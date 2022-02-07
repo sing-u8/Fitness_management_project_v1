@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="122" height="122" viewBox="0 0 122 122">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: none;
+      }
+
+      .cls-2 {
+        fill: #cfcfcf;
+      }
+    </style>
+  </defs>
+  <g id="위필화살표" transform="translate(-1660 -1001)">
+    <rect id="사각형_3133" data-name="사각형 3133" class="cls-1" width="122" height="122" transform="translate(1660 1001)"/>
+    <path id="위필화살표-2" data-name="위필화살표" class="cls-2" d="M116.181-214.618a2.775,2.775,0,0,1,3.909-.2,2.3,2.3,0,0,1,.2.2L135.5-197.695a2.758,2.758,0,0,1-.21,3.9,2.732,2.732,0,0,1-1.846.708H103.007a2.761,2.761,0,0,1-2.759-2.764,2.775,2.775,0,0,1,.7-1.847Z" transform="translate(1602.752 1266.529)"/>
+  </g>
+</svg>

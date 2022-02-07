@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="122" height="122" viewBox="0 0 122 122">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: none;
+      }
+
+      .cls-2 {
+        fill: #ffffff;
+      }
+    </style>
+  </defs>
+  <g id="엑스" transform="translate(-1072 -1295)">
+    <rect id="사각형_3137" data-name="사각형 3137" class="cls-1" width="122" height="122" transform="translate(1072 1295)"/>
+    <path id="엑스-2" data-name="엑스" class="cls-2" d="M-32.459-107.524a5,5,0,0,1,0,7.065,5,5,0,0,1-7.065,0l-20.334-20.334-20.334,20.334a5,5,0,0,1-7.065,0,5,5,0,0,1,0-7.065l20.334-20.334-20.334-20.334a5,5,0,0,1,0-7.065,5,5,0,0,1,7.065,0h0l20.334,20.334,20.334-20.334a5,5,0,0,1,7.065,0,5,5,0,0,1,0,7.065l-20.334,20.334Z" transform="translate(1192.721 1483.721)"/>
+  </g>
+</svg>

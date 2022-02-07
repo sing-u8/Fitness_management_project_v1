@@ -1,0 +1,70 @@
+import { Injectable } from '@angular/core'
+import { Router } from '@angular/router'
+import { Auth, signOut } from '@angular/fire/auth'
+
+declare let Kakao: any
+
+import { User } from '@schemas/user'
+import { Gym } from '@schemas/gym'
+
+type UserOrEmpty = User | { sign_in_method: string }
+
+@Injectable({ providedIn: 'root' })
+export class StorageService {
+    private storage = sessionStorage
+    private userKey = 'redwhale:authUser'
+
+    constructor(private fireAuth: Auth, private router: Router) {}
+
+    getUser(): User {
+        return JSON.parse(this.storage.getItem(this.userKey))
+    }
+    setUser(user: UserOrEmpty): void {
+        this.storage.setItem(this.userKey, JSON.stringify(user))
+    }
+
+    async removeUser() {
+        if (Kakao.Auth && Kakao.Auth.getAccessToken()) {
+            const logout = new Promise((resolve, reject) => {
+                Kakao.Auth.logout(() => {
+                    resolve(null)
+                })
+            })
+            console.log('logout in kakao')
+            await logout
+        }
+        await signOut(this.fireAuth)
+        this.storage.removeItem(this.userKey)
+        console.log('logout in email')
+    }
+
+    async logout() {
+        await this.removeUser()
+        this.router.navigateByUrl('/auth/login')
+    }
+
+    setSignInMethod(signInMethod: string): void {
+        const user = this.getUser() ?? { sign_in_method: '' }
+        user.sign_in_method = signInMethod
+        this.setUser(user)
+    }
+
+    getGym(): Gym {
+        const user: User = this.getUser()
+        if (user.selected_gym) {
+            return user.selected_gym
+        } else {
+            return null
+        }
+    }
+    setGym(gym: Gym): void {
+        const user: User = this.getUser()
+        user.selected_gym = gym
+        this.setUser(user)
+    }
+    removeGym(): void {
+        const user: User = this.getUser()
+        user.selected_gym = null
+        this.setUser(user)
+    }
+}

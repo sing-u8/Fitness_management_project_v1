@@ -1,0 +1,209 @@
+@mixin setting-container-common {
+    // width: 87.3%;
+    width: 484px;
+    align-self: flex-end;
+}
+
+* {
+    // padding: 0px;
+    margin: 0px;
+}
+
+section {
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: var(--background-color);
+
+    $containerWidth: 844px;
+    $header_height: 170px;
+    .header {
+        display: flex;
+        justify-content: center;
+        align-items: flex-end;
+        width: 100%;
+        height: $header_height;
+        background-color: var(--white);
+        position: relative;
+        padding: 0px 20px;
+
+        .header-text-container {
+            width: $containerWidth;
+            margin-bottom: 40px;
+        }
+
+        .subtext-margin {
+            margin-top: 10px;
+        }
+
+        .close-button {
+            position: absolute;
+            top: 36px;
+            right: 36px;
+        }
+    }
+
+    .body {
+        width: 100%;
+        background-color: var(--background-color);
+
+        .create-gym-outer-container {
+            display: flex;
+            justify-content: center;
+            padding-top: 40px;
+
+            @media (max-width: 885px) {
+                justify-content: flex-start;
+            }
+            .create-gym-container {
+                width: $containerWidth + 40px; // + side paddings(20px)
+                padding: 0px 20px;
+                height: 100%;
+
+                display: flex;
+                flex-direction: row;
+                .center-preview {
+                    margin-top: 36px;
+                    // width: 38%;
+                    width: 316px;
+                    display: flex;
+                    flex-direction: column;
+                }
+                .center-setting {
+                    // width: 62%;
+                    width: $containerWidth - 316px;
+                    border-left: 1px solid var(--border-color);
+                    display: flex;
+                    flex-direction: column;
+                }
+            }
+        }
+    }
+}
+
+.center-preview {
+    .item-container {
+        margin-top: 10px;
+    }
+}
+
+.center-setting {
+    .setting-info {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 20px;
+    }
+    .setting-input-container {
+        position: relative;
+        @include setting-container-common();
+
+        .center-name-input {
+            margin-top: 10px;
+            margin-bottom: 36px;
+            height: 50px;
+            width: 100%;
+
+            font-size: 1.4rem;
+            letter-spacing: -0.2px;
+            font-weight: bold;
+        }
+
+        .center-url {
+            &-container {
+                display: flex;
+                align-items: center;
+                margin-bottom: 50px;
+                margin-top: 10px;
+            }
+            &-default {
+                width: 23%;
+                font-weight: normal;
+                text-align: center;
+            }
+            &-input {
+                width: 77%;
+                height: 50px;
+
+                font-size: 1.4rem;
+                letter-spacing: -0.2px;
+                font-weight: bold;
+            }
+        }
+    }
+
+    .setting-picture-container {
+        @include setting-container-common();
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 40px;
+
+        &.picture-container-mb-1 {
+            margin-bottom: 40px;
+        }
+
+        &.picture-container-mb-2 {
+            margin-bottom: 50px;
+        }
+
+        .picture-container {
+            display: flex;
+            align-items: center;
+            height: 43px;
+        }
+        .picture-name {
+            margin-right: 10px;
+            width: 260px;
+            height: 20px;
+            text-align: end;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-weight: normal;
+        }
+        .register-button {
+            height: 40px;
+            width: 120px;
+            .mdi {
+                font-size: 1.8rem;
+            }
+        }
+        .remove-button {
+            height: 40px;
+            width: 91px;
+            padding: 12px 12px !important;
+            .mdi {
+                font-size: 1.4rem;
+                & ~ span {
+                    margin: 0px;
+                }
+            }
+        }
+    }
+
+    .create-center {
+        @include setting-container-common();
+        height: 55px;
+        margin-bottom: 20px;
+
+        font-size: 1.5rem;
+        letter-spacing: -0.23px;
+    }
+}
+
+.asterisk {
+    color: var(--red);
+}
+
+.hover-action-nothing {
+    &:hover {
+        opacity: 1;
+    }
+}
+
+.cg-typo-subtext {
+    font-size: 1.2rem;
+    line-height: 1.4;
+    font-weight: normal;
+    letter-spacing: -0.14px;
+}

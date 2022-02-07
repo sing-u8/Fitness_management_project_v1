@@ -1,0 +1,24 @@
+.member {
+    height: 100%;
+
+    & > div:first-child {
+        height: 23px;
+        margin: 19px 17px;
+
+        span {
+            min-width: 100px;
+            overflow: hidden;
+        }
+
+        img {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+        }
+    }
+
+    .h-line {
+        margin: 0 10px;
+        border-bottom: 1px solid var(--border-color);
+    }
+}

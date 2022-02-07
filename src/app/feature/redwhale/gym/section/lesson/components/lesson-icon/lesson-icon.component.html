@@ -1,0 +1,37 @@
+<div
+  class="icon-outer-container"
+>
+  <div
+    class="icon-container"
+    [style.cursor] = "!isLesson ? 'auto' : 'pointer' "
+    (click) ="isLesson && toggleColorDropDown(); $event.stopPropagation()"
+  >
+    <div
+      class="lesson-icon"
+      [style.backgroundColor]="!backGroundColor ? 'var(--border-color)': backGroundColor"
+    >
+      <img src="assets/icons/etc/workout_white.svg">
+    </div>
+    <div
+      *ngIf="isLesson"
+      class="mdi mdi-menu-down"
+      [class.open] = "isColorDropDownOpen"
+    ></div>
+  </div>
+
+  <div
+    #color_box
+    class="color-box"
+    [style.visibility] = "isColorDropDownOpen ? 'visible' : 'hidden'"
+    (click) = "$event.stopPropagation()"
+  >
+    <div
+      *ngFor="let color of iconColors | keyvalue; let i=index"
+      class="color-item"
+      [style.backgroundColor] = 'color.key'
+      (click) = "sendSelectedColor(color.key)"
+    >
+      <img *ngIf="color.key == backGroundColor" src="assets/icons/etc/check_white.svg">
+    </div>
+  </div>
+</div>

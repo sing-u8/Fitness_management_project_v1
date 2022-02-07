@@ -1,0 +1,142 @@
+.rw-datepicker {
+    width: 250px;
+    height: 260px;
+    padding: 15px;
+    border-radius: 5px;
+    background-color: var(--white);
+
+    &.shadow {
+        box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
+    }
+
+    .col,
+    [class*='col-'] {
+        padding-right: 0;
+        padding-left: 0;
+    }
+
+    .month {
+        .start,
+        .end {
+            .mdi {
+                font-size: 2rem;
+                color: var(--grey);
+                cursor: pointer;
+
+                &:hover {
+                    color: var(--darkgrey);
+                }
+            }
+        }
+
+        .center {
+            font-size: 1.5rem;
+            font-weight: 500;
+            color: var(--font-color);
+        }
+    }
+
+    .week-header {
+        font-size: 1.3rem;
+        color: var(--font-color);
+
+        & > div {
+            width: 29px;
+            height: 29px;
+        }
+    }
+
+    // date picker
+    .week-row {
+        .week-col {
+            width: 29px;
+            height: 29px;
+            border-radius: 5px;
+            font-size: 1.1rem;
+        }
+    }
+
+    &.mutiline-unit {
+        .week-header {
+            font-size: 1.3rem;
+            color: var(--font-color);
+
+            & > div {
+                width: 34px;
+                height: 29px;
+            }
+        }
+
+        .week-row {
+            .week-col {
+                width: 34px;
+                height: 29px;
+                border-radius: unset;
+                font-size: 1.1rem;
+            }
+        }
+    }
+}
+
+.rw-datepicker-date {
+    .week-row {
+        .week-col {
+            cursor: pointer;
+
+            &:hover {
+                background-color: var(--background-color);
+            }
+        }
+
+        .selected {
+            color: var(--white) !important;
+            background-color: var(--red);
+
+            &:hover {
+                background-color: var(--red);
+            }
+        }
+    }
+}
+
+.rw-datepicker-week {
+    .week-row {
+        border-radius: 5px;
+        cursor: pointer;
+
+        &:hover {
+            background-color: var(--background-color);
+        }
+
+        .week-col {
+            &.edge {
+                color: var(--white) !important;
+                background-color: var(--red);
+
+                &:hover {
+                    background-color: var(--red);
+                    color: var(--white) !important;
+                }
+            }
+            &.first {
+                border-radius: 5px 0px 0px 5px;
+            }
+            &.last {
+                border-radius: 0px 5px 5px 0px;
+            }
+        }
+    }
+
+    .selected {
+        background-color: #fef6f7;
+        // background-color: rgba(227, 74, 94, 0.05);
+
+        &:hover {
+            background-color: #fef6f7;
+        }
+
+        // .week-col {
+        //     color: var(--white) !important;
+        // }
+    }
+}

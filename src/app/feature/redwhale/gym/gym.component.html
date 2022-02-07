@@ -1,0 +1,30 @@
+<div
+  class="redwhale-gym full-absolute user-select-none"
+  [ngClass]="((drawer$ | async).tabName == 'general-schedule'
+            || (drawer$ | async).tabName == 'lesson-schedule'
+            || (drawer$ | async).tabName == 'modify-general-schedule'
+            || (drawer$ | async).tabName == 'modify-lesson-schedule') ? 'thin-scroll-x-overlay2' : ''"
+>
+    <div class="d-flex flex-column h-100">
+        <rw-header></rw-header>
+
+        <div class="flex-fill d-flex" style="overflow: hidden">
+            <div class="left-side">
+                <rw-gymNav></rw-gymNav>
+            </div>
+            <div class="section flex-fill thin-scroll-x">
+                <router-outlet></router-outlet>
+            </div>
+            <div
+              class="right-side"
+              [class.open-drawer]="(drawer$ | async).tabName != 'none'"
+              [class.schedule-drawer]="(drawer$ | async).tabName == 'general-schedule'
+                                    || (drawer$ | async).tabName == 'lesson-schedule'
+                                    || (drawer$ | async).tabName == 'modify-general-schedule'
+                                    || (drawer$ | async).tabName == 'modify-lesson-schedule'"
+            >
+                <drawer></drawer>
+            </div>
+        </div>
+    </div>
+</div>

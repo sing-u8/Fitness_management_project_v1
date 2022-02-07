@@ -1,0 +1,53 @@
+* {
+    padding: 0px;
+    margin: 0px;
+}
+
+.cmp-button {
+    display: flex;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    overflow: hidden;
+
+    .mdi {
+        position: relative;
+        top: 1px;
+        margin-right: 4px;
+        font-size: 2rem;
+
+        & ~ span {
+            margin-right: 4px;
+        }
+    }
+}
+
+.cmp-button-type1 {
+    &:hover {
+        background-color: var(--background-color);
+    }
+}
+
+.cmp-button-type2 {
+    &:hover {
+        opacity: 0.8;
+    }
+}
+
+.cmp-button-disabled {
+    color: var(--white) !important;
+    background-color: var(--lightgrey) !important;
+    cursor: not-allowed;
+
+    &:hover {
+        color: var(--white);
+        background-color: var(--lightgrey);
+        opacity: 1;
+    }
+}

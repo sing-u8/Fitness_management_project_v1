@@ -1,0 +1,14 @@
+<div class="center-list-container">
+  <div #list_header class="list-header"></div>
+  <div #list_avatar class="list-avatar">
+    <ng-template [ngIf]="centerAvatar.length < 2">{{centerAvatar}}</ng-template>
+  </div>
+  <div class="list-contents">
+    <p class="contents-top">
+      <span class="rw-typo-title2">{{centerName}}</span>
+    </p>
+    <p class="rw-typo-subtext4">
+      redwhale.xyz/{{centerAddress}}
+    </p>
+  </div>
+</div>

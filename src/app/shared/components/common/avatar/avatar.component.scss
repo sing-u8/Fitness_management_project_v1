@@ -1,0 +1,19 @@
+.rw-avatar {
+    img {
+        width: 34px;
+        height: 34px;
+        object-fit: cover;
+        border-radius: 50%;
+    }
+
+    .text {
+        display: inline;
+        width: 34px;
+        height: 34px;
+        font-size: 1.8rem;
+        font-weight: 500;
+        color: var(--white);
+        background-color: var(--grey);
+        border-radius: 50%;
+    }
+}

@@ -1,0 +1,57 @@
+.login {
+    .box {
+        width: 415px;
+        padding-top: 70px;
+
+        .button {
+            position: relative;
+            height: 55px;
+            border-radius: 6px;
+            cursor: pointer;
+
+            img {
+                position: absolute;
+                left: 11px;
+            }
+        }
+
+        .kakao {
+            margin-top: 44px;
+            background-color: #fee500;
+        }
+
+        .google {
+            margin-top: 15px;
+            background-color: #4285f4;
+
+            span {
+                color: var(--white);
+            }
+        }
+
+        .apple {
+            margin-top: 15px;
+            background-color: black;
+
+            span {
+                color: var(--white);
+            }
+        }
+
+        .email {
+            height: 55px;
+            margin-top: 15px;
+
+            .rw-typo-title2 {
+                padding: 17px 30px;
+                font-weight: 500;
+                cursor: pointer;
+            }
+
+            .v-line {
+                height: 20px;
+                border-right: 1px solid var(--border-color);
+            }
+        }
+    }
+}

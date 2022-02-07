@@ -1,0 +1,16 @@
+.redwhale-home {
+    // background-color: var(--lightgrey);
+    height: 100vh;
+    overflow: hidden;
+    .header-container {
+        position: sticky;
+        left: 0;
+        top: 0;
+        width: 100vw;
+        z-index: 1;
+    }
+    .gym-list-section-container {
+        overflow: overlay;
+        background-color: var(--background-color);
+    }
+}

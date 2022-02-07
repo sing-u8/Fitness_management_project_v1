@@ -1,0 +1,96 @@
+@import '../styles/mypage-navigation-common.scss';
+
+.innerContainer {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: space-around;
+    padding-top: 20px;
+    .profile {
+        display: flex;
+        flex-direction: column;
+        .avatar {
+            width: 110px;
+            height: 110px;
+            margin-top: 10px;
+            position: relative;
+            cursor: pointer;
+
+            .badge {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 30px;
+                height: 30px;
+
+                position: absolute;
+                background-color: var(--white);
+                border: 1px solid var(--border-color);
+                border-radius: 50%;
+
+                right: 0px;
+                bottom: -2px;
+                img {
+                    width: 20px;
+                    height: 20px;
+                }
+            }
+
+            &:hover {
+                opacity: 0.7;
+            }
+        }
+
+        .del-profile {
+            text-decoration: underline;
+            cursor: pointer;
+            color: var(--grey);
+            text-align: center;
+            margin-top: 10px;
+
+            &:hover {
+                color: var(--darkgrey);
+            }
+        }
+    }
+    .inputs {
+        display: flex;
+        flex-direction: column;
+
+        .input-card {
+            cursor: pointer;
+            width: 340px;
+            height: 45px;
+            margin-bottom: 28px;
+            .card-content {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+            &.cursor-auto {
+                cursor: auto;
+            }
+
+            path {
+                fill: #c9c9c9;
+            }
+            &:hover {
+                path {
+                    fill: #212121;
+                }
+            }
+        }
+
+        .logout-delAccount {
+            text-align: right;
+            margin: 17px 0 28px 0px;
+            span {
+                cursor: pointer;
+                color: var(--grey);
+                &:hover {
+                    color: var(--darkgrey);
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,10 @@
+<div class="rw-modal-background" #modalBackgroundElement></div>
+<div class="rw-modal-wrapper justify-content-center align-items-center" (click)="onCancel()" #modalWrapperElement>
+    <div class="rw-modal user-select-none" (click)="$event.stopPropagation()">
+        <div class="title d-flex justify-content-between align-items-start">
+            <span class="rw-typo-bodytext1">개인정보 수집 및 이용</span>
+            <img src="assets/icons/etc/close.svg" (click)="onCancel()" />
+        </div>
+        <div class="content rw-typo-subtext1 scroll-y">개인정보 수집 및 이용 내용</div>
+    </div>
+</div>

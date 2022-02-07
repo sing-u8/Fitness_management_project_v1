@@ -1,0 +1,108 @@
+.email {
+    .box {
+        width: 415px;
+        padding-top: 70px;
+
+        .step-box {
+            height: 34px;
+
+            .step {
+                width: 34px;
+                height: 34px;
+                border: 1px solid var(--border-color);
+                border-radius: 50%;
+                font-weight: 500;
+                color: var(--lightgrey);
+            }
+
+            .selected {
+                border: 1px solid var(--darkgrey);
+                color: var(--darkgrey);
+            }
+
+            .dot-line {
+                width: 23px;
+                height: 1px;
+                border-top: 1px dashed var(--border-color);
+            }
+        }
+
+        .headline {
+            margin-top: 25px;
+            text-decoration: underline;
+            text-underline-offset: 8px;
+            text-decoration-thickness: 2px;
+        }
+
+        .desc {
+            margin-top: 20px;
+
+            .rw-typo-bodytext1 {
+                font-weight: 500;
+            }
+
+            .time {
+                color: var(--grey);
+            }
+        }
+
+        .verification-code {
+            position: relative;
+            margin-top: 40px;
+
+            .number {
+                width: 97px;
+                height: 137px;
+                outline: none;
+                border: 1px solid var(--border-color);
+                border-radius: 5px;
+
+                font-size: 4rem;
+                font-weight: 700;
+                text-align: center;
+            }
+
+            .error {
+                position: absolute;
+                bottom: -30px;
+                width: 100%;
+                text-align: center;
+
+                .warning {
+                    position: relative;
+                    top: 3px;
+                    width: 16px;
+                    height: 16px;
+                }
+
+                .rw-typo-subtext1 {
+                    color: var(--red);
+                }
+            }
+        }
+
+        .next {
+            margin-top: 40px;
+        }
+
+        .h-line {
+            margin-top: 52px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .re-send {
+            margin-top: 20px;
+
+            .rw-typo-bodytext1 {
+                color: var(--grey) !important;
+            }
+
+            div:nth-child(2) {
+                text-decoration: underline;
+                text-underline-offset: 2px;
+                text-decoration-thickness: 1px;
+                cursor: pointer;
+            }
+        }
+    }
+}

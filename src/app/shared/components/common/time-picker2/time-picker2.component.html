@@ -1,0 +1,28 @@
+<div class="rw-timepicker2 user-select-none" #selectElement>
+  <div
+      class="selected rw-typo-bodytext1 d-flex justify-content-center align-items-center"
+      [class.open]="isOpen"
+      #selectedElement
+      (click)="toggle()"
+      (rwClickOutside)="close();initSelectedTime()"
+  >
+      <span class="text flex-fill">{{selectedTime.name}}</span>
+      <span class="mdi mdi-chevron-down"></span>
+  </div>
+  <div
+    class="items thin-scroll-y-overlay2"
+    #itemsElement [class.drop-up] ="dropUp"
+    (click)="$event.stopPropagation()"
+  >
+      <div
+          class="item d-flex align-items-center"
+          #item
+          *ngFor="let item of timeList; let idx = index"
+          [class.active]="item.name == selectedTime.name"
+          [class.disabled]="item.isDisabled"
+          (click)="!item.isDisabled && onSelect($event, item, idx)"
+      >
+          <span class="rw-typo-bodytext1">{{ item.name }}</span>
+      </div>
+  </div>
+</div>

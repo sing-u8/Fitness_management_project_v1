@@ -1,0 +1,32 @@
+.rw-toast {
+    display: none;
+    position: fixed;
+    bottom: 60px;
+    padding: 8.5px 23px;
+    border-radius: 58px;
+    background-color: var(--font-color);
+    opacity: 0;
+    transition: opacity 0.3s cubic-bezier(0.25, 0.8, 0.25, 0.8);
+    -moz-transition: opacity 0.3s cubic-bezier(0.25, 0.8, 0.25, 0.8);
+    -webkit-transition: opacity 0.3s cubic-bezier(0.25, 0.8, 0.25, 0.8);
+    -o-transition: opacity 0.3s cubic-bezier(0.25, 0.8, 0.25, 0.8);
+    z-index: 1000;
+
+    .rw-typo-bodytext2 {
+        font-weight: 700;
+        color: var(--white);
+    }
+
+    svg {
+        position: relative;
+        top: -1px;
+        width: 24px;
+        height: 24px;
+        margin-left: 30px;
+        cursor: pointer;
+    }
+}
+
+.rw-toast-show {
+    opacity: 1;
+}

@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="122" height="122" viewBox="0 0 122 122">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: none;
+      }
+
+      .cls-2 {
+        fill: #212121;
+      }
+    </style>
+  </defs>
+  <g id="스케줄_회원용" data-name="스케줄 회원용" transform="translate(-326 -370)">
+    <rect id="사각형_3088" data-name="사각형 3088" class="cls-1" width="122" height="122" transform="translate(326 370)"/>
+    <g id="그룹_5615" data-name="그룹 5615" transform="translate(344 391.001)">
+      <g id="사각형_2837" data-name="사각형 2837" transform="translate(0 6.063)">
+        <rect id="사각형_3108" data-name="사각형 3108" class="cls-1" width="86.546" height="73.564" rx="2" transform="translate(0 0.004)"/>
+        <path id="패스_2224" data-name="패스 2224" class="cls-2" d="M112.391,78.268H43.155A8.664,8.664,0,0,1,34.5,69.609V13.359A8.667,8.667,0,0,1,43.155,4.7h69.237a8.667,8.667,0,0,1,8.655,8.659v56.25A8.664,8.664,0,0,1,112.391,78.268ZM43.155,10.763a2.6,2.6,0,0,0-2.6,2.6v56.25a2.6,2.6,0,0,0,2.6,2.6h69.237a2.6,2.6,0,0,0,2.6-2.6V13.359a2.6,2.6,0,0,0-2.6-2.6Z" transform="translate(-34.5 -4.7)"/>
+      </g>
+      <g id="그룹_5140" data-name="그룹 5140" transform="translate(25.098)">
+        <path id="패스_2225" data-name="패스 2225" class="cls-2" d="M43.329,22.075A3.03,3.03,0,0,1,40.3,19.046V6.328a3.029,3.029,0,0,1,6.058,0V19.046A3.03,3.03,0,0,1,43.329,22.075Z" transform="translate(-40.3 -3.299)"/>
+        <path id="패스_2226" data-name="패스 2226" class="cls-2" d="M50.329,22.075A3.03,3.03,0,0,1,47.3,19.046V6.328a3.029,3.029,0,1,1,6.058,0V19.046A3.03,3.03,0,0,1,50.329,22.075Z" transform="translate(-17.009 -3.299)"/>
+      </g>
+      <rect id="사각형_3109" data-name="사각형 3109" class="cls-2" width="82.218" height="6.06" transform="translate(2.164 31.164)"/>
+      <path id="패스_2227" data-name="패스 2227" class="cls-2" d="M73.248,21.3H43.329a3.029,3.029,0,1,1,0-6.058H73.248a3.029,3.029,0,0,1,0,6.058Z" transform="translate(-15.202 36.422)"/>
+    </g>
+  </g>
+</svg>

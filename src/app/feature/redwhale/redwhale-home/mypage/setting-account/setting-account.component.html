@@ -1,0 +1,100 @@
+<section class="outer-container">
+  <div class="header rw-typo-title2">
+    계정 관리
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="content">
+      <div class="innerContainer">
+          <div  class="profile ">
+              <p class="rw-typo-subtext2">프로필 사진</p>
+              <div class="avatar" (click)="userProfile.click()">
+                  <rw-avatar [image]="user.picture" text="{{ user.given_name }}" size="110" fontSize="40" [backgroundColor]="user.color">
+                  </rw-avatar>
+                  <div class="badge">
+                      <img src="assets/icons/etc/camera_grey.svg">
+                  </div>
+                  <input type="file" accept="image/*" #userProfile (change)="registerPhoto(userProfile)" hidden />
+              </div>
+              <p *ngIf="user.picture != null" (click)="onInputClick('delavatar')" class="del-profile rw-typo-subtext1">사진 삭제</p>
+          </div>
+
+          <div class="inputs">
+              <div
+                *ngFor = "let item of inputList | keyvalue : keepOriginalOrder"
+                (click) = "!(item.key=='email' && user.sign_in_method == 'email')
+                          && onInputClick(item.key)"
+                class="input-card" [class.cursor-auto] = "item.key=='email' && user.sign_in_method == 'email'"
+              >
+                  <div class="rw-typo-subtext2">
+                      {{infoTitle[item.key]}}
+                  </div>
+                  <div class="card-content rw-typo-bodytext2">
+                      {{item.value || 'ㅡ'}}
+                      <svg
+                        *ngIf="!(item.key=='email' && user.sign_in_method == 'email')"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="25" height="25" viewBox="0 0 122 122">
+                        <defs>
+                            <style>
+                              .cls-1 {fill: none;}
+                              .cls-2 { fill: #212121;}
+                            </style>
+                        </defs>
+                        <g id="오른짧은화살표" transform="translate(-1006 -1001)">
+                            <rect id="사각형_3126" data-name="사각형 3126" class="cls-1" width="122" height="122" transform="translate(1006 1001)" />
+                            <path id="오른짧은화살표-2" data-name="오른짧은화살표" class="cls-2"
+                                d="M26.578-190.987a3.868,3.868,0,0,1-1.189,2.764l-25,24.038a3.866,3.866,0,0,1-5.44.586,3.866,3.866,0,0,1-.58-5.44,3.631,3.631,0,0,1,.691-.675l22.114-21.268L-4.94-212.25a3.871,3.871,0,0,1,.586-5.44,3.868,3.868,0,0,1,4.743-.088l25,24.038A3.875,3.875,0,0,1,26.578-190.987Z"
+                                transform="translate(1057.49 1252.547)" />
+                          </g>
+                      </svg>
+                  </div>
+
+              </div>
+
+              <div class="logout-delAccount rw-typo-subtext2">
+                  <span (click)="logout()">로그아웃</span>
+                  &nbsp;&nbsp;|&nbsp;&nbsp;
+                  <span (click)="gotoRemoveAccount()">계정 영구 삭제</span>
+              </div>
+          </div>
+      </div>
+
+
+  </div>
+
+</section>
+
+
+<rw-del-avatar-modal
+  [(visible)] = "delAvatarFlag"
+  [data] = "delModalTextData"
+  (cancel) = 'onDelAvatarModalCancel()'
+  (confirm) = 'onDelAvatarModalConfirm()'
+></rw-del-avatar-modal>
+
+<rw-certification-setting-modal
+  [(visible)] = "certAccountModalFlag"
+  [data] = "certSetModalTextData"
+  [activatedModalType] = 'activatedCertSettingModalType'
+  (cancel) = 'onCertSetModalCancel()'
+  (confirm) = 'onCertSetModalConfirm($event)'
+></rw-certification-setting-modal>
+
+<rw-setting-modal
+  [(visible)] = "accountModalFlag"
+  [data] = "setModalTextData"
+  [activatedModalType] = 'activatedSettingModalType'
+  [userData] = "modalUserData"
+  (cancel) = 'onSetModalCancel()'
+  (confirm) = 'onSetModalConfirm()'
+></rw-setting-modal>
+
+<rw-change-password-modal
+  *ngIf = "user.sign_in_method == 'email'"
+  [(visible)] = "changePasswordFlag"
+  [data] = "changePasswordTextData"
+  (cancel) = 'onChangePasswordCancel()'
+  (confirm) = 'onChangePasswordConfirm()'
+></rw-change-password-modal>

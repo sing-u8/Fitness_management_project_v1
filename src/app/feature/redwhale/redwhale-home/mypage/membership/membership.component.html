@@ -1,0 +1,28 @@
+<section class="outer-container">
+  <div class="header rw-typo-title2">
+    회원권/락커
+
+    <rw-gym-select
+      *ngIf="userGymList.length > 0 && isLoaded"
+      [items] = "userGymList"
+      [(ngModel)] = "selectedUserGym"
+      [height_type] ="'small'"
+      [noBorder] ="true"
+      (onSelectChange) = "null"
+    ></rw-gym-select>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="content">
+    <ng-container *ngIf="isLoaded">
+      <rw-empty-indicator
+        *ngIf="userGymList.length == 0; else membership_locker"
+      ></rw-empty-indicator>
+      <ng-template #membership_locker>
+
+      </ng-template>
+    </ng-container>
+  </div>
+
+</section>

@@ -1,0 +1,45 @@
+:host {
+    height: 100%;
+}
+
+.nav {
+    height: 100%;
+    box-shadow: 0 0 10px 0 rgba(181, 181, 181, 0.11);
+    background-color: var(--white);
+
+    width: 60px;
+
+    .menu {
+        height: 60px;
+        margin-bottom: 3px;
+        background-color: var(--white);
+        cursor: pointer;
+
+        svg {
+            width: 28px;
+            height: 28px;
+
+            .cls-1 {
+                fill: none;
+            }
+
+            .cls-2 {
+                fill: var(--font-color);
+            }
+        }
+
+        &.selected {
+            background-color: var(--red);
+
+            svg {
+                .cls-2 {
+                    fill: var(--white);
+                }
+            }
+
+            span {
+                color: var(--white);
+            }
+        }
+    }
+}

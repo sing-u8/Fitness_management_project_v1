@@ -1,0 +1,11 @@
+<div class="rw-avatar d-flex justify-content-center align-items-center user-select-none">
+    <img
+        #imgElement
+        [src]="image"
+        *ngIf="image"
+        onerror="this.onerror=null; this.src='assets/images/default-profile.png'"
+    />
+    <div #textElement class="text d-flex justify-content-center align-items-center" *ngIf="!image">
+        {{ nameInitial | uppercase }}
+    </div>
+</div>

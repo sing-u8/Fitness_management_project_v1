@@ -1,0 +1,63 @@
+<div class="terms full-absolute d-flex flex-column user-select-none">
+    <rw-auth-header></rw-auth-header>
+
+    <div class="flex-fill d-flex justify-content-center">
+        <div class="box d-flex flex-column">
+            <div class="headline d-flex flex-column align-items-center">
+                <div class="rw-typo-headline1">레드웨일에 오신 것을 환영합니다! 🤗</div>
+                <div class="rw-typo-subtext1">원활한 서비스 이용을 위해 아래 약관에 동의해주세요.</div>
+            </div>
+            <div class="select-all d-flex align-items-center">
+                <rw-radio-button text="모두 동의해요." [checked]="all" (click)="onClick('all')"></rw-radio-button>
+            </div>
+            <div class="terms-eula d-flex justify-content-between align-items-center">
+                <rw-radio-button
+                    text="레드웨일 서비스 이용약관 (필수)"
+                    [checked]="termsEULA"
+                    (click)="onClick('termsEULA')"
+                ></rw-radio-button>
+                <div class="detail rw-typo-bodytext1" (click)="showModal('termsEULA')">내용보기</div>
+            </div>
+            <div class="terms-privacy d-flex justify-content-between align-items-center">
+                <rw-radio-button
+                    text="개인정보 수집 및 이용 (필수)"
+                    [checked]="termsPrivacy"
+                    (click)="onClick('termsPrivacy')"
+                ></rw-radio-button>
+                <div class="detail rw-typo-bodytext1" (click)="showModal('termsPrivacy')">내용보기</div>
+            </div>
+            <div class="marketing d-flex align-items-center">
+                <rw-radio-button
+                    text="마케팅 정보 수신 (선택)"
+                    [checked]="marketing"
+                    (click)="onClick('marketing')"
+                ></rw-radio-button>
+                <div class="checkbox-group d-flex align-items-center">
+                    <rw-checkbox text="SMS" [checked]="marketingSMS" (click)="onClick('marketingSMS')"></rw-checkbox>
+                    <rw-checkbox
+                        text="이메일"
+                        [checked]="marketingEmail"
+                        (click)="onClick('marketingEmail')"
+                    ></rw-checkbox>
+                </div>
+            </div>
+            <div
+                class="next rw-typo-title2"
+                rw-button
+                rwButtonHeight="55"
+                rwButtonColor="var(--red)"
+                [rwButtonDisabled]="!formCheck()"
+                (click)="formCheck() && next()"
+            >
+                <span>다음</span>
+            </div>
+            <div class="h-line" *ngIf="!user"></div>
+            <div class="login d-flex justify-content-between" *ngIf="!user">
+                <div class="rw-typo-bodytext1">이미 레드웨일 계정이 있으신가요?</div>
+                <div class="rw-typo-bodytext1" [routerLink]="['/auth/login']">로그인하기</div>
+            </div>
+        </div>
+    </div>
+</div>
+<terms-eula [(visible)]="termsEULAVisible" (cancel)="hideModal('termsEULA')"></terms-eula>
+<terms-privacy [(visible)]="termsPrivacyVisible" (cancel)="hideModal('termsPrivacy')"></terms-privacy>

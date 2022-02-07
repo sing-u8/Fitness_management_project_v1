@@ -1,0 +1,83 @@
+<div class="email full-absolute d-flex flex-column user-select-none">
+    <rw-auth-header></rw-auth-header>
+
+    <div class="flex-fill d-flex justify-content-center">
+        <div class="box d-flex flex-column">
+            <div class="step-box d-flex justify-content-center align-items-center">
+                <div class="step rw-typo-subtext1 d-flex justify-content-center align-items-center">1</div>
+                <div class="dot-line"></div>
+                <div class="step selected d-flex rw-typo-subtext1 justify-content-center align-items-center">2</div>
+                <div class="dot-line"></div>
+                <div class="step d-flex rw-typo-subtext1 justify-content-center align-items-center">3</div>
+            </div>
+            <div class="headline d-flex flex-column align-items-center">
+                <div class="rw-typo-headline1">{{ email }}</div>
+            </div>
+            <div class="desc d-flex flex-column align-items-center">
+                <div class="rw-typo-bodytext1">입력하신 주소로 인증번호 이메일을 발송했습니다.</div>
+                <div class="rw-typo-bodytext1">
+                    <span class="time">{{ timeLeft | minuteSeconds }}</span> 내로 받으신 인증번호를 입력해주세요.
+                </div>
+            </div>
+            <div class="verification-code d-flex justify-content-between">
+                <input
+                    class="number"
+                    type="text"
+                    [(ngModel)]="verificationCodeOne"
+                    maxlength="1"
+                    (keypress)="checkDigit($event)"
+                    (keyup)="nextNumber($event, 'one', one, two)"
+                    #one
+                />
+                <input
+                    class="number"
+                    type="text"
+                    [(ngModel)]="verificationCodeTwo"
+                    maxlength="1"
+                    (keypress)="checkDigit($event)"
+                    (keyup)="nextNumber($event, 'two', two, three)"
+                    #two
+                />
+                <input
+                    class="number"
+                    type="text"
+                    [(ngModel)]="verificationCodeThree"
+                    maxlength="1"
+                    (keypress)="checkDigit($event)"
+                    (keyup)="nextNumber($event, 'three', three, four)"
+                    #three
+                />
+                <input
+                    class="number"
+                    type="text"
+                    [(ngModel)]="verificationCodeFour"
+                    maxlength="1"
+                    (keypress)="checkDigit($event)"
+                    (keyup)="nextNumber($event, 'four', four, null)"
+                    #four
+                />
+                <div class="error" *ngIf="error">
+                    <img class="warning" src="assets/icons/etc/warning-red.svg" />
+                    <span class="rw-typo-subtext1">{{ error }}</span>
+                </div>
+            </div>
+            <div
+                class="next rw-typo-title2"
+                rw-button
+                rwButtonHeight="55"
+                rwButtonColor="var(--red)"
+                [rwButtonDisabled]="!formCheck()"
+                (click)="formCheck() && next()"
+            >
+                <span>다음</span>
+            </div>
+            <div class="h-line"></div>
+            <div class="re-send d-flex justify-content-between">
+                <div class="rw-typo-bodytext1">혹시 이메일을 받지 못하셨나요?</div>
+                <div class="rw-typo-bodytext1" (click)="checkRegistration() && sendVerificationCodeMail(true)">
+                    재전송 요청하기
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

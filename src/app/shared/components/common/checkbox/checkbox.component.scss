@@ -1,0 +1,61 @@
+.rw-checkbox {
+    cursor: pointer;
+
+    &.checked {
+        .box {
+            background-color: var(--red);
+        }
+
+        &:hover {
+            .box {
+                opacity: 0.8;
+            }
+        }
+    }
+
+    &.disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+
+        .text {
+            color: var(--grey);
+        }
+
+        &:hover {
+            .box {
+                opacity: 1;
+            }
+        }
+    }
+
+    &.no-opacity {
+        &:hover {
+            .box {
+                opacity: 1 !important;
+            }
+        }
+    }
+
+    .box {
+        width: 24px;
+        height: 24px;
+        border-radius: 3px;
+        background-color: var(--grey);
+
+        .checkmark {
+            position: relative;
+            top: -2px;
+            width: 7px;
+            height: 12px;
+            border: solid var(--white);
+            border-width: 0 2px 2px 0;
+            -webkit-transform: rotate(45deg);
+            -ms-transform: rotate(45deg);
+            transform: rotate(45deg);
+        }
+    }
+
+    .text {
+        margin-left: 10px;
+    }
+}

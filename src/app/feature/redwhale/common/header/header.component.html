@@ -1,0 +1,205 @@
+<div class="header d-flex align-items-center">
+    <div class="left-side-menu col d-flex">
+        <div class="logo d-flex align-items-center" (click)="goRouterLink('/')" *ngIf="url == '/redwhale-home'">
+            <img src="assets/images/logo/redwhale-wording-logo-red-small.png" />
+        </div>
+        <div class="home d-flex justify-content-center align-items-center" *ngIf="url != '/redwhale-home'">
+            <img src="assets/images/logo/redwhale-logo-red-small.svg" (click)="goRouterLink('/redwhale-home')" />
+        </div>
+        <div
+            class="selected-gym d-flex align-items-center"
+            [class.open]="popupGymListVisible"
+            (click)="showPopupGymList($event)"
+            *ngIf="url != '/redwhale-home' && user.selected_gym"
+        >
+            <rw-avatar
+                [image]="user.selected_gym.picture"
+                text="{{ user.selected_gym.name }}"
+                size="26"
+                fontSize="13"
+                [backgroundColor]="user.selected_gym.color"
+            ></rw-avatar>
+            <span class="name rw-typo-bodytext2">{{ user.selected_gym.name }}</span>
+            <span class="mdi mdi-menu-down"></span>
+            <div
+                class="popup-gym-list"
+                *ngIf="popupGymListVisible"
+                (click)="$event.stopPropagation()"
+                (rwClickOutside)="hidePopupGymList()"
+            >
+                <div class="selected-gym-info d-flex">
+                    <div>
+                        <rw-avatar
+                            [image]="user.selected_gym.picture"
+                            text="{{ user.selected_gym.name }}"
+                            size="56"
+                            fontSize="22"
+                            [backgroundColor]="user.selected_gym.color"
+                        ></rw-avatar>
+                    </div>
+                    <div class="d-flex flex-column justify-content-center">
+                        <span class="rw-typo-title2">{{ user.selected_gym.name }}</span>
+                        <span class="rw-typo-subtext2">redwhale.xyz/{{ user.selected_gym.address }}</span>
+                    </div>
+                </div>
+                <div class="h-line"></div>
+                <div class="sub-menu d-flex justify-content-between align-items-center">
+                    <div
+                      class="touchpad d-flex justify-content-center align-items-center"
+                      (click) = "goTouchPad()"
+                    >
+                        <img src="assets/icons/header/touchpad.svg" />
+                        <span class="rw-typo-bodytext2">터치패드 모드</span>
+                    </div>
+                    <div class="v-line-touchpad-settings"></div>
+                    <div class="settings d-flex justify-content-center align-items-center">
+                        <img src="assets/icons/header/settings.svg" />
+                        <span class="rw-typo-bodytext2">센터 설정</span>
+                    </div>
+                </div>
+                <div class="h-line"></div>
+                <div class="label rw-typo-subtext2">
+                    <span>다른 센터로 이동하기</span>
+                </div>
+                <div class="gym-list">
+                    <div class="scroll-y">
+                        <div
+                            class="gym d-flex align-items-center"
+                            *ngFor="let gym of gymList; let i = index"
+                            (click)="changeGym(gym)"
+                        >
+                            <rw-avatar
+                                [image]="gym.picture"
+                                text="{{ gym.name }}"
+                                size="24"
+                                fontSize="13"
+                                [backgroundColor]="gym.color"
+                            ></rw-avatar>
+                            <span class="rw-typo-bodytext2">{{ gym.name }}</span>
+                            <div
+                                class="selected d-flex justify-content-center align-items-center"
+                                *ngIf="user.selected_gym.address == gym.address"
+                            >
+                                <div class="dot"></div>
+                                <span class="rw-typo-subtext2">접속중</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="right-side-menu col d-flex justify-content-end align-items-center">
+        <div
+            class="menu-item d-flex align-items-center"
+            [class.menu-item-selected]="(drawer$ | async)?.tabName == 'member'"
+            (click)="openDrawer('member')"
+            *ngIf="url != '/redwhale-home'"
+        >
+            <span class="rw-typo-bodytext2">회원 리스트</span>
+            <div class="menu-item-selected-line" *ngIf="(drawer$ | async)?.tabName == 'member'"></div>
+        </div>
+        <div class="empty" *ngIf="url != '/redwhale-home'"></div>
+        <div
+            class="menu-item d-flex align-items-center"
+            [class.menu-item-selected]="(drawer$ | async)?.tabName == 'community'"
+            (click)="openDrawer('community')"
+            *ngIf="url != '/redwhale-home'"
+        >
+            <span class="rw-typo-bodytext2">채팅</span>
+            <div class="menu-item-selected-line" *ngIf="(drawer$ | async)?.tabName == 'community'"></div>
+        </div>
+        <div class="empty" *ngIf="url != '/redwhale-home'"></div>
+        <div
+            class="menu-item d-flex align-items-center"
+            [class.menu-item-selected]="(drawer$ | async)?.tabName == 'notification'"
+            (click)="openDrawer('notification')"
+            *ngIf="url != '/redwhale-home'"
+        >
+            <span class="rw-typo-bodytext2">알림</span>
+            <div class="dot-badge d-flex justify-content-center align-items-center"></div>
+            <div class="menu-item-selected-line" *ngIf="(drawer$ | async)?.tabName == 'notification'"></div>
+        </div>
+        <div class="v-line-home" *ngIf="url == '/redwhale-home'"></div>
+        <div class="v-line-gym" *ngIf="url != '/redwhale-home'"></div>
+        <div
+            class="avatar d-flex align-items-center"
+            [class.menu-item]="url == '/redwhale-home'"
+            [class.menu-item-open]="url == '/redwhale-home' && avatarMenuVisible"
+            [class.adjustment]="url != '/redwhale-home'"
+            (click)="showAvatarMenu($event)"
+        >
+            <rw-avatar
+                [image]="user.picture"
+                text="{{ user.given_name }}"
+                size="24"
+                fontSize="13"
+                [backgroundColor]="user.color"
+            ></rw-avatar>
+            <span class="name rw-typo-bodytext2" *ngIf="url == '/redwhale-home'">{{ user.given_name }}님</span>
+            <div
+                class="avatar-menu"
+                *ngIf="avatarMenuVisible"
+                (click)="$event.stopPropagation()"
+                (rwClickOutside)="hideAvatarMenu()"
+            >
+                <div class="profile d-flex">
+                    <div>
+                        <rw-avatar
+                            [image]="user.picture"
+                            text="{{ user.given_name }}"
+                            size="56"
+                            fontSize="22"
+                            [backgroundColor]="user.color"
+                        ></rw-avatar>
+                    </div>
+                    <div class="d-flex flex-column justify-content-center">
+                        <span class="rw-typo-title2">{{ user.given_name }}님</span>
+                        <span class="rw-typo-subtext2">{{ user.email }}</span>
+                    </div>
+                </div>
+                <div class="h-line"></div>
+                <div
+                    (click) = "goRouterLink('/redwhale-home/mypage/exercise-journal')"
+                    class="avatar-menu-item d-flex align-items-center"
+                >
+                    <img src="assets/icons/header/journal.svg" />
+                    <span class="rw-typo-bodytext2">운동일지</span>
+                </div>
+                <!-- <div
+                    (click) = "goRouterLink('/redwhale-home/mypage/mission-management')"
+                    class="avatar-menu-item d-flex align-items-center"
+                >
+                    <img src="assets/icons/header/mission.svg" />
+                    <span class="rw-typo-bodytext2">미션관리</span>
+                </div> -->
+                <div
+                    (click) = "goRouterLink('/redwhale-home/mypage/membership')"
+                    class="avatar-menu-item d-flex align-items-center"
+                >
+                    <img src="assets/icons/header/ticket.svg" />
+                    <span class="rw-typo-bodytext2">회원권/락커</span>
+                </div>
+                <div
+                    (click) = "goRouterLink('/redwhale-home/mypage/reservation')"
+                    class="avatar-menu-item d-flex align-items-center"
+                >
+                    <img src="assets/icons/header/reservation.svg" />
+                    <span class="rw-typo-bodytext2">예약리스트</span>
+                </div>
+                <div class="h-line"></div>
+                <div
+                    (click) = "goRouterLink('/redwhale-home/mypage/setting-account')"
+                    class="avatar-menu-item d-flex align-items-center"
+                >
+                    <img src="assets/icons/header/settings.svg" />
+                    <span class="rw-typo-bodytext2">계정 관리</span>
+                </div>
+                <div class="h-line"></div>
+                <div class="avatar-menu-item d-flex align-items-center" (click)="logout()">
+                    <span class="logout rw-typo-bodytext2">로그아웃</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

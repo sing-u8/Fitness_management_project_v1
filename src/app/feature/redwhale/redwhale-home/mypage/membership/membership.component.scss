@@ -1,0 +1,8 @@
+@import '../styles/mypage-navigation-common.scss';
+
+// overriding
+section.outer-container {
+    .header {
+        justify-content: space-between;
+    }
+}

@@ -1,0 +1,48 @@
+.rw-radio-button {
+    cursor: pointer;
+
+    &.checked {
+        .circle .checkmark {
+            background-color: var(--red);
+        }
+
+        &:hover {
+            .circle .checkmark {
+                opacity: 0.8;
+            }
+        }
+    }
+
+    &.disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+
+        .text {
+            color: var(--grey);
+        }
+
+        &:hover {
+            .circle .checkmark {
+                opacity: 1;
+            }
+        }
+    }
+
+    .circle {
+        width: 22px;
+        height: 22px;
+        border: 2px solid var(--grey);
+        border-radius: 50%;
+
+        .checkmark {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background-color: var(--white);
+        }
+    }
+
+    .text {
+        margin-left: 10px;
+    }
+}

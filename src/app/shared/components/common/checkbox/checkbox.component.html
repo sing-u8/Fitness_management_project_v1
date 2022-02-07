@@ -1,0 +1,13 @@
+<div
+    class="rw-checkbox d-flex align-items-center user-select-none"
+    [class.checked]="checked"
+    [class.disabled]="disabled"
+    [class.no-opacity] = "noOpacity"
+>
+    <div
+      class="box d-flex justify-content-center align-items-center"
+    >
+        <div class="checkmark"></div>
+    </div>
+    <div class="text rw-typo-bodytext1" *ngIf="text">{{ text }}</div>
+</div>

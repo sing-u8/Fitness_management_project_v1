@@ -1,0 +1,412 @@
+<div class="nav">
+
+    <div
+        *ngIf="gymApiData?.role_code != 'member'"
+        class="menu d-flex flex-column justify-content-center align-items-center"
+        [routerLink]="['/', address, 'dashboard']"
+        routerLinkActive="selected"
+    >
+        <svg xmlns="http://www.w3.org/2000/svg" width="122" height="122" viewBox="0 0 122 122">
+          <defs>
+            <style></style>
+          </defs>
+          <g id="그룹_10970" data-name="그룹 10970" transform="translate(-1296 -194)">
+            <path
+              id="패스_2542"
+              data-name="패스 2542"
+              class="cls-2"
+              d="M112.319,53.651A41.485,41.485,0,1,0,124.47,82.985,41.214,41.214,0,0,0,112.319,53.651ZM82.985,65.166A12.662,12.662,0,1,1,70.323,77.828,12.676,12.676,0,0,1,82.985,65.166Zm0,30.941a20.332,20.332,0,0,1,20.046,16.6,35.789,35.789,0,0,1-40.093,0A20.332,20.332,0,0,1,82.985,96.107Zm17.45,1.1a25.931,25.931,0,0,0-6.878-4.48,18.279,18.279,0,1,0-21.145,0,26.061,26.061,0,0,0-14.285,16.085,35.868,35.868,0,1,1,49.714,0A25.986,25.986,0,0,0,100.435,97.211Z"
+              transform="translate(1274.5 172.5)"
+            />
+            <g id="그룹_10818" data-name="그룹 10818" transform="translate(88 -3)">
+              <rect
+                id="사각형_3622"
+                data-name="사각형 3622"
+                class="cls-1"
+                width="122"
+                height="122"
+                transform="translate(1208 197)"
+              />
+            </g>
+          </g>
+        </svg>
+        <span class="rw-typo-subtext3">회원관리</span>
+    </div>
+
+    <div
+        *ngIf="gymApiData?.role_code == 'member'"
+        class="menu d-flex flex-column justify-content-center align-items-center"
+        [routerLink]="['/', address, 'schedule-reservation']"
+        routerLinkActive="selected"
+    >
+        <svg xmlns="http://www.w3.org/2000/svg" width="122" height="122" viewBox="0 0 122 122">
+            <defs></defs>
+            <g id="스케줄_회원용" data-name="스케줄 회원용" transform="translate(-326 -370)">
+              <rect id="사각형_3088" data-name="사각형 3088" class="cls-1" width="122" height="122" transform="translate(326 370)"/>
+              <g id="그룹_5615" data-name="그룹 5615" transform="translate(344 391.001)">
+                <g id="사각형_2837" data-name="사각형 2837" transform="translate(0 6.063)">
+                  <rect id="사각형_3108" data-name="사각형 3108" class="cls-1" width="86.546" height="73.564" rx="2" transform="translate(0 0.004)"/>
+                  <path id="패스_2224" data-name="패스 2224" class="cls-2" d="M112.391,78.268H43.155A8.664,8.664,0,0,1,34.5,69.609V13.359A8.667,8.667,0,0,1,43.155,4.7h69.237a8.667,8.667,0,0,1,8.655,8.659v56.25A8.664,8.664,0,0,1,112.391,78.268ZM43.155,10.763a2.6,2.6,0,0,0-2.6,2.6v56.25a2.6,2.6,0,0,0,2.6,2.6h69.237a2.6,2.6,0,0,0,2.6-2.6V13.359a2.6,2.6,0,0,0-2.6-2.6Z" transform="translate(-34.5 -4.7)"/>
+                </g>
+                <g id="그룹_5140" data-name="그룹 5140" transform="translate(25.098)">
+                  <path id="패스_2225" data-name="패스 2225" class="cls-2" d="M43.329,22.075A3.03,3.03,0,0,1,40.3,19.046V6.328a3.029,3.029,0,0,1,6.058,0V19.046A3.03,3.03,0,0,1,43.329,22.075Z" transform="translate(-40.3 -3.299)"/>
+                  <path id="패스_2226" data-name="패스 2226" class="cls-2" d="M50.329,22.075A3.03,3.03,0,0,1,47.3,19.046V6.328a3.029,3.029,0,1,1,6.058,0V19.046A3.03,3.03,0,0,1,50.329,22.075Z" transform="translate(-17.009 -3.299)"/>
+                </g>
+                <rect id="사각형_3109" data-name="사각형 3109" class="cls-2" width="82.218" height="6.06" transform="translate(2.164 31.164)"/>
+                <path id="패스_2227" data-name="패스 2227" class="cls-2" d="M73.248,21.3H43.329a3.029,3.029,0,1,1,0-6.058H73.248a3.029,3.029,0,0,1,0,6.058Z" transform="translate(-15.202 36.422)"/>
+              </g>
+            </g>
+        </svg>
+        <span class="rw-typo-subtext3">예약</span>
+    </div>
+
+
+    <div
+        *ngIf="gymApiData?.role_code != 'member'"
+        class="menu d-flex flex-column justify-content-center align-items-center"
+        [routerLink]="['/', address, 'schedule']"
+        routerLinkActive="selected"
+    >
+        <svg xmlns="http://www.w3.org/2000/svg" width="122" height="122" viewBox="0 0 122 122">
+            <defs></defs>
+            <g id="스케줄_직원용" data-name="스케줄 직원용" transform="translate(-483 -370)">
+                <rect
+                    id="사각형_3089"
+                    data-name="사각형 3089"
+                    class="cls-1"
+                    width="122"
+                    height="122"
+                    transform="translate(483 370)"
+                />
+                <g id="그룹_5141" data-name="그룹 5141" transform="translate(501 390.999)">
+                    <g id="사각형_2837" data-name="사각형 2837" transform="translate(0 6.568)">
+                        <rect
+                            id="사각형_3110"
+                            data-name="사각형 3110"
+                            class="cls-1"
+                            width="86.55"
+                            height="73.062"
+                            rx="2"
+                            transform="translate(0 0.004)"
+                        />
+                        <path
+                            id="패스_2228"
+                            data-name="패스 2228"
+                            class="cls-2"
+                            d="M144.395,77.767H75.155a8.635,8.635,0,0,1-8.655-8.6V13.3a8.638,8.638,0,0,1,8.655-8.6h69.24a8.638,8.638,0,0,1,8.655,8.6V69.167A8.635,8.635,0,0,1,144.395,77.767ZM75.155,10.721a2.59,2.59,0,0,0-2.6,2.579V69.167a2.593,2.593,0,0,0,2.6,2.583h69.24a2.593,2.593,0,0,0,2.6-2.583V13.3a2.59,2.59,0,0,0-2.6-2.579Z"
+                            transform="translate(-66.5 -4.7)"
+                        />
+                    </g>
+                    <g id="그룹_5140" data-name="그룹 5140" transform="translate(23.586)">
+                        <path
+                            id="패스_2229"
+                            data-name="패스 2229"
+                            class="cls-2"
+                            d="M75.582,23.64A3.282,3.282,0,0,1,72.3,20.358V6.581a3.282,3.282,0,1,1,6.563,0V20.358A3.282,3.282,0,0,1,75.582,23.64Z"
+                            transform="translate(-72.3 -3.299)"
+                        />
+                        <path
+                            id="패스_2230"
+                            data-name="패스 2230"
+                            class="cls-2"
+                            d="M82.582,23.64A3.282,3.282,0,0,1,79.3,20.358V6.581a3.282,3.282,0,1,1,6.563,0V20.358A3.282,3.282,0,0,1,82.582,23.64Z"
+                            transform="translate(-46.484 -3.299)"
+                        />
+                    </g>
+                    <rect
+                        id="사각형_3111"
+                        data-name="사각형 3111"
+                        class="cls-2"
+                        width="81.862"
+                        height="6.565"
+                        transform="translate(2.344 30.952)"
+                    />
+                </g>
+            </g>
+        </svg>
+        <span class="rw-typo-subtext3">스케줄</span>
+    </div>
+
+    <div
+        *ngIf="gymApiData?.role_code != 'member'"
+        class="menu d-flex flex-column justify-content-center align-items-center"
+        [routerLink]="['/', address, 'membership']"
+        routerLinkActive="selected"
+    >
+        <svg xmlns="http://www.w3.org/2000/svg" width="122" height="122" viewBox="0 0 122 122">
+            <defs>
+                <style></style>
+            </defs>
+            <g id="회원권" transform="translate(-1118 -375)">
+                <rect
+                    id="사각형_3122"
+                    data-name="사각형 3122"
+                    class="cls-1"
+                    width="122"
+                    height="122"
+                    transform="translate(1118 375)"
+                />
+                <g id="회원권-2" data-name="회원권" transform="translate(1135 402.001)">
+                    <g id="빼기_1" data-name="빼기 1" transform="translate(0 0)">
+                        <path
+                            id="패스_2132"
+                            data-name="패스 2132"
+                            class="cls-1"
+                            d="M16-236.432v-18a4.183,4.183,0,0,1,4.181-4.181h79.44a4.183,4.183,0,0,1,4.181,4.181v17.882a11.567,11.567,0,0,0-8.676,11.205,11.56,11.56,0,0,0,8.676,11.205v19.183a4.18,4.18,0,0,1-4.181,4.181H20.181A4.18,4.18,0,0,1,16-194.956v-19.3A11.572,11.572,0,0,0,23.722-228.7,11.582,11.582,0,0,0,16-236.42Z"
+                            transform="translate(-16 258.613)"
+                        />
+                        <path
+                            id="패스_2133"
+                            data-name="패스 2133"
+                            class="cls-2"
+                            d="M21.853-240.149A17.569,17.569,0,0,1,30.1-225.344a17.564,17.564,0,0,1-8.241,14.805v13.915H97.949v-13.643a17.418,17.418,0,0,1-8.676-15.077,17.428,17.428,0,0,1,8.676-15.077V-252.76h-76.1v12.61M16-236.428v0l0-18a4.184,4.184,0,0,1,4.177-4.181h79.44a4.185,4.185,0,0,1,4.181,4.181v17.882a11.565,11.565,0,0,0-8.676,11.205,11.566,11.566,0,0,0,8.676,11.209v19.183a4.185,4.185,0,0,1-4.181,4.181H20.181A4.184,4.184,0,0,1,16-194.952v-19.3a11.641,11.641,0,0,0,8.241-11.088A11.64,11.64,0,0,0,16-236.428Z"
+                            transform="translate(-16 258.613)"
+                        />
+                    </g>
+                    <rect
+                        id="사각형_3079"
+                        data-name="사각형 3079"
+                        class="cls-2"
+                        width="5.855"
+                        height="60.858"
+                        transform="translate(52.331 2.093)"
+                    />
+                </g>
+            </g>
+        </svg>
+
+        <span class="rw-typo-subtext3">회원권</span>
+    </div>
+
+    <div
+        *ngIf="gymApiData?.role_code != 'member'"
+        class="menu d-flex flex-column justify-content-center align-items-center"
+        [routerLink]="['/', address, 'lesson']"
+        routerLinkActive="selected"
+    >
+        <svg xmlns="http://www.w3.org/2000/svg" width="122" height="122" viewBox="0 0 122 122">
+            <defs>
+                <style></style>
+            </defs>
+            <g id="수업" transform="translate(-635 -370)">
+                <rect
+                    id="사각형_3090"
+                    data-name="사각형 3090"
+                    class="cls-1"
+                    width="122"
+                    height="122"
+                    transform="translate(635 370)"
+                />
+                <path
+                    id="패스_2219"
+                    data-name="패스 2219"
+                    class="cls-2"
+                    d="M195.67,27.9h-4.122V17.763a13.135,13.135,0,0,0-13.12-13.12h-7.09a13.134,13.134,0,0,0-13.115,13.12V27.9H145.167V17.763a13.135,13.135,0,0,0-13.12-13.12h-7.085a13.135,13.135,0,0,0-13.12,13.12V27.9h-4.524A11.082,11.082,0,0,0,96.251,38.969v4.92a11.081,11.081,0,0,0,11.068,11.068h4.524v7.437a13.135,13.135,0,0,0,13.12,13.12h7.085a13.135,13.135,0,0,0,13.12-13.12V54.957h13.056v7.437a13.134,13.134,0,0,0,13.115,13.12h7.09a13.135,13.135,0,0,0,13.12-13.12V54.957h4.122a11.081,11.081,0,0,0,11.068-11.068v-4.92A11.082,11.082,0,0,0,195.67,27.9ZM107.319,49.215a5.334,5.334,0,0,1-5.326-5.326v-4.92a5.334,5.334,0,0,1,5.326-5.331h4.524V49.215Zm32.107,13.178a7.387,7.387,0,0,1-7.378,7.378h-7.085a7.387,7.387,0,0,1-7.378-7.378V17.763a7.387,7.387,0,0,1,7.378-7.378h7.085a7.387,7.387,0,0,1,7.378,7.378V62.394Zm5.741-13.178V33.638h13.056V49.215Zm40.64,13.178a7.387,7.387,0,0,1-7.378,7.378h-7.09a7.386,7.386,0,0,1-7.374-7.378V17.763a7.386,7.386,0,0,1,7.374-7.378h7.09a7.387,7.387,0,0,1,7.378,7.378V62.394ZM201,43.889a5.334,5.334,0,0,1-5.326,5.326h-4.122V33.638h4.122A5.334,5.334,0,0,1,201,38.969Z"
+                    transform="translate(544.749 391.357)"
+                />
+            </g>
+        </svg>
+
+        <span class="rw-typo-subtext3">수업</span>
+    </div>
+
+    <div
+        *ngIf="gymApiData?.role_code != 'member'"
+        class="menu d-flex flex-column justify-content-center align-items-center"
+        [routerLink]="['/', address, 'locker']"
+        routerLinkActive="selected"
+    >
+        <svg xmlns="http://www.w3.org/2000/svg" width="122" height="122" viewBox="0 0 122 122">
+            <defs>
+                <style></style>
+            </defs>
+            <g id="락커" transform="translate(-798 -370)">
+                <rect
+                    id="사각형_3091"
+                    data-name="사각형 3091"
+                    class="cls-1"
+                    width="122"
+                    height="122"
+                    transform="translate(798 370)"
+                />
+                <g id="그룹_5144" data-name="그룹 5144" transform="translate(819 391)">
+                    <g id="사각형_2835" data-name="사각형 2835">
+                        <rect
+                            id="사각형_3112"
+                            data-name="사각형 3112"
+                            class="cls-1"
+                            width="80.75"
+                            height="80.75"
+                            rx="2"
+                        />
+                        <path
+                            id="패스_2231"
+                            data-name="패스 2231"
+                            class="cls-2"
+                            d="M203.175,83.25h-64.6a8.083,8.083,0,0,1-8.075-8.075v-64.6A8.083,8.083,0,0,1,138.575,2.5h64.6a8.083,8.083,0,0,1,8.075,8.075v64.6A8.083,8.083,0,0,1,203.175,83.25Zm-64.6-75.1a2.424,2.424,0,0,0-2.423,2.423v64.6a2.424,2.424,0,0,0,2.423,2.423h64.6a2.424,2.424,0,0,0,2.423-2.423v-64.6a2.424,2.424,0,0,0-2.423-2.423Z"
+                            transform="translate(-130.5 -2.5)"
+                        />
+                    </g>
+                    <g id="패스_1914" data-name="패스 1914" transform="translate(29.054 24.003)">
+                        <path
+                            id="패스_2232"
+                            data-name="패스 2232"
+                            class="cls-1"
+                            d="M149,8.445A11.305,11.305,0,1,1,137.7,19.75,11.307,11.307,0,0,1,149,8.445Z"
+                            transform="translate(-137.696 -8.445)"
+                        />
+                        <path
+                            id="패스_2233"
+                            data-name="패스 2233"
+                            class="cls-2"
+                            d="M149.017,14.1a5.667,5.667,0,1,0,5.665,5.669,5.676,5.676,0,0,0-5.665-5.669m0-5.653A11.319,11.319,0,1,1,137.7,19.766,11.318,11.318,0,0,1,149.017,8.445Z"
+                            transform="translate(-137.696 -8.445)"
+                        />
+                    </g>
+                    <path
+                        id="패스_2234"
+                        data-name="패스 2234"
+                        class="cls-2"
+                        d="M142.626,28.307A2.827,2.827,0,0,1,139.8,25.48v-9.7a2.826,2.826,0,1,1,5.653,0v9.7A2.827,2.827,0,0,1,142.626,28.307Z"
+                        transform="translate(-102.251 29.248)"
+                    />
+                </g>
+            </g>
+        </svg>
+        <span class="rw-typo-subtext3">락커</span>
+    </div>
+
+    <div
+        class="menu d-flex flex-column justify-content-center align-items-center"
+        [routerLink]="['/', address, 'community']"
+        routerLinkActive="selected"
+    >
+        <svg xmlns="http://www.w3.org/2000/svg" width="122" height="122" viewBox="0 0 122 122">
+            <defs>
+                <style></style>
+            </defs>
+            <g id="채팅" transform="translate(-955 -370)">
+                <rect
+                    id="사각형_3092"
+                    data-name="사각형 3092"
+                    class="cls-1"
+                    width="122"
+                    height="122"
+                    transform="translate(955 370)"
+                />
+                <g id="그룹_5151" data-name="그룹 5151" transform="translate(977 390)">
+                    <g id="그룹_5145" data-name="그룹 5145">
+                        <g id="합치기_79" data-name="합치기 79">
+                            <path
+                                id="패스_2235"
+                                data-name="패스 2235"
+                                class="cls-1"
+                                d="M219.505,81.218,209.039,70.689H170.374a8.216,8.216,0,0,1-7.869-8.542V10.758A8.239,8.239,0,0,1,170.374,2.2h62.953a8.239,8.239,0,0,1,7.869,8.562V62.147a8.217,8.217,0,0,1-7.869,8.542H226.54V81.218a2.385,2.385,0,0,1-2.64,2.046A6.468,6.468,0,0,1,219.505,81.218Z"
+                                transform="translate(-162.498 -2.196)"
+                            />
+                            <path
+                                id="패스_2236"
+                                data-name="패스 2236"
+                                class="cls-2"
+                                d="M221.031,74.943V65.182h12.3c1.275,0,2.357-1.393,2.357-3.037V10.759c0-1.656-1.082-3.049-2.357-3.049H170.365c-1.275,0-2.357,1.393-2.357,3.049V62.144c0,1.645,1.082,3.037,2.357,3.037h40.959l1.617,1.625,8.089,8.137m2.868,8.322a6.471,6.471,0,0,1-4.4-2.046L209.034,70.69H170.365c-4.344,0-7.865-3.817-7.865-8.546V10.759c0-4.725,3.521-8.562,7.865-8.562h62.961c4.344,0,7.865,3.836,7.865,8.562V62.144c0,4.729-3.521,8.546-7.865,8.546h-6.787V81.219A2.384,2.384,0,0,1,223.9,83.265Z"
+                                transform="translate(-162.493 -2.193)"
+                            />
+                        </g>
+                        <g id="그룹_5138" data-name="그룹 5138" transform="translate(18.893 22.254)">
+                            <path
+                                id="패스_2237"
+                                data-name="패스 2237"
+                                class="cls-2"
+                                d="M184.164,13.36H170.054a2.754,2.754,0,0,1,0-5.508h14.109a2.754,2.754,0,0,1,0,5.508Z"
+                                transform="translate(-167.3 -7.852)"
+                            />
+                        </g>
+                    </g>
+                    <g id="그룹_5148" data-name="그룹 5148" transform="translate(18.893 22.254)">
+                        <path
+                            id="패스_2238"
+                            data-name="패스 2238"
+                            class="cls-2"
+                            d="M184.164,13.36H170.054a2.754,2.754,0,0,1,0-5.508h14.109a2.754,2.754,0,0,1,0,5.508Z"
+                            transform="translate(-167.3 -7.852)"
+                        />
+                    </g>
+                    <g id="그룹_5159" data-name="그룹 5159" transform="translate(18.893 37.78)">
+                        <path
+                            id="패스_2239"
+                            data-name="패스 2239"
+                            class="cls-2"
+                            d="M194.4,17.31H170.054a2.756,2.756,0,0,1,0-5.512H194.4a2.756,2.756,0,1,1,0,5.512Z"
+                            transform="translate(-167.3 -11.798)"
+                        />
+                    </g>
+                </g>
+            </g>
+        </svg>
+        <span class="rw-typo-subtext3">채팅</span>
+    </div>
+
+    <div
+        *ngIf="gymApiData?.role_code != 'member'"
+        class="menu d-flex flex-column justify-content-center align-items-center"
+        [routerLink]="['/', address, 'sale']"
+        routerLinkActive="selected"
+    >
+        <svg xmlns="http://www.w3.org/2000/svg" width="122" height="122" viewBox="0 0 122 122">
+            <defs>
+                <style></style>
+            </defs>
+            <g id="그룹_9638" data-name="그룹 9638" transform="translate(-1229 -197)">
+              <g id="그룹_9635" data-name="그룹 9635" transform="translate(1244.785 212.605)">
+                <g id="타원_564" data-name="타원 564" transform="translate(3.215 2.973)">
+                  <circle
+                    id="타원_566"
+                    data-name="타원 566"
+                    class="cls-1" cx="42.5" cy="42.5" r="42.5"
+                    transform="translate(0 0.422)"
+                  />
+                  <path
+                    id="패스_2472"
+                    data-name="패스 2472"
+                    class="cls-2"
+                    d="M45.735,87.471A41.735,41.735,0,1,1,87.471,45.735,41.78,41.78,0,0,1,45.735,87.471Zm0-77.911A36.175,36.175,0,1,0,81.911,45.735,36.219,36.219,0,0,0,45.735,9.56Z"
+                    transform="translate(-3.152 -2.897)"
+                  />
+                </g>
+                <g id="타원_565" data-name="타원 565" transform="translate(16.269 16.281)">
+                  <circle
+                    id="타원_567"
+                    data-name="타원 567"
+                    class="cls-1" cx="29" cy="29" r="29"
+                    transform="translate(0.945 0.113)"
+                  />
+                  <path
+                    id="패스_2473"
+                    data-name="패스 2473"
+                    class="cls-2" d="M35.529,65.059A29.529,29.529,0,1,1,65.059,35.529,29.562,29.562,0,0,1,35.529,65.059Zm0-54A24.471,24.471,0,1,0,60,35.529,24.5,24.5,0,0,0,35.529,11.058Z"
+                    transform="translate(-6 -6)"
+                  />
+                </g>
+                <path
+                  id="패스_2474"
+                  data-name="패스 2474"
+                  class="cls-2" d="M15.182,34.514A2.785,2.785,0,0,1,12.4,31.731V13.182a2.782,2.782,0,1,1,5.565,0V31.731A2.785,2.785,0,0,1,15.182,34.514Z"
+                  transform="translate(30.616 23.354)"
+                />
+              </g>
+              <g id="그룹_9637" data-name="그룹 9637" transform="translate(21)">
+                <rect
+                  id="사각형_3622"
+                  data-name="사각형 3622"
+                  class="cls-1"
+                  width="122"
+                  height="122"
+                  transform="translate(1208 197)"
+                />
+              </g>
+            </g>
+        </svg>
+        <span class="rw-typo-subtext3">매출</span>
+    </div>
+
+</div>

@@ -1,0 +1,10 @@
+<div
+    class="rw-radio-button d-flex align-items-center user-select-none"
+    [class.checked]="checked"
+    [class.disabled]="disabled"
+>
+    <div class="circle d-flex justify-content-center align-items-center">
+        <div class="checkmark"></div>
+    </div>
+    <div #text_element class="text rw-typo-bodytext1" *ngIf="text">{{ text }}</div>
+</div>

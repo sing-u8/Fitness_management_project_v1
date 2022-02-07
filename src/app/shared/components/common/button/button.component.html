@@ -1,0 +1,17 @@
+<div #rw_button class="cmp-button">
+
+  <ngx-spinner
+    bdColor="rgba(0, 0, 0, 0.8)"
+    size="default"
+    type="ball-clip-rotate"
+    [color]="'#fff'"
+    [bdColor]="color"
+    [fullScreen] = "false"
+    [name]="'loading-button'"
+  ></ngx-spinner>
+  <ng-container
+    *ngIf="!isLoading"
+  >
+    <ng-content #bt_content></ng-content>
+  </ng-container>
+</div>

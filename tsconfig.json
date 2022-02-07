@@ -1,0 +1,47 @@
+/* To learn more about this file see: https://angular.io/config/tsconfig. */
+{
+    "compileOnSave": false,
+    "compilerOptions": {
+        "baseUrl": "./",
+        "outDir": "./dist/out-tsc",
+        "forceConsistentCasingInFileNames": true,
+        "esModuleInterop": true,
+        "strict": false,
+        "noImplicitOverride": true,
+        "noPropertyAccessFromIndexSignature": true,
+        "noImplicitReturns": true,
+        "noFallthroughCasesInSwitch": true,
+        "sourceMap": true,
+        "declaration": false,
+        "downlevelIteration": true,
+        "experimentalDecorators": true,
+        "moduleResolution": "node",
+        "importHelpers": true,
+        "resolveJsonModule": true,
+        "allowSyntheticDefaultImports": true,
+        "target": "es2017",
+        "module": "es2020",
+        "lib": ["es2020", "dom"],
+        "paths": {
+            "@schemas/*": ["./src/app/core/schemas/*"],
+            "@services/*": ["./src/app/core/services/*"],
+            "@shared/*": ["./src/app/shared/*"],
+            "@environments/*": ["./src/environments/*"],
+            "@guards/*": ["./src/app/core/guards/*"],
+            "@helpers/*": ["./src/app/helper/*"],
+
+            "@redwhale/gym/*": ["./src/app/feature/redwhale/gym/*"],
+            "@redwhale/auth/*": ["./src/app/feature/redwhale/auth/*"],
+            "@redwhale/redwhale-home/*": ["./src/app/feature/redwhale/redwhale-home/*"],
+
+            "@appStore/*": ["./src/app/store/*"],
+            "@gymStore/*": ["./src/app/feature/redwhale/gym/store/*"]
+        }
+    },
+    "angularCompilerOptions": {
+        "enableI18nLegacyMessageIdFormat": false,
+        "strictInjectionParameters": true,
+        "strictInputAccessModifiers": true,
+        "strictTemplates": true
+    }
+}

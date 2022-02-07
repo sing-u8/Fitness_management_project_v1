@@ -1,0 +1,25 @@
+<section class="icon-container">
+
+  <div class="d-flex align-items-center justify-content-center" (click)="toggleDropDown()" (rwClickOutside)="closeDropDown()">
+    <div class="icon" [style.backgroundColor]="selectedColor ? selectedColor : 'var(--border-color)'"></div>
+    <div class="arrow-container">
+      <img src="assets/icons/etc/arrow-down-fill-grey.svg" [class.open]="isColorDropDownOpen">
+    </div>
+  </div>
+
+  <div
+    #color_box
+    class="color-box"
+    [style.visibility] = "isColorDropDownOpen ? 'visible' : 'hidden'"
+    (click) = "$event.stopPropagation()"
+  >
+    <div
+      *ngFor="let color of iconColors; let i=index"
+      class="color-item"
+      [style.backgroundColor] = 'color'
+      (click) = "onIconClick(color)"
+    >
+      <img *ngIf="color == selectedColor" src="assets/icons/etc/check_white.svg">
+    </div>
+  </div>
+</section>

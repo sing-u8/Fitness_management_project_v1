@@ -1,0 +1,31 @@
+* {
+    padding: 0px;
+    margin: 0px;
+}
+
+.empty-indicator {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    height: 100%;
+
+    img {
+        margin-bottom: 10px;
+    }
+
+    .find-text {
+        margin-top: 8px;
+    }
+    .grey {
+        color: var(--grey);
+    }
+    .top-image {
+        margin-bottom: 20px;
+    }
+
+    & > .empty-guide-button {
+        margin-top: 20px;
+    }
+}

@@ -1,0 +1,89 @@
+<div class="category-container" >
+
+  <div class="category-header">
+    <form class="header-left" (click)= "toggleCategOpen()">
+      <div class="mdi mdi-chevron-down" [class.open]="this.isCategOpen"></div>
+      <span
+        *ngIf="!isChangeNameOn" class="rw-typo-title1"
+      >
+        {{name}}
+      </span>
+      <input
+        *ngIf="isChangeNameOn"
+        rw-autoFocus
+        (rwClickOutside) = "changeCategName()"
+        (keyup.enter) = "changeCategName()"
+        class="rw-input"
+        [formControl] = "categNameForm"
+      >
+      <span class="rw-typo-title1 item-length">{{items.length}}</span>
+    </form>
+
+    <div class="header-right">
+      <img (click)="setDropdonwOpen($event)" src="assets/icons/etc/menu-vertical-grey.svg">
+      <div
+        class="dropdown"
+        (rwClickOutside) = "setDropdonwClose();"
+        [style.visibility] = "isDropdownOpen ? 'visible' : 'hidden'"
+      >
+        <div
+          (click) =" onChangeName($event)"
+          class="dropdown-item"
+        >이름 변경</div>
+        <div
+          (click)="setCategDelModalOepn()"
+          class="dropdown-item"
+        >카테고리 삭제</div>
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="category-content"
+    [class.categ-open] = 'isCategOpen'
+  >
+    <ng-template [ngIf] ="items.length != 0">
+      <gl-lesson-card
+        *ngFor = "let item of items"
+        [categItem] = "item"
+        [categId] = "id"
+        [gymId] = "gymId"
+        [categName] = "name"
+        [isIn] = "'category'"
+      ></gl-lesson-card>
+    </ng-template>
+
+    <div
+      *ngIf="!isAddLessonInputOn"
+      class="add-item"
+      (click) = "setAddLessonItemOn($event)"
+    >
+      <img src="assets/icons/etc/plus-darkgrey.svg" />
+      <span>수업 추가</span>
+    </div>
+    <form
+      *ngIf="isAddLessonInputOn"
+      class="add-item-container"
+    >
+      <input
+        rw-autoFocus
+        (rwClickOutside) = "addCategItem( newLessonForm.value )"
+        (keyup.enter) = "addCategItem( newLessonForm.value )"
+        [formControl] = newLessonForm
+        class="rw-input add-item-input"
+        type="text"
+        placeholder="수업명을 입력해주세요"
+      >
+      <img src="assets/icons/etc/plus-darkgrey.svg">
+    </form>
+
+
+  </div>
+</div>
+
+<rw-modal
+  [(visible)] = "isCategDelOpen"
+  [data] = "delModalData"
+  (cancel) ="onDeleteCategoryCancel()"
+  (confirm) ="onDeleteCategoryConfirm()"
+></rw-modal>

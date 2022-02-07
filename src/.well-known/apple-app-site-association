@@ -1,0 +1,15 @@
+{
+	"applinks": {
+		"apps": [],
+		"details": [
+			{
+				"appID": "L43AAUTC45.xyz.redwhale.m",
+				"paths": [
+					"NOT /",
+					"NOT /home/*",
+					"/*"
+				]
+			}
+		]
+	}
+}

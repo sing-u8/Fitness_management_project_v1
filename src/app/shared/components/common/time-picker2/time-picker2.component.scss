@@ -1,0 +1,111 @@
+.rw-timepicker2 {
+    position: relative;
+    display: inline-flex;
+
+    .selected {
+        height: 50px;
+        width: 140px;
+        padding: 15px;
+        border: 1px solid var(--border-color);
+        border-radius: 5px;
+        background-color: var(--white);
+        cursor: pointer;
+
+        .text {
+            font-weight: 500;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .mdi {
+            transform: rotateX(0deg);
+            transition: transform 0.2s linear;
+            -moz-transition: transform 0.2s linear;
+            -webkit-transition: transform 0.2s linear;
+            -o-transition: transform 0.2s linear;
+            font-size: 2.2rem;
+            color: var(--font-color);
+        }
+    }
+
+    .open {
+        border: 1px solid var(--grey);
+
+        .mdi {
+            transform: rotateX(180deg);
+            transition: transform 0.2s linear;
+            -moz-transition: transform 0.2s linear;
+            -webkit-transition: transform 0.2s linear;
+            -o-transition: transform 0.2s linear;
+        }
+    }
+
+    .disabled {
+        border: 1px solid var(--border-color);
+        background-color: var(--background-color);
+        cursor: not-allowed;
+
+        .text,
+        .mdi {
+            color: var(--grey);
+        }
+    }
+
+    .items {
+        display: block;
+        visibility: hidden;
+        position: absolute;
+        top: 55px;
+        width: 140px;
+        height: 170px;
+        padding: 7px 0;
+        border: 1px solid var(--grey);
+        border-radius: 7px;
+        background-color: var(--white);
+        z-index: 1;
+
+        &.drop-up {
+            top: initial;
+            bottom: 55px;
+        }
+
+        .item {
+            height: 50px;
+            padding: 15px;
+            cursor: pointer;
+
+            &:hover {
+                width: 100%;
+                background-color: var(--background-color);
+            }
+
+            span {
+                font-weight: 500;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+        }
+
+        .active {
+            span {
+                font-weight: 700;
+            }
+        }
+
+        .disabled {
+            border: 1px solid transparent;
+            background-color: var(--white);
+            cursor: not-allowed;
+
+            &:hover {
+                background-color: var(--white);
+            }
+
+            span {
+                color: var(--grey);
+            }
+        }
+    }
+}

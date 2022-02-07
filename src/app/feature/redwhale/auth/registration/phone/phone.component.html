@@ -1,0 +1,114 @@
+<div class="phone full-absolute d-flex flex-column user-select-none">
+    <rw-auth-header></rw-auth-header>
+
+    <div class="flex-fill d-flex justify-content-center">
+        <div class="box d-flex flex-column">
+            <div
+                class="step-box d-flex justify-content-center align-items-center"
+                *ngIf="registration && registration.emailValid"
+            >
+                <div class="step rw-typo-subtext1 d-flex justify-content-center align-items-center">1</div>
+                <div class="dot-line"></div>
+                <div class="step d-flex rw-typo-subtext1 justify-content-center align-items-center">2</div>
+                <div class="dot-line"></div>
+                <div class="step selected d-flex rw-typo-subtext1 justify-content-center align-items-center">3</div>
+            </div>
+            <div
+                class="headline d-flex flex-column align-items-center"
+                [class.mt-0]="!registration || !registration.emailValid"
+            >
+                <div>
+                    <span class="rw-typo-headline1">마지막 단계</span><span class="rw-typo-headline2">입니다!👏</span>
+                </div>
+                <div class="rw-typo-headline2">회원번호 생성을 위해 전화번호를 입력해주세요.</div>
+            </div>
+            <div class="input-box phonenumber-input-box">
+                <div class="label rw-typo-subtext2">전화번호</div>
+                <input
+                    rw-input
+                    placeholder="전화번호를 입력해주세요."
+                    [(ngModel)]="phoneNumber"
+                    minlength="10"
+                    maxlength="11"
+                    pattern="^\d{10,11}$"
+                    #phoneNumberRef
+                    (keypress)="checkDigit($event)"
+                    (keyup)="onKeyup($event, 'phoneNumber')"
+                />
+                <div
+                    class="rw-typo-bodytext1"
+                    rw-button
+                    rwButtonWidth="120"
+                    rwButtonHeight="50"
+                    rwButtonColor="var(--darkgrey)"
+                    [rwButtonDisabled]="!phoneNumberValid"
+                    (click)="sendVerificationCodeSMSChange()"
+                >
+                    <span>인증번호 받기</span>
+                </div>
+            </div>
+            <div class="input-box verificationcode-input-box" [class.input-box-error]="phoneNumberError">
+                <div class="label rw-typo-subtext2">인증번호</div>
+                <input
+                    rw-input
+                    placeholder="인증번호를 입력해주세요."
+                    [(ngModel)]="verificationCode"
+                    #verificationCodeRef="ngModel"
+                    minlength="4"
+                    maxlength="4"
+                    pattern="^\d{4}$"
+                    (keypress)="checkDigit($event)"
+                    (keyup)="onKeyup($event, 'verificationCode')"
+                />
+                <div class="time rw-typo-bodytext1" *ngIf="timeLeft != 0">{{ timeLeft | minuteSeconds }}</div>
+                <div class="error" *ngIf="phoneNumberError">
+                    <img class="warning" src="assets/icons/etc/warning-red.svg" />
+                    <span class="rw-typo-subtext1">{{ phoneNumberError }}</span>
+                </div>
+            </div>
+
+            <div
+                *ngIf="!isSocial"
+                class="next rw-typo-title2"
+                rw-button
+                rwButtonHeight="55"
+                rwButtonColor="var(--red)"
+                [rwButtonDisabled]="
+                    !phoneNumberValid || !verificationCode || !verificationCodeRef.valid || timeLeft <= 0
+                "
+                (click)="formCheck() && next()"
+            >
+                <span>레드웨일 시작하기</span>
+            </div>
+            <div
+              *ngIf="isSocial"
+              class="next d-flex align-items-center justify-content-between"
+            >
+              <div
+                class="rw-typo-title2"
+                rw-button
+                rwButtonHeight="55"
+                rwButtonWidth="78"
+                rwButtonFontColor="var(--grey)"
+                rwButtonBorderColor="var(--border-color)"
+                (click)="backToLogin()"
+              >
+                <span>취소</span>
+              </div>
+              <div
+                class="rw-typo-title2"
+                rw-button
+                rwButtonColor="var(--red)"
+                [rwButtonDisabled]="
+                    !phoneNumberValid || !verificationCode || !verificationCodeRef.valid || timeLeft <= 0
+                "
+                (click)="formCheck() && next()"
+                rwButtonHeight="55"
+                rwButtonWidth="325"
+              >
+                <span>레드웨일 시작하기</span>
+              </div>
+            </div>
+        </div>
+    </div>
+</div>

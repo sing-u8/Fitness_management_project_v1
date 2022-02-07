@@ -1,0 +1,226 @@
+<!-- <div
+  class="rw-datepicker rw-datepicker-date d-flex flex-column user-select-none"
+  *ngIf="mode == 'date'"
+  [class.isShadow] = 'isShadow'
+>
+    <div class="month col d-flex">
+        <div class="start col-3 d-flex justify-content-start align-items-start">
+            <span class="mdi mdi-chevron-double-left" (click)="previousYear()"></span>
+            <span class="mdi mdi-chevron-left" (click)="previousMonth()"></span>
+        </div>
+        <div class="center col-6 d-flex justify-content-center align-items-start">{{ month }}</div>
+        <div class="end col-3 d-flex justify-content-end align-items-start">
+            <span class="mdi mdi-chevron-right" (click)="nextMonth()"></span>
+            <span class="mdi mdi-chevron-double-right" (click)="nextYear()"></span>
+        </div>
+    </div>
+    <div class="week-header col d-flex justify-content-between align-items-center">
+        <div class="d-flex justify-content-center align-items-center">일</div>
+        <div class="d-flex justify-content-center align-items-center">월</div>
+        <div class="d-flex justify-content-center align-items-center">화</div>
+        <div class="d-flex justify-content-center align-items-center">수</div>
+        <div class="d-flex justify-content-center align-items-center">목</div>
+        <div class="d-flex justify-content-center align-items-center">금</div>
+        <div class="d-flex justify-content-center align-items-center">토</div>
+    </div>
+    <div
+        class="week-row col d-flex justify-content-between align-items-center"
+        *ngFor="let weekRow of weekRows; let i = index"
+    >
+        <div
+            class="week-col d-flex justify-content-center align-items-center"
+            *ngFor="let weekCol of weekRow; let j = index"
+            [style.color]="weekCol.color"
+            [class.selected]="weekCol.selected"
+            (click)="selectDate(i, j)"
+        >
+            {{ weekCol.day }}
+        </div>
+    </div>
+</div>
+
+<div
+  class="rw-datepicker rw-datepicker-week d-flex flex-column user-select-none"
+  *ngIf="mode == 'week'"
+  [class.isShadow] = 'isShadow'
+>
+    <div class="month col d-flex">
+        <div class="start col-3 d-flex justify-content-start align-items-start">
+            <span class="mdi mdi-chevron-double-left" (click)="previousYear()"></span>
+            <span class="mdi mdi-chevron-left" (click)="previousMonth()"></span>
+        </div>
+        <div class="center col-6 d-flex justify-content-center align-items-start">{{ month }}</div>
+        <div class="end col-3 d-flex justify-content-end align-items-start">
+            <span class="mdi mdi-chevron-right" (click)="nextMonth()"></span>
+            <span class="mdi mdi-chevron-double-right" (click)="nextYear()"></span>
+        </div>
+    </div>
+    <div class="week-header col d-flex justify-content-between align-items-center">
+        <div class="d-flex justify-content-center align-items-center">일</div>
+        <div class="d-flex justify-content-center align-items-center">월</div>
+        <div class="d-flex justify-content-center align-items-center">화</div>
+        <div class="d-flex justify-content-center align-items-center">수</div>
+        <div class="d-flex justify-content-center align-items-center">목</div>
+        <div class="d-flex justify-content-center align-items-center">금</div>
+        <div class="d-flex justify-content-center align-items-center">토</div>
+    </div>
+    <div
+        class="week-row col d-flex justify-content-between align-items-center"
+        *ngFor="let weekRow of weekRows; let i = index"
+        [class.selected]="weekNumbers[i] == selectedWeek"
+        (click)="selectWeek(i)"
+    >
+        <div
+            class="week-col d-flex justify-content-center align-items-center"
+            *ngFor="let weekCol of weekRow; let j = index"
+            [style.color]="weekCol.color"
+        >
+            {{ weekCol.day }}
+        </div>
+    </div>
+</div>
+
+<div
+  class="rw-datepicker rw-datepicker-date d-flex flex-column user-select-none"
+  *ngIf="mode == 'multi'"
+  [class.isShadow] = 'isShadow'
+>
+    <div class="month col d-flex">
+        <div class="start col-3 d-flex justify-content-start align-items-start">
+            <span class="mdi mdi-chevron-double-left" (click)="previousYear()"></span>
+            <span class="mdi mdi-chevron-left" (click)="previousMonth()"></span>
+        </div>
+        <div class="center col-6 d-flex justify-content-center align-items-start">{{ month }}</div>
+        <div class="end col-3 d-flex justify-content-end align-items-start">
+            <span class="mdi mdi-chevron-right" (click)="nextMonth()"></span>
+            <span class="mdi mdi-chevron-double-right" (click)="nextYear()"></span>
+        </div>
+    </div>
+    <div class="week-header col d-flex justify-content-between align-items-center">
+        <div class="d-flex justify-content-center align-items-center">일</div>
+        <div class="d-flex justify-content-center align-items-center">월</div>
+        <div class="d-flex justify-content-center align-items-center">화</div>
+        <div class="d-flex justify-content-center align-items-center">수</div>
+        <div class="d-flex justify-content-center align-items-center">목</div>
+        <div class="d-flex justify-content-center align-items-center">금</div>
+        <div class="d-flex justify-content-center align-items-center">토</div>
+    </div>
+    <div
+        class="week-row col d-flex justify-content-between align-items-center"
+        *ngFor="let weekRow of weekRows; let i = index"
+    >
+        <div
+            class="week-col d-flex justify-content-center align-items-center"
+            *ngFor="let weekCol of weekRow; let j = index"
+            [style.color]="weekCol.color"
+            [class.selected]="selectedDateObj[weekCol.date]"
+            (click)="multiSelectDate(weekCol)"
+        >
+            {{ weekCol.day }}
+        </div>
+    </div>
+</div>
+
+<div
+  #multiline_datepicker
+  class="rw-datepicker mutiline-unit rw-datepicker-multiline d-flex flex-column user-select-none"
+  *ngIf="mode == 'multiline' || mode =='multiline-component'"
+  [class.isShadow] = 'isShadow'
+>
+  <div class="month col d-flex">
+      <div class="start col-3 d-flex justify-content-start align-items-start">
+          <span class="mdi mdi-chevron-double-left" (click)="previousYear()"></span>
+          <span class="mdi mdi-chevron-left" (click)="previousMonth()"></span>
+      </div>
+      <div class="center col-6 d-flex justify-content-center align-items-start">{{ month }}</div>
+      <div class="end col-3 d-flex justify-content-end align-items-start">
+          <span class="mdi mdi-chevron-right" (click)="nextMonth()"></span>
+          <span class="mdi mdi-chevron-double-right" (click)="nextYear()"></span>
+      </div>
+  </div>
+  <div class="week-header col d-flex justify-content-between align-items-center">
+      <div class="d-flex justify-content-center align-items-center">일</div>
+      <div class="d-flex justify-content-center align-items-center">월</div>
+      <div class="d-flex justify-content-center align-items-center">화</div>
+      <div class="d-flex justify-content-center align-items-center">수</div>
+      <div class="d-flex justify-content-center align-items-center">목</div>
+      <div class="d-flex justify-content-center align-items-center">금</div>
+      <div class="d-flex justify-content-center align-items-center">토</div>
+  </div>
+  <div
+      class="week-row col d-flex justify-content-between align-items-center"
+      *ngFor="let weekRow of weekRows; let i = index"
+  >
+      <div
+          class="week-col d-flex justify-content-center align-items-center"
+          *ngFor="let weekCol of weekRow; let j = index"
+          [style.color]="weekCol.color"
+          [class.start-date]="isStartDate(weekCol)"
+          [class.end-date] = "isEndDate(weekCol)"
+          [class.selected]="isEdgeDate(weekCol)"
+          [class.between]="isBetween(weekCol)"
+          [class.avaliable-date] = "isAvailableDate(weekCol)"
+          (click)="multiLineSelectDate(weekCol)"
+          rw-tooltip
+          [rwTooltipDisabled] = "pastDisable(weekCol) || mode=='multiline-component'"
+          [rwTooltipTitle]="getDayFromStartDate(weekCol)+'일 사용'"
+          rwTooltipPlacement="bottom"
+      >
+          {{ weekCol.day }}
+      </div>
+  </div>
+</div>
+
+
+
+<div
+  #register_membership_locker
+  class="rw-datepicker mutiline-unit rw-datepicker-multiline d-flex flex-column user-select-none"
+  *ngIf="mode == 'reg-ml'"
+  [class.isShadow] = 'isShadow'
+>
+  <div class="month col d-flex">
+      <div class="start col-3 d-flex justify-content-start align-items-start">
+          <span class="mdi mdi-chevron-double-left" (click)="previousYear()"></span>
+          <span class="mdi mdi-chevron-left" (click)="previousMonth()"></span>
+      </div>
+      <div class="center col-6 d-flex justify-content-center align-items-start">{{ month }}</div>
+      <div class="end col-3 d-flex justify-content-end align-items-start">
+          <span class="mdi mdi-chevron-right" (click)="nextMonth()"></span>
+          <span class="mdi mdi-chevron-double-right" (click)="nextYear()"></span>
+      </div>
+  </div>
+  <div class="week-header col d-flex justify-content-between align-items-center">
+      <div class="d-flex justify-content-center align-items-center">일</div>
+      <div class="d-flex justify-content-center align-items-center">월</div>
+      <div class="d-flex justify-content-center align-items-center">화</div>
+      <div class="d-flex justify-content-center align-items-center">수</div>
+      <div class="d-flex justify-content-center align-items-center">목</div>
+      <div class="d-flex justify-content-center align-items-center">금</div>
+      <div class="d-flex justify-content-center align-items-center">토</div>
+  </div>
+  <div
+      class="week-row col d-flex justify-content-between align-items-center"
+      *ngFor="let weekRow of weekRows; let i = index"
+  >
+      <div
+          class="week-col d-flex justify-content-center align-items-center"
+          *ngFor="let weekCol of weekRow; let j = index"
+          [style.color]="weekCol.color"
+          [class.start-date]="isStartDate(weekCol)"
+          [class.end-date] = "isEndDate(weekCol)"
+          [class.selected]="isEdgeDate(weekCol)"
+          [class.between]="isBetween(weekCol)"
+          [class.avaliable-date] = "regML_IsAvailableDate(weekCol)"
+          (click)="regMLSelectDate(weekCol)"
+          rw-tooltip
+          [rwTooltipDisabled] = "pastDisable(weekCol) || option=='onlyStart' || option=='looseOnlyStart'"
+          [rwTooltipTitle]="getDayFromStartDate(weekCol)+'일 사용'"
+          rwTooltipPlacement="bottom"
+      >
+          {{ weekCol.day }}
+      </div>
+  </div>
+</div>
+
+ -->

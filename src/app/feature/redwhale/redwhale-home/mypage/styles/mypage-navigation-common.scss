@@ -1,0 +1,35 @@
+* {
+    margin: 0px;
+}
+
+.outer-container {
+    height: 100%;
+    width: 100%;
+    border-radius: 7px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .header {
+        display: flex;
+        align-items: center;
+
+        height: 60px;
+        width: 100%;
+        padding: 0px 20px;
+    }
+
+    .divider {
+        width: 545px;
+        height: 1px;
+        border-top: 1px solid var(--border-color);
+    }
+
+    .content {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        padding: 0px 20px;
+    }
+}

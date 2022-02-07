@@ -1,0 +1,53 @@
+<div class='section-outer-container'>
+
+        <section class="header">
+
+          <div class='rw-typo-headline2 title-container'>
+            <p class='user-container'> <span class="user-name">{{user.given_name}}</span>님,</p>
+            <p *ngIf="(gyms$ | async).length > 0">오늘도 건강한 하루 보내세요. 🤗</p>
+            <p *ngIf="(gyms$ | async).length == 0">센터를 추가하고 간편하게 관리해보세요. 🤗</p>
+          </div>
+
+          <div class="rw-typo-title2" rw-button rwButtonWidth="250" rwButtonHeight="50" rwButtonColor="var(--red)"
+            (click)="goRouterLink('/redwhale-home/create-gym')">
+            <img src="assets/icons/etc/plus-gym.svg">
+            <span>센터 생성</span>
+          </div>
+
+        </section>
+
+        <section *ngIf="(gymsLoading$ | async) == 'done'; else loading" class="gym-list-container">
+          <div *ngIf="(gyms$ | async).length == 0" class='gym-init-item' (click)="goRouterLink('/redwhale-home/create-gym')">
+            <img src="assets/icons/etc/plus-gym.svg">
+          </div>
+          <ng-template ngFor let-item [ngForOf]="(gyms$ | async)" let-i="index">
+            <center-list-item
+              [gym]="item"
+              [gymList]="(gyms$ | async)"
+              [userId] = "user.id"
+              [dropDownUp] ="i >= lastItemIdx ? true: false"
+              (onLeaveCenter)="onGymleft($event)"
+            >
+            </center-list-item>
+          </ng-template>
+        </section>
+
+        <ng-template #loading>
+          <section #gym_list_container class="gym-list-container">
+            <ngx-skeleton-loader
+              *ngFor="let _ of [1,2,3,4,5,6]"
+              count="1"
+              appearance="circle"
+              [theme]="{
+                width : '271px',
+                height: '271px',
+                'border-radius' : '7px',
+                margin: '0px'
+              }"
+            ></ngx-skeleton-loader>
+          </section>
+        </ng-template>
+
+</div>
+
+

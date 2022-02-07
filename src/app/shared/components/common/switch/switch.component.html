@@ -1,0 +1,14 @@
+<div
+    class="rw-switch d-flex align-items-center user-select-none"
+    [class.checked]="isChecked"
+    [class.disabled]="disabled"
+    (click)="onChanged(!isChecked)"
+>
+    <div class="switch">
+        <input type="checkbox" [checked]="isChecked" [disabled]="disabled" />
+        <div class="box" [class.checked]="isChecked">
+            <div class="circle"></div>
+        </div>
+    </div>
+    <div class="text rw-typo-bodytext1" *ngIf="text">{{ text }}</div>
+</div>

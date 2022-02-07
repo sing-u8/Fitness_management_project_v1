@@ -1,0 +1,32 @@
+<!-- <div
+    class="rw-timepicker d-flex justify-content-evenly align-items-center user-select-none"
+    (click)="$event.stopPropagation()"
+>
+    <div class="a d-flex flex-column justify-content-center align-items-center">
+        <div class="am" [class.selected]="amPm == 'am'" (click)="checkAmPm('am')">오전</div>
+        <div class="pm" [class.selected]="amPm == 'pm'" (click)="checkAmPm('pm')">오후</div>
+    </div>
+    <div class="h d-flex flex-column justify-content-center align-items-center">
+        <span class="mdi mdi-chevron-up" (click)="hourUp()"></span>
+        <input
+            type="text"
+            [(ngModel)]="hour"
+            (keypress)="digitCheck($event)"
+            (keyup)="formCheck('hour')"
+            maxlength="2"
+        />
+        <span class="mdi mdi-chevron-down" (click)="hourDown()"></span>
+    </div>
+    <div>:</div>
+    <div class="m d-flex flex-column justify-content-center align-items-center">
+        <span class="mdi mdi-chevron-up" (click)="minuteUp()"></span>
+        <input
+            type="text"
+            [(ngModel)]="minute"
+            (keypress)="digitCheck($event)"
+            (keyup)="formCheck('minute')"
+            maxlength="2"
+        />
+        <span class="mdi mdi-chevron-down" (click)="minuteDown()"></span>
+    </div>
+</div> -->

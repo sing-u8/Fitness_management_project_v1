@@ -1,0 +1,55 @@
+<div class="rw-select user-select-none" #selectElement>
+    <div
+        class="selected rw-typo-bodytext1 d-flex justify-content-center align-items-center"
+        [class.open]="isOpen"
+        [class.disabled]="disabled !== false"
+        [class.height-small] ="height_type == 'small'"
+        [class.border-none] = "noBorder == true"
+        #selectedElement
+        (click)="toggle()"
+        (rwClickOutside)="close()"
+    >
+        <div *ngIf="value?.value?.membership_number" class="avatar">
+          <rw-avatar
+            [image]="value.value.picture"
+            [backgroundColor]="value.value.color"
+            text="{{value.value.gym_user_name
+                    ? value.value.gym_user_name
+                    : value.value.given_name}}"
+            size="23"
+            fontSize="10"
+          ></rw-avatar>
+        </div>
+        <span class="text flex-fill">{{ value?.name }}</span>
+        <span class="mdi mdi-chevron-down"></span>
+    </div>
+    <div
+      class="items"
+      [class.items-small] ="height_type == 'small'"
+      [class.border-none] = "noBorder == true"
+      #itemsElement
+      (click)="$event.stopPropagation()"
+    >
+        <div
+            class="item d-flex align-items-center"
+            *ngFor="let item of items"
+            [class.active]="item.value == value?.value"
+            [class.disabled]="item.disabled"
+            [class.height-small] ="height_type == 'small'"
+            (click)="onSelect(item)"
+        >
+            <div *ngIf="item.value?.membership_number" class="avatar">
+              <rw-avatar
+                [image]="item.value.picture"
+                [backgroundColor]="item.value.color"
+                text="{{item.value.gym_user_name
+                        ? item.value.gym_user_name
+                        : item.value.given_name}}"
+                size="23"
+                fontSize="10"
+              ></rw-avatar>
+            </div>
+            <span class="rw-typo-bodytext1">{{ item.name }}</span>
+        </div>
+    </div>
+</div>

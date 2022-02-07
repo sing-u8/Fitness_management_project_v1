@@ -1,0 +1,63 @@
+<div id="_center-list-container" class="center-list-container" (click)="goGym($event)" >
+    <div #list_header class="list-header"></div>
+    <div #list_avatar class="list-avatar rw-typo-title2">
+      <ng-template [ngIf]="centerAvatar && centerAvatar.length < 2">{{centerAvatar}}</ng-template>
+    </div>
+    <div class="list-contents">
+        <p class="contents-top">
+          <span class="rw-typo-title2">{{gym.name}}</span>
+          <span class="rw-typo-subtext3">  {{gym.role_name}}</span>
+        </p>
+        <p class="rw-typo-subtext4 ">
+          redwhale.xyz/{{gym.address}}
+        </p>
+    </div>
+    <div class="list-bottom-toolbar">
+        <div
+          *ngIf=" gym.role_code == 'administrator' || gym.role_code == 'manager' "
+          class="toolbar-left"
+          id="_toolbar-left"
+          (click)="goGymSetting($event)"
+        >
+            <img src="assets/icons/header/settings.svg">
+            <span class="rw-typo-subtext3">센터 설정</span>
+        </div>
+        <div
+          *ngIf=" gym.role_code == 'member' || gym.role_code == 'staff' || gym.role_code == 'manager' "
+          (rwClickOutside) = 'hideDropDown()'
+          class="toolbar-right"
+          id="_toolbar-right"
+        >
+          <div
+            class="icon-container"
+            (click) = "toggleDropDown($event);"
+          >
+              <img src="assets/icons/etc/more-grey.svg">
+          </div>
+          <div
+            class='exit-dropdown'
+            [class.dropdown-up] = "dropDownUp == true"
+            *ngIf="doShowDropDown"
+            (click) = "toggleDropDown($event); toggleConfirmModal(true);"
+          >
+              <img src="assets/icons/etc/leave.svg">
+              <span
+                  class="rw-typo-subtext3"
+              >
+                  이 센터에서 나가기
+              </span>
+          </div>
+        </div>
+    </div>
+</div>
+
+
+<rw-modal
+  [(visible)]="doShowModal"
+  [data]="centerModalData"
+  (cancel)="handleModalCancel()"
+  (confirm)="leaveGym();">
+</rw-modal>
+
+
+

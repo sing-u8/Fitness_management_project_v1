@@ -1,0 +1,123 @@
+* {
+    margin: 0px;
+}
+
+.card-outer-container {
+    cursor: pointer;
+
+    padding: 15px 14px 11px 14px;
+    height: 92px;
+    min-height: 30px;
+    width: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    background-color: var(--white);
+    border: 1px solid var(--white);
+    border-radius: 5px;
+
+    &.card-hover-in-category {
+        &:hover {
+            box-shadow: 0px 0px 10px 2px #b5b5b51c;
+        }
+    }
+
+    &.reservable-card-hover {
+        cursor: auto;
+        &:hover {
+            .reservable-card-delete {
+                display: block;
+            }
+        }
+    }
+
+    .reservable-card-delete {
+        position: absolute;
+        display: none;
+        right: 15px;
+        top: 15px;
+        cursor: pointer;
+        z-index: 30;
+        img {
+            width: 22px;
+            height: 22px;
+            cursor: pointer;
+        }
+    }
+
+    &.selected {
+        border-color: var(--red) !important;
+        border-width: 2px;
+    }
+
+    .card-inner-container {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        position: relative;
+        .card-desc-container {
+            width: calc(100% - 46px);
+            margin-left: 10px;
+            .card-title-container {
+                margin-top: 1px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                width: 100%;
+                .card-title {
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                    width: 65%;
+                }
+                .card-desc1 {
+                    display: none;
+                    width: 35%;
+                    text-align: end;
+                }
+            }
+        }
+    }
+    .card-desc2 {
+        text-align: end;
+        width: 100%;
+        align-self: flex-end;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        margin-top: 7px;
+    }
+    .icon {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        img {
+            width: 24px;
+            height: 24px;
+        }
+    }
+
+    .bar {
+        margin: 0px 10px;
+        color: var(--border-color);
+    }
+}
+
+@media (min-width: 1920px) {
+    .card-outer-container {
+        height: 70px;
+    }
+    .card-desc2 {
+        display: none;
+    }
+    .card-desc1 {
+        display: block !important;
+    }
+    .reservable-card-delete {
+        right: 8px !important;
+        top: 8px !important;
+    }
+}

@@ -1,0 +1,167 @@
+<div class="rw-modal-background" #modalBackgroundElement></div>
+<div
+  class="rw-modal-wrapper"
+  (mouseup)="!isMouseModalDown && onCancel()"
+  (mousedown) = 'resetMouseModalDown()'
+  #modalWrapperElement
+>
+
+  <div
+    *ngIf="activatedModalType == 'EMAIL'"
+    class="rw-modal email-size user-select-none"
+    (mousedown) ='onMouseModalDown(); $event.stopPropagation()'
+  >
+    <div class="title-container">
+      <div class="text rw-typo-title1 ">{{ data?.text }}</div>
+      <div class="sub-text rw-typo-subtext1">{{ data?.subText }}</div>
+    </div>
+
+    <div id='new-email' class="input">
+      <p class="rw-typo-subtext1">새로운 이메일</p>
+      <div class="d-flex justify-content-between send-verification-container">
+        <input
+          class="rw-input"
+          type="text"
+          placeholder="이메일 주소를 입력해주세요."
+          [(ngModel)]="newInfoStr"
+          #newEmailRef=ngModel
+          maxlength="50"
+          required
+          pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+          (keyup)="onKeyup($event, 'email')"
+        >
+        <div
+          class="rw-typo-bodytext0-bold"
+          rw-button
+          rwButtonWidth="113"
+          rwButtonHeight="50"
+          rwButtonColor="var(--red)"
+          [rwButtonDisabled]="newEmailRef.invalid"
+          (click) = "sendVerificationCodeEmailChange()"
+        >
+          인증메일 받기
+        </div>
+      </div>
+    </div>
+
+    <div id='verification' class="input" [class.input-box-error]="verificationCodeErr">
+      <p class="rw-typo-subtext1">인증번호</p>
+      <input
+        class="rw-input"
+        type="text"
+        placeholder="인증번호를 입력해주세요."
+        [(ngModel)]="verificationCode"
+        #emailVerifRef=ngModel
+        required minlength="4" maxlength="4"
+        pattern="^\d{4}$"
+        (keypress)="checkDigit($event)"
+        (keyup)="onKeyup($event, 'verificationCode')"
+      >
+      <span class="verification-time" *ngIf="timeLeft != 0">{{ timeLeft | minuteSeconds }}</span>
+      <div class="error" *ngIf="verificationCodeErr">
+        <img class="warning" src="assets/icons/etc/warning-red.svg" />
+        <span class="rw-typo-subtext1">{{ verificationCodeErr }}</span>
+      </div>
+    </div>
+
+    <div class="button-group">
+      <div class="cancel " rw-button  (click)="onCancel()">
+        {{ data?.cancelButtonText || '취소' }}
+      </div>
+      <div
+        class="confirm"
+        rw-button
+        [rwButtonDisabled]="newEmailRef.invalid || !verificationCode || emailVerifRef.invalid || timeLeft <= 0 || triedVerifCode"
+        rwButtonColor="var(--red)"
+        (click)="emailFormCheck() && finishEmailChange()"
+      >
+        {{ data?.confirmButtonText || '확인' }}
+      </div>
+    </div>
+
+  </div>
+
+
+  <div
+    *ngIf="activatedModalType == 'PHONE'"
+    class="rw-modal phone-size user-select-none"
+    (mousedown) ='onMouseModalDown(); $event.stopPropagation()'
+  >
+    <div class="title-container">
+      <div class="text rw-typo-title1 ">{{ data?.text }}</div>
+      <div class="sub-text rw-typo-subtext1">{{ data?.subText }}</div>
+    </div>
+
+    <div id='new-phone' class="input">
+      <p class="rw-typo-subtext1">새로운 전화번호</p>
+      <div class="d-flex justify-content-between send-verification-container">
+        <input
+          class="rw-input"
+          type="text"
+          placeholder="전화번호를 입력해주세요."
+          minlength="10" maxlength="11" required
+          pattern="^\d{10,11}$"
+          [(ngModel)]="newInfoStr"
+          #newPhoneRef=ngModel
+          (keypress) = "checkDigit($event)"
+          (keyup) = "onKeyup($event, 'phoneNumber')"
+        >
+        <div
+          class="rw-typo-bodytext1"
+          rw-button
+          rwButtonWidth="113"
+          rwButtonHeight="50"
+          rwButtonColor="var(--red)"
+          [rwButtonDisabled]="newPhoneRef.invalid"
+          (click) = "sendVerificationCodeSMSChange()"
+        >
+          인증번호 받기
+        </div>
+      </div>
+    </div>
+
+    <div id='verification' class="input" [class.input-box-error]="verificationCodeErr">
+      <p class="rw-typo-subtext1">인증번호</p>
+      <input
+        class="rw-input"
+        type="text"
+        placeholder="인증번호를 입력해주세요."
+        [(ngModel)]="verificationCode"
+        #phoneVerifRef=ngModel
+        minlength="4" maxlength="4" required
+        pattern="^\d{4}$"
+        (keypress)="checkDigit($event)"
+        (keyup)="onKeyup($event, 'verificationCode')"
+      >
+      <span class="verification-time" *ngIf="timeLeft != 0">{{ timeLeft | minuteSeconds }}</span>
+      <div class="error" *ngIf="verificationCodeErr">
+        <img class="warning" src="assets/icons/etc/warning-red.svg" />
+        <span class="rw-typo-subtext1">{{ verificationCodeErr }}</span>
+      </div>
+
+    </div>
+
+    <div class="button-group">
+      <div
+        class="cancel"
+        rw-button
+        (click)="onCancel()"
+      >
+        {{ data?.cancelButtonText || '취소' }}
+      </div>
+      <div
+        class="confirm"
+        rw-button
+        [rwButtonDisabled]="newPhoneRef.invalid || !verificationCode || phoneVerifRef.invalid || timeLeft <= 0 || triedVerifCode"
+        rwButtonColor="var(--red)"
+        (click)="phoneFormCheck() && finishPhoneChange()"
+      >
+        {{ data?.confirmButtonText || '확인' }}
+      </div>
+    </div>
+
+  </div>
+
+
+
+</div>
