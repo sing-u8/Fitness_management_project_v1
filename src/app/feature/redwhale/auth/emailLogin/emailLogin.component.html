@@ -56,10 +56,10 @@
             </div>
 
             <rw-button
+              #login_button_el
               [height]="'55'"
               [color]="'var(--red)'"
               [disabled]="!formCheck()"
-              [isLoading]="loginLoading"
               (click)= "formCheck() && signInWithEmail()"
             >
               <span class="rw-typo-title2-none-color">로그인</span>

@@ -15,6 +15,8 @@ import {
 } from '@angular/core'
 import { NgxSpinnerService } from 'ngx-spinner'
 
+export type ClickEmitterType = {showLoading: Function, hideLoading: Function }
+
 @Component({
     selector: 'rw-button',
     templateUrl: './button.component.html',
@@ -27,18 +29,27 @@ export class ButtonComponent implements OnInit, OnChanges, AfterViewChecked {
     @Input() borderColor: string
     @Input() fontColor: string
     @Input() disabled: boolean
-
-    @Input() isLoading: boolean
-
     @Input() text: string
-
-    @Output() click = new EventEmitter<void>()
+    
+    
+    
+    @Output() click = new EventEmitter<ClickEmitterType>()
     onButtonClick() {
-        this.click.emit()
+        this.click.emit({showLoading: this.showLoading, hideLoading: this.hideLoading})
     }
-
+    
     @ViewChild('rw_button') button_el: ElementRef
 
+    public isLoading: boolean
+    public showLoading = () => {
+        this.isLoading = true
+        this.spinner.show('loading-button')
+    }
+    public hideLoading = () => {
+        this.isLoading = false
+        this.spinner.hide('loading-button')
+    }
+    
     public changed = false
 
     constructor(private renderer: Renderer2, private spinner: NgxSpinnerService) {}
@@ -47,13 +58,6 @@ export class ButtonComponent implements OnInit, OnChanges, AfterViewChecked {
         if (changes['disabled'] && !changes['disabled'].firstChange) {
             if (changes['disabled'].previousValue != changes['disabled'].currentValue) {
                 this.changed = true
-            }
-        }
-
-        if (changes['isLoading'] && !changes['isLoading'].firstChange) {
-            if (changes['isLoading'].previousValue != changes['isLoading'].currentValue) {
-                this.isLoading = changes['isLoading'].currentValue
-                this.isLoading == true ? this.spinner.show('loading-button') : this.spinner.hide('loading-button')
             }
         }
     }

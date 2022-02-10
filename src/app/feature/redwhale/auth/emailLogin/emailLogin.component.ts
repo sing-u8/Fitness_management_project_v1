@@ -15,6 +15,9 @@ import * as _ from 'lodash'
 import { Store } from '@ngrx/store'
 import { showToast } from '@appStore/actions/toast.action'
 
+// components 
+import {ButtonComponent} from '@shared/components/common/button/button.component'
+
 @Component({
     selector: 'email',
     templateUrl: './emailLogin.component.html',
@@ -32,7 +35,7 @@ export class EmailLoginComponent implements OnInit, OnDestroy {
     subscription: Subscription
 
     // button loading status
-    public loginLoading = false
+    @ViewChild('login_button_el') login_button_el : ButtonComponent
 
     constructor(
         private router: Router,
@@ -66,13 +69,13 @@ export class EmailLoginComponent implements OnInit, OnDestroy {
         this.subscription.unsubscribe()
     }
 
-    async signInWithEmail() {
-        const isBot = await this.systemService.isBot('emailLogin')
-        if (isBot) {
-            return
-        }
+    signInWithEmail() {
+        // const isBot = await this.systemService.isBot('emailLogin')
+        // if (isBot) {
+        //     return
+        // }
 
-        this.loginLoading = true
+        this.login_button_el.showLoading()
 
         this.signInMethod = 'email'
         this.authService.signInWithEmail({ email: this.email, password: this.password }).subscribe({
@@ -83,15 +86,16 @@ export class EmailLoginComponent implements OnInit, OnDestroy {
                     localStorage.removeItem('email')
                 }
                 signInWithCustomToken(this.fireAuth, user.custom_token).finally(() => {
-                    this.loginLoading = false
+                    this.login_button_el.showLoading()
                 })
             },
             error: (e) => {
                 this.nxStore.dispatch(showToast({ text: '입력하신 정보를 다시 확인해주세요.' }))
-                this.loginLoading = false
+                this.login_button_el.showLoading()
             },
         })
     }
+
 
     changePasswordVisible(passwordVisible: boolean) {
         this.passwordVisible = passwordVisible
