@@ -207,7 +207,8 @@ export class EmailComponent implements OnInit, AfterViewInit {
                     this.router.navigateByUrl('/auth/registration/phone')
                 },
                 error: (e) => {
-                    this.error = e.message
+                    // this.error = e.message
+                    this.error = '인증번호를 잘못 입력하셨습니다.'
                 }
             }
         )

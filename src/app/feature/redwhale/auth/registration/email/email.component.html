@@ -22,6 +22,7 @@
             <div class="verification-code d-flex justify-content-between">
                 <input
                     class="number"
+                    [class.number--error] = "error"
                     type="text"
                     [(ngModel)]="verificationCodeOne"
                     maxlength="1"
@@ -31,6 +32,7 @@
                 />
                 <input
                     class="number"
+                    [class.number--error] = "error"
                     type="text"
                     [(ngModel)]="verificationCodeTwo"
                     maxlength="1"
@@ -40,6 +42,7 @@
                 />
                 <input
                     class="number"
+                    [class.number--error] = "error"
                     type="text"
                     [(ngModel)]="verificationCodeThree"
                     maxlength="1"
@@ -49,6 +52,7 @@
                 />
                 <input
                     class="number"
+                    [class.number--error] = "error"
                     type="text"
                     [(ngModel)]="verificationCodeFour"
                     maxlength="1"
