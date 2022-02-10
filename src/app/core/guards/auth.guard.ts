@@ -14,10 +14,9 @@ export class AuthGuard implements CanActivate {
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
         const url = state.url.split('/')
         const user = this.storageService.getUser()
-        // console.log('in auth guard : ', url, user, !_.isEmpty(user))
+        console.log('auth guard : ', url, user, !_.isEmpty(user))
         if (!_.isEmpty(user)) {
-            console.log('in user data exist')
-            if (!user.terms_eula || !user.terms_privacy) {
+            if (!user.service_terms || !user.privacy) {
                 this.router.navigateByUrl('/auth/terms')
                 return false
             } else if (!user.phone_number_verified) {
@@ -30,7 +29,6 @@ export class AuthGuard implements CanActivate {
                 return true
             }
         } else {
-            // console.log('in user data do not exist', url)
             if (url[1] == 'auth') {
                 return true
             } else {

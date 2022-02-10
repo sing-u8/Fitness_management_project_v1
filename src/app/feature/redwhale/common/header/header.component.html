@@ -130,13 +130,13 @@
             (click)="showAvatarMenu($event)"
         >
             <rw-avatar
-                [image]="user.picture"
-                text="{{ user.given_name }}"
+                [image]="user.picture[0]?.url"
+                text="{{ user.nick_name ?? user.name }}"
                 size="24"
                 fontSize="13"
                 [backgroundColor]="user.color"
             ></rw-avatar>
-            <span class="name rw-typo-bodytext2" *ngIf="url == '/redwhale-home'">{{ user.given_name }}님</span>
+            <span class="name rw-typo-bodytext2" *ngIf="url == '/redwhale-home'">{{ user.nick_name ?? user.name }}님</span>
             <div
                 class="avatar-menu"
                 *ngIf="avatarMenuVisible"
@@ -146,15 +146,15 @@
                 <div class="profile d-flex">
                     <div>
                         <rw-avatar
-                            [image]="user.picture"
-                            text="{{ user.given_name }}"
+                            [image]="user.picture[0]?.url"
+                            text="{{ user.nick_name ?? user.name }}"
                             size="56"
                             fontSize="22"
                             [backgroundColor]="user.color"
                         ></rw-avatar>
                     </div>
                     <div class="d-flex flex-column justify-content-center">
-                        <span class="rw-typo-title2">{{ user.given_name }}님</span>
+                        <span class="rw-typo-title2">{{ user.nick_name ?? user.name }}님</span>
                         <span class="rw-typo-subtext2">{{ user.email }}</span>
                     </div>
                 </div>

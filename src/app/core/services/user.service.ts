@@ -11,6 +11,8 @@ import { StorageService } from '@services/storage.service'
 import { Response } from '@schemas/response'
 import { User } from '@schemas/user'
 
+import * as _ from 'lodash'
+
 @Injectable({
     providedIn: 'root',
 })
@@ -30,7 +32,9 @@ export class UserService {
 
         return this.http.get<Response>(url, options).pipe(
             map((res) => {
-                return res.dataset[0]
+                const resData = res.dataset[0]
+                resData.birth_date = _.replace(resData.birth_date, /[-]/gi, '.')
+                return resData
             }),
             catchError(handleError)
         )
@@ -47,21 +51,22 @@ export class UserService {
 
         return this.http.put<Response>(url, requestBody, options).pipe(
             map((res) => {
+                const resData = res.dataset[0]
+                resData.birth_date = _.replace(resData.birth_date, /[-]/gi, '.')
                 const user: User = this.storageService.getUser()
                 this.storageService.setUser({
                     ...user,
-                    family_name: res.dataset[0]['family_name'],
-                    given_name: res.dataset[0]['given_name'],
-                    picture: res.dataset[0]['picture'],
-                    sex: res.dataset[0]['sex'],
-                    birth_date: res.dataset[0]['birth_date'],
-                    fcm_token: res.dataset[0]['fcm_token'],
-                    color: res.dataset[0]['color'],
-                    terms_eula: res.dataset[0]['terms_eula'],
-                    terms_privacy: res.dataset[0]['terms_privacy'],
-                    marketing_sms: res.dataset[0]['marketing_sms'],
-                    marketing_email: res.dataset[0]['marketing_email'],
-                    notification_yn: res.dataset[0]['notification_yn'],
+                    name: resData['name'],
+                    nick_name: resData['nick_name'],
+                    sex: resData['sex'],
+                    birth_date: resData['birth_date'],
+                    color: resData['color'],
+                    fcm_token: resData['fcm_token'],
+                    privacy: resData['privacy'],
+                    service_terms: resData['service_terms'],
+                    sms_marketing: resData['sms_marketing'],
+                    email_marketing: resData['email_marketing'],
+                    push_notification: resData['push_notification'],
                 })
                 return this.storageService.getUser()
             }),
@@ -121,18 +126,17 @@ export class UserService {
 }
 
 class UpdateUserRequestBody {
-    family_name?: string
-    given_name?: string
-    picture?: string
+    name?: string
+    nick_name?: string
     sex?: string
     birth_date?: string
     fcm_token?: string
     color?: string
-    terms_eula?: number
-    terms_privacy?: number
-    marketing_sms?: number
-    marketing_email?: number
-    notification_yn?: number
+    service_terms?: boolean
+    privacy?: boolean
+    sms_marketing?: boolean
+    email_marketing?: boolean
+    push_notification?: boolean
 }
 
 class ChangePasswordRequestBody {

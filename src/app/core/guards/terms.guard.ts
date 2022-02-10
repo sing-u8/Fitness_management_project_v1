@@ -12,7 +12,7 @@ export class TermsGuard implements CanActivate {
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
         const user = this.storageService.getUser()
 
-        if (user && user.terms_eula && user.terms_privacy) {
+        if (user && user.service_terms && user.privacy) {
             this.router.navigateByUrl('/redwhale-home')
             return false
         } else {

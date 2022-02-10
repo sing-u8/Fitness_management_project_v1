@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core'
 import { Router } from '@angular/router'
 
-import { FileService } from '@services/file.service'
+import { FileService, CreateFileRequestBody } from '@services/file.service'
 
 import { UserService } from '@services/user.service'
 
@@ -27,7 +27,7 @@ import { showToast } from '@appStore/actions/toast.action'
 export class SettingAccountComponent implements OnInit {
     public user: User
 
-    public marketing_agree: { email: number; sms: number } = { email: null, sms: null }
+    public marketing_agree: { email: boolean; sms: boolean } = { email: undefined, sms: undefined }
     public inputList: {
         name: string
         email: string
@@ -38,14 +38,14 @@ export class SettingAccountComponent implements OnInit {
         marketing_agree: string // 0 or 1
         push_notice: string // '켜기' | '끄기'
     } = {
-        name: null,
-        email: null,
-        phone: null,
-        password: null,
-        sex: null,
-        birth_date: null,
-        marketing_agree: null,
-        push_notice: null,
+        name: undefined,
+        email: undefined,
+        phone: undefined,
+        password: undefined,
+        sex: undefined,
+        birth_date: undefined,
+        marketing_agree: undefined,
+        push_notice: undefined,
     }
 
     public delAvatarFlag: boolean
@@ -96,23 +96,23 @@ export class SettingAccountComponent implements OnInit {
     }
 
     initMarktingAgree() {
-        this.marketing_agree.email = this.user.marketing_email
-        this.marketing_agree.sms = this.user.marketing_sms
-        const agree_email_text = this.marketing_agree.email == 1 ? '수신' : '미수신'
-        const agree_sms_text = this.marketing_agree.sms == 1 ? '수신' : '미수신'
+        this.marketing_agree.email = this.user.email_marketing
+        this.marketing_agree.sms = this.user.sms_marketing
+        const agree_email_text = this.marketing_agree.email ? '수신' : '미수신'
+        const agree_sms_text = this.marketing_agree.sms  ? '수신' : '미수신'
         return `SMS ${agree_sms_text}, 이메일  ${agree_email_text}`
     }
     initInputList() {
         const marketing_agree_text = this.initMarktingAgree()
 
-        this.inputList.name = this.user.given_name
+        this.inputList.name = this.user.nick_name ?? this.user.name
         this.inputList.email = this.user.email
         this.inputList.phone = this.addDashtoPhoneNumber(this.user.phone_number)
         this.inputList.password = '********' // 들고 오는 곳 없음  더미로 * 8개 표시
         this.inputList.sex = this.user.sex == 'male' ? '남성' : this.user.sex == 'female' ? '여성' : null
         this.inputList.birth_date = this.user.birth_date ?? ''
         this.inputList.marketing_agree = marketing_agree_text
-        this.inputList.push_notice = this.user.notification_yn == 1 ? '켜기' : '끄기'
+        this.inputList.push_notice = this.user.push_notification ? '켜기' : '끄기'
 
         if (this.user.sign_in_method != 'email') {
             delete this.inputList.password
@@ -177,7 +177,7 @@ export class SettingAccountComponent implements OnInit {
     onSetModalConfirm() {
         this.user = this.storageService.getUser()
         this.activatedSettingModalType == 'NAME'
-            ? this.globalSettingAccountService.setUserName(this.user.given_name)
+            ? this.globalSettingAccountService.setUserName(this.user.nick_name ?? this.user.name)
             : null
         this.initInputList()
         this.accountModalFlag = false
@@ -195,21 +195,45 @@ export class SettingAccountComponent implements OnInit {
         const files: FileList = picture.files
         if (!this.isFileExist(files)) return
 
-        this.fileservice.createFile({ tag: 'user-profile' }, files).subscribe((fileList) => {
-            const location = fileList[0]['location']
-            this.userService.updateUser(this.user.id, { picture: location }).subscribe({
-                next: (user) => {
-                    this.user.picture = user['picture']
-                    this.globalSettingAccountService.setUserAvatar(user['picture'])
-                    this.storageService.setUser(user)
-                    this.nxStore.dispatch(showToast({ text: '프로필 사진이 변경되었습니다.' }))
-                },
-                error: (err) => {
-                    console.log('create account avatar file err: ', err)
-                },
-            })
+        const reqBody: CreateFileRequestBody = { tag: 'user-picture' }
+        this.fileservice.createFile(reqBody, files).subscribe((fileList) => {
+           
+            this.userService.getUser(this.user.id).subscribe(
+                {
+                    next: (resData) => {
+                        this.user.picture = resData['picture'].filter((v, i) => i == 0)
+                        this.globalSettingAccountService.setUserAvatar(resData['picture'][0]['url'])
+                        this.storageService.setUser({
+                            ...this.user,
+                            name: resData['name'],
+                            nick_name: resData['nick_name'],
+                            sex: resData['sex'],
+                            birth_date: resData['birth_date'],
+                            color: resData['color'],
+                            fcm_token: resData['fcm_token'],
+                            privacy: resData['privacy'],
+                            service_terms: resData['service_terms'],
+                            sms_marketing: resData['sms_marketing'],
+                            email_marketing: resData['email_marketing'],
+                            push_notification: resData['push_notification'],
+                        })
+                        this.user = this.storageService.getUser()
+                        this.nxStore.dispatch(showToast({ text: '프로필 사진이 변경되었습니다.' }))
+    
+                        resData.picture.forEach((v, i) => {
+                            if (i == 0) return
+                            this.fileservice.deleteFile(v.url).subscribe()
+                        })
+                    },
+                    error: (err) => {
+                        console.log('create account avatar file err: ', err)
+                    }
+                }
+            )
         })
     }
+
+    
     isFileExist(fileList: FileList) {
         if (fileList && fileList.length == 0) {
             return false
@@ -217,24 +241,38 @@ export class SettingAccountComponent implements OnInit {
         return true
     }
     removePhoto() {
-        const prevPicture = this.user.picture
-        this.userService.updateUser(this.user.id, { picture: null }).subscribe({
-            next: (user) => {
-                this.fileservice.deleteFile(prevPicture).subscribe({
-                    next: (res) => {
-                        this.user.picture = user['picture']
-                        this.storageService.setUser(user)
-                        this.globalSettingAccountService.setUserAvatar(null)
+        const prevPicture = this.user.picture[0].url
+        this.fileservice.deleteFile(prevPicture).subscribe({
+            next: (__) => {
+                this.userService.getUser(this.user.id).subscribe({
+                    next: (resData) => {
+                        this.storageService.setUser({
+                            ...this.user,
+                            name: resData['name'],
+                            nick_name: resData['nick_name'],
+                            sex: resData['sex'],
+                            birth_date: resData['birth_date'],
+                            color: resData['color'],
+                            fcm_token: resData['fcm_token'],
+                            privacy: resData['privacy'],
+                            service_terms: resData['service_terms'],
+                            sms_marketing: resData['sms_marketing'],
+                            email_marketing: resData['email_marketing'],
+                            push_notification: resData['push_notification'],
+                            picture: resData['picture'],
+                        })
+                        this.user = this.storageService.getUser()
+                        this.globalSettingAccountService.setUserAvatar(undefined)
                         this.nxStore.dispatch(showToast({ text: '프로필 사진이 삭제되었습니다.' }))
                         this.delAvatarFlag = false
                     },
                     error: (err) => {
-                        console.log('remove file err: ', err)
+                        console.log('get user error :', err)
                     },
                 })
             },
             error: (err) => {
-                console.log('err in updateuser for remove avatar', err)
+                console.log('remove file err: ', err)
             },
         })
     }

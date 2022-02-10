@@ -79,10 +79,10 @@
                       class="cg-typo-subtext register-button" rw-button rwButtonColor="var(--darkgrey)">
                       <span class="mdi mdi-plus"></span>
                       <span>등록하기</span>
-                      <input type="file" accept="image/*" #centerProfile (change)="registerPhoto('centerProfile', centerProfile)"
+                      <input type="file" accept="image/*" #centerProfile (change)="registerPhoto('gym-picture', centerProfile)"
                         hidden />
                     </div>
-                    <div (click)="removePhoto('centerProfile')" *ngIf="isCenterProfileRegistered == true "
+                    <div (click)="removePhoto('gym-picture')" *ngIf="isCenterProfileRegistered == true "
                       class="cg-typo-subtext remove-button" rw-button rwButtonBorderColor="#c9c9c9"
                       rwButtonFontColor="var(--darkgrey)">
                       <span class="mdi mdi-trash-can-outline"></span>
@@ -102,9 +102,9 @@
                       <span class="mdi mdi-plus"></span>
                       <span>등록하기</span>
                       <input type="file" accept="image/*" #centerBackground
-                        (change)="registerPhoto('centerBackground', centerBackground)" hidden />
+                        (change)="registerPhoto('gym-background', centerBackground)" hidden />
                     </div>
-                    <div (click)="removePhoto('centerBackground')" *ngIf="isCenterBackgroundRegistered == true "
+                    <div (click)="removePhoto('gym-background')" *ngIf="isCenterBackgroundRegistered == true "
                       rw-button rwButtonBorderColor="#c9c9c9"
                       rwButtonFontColor="var(--darkgrey)"
                       class="cg-typo-subtext remove-button"

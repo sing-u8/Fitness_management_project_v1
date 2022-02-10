@@ -9,7 +9,6 @@ import { LessonCategory } from '@schemas/lesson-category'
 import { LessonItem } from '@schemas/lesson-item'
 import { GymUser } from '@schemas/gym-user'
 import { Loading } from '@schemas/store/loading'
-import { updateMembershipCategs } from '../actions/sec.membership.actions'
 
 export interface SelectedLesson {
     lessonData: LessonItem

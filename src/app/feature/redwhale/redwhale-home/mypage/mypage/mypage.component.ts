@@ -32,8 +32,8 @@ export class MypageComponent implements OnInit, OnChanges {
     ngOnInit(): void {
         this.user = this.storageService.getUser()
 
-        this.globalSettingAccountService.setUserName(this.user.given_name)
-        this.globalSettingAccountService.setUserAvatar(this.user.picture)
+        this.globalSettingAccountService.setUserName(this.user.nick_name ?? this.user.name)
+        this.globalSettingAccountService.setUserAvatar(this.user.picture[0]?.url)
         this.globalSettingAccountService.setUserEmail(this.user.email)
         console.log('global setting data: ', this.globalSettingAccountService.getUserData())
         this.accountUserData = this.globalSettingAccountService.getUserData()

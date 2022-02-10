@@ -1,56 +1,56 @@
 .email {
-    .box {
-        width: 415px;
-        padding-top: 70px;
+  .box {
+    width: 415px;
+    padding-top: 70px;
 
-        .input-box {
-            input {
-                width: 100%;
-                margin-top: 5px;
-            }
-        }
-
-        .email-input-box {
-            margin-top: 40px;
-        }
-
-        .password-input-box {
-            position: relative;
-            margin-top: 37px;
-
-            .password-icon {
-                display: none;
-                position: absolute;
-                top: 34px;
-                right: 14px;
-                width: 28px;
-                height: 28px;
-                cursor: pointer;
-            }
-        }
-
-        .checkbox-group {
-            margin-top: 37px;
-        }
-
-        .h-line {
-            margin-top: 51px;
-            border-top: 1px solid var(--border-color);
-        }
-
-        .forgot-password {
-            margin-top: 20px;
-
-            .rw-typo-bodytext1 {
-                color: var(--grey) !important;
-            }
-
-            div:nth-child(2) {
-                text-decoration: underline;
-                text-underline-offset: 2px;
-                text-decoration-thickness: 1px;
-                cursor: pointer;
-            }
-        }
+    .input-box {
+      input {
+        width: 100%;
+        margin-top: 5px;
+      }
     }
+
+    .email-input-box {
+      margin-top: 40px;
+    }
+
+    .password-input-box {
+      position: relative;
+      margin-top: 37px;
+
+      .password-icon {
+        display: none;
+        position: absolute;
+        top: 34px;
+        right: 14px;
+        width: 28px;
+        height: 28px;
+        cursor: pointer;
+      }
+    }
+
+    .checkbox-group {
+      margin: 37px 0px;
+    }
+
+    .h-line {
+      margin-top: 51px;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .forgot-password {
+      margin-top: 20px;
+
+      .rw-typo-bodytext1 {
+        color: var(--grey) !important;
+      }
+
+      div:nth-child(2) {
+        text-decoration: underline;
+        text-underline-offset: 2px;
+        text-decoration-thickness: 1px;
+        cursor: pointer;
+      }
+    }
+  }
 }

@@ -48,11 +48,6 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.nxStore.dispatch(removeRegistration())
 
         this.subscription = authState(this.fireAuth).subscribe((user) => {
-            console.log('authState user : ', user)
-            if (user) {
-            }
-        })
-        this.subscription = authState(this.fireAuth).subscribe((user) => {
             if (user) {
                 if (this.signInMethod == 'google' || this.signInMethod == 'facebook' || this.signInMethod == 'apple') {
                     user.getIdToken().then((accessToken) => {
@@ -67,7 +62,6 @@ export class LoginComponent implements OnInit, OnDestroy {
                         })
                     })
                 } else {
-                    console.log('singin: ', this.signInMethod)
                     this.storageService.setSignInMethod(this.signInMethod)
                     this.router.navigateByUrl('/redwhale-home')
                 }
@@ -100,6 +94,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     signInWithKakao() {
         this.signInMethod = 'kakao'
         const kakao$ = new Observable(function subscribe(observer) {
+            console.log('kakao$ : ', kakao$)
             Kakao.Auth.loginForm({
                 success: function (response) {
                     observer.next(response)
@@ -115,7 +110,6 @@ export class LoginComponent implements OnInit, OnDestroy {
 
         kakao$.subscribe({
             next: (user) => {
-                console.log('kakao user: ', user)
                 const accessToken = user['access_token']
                 this.authService.signInWithKakao({ accessToken }).subscribe((user) => {
                     signInWithCustomToken(this.fireAuth, String(user.custom_token))

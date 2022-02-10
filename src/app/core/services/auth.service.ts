@@ -27,14 +27,7 @@ export class AuthService {
 
     constructor(private http: HttpClient, private storageService: StorageService) {}
 
-    checkPermission(permissions: Array<string>, permission: string): boolean {
-        if (permissions.includes(permission)) {
-            return true
-        } else {
-            return false
-        }
-    }
-
+  
     signInWithFirebase(requestBody: SignInWithFirebaseRequestBody): Observable<User> {
         const url = this.SERVER + '/firebase'
 
@@ -92,6 +85,28 @@ export class AuthService {
         )
     }
 
+    // -- // new
+    refreshToken(requestBody: RefreshTokenRequestBody) {
+        const url = this.SERVER + '/token'
+
+        const options = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json',
+            }),
+        }
+
+        return this.http.post<Response>(url, requestBody, options).pipe(
+            map((res) => {
+                const resData = res.dataset[0]
+                const user: User = this.storageService.getUser()
+                this.storageService.setUser({
+                    ...user,
+                    ...resData,
+                })
+            })
+        )
+    }
+
     checkDuplicateMail(requestBody: CheckDuplicateMailRequestBody): Observable<Response> {
         const url = this.SERVER + '/check-duplicate-mail'
 
@@ -144,6 +159,7 @@ export class AuthService {
     }
 
     registration(requestBody: RegistrationRequestBody): Observable<User> {
+        // name은??
         const url = this.SERVER + '/registration'
 
         const options = {
@@ -207,9 +223,9 @@ export class AuthService {
 
         return this.http.post<Response>(url, requestBody, options).pipe(
             map((res) => {
-                const user: User = res.dataset[0]
-                this.storageService.setUser(user)
-                return user
+                const updatedUser: User = res.dataset[0]
+                this.storageService.setUser(updatedUser)
+                return updatedUser
             }),
             catchError(handleError)
         )
@@ -250,7 +266,7 @@ export class AuthService {
     }
 
     sendVerificationCodeSMSChange(requestBody: SendVerificationCodeSMSChangeRequestBody): Observable<Response> {
-        const url = this.SERVER + '/send-verification-code-sms-change'
+        const url = this.SERVER + '/send-verification-code-phone-number-change'
 
         const options = {
             headers: new HttpHeaders({
@@ -267,7 +283,7 @@ export class AuthService {
     }
 
     checkVerificationCodeSMSChange(requestBody: CheckVerificationCodeSMSChangeRequestBody): Observable<Response> {
-        const url = this.SERVER + '/check-verification-code-sms-change'
+        const url = this.SERVER + '/check-verification-code-phone-number-change'
 
         const options = {
             headers: new HttpHeaders({
@@ -282,75 +298,89 @@ export class AuthService {
             catchError(handleError)
         )
     }
+    // ---------------------------------------------------------------------------------//
+    // checkPermission(permissions: Array<string>, permission: string): boolean {
+    //     if (permissions.includes(permission)) {
+    //         return true
+    //     } else {
+    //         return false
+    //     }
+    // }
 }
 
-class SignInWithFirebaseRequestBody {
+type SignInWithFirebaseRequestBody = {
     accessToken: string
 }
 
-class SignInWithKakaoRequestBody {
+type SignInWithKakaoRequestBody = {
     accessToken: string
 }
 
-class SignInWithEmailRequestBody {
+type SignInWithEmailRequestBody = {
     email: string
     password: string
 }
 
-class CheckDuplicateMailRequestBody {
+type RefreshTokenRequestBody = {
+    refresh_token: string
+}
+
+type CheckDuplicateMailRequestBody = {
     email: string
 }
 
-class SendVerificationCodeMailRequestBody {
+type SendVerificationCodeMailRequestBody = {
     email: string
 }
 
-class CheckVerificationCodeMailRequestBody {
+type CheckVerificationCodeMailRequestBody = {
     email: string
     verification_code: number
 }
 
-class RegistrationRequestBody {
+export type RegistrationRequestBody = {
+    // email: string
+    // verification_code: number
+    // password: string
+    // family_name?: string
+    // given_name: string
+    // terms_eula: number
+    // terms_privacy: number
+    // marketing_sms: number
+    // marketing_email: number
     email: string
     verification_code: number
     password: string
-    family_name?: string
-    given_name: string
-    terms_eula: number
-    terms_privacy: number
-    marketing_sms: number
-    marketing_email: number
-    unique_id?: string
-    device_id?: string
+    privacy: boolean
+    service_terms: boolean
+    sms_marketing: boolean
+    email_marketing: boolean
 }
 
-class SendResetPasswordLinkMailRequestBody {
+type SendResetPasswordLinkMailRequestBody = {
     email: string
 }
-class CheckResetPasswordLinkMailRequestBody {
+type CheckResetPasswordLinkMailRequestBody = {
     token: string
 }
 
-class ChangePasswordRequestBody {
+type ChangePasswordRequestBody = {
     token: string
     new_password: string
-    unique_id?: string
-    device_id?: string
 }
 
-class SendVerificationCodeMailChangeRequestBody {
+type SendVerificationCodeMailChangeRequestBody = {
     email: string
 }
 
-class CheckVerificationCodeMailChangeRequestBody {
+type CheckVerificationCodeMailChangeRequestBody = {
     verification_code: number
 }
 
-class SendVerificationCodeSMSChangeRequestBody {
+type SendVerificationCodeSMSChangeRequestBody = {
     phone_number: string
-    is_test?: boolean
 }
 
-class CheckVerificationCodeSMSChangeRequestBody {
+type CheckVerificationCodeSMSChangeRequestBody = {
     verification_code: number
 }

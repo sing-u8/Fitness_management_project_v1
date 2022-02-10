@@ -200,7 +200,7 @@ export class CertificationSettingModalComponent implements OnChanges, AfterViewC
         this.authService.checkVerificationCodeSMSChange({ verification_code: this.verificationCode }).subscribe({
             next: (v) => {
                 this.user.phone_number = this.newInfoStr
-                this.user.phone_number_verified = 1
+                this.user.phone_number_verified = true
                 this.storageService.setUser(this.user)
                 this.onConfirm()
                 this.nxStore.dispatch(showToast({ text: '전화번호가 변경되었습니다.' }))
@@ -252,7 +252,7 @@ export class CertificationSettingModalComponent implements OnChanges, AfterViewC
         this.authService.checkVerificationCodeMailChange({ verification_code: this.verificationCode }).subscribe({
             next: (v) => {
                 this.user.email = this.newInfoStr
-                this.user.email_verified = 1
+                this.user.email_verified = true
                 this.storageService.setUser(this.user)
                 this.onConfirm()
                 this.nxStore.dispatch(showToast({ text: '이메일이 변경되었습니다.' }))

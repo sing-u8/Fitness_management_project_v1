@@ -5,7 +5,7 @@
         <div class="box d-flex flex-column">
             <div class="headline d-flex flex-column align-items-center">
                 <img src="assets/images/gym/auth/register-complete.png" alt="register-complete.png">
-                <div class="rw-typo-headline1">{{ user.given_name }}님, 반갑습니다! 🙌</div>
+                <div class="rw-typo-headline1">{{ user.nick_name ?? user.name }}님, 반갑습니다! 🙌</div>
                 <div class="rw-typo-subtext1">이제부터 레드웨일 서비스를 이용하실 수 있어요.</div>
             </div>
             <div class="next rw-typo-title2" rw-button rwButtonHeight="55" rwButtonColor="var(--red)" (click)="next()">

@@ -3,7 +3,7 @@ import { Router } from '@angular/router'
 import { FormBuilder, FormControl, Validators } from '@angular/forms'
 
 import { GymService } from '@services/gym.service'
-import { FileService } from '@services/file.service'
+import { FileService, FileTag } from '@services/file.service'
 
 // ngrx
 import { Store } from '@ngrx/store'
@@ -74,16 +74,16 @@ export class CreateGymComponent implements OnInit {
     }
 
     // -------------------------------photo funcs---------------------------------//
-    registerPhoto(photoType: 'centerProfile' | 'centerBackground', photoEle: any) {
+    registerPhoto(photoType: FileTag, photoEle: any) {
         this.onChangeFile(photoType, photoEle.files)
-        photoType == 'centerProfile' ? this.toggleCenterProfileFlag() : this.toggleCenterBackgroundFlag()
+        photoType == 'gym-picture' ? this.toggleCenterProfileFlag() : this.toggleCenterBackgroundFlag()
     }
-    removePhoto(photoType: 'centerProfile' | 'centerBackground') {
+    removePhoto(photoType: FileTag) {
         this.resetPhotoTexts(photoType)
-        photoType == 'centerProfile' ? this.toggleCenterProfileFlag() : this.toggleCenterBackgroundFlag()
+        photoType == 'gym-picture' ? this.toggleCenterProfileFlag() : this.toggleCenterBackgroundFlag()
     }
 
-    onChangeFile(photoType: 'centerProfile' | 'centerBackground', photoFile: FileList) {
+    onChangeFile(photoType: FileTag, photoFile: FileList) {
         if (!this.isFileExist(photoFile)) return
 
         this.localPhotoFiles[photoType] = photoFile
@@ -109,25 +109,25 @@ export class CreateGymComponent implements OnInit {
         }
         return true
     }
-    setPhotoTag(photoType: 'centerProfile' | 'centerBackground') {
-        let tag = ''
-        if (photoType === 'centerProfile') {
-            tag = 'gym-profile'
-        } else if (photoType === 'centerBackground') {
+    setPhotoTag(photoType: FileTag) : FileTag {
+        let tag : FileTag = undefined
+        if (photoType === 'gym-picture') {
+            tag = 'gym-picture'
+        } else if (photoType === 'gym-background') {
             tag = 'gym-background'
         }
         return tag
     }
-    setPhotoReqbodyProp(photoType: 'centerProfile' | 'centerBackground') {
+    setPhotoReqbodyProp(photoType: FileTag) {
         let prop = ''
-        if (photoType === 'centerProfile') {
+        if (photoType === 'gym-picture') {
             prop = 'picture'
-        } else if (photoType === 'centerBackground') {
+        } else if (photoType === 'gym-background') {
             prop = 'background'
         }
         return prop
     }
-    resetPhotoTexts(photoType: 'centerProfile' | 'centerBackground') {
+    resetPhotoTexts(photoType: FileTag) {
         this.photoName[photoType] = ''
         this.photoSrc[photoType] = ''
         this.localPhotoFiles[photoType] = null
@@ -141,8 +141,8 @@ export class CreateGymComponent implements OnInit {
                 /*
                   address: "heasdf", background: null, color: "#FFA5C1", id: 225, name: "hello123", permissions: [], picture: null, role_code:"administrator", role_name:"운영자", timezone: "Asia/Seoul"
                 */
-                this.createApiPhotoFile('centerBackground', v, () => {
-                    this.createApiPhotoFile('centerProfile', v, () => {
+                this.createApiPhotoFile('gym-background', v, () => {
+                    this.createApiPhotoFile('gym-picture', v, () => {
                         this.goRouterLink('/redwhale-home')
                         this.nxStore.dispatch(showToast({ text: '새로운 센터가 생성되었습니다.' }))
                     })
@@ -154,7 +154,7 @@ export class CreateGymComponent implements OnInit {
             },
         })
     }
-    createApiPhotoFile(photoType: 'centerProfile' | 'centerBackground', gymInfo, callback?: () => void) {
+    createApiPhotoFile(photoType: FileTag, gymInfo, callback?: () => void) {
         const gymId = gymInfo.id
         const tag = this.setPhotoTag(photoType)
         const prop = this.setPhotoReqbodyProp(photoType)

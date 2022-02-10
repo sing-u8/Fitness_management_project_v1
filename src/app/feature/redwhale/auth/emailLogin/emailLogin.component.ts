@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core'
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core'
 import { Router } from '@angular/router'
 // import { AngularFireAuth } from '@angular/fire/auth'
 import { Auth, authState, signInWithCustomToken } from '@angular/fire/auth'
@@ -54,7 +54,6 @@ export class EmailLoginComponent implements OnInit, OnDestroy {
         this.subscription = authState(this.fireAuth).subscribe({
             next: (firebaseUser) => {
                 const user = this.storageService.getUser()
-                // console.log('fire subscription : ', firebaseUser)
                 if (firebaseUser && !_.isEmpty(user)) {
                     this.storageService.setSignInMethod(this.signInMethod)
                     this.router.navigateByUrl('/redwhale-home')

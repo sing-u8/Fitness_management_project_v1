@@ -47,10 +47,10 @@ export class TermsComponent implements OnInit, OnDestroy {
     ) {
         this.user = this.storageService.getUser()
         this.nxStore.pipe(select(registrationSelector), takeUntil(this.unSubscriber$)).subscribe((reg) => {
-            this.termsEULA = reg.termsEULA
-            this.termsPrivacy = reg.termsPrivacy
-            this.marketingSMS = reg.marketingSMS
-            this.marketingEmail = reg.marketingEmail
+            this.termsEULA = reg.service_terms
+            this.termsPrivacy = reg.privacy
+            this.marketingSMS = reg.sms_marketing
+            this.marketingEmail = reg.email_marketing
         })
     }
 
@@ -122,20 +122,20 @@ export class TermsComponent implements OnInit, OnDestroy {
         this.nxStore.dispatch(
             setRegistration({
                 registration: {
-                    termsEULA: this.termsEULA,
-                    termsPrivacy: this.termsPrivacy,
-                    marketingSMS: this.marketingSMS,
-                    marketingEmail: this.marketingEmail,
+                    service_terms: this.termsEULA,
+                    privacy: this.termsPrivacy,
+                    sms_marketing: this.marketingSMS,
+                    email_marketing: this.marketingEmail,
                 },
             })
         )
 
         if (this.user) {
             const requestBody = {
-                terms_eula: this.termsEULA ? 1 : 0,
-                terms_privacy: this.termsPrivacy ? 1 : 0,
-                marketing_sms: this.marketingSMS ? 1 : 0,
-                marketing_email: this.marketingEmail ? 1 : 0,
+                service_terms: this.termsEULA,
+                terms_privacy: this.termsPrivacy,
+                marketing_sms: this.marketingSMS,
+                marketing_email: this.marketingEmail,
             }
 
             this.userService.updateUser(this.user.id, requestBody).subscribe({

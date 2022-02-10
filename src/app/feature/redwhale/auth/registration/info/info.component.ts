@@ -1,9 +1,11 @@
 import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core'
 import { Router } from '@angular/router'
-import { Observable, fromEvent, Subscription } from 'rxjs'
+import { Observable, fromEvent } from 'rxjs'
 import { map, debounceTime, distinctUntilChanged } from 'rxjs/operators'
 
 import { AuthService } from '@services/auth.service'
+
+import { Registration } from '@schemas/store/app/registration.interface'
 
 // ngrx
 import { select, Store } from '@ngrx/store'
@@ -22,7 +24,7 @@ export class InfoComponent implements OnInit, AfterViewInit {
     emailInput: ElementRef
     keyup$: Observable<any>
 
-    registration: any
+    registration: Registration
 
     name: string
     email: string
@@ -184,7 +186,7 @@ export class InfoComponent implements OnInit, AfterViewInit {
         this.router.navigateByUrl('/auth/registration/email')
     }
 
-    onKeyup(event, type) {
+    onKeyup(event, type : string) {
         if (event.key == 'Enter') {
             if (this.formCheck()) {
                 this.next()
@@ -199,7 +201,7 @@ export class InfoComponent implements OnInit, AfterViewInit {
     checkRegistration() {
         let isValid = false
 
-        if (this.registration && this.registration.termsEULA && this.registration.termsPrivacy) {
+        if (this.registration && this.registration.service_terms && this.registration.privacy) {
             isValid = true
         }
 

@@ -1,4 +1,4 @@
-import { GymUser } from '@schemas/gym-user'
+import { GymUser } from '@schemas/backup/gym-user'
 
 export type Avatar = {
     color: string

@@ -30,12 +30,10 @@ export class StorageService {
                     resolve(null)
                 })
             })
-            console.log('logout in kakao')
             await logout
         }
         await signOut(this.fireAuth)
         this.storage.removeItem(this.userKey)
-        console.log('logout in email')
     }
 
     async logout() {

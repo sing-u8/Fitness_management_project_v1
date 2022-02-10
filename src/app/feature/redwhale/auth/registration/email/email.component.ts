@@ -16,6 +16,8 @@ import { showToast } from '@appStore/actions/toast.action'
 import { showModal } from '@appStore/actions/modal.action'
 import { registrationSelector } from '@appStore/selectors'
 
+type InputName = "one" | "two" | "three" | "four"
+
 @Component({
     selector: 'email',
     templateUrl: './email.component.html',
@@ -37,7 +39,7 @@ export class EmailComponent implements OnInit, AfterViewInit {
     error: string
 
     timeLeft: number
-    interval: any
+    interval: NodeJS.Timeout
 
     subscription: Subscription
 
@@ -71,6 +73,7 @@ export class EmailComponent implements OnInit, AfterViewInit {
 
     ngAfterViewInit() {
         this.one.nativeElement.focus()
+        
     }
 
     startTimer() {
@@ -105,7 +108,12 @@ export class EmailComponent implements OnInit, AfterViewInit {
         }
     }
 
-    nextNumber(event, name, currentElement, nextElement) {
+    nextNumber(
+        event, 
+        name : InputName, 
+        currentElement:HTMLInputElement, 
+        nextElement:HTMLInputElement
+    ) {
         if (event.key == 'Enter') {
             if (this.formCheck()) {
                 this.next()
@@ -182,23 +190,25 @@ export class EmailComponent implements OnInit, AfterViewInit {
         )
 
         const body = {
+            // name: this.registration.name,
             email: this.registration.email,
             verification_code: verificationCode,
             password: this.registration.password,
-            given_name: this.registration.name,
-            terms_eula: this.registration.termsEULA ? 1 : 0,
-            terms_privacy: this.registration.termsPrivacy ? 1 : 0,
-            marketing_sms: this.registration.marketingSMS ? 1 : 0,
-            marketing_email: this.registration.marketingEmail ? 1 : 0,
+            privacy: this.registration.privacy,
+            service_terms: this.registration.service_terms,
+            sms_marketing: this.registration.sms_marketing,
+            email_marketing: this.registration.email_marketing,
         }
 
         this.authService.registration(body).subscribe(
-            (user: User) => {
-                signInWithCustomToken(this.fireAuth, user.custom_token)
-                this.router.navigateByUrl('/auth/registration/phone')
-            },
-            (e) => {
-                this.error = e.message
+            {
+                next: (user: User) => {
+                    signInWithCustomToken(this.fireAuth, user.custom_token)
+                    this.router.navigateByUrl('/auth/registration/phone')
+                },
+                error: (e) => {
+                    this.error = e.message
+                }
             }
         )
     }
@@ -208,8 +218,8 @@ export class EmailComponent implements OnInit, AfterViewInit {
 
         if (
             this.registration &&
-            this.registration.termsEULA &&
-            this.registration.termsPrivacy &&
+            this.registration.service_terms &&
+            this.registration.privacy &&
             this.registration.name &&
             this.registration.email &&
             this.registration.emailValid &&

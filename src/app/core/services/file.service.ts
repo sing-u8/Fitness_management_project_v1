@@ -7,6 +7,9 @@ import handleError from './handleError'
 import { environment } from '@environments/environment'
 
 import { Response } from '@schemas/response'
+import {File} from '@schemas/file'
+
+export type FileTag = 'user-picture' | 'user-background' | 'gym-picture' | 'gym-background' | 'chat'
 
 @Injectable({
     providedIn: 'root',
@@ -98,14 +101,10 @@ export class FileService {
     }
 }
 
-class CreateFileRequestBody {
-    tag: string
+export interface CreateFileRequestBody {
+    tag: FileTag
     gym_id?: string
+    chat_room_id?: string
+    // files  : FileList   -- is already in other param
 }
 
-class File {
-    location: string
-    mimetype: string
-    originalname: string
-    size: number
-}

@@ -4,10 +4,10 @@ import { Subscription } from 'rxjs'
 
 import { StorageService } from '@services/storage.service'
 import { RouterService } from '@services/auth/router.service'
-
 import { AuthService } from '@services/auth.service'
 
 import { User } from '@schemas/user'
+import { Registration } from '@schemas/store/app/registration.interface'
 
 // ngrx
 import { select, Store } from '@ngrx/store'
@@ -31,7 +31,7 @@ export class PhoneComponent implements OnInit, AfterViewInit, OnDestroy {
 
     user: User
 
-    registration: any
+    registration: Registration
 
     phoneNumber: string
     phoneNumberValid: boolean
@@ -39,7 +39,7 @@ export class PhoneComponent implements OnInit, AfterViewInit, OnDestroy {
     verificationCode: number
 
     timeLeft: number
-    interval: any
+    interval: NodeJS.Timeout
 
     routerSubscription: Subscription
     isSocial: boolean
@@ -155,7 +155,7 @@ export class PhoneComponent implements OnInit, AfterViewInit, OnDestroy {
         this.authService.checkVerificationCodeSMSChange({ verification_code: this.verificationCode }).subscribe({
             next: (v) => {
                 this.user.phone_number = this.phoneNumber
-                this.user.phone_number_verified = 1
+                this.user.phone_number_verified = true
                 this.storageService.setUser(this.user)
 
                 this.router.navigateByUrl('/auth/registration/completed')
