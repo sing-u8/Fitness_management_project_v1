@@ -86,12 +86,12 @@ export class EmailLoginComponent implements OnInit, OnDestroy {
                     localStorage.removeItem('email')
                 }
                 signInWithCustomToken(this.fireAuth, user.custom_token).finally(() => {
-                    this.login_button_el.showLoading()
+                    this.login_button_el.hideLoading()
                 })
             },
             error: (e) => {
                 this.nxStore.dispatch(showToast({ text: '입력하신 정보를 다시 확인해주세요.' }))
-                this.login_button_el.showLoading()
+                this.login_button_el.hideLoading()
             },
         })
     }

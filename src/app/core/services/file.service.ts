@@ -15,7 +15,7 @@ export type FileTag = 'user-picture' | 'user-background' | 'gym-picture' | 'gym-
     providedIn: 'root',
 })
 export class FileService {
-    private SERVER = `${environment.protocol}${environment.subDomain}${environment.domain}${environment.port}${environment.version}/system`
+    private SERVER = `${environment.protocol}${environment.subDomain}${environment.domain}${environment.port}${environment.version}`
 
     constructor(private http: HttpClient) {}
 

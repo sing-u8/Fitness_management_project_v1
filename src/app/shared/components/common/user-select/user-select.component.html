@@ -11,9 +11,7 @@
         <rw-avatar
           [image]="value.value.picture"
           [backgroundColor]="value.value.color"
-          text="{{value.value.gym_user_name
-                  ? value.value.gym_user_name
-                  : value.value.given_name}}"
+          text="{{value.value.nick_name ?? value.value.name}}"
           size="23"
           fontSize="10"
         ></rw-avatar>
@@ -37,9 +35,7 @@
             <rw-avatar
               [image]="item.value.picture"
               [backgroundColor]="item.value.color"
-              text="{{item.value.gym_user_name
-                      ? item.value.gym_user_name
-                      : item.value.given_name}}"
+              text="{{value.value.nick_name ?? value.value.name}}"
               size="26"
               fontSize="10"
             ></rw-avatar>

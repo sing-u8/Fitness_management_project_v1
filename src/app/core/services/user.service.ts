@@ -125,7 +125,7 @@ export class UserService {
     }
 }
 
-class UpdateUserRequestBody {
+interface UpdateUserRequestBody {
     name?: string
     nick_name?: string
     sex?: string
@@ -139,7 +139,7 @@ class UpdateUserRequestBody {
     push_notification?: boolean
 }
 
-class ChangePasswordRequestBody {
+interface ChangePasswordRequestBody {
     password: string
     new_password: string
 }

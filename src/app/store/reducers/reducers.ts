@@ -47,7 +47,6 @@ export const appReducer = createImmerReducer(
         return state
     }),
     on(hideToast, (state): AppStateInterface => {
-        state.toast.text = undefined
         state.toast.visible = false
         return state
     }),
