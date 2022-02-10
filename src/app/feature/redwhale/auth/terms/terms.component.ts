@@ -133,9 +133,9 @@ export class TermsComponent implements OnInit, OnDestroy {
         if (this.user) {
             const requestBody = {
                 service_terms: this.termsEULA,
-                terms_privacy: this.termsPrivacy,
-                marketing_sms: this.marketingSMS,
-                marketing_email: this.marketingEmail,
+                privacy: this.termsPrivacy,
+                sms_marketing: this.marketingSMS,
+                email_marketing: this.marketingEmail,
             }
 
             this.userService.updateUser(this.user.id, requestBody).subscribe({

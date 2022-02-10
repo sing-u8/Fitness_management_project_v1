@@ -15,7 +15,7 @@ import {
 } from '@angular/core'
 import { NgxSpinnerService } from 'ngx-spinner'
 
-export type ClickEmitterType = {showLoading: Function, hideLoading: Function }
+export type ClickEmitterType = {showLoading: ()=> void, hideLoading: ()=> void }
 
 @Component({
     selector: 'rw-button',
@@ -35,17 +35,17 @@ export class ButtonComponent implements OnInit, OnChanges, AfterViewChecked {
     
     @Output() click = new EventEmitter<ClickEmitterType>()
     onButtonClick() {
-        this.click.emit({showLoading: this.showLoading, hideLoading: this.hideLoading})
+        this.click.emit({ showLoading: this.showLoading.bind(this), hideLoading: this.hideLoading.bind(this) })
     }
-    
+
     @ViewChild('rw_button') button_el: ElementRef
 
     public isLoading: boolean
-    public showLoading = () => {
+    showLoading() {
         this.isLoading = true
         this.spinner.show('loading-button')
     }
-    public hideLoading = () => {
+    hideLoading() {
         this.isLoading = false
         this.spinner.hide('loading-button')
     }

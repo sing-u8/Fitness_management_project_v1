@@ -90,7 +90,6 @@ export class SettingAccountComponent implements OnInit {
         this.changePasswordFlag = false
 
         this.user = this.storageService.getUser()
-
         console.log('user in setting account: ', this.user)
         this.initInputList()
     }
@@ -139,7 +138,8 @@ export class SettingAccountComponent implements OnInit {
             } else if (modalType == 'MARKETING_AGREE') {
                 this.modalUserData = { email: this.marketing_agree.email, sms: this.marketing_agree.sms }
             } else if (modalType == 'PUSH_NOTICE') {
-                this.modalUserData = this.inputList[type] == 1 ? true : false
+                console.log('push notice : ', type, this.inputList[type])
+                this.modalUserData = this.inputList[type] == "켜기" ? true : false
             } else {
                 this.modalUserData = this.inputList[type]
             }
@@ -196,8 +196,7 @@ export class SettingAccountComponent implements OnInit {
         if (!this.isFileExist(files)) return
 
         const reqBody: CreateFileRequestBody = { tag: 'user-picture' }
-        this.fileservice.createFile(reqBody, files).subscribe((fileList) => {
-           
+        this.fileservice.createFile(reqBody, files).subscribe((__) => {
             this.userService.getUser(this.user.id).subscribe(
                 {
                     next: (resData) => {

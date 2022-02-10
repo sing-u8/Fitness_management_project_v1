@@ -339,15 +339,6 @@ type CheckVerificationCodeMailRequestBody = {
 }
 
 export type RegistrationRequestBody = {
-    // email: string
-    // verification_code: number
-    // password: string
-    // family_name?: string
-    // given_name: string
-    // terms_eula: number
-    // terms_privacy: number
-    // marketing_sms: number
-    // marketing_email: number
     email: string
     verification_code: number
     password: string

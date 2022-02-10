@@ -27,7 +27,7 @@ export class ToastComponent implements OnChanges, AfterViewChecked {
     @Output() cancel = new EventEmitter<any>()
 
     changed: boolean
-    timer: any
+    timer: NodeJS.Timeout
 
     constructor(private el: ElementRef, private renderer: Renderer2) {
         this.delay = 2000

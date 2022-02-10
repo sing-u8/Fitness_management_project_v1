@@ -73,6 +73,8 @@ export class SettingModalComponent implements OnChanges, AfterViewChecked, OnIni
         if (!changes['visible'].firstChange) {
             if (changes['visible'].previousValue != changes['visible'].currentValue) {
                 this.changed = true
+
+                console.log('setting modal userdata : ', this.userData)
             }
         }
     }
@@ -120,10 +122,10 @@ export class SettingModalComponent implements OnChanges, AfterViewChecked, OnIni
 
     // -- marketing-agree
     onSMS() {
-        this.userData.sms = this.userData.sms == 1 ? 0 : this.userData.sms == 0 ? 1 : null
+        this.userData.sms = this.userData.sms ? false : !this.userData.sms ? true : null
     }
     onEmail() {
-        this.userData.email = this.userData.email == 1 ? 0 : this.userData.email == 0 ? 1 : null
+        this.userData.email = this.userData.email ? false : !this.userData.email ? true : null
     }
     // user update service and object
 
@@ -131,22 +133,22 @@ export class SettingModalComponent implements OnChanges, AfterViewChecked, OnIni
         switch (activeModalType) {
             case 'NAME':
                 this.toast_menu_text = '이름이'
-                return { given_name: userData }
+                return { nick_name: userData }
             case 'SEX':
                 this.toast_menu_text = '성별이'
                 return { sex: userData }
             case 'MARKETING_AGREE':
                 this.toast_menu_text = '마케팅 수신 동의가'
-                return { marketing_sms: userData.sms, marketing_email: userData.email }
+                return { sms_marketing: userData.sms, email_marketing: userData.email }
             case 'PUSH_NOTICE':
                 this.toast_menu_text = '푸시 알림 설정이'
-                const onOffFlag = userData ? 1 : 0
-                return { notification_yn: onOffFlag }
+                const onOffFlag = userData ? true : false
+                return { push_notification: onOffFlag }
             case 'BIRTH_DATE':
                 this.toast_menu_text = '생년월일이'
                 return { birth_date: userData }
-            default:
-                return undefined
+            default: 
+                return {}
         }
     }
 
