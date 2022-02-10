@@ -26,6 +26,9 @@ import { Store } from '@ngrx/store'
 import { showModal } from '@appStore/actions/modal.action'
 import { removeRegistration } from '@appStore/actions/registration.action'
 
+// components 
+import {ClickEmitterType} from '@shared/components/common/button/button.component'
+
 @Component({
     selector: 'rw-login',
     templateUrl: './login.component.html',
@@ -49,7 +52,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
         this.subscription = authState(this.fireAuth).subscribe((user) => {
             if (user) {
-                if (this.signInMethod == 'google' || this.signInMethod == 'facebook' || this.signInMethod == 'apple') {
+                if (this.signInMethod == 'google' || this.signInMethod == 'apple') {
                     user.getIdToken().then((accessToken) => {
                         this.authService.signInWithFirebase({ accessToken }).subscribe({
                             next: (user) => {
@@ -76,25 +79,26 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.subscription.unsubscribe()
     }
 
-    signInWithGoogle() {
+    signInWithGoogle(btLoadingFns:ClickEmitterType) {
+        btLoadingFns.showLoading()
         this.signInMethod = 'google'
-        signInWithPopup(this.fireAuth, new GoogleAuthProvider())
+        signInWithPopup(this.fireAuth, new GoogleAuthProvider()).then(() => {
+            btLoadingFns.hideLoading()
+        })
     }
 
-    signInWithFacebook() {
-        this.signInMethod = 'facebook'
-        signInWithPopup(this.fireAuth, new FacebookAuthProvider())
-    }
-
-    signInWithApple() {
+    signInWithApple(btLoadingFns:ClickEmitterType) {
+        btLoadingFns.showLoading()
         this.signInMethod = 'apple'
-        signInWithPopup(this.fireAuth, new OAuthProvider('apple.com'))
+        signInWithPopup(this.fireAuth, new OAuthProvider('apple.com')).then(() => {
+            btLoadingFns.hideLoading()
+        })
     }
 
-    signInWithKakao() {
+    signInWithKakao(btLoadingFns:ClickEmitterType) {
+        btLoadingFns.showLoading()
         this.signInMethod = 'kakao'
         const kakao$ = new Observable(function subscribe(observer) {
-            console.log('kakao$ : ', kakao$)
             Kakao.Auth.loginForm({
                 success: function (response) {
                     observer.next(response)
@@ -112,10 +116,13 @@ export class LoginComponent implements OnInit, OnDestroy {
             next: (user) => {
                 const accessToken = user['access_token']
                 this.authService.signInWithKakao({ accessToken }).subscribe((user) => {
-                    signInWithCustomToken(this.fireAuth, String(user.custom_token))
+                    signInWithCustomToken(this.fireAuth, String(user.custom_token)).then(() => {
+                        btLoadingFns.hideLoading()
+                    })
                 })
             },
             error: (e) => {
+                btLoadingFns.hideLoading()
                 this.nxStore.dispatch(showModal({ data: { text: this.TAG, subText: e.message } }))
             },
         })

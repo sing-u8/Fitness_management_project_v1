@@ -60,7 +60,8 @@
               [height]="'55'"
               [color]="'var(--red)'"
               [disabled]="!formCheck()"
-              (click)= "formCheck() && signInWithEmail()"
+              [loadingName]="'login'"
+              (onClick)= "formCheck() && signInWithEmail()"
             >
               <span class="rw-typo-title2-none-color">로그인</span>
             </rw-button>

@@ -9,18 +9,49 @@
                 <div class="rw-typo-headline1">레드웨일을 이용하시려면</div>
                 <div class="rw-typo-headline1">로그인이 필요해요! 👇</div>
             </div>
-            <div class="button kakao d-flex justify-content-center align-items-center" (click)="signInWithKakao()">
-                <img src="assets/icons/social/kakao.svg" />
-                <span class="rw-typo-title2">카카오로 로그인</span>
-            </div>
-            <div class="button google d-flex justify-content-center align-items-center" (click)="signInWithGoogle()">
-                <img src="assets/icons/social/google.svg" />
-                <span class="rw-typo-title2">Google로 로그인</span>
-            </div>
-            <div class="button apple d-flex justify-content-center align-items-center" (click)="signInWithApple()">
-                <img src="assets/icons/social/apple.svg" />
-                <span class="rw-typo-title2">Apple로 로그인</span>
-            </div>
+
+            <rw-button
+                id="kakao"
+                #kakao_login_bt
+                [height]="'55'"
+                [color]="'#fee500'"
+                [loadingName]="'kakao'"
+                (onClick)="signInWithKakao($event)"
+            >
+                <div class="button kakao d-flex justify-content-center align-items-center">
+                    <img src="assets/icons/social/kakao.svg" />
+                    <span class="rw-typo-title2">카카오로 로그인</span>
+                </div>
+            </rw-button>
+
+            <rw-button
+                id="google"
+                #google_login_bt
+                [height]="'55'"
+                [color]="'#4285f4'"
+                [loadingName]="'google'"
+                (onClick)="signInWithGoogle($event)"
+            >
+                <div class="button google d-flex justify-content-center align-items-center">
+                    <img src="assets/icons/social/google.svg" />
+                    <span class="rw-typo-title2">Google로 로그인</span>
+                </div>
+            </rw-button>
+
+            <rw-button
+                id="apple"
+                #apple_login_bt
+                [height]="'55'"
+                [color]="'black'"
+                [loadingName]="'apple'"
+                (onClick)="signInWithApple($event)"
+            >
+                <div class="button apple d-flex justify-content-center align-items-center">
+                    <img src="assets/icons/social/apple.svg" />
+                    <span class="rw-typo-title2">Apple로 로그인</span>
+                </div>
+            </rw-button>
+            
             <div class="email d-flex justify-content-evenly align-items-center">
                 <div class="rw-typo-title2" [routerLink]="['/auth/email']">이메일로 로그인</div>
                 <div class="v-line"></div>

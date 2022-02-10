@@ -30,12 +30,13 @@ export class ButtonComponent implements OnInit, OnChanges, AfterViewChecked {
     @Input() fontColor: string
     @Input() disabled: boolean
     @Input() text: string
+    @Input() loadingName = 'loading-button'
     
     
     
-    @Output() click = new EventEmitter<ClickEmitterType>()
+    @Output() onClick = new EventEmitter<ClickEmitterType>()
     onButtonClick() {
-        this.click.emit({ showLoading: this.showLoading.bind(this), hideLoading: this.hideLoading.bind(this) })
+        this.onClick.emit({ showLoading: this.showLoading.bind(this), hideLoading: this.hideLoading.bind(this) })
     }
 
     @ViewChild('rw_button') button_el: ElementRef
@@ -43,11 +44,11 @@ export class ButtonComponent implements OnInit, OnChanges, AfterViewChecked {
     public isLoading: boolean
     showLoading() {
         this.isLoading = true
-        this.spinner.show('loading-button')
+        this.spinner.show(this.loadingName)
     }
     hideLoading() {
         this.isLoading = false
-        this.spinner.hide('loading-button')
+        this.spinner.hide(this.loadingName)
     }
     
     public changed = false
@@ -75,7 +76,6 @@ export class ButtonComponent implements OnInit, OnChanges, AfterViewChecked {
         }
 
         if (this.color) {
-            console.log('button color: ', this.color)
             this.renderer.setStyle(this.button_el.nativeElement, 'backgroundColor', `${this.color}`)
             this.renderer.setStyle(this.button_el.nativeElement, 'color', 'var(--white)', RendererStyleFlags2.Important)
             this.renderer.addClass(this.button_el.nativeElement, 'cmp-button-type2')

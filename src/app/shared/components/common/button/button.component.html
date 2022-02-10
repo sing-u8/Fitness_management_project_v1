@@ -1,4 +1,4 @@
-<div #rw_button class="cmp-button">
+<div (click)="onButtonClick()" #rw_button class="cmp-button">
 
   <ngx-spinner
     bdColor="rgba(0, 0, 0, 0.8)"
@@ -7,7 +7,7 @@
     [color]="'#fff'"
     [bdColor]="color"
     [fullScreen] = "false"
-    [name]="'loading-button'"
+    [name]="loadingName"
   ></ngx-spinner>
   <ng-container
     *ngIf="!isLoading"
