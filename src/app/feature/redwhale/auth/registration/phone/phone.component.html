@@ -74,7 +74,7 @@
                 rwButtonHeight="55"
                 rwButtonColor="var(--red)"
                 [rwButtonDisabled]="
-                    !phoneNumberValid || !verificationCode || !verificationCodeRef.valid || timeLeft <= 0
+                !(isVerifValid && phoneNumberValid && verificationCode && verificationCodeRef.valid && timeLeft > 0)
                 "
                 (click)="formCheck() && next()"
             >
