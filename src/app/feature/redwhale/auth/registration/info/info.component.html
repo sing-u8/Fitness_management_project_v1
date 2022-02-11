@@ -58,12 +58,14 @@
                     *ngIf="passwordVisible"
                 />
                 <img
+                    *ngIf="password.length > 0"
                     class="password-icon"
                     src="assets/icons/etc/password-visible.svg"
                     [class.display-block]="passwordVisible"
                     (click)="changePasswordVisible(false)"
                 />
                 <img
+                    *ngIf="password.length > 0"
                     class="password-icon"
                     src="assets/icons/etc/password-invisible.svg"
                     [class.display-block]="!passwordVisible"

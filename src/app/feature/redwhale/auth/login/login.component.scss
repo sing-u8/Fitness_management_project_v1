@@ -53,6 +53,9 @@
         padding: 17px 30px;
         font-weight: 500;
         cursor: pointer;
+        &:hover {
+          opacity: 0.8;
+        }
       }
 
       .v-line {

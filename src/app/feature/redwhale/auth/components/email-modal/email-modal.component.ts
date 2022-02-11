@@ -12,26 +12,28 @@ import {
 } from "@angular/core";
 
 @Component({
-  selector: "rw-modal",
-  templateUrl: "./modal.component.html",
-  styleUrls: ["./modal.component.scss"],
+  selector: "auth-email-modal",
+  templateUrl: "./email-modal.component.html",
+  styleUrls: ["./email-modal.component.scss"],
 })
-export class ModalComponent implements OnChanges, AfterViewChecked {
+export class EmailModalComponent implements OnChanges, AfterViewChecked {
   @Input() visible: boolean;
   @Input() data: any;
   @Input() type: string;
 
+  @Input() height: string;
+
   @Input() blockClickOutside = false;
 
-  @ViewChild("modalBackgroundElement") modalBackgroundElement;
-  @ViewChild("modalWrapperElement") modalWrapperElement;
+  @ViewChild("modalBackgroundElement") modalBackgroundElement: ElementRef;
+  @ViewChild("modalWrapperElement") modalWrapperElement: ElementRef;
+  @ViewChild("rwModalElement") rwModalElement: ElementRef;
 
   @Output() visibleChange = new EventEmitter<boolean>();
   @Output() cancel = new EventEmitter<any>();
   @Output() confirm = new EventEmitter<any>();
 
   changed: boolean;
-
   public isMouseModalDown: boolean;
 
   constructor(private el: ElementRef, private renderer: Renderer2) {
@@ -40,7 +42,7 @@ export class ModalComponent implements OnChanges, AfterViewChecked {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (!changes["visible"].firstChange) {
+    if (changes["visible"] && !changes["visible"].firstChange) {
       if (changes["visible"].previousValue != changes["visible"].currentValue) {
         this.changed = true;
       }
@@ -90,6 +92,13 @@ export class ModalComponent implements OnChanges, AfterViewChecked {
           );
         }, 200);
       }
+
+      this.height = this.height ?? "204";
+      this.renderer.setStyle(
+        this.rwModalElement.nativeElement,
+        "height",
+        `${this.height}px`
+      );
     }
   }
 

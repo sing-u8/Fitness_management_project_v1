@@ -1,12 +1,16 @@
 .header {
-    height: 55px;
-    box-shadow: 0 0 6px 0 rgba(172, 172, 172, 0.2);
-    background-color: var(--white);
+  height: 55px;
+  box-shadow: 0 0 6px 0 rgba(172, 172, 172, 0.2);
+  background-color: var(--white);
 
-    .left-side-menu {
-        .logo {
-            margin-left: 3px;
-            cursor: pointer;
-        }
+  .left-side-menu {
+    .logo {
+      margin-left: 3px;
+      cursor: pointer;
+
+      img {
+        width: 96px;
+      }
     }
+  }
 }

@@ -81,10 +81,10 @@
                 <span>레드웨일 시작하기</span>
             </div>
             <div
-              *ngIf="isSocial"
-              class="next d-flex align-items-center justify-content-between"
+                *ngIf="isSocial"
+                class="next d-flex align-items-center justify-content-between"
             >
-              <div
+                <div
                 class="rw-typo-title2"
                 rw-button
                 rwButtonHeight="55"
@@ -92,22 +92,22 @@
                 rwButtonFontColor="var(--grey)"
                 rwButtonBorderColor="var(--border-color)"
                 (click)="backToLogin()"
-              >
-                <span>취소</span>
-              </div>
-              <div
+                >
+                    <span>취소</span>
+                </div>
+                <div
                 class="rw-typo-title2"
                 rw-button
                 rwButtonColor="var(--red)"
                 [rwButtonDisabled]="
-                    !phoneNumberValid || !verificationCode || !verificationCodeRef.valid || timeLeft <= 0
+                    !(isVerifValid && phoneNumberValid && verificationCode && verificationCodeRef.valid && timeLeft > 0)
                 "
                 (click)="formCheck() && next()"
                 rwButtonHeight="55"
                 rwButtonWidth="325"
-              >
-                <span>레드웨일 시작하기</span>
-              </div>
+                >
+                    <span>레드웨일 시작하기</span>
+                </div>
             </div>
         </div>
     </div>

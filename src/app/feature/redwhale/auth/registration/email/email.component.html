@@ -28,6 +28,7 @@
                     maxlength="1"
                     (keypress)="checkDigit($event)"
                     (keyup)="nextNumber($event, 'one', one, two)"
+                    (keyup.backspace)="prevNumber( 'one', null )"
                     #one
                 />
                 <input
@@ -38,6 +39,7 @@
                     maxlength="1"
                     (keypress)="checkDigit($event)"
                     (keyup)="nextNumber($event, 'two', two, three)"
+                    (keyup.backspace)="prevNumber( 'two', one)"
                     #two
                 />
                 <input
@@ -48,6 +50,7 @@
                     maxlength="1"
                     (keypress)="checkDigit($event)"
                     (keyup)="nextNumber($event, 'three', three, four)"
+                    (keyup.backspace)="prevNumber( 'three', two )"
                     #three
                 />
                 <input
@@ -58,6 +61,7 @@
                     maxlength="1"
                     (keypress)="checkDigit($event)"
                     (keyup)="nextNumber($event, 'four', four, null)"
+                    (keyup.backspace)="prevNumber( 'four', three )"
                     #four
                 />
                 <div class="error" *ngIf="error">
@@ -85,3 +89,11 @@
         </div>
     </div>
 </div>
+
+<auth-email-modal
+    [(visible)]="emailModalVisible"
+    [data]="emailModalTextObj"
+    [type]="'type2'"
+    (cancel)="hideEmailModal()"
+    (confirm)="hideEmailModal()"
+></auth-email-modal>
