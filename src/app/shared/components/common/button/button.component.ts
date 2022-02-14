@@ -70,6 +70,17 @@ export class ButtonComponent implements OnInit, OnChanges, AfterViewChecked {
         this.changed = true;
       }
     }
+
+    if (changes["width"] && !changes["width"].firstChange) {
+      if (changes["width"].previousValue != changes["width"].currentValue) {
+        this.changed = true;
+        this.renderer.setStyle(
+          this.button_el.nativeElement,
+          "width",
+          `${this.width}px`
+        );
+      }
+    }
   }
   ngAfterViewInit(): void {
     if (this.width) {

@@ -44,7 +44,7 @@ export class MobileResetPasswordComponent implements OnInit, OnDestroy {
   public token: string;
   public isTokenValid = false;
 
-  public passwordChangeSuccess = true;
+  public passwordChangeSuccess = false;
 
   public resizeUnListener: () => void;
 
