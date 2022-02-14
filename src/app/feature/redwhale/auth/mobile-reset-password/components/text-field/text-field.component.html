@@ -1,0 +1,88 @@
+<div class="l-text-field" #l_text_field_el>
+
+  <div class="text-field">
+    <div
+      class="text-field-title"
+      [ngClass] = "{
+        'h-warning-color' : this.form.dirty && this.form.errors['status'] == 'warning',
+        'h-error-color' : this.form.dirty && this.form.errors['status'] == 'error'
+      }"
+    >
+      {{this.title}}
+    </div>
+    <input
+      #input_el
+      [ngClass] = "{
+        'h-warning-border' : this.form.dirty && this.form.errors['status'] == 'warning',
+        'h-error-border' : this.form.dirty && this.form.errors['status'] == 'error'
+      }"
+      [type]="this.textVisible ? 'text' : 'password'"
+      [placeholder]="this.placeHolder"
+      [formControl] = "this.form"
+      (keyup.enter) = "Enter($event)"
+      (keyup) = "keyUp($event)"
+      (focus)="onInputFocused()"
+      (blur)="onInputBlured()"
+    >
+
+
+
+    <div *ngIf="this.form.dirty" id="status">
+      <img
+        *ngIf="this.form.errors['status'] == 'error'  else warning"
+        id="error" src="assets/icons/mobile/error.svg" alt="error.svg"
+      >
+      <ng-template #warning>
+        <img
+          *ngIf="this.form.errors['status'] == 'warning' else valid"
+          id="error" src="assets/icons/mobile/warning.svg" alt="warning.svg"
+        >
+      </ng-template>
+      <ng-template #valid>
+        <img
+          *ngIf="this.form.valid"
+          id="check" src="assets/icons/mobile/check.svg" alt="check.svg"
+        >
+      </ng-template>
+    </div>
+
+    <div id="visible">
+      <img
+        *ngIf="!this.textVisible"
+        id="invisible"
+        src="assets/icons/mobile/invisible.svg" alt="invisible.svg"
+        (click)="toggleVisible()"
+      >
+      <img
+        *ngIf="this.textVisible"
+        id="visible"
+        src="assets/icons/mobile/visible.svg" alt="visible.svg"
+        (click)="toggleVisible()"
+      >
+    </div>
+
+
+
+  </div>
+
+  <div
+    *ngIf="this.form.dirty && !this.form.valid"
+    class="guide-text"
+    [ngClass] = "{
+      'h-warning-color' : this.form.dirty && this.form.errors['status'] == 'warning',
+      'h-error-color' : this.form.dirty && this.form.errors['status'] == 'error'
+    }"
+  >
+    {{this.guideText}}
+  </div>
+
+  <div
+    *ngIf="this.isFocused && this.form.pristine"
+    class="guide-text"
+  >
+    {{this.guidePlaceHoldText}}
+  </div>
+
+</div>
+
+

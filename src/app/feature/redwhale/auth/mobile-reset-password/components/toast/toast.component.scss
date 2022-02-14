@@ -1,0 +1,35 @@
+* {
+    padding: 0px;
+    margin: 0px;
+}
+
+.mrp-toast {
+    $width: 288px;
+    $height: 53px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 15px 22px;
+
+    position: absolute;
+    width: $width;
+    min-height: $height;
+    left: calc(50vw - (#{$width} / 2));
+    top: -$height;
+    transition: top 0.5s;
+    -moz-transition: top 0.5s;
+    -webkit-transition: top 0.5s;
+    -o-transition: top 0.5s;
+
+    background: #6a6a6a;
+    border-radius: 55px;
+
+    &.view-toast {
+        top: calc(50vh - (#{$height}/ 2) - 266.5px);
+    }
+
+    span {
+        color: var(--white);
+    }
+}
