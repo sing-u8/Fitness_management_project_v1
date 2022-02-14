@@ -4,7 +4,6 @@ import {
   Renderer2,
   OnDestroy,
   ViewChild,
-  ElementRef,
 } from "@angular/core";
 import {
   FormControl,

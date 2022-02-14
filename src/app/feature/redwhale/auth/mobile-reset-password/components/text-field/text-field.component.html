@@ -4,21 +4,21 @@
     <div
       class="text-field-title"
       [ngClass] = "{
-        'h-warning-color' : this.form.dirty && this.form.errors['status'] == 'warning',
-        'h-error-color' : this.form.dirty && this.form.errors['status'] == 'error'
+        'h-warning-color' : form.dirty && form.errors?.['status'] == 'warning',
+        'h-error-color' : form.dirty && form.errors?.['status'] == 'error'
       }"
     >
-      {{this.title}}
+      {{title}}
     </div>
     <input
       #input_el
       [ngClass] = "{
-        'h-warning-border' : this.form.dirty && this.form.errors['status'] == 'warning',
-        'h-error-border' : this.form.dirty && this.form.errors['status'] == 'error'
+        'h-warning-border' : form.dirty && form.errors?.['status'] == 'warning',
+        'h-error-border' : form.dirty && form.errors?.['status'] == 'error'
       }"
-      [type]="this.textVisible ? 'text' : 'password'"
-      [placeholder]="this.placeHolder"
-      [formControl] = "this.form"
+      [type]="textVisible ? 'text' : 'password'"
+      [placeholder]="placeHolder"
+      [formControl] = "form"
       (keyup.enter) = "Enter($event)"
       (keyup) = "keyUp($event)"
       (focus)="onInputFocused()"
@@ -27,20 +27,20 @@
 
 
 
-    <div *ngIf="this.form.dirty" id="status">
+    <div *ngIf="form.dirty" id="status">
       <img
-        *ngIf="this.form.errors['status'] == 'error'  else warning"
+        *ngIf="form.errors?.['status'] == 'error'  else warning"
         id="error" src="assets/icons/mobile/error.svg" alt="error.svg"
       >
       <ng-template #warning>
         <img
-          *ngIf="this.form.errors['status'] == 'warning' else valid"
+          *ngIf="form.errors?.['status'] == 'warning' else valid"
           id="error" src="assets/icons/mobile/warning.svg" alt="warning.svg"
         >
       </ng-template>
       <ng-template #valid>
         <img
-          *ngIf="this.form.valid"
+          *ngIf="form.valid"
           id="check" src="assets/icons/mobile/check.svg" alt="check.svg"
         >
       </ng-template>
@@ -48,13 +48,13 @@
 
     <div id="visible">
       <img
-        *ngIf="!this.textVisible"
+        *ngIf="!textVisible"
         id="invisible"
         src="assets/icons/mobile/invisible.svg" alt="invisible.svg"
         (click)="toggleVisible()"
       >
       <img
-        *ngIf="this.textVisible"
+        *ngIf="textVisible"
         id="visible"
         src="assets/icons/mobile/visible.svg" alt="visible.svg"
         (click)="toggleVisible()"
@@ -66,21 +66,21 @@
   </div>
 
   <div
-    *ngIf="this.form.dirty && !this.form.valid"
+    *ngIf="form.dirty && !form.valid"
     class="guide-text"
     [ngClass] = "{
-      'h-warning-color' : this.form.dirty && this.form.errors['status'] == 'warning',
-      'h-error-color' : this.form.dirty && this.form.errors['status'] == 'error'
+      'h-warning-color' : form.dirty && form.errors?.['status'] == 'warning',
+      'h-error-color' : form.dirty && form.errors?.['status'] == 'error'
     }"
   >
-    {{this.guideText}}
+    {{guideText}}
   </div>
 
   <div
-    *ngIf="this.isFocused && this.form.pristine"
+    *ngIf="isFocused && form.pristine"
     class="guide-text"
   >
-    {{this.guidePlaceHoldText}}
+    {{guidePlaceHoldText}}
   </div>
 
 </div>

@@ -58,7 +58,7 @@ export class TextFieldComponent implements OnInit, AfterViewInit, OnChanges {
         this.renderer.setStyle(
           this.l_text_field_el.nativeElement,
           "width",
-          `${this.width}px`,
+          `${Number(this.width) / 10}rem`,
           RendererStyleFlags2.Important
         );
       }
@@ -69,7 +69,7 @@ export class TextFieldComponent implements OnInit, AfterViewInit, OnChanges {
       this.renderer.setStyle(
         this.l_text_field_el.nativeElement,
         "width",
-        `${this.width}px`,
+        `${Number(this.width) / 10}rem`,
         RendererStyleFlags2.Important
       );
     }
