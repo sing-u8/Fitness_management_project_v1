@@ -1,10 +1,130 @@
 <div class="rw-modal-background" #modalBackgroundElement></div>
 <div class="rw-modal-wrapper justify-content-center align-items-center" (click)="onCancel()" #modalWrapperElement>
     <div class="rw-modal user-select-none" (click)="$event.stopPropagation()">
+
         <div class="title d-flex justify-content-between align-items-start">
             <span class="rw-typo-bodytext1">레드웨일 서비스 이용약관</span>
             <img src="assets/icons/etc/close.svg" (click)="onCancel()" />
         </div>
-        <div class="content rw-typo-subtext1 scroll-y">이용약관 내용</div>
+
+        <div class="content rw-typo-subtext1 thin-scroll-y-overlay2">
+            <div class="text__title_large_chap">
+                제 1장 총칙
+            </div>
+
+            <div class="text__title_small_chap">
+                제1조 약관의 목적
+            </div>
+
+            <div class="text_content text--paragraph">
+                이 약관은 회사가 온라인으로 제공하는 레드웨일 및 제반 서비스 (이하 ’서비스’라고 합니다)의 이용과 관련하여 회사와 센터의 권리, 의무 및 책임 사항 등을 규정함을 목적으로 합니다.
+            </div>
+
+            <div class="text__title_small_chap">
+                제2조 용어의 정리
+            </div>
+            <div class="text__content text--content_margin">
+                이 약관에서 사용하는 용어의 정의는 다음 각호와 같습니다.
+            </div>
+            <ol class="first">
+                <li class="text__content  text--content_margin">
+                    “서비스”는 센터가 센터 및 수업 관리에 필요한 업무를 모바일 및 PC 온라인으로 이용할 수 있도록 회사가 제공하는 일체 서비스의 집합을 의미합니다.
+                </li>
+                <li class="text__content  text--content_margin">
+                    “센터”는 회사의 홈페이지를 통해 회원 가입을 하고, 이 약관에 따라 회사와 이용계약을 체결하여 유상 또는 무상으로 솔루션을 이용하는 고객을 의미합니다.
+                </li>
+                <li class="text__content  text--content_margin">
+                    “회원”은 회사의 홈페이지 또는 애플리케이션을 통해 회원 가입을 하고 정상적으로 서비스를 이용할 수 있는 권한을 부여 받은 고객을 의미합니다.
+                </li>
+                <li class="text__content  text--content_margin">
+                    “이용료”는 서비스를 통해 제공되는 기본 서비스 및 부가 서비스 비용을 의미합니다.
+                </li>
+                <li class="text__content ">
+                    “무료 체험”은 회사가 별도로 지정한 조건으로 지속되며, 신규 센터 및 특정 기존 센터가 서비스를 실질적으로 이용해 볼 수 있도록 하기 위함입니다.
+                </li>
+            </ol>
+
+            <div class="text__title_small_chap p-top-margin">
+                제4조 이용계약의 체결
+            </div>
+            <ol class="first">
+                <li class="text__content  text--content_margin">
+                    이용계약은 서비스를 이용하고자 하는 자가 약관의 내용을 확인한 후 동의하고 서비스 운영에 필요한 정보를 기재하여 신청하면 회사가 이를 승낙함으로써 성립합니다.
+                </li>
+                <li class="text__content  text--content_margin">
+                    회사는 이용 약관에 동의한 후 접수 순서에 따라 서비스 이용을 승낙함을 원칙으로 합니다. 다만, 업무 수행상 또는 기술상 지장이 있으면 일정 시간 가입 승인을 유보할 수 있습니다.
+                </li>
+                <li class="text__content">
+                    <div class="text--content_margin_small">
+                        회사는 다음 각호에 해당하는 신청에 대해서 승낙하지 않거나 사후에 이용계약을 해지할 수 있습니다.
+                    </div>
+                    <ol class="second">
+                        <li> 비실명, 타인 명의로 서비스를 신청한 경우</li>
+                        <li> 정보를 허위로 기재하거나 필수 기재 항목을 누락, 오기한 경우</li>
+                        <li> 부정한 용도로 서비스를 사용하고자 하는 경우</li>
+                        <li> 사업자 신원 확인 및 본인 확인에 필요한 서류의 제출을 거부한 경우</li>
+                        <li> 국내법 또는 국제법을 위반하거나 이 약관을 위반하여 이용계약이 해지된 이력이 있는 경우</li>
+                        <li> 선정적이고 미풍양속을 해치는 용도로 서비스를 이용한 이력이 있는 경우</li>
+                        <li> 센터의 이용 목적이나 서비스 이용 방법이 회사의 재산권이나 영업권을 침해하거나 침해할 우려가 있는 경우</li>
+                    </ol>
+                </li>
+            </ol>
+
+
+
+            <div class="text__title_large_chap title-top-margin">
+                제 2장 계약의 내용
+            </div>
+
+            <div class="text__title_small_chap">
+                제 14조 이용료 지불 및 결제방법
+            </div>
+
+            <ol class="first">
+
+                <li class="text__content">
+                    <div class="text--content_margin_small">
+                        이용료에 대한 지불은 다음 호의 방식으로 진행됩니다.
+                    </div>
+                    <ol class="second text--content_margin_small ">
+                        <li>월간 결제 : 정기 결제일에 해당하는 기본 서비스 이용료를 선결제하는 방식</li>
+                    </ol>
+                </li>
+
+                <li class="text__content text--content_margin text-top-margin">
+                    이용료는 폰뱅킹, 인터넷뱅킹 등의 각종 계좌이체 방법으로 결제합니다.
+                </li>
+
+                <li class="text__content">
+                    <div class="text--content_margin_small">
+                        이용 기간 중 센터의 요금제가 변경될 경우 결제 방식은 다음과 같습니다.
+                    </div>
+                    <ol class="second text--content_margin_small">
+                        <li>
+                            <div class="li_margin">월간 결제 : 정기 결제일에 해당하는 기본 서비스 이용료를 선결제하는 방식</div>
+                            <ol class="third braket_number">
+                                <li>기존 요금제가 다음 결제일까지 유지됩니다.</li>
+                                <li>다음 결제일부터 요금제가 변경되고 변경된 요금제의 이용 요금이 청구됩니다.</li>
+                            </ol>
+                        </li>
+
+                        <li>
+                            <div class="li_margin">월간 결제 후 요금제를 상향 변경한 경우</div>
+                            <ol class="third braket_number">
+                                <li>변경한 요금제의 이용 요금이 변경 당일 청구되고 변경한 요금제의 모든 기능과 이용 조건 등이 즉시 적용됩니다.</li>
+                                <li>변경한 날짜를 새로운 결제일로 하여 다음 결제일부터 변경한 요금제의 이용 요금이 청구됩니다.</li>
+                            </ol>
+                        </li>
+
+                        <li class="p-bottom-margin">
+                            월간 결제 후 회원이 250인 미만이 되더라도 환불, 보상, 무료 요금제로의 전환이 모두 불가하며, 이 경우 계약 종료 후 250인 미만 조건에 부합했을 때 무료 요금제 이용이 가능합니다.
+                        </li>
+
+                    </ol>
+                </li>
+            </ol>
+
+        </div>
+
     </div>
 </div>

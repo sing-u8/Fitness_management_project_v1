@@ -147,7 +147,7 @@ export class SettingModalComponent implements OnChanges, AfterViewChecked, OnIni
             case 'BIRTH_DATE':
                 this.toast_menu_text = '생년월일이'
                 return { birth_date: userData }
-            default: 
+            default:
                 return {}
         }
     }

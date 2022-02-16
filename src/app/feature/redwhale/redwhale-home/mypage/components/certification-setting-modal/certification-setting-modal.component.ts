@@ -74,7 +74,7 @@ export class CertificationSettingModalComponent implements OnChanges, AfterViewC
     }
     ngOnInit() {
         this.user = this.storageService.getUser()
-        this.timeLeft = 0
+        this.timeLeft = -1
     }
     ngOnChanges(changes: SimpleChanges) {
         if (!changes['visible'].firstChange) {
@@ -126,7 +126,7 @@ export class CertificationSettingModalComponent implements OnChanges, AfterViewC
         this.verificationCodeErr = ''
 
         clearInterval(this.interval)
-        this.timeLeft = 0
+        this.timeLeft = -1
     }
 
     // time methods
@@ -148,7 +148,7 @@ export class CertificationSettingModalComponent implements OnChanges, AfterViewC
             this.activatedModalType == 'EMAIL'
                 ? '입력 시간이 초과되었어요. [인증메일 받기] 버튼을 눌러주세요!'
                 : this.activatedModalType == 'PHONE'
-                ? '입력 시간이 초과되었어요. [인증번호 받기] 버튼을 다시 눌러주세요!'
+                ? '입력 시간이 초과되었어요. [인증번호 받기] 버튼을 눌러주세요!'
                 : ''
         clearInterval(this.interval)
     }
@@ -197,20 +197,24 @@ export class CertificationSettingModalComponent implements OnChanges, AfterViewC
     }
 
     finishPhoneChange() {
-        this.authService.checkVerificationCodeSMSChange({ verification_code: this.verificationCode }).subscribe({
-            next: (v) => {
-                this.user.phone_number = this.newInfoStr
-                this.user.phone_number_verified = true
-                this.storageService.setUser(this.user)
-                this.onConfirm()
-                this.nxStore.dispatch(showToast({ text: '전화번호가 변경되었습니다.' }))
-                this.resetAllVariables()
-            },
-            error: (e) => {
-                this.triedVerifCode = true
-                this.verificationCodeErr = '인증번호를 잘못 입력하셨습니다.'
-            },
-        })
+        this.authService
+            .checkVerificationCodeSMSChange({
+                verification_code: this.verificationCode,
+            })
+            .subscribe({
+                next: (v) => {
+                    this.user.phone_number = this.newInfoStr
+                    this.user.phone_number_verified = true
+                    this.storageService.setUser(this.user)
+                    this.onConfirm()
+                    this.nxStore.dispatch(showToast({ text: '전화번호가 변경되었습니다.' }))
+                    this.resetAllVariables()
+                },
+                error: (e) => {
+                    this.triedVerifCode = true
+                    this.verificationCodeErr = '인증번호를 잘못 입력하셨습니다.'
+                },
+            })
     }
 
     // email methods
@@ -249,20 +253,24 @@ export class CertificationSettingModalComponent implements OnChanges, AfterViewC
     }
 
     finishEmailChange() {
-        this.authService.checkVerificationCodeMailChange({ verification_code: this.verificationCode }).subscribe({
-            next: (v) => {
-                this.user.email = this.newInfoStr
-                this.user.email_verified = true
-                this.storageService.setUser(this.user)
-                this.onConfirm()
-                this.nxStore.dispatch(showToast({ text: '이메일이 변경되었습니다.' }))
-                this.resetAllVariables()
-            },
-            error: (e) => {
-                this.triedVerifCode = true
-                this.verificationCodeErr = '인증번호를 잘못 입력하셨습니다.'
-            },
-        })
+        this.authService
+            .checkVerificationCodeMailChange({
+                verification_code: this.verificationCode,
+            })
+            .subscribe({
+                next: (v) => {
+                    this.user.email = this.newInfoStr
+                    this.user.email_verified = true
+                    this.storageService.setUser(this.user)
+                    this.onConfirm()
+                    this.nxStore.dispatch(showToast({ text: '이메일이 변경되었습니다.' }))
+                    this.resetAllVariables()
+                },
+                error: (e) => {
+                    this.triedVerifCode = true
+                    this.verificationCodeErr = '인증번호를 잘못 입력하셨습니다.'
+                },
+            })
     }
 
     // common

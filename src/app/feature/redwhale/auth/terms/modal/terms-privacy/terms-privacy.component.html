@@ -1,10 +1,218 @@
 <div class="rw-modal-background" #modalBackgroundElement></div>
 <div class="rw-modal-wrapper justify-content-center align-items-center" (click)="onCancel()" #modalWrapperElement>
     <div class="rw-modal user-select-none" (click)="$event.stopPropagation()">
+
         <div class="title d-flex justify-content-between align-items-start">
-            <span class="rw-typo-bodytext1">개인정보 수집 및 이용</span>
+            <span class="rw-typo-bodytext1">개인정보 보호 및 이용</span>
             <img src="assets/icons/etc/close.svg" (click)="onCancel()" />
         </div>
-        <div class="content rw-typo-subtext1 scroll-y">개인정보 수집 및 이용 내용</div>
+
+        <div class="content rw-typo-subtext1 thin-scroll-y-overlay2">
+
+            <div class="text__title_small_chap">
+                1. 개인정보의 처리 목적
+            </div>
+
+            <div class="text__content text--content_margin">
+                개인정보는 다음의 목적 외의 용도로는 사용되지 않으며 이용 목적이 변경될 시에는 사전 동의를 구할 예정입니다.
+            </div>
+
+            <ol class="first circle_number">
+                <li>
+                    회원가입 및 관리, 회원제 서비스 이용, 제한적 본인 확인제에 따른 본인확인, 개인식별, 부정이용 방지, 비인가 사용방지, 가입의사 확인, 만 14세 미만 아동 개인정보 수집 시 법정대리인 동의여부 확인, 추후
+                    법정대리인 본인확인, 사고조사, 분쟁해결, 민원처리 및 고지사항 전달 등의 목적으로 개인정보를 처리합니다.
+                </li>
+                <li>
+                    서비스 개발, 서비스 제공 및 개선, 인구 통계학적 분석, 서비스 방문 및 이용기록의 분석, 개인정보 및 관심에 기반한 고객간 관계의 형성, 지인 및 관심사 등에 기반한 맞춤형 서비스 제공 등 신규 서비스 요소의
+                    발굴 및 기존 서비스 개선 등을 위하여 개인정보를 처리합니다.
+                </li>
+            </ol>
+
+
+
+            <div class="text__title_small_chap p-top-margin">
+                2. 개인정보의 처리 및 보유 기간
+            </div>
+
+            <ol class="first circle_number">
+
+                <li class="text-top-margin text--content_margin">
+                    회원 가입 및 관리 목적으로 수집된 개인(신용)정보는 센터와 회원의 회원 가입일로부터 회원 탈퇴일까지 보유·이용됩니다. 다만, 센터의 회원이 탈퇴한 후에는 제1조의 목적과 관련된 사고조사, 분쟁해결, 민원처리,
+                    법령상 의무이행만을 위하여 보유·이용됩니다.
+                </li>
+
+                <li>
+                    <div class="li_margin text--content_margin">
+                        고객의 개인정보는 원칙적으로 개인정보의 수집 및 이용목적이 달성되면 지체 없이 파기되나, 아래 각 항목에 해당하는 경우에는 명시한 기간 동안 보관할 수 있으며, 그 외 다른 목적으로 사용하지 않습니다.
+                    </div>
+
+                    <ul class="second">
+
+                        <li>
+                            불건전한 서비스 이용으로 서비스에 물의를 일으킨 고객의 경우 사법기관 수사의뢰를 하거나 다른 고객을 보호할 목적으로 1년간 해당 개인정보를 보유·이용할 수 있습니다.
+                        </li>
+
+                        <li>
+                            <div class="li_margin">
+                                관계법령의 규정에 의하여 보관할 필요가 있는 경우 회사는 수집 및 이용 목적 달성 후에도 관계법령에서 정한 일정 기간 동안 고객의 개인정보를 보유·이용할 수 있습니다.
+                            </div>
+                            <ol class="third">
+                                <li>계약 또는 청약 철회 등에 관한 기록 : 5년</li>
+                                <li>대금 결제 및 재화의 공급에 관한 기록 : 5년</li>
+                                <li>소비자의 불만 또는 분쟁처리에 관한 기록 : 3년</li>
+                            </ol>
+                        </li>
+
+                    </ul>
+
+                </li>
+
+            </ol>
+
+
+            <div class="text__title_small_chap p-top-margin">
+                3. 개인정보의 제3자 제공
+            </div>
+
+            <div class="text__content text--content_margin">
+                회사는 원칙적으로 이용자 동의 없이 개인정보를 외부에 제공하지 않습니다.
+            </div>
+
+            <ol class="first circle_number">
+
+                <li>
+                    <div class="li_margin">
+                        회사는 원칙적으로 센터와 회원의 개인정보를 제1조에서 명시한 목적 범위 내에서 처리하며, 센터와 회원의 사전 동의 없는 본래의 범위를 초과하여 처리하거나 제3자에게 제공하지 않습니다. 다만, 다음과 같은 경우 센터와 회원의 개인 정보를 제3자에게 제공할 수 있습니다.
+                    </div>
+
+                    <ul class="second">
+                        <li>고객이 사전에 제3자 제공에 동의한 경우</li>
+                        <li>다른 법률에 특별한 규정이 있는 경우</li>
+                        <li>
+                            고객 또는 법정대리인이 의사표시를 할 수 없는 상태에 있거나 주소불명 등으로 사전 동의를 받을 수 없는 경우로서 명백히 고객 또는 제3자의 급박한 생명, 신체, 재산의 이익을 위하여 필요하다고 인정되는 경우
+                        </li>
+                        <li>
+                            통계작성 및 학술연구 등의 목적을 위하여 필요한 경우로서 특정 개인을 알아볼 수 없는 형태로 개인정보를 제공하는 경우
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <div class="li_margin">
+                        제1항에 따라 회원이 사전에 동의한 경우 센터가 제공하는 서비스의 이용을 위하여 관련된 회원의 정보를 필요한 범위 내에서 센터에게 제공할 수 있습니다. 이 때 회사는 회원에게 아래의 ‘개인정보를 제공받는 자,
+                        제공목적, 제공하는 개인정보 항목, 제공하는 개인정보의 보유 및 이용기간’을 사전에 고지하고 이에 대하여 명시적, 개별적 동의를 얻습니다. 회원은 개인정보 제공을 거부하실 수 있으나 이 경우 센터가 제공하는 서비스
+                        이용이 제한될 수 있습니다.
+                    </div>
+
+                    <table class="type1">
+                        <tr>
+                            <td>제공받는 자</td>
+                            <td>제공 목적</td>
+                            <td class="third_width">제공 항목</td>
+                            <td>보유 및 이용 기간</td>
+                        </tr>
+                        <tr>
+                            <td class="span_align" rowspan="3">텐엑스 서비스에 가입된 센터 또는 브랜드</td>
+                            <td>가입된 센터의 회원 관리</td>
+                            <td>이름, 이메일 주소, 전화번호, 성별, 생년월일</td>
+                            <td class="span_align" rowspan="3">센터 계약 종료 시 또는 회원 탈퇴 시 또는 서비스 종료 시까지</td>
+                        </tr>
+                        <tr>
+                            <td>가입된 센터의 회원권, 수강 관리</td>
+                            <td>회원권 구매 상세 내역, 예약 및 수강 내역</td>
+                        </tr>
+                        <tr>
+                            <td>가입된 센터의 출결 관리</td>
+                            <td>이름, 전화번호, 출결 현황</td>
+                        </tr>
+                    </table>
+
+                    <ol class="second text-top-margin">
+                        <li class="text--content_margin">
+                            서비스의 개인정보를 제공 받는 자는 1) 회원이 등록된 센터 및 2) 회원이 제3자 정보 제공에 동의한 센터에 한정되며, 그러한 센터의 변동에 따른 개인정보 처리방침의 수시 개정이 어려워 업체 리스트 열거는
+                            생략합니다.
+                        </li>
+                    </ol>
+
+                    <table class="type2">
+                        <tr>
+                            <td class="first_width">위탁 업체</td>
+                            <td class="second_width">위탁 업무</td>
+                            <td>보유 및 이용 기간</td>
+                        </tr>
+                        <tr>
+                            <td>Amazon Web Services, Inc.</td>
+                            <td>클라우드 서비스를 이용한<br> 서비스 제공 및 데이터 보관 관리</td>
+                            <td>센터 계약 종료 시 또는 회원<br> 탈퇴 시 또는 서비스 종료 시<br>까지</td>
+                        </tr>
+                    </table>
+
+                </li>
+
+                <div class ="text-top-margin">
+                    <div class="text--content_margin_small">
+                        또한 위의 수탁업체 외에 서비스 이용 및 통계 분석을 목적으로 로그 분석툴인 Google Analytics, Amplitude 도구를 사용하고 있습니다. 외부 분석툴을 통한 로그 분석을 중단하고 싶으신 경우, 아래
+                        안내 페이지를 통해 설정을 해제하실 수 있습니다.
+                    </div>
+                    <ul class="second">
+                        <li><span class="underline">Google Analytics 설정 해제 안내</span></li>
+                        <li> <span class="underline">Amplitude 설정 해제 안내</span></li>
+                    </ul>
+                </div>
+
+                <li class = "text-top-margin">
+                    영업의 전부 또는 일부를 양도하거나, 합병/상속 등으로 서비스 제공자의 권리, 의무를 이전 승계하는 경우 개인정보 보호 관련 고객의 권리를 보장하기 위하여 반드시 그 사실을 센터와 회원에게 통지합니다.
+                </li>
+
+            </ol>
+
+
+
+            <div class="text__title_small_chap p-top-margin">
+                9. 권익침해 구제 방법
+            </div>
+
+            <div class="text__content text--content_margin">
+                회사는 원칙적으로 이용자 동의 없이 개인정보를 외부에 제공하지 않습니다.
+            </div>
+
+            <ol class="first circle_number">
+                <li>개인정보분쟁조정위원회 (koplco.go.kr/) 1833-6972</li>
+                <li>개인정보침해신고센터 (privacy.klsa.or.kr/) 118</li>
+                <li>대검찰청 첨단범죄수사과 (spo.go.kr/) 02-3480-2000</li>
+                <li>경찰청 사이버안전국 (cyberbureau.police.go.kr/) 182</li>
+            </ol>
+
+
+            <div class="text__title_small_chap p-top-margin">
+                10. 개인정보 보호 책임자
+            </div>
+
+            <div class="text__content text--content_margin">
+                회사는 원칙적으로 이용자 동의 없이 개인정보를 외부에 제공하지 않습니다.
+            </div>
+
+            <ul class="first">
+                <li class="text--content_margin">책임자 : 강신호</li>
+                <li>문의 : hohde3@gmail.com</li>
+            </ul>
+
+
+
+            <div class="text__title_small_chap p-top-margin">
+                11. 개인정보 처리방침의 변경
+            </div>
+
+            <div class="text__content text--content_margin">
+                회사는 개인정보 처리방침을 변경하는 경우에는 변경 및 시행의 시기, 변경된 내용을 지속적으로 공개하며, 변경된 내용은 고객이 쉽게 확인할 수 있도록 변경 전후를 비교하여 공개합니다.
+            </div>
+
+            <div class="text__content text--content_margin p-bottom-margin">
+                시행일자 : 2019년 7월 30일
+            </div>
+
+
+        </div>
+
     </div>
 </div>

@@ -57,7 +57,7 @@
         (keypress)="checkDigit($event)"
         (keyup)="onKeyup($event, 'verificationCode')"
       >
-      <span class="verification-time" *ngIf="timeLeft != 0">{{ timeLeft | minuteSeconds }}</span>
+      <span class="verification-time" *ngIf="timeLeft >= 0">{{ timeLeft | minuteSeconds }}</span>
       <div class="error" *ngIf="verificationCodeErr">
         <img class="warning" src="assets/icons/etc/warning-red.svg" />
         <span class="rw-typo-subtext1">{{ verificationCodeErr }}</span>
@@ -133,7 +133,7 @@
         (keypress)="checkDigit($event)"
         (keyup)="onKeyup($event, 'verificationCode')"
       >
-      <span class="verification-time" *ngIf="timeLeft != 0">{{ timeLeft | minuteSeconds }}</span>
+      <span class="verification-time" *ngIf="timeLeft >= 0">{{ timeLeft | minuteSeconds }}</span>
       <div class="error" *ngIf="verificationCodeErr">
         <img class="warning" src="assets/icons/etc/warning-red.svg" />
         <span class="rw-typo-subtext1">{{ verificationCodeErr }}</span>

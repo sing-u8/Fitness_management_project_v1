@@ -7,7 +7,7 @@ import handleError from './handleError'
 import { environment } from '@environments/environment'
 
 import { Response } from '@schemas/response'
-import {File} from '@schemas/file'
+import { File } from '@schemas/file'
 
 export type FileTag = 'user-picture' | 'user-background' | 'gym-picture' | 'gym-background' | 'chat'
 
@@ -107,4 +107,3 @@ export interface CreateFileRequestBody {
     chat_room_id?: string
     // files  : FileList   -- is already in other param
 }
-

@@ -7,7 +7,7 @@
       </div>
 
       <div class="cg-typo-subtext close-button" rw-button rwButtonWidth="85" rwButtonHeight="40"
-        rwButtonBorderColor="var(--font-color)" (click)="goRouterLink('/redwhale-home')">
+        rwButtonBorderColor="var(--font-color)" (click)="goBack()">
         <span class="mdi mdi-close"></span>
         <span>닫기</span>
       </div>
@@ -33,12 +33,12 @@
 
                 <div class="divider"></div>
 
-                <div (click)="onClickNavigation('journal')" class="navigate" [class.selected]="currentNavigation == 'journal'">
+                <!-- <div (click)="onClickNavigation('journal')" class="navigate" [class.selected]="currentNavigation == 'journal'">
                   <img *ngIf="currentNavigation != 'journal'" src="assets/icons/header/journal.svg">
                   <img *ngIf="currentNavigation == 'journal'" src="assets/icons/etc/journal-white.svg">
 
                   운동일지
-                </div>
+                </div> -->
                 <!-- <div
                                 (click) = "onClickNavigation('mission')"
                                 class="navigate"

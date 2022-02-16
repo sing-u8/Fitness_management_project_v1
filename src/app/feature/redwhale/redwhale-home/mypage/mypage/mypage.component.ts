@@ -1,4 +1,5 @@
-import { Component, OnInit, ViewChild, ElementRef, Renderer2, OnChanges } from '@angular/core'
+import { Component, OnInit, ViewChild, ElementRef, OnChanges } from '@angular/core'
+import { Location } from '@angular/common'
 import { Router } from '@angular/router'
 
 import { StorageService } from '@services/storage.service'
@@ -22,6 +23,7 @@ export class MypageComponent implements OnInit, OnChanges {
     @ViewChild('userAvatar') userAvatarEl: ElementRef
 
     constructor(
+        private location: Location,
         private router: Router,
         private storageService: StorageService,
         private globalSettingAccountService: GlobalSettingAccountService
@@ -35,16 +37,20 @@ export class MypageComponent implements OnInit, OnChanges {
         this.globalSettingAccountService.setUserName(this.user.nick_name ?? this.user.name)
         this.globalSettingAccountService.setUserAvatar(this.user.picture[0]?.url)
         this.globalSettingAccountService.setUserEmail(this.user.email)
-        console.log('global setting data: ', this.globalSettingAccountService.getUserData())
+        // console.log('global setting data: ', this.globalSettingAccountService.getUserData())
         this.accountUserData = this.globalSettingAccountService.getUserData()
     }
 
     ngOnChanges(): void {
-        console.log('onchange in mypage -- glabal flag: ', this.globalSettingAccountService.changeFlag)
+        // console.log('onchange in mypage -- glabal flag: ', this.globalSettingAccountService.changeFlag)
     }
 
     goRouterLink(url: string) {
         this.router.navigateByUrl(url)
+    }
+
+    goBack() {
+        this.location.back()
     }
     // ----------------------  methods related to user ----------------------//
 

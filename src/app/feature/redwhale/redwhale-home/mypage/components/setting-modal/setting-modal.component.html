@@ -106,27 +106,28 @@
         >
             <div class="radio-container">
                 <rw-radio-button
-                  (click) ="onMale()"
-                  [checked] = "userData == 'male'"
-                  [text] = "'남성'"
+                    (click) ="onMale()"
+                    [checked] = "userData == 'male'"
+                    [text] = "'남성'"
                 ></rw-radio-button>
                 <rw-radio-button
-                  (click) ="onFemale()"
-                  [checked] = "userData == 'female'"
-                  [text] = "'여성'"
+                    (click) ="onFemale()"
+                    [checked] = "userData == 'female'"
+                    [text] = "'여성'"
                 ></rw-radio-button>
             </div>
         </div>
 
         <div class="button-group">
             <div class="cancel " rw-button (click)="onCancel()">
-              {{ data?.cancelButtonText || '취소' }}
+                {{ data?.cancelButtonText || '취소' }}
             </div>
             <div
-              class="confirm "
-              rw-button
-              rwButtonColor="var(--red)"
-              (click)="getUpdateUserData()"
+                class="confirm "
+                rw-button
+                rwButtonColor="var(--red)"
+                [rwButtonDisabled]="!(userData == 'female' || userData == 'male')"
+                (click)="(userData == 'female' || userData == 'male') && getUpdateUserData()"
             >
                 {{ data?.confirmButtonText || '확인' }}
             </div>

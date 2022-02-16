@@ -27,7 +27,10 @@ import { showToast } from '@appStore/actions/toast.action'
 export class SettingAccountComponent implements OnInit {
     public user: User
 
-    public marketing_agree: { email: boolean; sms: boolean } = { email: undefined, sms: undefined }
+    public marketing_agree: { email: boolean; sms: boolean } = {
+        email: undefined,
+        sms: undefined,
+    }
     public inputList: {
         name: string
         email: string
@@ -66,7 +69,7 @@ export class SettingAccountComponent implements OnInit {
         name: '이름',
         email: '이메일',
         phone: '전화번호',
-        password: '비밀번호',
+        password: '비밀번호 변경',
         sex: '성별',
         birth_date: '생년월일',
         marketing_agree: '마케팅 수신 동의',
@@ -98,7 +101,7 @@ export class SettingAccountComponent implements OnInit {
         this.marketing_agree.email = this.user.email_marketing
         this.marketing_agree.sms = this.user.sms_marketing
         const agree_email_text = this.marketing_agree.email ? '수신' : '미수신'
-        const agree_sms_text = this.marketing_agree.sms  ? '수신' : '미수신'
+        const agree_sms_text = this.marketing_agree.sms ? '수신' : '미수신'
         return `SMS ${agree_sms_text}, 이메일  ${agree_email_text}`
     }
     initInputList() {
@@ -136,10 +139,13 @@ export class SettingAccountComponent implements OnInit {
             if (modalType == 'SEX') {
                 this.modalUserData = this.user.sex
             } else if (modalType == 'MARKETING_AGREE') {
-                this.modalUserData = { email: this.marketing_agree.email, sms: this.marketing_agree.sms }
+                this.modalUserData = {
+                    email: this.marketing_agree.email,
+                    sms: this.marketing_agree.sms,
+                }
             } else if (modalType == 'PUSH_NOTICE') {
                 console.log('push notice : ', type, this.inputList[type])
-                this.modalUserData = this.inputList[type] == "켜기" ? true : false
+                this.modalUserData = this.inputList[type] == '켜기' ? true : false
             } else {
                 this.modalUserData = this.inputList[type]
             }
@@ -193,46 +199,45 @@ export class SettingAccountComponent implements OnInit {
     // change avatar fucntions
     registerPhoto(picture: any) {
         const files: FileList = picture.files
+        console.log('registerPhoto : ', picture)
         if (!this.isFileExist(files)) return
+        console.log('this.isFileExist(files) : ', this.isFileExist(files))
 
         const reqBody: CreateFileRequestBody = { tag: 'user-picture' }
         this.fileservice.createFile(reqBody, files).subscribe((__) => {
-            this.userService.getUser(this.user.id).subscribe(
-                {
-                    next: (resData) => {
-                        this.user.picture = resData['picture'].filter((v, i) => i == 0)
-                        this.globalSettingAccountService.setUserAvatar(resData['picture'][0]['url'])
-                        this.storageService.setUser({
-                            ...this.user,
-                            name: resData['name'],
-                            nick_name: resData['nick_name'],
-                            sex: resData['sex'],
-                            birth_date: resData['birth_date'],
-                            color: resData['color'],
-                            fcm_token: resData['fcm_token'],
-                            privacy: resData['privacy'],
-                            service_terms: resData['service_terms'],
-                            sms_marketing: resData['sms_marketing'],
-                            email_marketing: resData['email_marketing'],
-                            push_notification: resData['push_notification'],
-                        })
-                        this.user = this.storageService.getUser()
-                        this.nxStore.dispatch(showToast({ text: '프로필 사진이 변경되었습니다.' }))
-    
-                        resData.picture.forEach((v, i) => {
-                            if (i == 0) return
-                            this.fileservice.deleteFile(v.url).subscribe()
-                        })
-                    },
-                    error: (err) => {
-                        console.log('create account avatar file err: ', err)
-                    }
-                }
-            )
+            this.userService.getUser(this.user.id).subscribe({
+                next: (resData) => {
+                    this.user.picture = resData['picture'].filter((v, i) => i == 0)
+                    this.globalSettingAccountService.setUserAvatar(resData['picture'][0]['url'])
+                    this.storageService.setUser({
+                        ...this.user,
+                        name: resData['name'],
+                        nick_name: resData['nick_name'],
+                        sex: resData['sex'],
+                        birth_date: resData['birth_date'],
+                        color: resData['color'],
+                        fcm_token: resData['fcm_token'],
+                        privacy: resData['privacy'],
+                        service_terms: resData['service_terms'],
+                        sms_marketing: resData['sms_marketing'],
+                        email_marketing: resData['email_marketing'],
+                        push_notification: resData['push_notification'],
+                    })
+                    this.user = this.storageService.getUser()
+                    this.nxStore.dispatch(showToast({ text: '프로필 사진이 변경되었습니다.' }))
+
+                    resData.picture.forEach((v, i) => {
+                        if (i == 0) return
+                        this.fileservice.deleteFile(v.url).subscribe()
+                    })
+                },
+                error: (err) => {
+                    console.log('create account avatar file err: ', err)
+                },
+            })
         })
     }
 
-    
     isFileExist(fileList: FileList) {
         if (fileList && fileList.length == 0) {
             return false
@@ -262,7 +267,7 @@ export class SettingAccountComponent implements OnInit {
                         })
                         this.user = this.storageService.getUser()
                         this.globalSettingAccountService.setUserAvatar(undefined)
-                        this.nxStore.dispatch(showToast({ text: '프로필 사진이 삭제되었습니다.' }))
+                        this.nxStore.dispatch(showToast({ text: '프로필 사진이 변경되었습니다.' }))
                         this.delAvatarFlag = false
                     },
                     error: (err) => {
