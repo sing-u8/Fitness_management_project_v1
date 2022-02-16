@@ -10,7 +10,7 @@
           <div  class="profile ">
               <p class="rw-typo-subtext2">프로필 사진</p>
               <div class="avatar" (click)="userProfile.click()">
-                  <rw-avatar [image]="user.picture[0]?.url" text="{{ this.user.nick_name ?? this.user.name }}" size="110" fontSize="40" [backgroundColor]="user.color">
+                  <rw-avatar [image]="user.picture[0]?.url" text="{{ user.nick_name ?? user.name }}" size="110" fontSize="40" [backgroundColor]="user.color">
                   </rw-avatar>
                   <div class="badge">
                       <img src="assets/icons/etc/camera_grey.svg">
