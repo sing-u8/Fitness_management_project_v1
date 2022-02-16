@@ -4,8 +4,8 @@
 
           <div class='rw-typo-headline2 title-container'>
             <p class='user-container'> <span class="user-name">{{user.nick_name ?? user.name}}</span>님,</p>
-            <p *ngIf="(gyms$ | async).length > 0">오늘도 건강한 하루 보내세요. 🤗</p>
-            <p *ngIf="(gyms$ | async).length == 0">센터를 추가하고 간편하게 관리해보세요. 🤗</p>
+            <p *ngIf="(gyms$ | async)?.length > 0">오늘도 건강한 하루 보내세요. 🤗</p>
+            <p *ngIf="(gyms$ | async)?.length == 0">센터를 추가하고 간편하게 관리해보세요. 🤗</p>
           </div>
 
           <div class="rw-typo-title2" rw-button rwButtonWidth="250" rwButtonHeight="50" rwButtonColor="var(--red)"
