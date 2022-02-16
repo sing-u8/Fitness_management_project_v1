@@ -12,7 +12,7 @@ import {
 } from '@angular/core'
 
 @Component({
-    selector: 'terms-eula',
+    selector: 'rw-terms-eula',
     templateUrl: './terms-eula.component.html',
     styleUrls: ['./terms-eula.component.scss'],
 })

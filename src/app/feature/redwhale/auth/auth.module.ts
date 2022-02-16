@@ -10,8 +10,6 @@ import { MobileResetPasswordModule } from './mobile-reset-password/mobile-reset-
 
 import { EmailLoginComponent } from './emailLogin/emailLogin.component'
 import { TermsComponent } from './terms/terms.component'
-import { TermsEULAComponent } from './terms/modal/terms-eula/terms-eula.component'
-import { TermsPrivacyComponent } from './terms/modal/terms-privacy/terms-privacy.component'
 import { LoginComponent } from './login/login.component'
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component'
 import { ResetPasswordComponent } from './reset-password/reset-password.component'
@@ -20,8 +18,6 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
     declarations: [
         EmailLoginComponent,
         TermsComponent,
-        TermsEULAComponent,
-        TermsPrivacyComponent,
         LoginComponent,
         ForgotPasswordComponent,
         ResetPasswordComponent,

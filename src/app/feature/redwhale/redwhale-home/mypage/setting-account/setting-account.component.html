@@ -23,9 +23,9 @@
           <div class="inputs">
               <div
                 *ngFor = "let item of inputList | keyvalue : keepOriginalOrder"
-                (click) = "!(item.key=='email' && user.sign_in_method == 'email')
+                (click) = "!(item.key=='email' && user.provider == 'redwhale.xyz')
                           && onInputClick(item.key)"
-                class="input-card" [class.cursor-auto] = "item.key=='email' && user.sign_in_method == 'email'"
+                class="input-card" [class.cursor-auto] = "item.key=='email' && user.provider == 'redwhale.xyz'"
               >
                   <div class="rw-typo-subtext2">
                       {{infoTitle[item.key]}}
@@ -33,7 +33,7 @@
                   <div class="card-content rw-typo-bodytext2">
                       {{item.value || 'ㅡ'}}
                       <svg
-                        *ngIf="!(item.key=='email' && user.sign_in_method == 'email')"
+                        *ngIf="!(item.key=='email' && user.provider == 'redwhale.xyz')"
                         xmlns="http://www.w3.org/2000/svg"
                         width="25" height="25" viewBox="0 0 122 122">
                         <defs>
@@ -92,7 +92,7 @@
 ></rw-setting-modal>
 
 <rw-change-password-modal
-  *ngIf = "user.sign_in_method == 'email'"
+  *ngIf = "user.provider == 'redwhale.xyz'"
   [(visible)] = "changePasswordFlag"
   [data] = "changePasswordTextData"
   (cancel) = 'onChangePasswordCancel()'

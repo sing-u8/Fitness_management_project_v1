@@ -12,7 +12,7 @@ import {
 } from '@angular/core'
 
 @Component({
-    selector: 'terms-privacy',
+    selector: 'rw-terms-privacy',
     templateUrl: './terms-privacy.component.html',
     styleUrls: ['./terms-privacy.component.scss'],
 })

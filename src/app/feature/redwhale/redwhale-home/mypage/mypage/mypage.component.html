@@ -66,9 +66,9 @@
                   <router-outlet></router-outlet>
                 </div>
                 <div class="eula rw-typo-subtext2">
-                  <span (click)="onLicenseClick()">최종 사용자 라이센스</span>
+                  <span (click)="showModal('termsEULA')">최종 사용자 라이센스</span>
                   &nbsp;&nbsp; | &nbsp;&nbsp;
-                  <span (click)="onPrivacyClick()">개인정보 보호정책</span>
+                  <span (click)="showModal('termsPrivacy')">개인정보 보호정책</span>
                 </div>
               </div>
 
@@ -79,3 +79,5 @@
 
 </section>
 
+<rw-terms-eula [(visible)]="termsEULAVisible" (cancel)="hideModal('termsEULA')"></rw-terms-eula>
+<rw-terms-privacy [(visible)]="termsPrivacyVisible" (cancel)="hideModal('termsPrivacy')"></rw-terms-privacy>

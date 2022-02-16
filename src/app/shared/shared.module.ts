@@ -20,6 +20,8 @@ import { ColorSelectComponent } from './components/common/color-select/color-sel
 import { DualNavigationComponent } from './components/common/dual-navigation/dual-navigation.component'
 import { EmptyIndicatorComponent } from './components/common/empty-indicator/empty-indicator.component'
 import { ButtonComponent } from './components/common/button/button.component'
+import { TermsEULAComponent } from './components/terms/terms-eula/terms-eula.component'
+import { TermsPrivacyComponent } from './components/terms/terms-privacy/terms-privacy.component'
 
 // Directives
 // import { AutoScrollDirective } from './directives/auto-scroll.directive'
@@ -98,6 +100,8 @@ import { NgxSpinnerModule } from 'ngx-spinner'
         DualNavigationComponent,
         EmptyIndicatorComponent,
         ButtonComponent,
+        TermsEULAComponent,
+        TermsPrivacyComponent,
         // Directives
         // AutoScrollDirective,
         ButtonDirective,
@@ -152,6 +156,8 @@ import { NgxSpinnerModule } from 'ngx-spinner'
         DualNavigationComponent,
         EmptyIndicatorComponent,
         ButtonComponent,
+        TermsEULAComponent,
+        TermsPrivacyComponent,
         // Directives
         // AutoScrollDirective,
         ButtonDirective,

@@ -82,10 +82,23 @@ export class MypageComponent implements OnInit, OnChanges {
     }
 
     // ----------------------  methods related to eula ----------------------//
-    onLicenseClick() {
-        console.log('should show license modal')
+
+    termsEULAVisible: boolean
+    termsPrivacyVisible: boolean
+
+    showModal(name: string) {
+        if (name == 'termsEULA') {
+            this.termsEULAVisible = true
+        } else if (name == 'termsPrivacy') {
+            this.termsPrivacyVisible = true
+        }
     }
-    onPrivacyClick() {
-        console.log('should show privacy modal')
+
+    hideModal(name: string) {
+        if (name == 'termsEULA') {
+            this.termsEULAVisible = false
+        } else if (name == 'termsPrivacy') {
+            this.termsPrivacyVisible = false
+        }
     }
 }
