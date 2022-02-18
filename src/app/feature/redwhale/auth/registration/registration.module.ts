@@ -1,37 +1,31 @@
-import { NgModule } from "@angular/core";
-import { CommonModule as AngularCommonModule } from "@angular/common";
+import { NgModule } from '@angular/core'
+import { CommonModule as AngularCommonModule } from '@angular/common'
 
-import { RegistrationRoutingModule } from "./registration-routing.module";
-import { SharedModule } from "@shared/shared.module";
-import { FormsModule } from "@angular/forms";
+import { RegistrationRoutingModule } from './registration-routing.module'
+import { SharedModule } from '@shared/shared.module'
+import { FormsModule } from '@angular/forms'
 
-import { CommonModule } from "../common/common.module";
+import { CommonModule } from '../common/common.module'
 
-import { InfoComponent } from "./info/info.component";
-import { EmailComponent } from "./email/email.component";
-import { PhoneComponent } from "./phone/phone.component";
-import { CompletedComponent } from "./completed/completed.component";
+import { InfoComponent } from './info/info.component'
+import { EmailComponent } from './email/email.component'
+import { PhoneComponent } from './phone/phone.component'
+import { CompletedComponent } from './completed/completed.component'
 
 // sub component
-import { EmailModalComponent } from "../components/email-modal/email-modal.component";
+import { EmailModalComponent } from '../components/email-modal/email-modal.component'
 
 @NgModule({
-  declarations: [
-    InfoComponent,
-    EmailComponent,
-    PhoneComponent,
-    CompletedComponent,
-    // sub component
-    EmailModalComponent,
-  ],
-  imports: [
-    FormsModule,
-    AngularCommonModule,
-    RegistrationRoutingModule,
-    SharedModule,
-    CommonModule,
-  ],
-  exports: [],
-  providers: [],
+    declarations: [
+        InfoComponent,
+        EmailComponent,
+        PhoneComponent,
+        CompletedComponent,
+        // sub component
+        EmailModalComponent,
+    ],
+    imports: [FormsModule, AngularCommonModule, RegistrationRoutingModule, SharedModule, CommonModule],
+    exports: [],
+    providers: [],
 })
 export class RegistrationModule {}

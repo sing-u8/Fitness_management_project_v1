@@ -8,9 +8,7 @@ declare let Kakao: any
 import {
     Auth,
     signInWithPopup,
-    onAuthStateChanged,
     GoogleAuthProvider,
-    FacebookAuthProvider,
     OAuthProvider,
     authState,
     signInWithCustomToken,
