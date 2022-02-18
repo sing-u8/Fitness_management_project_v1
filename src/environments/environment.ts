@@ -18,7 +18,9 @@ export const environment = {
     kakao: {
         appKey: {
             javascript: '80f7f2934ed2250481af1936d4de9da5',
+            restApi: '42b0d7c314dfd0ca21abe57fee6dc392',
         },
+        redirectUri: 'https://dev.redwhale.xyz/auth/callback/sign-in-with-kakao',
     },
     RECAPTCHA_SITE_KEY: '6Lft2NMZAAAAABaEafU1cNe_aXgjCkZgYYDFEIet',
 }
