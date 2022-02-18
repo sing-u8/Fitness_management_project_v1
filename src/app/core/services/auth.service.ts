@@ -338,6 +338,7 @@ export type CheckVerificationCodeMailRequestBody = {
 }
 
 export type RegistrationRequestBody = {
+    name: string
     email: string
     verification_code: number
     password: string

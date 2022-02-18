@@ -60,7 +60,7 @@
                     (keypress)="checkDigit($event)"
                     (keyup)="onKeyup($event, 'verificationCode')"
                 />
-                <div class="time rw-typo-bodytext1" *ngIf="timeLeft != 0">{{ timeLeft | minuteSeconds }}</div>
+                <div class="time rw-typo-bodytext1" *ngIf="timeLeft >= 0">{{ timeLeft | minuteSeconds }}</div>
                 <div class="error" *ngIf="phoneNumberError">
                     <img class="warning" src="assets/icons/etc/warning-red.svg" />
                     <span class="rw-typo-subtext1">{{ phoneNumberError }}</span>

@@ -68,7 +68,7 @@ export class PhoneComponent implements OnInit, AfterViewInit, OnDestroy {
     ngOnInit(): void {
         this.user = this.storageService.getUser()
         this.isSocial = this.user == null || (this.user != null && this.user.provider == 'redwhale.xyz') ? false : true
-        this.timeLeft = 0
+        this.timeLeft = -1
 
         this.nxStore.pipe(select(registrationSelector)).subscribe((reg) => {
             this.registration = reg
@@ -94,7 +94,6 @@ export class PhoneComponent implements OnInit, AfterViewInit, OnDestroy {
                             this.user.phone_number = this.phoneNumber
                             this.user.phone_number_verified = true
                             this.isVerifValid = true
-                            console.log('al;sdkfja;lkdfj;alksgha;lskdfha;lkdsjf;alksdjf')
                         },
                         error: (e) => {
                             this.phoneNumberError = '인증번호를 잘못 입력하셨습니다.'
@@ -117,6 +116,7 @@ export class PhoneComponent implements OnInit, AfterViewInit, OnDestroy {
 
     public isTimeOut = false
     startTimer() {
+        this.verificationCode = ''
         this.phoneNumberError = ''
         this.isTimeOut = false
 
@@ -133,6 +133,7 @@ export class PhoneComponent implements OnInit, AfterViewInit, OnDestroy {
     stopTimer() {
         this.phoneNumberError = '입력 시간이 초과되었어요. [인증번호 받기] 버튼을 다시 눌러주세요!'
         this.isTimeOut = true
+        this.verificationCode = ''
         clearInterval(this.interval)
     }
 

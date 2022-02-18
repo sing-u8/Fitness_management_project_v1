@@ -234,7 +234,7 @@ export class EmailComponent implements OnInit, AfterViewInit, OnDestroy {
 
     next() {
         const body = {
-            // name: this.registration.name,
+            name: this.registration.name,
             email: this.registration.email,
             verification_code: this.verficationCode,
             password: this.registration.password,

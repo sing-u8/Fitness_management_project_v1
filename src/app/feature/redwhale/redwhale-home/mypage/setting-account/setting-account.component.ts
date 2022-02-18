@@ -111,7 +111,7 @@ export class SettingAccountComponent implements OnInit {
         this.inputList.email = this.user.email
         this.inputList.phone = this.addDashtoPhoneNumber(this.user.phone_number)
         this.inputList.password = '********' // 들고 오는 곳 없음  더미로 * 8개 표시
-        this.inputList.sex = this.user.sex == 'male' ? '남성' : this.user.sex == 'female' ? '여성' : null
+        this.inputList.sex = this.user.sex == 'male' ? '남성' : this.user.sex == 'female' ? '여성' : undefined
         this.inputList.birth_date = this.user.birth_date ?? ''
         this.inputList.marketing_agree = marketing_agree_text
         this.inputList.push_notice = this.user.push_notification ? '켜기' : '끄기'
