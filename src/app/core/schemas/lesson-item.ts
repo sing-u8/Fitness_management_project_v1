@@ -1,4 +1,4 @@
-import { GymUser } from './gym-user'
+import { CenterUser } from './users-center'
 import { MembershipItem } from './membership-item'
 
 export interface LessonItem {
@@ -15,6 +15,6 @@ export interface LessonItem {
     reservation_cancel_end?: number
     memo?: string
     sequence_number?: number
-    trainer?: GymUser
+    trainer?: CenterUser
     membership_item_list?: Array<MembershipItem>
 }

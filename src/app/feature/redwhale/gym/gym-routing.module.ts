@@ -12,7 +12,7 @@ import { SaleComponent } from './section/sale/sale.component'
 // import { ReserveScheduleComponent } from './section/reserve-schedule/reserve-schedule.component'
 // import { TouchPadComponent } from './touch-pad/touch-pad.component'
 
-import { GymMemberBlockGuard } from '@guards/gym-member-block.guard'
+import { CenterMemberBlockGuard } from '@guards/center-member-block.guard'
 
 const routes: Routes = [
     {
@@ -20,19 +20,19 @@ const routes: Routes = [
         component: GymComponent,
         children: [
             { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
-            { path: 'dashboard', component: DashboardComponent, canActivate: [GymMemberBlockGuard] },
-            { path: 'schedule', component: ScheduleComponent, canActivate: [GymMemberBlockGuard] },
-            { path: 'membership', component: MembershipComponent, canActivate: [GymMemberBlockGuard] },
-            { path: 'lesson', component: LessonComponent, canActivate: [GymMemberBlockGuard] },
-            { path: 'locker', component: LockerComponent, canActivate: [GymMemberBlockGuard] },
+            { path: 'dashboard', component: DashboardComponent, canActivate: [CenterMemberBlockGuard] },
+            { path: 'schedule', component: ScheduleComponent, canActivate: [CenterMemberBlockGuard] },
+            { path: 'membership', component: MembershipComponent, canActivate: [CenterMemberBlockGuard] },
+            { path: 'lesson', component: LessonComponent, canActivate: [CenterMemberBlockGuard] },
+            { path: 'locker', component: LockerComponent, canActivate: [CenterMemberBlockGuard] },
             { path: 'community', component: CommunityComponent },
-            { path: 'sale', component: SaleComponent, canActivate: [GymMemberBlockGuard] },
+            { path: 'sale', component: SaleComponent, canActivate: [CenterMemberBlockGuard] },
             // { path: 'schedule-reservation', component: ReserveScheduleComponent },
         ],
     },
     // {
     //     path: 'dashboard/:membershipId',
-    //     canActivate: [GymMemberBlockGuard],
+    //     canActivate: [CenterMemberBlockGuard],
     //     loadChildren: () =>
     //         import('./membership-locker-full-modal/membership-locker-full-modal.module').then(
     //             (m) => m.MembershipLockerFullModalModule
@@ -40,10 +40,10 @@ const routes: Routes = [
     // },
     // {
     //     path: 'register-member',
-    //     canActivate: [GymMemberBlockGuard],
+    //     canActivate: [CenterMemberBlockGuard],
     //     loadChildren: () => import('./register-member/register-member.module').then((m) => m.RegisterMemberModule),
     // },
-    // { path: 'touch-pad', component: TouchPadComponent, canActivate: [GymMemberBlockGuard] },
+    // { path: 'touch-pad', component: TouchPadComponent, canActivate: [CenterMemberBlockGuard] },
 ]
 
 @NgModule({

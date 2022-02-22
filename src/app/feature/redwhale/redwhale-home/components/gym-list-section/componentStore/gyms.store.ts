@@ -4,38 +4,38 @@ import { ComponentStore } from '@ngrx/component-store'
 import { EMPTY, Observable } from 'rxjs'
 import { filter, switchMap, tap, catchError } from 'rxjs/operators'
 
-import { UserGymService } from '@services/user-gym.service'
+import { UsersCenterService } from '@services/users-center.service'
 import { StorageService } from '@services/storage.service'
 
-import { Gym } from '@schemas/gym'
+import { Center } from '@schemas/center'
 import { Loading } from '@schemas/componentStore/loading'
 import { User } from '@schemas/user'
 
 import * as _ from 'lodash'
 
-export interface GymsState {
-    gyms: Array<Gym>
+export interface CentersState {
+    gyms: Array<Center>
     loading: Loading
 }
-export const gymsInit: GymsState = { gyms: [], loading: 'idle' }
+export const gymsInit: CentersState = { gyms: [], loading: 'idle' }
 
 @Injectable()
-export class GymsStore extends ComponentStore<GymsState> {
+export class GymsStore extends ComponentStore<CentersState> {
     public readonly gyms$ = this.select((s) => s.gyms)
     public readonly loading$ = this.select((s) => s.loading)
 
     private readonly user: User = this.storageService.getUser()
 
-    constructor(private userGymService: UserGymService, private storageService: StorageService) {
+    constructor(private usersCenterService: UsersCenterService, private storageService: StorageService) {
         super(gymsInit)
     }
 
-    getGyms() {
+    getCenters() {
         this.patchState((s) => ({ loading: 'pending' }))
         this.loadGymsEffect('pending')
     }
 
-    readonly updateGyms = this.updater((state, gyms: Array<Gym>) => ({
+    readonly updateGyms = this.updater((state, gyms: Array<Center>) => ({
         ...state,
         gyms: gyms,
         loading: 'done',
@@ -52,13 +52,13 @@ export class GymsStore extends ComponentStore<GymsState> {
     readonly leaveGymEffect = this.effect((gymId$: Observable<string>) => {
         return gymId$.pipe(
             switchMap((gymId) =>
-                this.userGymService.leave(this.user.id, gymId).pipe(
+                this.usersCenterService.leave(this.user.id, gymId).pipe(
                     tap({
                         next: (_) => {
                             this.filterGym(gymId)
                         },
                         error: (err) => {
-                            console.log('gymsStore - userGymService.leave err: ', err)
+                            console.log('gymsStore - usersCenterService.leave err: ', err)
                         },
                     }),
                     catchError(() => EMPTY)
@@ -73,12 +73,12 @@ export class GymsStore extends ComponentStore<GymsState> {
                 return loading == 'pending'
             }),
             switchMap((_) =>
-                this.userGymService.getGymList(this.user.id).pipe(
+                this.usersCenterService.getCenterList(this.user.id).pipe(
                     tap({
                         next: (gyms) => {
                             this.updateGyms(gyms)
                         },
-                        error: (e) => console.log('gymsStore - userGymService.getGymList err: ', e),
+                        error: (e) => console.log('gymsStore - usersCenterService.getCenterList err: ', e),
                     }),
                     catchError(() => EMPTY)
                 )

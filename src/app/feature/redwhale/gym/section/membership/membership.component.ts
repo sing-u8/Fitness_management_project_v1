@@ -8,7 +8,7 @@ import { StorageService } from '@services/storage.service'
 import { GymLessonService } from '@services/gym-lesson.service'
 
 // scehmas
-import { Gym } from '@schemas/gym'
+import { Center } from '@schemas/center'
 import { Drawer } from '@schemas/store/app/drawer.interface'
 import { LessonCategory } from '@schemas/lesson-category'
 import { LessonItem } from '@schemas/lesson-item'
@@ -61,7 +61,7 @@ export class MembershipComponent implements OnInit {
     public unSubscriber$ = new Subject<void>()
 
     // screen vars
-    public gym: Gym
+    public gym: Center
 
     public selMembershipInputObj: SelectedMembershipObj = {
         days: { value: this.fb.control('0', { validators: [Validators.maxLength(4)] }), isOn: false },
@@ -88,7 +88,7 @@ export class MembershipComponent implements OnInit {
         private gymLessonService: GymLessonService,
         private fb: FormBuilder
     ) {
-        this.gym = this.storageService.getGym()
+        this.gym = this.storageService.getCenter()
         this.nxStore.pipe(select(MembershipSelector.currentGym), takeUntil(this.unSubscriber$)).subscribe((curGym) => {
             console.log('memberhsip gym : ', ' : ', curGym, ' : ', this.gym.id)
             if (curGym != this.gym.id) {
@@ -169,7 +169,7 @@ export class MembershipComponent implements OnInit {
     public delModalData = {
         text: '수업을 삭제하시겠습니까?',
         subText: `잠깐! 수업을 삭제하시면
-                  다시 복구하실 수 없어요.`,
+                    다시 복구하실 수 없어요.`,
         confirmButtonText: '삭제',
     }
     setItemDelOpen() {

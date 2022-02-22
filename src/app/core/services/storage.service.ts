@@ -5,7 +5,7 @@ import { Auth, signOut } from '@angular/fire/auth'
 declare let Kakao: any
 
 import { User } from '@schemas/user'
-import { Gym } from '@schemas/gym'
+import { Center } from '@schemas/center'
 
 type UserOrEmpty = User | { sign_in_method: string }
 
@@ -47,7 +47,7 @@ export class StorageService {
         this.setUser(user)
     }
 
-    getGym(): Gym {
+    getCenter(): Center {
         const user: User = this.getUser()
         if (user.selected_gym) {
             return user.selected_gym
@@ -55,12 +55,12 @@ export class StorageService {
             return null
         }
     }
-    setGym(gym: Gym): void {
+    setCenter(gym: Center): void {
         const user: User = this.getUser()
         user.selected_gym = gym
         this.setUser(user)
     }
-    removeGym(): void {
+    removeCenter(): void {
         const user: User = this.getUser()
         user.selected_gym = null
         this.setUser(user)

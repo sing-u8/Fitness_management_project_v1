@@ -3,13 +3,13 @@ import { Router, ActivatedRouteSnapshot, RouterStateSnapshot, CanActivate } from
 import { Observable, of } from 'rxjs'
 import { catchError, map } from 'rxjs/operators'
 
-import { GymService } from '@services/gym.service'
+import { CenterService } from '@services/center.service'
 
 @Injectable({
     providedIn: 'root',
 })
-export class GymGuard implements CanActivate {
-    constructor(private router: Router, private gymService: GymService) {}
+export class CenterGuard implements CanActivate {
+    constructor(private router: Router, private gymService: CenterService) {}
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
         const address = route.params['address']

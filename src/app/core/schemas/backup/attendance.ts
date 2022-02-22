@@ -1,4 +1,4 @@
-// import { GymUser } from './gym-user'
+// import { CenterUser } from './gym-user'
 import { GetUserReturn } from './gym-dashboard'
 
 export interface Attendance {

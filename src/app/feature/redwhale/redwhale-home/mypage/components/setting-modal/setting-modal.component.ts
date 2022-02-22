@@ -12,7 +12,7 @@ import {
     ViewChild,
 } from '@angular/core'
 
-import { UserService } from '@services/user.service'
+import { UsersService } from '@services/users.service'
 import { StorageService } from '@services/storage.service'
 
 import { modalType } from '@schemas/home/setting-account-modal'
@@ -58,7 +58,7 @@ export class SettingModalComponent implements OnChanges, AfterViewChecked, OnIni
     constructor(
         private el: ElementRef,
         private renderer: Renderer2,
-        private userService: UserService,
+        private usersService: UsersService,
         private storageService: StorageService,
         private nxStore: Store
     ) {
@@ -154,7 +154,7 @@ export class SettingModalComponent implements OnChanges, AfterViewChecked, OnIni
 
     getUpdateUserData() {
         const reqBody = this.getUpdateReqBody(this.activatedModalType, this.userData)
-        this.userService.updateUser(this.user.id, reqBody).subscribe({
+        this.usersService.updateUser(this.user.id, reqBody).subscribe({
             next: (user) => {
                 this.storageService.setUser(user)
                 this.onConfirm()

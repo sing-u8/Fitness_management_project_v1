@@ -1,4 +1,4 @@
-import { GymUser } from './gym-user'
+import { CenterUser } from './gym-user'
 
 export interface Sale {
     sales_data: Array<SalesData>

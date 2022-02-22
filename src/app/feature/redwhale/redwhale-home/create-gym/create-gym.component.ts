@@ -2,7 +2,7 @@ import { Component, OnInit, OnChanges } from '@angular/core'
 import { Router } from '@angular/router'
 import { FormBuilder, FormControl, Validators } from '@angular/forms'
 
-import { GymService } from '@services/gym.service'
+import { CenterService } from '@services/center.service'
 import { FileService, FileTag } from '@services/file.service'
 
 // ngrx
@@ -44,7 +44,7 @@ export class CreateGymComponent implements OnInit {
     constructor(
         private fb: FormBuilder,
         private router: Router,
-        private gymService: GymService,
+        private centerService: CenterService,
         private fileService: FileService,
         private nxStore: Store
     ) {
@@ -109,8 +109,8 @@ export class CreateGymComponent implements OnInit {
         }
         return true
     }
-    setPhotoTag(photoType: FileTag) : FileTag {
-        let tag : FileTag = undefined
+    setPhotoTag(photoType: FileTag): FileTag {
+        let tag: FileTag = undefined
         if (photoType === 'gym-picture') {
             tag = 'gym-picture'
         } else if (photoType === 'gym-background') {
@@ -135,24 +135,26 @@ export class CreateGymComponent implements OnInit {
     // <---- photo file control helper function ------//
     // ------------------------------------------------------------------------//
 
-    createGym() {
-        this.gymService.createGym({ name: this.centerNameForm.value, address: this.centerAddrForm.value }).subscribe({
-            next: (v) => {
-                /*
-                  address: "heasdf", background: null, color: "#FFA5C1", id: 225, name: "hello123", permissions: [], picture: null, role_code:"administrator", role_name:"운영자", timezone: "Asia/Seoul"
+    createCenter() {
+        this.centerService
+            .createCenter({ name: this.centerNameForm.value, address: this.centerAddrForm.value })
+            .subscribe({
+                next: (v) => {
+                    /*
+                    address: "heasdf", background: null, color: "#FFA5C1", id: 225, name: "hello123", permissions: [], picture: null, role_code:"administrator", role_name:"운영자", timezone: "Asia/Seoul"
                 */
-                this.createApiPhotoFile('gym-background', v, () => {
-                    this.createApiPhotoFile('gym-picture', v, () => {
-                        this.goRouterLink('/redwhale-home')
-                        this.nxStore.dispatch(showToast({ text: '새로운 센터가 생성되었습니다.' }))
+                    this.createApiPhotoFile('gym-background', v, () => {
+                        this.createApiPhotoFile('gym-picture', v, () => {
+                            this.goRouterLink('/redwhale-home')
+                            this.nxStore.dispatch(showToast({ text: '새로운 센터가 생성되었습니다.' }))
+                        })
                     })
-                })
-            },
-            error: (e) => {
-                // this.setInputWarning('centerAddress', true)
-                // this.setInputWarningText('centerAddress', e.message)
-            },
-        })
+                },
+                error: (e) => {
+                    // this.setInputWarning('centerAddress', true)
+                    // this.setInputWarningText('centerAddress', e.message)
+                },
+            })
     }
     createApiPhotoFile(photoType: FileTag, gymInfo, callback?: () => void) {
         const gymId = gymInfo.id
@@ -164,12 +166,12 @@ export class CreateGymComponent implements OnInit {
                 next: (fileList) => {
                     const location = fileList[0]['location']
                     this.apiCreateFileReq[prop] = location
-                    this.gymService.updateGym(gymId, this.apiCreateFileReq).subscribe({
+                    this.centerService.updateCenter(gymId, this.apiCreateFileReq).subscribe({
                         next: (gym) => {
                             if (callback) callback()
                         },
                         error: (e) => {
-                            console.log('createApiPhotoFile-updateGym error: ', e)
+                            console.log('createApiPhotoFile-updateCenter error: ', e)
                         },
                     })
                 },

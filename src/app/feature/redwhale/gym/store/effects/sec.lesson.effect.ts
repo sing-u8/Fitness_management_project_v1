@@ -14,7 +14,7 @@ import * as LessonSelector from '../selectors/sec.lesson.selector'
 import * as MembershipActions from '../actions/sec.membership.actions'
 
 import { GymLessonService } from '@services/gym-lesson.service'
-import { GymUserService } from '@services/gym-user.service'
+import { GymUsersService } from '@services/gym-user.service'
 
 import * as _ from 'lodash'
 
@@ -23,7 +23,7 @@ export class LessongEffect {
     constructor(
         private actions$: Actions,
         private gymLessonApi: GymLessonService,
-        private gymUserApi: GymUserService,
+        private gymUserApi: GymUsersService,
         private store: Store
     ) {}
 

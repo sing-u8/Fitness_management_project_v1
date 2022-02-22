@@ -8,7 +8,7 @@ import { StorageService } from '@services/storage.service'
 import { GymMembershipService } from '@services/gym-membership.service'
 
 // scehmas
-import { Gym } from '@schemas/gym'
+import { Center } from '@schemas/center'
 import { Drawer } from '@schemas/store/app/drawer.interface'
 import { MembershipCategory } from '@schemas/membership-category'
 import { MembershipItem } from '@schemas/membership-item'
@@ -70,7 +70,7 @@ export class LessonComponent implements OnInit, AfterViewInit, OnDestroy {
     public unSubscriber$ = new Subject<void>()
 
     // screen vars
-    public gym: Gym
+    public gym: Center
 
     public selLessonInputObj: SelectedLessonObj = {
         minutes: { value: this.fb.control('0'), isOn: false },
@@ -113,7 +113,7 @@ export class LessonComponent implements OnInit, AfterViewInit, OnDestroy {
         private gymMembershipService: GymMembershipService,
         private fb: FormBuilder
     ) {
-        this.gym = this.storageService.getGym()
+        this.gym = this.storageService.getCenter()
         this.nxStore.pipe(select(LessonSelector.currentGym), takeUntil(this.unSubscriber$)).subscribe((curGym) => {
             if (curGym != this.gym.id) {
                 this.nxStore.dispatch(LessonActions.resetAll())

@@ -1,4 +1,4 @@
-import { GymUser } from '@schemas/backup/gym-user'
+import { CenterUser } from '@schemas/backup/gym-user'
 
 export type Avatar = {
     color: string
@@ -41,7 +41,7 @@ export function createUserGymRoomObj({
 // UserGymRoom used in frontEnd
 export type UserGymRoomFE = UserGymRoomParam &
     Partial<{
-        interlocutor: GymUser
+        interlocutor: CenterUser
         doChatWithMe: boolean
         isTempRoom: boolean
     }>

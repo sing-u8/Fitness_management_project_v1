@@ -7,7 +7,7 @@ import * as LessonActions from '../actions/sec.lesson.actions'
 
 import { LessonCategory } from '@schemas/lesson-category'
 import { LessonItem } from '@schemas/lesson-item'
-import { GymUser } from '@schemas/gym-user'
+import { CenterUser } from '@schemas/users-center'
 import { Loading } from '@schemas/store/loading'
 
 export interface SelectedLesson {
@@ -29,7 +29,7 @@ export interface LessonCategoryState extends LessonCategory {
 
 export interface TrainerFilter {
     name: string
-    value: GymUser
+    value: CenterUser
 }
 export const initialTrainerFilter: TrainerFilter = {
     name: '강사 전체',

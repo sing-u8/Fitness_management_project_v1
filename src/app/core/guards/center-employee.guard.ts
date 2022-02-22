@@ -5,16 +5,16 @@ import { StorageService } from '@services/storage.service'
 
 import { ROLE } from '@services/auth.service'
 
-import { Gym } from '@schemas/gym'
+import { Center } from '@schemas/center'
 
 @Injectable({
     providedIn: 'root',
 })
-export class GymEmployeeGuard implements CanActivate {
+export class CenterEmployeeGuard implements CanActivate {
     constructor(private router: Router, private storageService: StorageService) {}
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-        const gym: Gym = this.storageService.getGym()
+        const gym: Center = this.storageService.getCenter()
         if (!gym || gym.role_code == ROLE.MEMBER) {
             this.router.navigateByUrl('/redwhale-home')
             return false

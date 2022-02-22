@@ -8,17 +8,17 @@ import { environment } from '@environments/environment'
 import { StorageService } from '@services/storage.service'
 
 import { Response } from '@schemas/response'
-import { Gym } from '@schemas/gym'
+import { Center } from '@schemas/center'
 
 @Injectable({
     providedIn: 'root',
 })
-export class GymService {
+export class CenterService {
     private SERVER = `${environment.protocol}${environment.subDomain}${environment.domain}${environment.port}${environment.version}/gym`
 
     constructor(private http: HttpClient, private storageService: StorageService) {}
 
-    createGym(requestBody: CreateGymRequestBody): Observable<Gym> {
+    createCenter(requestBody: CreateCenterRequestBody): Observable<Center> {
         const url = this.SERVER
 
         const options = {
@@ -35,7 +35,7 @@ export class GymService {
         )
     }
 
-    getGym(gymId: string): Observable<Gym> {
+    getCenter(gymId: string): Observable<Center> {
         const url = this.SERVER + `/${gymId}`
 
         const options = {
@@ -52,7 +52,7 @@ export class GymService {
         )
     }
 
-    updateGym(gymId: string, requestBody: UpdateGymRequestBody): Observable<Gym> {
+    updateCenter(gymId: string, requestBody: UpdateCenterRequestBody): Observable<Center> {
         const url = this.SERVER + `/${gymId}`
 
         const options = {
@@ -63,15 +63,15 @@ export class GymService {
 
         return this.http.put<Response>(url, requestBody, options).pipe(
             map((res) => {
-                const gym: Gym = Object.assign({}, this.storageService.getGym(), res.dataset[0])
-                this.storageService.setGym(gym)
+                const gym: Center = Object.assign({}, this.storageService.getCenter(), res.dataset[0])
+                this.storageService.setCenter(gym)
                 return res.dataset[0]
             }),
             catchError(handleError)
         )
     }
 
-    deleteGym(gymId: string): Observable<Response> {
+    deleteCenter(gymId: string): Observable<Response> {
         const url = this.SERVER + `/${gymId}`
 
         const options = {
@@ -123,12 +123,12 @@ export class GymService {
     }
 }
 
-class CreateGymRequestBody {
+class CreateCenterRequestBody {
     name: string
     address: string
 }
 
-class UpdateGymRequestBody {
+class UpdateCenterRequestBody {
     name?: string
     address?: string
     picture?: string

@@ -3,11 +3,11 @@ import { Router, ActivatedRoute } from '@angular/router'
 
 import { StorageService } from '@services/storage.service'
 
-import { GymService } from '@services/gym.service'
-import { UserGymService } from '@services/user-gym.service'
+import { CenterService } from '@services/center.service'
+import { UsersCenterService } from '@services/users-center.service'
 
 import { User } from '@schemas/user'
-import { Gym } from '@schemas/gym'
+import { Center } from '@schemas/center'
 
 // rxjs
 import { Observable, Subscription } from 'rxjs'
@@ -32,8 +32,8 @@ export class HeaderComponent implements OnInit {
     drawer$: Observable<Drawer>
     user: User
 
-    gymList: Array<Gym>
-    invitedGymList: Array<Gym>
+    gymList: Array<Center>
+    invitedGymList: Array<Center>
 
     popupGymListVisible: boolean
     avatarMenuVisible: boolean
@@ -41,8 +41,8 @@ export class HeaderComponent implements OnInit {
     constructor(
         private router: Router,
         private storageService: StorageService,
-        private gymService: GymService,
-        private userGymService: UserGymService,
+        private gymService: CenterService,
+        private usersCenterService: UsersCenterService,
         private activatedRoute: ActivatedRoute,
         private nxStore: Store
     ) {}
@@ -52,7 +52,7 @@ export class HeaderComponent implements OnInit {
         this.drawer$ = this.nxStore.pipe(select(drawerSelector))
         this.user = this.storageService.getUser()
 
-        this.getGymList()
+        this.getCenterList()
     }
 
     goRouterLink(link: string) {
@@ -61,8 +61,8 @@ export class HeaderComponent implements OnInit {
         this.router.navigateByUrl(link)
     }
 
-    getGymList() {
-        this.userGymService.getGymList(this.user.id).subscribe({
+    getCenterList() {
+        this.usersCenterService.getCenterList(this.user.id).subscribe({
             next: (gymList) => {
                 this.gymList = gymList
 
@@ -83,16 +83,16 @@ export class HeaderComponent implements OnInit {
                 return address == gym.address
             })
             .map((gym, index) => {
-                this.storageService.setGym(gym)
+                this.storageService.setCenter(gym)
                 this.user = this.storageService.getUser()
             })
     }
 
-    changeGym(gym: Gym) {
+    changeGym(gym: Center) {
         if (this.user.selected_gym.address == gym.address) return
-        this.gymService.getGym(gym.id).subscribe({
+        this.gymService.getCenter(gym.id).subscribe({
             next: (gym) => {
-                this.storageService.setGym(gym)
+                this.storageService.setCenter(gym)
                 const url = `${window.location.origin}/${gym.address}/community`
                 window.open(url, '_self')
             },

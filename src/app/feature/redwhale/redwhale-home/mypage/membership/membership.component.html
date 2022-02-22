@@ -3,9 +3,9 @@
     회원권/락커
 
     <rw-gym-select
-      *ngIf="userGymList.length > 0 && isLoaded"
-      [items] = "userGymList"
-      [(ngModel)] = "selectedUserGym"
+      *ngIf="userCenterList.length > 0 && isLoaded"
+      [items] = "userCenterList"
+      [(ngModel)] = "selectedUserCenter"
       [height_type] ="'small'"
       [noBorder] ="true"
       (onSelectChange) = "null"
@@ -17,7 +17,7 @@
   <div class="content">
     <ng-container *ngIf="isLoaded">
       <rw-empty-indicator
-        *ngIf="userGymList.length == 0; else membership_locker"
+        *ngIf="userCenterList.length == 0; else membership_locker"
       ></rw-empty-indicator>
       <ng-template #membership_locker>
 

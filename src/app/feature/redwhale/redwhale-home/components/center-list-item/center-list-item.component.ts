@@ -16,7 +16,7 @@ import { StorageService } from '@services/storage.service'
 
 import { GymConfirmModalService } from '@services/home/gym-confirm-modal.service'
 
-import { Gym } from '@schemas/gym'
+import { Center } from '@schemas/center'
 
 @Component({
     selector: 'center-list-item',
@@ -25,8 +25,8 @@ import { Gym } from '@schemas/gym'
 })
 export class CenterListItemComponent implements OnInit, AfterViewInit {
     @Input() userId: string
-    @Input() gym: Gym
-    @Input() gymList: Array<Gym>
+    @Input() gym: Center
+    @Input() gymList: Array<Center>
     @Input() dropDownUp: boolean
 
     @Output() onLeaveCenter = new EventEmitter<string>()
@@ -86,7 +86,7 @@ export class CenterListItemComponent implements OnInit, AfterViewInit {
     }
     goGym(event) {
         if (this.isSideToolbarPressed(event)) return
-        this.storageService.setGym(this.gym)
+        this.storageService.setCenter(this.gym)
         this.router.navigateByUrl(`/${this.gym.address}`, {
             state: { gymList: this.gymList },
         })

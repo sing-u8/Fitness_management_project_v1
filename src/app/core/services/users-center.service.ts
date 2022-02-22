@@ -7,17 +7,17 @@ import handleError from './handleError'
 import { environment } from '@environments/environment'
 
 import { Response } from '@schemas/response'
-import { Gym } from '@schemas/gym'
+import { Center } from '@schemas/center'
 
 @Injectable({
     providedIn: 'root',
 })
-export class UserGymService {
+export class UsersCenterService {
     private SERVER = `${environment.protocol}${environment.subDomain}${environment.domain}${environment.port}${environment.version}/users`
 
     constructor(private http: HttpClient) {}
 
-    getGymList(userId: string, page = '', pageSize = ''): Observable<Array<Gym>> {
+    getCenterList(userId: string, page = '', pageSize = ''): Observable<Array<Center>> {
         const url = this.SERVER + `/${userId}/gym?page=${page}&pageSize=${pageSize}`
 
         const options = {

@@ -1,4 +1,4 @@
-export interface GymUser {
+export interface CenterUser {
     id: string
     provider: string
     family_name: string

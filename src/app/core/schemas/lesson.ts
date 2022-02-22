@@ -1,4 +1,4 @@
-import { GymUser } from './gym-user'
+import { CenterUser } from './users-center'
 
 export interface Lesson {
     id: string
@@ -10,5 +10,5 @@ export interface Lesson {
     minutes: number
     color: string
     type_name: string
-    trainers: Array<GymUser>
+    trainers: Array<CenterUser>
 }

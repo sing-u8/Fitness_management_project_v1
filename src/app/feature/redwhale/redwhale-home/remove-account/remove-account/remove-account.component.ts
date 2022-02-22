@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core'
 import { Router, ActivatedRoute } from '@angular/router'
 
-import { UserService } from '@services/user.service'
+import { UsersService } from '@services/users.service'
 import { StorageService } from '@services/storage.service'
 
 import { User } from '@schemas/user'
@@ -19,7 +19,7 @@ export class RemoveAccountComponent implements OnInit {
     public removeModalVisible: boolean
 
     constructor(
-        private userService: UserService,
+        private usersService: UsersService,
         private storageService: StorageService,
         private router: Router,
         private activatedRoute: ActivatedRoute
@@ -40,7 +40,7 @@ export class RemoveAccountComponent implements OnInit {
     }
     onRemoveAccountConfirm() {
         this.toggleRemoveModal()
-        this.userService.deleteUser(this.user.id).subscribe({
+        this.usersService.deleteUser(this.user.id).subscribe({
             next: async (_) => {
                 console.log('delte')
                 await this.storageService.removeUser()

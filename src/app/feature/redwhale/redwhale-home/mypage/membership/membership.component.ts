@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core'
 
 import { StorageService } from '@services/storage.service'
-import { UserGymService } from '@services/user-gym.service'
+import { UsersCenterService } from '@services/users-center.service'
 
 import { User } from '@schemas/user'
-import { Gym } from '@schemas/gym'
+import { Center } from '@schemas/center'
 @Component({
     selector: 'rw-membership',
     templateUrl: './membership.component.html',
@@ -12,23 +12,23 @@ import { Gym } from '@schemas/gym'
 })
 export class MembershipComponent implements OnInit {
     public user: User = undefined
-    public userGymList: Array<{ name: string; value: Gym }> = []
-    public selectedUserGym: { name: string; value: Gym } = { name: undefined, value: undefined }
+    public userCenterList: Array<{ name: string; value: Center }> = []
+    public selectedUserCenter: { name: string; value: Center } = { name: undefined, value: undefined }
 
     public isLoaded = false
 
-    constructor(private userGymService: UserGymService, private storageService: StorageService) {
+    constructor(private usersCenterService: UsersCenterService, private storageService: StorageService) {
         this.user = this.storageService.getUser()
-        this.userGymService.getGymList(this.user.id).subscribe((gymList) => {
+        this.usersCenterService.getCenterList(this.user.id).subscribe((gymList) => {
             if (gymList.length == 0) {
                 this.isLoaded = true
                 return
             }
-            this.userGymList = gymList.map((gym) => ({ name: gym.name, value: gym }))
-            this.selectedUserGym = { name: gymList[0].name, value: gymList[0] }
+            this.userCenterList = gymList.map((gym) => ({ name: gym.name, value: gym }))
+            this.selectedUserCenter = { name: gymList[0].name, value: gymList[0] }
             this.isLoaded = true
         })
-        this.userGymService.getGymList(this.user.id)
+        this.usersCenterService.getCenterList(this.user.id)
     }
 
     ngOnInit(): void {}

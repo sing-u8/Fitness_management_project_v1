@@ -17,6 +17,6 @@ export class RedwhaleHomeComponent implements OnInit {
 
     ngOnInit(): void {
         this.nxStore.dispatch(removeRegistration())
-        this.storageService.removeGym()
+        this.storageService.removeCenter()
     }
 }

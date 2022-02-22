@@ -6,9 +6,9 @@ import { Subject, Observable, Subscription } from 'rxjs'
 
 import { GlobalService } from '@services/global.service'
 import { StorageService } from '@services/storage.service'
-import { GymService } from '@services/gym.service'
+import { CenterService } from '@services/center.service'
 
-import { Gym } from '@schemas/gym'
+import { Center } from '@schemas/center'
 import { User } from '@schemas/user'
 
 @Component({
@@ -19,11 +19,11 @@ import { User } from '@schemas/user'
 export class NavComponent implements OnInit, OnDestroy {
     TAG = 'Nav'
 
-    public gym: Gym
+    public gym: Center
     public user: User
     public address: string
 
-    public gymApiData: Gym
+    public gymApiData: Center
     public unSubscriber$ = new Subject<void>()
 
     public isLoading = false
@@ -34,14 +34,14 @@ export class NavComponent implements OnInit, OnDestroy {
     constructor(
         private router: Router,
         private storageService: StorageService,
-        private gymService: GymService,
+        private centerService: CenterService,
         private globalService: GlobalService
     ) {
-        this.gym = this.storageService.getGym()
+        this.gym = this.storageService.getCenter()
         this.user = this.storageService.getUser()
         this.getCenterAddress()
-        this.gymService
-            .getGym(this.gym.id)
+        this.centerService
+            .getCenter(this.gym.id)
             .pipe(takeUntil(this.unSubscriber$))
             .subscribe((gymData) => {
                 this.gymApiData = gymData
@@ -51,7 +51,7 @@ export class NavComponent implements OnInit, OnDestroy {
 
         this.gymChangedSubscription = this.globalService.selectIsGymChangedForNav().subscribe((gymDataChanged) => {
             if (gymDataChanged == true) {
-                this.gym = this.storageService.getGym()
+                this.gym = this.storageService.getCenter()
                 this.gymApiData = this.gym
                 this.globalService.setIsGymChangedForNav(false)
             }

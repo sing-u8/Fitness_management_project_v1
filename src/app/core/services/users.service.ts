@@ -16,7 +16,7 @@ import * as _ from 'lodash'
 @Injectable({
     providedIn: 'root',
 })
-export class UserService {
+export class UsersService {
     private SERVER = `${environment.protocol}${environment.subDomain}${environment.domain}${environment.port}${environment.version}/users`
 
     constructor(private http: HttpClient, private storageService: StorageService) {}

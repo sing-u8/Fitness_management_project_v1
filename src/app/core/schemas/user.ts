@@ -1,5 +1,5 @@
 import { File } from './file'
-import { Gym } from './gym'
+import { Center } from './center'
 
 export interface User {
     // default information
@@ -31,7 +31,7 @@ export interface User {
     // -- / frontend props
     phone_number?: string
     phone_number_verified?: boolean
-    selected_gym?: Gym
+    selected_gym?: Center
     sign_in_method?: string
     fcm_token: string
 }

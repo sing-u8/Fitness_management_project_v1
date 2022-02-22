@@ -7,12 +7,12 @@ import handleError from './handleError'
 import { environment } from '@environments/environment'
 
 import { Response } from '@schemas/response'
-import { GymUser } from '@schemas/backup/gym-user'
+import { CenterUser } from '@schemas/backup/gym-user'
 
 @Injectable({
     providedIn: 'root',
 })
-export class GymUserService {
+export class GymUsersService {
     private SERVER = `${environment.protocol}${environment.subDomain}${environment.domain}${environment.port}${environment.version}/gym`
 
     constructor(private http: HttpClient) {}
@@ -51,7 +51,7 @@ export class GymUserService {
         )
     }
 
-    getUserList(gymId: string, q = '', role_code = '', type = ''): Observable<Array<GymUser>> {
+    getUserList(gymId: string, q = '', role_code = '', type = ''): Observable<Array<CenterUser>> {
         const url = this.SERVER + `/${gymId}/users?q=${q}&role_code=${role_code}&type=${type}`
 
         const options = {

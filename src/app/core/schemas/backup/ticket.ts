@@ -1,6 +1,6 @@
-import { GymUser } from './gym-user'
+import { CenterUser } from './gym-user'
 
 export interface Ticket {
     end_date: string
-    user: GymUser
+    user: CenterUser
 }

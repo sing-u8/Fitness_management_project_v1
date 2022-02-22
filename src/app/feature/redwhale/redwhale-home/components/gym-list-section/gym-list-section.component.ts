@@ -12,7 +12,7 @@ import { Store } from '@ngrx/store'
 import { debugLog } from '@appStore/actions/log.action'
 
 import { User } from '@schemas/user'
-import { Gym } from '@schemas/gym'
+import { Center } from '@schemas/center'
 import { Loading } from '@schemas/componentStore/loading'
 
 // component store
@@ -27,7 +27,7 @@ import { Observable } from 'rxjs'
 })
 export class GymListSectionComponent implements OnInit, AfterViewInit, OnDestroy {
     public user: User
-    public gyms$: Observable<Array<Gym>>
+    public gyms$: Observable<Array<Center>>
     public gymsLoading$: Observable<Loading>
 
     public unsubscriber$ = new Subject<void>()
@@ -40,11 +40,11 @@ export class GymListSectionComponent implements OnInit, AfterViewInit, OnDestroy
         private nxStore: Store,
         private cmpStore: GymsStore
     ) {
-        this.storageService.removeGym()
+        this.storageService.removeCenter()
         this.gyms$ = this.cmpStore.gyms$
         this.gymsLoading$ = this.cmpStore.loading$
 
-        this.cmpStore.getGyms()
+        this.cmpStore.getCenters()
     }
 
     ngOnInit(): void {
@@ -73,10 +73,10 @@ export class GymListSectionComponent implements OnInit, AfterViewInit, OnDestroy
     public lastItemIdx: number
     @HostListener('window:resize', ['$event'])
     detectLastRowOnResize(e) {
-        this.setGymItemDropUp()
+        this.setCenterItemDropUp()
     }
 
-    setGymItemDropUp() {
+    setCenterItemDropUp() {
         this.gyms$.pipe(takeUntil(this.unsubscriber$)).subscribe((gymList) => {
             if (window.innerWidth <= 587) {
                 if (this.gridCols !== 1 && gymList.length > 1) {

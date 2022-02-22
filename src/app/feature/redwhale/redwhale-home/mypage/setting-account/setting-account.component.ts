@@ -3,7 +3,7 @@ import { Router } from '@angular/router'
 
 import { FileService, CreateFileRequestBody } from '@services/file.service'
 
-import { UserService } from '@services/user.service'
+import { UsersService } from '@services/users.service'
 
 import { StorageService } from '@services/storage.service'
 import { SettingAccountModalService } from '@services/home/setting-account-modal.service'
@@ -79,7 +79,7 @@ export class SettingAccountComponent implements OnInit {
     constructor(
         private storageService: StorageService,
         private settingAcountModalService: SettingAccountModalService,
-        private userService: UserService,
+        private usersService: UsersService,
         private nxStore: Store,
         private fileservice: FileService,
         private globalSettingAccountService: GlobalSettingAccountService,
@@ -205,7 +205,7 @@ export class SettingAccountComponent implements OnInit {
 
         const reqBody: CreateFileRequestBody = { tag: 'user-picture' }
         this.fileservice.createFile(reqBody, files).subscribe((__) => {
-            this.userService.getUser(this.user.id).subscribe({
+            this.usersService.getUser(this.user.id).subscribe({
                 next: (resData) => {
                     this.user.picture = resData['picture'].filter((v, i) => i == 0)
                     this.globalSettingAccountService.setUserAvatar(resData['picture'][0]['url'])
@@ -248,7 +248,7 @@ export class SettingAccountComponent implements OnInit {
         const prevPicture = this.user.picture[0].url
         this.fileservice.deleteFile(prevPicture).subscribe({
             next: (__) => {
-                this.userService.getUser(this.user.id).subscribe({
+                this.usersService.getUser(this.user.id).subscribe({
                     next: (resData) => {
                         this.storageService.setUser({
                             ...this.user,

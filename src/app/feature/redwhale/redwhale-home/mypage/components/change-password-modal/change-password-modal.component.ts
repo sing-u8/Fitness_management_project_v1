@@ -14,7 +14,7 @@ import {
 
 import { FormBuilder, FormControl, Validators, ValidationErrors, ValidatorFn, AbstractControl } from '@angular/forms'
 
-import { UserService } from '@services/user.service'
+import { UsersService } from '@services/users.service'
 import { StorageService } from '@services/storage.service'
 
 import { User } from '@schemas/user'
@@ -77,7 +77,7 @@ export class ChangePasswordModalComponent implements OnInit, AfterViewChecked, O
         private el: ElementRef,
         private fb: FormBuilder,
         private renderer: Renderer2,
-        private userService: UserService,
+        private usersService: UsersService,
         private storageService: StorageService,
         private nxStore: Store
     ) {
@@ -152,7 +152,7 @@ export class ChangePasswordModalComponent implements OnInit, AfterViewChecked, O
     }
 
     isCurrentPasswordChecked() {
-        this.userService.checkPasswrod(this.user.id, { password: this.pwdInputs.currentPassword.value }).subscribe({
+        this.usersService.checkPasswrod(this.user.id, { password: this.pwdInputs.currentPassword.value }).subscribe({
             next: (res) => {
                 console.log('check pwd: ', res)
                 this.goToNextStep()
@@ -232,7 +232,7 @@ export class ChangePasswordModalComponent implements OnInit, AfterViewChecked, O
 
     // set new password method
     setNewPassword() {
-        this.userService
+        this.usersService
             .changePassword(this.user.id, {
                 password: this.pwdInputs.currentPassword.value,
                 new_password: this.pwdInputs.modifiedPassword.value,

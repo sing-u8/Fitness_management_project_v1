@@ -5,7 +5,7 @@ import { takeUntil } from 'rxjs/operators'
 
 import { StorageService } from '@services/storage.service'
 
-import { UserService } from '@services/user.service'
+import { UsersService } from '@services/users.service'
 
 import { User } from '@schemas/user'
 
@@ -43,7 +43,7 @@ export class TermsComponent implements OnInit, OnDestroy {
         private router: Router,
         private nxStore: Store,
         private storageService: StorageService,
-        private userService: UserService
+        private usersService: UsersService
     ) {
         this.user = this.storageService.getUser()
         this.nxStore.pipe(select(registrationSelector), takeUntil(this.unSubscriber$)).subscribe((reg) => {
@@ -138,7 +138,7 @@ export class TermsComponent implements OnInit, OnDestroy {
                 email_marketing: this.marketingEmail,
             }
 
-            this.userService.updateUser(this.user.id, requestBody).subscribe({
+            this.usersService.updateUser(this.user.id, requestBody).subscribe({
                 next: (user) => {
                     if (this.user.phone_number_verified) {
                         this.router.navigateByUrl('/redwhale-home')

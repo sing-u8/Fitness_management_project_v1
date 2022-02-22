@@ -1,7 +1,7 @@
 import { LessonItem } from '@schemas/lesson-item'
 import { MembershipItem } from '@schemas/membership-item'
-import { GymUser } from '@schemas/gym-user'
-import { TaskLessonTrainer, TaskReservation } from '@schemas/task'
+import { CenterUser } from '@schemas/users-center'
+import { TaskLessonTrainer, TaskReservation } from '@schemas/backup/task'
 import { MembershipTicket as _MembershipTicket } from '@schemas/membership-ticket'
 
 export interface HoldAllMemberRequestBody {
@@ -181,7 +181,7 @@ export interface MembershipTicket {
     status_name: string
     lesson_item_list: Array<LessonItem>
     membership_item_list: Array<MembershipItem>
-    assignee: GymUser
+    assignee: CenterUser
     holding_remaining_days: number
     holding_reservation_days: number
     holding_start_date: string
@@ -223,7 +223,7 @@ export interface LockerTicket {
     end_date: string
     price: number
     paid_date: string
-    assignee: GymUser
+    assignee: CenterUser
     holding_remaining_days: number
     holding_reservation_days: number
     holding_start_date: string
