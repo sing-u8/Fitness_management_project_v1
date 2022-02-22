@@ -14,8 +14,8 @@ export class CenterEmployeeGuard implements CanActivate {
     constructor(private router: Router, private storageService: StorageService) {}
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-        const gym: Center = this.storageService.getCenter()
-        if (!gym || gym.role_code == ROLE.MEMBER) {
+        const center: Center = this.storageService.getCenter()
+        if (!center || center.role_code == ROLE.MEMBER) {
             this.router.navigateByUrl('/redwhale-home')
             return false
         } else {

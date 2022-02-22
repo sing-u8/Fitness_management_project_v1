@@ -21,7 +21,7 @@ const routes: Routes = [
     {
         path: ':address',
         canActivate: [AuthGuard, CenterGuard],
-        loadChildren: () => import('./feature/redwhale/gym/gym.module').then((m) => m.GymModule),
+        loadChildren: () => import('./feature/redwhale/center/center.module').then((m) => m.CenterModule),
     },
     { path: '404', component: NotFoundComponent },
     { path: '**', redirectTo: '/404' },

@@ -25,8 +25,8 @@ import { Center } from '@schemas/center'
 })
 export class CenterListItemComponent implements OnInit, AfterViewInit {
     @Input() userId: string
-    @Input() gym: Center
-    @Input() gymList: Array<Center>
+    @Input() center: Center
+    @Input() centerList: Array<Center>
     @Input() dropDownUp: boolean
 
     @Output() onLeaveCenter = new EventEmitter<string>()
@@ -62,40 +62,40 @@ export class CenterListItemComponent implements OnInit, AfterViewInit {
         this.initCenterBackground()
     }
     initCenterAvatar() {
-        if (!this.gym.picture) {
-            this.centerAvatar = this.gym.name.slice(0, 1)
-            this.renderer.setStyle(this.list_avatar.nativeElement, 'backgroundColor', this.gym.color)
+        if (!this.center.picture) {
+            this.centerAvatar = this.center.name.slice(0, 1)
+            this.renderer.setStyle(this.list_avatar.nativeElement, 'backgroundColor', this.center.color)
         } else {
-            this.centerAvatar = this.gym.picture
+            this.centerAvatar = this.center.picture
             this.renderer.setStyle(this.list_avatar.nativeElement, 'backgroundImage', `url(${this.centerAvatar})`)
         }
     }
     initCenterBackground() {
-        if (!this.gym.background) {
-            this.renderer.setStyle(this.list_header.nativeElement, 'backgroundColor', this.gym.color)
+        if (!this.center.background) {
+            this.renderer.setStyle(this.list_header.nativeElement, 'backgroundColor', this.center.color)
         } else {
-            this.renderer.setStyle(this.list_header.nativeElement, 'backgroundImage', `url(${this.gym.background})`)
+            this.renderer.setStyle(this.list_header.nativeElement, 'backgroundImage', `url(${this.center.background})`)
             this.renderer.setStyle(this.list_header.nativeElement, 'opacity', '1')
         }
     }
 
-    // ---------------------gym service------------------>//
+    // ---------------------center service------------------>//
     leaveGym() {
         this.handleModalConfirm()
-        this.onLeaveCenterEmiiter(this.gym.id)
+        this.onLeaveCenterEmiiter(this.center.id)
     }
     goGym(event) {
         if (this.isSideToolbarPressed(event)) return
-        this.storageService.setCenter(this.gym)
-        this.router.navigateByUrl(`/${this.gym.address}`, {
-            state: { gymList: this.gymList },
+        this.storageService.setCenter(this.center)
+        this.router.navigateByUrl(`/${this.center.address}`, {
+            state: { centerList: this.centerList },
         })
     }
     goGymSetting(event) {
         event.stopPropagation()
         event.preventDefault()
     }
-    // <---------------------gym service------------------//
+    // <---------------------center service------------------//
 
     toggleDropDown(event) {
         event.stopPropagation()

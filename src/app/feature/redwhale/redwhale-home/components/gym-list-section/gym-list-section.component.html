@@ -3,9 +3,9 @@
         <section class="header">
 
           <div class='rw-typo-headline2 title-container'>
-            <p class='user-container'> <span class="user-name">{{user.nick_name ?? user.name}}</span>님,</p>
-            <p *ngIf="(gyms$ | async)?.length > 0">오늘도 건강한 하루 보내세요. 🤗</p>
-            <p *ngIf="(gyms$ | async)?.length == 0">센터를 추가하고 간편하게 관리해보세요. 🤗</p>
+            <p class='user-container'> <span class="user-name">{{ user.name}}</span>님,</p>
+            <p *ngIf="(centers$ | async)?.length > 0">오늘도 건강한 하루 보내세요. 🤗</p>
+            <p *ngIf="(centers$ | async)?.length == 0">센터를 추가하고 간편하게 관리해보세요. 🤗</p>
           </div>
 
           <div class="rw-typo-title2" rw-button rwButtonWidth="250" rwButtonHeight="50" rwButtonColor="var(--red)"
@@ -16,14 +16,14 @@
 
         </section>
 
-        <section *ngIf="(gymsLoading$ | async) == 'done'; else loading" class="gym-list-container">
-          <div *ngIf="(gyms$ | async).length == 0" class='gym-init-item' (click)="goRouterLink('/redwhale-home/create-gym')">
+        <section *ngIf="(centersLoading$ | async) == 'done'; else loading" class="center-list-container">
+          <div *ngIf="(centers$ | async).length == 0" class='center-init-item' (click)="goRouterLink('/redwhale-home/create-gym')">
             <img src="assets/icons/etc/plus-gym.svg">
           </div>
-          <ng-template ngFor let-item [ngForOf]="(gyms$ | async)" let-i="index">
+          <ng-template ngFor let-item [ngForOf]="(centers$ | async)" let-i="index">
             <center-list-item
-              [gym]="item"
-              [gymList]="(gyms$ | async)"
+              [center]="item"
+              [centerList]="(centers$ | async)"
               [userId] = "user.id"
               [dropDownUp] ="i >= lastItemIdx ? true: false"
               (onLeaveCenter)="onGymleft($event)"
@@ -33,7 +33,7 @@
         </section>
 
         <ng-template #loading>
-          <section #gym_list_container class="gym-list-container">
+          <section #center_list_container class="center-list-container">
             <ngx-skeleton-loader
               *ngFor="let _ of [1,2,3,4,5,6]"
               count="1"

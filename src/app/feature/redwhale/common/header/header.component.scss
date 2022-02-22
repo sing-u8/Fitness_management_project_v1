@@ -1,317 +1,317 @@
 .header {
-  height: 55px;
-  box-shadow: 0 0 6px 0 rgba(172, 172, 172, 0.16);
-  background-color: var(--white);
+    height: 55px;
+    box-shadow: 0 0 6px 0 rgba(172, 172, 172, 0.16);
+    background-color: var(--white);
 
-  .menu-item {
-    position: relative;
-    height: 34px;
-    padding: 0 8px;
-    border-radius: 4px;
-    cursor: pointer;
-
-    &:hover {
-      background-color: var(--background-color);
-    }
-
-    img {
-      width: 26px;
-    }
-
-    .badge {
-      position: absolute;
-      top: 4px;
-      right: 7px;
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background-color: var(--red);
-      font-size: 0.8rem;
-      font-weight: 700;
-      color: var(--white);
-    }
-
-    .dot-badge {
-      position: absolute;
-      top: 7px;
-      right: 4px;
-      width: 5px;
-      height: 5px;
-      border-radius: 50%;
-      background-color: var(--red);
-    }
-  }
-
-  .menu-item-selected {
-    padding: 0;
-    margin: 0 8px;
-    border-radius: 0;
-    color: var(--red);
-
-    &:hover {
-      background-color: var(--white);
-    }
-
-    .dot-badge {
-      right: -4px;
-    }
-  }
-
-  .menu-item-selected-line {
-    position: absolute;
-    bottom: 2px;
-    width: 100%;
-    border-bottom: 2px solid var(--red);
-  }
-
-  .menu-item-open {
-    background-color: var(--background-color);
-  }
-
-  .empty {
-    width: 7px;
-  }
-
-  .left-side-menu {
-    .logo {
-      margin-left: 3px;
-      cursor: pointer;
-
-      img {
-        width: 96px;
-      }
-    }
-
-    .home {
-      width: 60px;
-      margin-left: -15px;
-
-      img {
-        width: 26px;
+    .menu-item {
+        position: relative;
+        height: 34px;
+        padding: 0 8px;
+        border-radius: 4px;
         cursor: pointer;
-      }
+
+        &:hover {
+            background-color: var(--background-color);
+        }
+
+        img {
+            width: 26px;
+        }
+
+        .badge {
+            position: absolute;
+            top: 4px;
+            right: 7px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: var(--red);
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--white);
+        }
+
+        .dot-badge {
+            position: absolute;
+            top: 7px;
+            right: 4px;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background-color: var(--red);
+        }
     }
 
-    .selected-gym {
-      position: relative;
-      height: 34px;
-      padding: 8px 1px 8px 8px;
-      margin-left: 5px;
-      border-radius: 4px;
-      cursor: pointer;
+    .menu-item-selected {
+        padding: 0;
+        margin: 0 8px;
+        border-radius: 0;
+        color: var(--red);
 
-      &:hover {
-        background-color: var(--background-color);
-      }
-
-      .name {
-        margin-left: 9px;
-      }
-
-      .mdi {
-        margin-left: 10px;
-        font-size: 2.2rem;
-        color: var(--grey);
-      }
-
-      &.open {
-        background-color: var(--background-color);
-
-        .mdi {
-          position: relative;
-          transform: rotateX(180deg);
-          transition: transform 0.3s linear;
-          -moz-transition: transform 0.3s linear;
-          -webkit-transition: transform 0.3s linear;
-          -o-transition: transform 0.3s linear;
+        &:hover {
+            background-color: var(--white);
         }
-      }
 
-      .popup-gym-list {
+        .dot-badge {
+            right: -4px;
+        }
+    }
+
+    .menu-item-selected-line {
         position: absolute;
-        top: 40px;
-        left: 0px;
-        width: 274px;
-        border-radius: 5px;
-        box-shadow: 0 0 10px 0 rgba(181, 181, 181, 0.11);
-        background-color: var(--white);
-        z-index: 999;
-        cursor: default;
+        bottom: 2px;
+        width: 100%;
+        border-bottom: 2px solid var(--red);
+    }
 
-        .selected-gym-info {
-          padding: 25px;
+    .menu-item-open {
+        background-color: var(--background-color);
+    }
 
-          div:nth-child(2) {
-            margin-left: 15px;
-          }
-        }
+    .empty {
+        width: 7px;
+    }
 
-        .h-line {
-          margin: 0 7px;
-          border-bottom: 1px solid var(--border-color);
-        }
-
-        .sub-menu {
-          height: 27px;
-          margin: 10px 0;
-          padding: 0 24px;
-
-          .touchpad,
-          .settings {
+    .left-side-menu {
+        .logo {
+            margin-left: 3px;
             cursor: pointer;
 
             img {
-              width: 22px;
-              margin-right: 2px;
+                width: 96px;
             }
-          }
-
-          .v-line-touchpad-settings {
-            width: 0;
-            height: 27px;
-            border-right: 1px solid var(--border-color);
-          }
         }
 
-        .label {
-          padding-top: 25px;
-          padding-left: 25px;
+        .home {
+            width: 60px;
+            margin-left: -15px;
+
+            img {
+                width: 26px;
+                cursor: pointer;
+            }
         }
 
-        .gym-list {
-          position: relative;
-          height: 172px;
-          margin-top: 7px;
-          margin-bottom: 12px;
+        .selected-center {
+            position: relative;
+            height: 34px;
+            padding: 8px 1px 8px 8px;
+            margin-left: 5px;
+            border-radius: 4px;
+            cursor: pointer;
 
-          > div:first-child {
-            position: absolute;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            left: 0;
-            overflow-y: overlay;
-
-            .gym {
-              position: relative;
-              height: 43px;
-              padding: 9px 25px;
-              cursor: pointer;
-
-              &:hover {
+            &:hover {
                 background-color: var(--background-color);
-              }
+            }
 
-              span {
-                margin-left: 8px;
-              }
+            .name {
+                margin-left: 9px;
+            }
 
-              .selected {
+            .mdi {
+                margin-left: 10px;
+                font-size: 2.2rem;
+                color: var(--grey);
+            }
+
+            &.open {
+                background-color: var(--background-color);
+
+                .mdi {
+                    position: relative;
+                    transform: rotateX(180deg);
+                    transition: transform 0.3s linear;
+                    -moz-transition: transform 0.3s linear;
+                    -webkit-transition: transform 0.3s linear;
+                    -o-transition: transform 0.3s linear;
+                }
+            }
+
+            .popup-center-list {
                 position: absolute;
-                right: 25px;
+                top: 40px;
+                left: 0px;
+                width: 274px;
+                border-radius: 5px;
+                box-shadow: 0 0 10px 0 rgba(181, 181, 181, 0.11);
+                background-color: var(--white);
+                z-index: 999;
+                cursor: default;
 
-                .dot {
-                  position: relative;
-                  top: 2px;
-                  width: 4px;
-                  height: 4px;
-                  border-radius: 50%;
-                  background-color: var(--red);
+                .selected-center-info {
+                    padding: 25px;
+
+                    div:nth-child(2) {
+                        margin-left: 15px;
+                    }
                 }
 
-                span {
-                  margin-left: 5px;
-                  color: var(--red);
+                .h-line {
+                    margin: 0 7px;
+                    border-bottom: 1px solid var(--border-color);
                 }
-              }
+
+                .sub-menu {
+                    height: 27px;
+                    margin: 10px 0;
+                    padding: 0 24px;
+
+                    .touchpad,
+                    .settings {
+                        cursor: pointer;
+
+                        img {
+                            width: 22px;
+                            margin-right: 2px;
+                        }
+                    }
+
+                    .v-line-touchpad-settings {
+                        width: 0;
+                        height: 27px;
+                        border-right: 1px solid var(--border-color);
+                    }
+                }
+
+                .label {
+                    padding-top: 25px;
+                    padding-left: 25px;
+                }
+
+                .center-list {
+                    position: relative;
+                    height: 172px;
+                    margin-top: 7px;
+                    margin-bottom: 12px;
+
+                    > div:first-child {
+                        position: absolute;
+                        top: 0;
+                        right: 0;
+                        bottom: 0;
+                        left: 0;
+                        overflow-y: overlay;
+
+                        .center {
+                            position: relative;
+                            height: 43px;
+                            padding: 9px 25px;
+                            cursor: pointer;
+
+                            &:hover {
+                                background-color: var(--background-color);
+                            }
+
+                            span {
+                                margin-left: 8px;
+                            }
+
+                            .selected {
+                                position: absolute;
+                                right: 25px;
+
+                                .dot {
+                                    position: relative;
+                                    top: 2px;
+                                    width: 4px;
+                                    height: 4px;
+                                    border-radius: 50%;
+                                    background-color: var(--red);
+                                }
+
+                                span {
+                                    margin-left: 5px;
+                                    color: var(--red);
+                                }
+                            }
+                        }
+                    }
+                }
             }
-          }
         }
-      }
-    }
-  }
-
-  .right-side-menu {
-    .v-line-home {
-      width: 0;
-      height: 14px;
-      margin: 0 11px;
-      border-right: 1px solid var(--border-color);
     }
 
-    .v-line-gym {
-      width: 0;
-      height: 14px;
-      margin-left: 11px;
-      margin-right: 20px;
-      border-right: 1px solid var(--border-color);
-    }
-
-    .avatar {
-      position: relative;
-      margin-right: -7px;
-
-      .name {
-        margin-left: 9px;
-      }
-
-      .avatar-menu {
-        position: absolute;
-        top: 40px;
-        right: 0px;
-        width: 274px;
-        padding-bottom: 5px;
-        border-radius: 5px;
-        box-shadow: 0 0 10px 0 rgba(181, 181, 181, 0.11);
-        background-color: var(--white);
-        z-index: 999;
-        cursor: default;
-
-        .profile {
-          padding: 25px 25px 20px 25px;
-
-          div:nth-child(2) {
-            margin-left: 15px;
-          }
+    .right-side-menu {
+        .v-line-home {
+            width: 0;
+            height: 14px;
+            margin: 0 11px;
+            border-right: 1px solid var(--border-color);
         }
 
-        .h-line {
-          margin: 5px 7px;
-          border-bottom: 1px solid var(--border-color);
+        .v-line-center {
+            width: 0;
+            height: 14px;
+            margin-left: 11px;
+            margin-right: 20px;
+            border-right: 1px solid var(--border-color);
         }
 
-        .avatar-menu-item {
-          height: 43px;
-          padding: 12px 25px;
-          cursor: pointer;
+        .avatar {
+            position: relative;
+            margin-right: -7px;
 
-          &:hover {
-            background-color: var(--background-color);
-          }
-
-          img {
-            width: 22px;
-            margin-right: 5px;
-          }
-
-          span {
-            &.logout {
-              margin-left: 0;
+            .name {
+                margin-left: 9px;
             }
-          }
+
+            .avatar-menu {
+                position: absolute;
+                top: 40px;
+                right: 0px;
+                width: 274px;
+                padding-bottom: 5px;
+                border-radius: 5px;
+                box-shadow: 0 0 10px 0 rgba(181, 181, 181, 0.11);
+                background-color: var(--white);
+                z-index: 999;
+                cursor: default;
+
+                .profile {
+                    padding: 25px 25px 20px 25px;
+
+                    div:nth-child(2) {
+                        margin-left: 15px;
+                    }
+                }
+
+                .h-line {
+                    margin: 5px 7px;
+                    border-bottom: 1px solid var(--border-color);
+                }
+
+                .avatar-menu-item {
+                    height: 43px;
+                    padding: 12px 25px;
+                    cursor: pointer;
+
+                    &:hover {
+                        background-color: var(--background-color);
+                    }
+
+                    img {
+                        width: 22px;
+                        margin-right: 5px;
+                    }
+
+                    span {
+                        &.logout {
+                            margin-left: 0;
+                        }
+                    }
+                }
+            }
         }
-      }
-    }
 
-    .adjustment {
-      > rw-avatar {
-        margin-right: 12px;
-        cursor: pointer;
-      }
+        .adjustment {
+            > rw-avatar {
+                margin-right: 12px;
+                cursor: pointer;
+            }
 
-      .avatar-menu {
-        top: 30px;
-      }
+            .avatar-menu {
+                top: 30px;
+            }
+        }
     }
-  }
 }

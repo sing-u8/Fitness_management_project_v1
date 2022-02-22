@@ -9,7 +9,7 @@ import { environment } from '@environments/environment'
 import { Response } from '@schemas/response'
 import { File } from '@schemas/file'
 
-export type FileTag = 'user-picture' | 'user-background' | 'gym-picture' | 'gym-background' | 'chat'
+export type FileTypeCode = 'user-picture' | 'user-background' | 'center-picture' | 'center-background' | 'chat'
 
 @Injectable({
     providedIn: 'root',
@@ -102,8 +102,8 @@ export class FileService {
 }
 
 export interface CreateFileRequestBody {
-    tag: FileTag
-    gym_id?: string
+    type_code: FileTypeCode
+    center_id?: string
     chat_room_id?: string
     // files  : FileList   -- is already in other param
 }

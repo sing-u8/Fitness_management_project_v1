@@ -17,8 +17,8 @@ export class GymUsersService {
 
     constructor(private http: HttpClient) {}
 
-    createUser(gymId: string, requestBody: CreateUserRequestBody): Observable<CreateUserResponse> {
-        const url = this.SERVER + `/${gymId}/users`
+    createUser(centerId: string, requestBody: CreateUserRequestBody): Observable<CreateUserResponse> {
+        const url = this.SERVER + `/${centerId}/users`
 
         const options = {
             headers: new HttpHeaders({
@@ -34,8 +34,8 @@ export class GymUsersService {
         )
     }
 
-    registerByEmail(gymId: string, requestBody: registrationByEmailRequestBody): Observable<CreateUserResponse> {
-        const url = this.SERVER + `/${gymId}/users/registrationByEmail`
+    registerByEmail(centerId: string, requestBody: registrationByEmailRequestBody): Observable<CreateUserResponse> {
+        const url = this.SERVER + `/${centerId}/users/registrationByEmail`
 
         const options = {
             headers: new HttpHeaders({
@@ -51,8 +51,8 @@ export class GymUsersService {
         )
     }
 
-    getUserList(gymId: string, q = '', role_code = '', type = ''): Observable<Array<CenterUser>> {
-        const url = this.SERVER + `/${gymId}/users?q=${q}&role_code=${role_code}&type=${type}`
+    getUserList(centerId: string, q = '', role_code = '', type = ''): Observable<Array<CenterUser>> {
+        const url = this.SERVER + `/${centerId}/users?q=${q}&role_code=${role_code}&type=${type}`
 
         const options = {
             headers: new HttpHeaders({
@@ -68,8 +68,8 @@ export class GymUsersService {
         )
     }
 
-    updateUser(gymId: string, userId: string, requestBody: UpdateUserRequestBody) {
-        const url = this.SERVER + `/${gymId}/users/${userId}`
+    updateUser(centerId: string, userId: string, requestBody: UpdateUserRequestBody) {
+        const url = this.SERVER + `/${centerId}/users/${userId}`
 
         const options = {
             headers: new HttpHeaders({

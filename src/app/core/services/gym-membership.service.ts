@@ -14,12 +14,12 @@ import { MembershipItem } from '@schemas/membership-item'
     providedIn: 'root',
 })
 export class GymMembershipService {
-    private SERVER = `${environment.protocol}${environment.subDomain}${environment.domain}${environment.port}${environment.version}/gym`
+    private SERVER = `${environment.protocol}${environment.subDomain}${environment.domain}${environment.port}${environment.version}/center`
 
     constructor(private http: HttpClient) {}
 
-    createCategory(gymId: string, requestBody: CreateCategoryRequestBody): Observable<MembershipCategory> {
-        const url = this.SERVER + `/${gymId}/membership`
+    createCategory(centerId: string, requestBody: CreateCategoryRequestBody): Observable<MembershipCategory> {
+        const url = this.SERVER + `/${centerId}/membership`
 
         const options = {
             headers: new HttpHeaders({
@@ -35,8 +35,8 @@ export class GymMembershipService {
         )
     }
 
-    getCategoryList(gymId: string): Observable<Array<MembershipCategory>> {
-        const url = this.SERVER + `/${gymId}/membership`
+    getCategoryList(centerId: string): Observable<Array<MembershipCategory>> {
+        const url = this.SERVER + `/${centerId}/membership`
 
         const options = {
             headers: new HttpHeaders({
@@ -52,8 +52,8 @@ export class GymMembershipService {
         )
     }
 
-    updateCategory(gymId: string, categoryId: string, requestBody: UpdateCategoryRequestBody): Observable<Response> {
-        const url = this.SERVER + `/${gymId}/membership/${categoryId}`
+    updateCategory(centerId: string, categoryId: string, requestBody: UpdateCategoryRequestBody): Observable<Response> {
+        const url = this.SERVER + `/${centerId}/membership/${categoryId}`
 
         const options = {
             headers: new HttpHeaders({
@@ -69,8 +69,8 @@ export class GymMembershipService {
         )
     }
 
-    deleteCategory(gymId: string, categoryId: string): Observable<Response> {
-        const url = this.SERVER + `/${gymId}/membership/${categoryId}`
+    deleteCategory(centerId: string, categoryId: string): Observable<Response> {
+        const url = this.SERVER + `/${centerId}/membership/${categoryId}`
 
         const options = {
             headers: new HttpHeaders({
@@ -86,8 +86,8 @@ export class GymMembershipService {
         )
     }
 
-    createItem(gymId: string, categoryId: string, requestBody: CreateItemRequestBody): Observable<MembershipItem> {
-        const url = this.SERVER + `/${gymId}/membership/${categoryId}/item`
+    createItem(centerId: string, categoryId: string, requestBody: CreateItemRequestBody): Observable<MembershipItem> {
+        const url = this.SERVER + `/${centerId}/membership/${categoryId}/item`
 
         const options = {
             headers: new HttpHeaders({
@@ -103,8 +103,8 @@ export class GymMembershipService {
         )
     }
 
-    getItem(gymId: string, categoryId: string, itemId: string): Observable<MembershipItem> {
-        const url = this.SERVER + `/${gymId}/membership/${categoryId}/item/${itemId}`
+    getItem(centerId: string, categoryId: string, itemId: string): Observable<MembershipItem> {
+        const url = this.SERVER + `/${centerId}/membership/${categoryId}/item/${itemId}`
 
         const options = {
             headers: new HttpHeaders({
@@ -121,12 +121,12 @@ export class GymMembershipService {
     }
 
     updateItem(
-        gymId: string,
+        centerId: string,
         categoryId: string,
         itemId: string,
         requestBody: UpdateItemRequestBody
     ): Observable<Response> {
-        const url = this.SERVER + `/${gymId}/membership/${categoryId}/item/${itemId}`
+        const url = this.SERVER + `/${centerId}/membership/${categoryId}/item/${itemId}`
 
         const options = {
             headers: new HttpHeaders({
@@ -142,8 +142,8 @@ export class GymMembershipService {
         )
     }
 
-    deleteItem(gymId: string, categoryId: string, itemId: string): Observable<Response> {
-        const url = this.SERVER + `/${gymId}/membership/${categoryId}/item/${itemId}`
+    deleteItem(centerId: string, categoryId: string, itemId: string): Observable<Response> {
+        const url = this.SERVER + `/${centerId}/membership/${categoryId}/item/${itemId}`
 
         const options = {
             headers: new HttpHeaders({
@@ -160,12 +160,12 @@ export class GymMembershipService {
     }
 
     moveItem(
-        gymId: string,
+        centerId: string,
         categoryId: string,
         ItemId: string,
         requestBody: MoveItemRequestBody
     ): Observable<Response> {
-        const url = this.SERVER + `/${gymId}/membership/${categoryId}/item/${ItemId}/move`
+        const url = this.SERVER + `/${centerId}/membership/${categoryId}/item/${ItemId}/move`
 
         const options = {
             headers: new HttpHeaders({

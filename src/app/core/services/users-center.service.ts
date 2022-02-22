@@ -17,8 +17,25 @@ export class UsersCenterService {
 
     constructor(private http: HttpClient) {}
 
+    addCenterToUser(userId: string, reqBody: AddCenterToUserReqBody) {
+        const url = this.SERVER + `/${userId}/center`
+
+        const options = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json',
+            }),
+        }
+
+        return this.http.post<Response>(url, reqBody, options).pipe(
+            map((res) => {
+                return res.dataset
+            }),
+            catchError(handleError)
+        )
+    }
+
     getCenterList(userId: string, page = '', pageSize = ''): Observable<Array<Center>> {
-        const url = this.SERVER + `/${userId}/gym?page=${page}&pageSize=${pageSize}`
+        const url = this.SERVER + `/${userId}/center?page=${page}&pageSize=${pageSize}`
 
         const options = {
             headers: new HttpHeaders({
@@ -34,8 +51,8 @@ export class UsersCenterService {
         )
     }
 
-    leave(userId: string, gymId: string): Observable<Response> {
-        const url = this.SERVER + `/${userId}/gym/${gymId}/leave`
+    leave(userId: string, centerId: string): Observable<Response> {
+        const url = this.SERVER + `/${userId}/center/${centerId}/leave`
 
         const options = {
             headers: new HttpHeaders({
@@ -50,4 +67,8 @@ export class UsersCenterService {
             catchError(handleError)
         )
     }
+}
+
+export interface AddCenterToUserReqBody {
+    center_id: string
 }

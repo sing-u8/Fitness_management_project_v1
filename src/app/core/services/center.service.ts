@@ -14,7 +14,7 @@ import { Center } from '@schemas/center'
     providedIn: 'root',
 })
 export class CenterService {
-    private SERVER = `${environment.protocol}${environment.subDomain}${environment.domain}${environment.port}${environment.version}/gym`
+    private SERVER = `${environment.protocol}${environment.subDomain}${environment.domain}${environment.port}${environment.version}/center`
 
     constructor(private http: HttpClient, private storageService: StorageService) {}
 
@@ -35,8 +35,8 @@ export class CenterService {
         )
     }
 
-    getCenter(gymId: string): Observable<Center> {
-        const url = this.SERVER + `/${gymId}`
+    getCenter(centerId: string): Observable<Center> {
+        const url = this.SERVER + `/${centerId}`
 
         const options = {
             headers: new HttpHeaders({
@@ -52,8 +52,8 @@ export class CenterService {
         )
     }
 
-    updateCenter(gymId: string, requestBody: UpdateCenterRequestBody): Observable<Center> {
-        const url = this.SERVER + `/${gymId}`
+    updateCenter(centerId: string, requestBody: UpdateCenterRequestBody): Observable<Center> {
+        const url = this.SERVER + `/${centerId}`
 
         const options = {
             headers: new HttpHeaders({
@@ -63,16 +63,16 @@ export class CenterService {
 
         return this.http.put<Response>(url, requestBody, options).pipe(
             map((res) => {
-                const gym: Center = Object.assign({}, this.storageService.getCenter(), res.dataset[0])
-                this.storageService.setCenter(gym)
+                const center: Center = Object.assign({}, this.storageService.getCenter(), res.dataset[0])
+                this.storageService.setCenter(center)
                 return res.dataset[0]
             }),
             catchError(handleError)
         )
     }
 
-    deleteCenter(gymId: string): Observable<Response> {
-        const url = this.SERVER + `/${gymId}`
+    deleteCenter(centerId: string): Observable<Response> {
+        const url = this.SERVER + `/${centerId}`
 
         const options = {
             headers: new HttpHeaders({
@@ -105,8 +105,8 @@ export class CenterService {
         )
     }
 
-    delegate(gymId: string, requestBody: DelegateRequestBody): Observable<Response> {
-        const url = this.SERVER + `/${gymId}/delegate`
+    delegate(centerId: string, requestBody: DelegateRequestBody): Observable<Response> {
+        const url = this.SERVER + `/${centerId}/delegate`
 
         const options = {
             headers: new HttpHeaders({
@@ -131,12 +131,13 @@ class CreateCenterRequestBody {
 class UpdateCenterRequestBody {
     name?: string
     address?: string
-    picture?: string
     color?: string
-    background?: string
-    operating_days?: Array<string> // // all (매일 반복) , weekdays (평일마다 반복), weekend (주말마다 반복), ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']
-    operating_start_time?: string
-    operating_end_time?: string
+    timezone?: string
+    // picture?: string
+    // background?: string
+    // operating_days?: Array<string> // all (매일 반복) , weekdays (평일마다 반복), weekend (주말마다 반복), ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']
+    // operating_start_time?: string
+    // operating_end_time?: string
 }
 
 class DelegateRequestBody {

@@ -57,7 +57,6 @@ export class UsersService {
                 this.storageService.setUser({
                     ...user,
                     name: resData['name'],
-                    nick_name: resData['nick_name'],
                     sex: resData['sex'],
                     birth_date: resData['birth_date'],
                     color: resData['color'],
@@ -127,13 +126,12 @@ export class UsersService {
 
 interface UpdateUserRequestBody {
     name?: string
-    nick_name?: string
     sex?: string
     birth_date?: string
-    fcm_token?: string
     color?: string
-    service_terms?: boolean
+    fcm_token?: string
     privacy?: boolean
+    service_terms?: boolean
     sms_marketing?: boolean
     email_marketing?: boolean
     push_notification?: boolean

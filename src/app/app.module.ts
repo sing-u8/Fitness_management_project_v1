@@ -11,7 +11,7 @@ import { AppComponent } from './app.component'
 // modules
 import { CoreModule } from './core/core.module'
 import { SharedModule } from '@shared/shared.module'
-import { GymModule } from '@redwhale/gym/gym.module'
+import { CenterModule } from 'src/app/feature/redwhale/center/center.module'
 import { AuthModule } from '@redwhale/auth/auth.module'
 import { RedwhaleHomeModule } from '@redwhale/redwhale-home/redwhale-home.module'
 
@@ -71,7 +71,7 @@ import { RECAPTCHA_V3_SITE_KEY, RecaptchaV3Module } from 'ng-recaptcha'
         // modules
         CoreModule,
         SharedModule,
-        GymModule,
+        CenterModule,
     ],
     providers: [
         {

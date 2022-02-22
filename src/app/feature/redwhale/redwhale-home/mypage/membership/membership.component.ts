@@ -19,13 +19,13 @@ export class MembershipComponent implements OnInit {
 
     constructor(private usersCenterService: UsersCenterService, private storageService: StorageService) {
         this.user = this.storageService.getUser()
-        this.usersCenterService.getCenterList(this.user.id).subscribe((gymList) => {
-            if (gymList.length == 0) {
+        this.usersCenterService.getCenterList(this.user.id).subscribe((centerList) => {
+            if (centerList.length == 0) {
                 this.isLoaded = true
                 return
             }
-            this.userCenterList = gymList.map((gym) => ({ name: gym.name, value: gym }))
-            this.selectedUserCenter = { name: gymList[0].name, value: gymList[0] }
+            this.userCenterList = centerList.map((center) => ({ name: center.name, value: center }))
+            this.selectedUserCenter = { name: centerList[0].name, value: centerList[0] }
             this.isLoaded = true
         })
         this.usersCenterService.getCenterList(this.user.id)

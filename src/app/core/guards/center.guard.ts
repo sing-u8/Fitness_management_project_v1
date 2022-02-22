@@ -9,11 +9,11 @@ import { CenterService } from '@services/center.service'
     providedIn: 'root',
 })
 export class CenterGuard implements CanActivate {
-    constructor(private router: Router, private gymService: CenterService) {}
+    constructor(private router: Router, private CenterService: CenterService) {}
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
         const address = route.params['address']
-        return this.gymService.checkMemeber(address).pipe(
+        return this.CenterService.checkMemeber(address).pipe(
             map((res) => {
                 return true
             }),

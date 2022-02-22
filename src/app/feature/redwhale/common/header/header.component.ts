@@ -32,7 +32,7 @@ export class HeaderComponent implements OnInit {
     drawer$: Observable<Drawer>
     user: User
 
-    gymList: Array<Center>
+    centerList: Array<Center>
     invitedGymList: Array<Center>
 
     popupGymListVisible: boolean
@@ -41,7 +41,7 @@ export class HeaderComponent implements OnInit {
     constructor(
         private router: Router,
         private storageService: StorageService,
-        private gymService: CenterService,
+        private centerService: CenterService,
         private usersCenterService: UsersCenterService,
         private activatedRoute: ActivatedRoute,
         private nxStore: Store
@@ -63,10 +63,10 @@ export class HeaderComponent implements OnInit {
 
     getCenterList() {
         this.usersCenterService.getCenterList(this.user.id).subscribe({
-            next: (gymList) => {
-                this.gymList = gymList
+            next: (centerList) => {
+                this.centerList = centerList
 
-                if (!this.user.selected_gym) {
+                if (!this.user.selected_center) {
                     this.checkSelectedGym()
                 }
             },
@@ -78,22 +78,22 @@ export class HeaderComponent implements OnInit {
 
     checkSelectedGym() {
         const address = this.router.url.split('/')[1]
-        this.gymList
-            .filter((gym, index) => {
-                return address == gym.address
+        this.centerList
+            .filter((center, index) => {
+                return address == center.address
             })
-            .map((gym, index) => {
-                this.storageService.setCenter(gym)
+            .map((center, index) => {
+                this.storageService.setCenter(center)
                 this.user = this.storageService.getUser()
             })
     }
 
-    changeGym(gym: Center) {
-        if (this.user.selected_gym.address == gym.address) return
-        this.gymService.getCenter(gym.id).subscribe({
-            next: (gym) => {
-                this.storageService.setCenter(gym)
-                const url = `${window.location.origin}/${gym.address}/community`
+    changeGym(center: Center) {
+        if (this.user.selected_center.address == center.address) return
+        this.centerService.getCenter(center.id).subscribe({
+            next: (center) => {
+                this.storageService.setCenter(center)
+                const url = `${window.location.origin}/${center.address}/community`
                 window.open(url, '_self')
             },
             error: (e) => {

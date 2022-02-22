@@ -1,0 +1,37 @@
+.redwhale-center {
+    background-color: var(--background-color);
+
+    .left-side {
+        width: 60px;
+    }
+
+    .section {
+        position: relative;
+        overflow-y: hidden;
+    }
+
+    .right-side {
+        width: 0px;
+        background-color: var(--white);
+        transition: width 0.4s;
+        -moz-transition: width 0.4s;
+        -webkit-transition: width 0.4s;
+        -o-transition: width 0.4s;
+
+        &.open-drawer {
+            width: 323px;
+            box-shadow: 0 0 10px 0 rgba(181, 181, 181, 0.11);
+            transition: width 0.4s;
+            -moz-transition: width 0.4s;
+            -webkit-transition: width 0.4s;
+            -o-transition: width 0.4s;
+        }
+
+        &.schedule-drawer {
+            position: absolute;
+            right: 0px;
+            height: calc(100% - 55px);
+            z-index: 100;
+        }
+    }
+}

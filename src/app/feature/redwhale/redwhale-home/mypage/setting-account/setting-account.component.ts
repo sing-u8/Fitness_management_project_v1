@@ -107,7 +107,7 @@ export class SettingAccountComponent implements OnInit {
     initInputList() {
         const marketing_agree_text = this.initMarktingAgree()
 
-        this.inputList.name = this.user.nick_name ?? this.user.name
+        this.inputList.name = this.user.name
         this.inputList.email = this.user.email
         this.inputList.phone = this.addDashtoPhoneNumber(this.user.phone_number)
         this.inputList.password = '********' // 들고 오는 곳 없음  더미로 * 8개 표시
@@ -182,9 +182,7 @@ export class SettingAccountComponent implements OnInit {
     }
     onSetModalConfirm() {
         this.user = this.storageService.getUser()
-        this.activatedSettingModalType == 'NAME'
-            ? this.globalSettingAccountService.setUserName(this.user.nick_name ?? this.user.name)
-            : null
+        this.activatedSettingModalType == 'NAME' ? this.globalSettingAccountService.setUserName(this.user.name) : null
         this.initInputList()
         this.accountModalFlag = false
     }
@@ -203,16 +201,15 @@ export class SettingAccountComponent implements OnInit {
         if (!this.isFileExist(files)) return
         console.log('this.isFileExist(files) : ', this.isFileExist(files))
 
-        const reqBody: CreateFileRequestBody = { tag: 'user-picture' }
+        const reqBody: CreateFileRequestBody = { type_code: 'user-picture' }
         this.fileservice.createFile(reqBody, files).subscribe((__) => {
             this.usersService.getUser(this.user.id).subscribe({
                 next: (resData) => {
-                    this.user.picture = resData['picture'].filter((v, i) => i == 0)
+                    this.user.picture = resData['picture'] // .filter((v, i) => i == 0)
                     this.globalSettingAccountService.setUserAvatar(resData['picture'][0]['url'])
                     this.storageService.setUser({
                         ...this.user,
                         name: resData['name'],
-                        nick_name: resData['nick_name'],
                         sex: resData['sex'],
                         birth_date: resData['birth_date'],
                         color: resData['color'],
@@ -226,10 +223,10 @@ export class SettingAccountComponent implements OnInit {
                     this.user = this.storageService.getUser()
                     this.nxStore.dispatch(showToast({ text: '프로필 사진이 변경되었습니다.' }))
 
-                    resData.picture.forEach((v, i) => {
-                        if (i == 0) return
-                        this.fileservice.deleteFile(v.url).subscribe()
-                    })
+                    // resData.picture.forEach((v, i) => {
+                    //     if (i == 0) return
+                    //     this.fileservice.deleteFile(v.url).subscribe()
+                    // })
                 },
                 error: (err) => {
                     console.log('create account avatar file err: ', err)
@@ -245,7 +242,7 @@ export class SettingAccountComponent implements OnInit {
         return true
     }
     removePhoto() {
-        const prevPicture = this.user.picture[0].url
+        const prevPicture = this.user.picture
         this.fileservice.deleteFile(prevPicture).subscribe({
             next: (__) => {
                 this.usersService.getUser(this.user.id).subscribe({
@@ -253,7 +250,6 @@ export class SettingAccountComponent implements OnInit {
                         this.storageService.setUser({
                             ...this.user,
                             name: resData['name'],
-                            nick_name: resData['nick_name'],
                             sex: resData['sex'],
                             birth_date: resData['birth_date'],
                             color: resData['color'],

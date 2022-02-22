@@ -49,20 +49,20 @@ export class StorageService {
 
     getCenter(): Center {
         const user: User = this.getUser()
-        if (user.selected_gym) {
-            return user.selected_gym
+        if (user.selected_center) {
+            return user.selected_center
         } else {
             return null
         }
     }
-    setCenter(gym: Center): void {
+    setCenter(center: Center): void {
         const user: User = this.getUser()
-        user.selected_gym = gym
+        user.selected_center = center
         this.setUser(user)
     }
     removeCenter(): void {
         const user: User = this.getUser()
-        user.selected_gym = null
+        user.selected_center = null
         this.setUser(user)
     }
 }

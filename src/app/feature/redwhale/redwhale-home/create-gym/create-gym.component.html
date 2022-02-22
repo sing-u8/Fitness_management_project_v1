@@ -20,8 +20,8 @@
     </div>
 
     <div class="body thin-scroll-x">
-        <div class='create-gym-outer-container'>
-            <div class="create-gym-container">
+        <div class='create-center-outer-container'>
+            <div class="create-center-container">
 
               <div class="center-preview">
                 <p class="rw-typo-subtext2 ">미리보기</p>
@@ -79,10 +79,10 @@
                       class="cg-typo-subtext register-button" rw-button rwButtonColor="var(--darkgrey)">
                       <span class="mdi mdi-plus"></span>
                       <span>등록하기</span>
-                      <input type="file" accept="image/*" #centerProfile (change)="registerPhoto('gym-picture', centerProfile)"
+                      <input type="file" accept="image/*" #centerProfile (change)="registerPhoto('center-picture', centerProfile)"
                         hidden />
                     </div>
-                    <div (click)="removePhoto('gym-picture')" *ngIf="isCenterProfileRegistered == true "
+                    <div (click)="removePhoto('center-picture')" *ngIf="isCenterProfileRegistered == true "
                       class="cg-typo-subtext remove-button" rw-button rwButtonBorderColor="#c9c9c9"
                       rwButtonFontColor="var(--darkgrey)">
                       <span class="mdi mdi-trash-can-outline"></span>
@@ -102,9 +102,9 @@
                       <span class="mdi mdi-plus"></span>
                       <span>등록하기</span>
                       <input type="file" accept="image/*" #centerBackground
-                        (change)="registerPhoto('gym-background', centerBackground)" hidden />
+                        (change)="registerPhoto('center-background', centerBackground)" hidden />
                     </div>
-                    <div (click)="removePhoto('gym-background')" *ngIf="isCenterBackgroundRegistered == true "
+                    <div (click)="removePhoto('center-background')" *ngIf="isCenterBackgroundRegistered == true "
                       rw-button rwButtonBorderColor="#c9c9c9"
                       rwButtonFontColor="var(--darkgrey)"
                       class="cg-typo-subtext remove-button"

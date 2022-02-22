@@ -5,16 +5,16 @@
     </div>
     <div class="list-contents">
         <p class="contents-top">
-          <span class="rw-typo-title2">{{gym.name}}</span>
-          <span class="rw-typo-subtext3">  {{gym.role_name}}</span>
+          <span class="rw-typo-title2">{{center.name}}</span>
+          <span class="rw-typo-subtext3">  {{center.role_name}}</span>
         </p>
         <p class="rw-typo-subtext4 ">
-          redwhale.xyz/{{gym.address}}
+          redwhale.xyz/{{center.address}}
         </p>
     </div>
     <div class="list-bottom-toolbar">
         <div
-          *ngIf=" gym.role_code == 'administrator' || gym.role_code == 'manager' "
+          *ngIf=" center.role_code == 'administrator' || center.role_code == 'manager' "
           class="toolbar-left"
           id="_toolbar-left"
           (click)="goGymSetting($event)"
@@ -23,7 +23,7 @@
             <span class="rw-typo-subtext3">센터 설정</span>
         </div>
         <div
-          *ngIf=" gym.role_code == 'member' || gym.role_code == 'staff' || gym.role_code == 'manager' "
+          *ngIf=" center.role_code == 'member' || center.role_code == 'staff' || center.role_code == 'manager' "
           (rwClickOutside) = 'hideDropDown()'
           class="toolbar-right"
           id="_toolbar-right"

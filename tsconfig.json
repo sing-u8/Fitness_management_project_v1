@@ -30,12 +30,12 @@
             "@guards/*": ["./src/app/core/guards/*"],
             "@helpers/*": ["./src/app/helper/*"],
 
-            "@redwhale/gym/*": ["./src/app/feature/redwhale/gym/*"],
+            "@redwhale/center/*": ["src/app/feature/redwhale/center/*"],
             "@redwhale/auth/*": ["./src/app/feature/redwhale/auth/*"],
             "@redwhale/redwhale-home/*": ["./src/app/feature/redwhale/redwhale-home/*"],
 
             "@appStore/*": ["./src/app/store/*"],
-            "@gymStore/*": ["./src/app/feature/redwhale/gym/store/*"]
+            "@centerStore/*": ["src/app/feature/redwhale/center/store/*"]
         }
     },
     "angularCompilerOptions": {

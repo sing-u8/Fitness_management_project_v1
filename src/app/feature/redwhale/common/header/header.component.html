@@ -7,39 +7,39 @@
             <img src="assets/images/logo/redwhale-logo-red-small.svg" (click)="goRouterLink('/redwhale-home')" />
         </div>
         <div
-            class="selected-gym d-flex align-items-center"
+            class="selected-center d-flex align-items-center"
             [class.open]="popupGymListVisible"
             (click)="showPopupGymList($event)"
-            *ngIf="url != '/redwhale-home' && user.selected_gym"
+            *ngIf="url != '/redwhale-home' && user.selected_center"
         >
             <rw-avatar
-                [image]="user.selected_gym.picture"
-                text="{{ user.selected_gym.name }}"
+                [image]="user.selected_center.picture"
+                text="{{ user.selected_center.name }}"
                 size="26"
                 fontSize="13"
-                [backgroundColor]="user.selected_gym.color"
+                [backgroundColor]="user.selected_center.color"
             ></rw-avatar>
-            <span class="name rw-typo-bodytext2">{{ user.selected_gym.name }}</span>
+            <span class="name rw-typo-bodytext2">{{ user.selected_center.name }}</span>
             <span class="mdi mdi-menu-down"></span>
             <div
-                class="popup-gym-list"
+                class="popup-center-list"
                 *ngIf="popupGymListVisible"
                 (click)="$event.stopPropagation()"
                 (rwClickOutside)="hidePopupGymList()"
             >
-                <div class="selected-gym-info d-flex">
+                <div class="selected-center-info d-flex">
                     <div>
                         <rw-avatar
-                            [image]="user.selected_gym.picture"
-                            text="{{ user.selected_gym.name }}"
+                            [image]="user.selected_center.picture"
+                            text="{{ user.selected_center.name }}"
                             size="56"
                             fontSize="22"
-                            [backgroundColor]="user.selected_gym.color"
+                            [backgroundColor]="user.selected_center.color"
                         ></rw-avatar>
                     </div>
                     <div class="d-flex flex-column justify-content-center">
-                        <span class="rw-typo-title2">{{ user.selected_gym.name }}</span>
-                        <span class="rw-typo-subtext2">redwhale.xyz/{{ user.selected_gym.address }}</span>
+                        <span class="rw-typo-title2">{{ user.selected_center.name }}</span>
+                        <span class="rw-typo-subtext2">redwhale.xyz/{{ user.selected_center.address }}</span>
                     </div>
                 </div>
                 <div class="h-line"></div>
@@ -61,24 +61,24 @@
                 <div class="label rw-typo-subtext2">
                     <span>다른 센터로 이동하기</span>
                 </div>
-                <div class="gym-list">
+                <div class="center-list">
                     <div class="scroll-y">
                         <div
-                            class="gym d-flex align-items-center"
-                            *ngFor="let gym of gymList; let i = index"
-                            (click)="changeGym(gym)"
+                            class="center d-flex align-items-center"
+                            *ngFor="let center of centerList; let i = index"
+                            (click)="changeGym(center)"
                         >
                             <rw-avatar
-                                [image]="gym.picture"
-                                text="{{ gym.name }}"
+                                [image]="center.picture"
+                                text="{{ center.name }}"
                                 size="24"
                                 fontSize="13"
-                                [backgroundColor]="gym.color"
+                                [backgroundColor]="center.color"
                             ></rw-avatar>
-                            <span class="rw-typo-bodytext2">{{ gym.name }}</span>
+                            <span class="rw-typo-bodytext2">{{ center.name }}</span>
                             <div
                                 class="selected d-flex justify-content-center align-items-center"
-                                *ngIf="user.selected_gym.address == gym.address"
+                                *ngIf="user.selected_center.address == center.address"
                             >
                                 <div class="dot"></div>
                                 <span class="rw-typo-subtext2">접속중</span>
@@ -121,7 +121,7 @@
             <div class="menu-item-selected-line" *ngIf="(drawer$ | async)?.tabName == 'notification'"></div>
         </div>
         <div class="v-line-home" *ngIf="url == '/redwhale-home'"></div>
-        <div class="v-line-gym" *ngIf="url != '/redwhale-home'"></div>
+        <div class="v-line-center" *ngIf="url != '/redwhale-home'"></div>
         <div
             class="avatar d-flex align-items-center"
             [class.menu-item]="url == '/redwhale-home'"
@@ -130,13 +130,13 @@
             (click)="showAvatarMenu($event)"
         >
             <rw-avatar
-                [image]="user.picture[0]?.url"
-                text="{{ user.nick_name ?? user.name }}"
+                [image]="user.picture"
+                text="{{ user.name }}"
                 size="24"
                 fontSize="13"
                 [backgroundColor]="user.color"
             ></rw-avatar>
-            <span class="name rw-typo-bodytext2" *ngIf="url == '/redwhale-home'">{{ user.nick_name ?? user.name }}님</span>
+            <span class="name rw-typo-bodytext2" *ngIf="url == '/redwhale-home'">{{ user.name }}님</span>
             <div
                 class="avatar-menu"
                 *ngIf="avatarMenuVisible"
@@ -146,15 +146,15 @@
                 <div class="profile d-flex">
                     <div>
                         <rw-avatar
-                            [image]="user.picture[0]?.url"
-                            text="{{ user.nick_name ?? user.name }}"
+                            [image]="user.picture"
+                            text="{{ user.name }}"
                             size="56"
                             fontSize="22"
                             [backgroundColor]="user.color"
                         ></rw-avatar>
                     </div>
                     <div class="d-flex flex-column justify-content-center">
-                        <span class="rw-typo-title2">{{ user.nick_name ?? user.name }}님</span>
+                        <span class="rw-typo-title2">{{ user.name }}님</span>
                         <span class="rw-typo-subtext2">{{ user.email }}</span>
                     </div>
                 </div>

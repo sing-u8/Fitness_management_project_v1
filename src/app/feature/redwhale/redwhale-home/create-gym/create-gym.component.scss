@@ -48,7 +48,7 @@ section {
         width: 100%;
         background-color: var(--background-color);
 
-        .create-gym-outer-container {
+        .create-center-outer-container {
             display: flex;
             justify-content: center;
             padding-top: 40px;
@@ -56,7 +56,7 @@ section {
             @media (max-width: 885px) {
                 justify-content: flex-start;
             }
-            .create-gym-container {
+            .create-center-container {
                 width: $containerWidth + 40px; // + side paddings(20px)
                 padding: 0px 20px;
                 height: 100%;

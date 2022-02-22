@@ -3,7 +3,7 @@ import { Router } from '@angular/router'
 import { FormBuilder, FormControl, Validators } from '@angular/forms'
 
 import { CenterService } from '@services/center.service'
-import { FileService, FileTag } from '@services/file.service'
+import { FileService, FileTypeCode } from '@services/file.service'
 
 // ngrx
 import { Store } from '@ngrx/store'
@@ -74,16 +74,16 @@ export class CreateGymComponent implements OnInit {
     }
 
     // -------------------------------photo funcs---------------------------------//
-    registerPhoto(photoType: FileTag, photoEle: any) {
+    registerPhoto(photoType: FileTypeCode, photoEle: any) {
         this.onChangeFile(photoType, photoEle.files)
-        photoType == 'gym-picture' ? this.toggleCenterProfileFlag() : this.toggleCenterBackgroundFlag()
+        photoType == 'center-picture' ? this.toggleCenterProfileFlag() : this.toggleCenterBackgroundFlag()
     }
-    removePhoto(photoType: FileTag) {
+    removePhoto(photoType: FileTypeCode) {
         this.resetPhotoTexts(photoType)
-        photoType == 'gym-picture' ? this.toggleCenterProfileFlag() : this.toggleCenterBackgroundFlag()
+        photoType == 'center-picture' ? this.toggleCenterProfileFlag() : this.toggleCenterBackgroundFlag()
     }
 
-    onChangeFile(photoType: FileTag, photoFile: FileList) {
+    onChangeFile(photoType: FileTypeCode, photoFile: FileList) {
         if (!this.isFileExist(photoFile)) return
 
         this.localPhotoFiles[photoType] = photoFile
@@ -109,25 +109,25 @@ export class CreateGymComponent implements OnInit {
         }
         return true
     }
-    setPhotoTag(photoType: FileTag): FileTag {
-        let tag: FileTag = undefined
-        if (photoType === 'gym-picture') {
-            tag = 'gym-picture'
-        } else if (photoType === 'gym-background') {
-            tag = 'gym-background'
+    setPhotoTag(photoType: FileTypeCode): FileTypeCode {
+        let tag: FileTypeCode = undefined
+        if (photoType === 'center-picture') {
+            tag = 'center-picture'
+        } else if (photoType === 'center-background') {
+            tag = 'center-background'
         }
         return tag
     }
-    setPhotoReqbodyProp(photoType: FileTag) {
+    setPhotoReqbodyProp(photoType: FileTypeCode) {
         let prop = ''
-        if (photoType === 'gym-picture') {
+        if (photoType === 'center-picture') {
             prop = 'picture'
-        } else if (photoType === 'gym-background') {
+        } else if (photoType === 'center-background') {
             prop = 'background'
         }
         return prop
     }
-    resetPhotoTexts(photoType: FileTag) {
+    resetPhotoTexts(photoType: FileTypeCode) {
         this.photoName[photoType] = ''
         this.photoSrc[photoType] = ''
         this.localPhotoFiles[photoType] = null
@@ -143,8 +143,8 @@ export class CreateGymComponent implements OnInit {
                     /*
                     address: "heasdf", background: null, color: "#FFA5C1", id: 225, name: "hello123", permissions: [], picture: null, role_code:"administrator", role_name:"운영자", timezone: "Asia/Seoul"
                 */
-                    this.createApiPhotoFile('gym-background', v, () => {
-                        this.createApiPhotoFile('gym-picture', v, () => {
+                    this.createApiPhotoFile('center-background', v, () => {
+                        this.createApiPhotoFile('center-picture', v, () => {
                             this.goRouterLink('/redwhale-home')
                             this.nxStore.dispatch(showToast({ text: '새로운 센터가 생성되었습니다.' }))
                         })
@@ -156,29 +156,31 @@ export class CreateGymComponent implements OnInit {
                 },
             })
     }
-    createApiPhotoFile(photoType: FileTag, gymInfo, callback?: () => void) {
-        const gymId = gymInfo.id
+    createApiPhotoFile(photoType: FileTypeCode, centerInfo, callback?: () => void) {
+        const centerId = centerInfo.id
         const tag = this.setPhotoTag(photoType)
         const prop = this.setPhotoReqbodyProp(photoType)
-        this.apiCreateFileReq['address'] = gymInfo.address
+        this.apiCreateFileReq['address'] = centerInfo.address
         if (this.localPhotoFiles[photoType]) {
-            this.fileService.createFile({ tag: tag, gym_id: gymId }, this.localPhotoFiles[photoType]).subscribe({
-                next: (fileList) => {
-                    const location = fileList[0]['location']
-                    this.apiCreateFileReq[prop] = location
-                    this.centerService.updateCenter(gymId, this.apiCreateFileReq).subscribe({
-                        next: (gym) => {
-                            if (callback) callback()
-                        },
-                        error: (e) => {
-                            console.log('createApiPhotoFile-updateCenter error: ', e)
-                        },
-                    })
-                },
-                error: (e) => {
-                    console.log('createApiPhotoFile error: ', e)
-                },
-            })
+            this.fileService
+                .createFile({ type_code: tag, center_id: centerId }, this.localPhotoFiles[photoType])
+                .subscribe({
+                    next: (fileList) => {
+                        const location = fileList[0]['location']
+                        this.apiCreateFileReq[prop] = location
+                        this.centerService.updateCenter(centerId, this.apiCreateFileReq).subscribe({
+                            next: (center) => {
+                                if (callback) callback()
+                            },
+                            error: (e) => {
+                                console.log('createApiPhotoFile-updateCenter error: ', e)
+                            },
+                        })
+                    },
+                    error: (e) => {
+                        console.log('createApiPhotoFile error: ', e)
+                    },
+                })
         } else {
             if (callback) callback()
         }

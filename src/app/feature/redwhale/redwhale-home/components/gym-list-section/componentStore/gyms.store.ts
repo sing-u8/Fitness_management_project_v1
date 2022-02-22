@@ -14,20 +14,20 @@ import { User } from '@schemas/user'
 import * as _ from 'lodash'
 
 export interface CentersState {
-    gyms: Array<Center>
+    centers: Array<Center>
     loading: Loading
 }
-export const gymsInit: CentersState = { gyms: [], loading: 'idle' }
+export const centersInit: CentersState = { centers: [], loading: 'idle' }
 
 @Injectable()
 export class GymsStore extends ComponentStore<CentersState> {
-    public readonly gyms$ = this.select((s) => s.gyms)
+    public readonly centers$ = this.select((s) => s.centers)
     public readonly loading$ = this.select((s) => s.loading)
 
     private readonly user: User = this.storageService.getUser()
 
     constructor(private usersCenterService: UsersCenterService, private storageService: StorageService) {
-        super(gymsInit)
+        super(centersInit)
     }
 
     getCenters() {
@@ -35,30 +35,30 @@ export class GymsStore extends ComponentStore<CentersState> {
         this.loadGymsEffect('pending')
     }
 
-    readonly updateGyms = this.updater((state, gyms: Array<Center>) => ({
+    readonly updateGyms = this.updater((state, centers: Array<Center>) => ({
         ...state,
-        gyms: gyms,
+        centers: centers,
         loading: 'done',
     }))
 
-    readonly filterGym = this.updater((state, gymId: string) => {
-        const filteredGyms = _.filter(this.get().gyms, (gym) => Number(gym.id) !== Number(gymId))
+    readonly filterGym = this.updater((state, centerId: string) => {
+        const filteredGyms = _.filter(this.get().centers, (center) => Number(center.id) !== Number(centerId))
         return {
             ...state,
-            gyms: filteredGyms,
+            centers: filteredGyms,
         }
     })
 
-    readonly leaveGymEffect = this.effect((gymId$: Observable<string>) => {
-        return gymId$.pipe(
-            switchMap((gymId) =>
-                this.usersCenterService.leave(this.user.id, gymId).pipe(
+    readonly leaveGymEffect = this.effect((centerId$: Observable<string>) => {
+        return centerId$.pipe(
+            switchMap((centerId) =>
+                this.usersCenterService.leave(this.user.id, centerId).pipe(
                     tap({
                         next: (_) => {
-                            this.filterGym(gymId)
+                            this.filterGym(centerId)
                         },
                         error: (err) => {
-                            console.log('gymsStore - usersCenterService.leave err: ', err)
+                            console.log('centersStore - usersCenterService.leave err: ', err)
                         },
                     }),
                     catchError(() => EMPTY)
@@ -75,10 +75,10 @@ export class GymsStore extends ComponentStore<CentersState> {
             switchMap((_) =>
                 this.usersCenterService.getCenterList(this.user.id).pipe(
                     tap({
-                        next: (gyms) => {
-                            this.updateGyms(gyms)
+                        next: (centers) => {
+                            this.updateGyms(centers)
                         },
-                        error: (e) => console.log('gymsStore - usersCenterService.getCenterList err: ', e),
+                        error: (e) => console.log('centersStore - usersCenterService.getCenterList err: ', e),
                     }),
                     catchError(() => EMPTY)
                 )

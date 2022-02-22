@@ -1,6 +1,6 @@
 export interface File {
-  url: string
-  originalname: string
-  mimetype: string
-  size: number
+    url: string
+    originalname: string
+    mimetype: string
+    size: number
 }
