@@ -76,11 +76,11 @@ export class CreateGymComponent implements OnInit {
     // -------------------------------photo funcs---------------------------------//
     registerPhoto(photoType: FileTypeCode, photoEle: any) {
         this.onChangeFile(photoType, photoEle.files)
-        photoType == 'center-picture' ? this.toggleCenterProfileFlag() : this.toggleCenterBackgroundFlag()
+        photoType == 'center_picture' ? this.toggleCenterProfileFlag() : this.toggleCenterBackgroundFlag()
     }
     removePhoto(photoType: FileTypeCode) {
         this.resetPhotoTexts(photoType)
-        photoType == 'center-picture' ? this.toggleCenterProfileFlag() : this.toggleCenterBackgroundFlag()
+        photoType == 'center_picture' ? this.toggleCenterProfileFlag() : this.toggleCenterBackgroundFlag()
     }
 
     onChangeFile(photoType: FileTypeCode, photoFile: FileList) {
@@ -111,18 +111,18 @@ export class CreateGymComponent implements OnInit {
     }
     setPhotoTag(photoType: FileTypeCode): FileTypeCode {
         let tag: FileTypeCode = undefined
-        if (photoType === 'center-picture') {
-            tag = 'center-picture'
-        } else if (photoType === 'center-background') {
-            tag = 'center-background'
+        if (photoType === 'center_picture') {
+            tag = 'center_picture'
+        } else if (photoType === 'center_background') {
+            tag = 'center_background'
         }
         return tag
     }
     setPhotoReqbodyProp(photoType: FileTypeCode) {
         let prop = ''
-        if (photoType === 'center-picture') {
+        if (photoType === 'center_picture') {
             prop = 'picture'
-        } else if (photoType === 'center-background') {
+        } else if (photoType === 'center_background') {
             prop = 'background'
         }
         return prop
@@ -143,8 +143,8 @@ export class CreateGymComponent implements OnInit {
                     /*
                     address: "heasdf", background: null, color: "#FFA5C1", id: 225, name: "hello123", permissions: [], picture: null, role_code:"administrator", role_name:"운영자", timezone: "Asia/Seoul"
                 */
-                    this.createApiPhotoFile('center-background', v, () => {
-                        this.createApiPhotoFile('center-picture', v, () => {
+                    this.createApiPhotoFile('center_background', v, () => {
+                        this.createApiPhotoFile('center_picture', v, () => {
                             this.goRouterLink('/redwhale-home')
                             this.nxStore.dispatch(showToast({ text: '새로운 센터가 생성되었습니다.' }))
                         })

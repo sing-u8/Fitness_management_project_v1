@@ -133,7 +133,7 @@ export class SettingModalComponent implements OnChanges, AfterViewChecked, OnIni
         switch (activeModalType) {
             case 'NAME':
                 this.toast_menu_text = '이름이'
-                return { nick_name: userData }
+                return { name: userData }
             case 'SEX':
                 this.toast_menu_text = '성별이'
                 return { sex: userData }

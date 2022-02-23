@@ -3,10 +3,7 @@ import { Routes, RouterModule } from '@angular/router'
 
 import { MypageComponent } from './mypage/mypage.component'
 
-import { ExerciseJournalComponent } from './exercise-journal/exercise-journal.component'
 import { SettingAccountComponent } from './setting-account/setting-account.component'
-import { MembershipComponent } from './membership/membership.component'
-import { ReservationComponent } from './reservation/reservation.component'
 
 const routes: Routes = [
     {
@@ -17,12 +14,7 @@ const routes: Routes = [
     {
         path: '',
         component: MypageComponent,
-        children: [
-            { path: 'exercise-journal', component: ExerciseJournalComponent },
-            { path: 'setting-account', component: SettingAccountComponent },
-            { path: 'membership', component: MembershipComponent },
-            { path: 'reservation', component: ReservationComponent },
-        ],
+        children: [{ path: 'setting-account', component: SettingAccountComponent }],
     },
 ]
 

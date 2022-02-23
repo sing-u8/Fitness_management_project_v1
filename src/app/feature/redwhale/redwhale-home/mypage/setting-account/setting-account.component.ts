@@ -201,12 +201,12 @@ export class SettingAccountComponent implements OnInit {
         if (!this.isFileExist(files)) return
         console.log('this.isFileExist(files) : ', this.isFileExist(files))
 
-        const reqBody: CreateFileRequestBody = { type_code: 'user-picture' }
+        const reqBody: CreateFileRequestBody = { type_code: 'user_picture' }
         this.fileservice.createFile(reqBody, files).subscribe((__) => {
             this.usersService.getUser(this.user.id).subscribe({
                 next: (resData) => {
                     this.user.picture = resData['picture'] // .filter((v, i) => i == 0)
-                    this.globalSettingAccountService.setUserAvatar(resData['picture'][0]['url'])
+                    this.globalSettingAccountService.setUserAvatar(resData['picture'])
                     this.storageService.setUser({
                         ...this.user,
                         name: resData['name'],
@@ -262,7 +262,7 @@ export class SettingAccountComponent implements OnInit {
                             picture: resData['picture'],
                         })
                         this.user = this.storageService.getUser()
-                        this.globalSettingAccountService.setUserAvatar(undefined)
+                        this.globalSettingAccountService.setUserAvatar(this.user.picture)
                         this.nxStore.dispatch(showToast({ text: '프로필 사진이 변경되었습니다.' }))
                         this.delAvatarFlag = false
                     },
