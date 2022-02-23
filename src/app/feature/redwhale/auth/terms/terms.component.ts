@@ -9,6 +9,8 @@ import { UsersService } from '@services/users.service'
 
 import { User } from '@schemas/user'
 
+import * as _ from 'lodash'
+
 // ngrx
 import { Store, select } from '@ngrx/store'
 import { registrationSelector } from '@appStore/selectors'
@@ -130,7 +132,7 @@ export class TermsComponent implements OnInit, OnDestroy {
             })
         )
 
-        if (this.user) {
+        if (!_.isEmpty(this.user)) {
             const requestBody = {
                 service_terms: this.termsEULA,
                 privacy: this.termsPrivacy,
