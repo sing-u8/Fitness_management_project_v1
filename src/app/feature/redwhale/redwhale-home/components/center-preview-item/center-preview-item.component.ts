@@ -18,6 +18,7 @@ export class CenterPreviewItemComponent implements OnInit, AfterViewInit, OnChan
 
     ngOnInit(): void {}
     ngOnChanges(): void {
+        // console.log('preview changes: ', this.centerName)
         this.resetCenterName()
         setTimeout(() => {
             this.initCenterAvatar()

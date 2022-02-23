@@ -1,8 +1,8 @@
 <section class="user-select-none thin-scroll-y " >
     <div class="header">
         <div class="header-text-container">
-          <p class="rw-typo-headline1">1분이면 끝!</p>
-          <p class="rw-typo-headline1">간편하게 센터를 생성해보세요.</p>
+          <p class="rw-typo-headline1">센터 정보를 간편하게</p>
+          <p class="rw-typo-headline1">업데이트해보세요.</p>
           <p class="rw-typo-subtext1 subtext-margin">센터 이름과 url 주소는 언제든지 변경할 수 있어요.</p>
         </div>
 
@@ -26,12 +26,9 @@
               <div class="center-preview">
                 <p class="rw-typo-subtext2 ">미리보기</p>
                 <div class="item-container">
-                  <center-preview-item
-                    [centerName]="centerNameForm.value"
-                    [centerAddress]="centerAddrForm.value"
-                    [centerAvatar]="photoSrc.center_picture"
-                    [centerBackgroundImage]="photoSrc.center_background"
-                  > </center-preview-item>
+                  <center-preview-item centerName={{centerNameForm.value}} centerAddress={{centerAddrForm.value}}
+                    centerAvatar={{photoSrc.center_picture}} centerBackgroundImage={{photoSrc.center_background}}>
+                  </center-preview-item>
                 </div>
               </div>
 
@@ -127,7 +124,7 @@
                     [loadingName]="'create_center'"
                     (onClick) = "(centerNameForm.value != '' && centerNameForm.errors == null)
                                 && (centerAddrForm.value != '' && centerAddrForm.errors == null )
-                              ? createCenter($event) : '' "
+                              ? modifyCenter($event) : '' "
                   >
                     <div
                       class="rw-typo-bodytext1 create-center"
@@ -139,7 +136,7 @@
                       [class.hover-action-nothing]="!((centerNameForm.value != '' && centerNameForm.errors == null)
                                                       && (centerAddrForm.value != '' && centerAddrForm.errors == null ))"
                     >
-                      <span>센터 생성</span>
+                      <span>저장하기</span>
                     </div>
                   </rw-button>
                 </div>

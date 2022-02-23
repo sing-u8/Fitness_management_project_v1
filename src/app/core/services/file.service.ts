@@ -19,6 +19,31 @@ export class FileService {
 
     constructor(private http: HttpClient) {}
 
+    getFile(
+        type_code: FileTypeCode,
+        center_id = '',
+        chat_room_id = '',
+        page = '',
+        pageSize = ''
+    ): Observable<Array<File>> {
+        const url =
+            this.SERVER +
+            `/files?type_code=${type_code}&center_id=${center_id}&chat_room_id=${chat_room_id}&page=${page}&pageSize=${pageSize}`
+
+        const options = {
+            headers: new HttpHeaders({
+                Accept: 'application/json',
+            }),
+        }
+
+        return this.http.get<Response>(url, options).pipe(
+            map((res) => {
+                return res.dataset
+            }),
+            catchError(handleError)
+        )
+    }
+
     createFile(requestBody: CreateFileRequestBody, files: FileList): Observable<Array<File>> {
         const url = this.SERVER + `/files`
 

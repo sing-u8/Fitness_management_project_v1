@@ -94,6 +94,7 @@ export class CenterListItemComponent implements OnInit, AfterViewInit {
     goGymSetting(event) {
         event.stopPropagation()
         event.preventDefault()
+        this.router.navigate(['redwhale-home', 'set-center', this.center.id])
     }
     // <---------------------center service------------------//
 

@@ -14,6 +14,7 @@ import { GymListSectionComponent } from './components/gym-list-section/gym-list-
 import { CenterListItemComponent } from './components/center-list-item/center-list-item.component'
 import { CenterPreviewItemComponent } from './components/center-preview-item/center-preview-item.component'
 import { CreateCenterDirective } from './directives/create-center.directive'
+import { SetCenterComponent } from './set-center/set-center.component'
 
 // ngxSkeletonLoader module
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader'
@@ -25,6 +26,7 @@ import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader'
         CenterListItemComponent,
         CreateGymComponent,
         CenterPreviewItemComponent,
+        SetCenterComponent,
 
         // directive
         CreateCenterDirective,

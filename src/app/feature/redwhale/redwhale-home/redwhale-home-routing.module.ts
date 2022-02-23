@@ -5,6 +5,7 @@ import { AuthGuard } from '@guards/auth.guard'
 
 import { RedwhaleHomeComponent } from './redwhale-home.component'
 import { CreateGymComponent } from './create-gym/create-gym.component'
+import { SetCenterComponent } from './set-center/set-center.component'
 
 const routes: Routes = [
     {
@@ -13,9 +14,14 @@ const routes: Routes = [
         component: RedwhaleHomeComponent,
     },
     {
-        path: 'create-gym',
+        path: 'create-center',
         canActivate: [AuthGuard],
         component: CreateGymComponent,
+    },
+    {
+        path: 'set-center/:centerId',
+        canActivate: [AuthGuard],
+        component: SetCenterComponent,
     },
     {
         path: 'mypage',

@@ -12,12 +12,17 @@ import { ClickEmitterType } from '@shared/components/common/button/button.compon
 import { Store } from '@ngrx/store'
 import { showToast } from '@appStore/actions/toast.action'
 
+import * as _ from 'lodash'
+import { combineLatestWith } from 'rxjs/operators'
+import { Center } from '@schemas/center'
+
 @Component({
-    selector: 'create-gym',
-    templateUrl: './create-gym.component.html',
-    styleUrls: ['./create-gym.component.scss'],
+    selector: 'rw-set-center',
+    templateUrl: './set-center.component.html',
+    styleUrls: ['./set-center.component.scss'],
 })
-export class CreateGymComponent implements OnInit {
+export class SetCenterComponent implements OnInit {
+    // skeleton 필요
     public isCenterProfileRegistered: boolean
     public isCenterBackgroundRegistered: boolean
 
@@ -26,7 +31,7 @@ export class CreateGymComponent implements OnInit {
     public photoSrc: { center_picture: string; center_background: string }
     public photoName: { center_picture: string; center_background: string }
 
-    private apiCreateFileReq: { address: string; picture?: string; background?: string }
+    private apiCreateFileReq: { picture?: string; background?: string }
     private localPhotoFiles: { center_picture: FileList; center_background: FileList }
 
     public centerNameForm: FormControl
@@ -39,6 +44,8 @@ export class CreateGymComponent implements OnInit {
         empty: '센터 url 주소를 입력해주세요.',
         maxlength: '15자를 초과하였습니다.',
     }
+
+    public center: Center = undefined
 
     constructor(
         private fb: FormBuilder,
@@ -55,7 +62,7 @@ export class CreateGymComponent implements OnInit {
         this.photoSrc = { center_picture: '', center_background: '' }
         this.photoName = { center_picture: '', center_background: '' }
 
-        this.apiCreateFileReq = { address: '' }
+        this.apiCreateFileReq = { picture: undefined, background: undefined }
         this.localPhotoFiles = { center_picture: null, center_background: null }
 
         // formbulder
@@ -63,6 +70,35 @@ export class CreateGymComponent implements OnInit {
         this.centerAddrForm = this.fb.control('', {
             validators: [Validators.maxLength(15)],
         })
+
+        const urlList = _.split(this.router.url, '/')
+        const centerId = urlList[urlList.length - 1]
+
+        this.centerService
+            .getCenter(centerId)
+            .pipe(
+                combineLatestWith(
+                    this.fileService.getFile('center_picture', centerId),
+                    this.fileService.getFile('center_background', centerId)
+                )
+            )
+            .subscribe(([center, cp, cbg]) => {
+                this.center = center
+                if (center.background) {
+                    this.photoSrc.center_background = cbg[0]?.url ?? undefined
+                    this.photoName.center_background = cbg[0]?.originalname ?? undefined
+                    this.isCenterBackgroundRegistered = true
+                }
+                if (center.picture) {
+                    this.photoSrc.center_picture = cp[0]?.url ?? undefined
+                    this.photoName.center_picture = cp[0]?.originalname ?? undefined
+                    this.isCenterProfileRegistered = true
+                }
+
+                this.centerNameForm.setValue(center.name)
+                this.centerAddrForm.setValue(center.address)
+                console.log('center cp cbg : ', center, cp, cbg)
+            })
     }
 
     ngOnInit(): void {}
@@ -136,56 +172,29 @@ export class CreateGymComponent implements OnInit {
     // <---- photo file control helper function ------//
     // ------------------------------------------------------------------------//
 
-    createCenter(btLoadingFns: ClickEmitterType) {
+    modifyCenter(btLoadingFns: ClickEmitterType) {
         btLoadingFns.showLoading()
-        this.centerService
-            .createCenter({ name: this.centerNameForm.value, address: this.centerAddrForm.value })
-            .subscribe({
-                next: (v) => {
-                    /*
-                    address: "heasdf", background: null, color: "#FFA5C1", id: 225, name: "hello123", permissions: [], picture: null, role_code:"administrator", role_name:"운영자", timezone: "Asia/Seoul"
-                */
-                    this.createApiPhotoFile('center_background', v, () => {
-                        this.createApiPhotoFile('center_picture', v, () => {
+
+        this.createApiPhotoFileAsPossible('center_background', this.center, () => {
+            this.createApiPhotoFileAsPossible('center_picture', this.center, () => {
+                this.centerService
+                    .updateCenter(this.center.id, {
+                        name: this.centerNameForm.value,
+                        address: this.centerAddrForm.value,
+                        ...this.apiCreateFileReq,
+                    })
+                    .subscribe({
+                        next: (center) => {
                             btLoadingFns.hideLoading()
                             this.goRouterLink('/redwhale-home')
-                            this.nxStore.dispatch(showToast({ text: '새로운 센터가 생성되었습니다.' }))
-                        })
+                            this.nxStore.dispatch(showToast({ text: '센터 정보가 수정되었습니다.' }))
+                        },
+                        error: (e) => {
+                            console.log('createApiPhotoFile-updateCenter error: ', e)
+                        },
                     })
-                },
-                error: (e) => {
-                    btLoadingFns.hideLoading()
-                },
             })
-    }
-    createApiPhotoFile(photoType: FileTypeCode, centerInfo, callback?: () => void) {
-        const centerId = centerInfo.id
-        const tag = this.setPhotoTag(photoType)
-        const prop = this.setPhotoReqbodyProp(photoType)
-        this.apiCreateFileReq['address'] = centerInfo.address
-        if (this.localPhotoFiles[photoType]) {
-            this.fileService
-                .createFile({ type_code: tag, center_id: centerId }, this.localPhotoFiles[photoType])
-                .subscribe({
-                    next: (fileList) => {
-                        const location = fileList[0]['location']
-                        this.apiCreateFileReq[prop] = location
-                        this.centerService.updateCenter(centerId, this.apiCreateFileReq).subscribe({
-                            next: (center) => {
-                                if (callback) callback()
-                            },
-                            error: (e) => {
-                                console.log('createApiPhotoFile-updateCenter error: ', e)
-                            },
-                        })
-                    },
-                    error: (e) => {
-                        console.log('createApiPhotoFile error: ', e)
-                    },
-                })
-        } else {
-            if (callback) callback()
-        }
+        })
     }
 
     createApiPhotoFileAsPossible(photoType: FileTypeCode, centerInfo, callback?: () => void) {

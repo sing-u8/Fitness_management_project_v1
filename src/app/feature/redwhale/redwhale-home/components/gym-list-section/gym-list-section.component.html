@@ -9,7 +9,7 @@
           </div>
 
           <div class="rw-typo-title2" rw-button rwButtonWidth="250" rwButtonHeight="50" rwButtonColor="var(--red)"
-            (click)="goRouterLink('/redwhale-home/create-gym')">
+            (click)="goRouterLink('/redwhale-home/create-center')">
             <img src="assets/icons/etc/plus-gym.svg">
             <span>센터 생성</span>
           </div>
@@ -17,7 +17,7 @@
         </section>
 
         <section *ngIf="(centersLoading$ | async) == 'done'; else loading" class="center-list-container">
-          <div *ngIf="(centers$ | async).length == 0" class='center-init-item' (click)="goRouterLink('/redwhale-home/create-gym')">
+          <div *ngIf="(centers$ | async).length == 0" class='center-init-item' (click)="goRouterLink('/redwhale-home/create-center')">
             <img src="assets/icons/etc/plus-gym.svg">
           </div>
           <ng-template ngFor let-item [ngForOf]="(centers$ | async)" let-i="index">
