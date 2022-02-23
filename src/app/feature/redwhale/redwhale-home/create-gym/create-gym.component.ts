@@ -5,9 +5,13 @@ import { FormBuilder, FormControl, Validators } from '@angular/forms'
 import { CenterService } from '@services/center.service'
 import { FileService, FileTypeCode } from '@services/file.service'
 
+// components
+import { ClickEmitterType } from '@shared/components/common/button/button.component'
+
 // ngrx
 import { Store } from '@ngrx/store'
 import { showToast } from '@appStore/actions/toast.action'
+
 @Component({
     selector: 'create-gym',
     templateUrl: './create-gym.component.html',
@@ -24,11 +28,11 @@ export class CreateGymComponent implements OnInit {
     // public InputWarnings: { centerName: boolean; centerAddress: boolean }
     // public inputWarningTexts: { centerAddress: string; centerName: string }
 
-    public photoSrc: { centerProfile: string; centerBackground: string }
-    public photoName: { centerProfile: string; centerBackground: string }
+    public photoSrc: { center_picture: string; center_background: string }
+    public photoName: { center_picture: string; center_background: string }
 
     private apiCreateFileReq: { address: string; picture?: string; background?: string }
-    private localPhotoFiles: { centerProfile: FileList; centerBackground: FileList }
+    private localPhotoFiles: { center_picture: FileList; center_background: FileList }
 
     public centerNameForm: FormControl
     public centerAddrForm: FormControl
@@ -53,11 +57,11 @@ export class CreateGymComponent implements OnInit {
 
         this.centerCreationAvailable = false
 
-        this.photoSrc = { centerProfile: '', centerBackground: '' }
-        this.photoName = { centerProfile: '', centerBackground: '' }
+        this.photoSrc = { center_picture: '', center_background: '' }
+        this.photoName = { center_picture: '', center_background: '' }
 
         this.apiCreateFileReq = { address: '' }
-        this.localPhotoFiles = { centerProfile: null, centerBackground: null }
+        this.localPhotoFiles = { center_picture: null, center_background: null }
 
         // formbulder
         this.centerNameForm = this.fb.control('')
@@ -92,6 +96,8 @@ export class CreateGymComponent implements OnInit {
         fileReader.onload = (e) => {
             this.photoSrc[photoType] = e.target.result as string
             this.photoName[photoType] = photoFile[0].name
+
+            console.log('photoSrc , photoName : ', this.photoSrc, ' - ', this.photoName)
         }
         fileReader.readAsDataURL(photoFile[0])
     }
@@ -135,7 +141,8 @@ export class CreateGymComponent implements OnInit {
     // <---- photo file control helper function ------//
     // ------------------------------------------------------------------------//
 
-    createCenter() {
+    createCenter(btLoadingFns: ClickEmitterType) {
+        btLoadingFns.showLoading()
         this.centerService
             .createCenter({ name: this.centerNameForm.value, address: this.centerAddrForm.value })
             .subscribe({
@@ -145,12 +152,14 @@ export class CreateGymComponent implements OnInit {
                 */
                     this.createApiPhotoFile('center_background', v, () => {
                         this.createApiPhotoFile('center_picture', v, () => {
+                            btLoadingFns.hideLoading()
                             this.goRouterLink('/redwhale-home')
                             this.nxStore.dispatch(showToast({ text: '새로운 센터가 생성되었습니다.' }))
                         })
                     })
                 },
                 error: (e) => {
+                    btLoadingFns.hideLoading()
                     // this.setInputWarning('centerAddress', true)
                     // this.setInputWarningText('centerAddress', e.message)
                 },

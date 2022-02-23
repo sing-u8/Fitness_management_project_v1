@@ -184,10 +184,14 @@ section {
     .create-center {
         @include setting-container-common();
         height: 55px;
-        margin-bottom: 20px;
-
         font-size: 1.5rem;
         letter-spacing: -0.23px;
+    }
+
+    .button_container {
+        @include setting-container-common();
+        margin-bottom: 20px;
+        position: relative;
     }
 }
 

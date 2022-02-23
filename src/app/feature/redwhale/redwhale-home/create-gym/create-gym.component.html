@@ -27,7 +27,7 @@
                 <p class="rw-typo-subtext2 ">미리보기</p>
                 <div class="item-container">
                   <center-preview-item centerName={{centerNameForm.value}} centerAddress={{centerAddrForm.value}}
-                    centerAvatar={{photoSrc.centerProfile}} centerBackgroundImage={{photoSrc.centerBackground}}>
+                    centerAvatar={{photoSrc.center_picture}} centerBackgroundImage={{photoSrc.center_background}}>
                   </center-preview-item>
                 </div>
               </div>
@@ -74,7 +74,7 @@
                 <div class="setting-picture-container picture-container-mb-1">
                   <p class="rw-typo-subtext2">센터 프로필 사진</p>
                   <div class="d-flex align-items-center">
-                    <p class="rw-typo-bodytext1 picture-name">{{photoName.centerProfile}}</p>
+                    <p class="rw-typo-bodytext1 picture-name">{{photoName.center_picture}}</p>
                     <div (click)="centerProfile.click()" *ngIf="isCenterProfileRegistered == false "
                       class="cg-typo-subtext register-button" rw-button rwButtonColor="var(--darkgrey)">
                       <span class="mdi mdi-plus"></span>
@@ -94,7 +94,7 @@
                 <div class="setting-picture-container picture-container-mb-2">
                   <p class="rw-typo-subtext2">센터 배경 사진</p>
                   <div class="d-flex align-items-center">
-                    <p class="rw-typo-bodytext1 picture-name">{{photoName.centerBackground}}</p>
+                    <p class="rw-typo-bodytext1 picture-name">{{photoName.center_background}}</p>
                     <div (click)="centerBackground.click()" *ngIf="isCenterBackgroundRegistered == false "
                       rw-button rwButtonColor="var(--darkgrey)"
                       class="cg-typo-subtext register-button"
@@ -115,21 +115,32 @@
                   </div>
                 </div>
 
-                <div
-                  class="rw-typo-bodytext1 create-center"
-                  rw-button rwButtonColor="var(--grey)"
-                  [style]="(centerNameForm.value != '' && centerNameForm.errors == null)
-                            && (centerAddrForm.value != '' && centerAddrForm.errors == null )
-                          ? 'backgroundColor:var(--red); '
-                          : 'backgroundColor:var(--grey); cursor : initial;' "
-                  [class.hover-action-nothing]="!((centerNameForm.value != '' && centerNameForm.errors == null)
-                                                  && (centerAddrForm.value != '' && centerAddrForm.errors == null ))"
-                  (click)="(centerNameForm.value != '' && centerNameForm.errors == null)
-                            && (centerAddrForm.value != '' && centerAddrForm.errors == null )
-                          ? createCenter() : '' "
-                >
-                  <span>센터 생성</span>
+                <div class="button_container">
+                  <rw-button
+                    id="create_center"
+                    [height]="'55'"
+                    [width]="'484'"
+                    [color]="'var(--red)'"
+                    [loadingName]="'create_center'"
+                    (onClick) = "(centerNameForm.value != '' && centerNameForm.errors == null)
+                                && (centerAddrForm.value != '' && centerAddrForm.errors == null )
+                              ? createCenter($event) : '' "
+                  >
+                    <div
+                      class="rw-typo-bodytext1 create-center"
+                      rw-button rwButtonColor="var(--grey)"
+                      [style]="(centerNameForm.value != '' && centerNameForm.errors == null)
+                                && (centerAddrForm.value != '' && centerAddrForm.errors == null )
+                              ? 'backgroundColor:var(--red); '
+                              : 'backgroundColor:var(--grey); cursor : initial;' "
+                      [class.hover-action-nothing]="!((centerNameForm.value != '' && centerNameForm.errors == null)
+                                                      && (centerAddrForm.value != '' && centerAddrForm.errors == null ))"
+                    >
+                      <span>센터 생성</span>
+                    </div>
+                  </rw-button>
                 </div>
+
 
               </div>
             </div>
