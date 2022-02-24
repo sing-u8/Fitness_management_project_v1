@@ -14,7 +14,7 @@
           rwButtonBorderColor="var(--font-color)"
           (click) = "goRouterLink('/redwhale-home')"
         >
-            <span class="mdi mdi-close"></span>
+            <span class="mdi mdi-close close-size"></span>
             <span>닫기</span>
         </div>
     </div>
@@ -128,7 +128,7 @@
                                 && (centerAddrForm.value != '' && !centerAddrForm.errors )
                               ? modifyCenter($event) : '' "
                   >
-                      <span>저장하기</span>
+                      <span class="button-text">저장하기</span>
                   </rw-button>
                 </div>
 

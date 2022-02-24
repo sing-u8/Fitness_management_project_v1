@@ -76,7 +76,8 @@ export class GymsStore extends ComponentStore<CentersState> {
                 this.usersCenterService.getCenterList(this.user.id).pipe(
                     tap({
                         next: (centers) => {
-                            this.updateGyms(centers)
+                            const filteredCenters = centers.filter((center) => center.role_code != 'member')
+                            this.updateGyms(filteredCenters)
                         },
                         error: (e) => console.log('centersStore - usersCenterService.getCenterList err: ', e),
                     }),

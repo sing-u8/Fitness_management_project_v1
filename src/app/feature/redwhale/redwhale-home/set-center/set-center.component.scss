@@ -30,17 +30,21 @@ section {
 
         .header-text-container {
             width: $containerWidth;
-            margin-bottom: 40px;
+            margin-bottom: 25px;
         }
 
         .subtext-margin {
-            margin-top: 10px;
+            margin-top: 7px;
         }
 
         .close-button {
             position: absolute;
             top: 36px;
             right: 36px;
+        }
+
+        .close-size {
+            font-size: 1.5rem;
         }
     }
 
@@ -153,7 +157,7 @@ section {
             height: 43px;
         }
         .picture-name {
-            margin-right: 10px;
+            margin-right: 14px;
             width: 260px;
             height: 20px;
             text-align: end;
@@ -209,6 +213,10 @@ section {
 .cg-typo-subtext {
     font-size: 1.2rem;
     line-height: 1.4;
-    font-weight: normal;
+    font-weight: 500;
     letter-spacing: -0.14px;
+}
+
+.button-text {
+    font-weight: 700;
 }

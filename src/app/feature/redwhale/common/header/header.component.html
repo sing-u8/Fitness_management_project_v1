@@ -4,7 +4,7 @@
             <img src="assets/images/logo/redwhale-wording-logo-red-small.png" />
         </div>
         <div class="home d-flex justify-content-center align-items-center" *ngIf="url != '/redwhale-home'">
-            <img src="assets/images/logo/redwhale-logo-red-small.svg" (click)="goRouterLink('/redwhale-home')" />
+            <img src="assets/icons/main/home.svg" (click)="goRouterLink('/redwhale-home')" />
         </div>
         <div
             class="selected-center d-flex align-items-center"
@@ -16,7 +16,7 @@
                 [image]="user.selected_center.picture"
                 text="{{ user.selected_center.name }}"
                 size="26"
-                fontSize="13"
+                fontSize="11"
                 [backgroundColor]="user.selected_center.color"
             ></rw-avatar>
             <span class="name rw-typo-bodytext2">{{ user.selected_center.name }}</span>
@@ -57,35 +57,39 @@
                         <span class="rw-typo-bodytext2">센터 설정</span>
                     </div>
                 </div>
-                <div class="h-line"></div>
-                <div class="label rw-typo-subtext2">
-                    <span>다른 센터로 이동하기</span>
-                </div>
-                <div class="center-list">
-                    <div class="scroll-y">
-                        <div
-                            class="center d-flex align-items-center"
-                            *ngFor="let center of centerList; let i = index"
-                            (click)="changeGym(center)"
-                        >
-                            <rw-avatar
-                                [image]="center.picture"
-                                text="{{ center.name }}"
-                                size="24"
-                                fontSize="13"
-                                [backgroundColor]="center.color"
-                            ></rw-avatar>
-                            <span class="rw-typo-bodytext2">{{ center.name }}</span>
+
+                <ng-container *ngIf="centerList.length > 1">
+                    <div class="h-line"></div>
+                    <div class="label rw-typo-subtext2">
+                        <span>다른 센터로 이동하기</span>
+                    </div>
+                    <div class="center-list">
+                        <div class="scroll-y">
                             <div
-                                class="selected d-flex justify-content-center align-items-center"
-                                *ngIf="user.selected_center.address == center.address"
+                                class="center d-flex align-items-center"
+                                *ngFor="let center of centerList; let i = index"
+                                (click)="changeGym(center)"
                             >
-                                <div class="dot"></div>
-                                <span class="rw-typo-subtext2">접속중</span>
+                                <rw-avatar
+                                    [image]="center.picture"
+                                    text="{{ center.name }}"
+                                    size="24"
+                                    fontSize="13"
+                                    [backgroundColor]="center.color"
+                                ></rw-avatar>
+                                <span class="rw-typo-bodytext2">{{ center.name }}</span>
+                                <div
+                                    class="selected d-flex justify-content-center align-items-center"
+                                    *ngIf="user.selected_center.address == center.address"
+                                >
+                                    <div class="dot"></div>
+                                    <span class="rw-typo-subtext2">접속중</span>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                </ng-container>
+
             </div>
         </div>
     </div>

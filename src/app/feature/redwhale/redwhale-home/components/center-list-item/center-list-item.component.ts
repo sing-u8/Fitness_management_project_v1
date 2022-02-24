@@ -58,6 +58,7 @@ export class CenterListItemComponent implements OnInit, AfterViewInit {
     ngOnInit(): void {}
 
     ngAfterViewInit(): void {
+        this.initCenterRoleName()
         this.initCenterAvatar()
         this.initCenterBackground()
     }
@@ -76,6 +77,15 @@ export class CenterListItemComponent implements OnInit, AfterViewInit {
         } else {
             this.renderer.setStyle(this.list_header.nativeElement, 'backgroundImage', `url(${this.center.background})`)
             this.renderer.setStyle(this.list_header.nativeElement, 'opacity', '1')
+        }
+    }
+
+    public centerRoleName = ''
+    initCenterRoleName() {
+        if (this.center.role_code == 'owner') {
+            this.centerRoleName = '운영자'
+        } else if (this.center.role_code == 'member') {
+            this.centerRoleName = '회원'
         }
     }
 
@@ -124,11 +134,34 @@ export class CenterListItemComponent implements OnInit, AfterViewInit {
     isSideToolbarPressed(event) {
         return this.doShowDropDown == true ? true : false
     }
+
+    // owner modal
+    public doShowOwnerModal = false
+    public onwerModaldata = {
+        text: '운영자는 센터를 나가실 수 없어요.',
+        subText: `센터 운영자는 운영자 권한 양도
+                    후에 센터 나가기가 가능합니다.`,
+    }
+    showOwerModal() {
+        this.doShowOwnerModal = true
+    }
+    hideOwnerModal() {
+        this.doShowOwnerModal = false
+    }
+
+    leaveGymIfNotOnwer() {
+        if (this.center.role_code != 'owner') {
+            this.leaveGym()
+        } else {
+            this.handleModalCancel()
+            this.showOwerModal()
+        }
+    }
 }
 
 /*
-    ADMIN: 'administrator', - 운영자
-    MANAGER: 'manager',  - 관리자
-    STAFF: 'staff',  - 직원
-    MEMBER: 'member',  - 회원
+    Owner: 'owner', - 운영자
+    // MANAGER: 'manager',  - 관리자
+    // STAFF: 'staff',  - 직원
+    Member: 'member',  - 회원
 */

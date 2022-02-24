@@ -42,12 +42,12 @@
 
 .cmp-button-disabled {
     color: var(--white) !important;
-    background-color: var(--lightgrey) !important;
+    background-color: var(--lightergrey) !important;
     cursor: not-allowed;
 
     &:hover {
         color: var(--white);
-        background-color: var(--lightgrey);
+        background-color: var(--lightergrey);
         opacity: 1;
     }
 }

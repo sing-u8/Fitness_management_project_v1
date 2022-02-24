@@ -40,6 +40,14 @@
             span {
                 color: var(--white);
             }
+
+            &:hover {
+                background-color: var(--red);
+            }
+        }
+
+        &:hover {
+            background-color: var(--background-color);
         }
     }
 }
