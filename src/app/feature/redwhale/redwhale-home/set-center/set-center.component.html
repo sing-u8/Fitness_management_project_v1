@@ -121,23 +121,14 @@
                     [height]="'55'"
                     [width]="'484'"
                     [color]="'var(--red)'"
+                    [disabled]="!((centerNameForm.value != '' && !centerNameForm.errors)
+                                && (centerAddrForm.value != '' && !centerAddrForm.errors ))"
                     [loadingName]="'create_center'"
-                    (onClick) = "(centerNameForm.value != '' && centerNameForm.errors == null)
-                                && (centerAddrForm.value != '' && centerAddrForm.errors == null )
+                    (onClick) = "(centerNameForm.value != '' && !centerNameForm.errors)
+                                && (centerAddrForm.value != '' && !centerAddrForm.errors )
                               ? modifyCenter($event) : '' "
                   >
-                    <div
-                      class="rw-typo-bodytext1 create-center"
-                      rw-button rwButtonColor="var(--grey)"
-                      [style]="(centerNameForm.value != '' && centerNameForm.errors == null)
-                                && (centerAddrForm.value != '' && centerAddrForm.errors == null )
-                              ? 'backgroundColor:var(--red); '
-                              : 'backgroundColor:var(--grey); cursor : initial;' "
-                      [class.hover-action-nothing]="!((centerNameForm.value != '' && centerNameForm.errors == null)
-                                                      && (centerAddrForm.value != '' && centerAddrForm.errors == null ))"
-                    >
                       <span>저장하기</span>
-                    </div>
                   </rw-button>
                 </div>
 

@@ -26,7 +26,7 @@ export class CreateGymComponent implements OnInit {
     public photoSrc: { center_picture: string; center_background: string }
     public photoName: { center_picture: string; center_background: string }
 
-    private apiCreateFileReq: { address: string; picture?: string; background?: string }
+    private apiCreateFileReq: { picture?: string; background?: string }
     private localPhotoFiles: { center_picture: FileList; center_background: FileList }
 
     public centerNameForm: FormControl
@@ -55,8 +55,8 @@ export class CreateGymComponent implements OnInit {
         this.photoSrc = { center_picture: '', center_background: '' }
         this.photoName = { center_picture: '', center_background: '' }
 
-        this.apiCreateFileReq = { address: '' }
-        this.localPhotoFiles = { center_picture: null, center_background: null }
+        this.apiCreateFileReq = { picture: undefined, background: undefined }
+        this.localPhotoFiles = { center_picture: undefined, center_background: undefined }
 
         // formbulder
         this.centerNameForm = this.fb.control('')
@@ -142,50 +142,32 @@ export class CreateGymComponent implements OnInit {
             .createCenter({ name: this.centerNameForm.value, address: this.centerAddrForm.value })
             .subscribe({
                 next: (v) => {
-                    /*
-                    address: "heasdf", background: null, color: "#FFA5C1", id: 225, name: "hello123", permissions: [], picture: null, role_code:"administrator", role_name:"운영자", timezone: "Asia/Seoul"
-                */
-                    this.createApiPhotoFile('center_background', v, () => {
-                        this.createApiPhotoFile('center_picture', v, () => {
-                            btLoadingFns.hideLoading()
-                            this.goRouterLink('/redwhale-home')
-                            this.nxStore.dispatch(showToast({ text: '새로운 센터가 생성되었습니다.' }))
+                    this.createApiPhotoFileAsPossible('center_background', v, () => {
+                        this.createApiPhotoFileAsPossible('center_picture', v, () => {
+                            this.centerService
+                                .updateCenter(v.id, {
+                                    name: this.centerNameForm.value,
+                                    address: this.centerAddrForm.value,
+                                    ...this.apiCreateFileReq,
+                                })
+                                .subscribe({
+                                    next: (center) => {
+                                        btLoadingFns.hideLoading()
+                                        this.goRouterLink('/redwhale-home')
+                                        this.nxStore.dispatch(showToast({ text: '새로운 센터가 생성되었습니다.' }))
+                                    },
+                                    error: (e) => {
+                                        console.log('createApiPhotoFile-updateCenter error: ', e)
+                                    },
+                                })
                         })
                     })
                 },
                 error: (e) => {
                     btLoadingFns.hideLoading()
+                    this.nxStore.dispatch(showToast({ text: '이미 존재하는 센터 주소입니다.' }))
                 },
             })
-    }
-    createApiPhotoFile(photoType: FileTypeCode, centerInfo, callback?: () => void) {
-        const centerId = centerInfo.id
-        const tag = this.setPhotoTag(photoType)
-        const prop = this.setPhotoReqbodyProp(photoType)
-        this.apiCreateFileReq['address'] = centerInfo.address
-        if (this.localPhotoFiles[photoType]) {
-            this.fileService
-                .createFile({ type_code: tag, center_id: centerId }, this.localPhotoFiles[photoType])
-                .subscribe({
-                    next: (fileList) => {
-                        const location = fileList[0]['location']
-                        this.apiCreateFileReq[prop] = location
-                        this.centerService.updateCenter(centerId, this.apiCreateFileReq).subscribe({
-                            next: (center) => {
-                                if (callback) callback()
-                            },
-                            error: (e) => {
-                                console.log('createApiPhotoFile-updateCenter error: ', e)
-                            },
-                        })
-                    },
-                    error: (e) => {
-                        console.log('createApiPhotoFile error: ', e)
-                    },
-                })
-        } else {
-            if (callback) callback()
-        }
     }
 
     createApiPhotoFileAsPossible(photoType: FileTypeCode, centerInfo, callback?: () => void) {

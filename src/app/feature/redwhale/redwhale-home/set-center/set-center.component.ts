@@ -14,6 +14,8 @@ import { showToast } from '@appStore/actions/toast.action'
 
 import * as _ from 'lodash'
 import { combineLatestWith } from 'rxjs/operators'
+import { range } from 'rxjs'
+
 import { Center } from '@schemas/center'
 
 @Component({
@@ -22,7 +24,7 @@ import { Center } from '@schemas/center'
     styleUrls: ['./set-center.component.scss'],
 })
 export class SetCenterComponent implements OnInit {
-    // skeleton 필요
+    // !! skeleton 필요
     public isCenterProfileRegistered: boolean
     public isCenterBackgroundRegistered: boolean
 
@@ -31,7 +33,6 @@ export class SetCenterComponent implements OnInit {
     public photoSrc: { center_picture: string; center_background: string }
     public photoName: { center_picture: string; center_background: string }
 
-    private apiCreateFileReq: { picture?: string; background?: string }
     private localPhotoFiles: { center_picture: FileList; center_background: FileList }
 
     public centerNameForm: FormControl
@@ -62,8 +63,7 @@ export class SetCenterComponent implements OnInit {
         this.photoSrc = { center_picture: '', center_background: '' }
         this.photoName = { center_picture: '', center_background: '' }
 
-        this.apiCreateFileReq = { picture: undefined, background: undefined }
-        this.localPhotoFiles = { center_picture: null, center_background: null }
+        this.localPhotoFiles = { center_picture: undefined, center_background: undefined }
 
         // formbulder
         this.centerNameForm = this.fb.control('')
@@ -114,6 +114,7 @@ export class SetCenterComponent implements OnInit {
         photoType == 'center_picture' ? this.toggleCenterProfileFlag() : this.toggleCenterBackgroundFlag()
     }
     removePhoto(photoType: FileTypeCode) {
+        this.addRemoveRwFileList(this.photoSrc[photoType])
         this.resetPhotoTexts(photoType)
         photoType == 'center_picture' ? this.toggleCenterProfileFlag() : this.toggleCenterBackgroundFlag()
     }
@@ -175,39 +176,52 @@ export class SetCenterComponent implements OnInit {
     modifyCenter(btLoadingFns: ClickEmitterType) {
         btLoadingFns.showLoading()
 
-        this.createApiPhotoFileAsPossible('center_background', this.center, () => {
-            this.createApiPhotoFileAsPossible('center_picture', this.center, () => {
-                this.centerService
-                    .updateCenter(this.center.id, {
-                        name: this.centerNameForm.value,
-                        address: this.centerAddrForm.value,
-                        ...this.apiCreateFileReq,
-                    })
-                    .subscribe({
-                        next: (center) => {
-                            btLoadingFns.hideLoading()
-                            this.goRouterLink('/redwhale-home')
-                            this.nxStore.dispatch(showToast({ text: '센터 정보가 수정되었습니다.' }))
-                        },
-                        error: (e) => {
-                            console.log('createApiPhotoFile-updateCenter error: ', e)
-                        },
-                    })
+        this.centerService
+            .updateCenter(this.center.id, {
+                name: this.centerNameForm.value,
+                address: this.centerAddrForm.value,
             })
-        })
+            .subscribe({
+                next: (center) => {
+                    this.createApiPhotoFileAsPossible('center_background', this.center, () => {
+                        this.createApiPhotoFileAsPossible('center_picture', this.center, () => {
+                            this.centerService
+                                .updateCenter(this.center.id, {
+                                    name: this.centerNameForm.value,
+                                    address: this.centerAddrForm.value,
+                                })
+                                .subscribe({
+                                    next: (center) => {
+                                        this.removeRwFiles(() => {
+                                            btLoadingFns.hideLoading()
+                                            this.goRouterLink('/redwhale-home')
+                                            this.nxStore.dispatch(showToast({ text: '센터 정보가 수정되었습니다.' }))
+                                        })
+                                    },
+                                    error: (e) => {
+                                        console.log('createApiPhotoFile-updateCenter error: ', e)
+                                        btLoadingFns.hideLoading()
+                                    },
+                                })
+                        })
+                    })
+                },
+                error: (e) => {
+                    console.log('createApiPhotoFile-updateCenter error: ', e)
+                    btLoadingFns.hideLoading()
+                    this.nxStore.dispatch(showToast({ text: '이미 존재하는 센터 주소입니다.' }))
+                },
+            })
     }
 
-    createApiPhotoFileAsPossible(photoType: FileTypeCode, centerInfo, callback?: () => void) {
+    createApiPhotoFileAsPossible(photoType: FileTypeCode, centerInfo: Center, callback?: () => void) {
         const centerId = centerInfo.id
         const tag = this.setPhotoTag(photoType)
-        const prop = this.setPhotoReqbodyProp(photoType)
         if (this.localPhotoFiles[photoType]) {
             this.fileService
                 .createFile({ type_code: tag, center_id: centerId }, this.localPhotoFiles[photoType])
                 .subscribe({
                     next: (fileList) => {
-                        const location = fileList[0]['location']
-                        this.apiCreateFileReq[prop] = location
                         if (callback) callback()
                     },
                     error: (e) => {
@@ -216,6 +230,26 @@ export class SetCenterComponent implements OnInit {
                 })
         } else {
             if (callback) callback()
+        }
+    }
+
+    public removeRwFileList: Array<string> = []
+    addRemoveRwFileList(url: string) {
+        if (_.includes(url, 'https://private.redwhale.xyz/')) {
+            this.removeRwFileList.push(url)
+        }
+    }
+    removeRwFiles(cbf?: () => void) {
+        if (this.removeRwFileList.length > 0) {
+            range(1, this.removeRwFileList.length).subscribe((val) => {
+                this.fileService.deleteFile(this.removeRwFileList[val - 1]).subscribe(() => {
+                    if (val == this.removeRwFileList.length) {
+                        cbf ? cbf() : null
+                    }
+                })
+            })
+        } else {
+            cbf ? cbf() : null
         }
     }
 }

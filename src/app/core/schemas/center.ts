@@ -6,8 +6,8 @@ export interface Center {
     timezone: string
     picture: string
     background: string
-    role_code: string
-    role_name: string
+    role_code: string // owner, member
+    role_name: string //
     permissions: Array<string> // 권한 코드 리스트
     // operating_days: string
     // operating_start_time: string
