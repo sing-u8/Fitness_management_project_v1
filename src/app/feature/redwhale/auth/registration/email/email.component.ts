@@ -83,10 +83,11 @@ export class EmailComponent implements OnInit, AfterViewInit, OnDestroy {
         this.veriNumberSubscription = this.veriNumberSelector.subscribe({
             next: (v) => {
                 this.verficationCode = Number(v)
+                console.log('veri Number : ', this.verficationCode)
                 this.authService
                     .checkVerificationCodeMail({
                         email: this.email,
-                        verification_code: Number(this.verficationCode),
+                        verification_code: this.verficationCode,
                     })
                     .subscribe({
                         next: () => {
@@ -173,7 +174,7 @@ export class EmailComponent implements OnInit, AfterViewInit, OnDestroy {
         )
     }
 
-    prevNumber(name: InputName, prevElement: HTMLInputElement) {
+    prevNumber(name: InputName, prevElement: HTMLInputElement, prevName: InputName) {
         if (name == 'one') {
             this.verificationCodeOne = ''
         } else if (name == 'two') {
@@ -186,7 +187,16 @@ export class EmailComponent implements OnInit, AfterViewInit, OnDestroy {
 
         this.error = ''
         this.isNumberValid = false
-        if (prevElement) prevElement.focus()
+        if (prevElement) {
+            prevElement.focus()
+            if (prevName == 'one') {
+                this.verificationCodeOne = ''
+            } else if (prevName == 'two') {
+                this.verificationCodeTwo = ''
+            } else if (prevName == 'three') {
+                this.verificationCodeThree = ''
+            }
+        }
     }
 
     formCheck() {

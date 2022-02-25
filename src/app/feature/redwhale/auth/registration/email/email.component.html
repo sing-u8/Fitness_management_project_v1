@@ -28,7 +28,7 @@
                     maxlength="1"
                     (keypress)="checkDigit($event)"
                     (keyup)="nextNumber($event, 'one', one, two)"
-                    (keyup.backspace)="prevNumber( 'one', null )"
+                    (keyup.backspace)="prevNumber( 'one', null, null )"
                     #one
                 />
                 <input
@@ -39,7 +39,7 @@
                     maxlength="1"
                     (keypress)="checkDigit($event)"
                     (keyup)="nextNumber($event, 'two', two, three)"
-                    (keyup.backspace)="prevNumber( 'two', one)"
+                    (keyup.backspace)="prevNumber( 'two', one, 'one')"
                     #two
                 />
                 <input
@@ -50,7 +50,7 @@
                     maxlength="1"
                     (keypress)="checkDigit($event)"
                     (keyup)="nextNumber($event, 'three', three, four)"
-                    (keyup.backspace)="prevNumber( 'three', two )"
+                    (keyup.backspace)="prevNumber( 'three', two, 'two' )"
                     #three
                 />
                 <input
@@ -61,7 +61,7 @@
                     maxlength="1"
                     (keypress)="checkDigit($event)"
                     (keyup)="nextNumber($event, 'four', four, null)"
-                    (keyup.backspace)="prevNumber( 'four', three )"
+                    (keyup.backspace)="prevNumber( 'four', three, 'three' )"
                     #four
                 />
                 <div class="error" *ngIf="error">
