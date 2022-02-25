@@ -1,217 +1,227 @@
 <div class="rw-modal-background" #modalBackgroundElement></div>
 <div
-  class="rw-modal-wrapper"
-  (mouseup)="!isMouseModalDown && onCancel()"
-  (mousedown) = 'resetMouseModalDown()'
-  #modalWrapperElement
+    class="rw-modal-wrapper"
+    (mouseup)="!isMouseModalDown && onCancel()"
+    (mousedown) = 'resetMouseModalDown()'
+    #modalWrapperElement
 >
 
-    <div
-      *ngIf="activatedModalType == 'NAME' "
-      class="rw-modal name-size user-select-none"
-      (mousedown) ='onMouseModalDown(); $event.stopPropagation()'
-    >
-        <div class="title-container">
-            <div class="text rw-typo-title1 ">{{ data?.text }}</div>
-            <div class="sub-text rw-typo-subtext1">{{ data?.subText }}</div>
-        </div>
+    <ng-container *ngIf="activatedModalType == 'NAME' ">
         <div
-            id='name'
-            class="input"
+            class="rw-modal name-size user-select-none"
+            (mousedown) ='onMouseModalDown(); $event.stopPropagation()'
         >
-            <p class="rw-typo-subtext1">이름</p>
-            <input
-                class="rw-input"
-                type="text"
-                placeholder="이름을 입력해주세요."
-                [(ngModel)]="userData" #name = ngModel
-                pattern="[가-힣|a-z|A-Z]+"
-                required maxlength="20"
-                (keypress) ="nameCheck($event)"
-                (keyup.enter) = "name.valid && getUpdateUserData() "
-            >
-        </div>
-        <div class="button-group">
-            <div class="cancel " rw-button (click)="onCancel()">
-              {{ data?.cancelButtonText || '취소' }}
+            <div class="title-container">
+                <div class="text rw-typo-title1 ">{{ data?.text }}</div>
+                <div class="sub-text rw-typo-subtext1">{{ data?.subText }}</div>
             </div>
             <div
-              class="confirm"
-              rw-button
-              rwButtonColor="var(--red)"
-              [rwButtonDisabled]= "name.invalid"
-              (click)="name.valid && getUpdateUserData()"
+                id='name'
+                class="input"
             >
-                {{ data?.confirmButtonText || '확인' }}
+                <p class="rw-typo-subtext1">이름</p>
+                <input
+                    class="rw-input"
+                    type="text"
+                    placeholder="이름을 입력해주세요."
+                    [(ngModel)]="userData" #name = ngModel
+                    pattern="[가-힣|a-z|A-Z]+"
+                    required maxlength="20"
+                    (keypress) ="nameCheck($event)"
+                    (keyup.enter) = "name.valid && getUpdateUserData() "
+                >
+            </div>
+            <div class="button-group">
+                <div class="cancel " rw-button (click)="onCancel()">
+                    {{ data?.cancelButtonText || '취소' }}
+                </div>
+                <div
+                    class="confirm"
+                    rw-button
+                    rwButtonColor="var(--red)"
+                    [rwButtonDisabled]= "name.invalid"
+                    (click)="name.valid && getUpdateUserData()"
+                >
+                    {{ data?.confirmButtonText || '확인' }}
+                </div>
             </div>
         </div>
-    </div>
+    </ng-container>
 
-    <div
-      *ngIf=" activatedModalType == 'BIRTH_DATE'"
-      class="rw-modal birth-size user-select-none"
-      (mousedown) ='onMouseModalDown(); $event.stopPropagation()'
-    >
-        <div class="title-container">
-            <div class="text rw-typo-title1 ">{{ data?.text }}</div>
-            <div class="sub-text rw-typo-subtext1">{{ data?.subText }}</div>
-        </div>
+
+    <ng-container  *ngIf=" activatedModalType == 'BIRTH_DATE'">
         <div
-            id='birth-date'
-            class="input"
+            class="rw-modal birth-size user-select-none"
+            (mousedown) ='onMouseModalDown(); $event.stopPropagation()'
         >
-            <p class="rw-typo-subtext1">생년월일</p>
-            <input
-                class="rw-input"
-                type="text"
-                placeholder="생년월일을 입력해주세요. (YYYY.MM.DD)"
-                [(ngModel)]="userData" #birth_date = ngModel
-                maxlength="10" minlength="6" required
-                pattern="^\d{4}[.](0[1-9]|1[012])[.](0[1-9]|[12][0-9]|3[01])$"
-                (keypress) = 'birthdateCheck($event)'
-                (keyup) = 'matchBirthdateForm($event)'
-                (keyup.enter) = "birth_date.valid ? getUpdateUserData() : '' "
-            >
-        </div>
-        <div class="button-group">
-            <div class="cancel " rw-button (click)="onCancel()">
-                {{ data?.cancelButtonText || '취소' }}
+            <div class="title-container">
+                <div class="text rw-typo-title1 ">{{ data?.text }}</div>
+                <div class="sub-text rw-typo-subtext1">{{ data?.subText }}</div>
             </div>
             <div
-              class="confirm "
-              rw-button
-              rwButtonColor="var(--red)"
-              [rwButtonDisabled]= "birth_date.invalid"
-              (click)="birth_date.valid && getUpdateUserData()"
+                id='birth-date'
+                class="input"
             >
-                {{ data?.confirmButtonText || '확인' }}
+                <p class="rw-typo-subtext1">생년월일</p>
+                <input
+                    class="rw-input"
+                    type="text"
+                    placeholder="생년월일을 입력해주세요. (YYYY.MM.DD)"
+                    [(ngModel)]="userData" #birth_date = ngModel
+                    maxlength="10" minlength="6" required
+                    pattern="^\d{4}[.](0[1-9]|1[012])[.](0[1-9]|[12][0-9]|3[01])$"
+                    (keypress) = 'birthdateCheck($event)'
+                    (keyup) = 'matchBirthdateForm($event)'
+                    (keyup.enter) = "birth_date.valid ? getUpdateUserData() : '' "
+                >
+            </div>
+            <div class="button-group">
+                <div class="cancel " rw-button (click)="onCancel()">
+                    {{ data?.cancelButtonText || '취소' }}
+                </div>
+                <div
+                    class="confirm "
+                    rw-button
+                    rwButtonColor="var(--red)"
+                    [rwButtonDisabled]= "birth_date.invalid"
+                    (click)="birth_date.valid && getUpdateUserData()"
+                >
+                    {{ data?.confirmButtonText || '확인' }}
+                </div>
             </div>
         </div>
-    </div>
+    </ng-container>
 
 
-    <div
-      *ngIf="activatedModalType == 'SEX'"
-      class="rw-modal sex-size user-select-none"
-      (mousedown) ='onMouseModalDown(); $event.stopPropagation()'
-    >
-        <div class="title-container">
-            <div class="text rw-typo-title1 ">{{ data?.text }}</div>
-            <div class="sub-text rw-typo-subtext1">{{ data?.subText }}</div>
-        </div>
 
+    <ng-container *ngIf="activatedModalType == 'SEX'">
         <div
-            id='sex'
-            class="input"
+            class="rw-modal sex-size user-select-none"
+            (mousedown) ='onMouseModalDown(); $event.stopPropagation()'
         >
-            <div class="radio-container">
-                <rw-radio-button
-                    (click) ="onMale()"
-                    [checked] = "userData == 'male'"
-                    [text] = "'남성'"
-                ></rw-radio-button>
-                <rw-radio-button
-                    (click) ="onFemale()"
-                    [checked] = "userData == 'female'"
-                    [text] = "'여성'"
-                ></rw-radio-button>
+            <div class="title-container">
+                <div class="text rw-typo-title1 ">{{ data?.text }}</div>
+                <div class="sub-text rw-typo-subtext1">{{ data?.subText }}</div>
             </div>
-        </div>
 
-        <div class="button-group">
-            <div class="cancel " rw-button (click)="onCancel()">
-                {{ data?.cancelButtonText || '취소' }}
-            </div>
             <div
-                class="confirm "
-                rw-button
-                rwButtonColor="var(--red)"
-                [rwButtonDisabled]="!(userData == 'female' || userData == 'male')"
-                (click)="(userData == 'female' || userData == 'male') && getUpdateUserData()"
+                id='sex'
+                class="input"
             >
-                {{ data?.confirmButtonText || '확인' }}
+                <div class="radio-container">
+                    <rw-radio-button
+                        (click) ="onMale()"
+                        [checked] = "userData == 'male'"
+                        [text] = "'남성'"
+                    ></rw-radio-button>
+                    <rw-radio-button
+                        (click) ="onFemale()"
+                        [checked] = "userData == 'female'"
+                        [text] = "'여성'"
+                    ></rw-radio-button>
+                </div>
+            </div>
+
+            <div class="button-group">
+                <div class="cancel " rw-button (click)="onCancel()">
+                    {{ data?.cancelButtonText || '취소' }}
+                </div>
+                <div
+                    class="confirm "
+                    rw-button
+                    rwButtonColor="var(--red)"
+                    [rwButtonDisabled]="!(userData == 'female' || userData == 'male')"
+                    (click)="(userData == 'female' || userData == 'male') && getUpdateUserData()"
+                >
+                    {{ data?.confirmButtonText || '확인' }}
+                </div>
             </div>
         </div>
-    </div>
+    </ng-container>
 
-    <div
-      *ngIf="activatedModalType == 'MARKETING_AGREE'"
-      class="rw-modal marketing-size user-select-none"
-      (mousedown) ='onMouseModalDown(); $event.stopPropagation()'
-    >
-        <div class="title-container">
-            <div class="text rw-typo-title1 ">{{ data?.text }}</div>
-            <div class="sub-text rw-typo-subtext1">{{ data?.subText }}</div>
-        </div>
 
+    <ng-container *ngIf="activatedModalType == 'MARKETING_AGREE'">
         <div
-            id='marketing-agree'
-            class="input"
+            class="rw-modal marketing-size user-select-none"
+            (mousedown) ='onMouseModalDown(); $event.stopPropagation()'
         >
-            <div class="checkbox-container">
-                <rw-checkbox
-                    (click) ="onSMS()"
-                    [checked] = "userData.sms == 1"
-                    [text] = "'SMS'"
-                ></rw-checkbox>
-                <rw-checkbox
-                    (click) ="onEmail()"
-                    [checked] = "userData.email == 1"
-                    [text] = "'이메일'"
-                ></rw-checkbox>
+            <div class="title-container">
+                <div class="text rw-typo-title1 ">{{ data?.text }}</div>
+                <div class="sub-text rw-typo-subtext1">{{ data?.subText }}</div>
             </div>
-        </div>
 
-        <div class="button-group">
-            <div class="cancel " rw-button (click)="onCancel()">
-              {{ data?.cancelButtonText || '취소' }}
-            </div>
             <div
-              class="confirm "
-              rw-button
-              rwButtonColor="var(--red)"
-              (click)="getUpdateUserData()"
+                id='marketing-agree'
+                class="input"
             >
-                {{ data?.confirmButtonText || '확인' }}
+                <div class="checkbox-container">
+                    <rw-checkbox
+                        (click) ="onSMS()"
+                        [checked] = "userData.sms == 1"
+                        [text] = "'SMS'"
+                    ></rw-checkbox>
+                    <rw-checkbox
+                        (click) ="onEmail()"
+                        [checked] = "userData.email == 1"
+                        [text] = "'이메일'"
+                    ></rw-checkbox>
+                </div>
+            </div>
+
+            <div class="button-group">
+                <div class="cancel " rw-button (click)="onCancel()">
+                    {{ data?.cancelButtonText || '취소' }}
+                </div>
+                <div
+                    class="confirm "
+                    rw-button
+                    rwButtonColor="var(--red)"
+                    (click)="getUpdateUserData()"
+                >
+                    {{ data?.confirmButtonText || '확인' }}
+                </div>
             </div>
         </div>
-    </div>
+    </ng-container>
 
-    <div
-      *ngIf="activatedModalType == 'PUSH_NOTICE'"
-      class="rw-modal push-size user-select-none"
-      (mousedown) ='onMouseModalDown(); $event.stopPropagation()'
-    >
-        <div class="title-container">
-            <div class="text rw-typo-title1 ">{{ data?.text }}</div>
-            <div class="sub-text rw-typo-subtext1">{{ data?.subText }}</div>
-        </div>
 
+    <ng-container *ngIf="activatedModalType == 'PUSH_NOTICE'">
         <div
-            id='push-notice'
-            class="input"
+            class="rw-modal push-size user-select-none"
+            (mousedown) ='onMouseModalDown(); $event.stopPropagation()'
         >
-            <div class="push-notice-container">
-                <rw-switch
-                    [text] = "userData  ? '푸시 알림 켜기 😍' :'푸시 알림 끄기 😢'"
-                    [(ngModel)] = "userData"
-                ></rw-switch>
+            <div class="title-container">
+                <div class="text rw-typo-title1 ">{{ data?.text }}</div>
+                <div class="sub-text rw-typo-subtext1">{{ data?.subText }}</div>
             </div>
-        </div>
 
-        <div class="button-group">
-            <div class="cancel " rw-button (click)="onCancel()">
-              {{ data?.cancelButtonText || '취소' }}
-            </div>
             <div
-              class="confirm "
-              rw-button
-              rwButtonColor="var(--red)"
-              (click)="getUpdateUserData()"
+                id='push-notice'
+                class="input"
             >
-                {{ data?.confirmButtonText || '확인' }}
+                <div class="push-notice-container">
+                    <rw-switch
+                        [text] = "userData  ? '푸시 알림 켜기 😍' :'푸시 알림 끄기 😢'"
+                        [(ngModel)] = "userData"
+                    ></rw-switch>
+                </div>
+            </div>
+
+            <div class="button-group">
+                <div class="cancel " rw-button (click)="onCancel()">
+                    {{ data?.cancelButtonText || '취소' }}
+                </div>
+                <div
+                    class="confirm "
+                    rw-button
+                    rwButtonColor="var(--red)"
+                    (click)="getUpdateUserData()"
+                >
+                    {{ data?.confirmButtonText || '확인' }}
+                </div>
             </div>
         </div>
-    </div>
+    </ng-container>
+
 
 </div>

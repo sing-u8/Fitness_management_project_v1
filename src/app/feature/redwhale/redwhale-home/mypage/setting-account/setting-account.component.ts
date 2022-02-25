@@ -12,6 +12,8 @@ import { GlobalSettingAccountService } from '@services/home/global-setting-accou
 import { User } from '@schemas/user'
 import { modalType, modalData } from '@schemas/home/setting-account-modal'
 
+import * as _ from 'lodash'
+
 // helper
 import { originalOrder } from '@helpers/pipe/keyvalue'
 
@@ -125,6 +127,7 @@ export class SettingAccountComponent implements OnInit {
 
     onInputClick(type: string) {
         const modalType = type.toUpperCase()
+        console.log('onINputClick -- : ', type, modalType)
         if (modalType == 'DELAVATAR') {
             this.delAvatarFlag = true
             this.delModalTextData = this.settingAcountModalService.initModal(modalType as modalType)
@@ -139,12 +142,8 @@ export class SettingAccountComponent implements OnInit {
             if (modalType == 'SEX') {
                 this.modalUserData = this.user.sex
             } else if (modalType == 'MARKETING_AGREE') {
-                this.modalUserData = {
-                    email: this.marketing_agree.email,
-                    sms: this.marketing_agree.sms,
-                }
+                this.modalUserData = { email: this.marketing_agree.email, sms: this.marketing_agree.sms }
             } else if (modalType == 'PUSH_NOTICE') {
-                console.log('push notice : ', type, this.inputList[type])
                 this.modalUserData = this.inputList[type] == '켜기' ? true : false
             } else {
                 this.modalUserData = this.inputList[type]
@@ -197,15 +196,15 @@ export class SettingAccountComponent implements OnInit {
     // change avatar fucntions
     registerPhoto(picture: any) {
         const files: FileList = picture.files
-        console.log('registerPhoto : ', picture)
         if (!this.isFileExist(files)) return
-        console.log('this.isFileExist(files) : ', this.isFileExist(files))
+
+        this.saveIfRwPicture(this.user.picture)
 
         const reqBody: CreateFileRequestBody = { type_code: 'user_picture' }
         this.fileservice.createFile(reqBody, files).subscribe((__) => {
             this.usersService.getUser(this.user.id).subscribe({
                 next: (resData) => {
-                    this.user.picture = resData['picture'] // .filter((v, i) => i == 0)
+                    this.user.picture = resData['picture']
                     this.globalSettingAccountService.setUserAvatar(resData['picture'])
                     this.storageService.setUser({
                         ...this.user,
@@ -223,16 +222,24 @@ export class SettingAccountComponent implements OnInit {
                     this.user = this.storageService.getUser()
                     this.nxStore.dispatch(showToast({ text: '프로필 사진이 변경되었습니다.' }))
 
-                    // resData.picture.forEach((v, i) => {
-                    //     if (i == 0) return
-                    //     this.fileservice.deleteFile(v.url).subscribe()
-                    // })
+                    if (this.rwPicture) {
+                        this.fileservice.deleteFile(this.rwPicture).subscribe(() => {
+                            this.rwPicture = undefined
+                        })
+                    }
                 },
                 error: (err) => {
                     console.log('create account avatar file err: ', err)
                 },
             })
         })
+    }
+
+    public rwPicture: string = undefined
+    saveIfRwPicture(url: string) {
+        if (_.includes(url, 'https://private.redwhale.xyz/')) {
+            this.rwPicture = url
+        }
     }
 
     isFileExist(fileList: FileList) {
