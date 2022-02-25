@@ -32,7 +32,7 @@ export class HeaderComponent implements OnInit {
     drawer$: Observable<Drawer>
     user: User
 
-    centerList: Array<Center>
+    centerList: Array<Center> = []
     invitedGymList: Array<Center>
 
     popupGymListVisible: boolean
@@ -129,12 +129,12 @@ export class HeaderComponent implements OnInit {
         drSubscription.unsubscribe()
     }
 
-    goInvitedGym() {
-        this.router.navigateByUrl('/redwhale-home/invited-gym')
-    }
-
     goTouchPad() {
         this.router.navigate(['./touch-pad'], { relativeTo: this.activatedRoute })
+    }
+
+    goSettingCenter() {
+        this.router.navigate(['redwhale-home', 'set-center', this.user.selected_center.id])
     }
 
     showAvatarMenu(event) {
