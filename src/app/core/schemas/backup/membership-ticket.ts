@@ -1,6 +1,6 @@
 // 나중에 추가하기
-import { LessonItem } from '@schemas/lesson-item'
-import { UserMembershipHistory } from '@schemas/user-membership-history'
+import { ClassItem } from '@schemas/class-item'
+// import { UserMembershipHistory } from '@schemas/user-membership-history'
 
 export interface MembershipTicket {
     id: string
@@ -27,9 +27,9 @@ export interface MembershipTicket {
     paid_date: string
     gym_name: string
     status_name: string
-    lesson_item_list: LessonItem[]
+    lesson_item_list: ClassItem[]
     lesson_item_ids: string[]
-    history: UserMembershipHistory[]
+    history: any[] // UserMembershipHistory[]
     assignee: [
         {
             id: number

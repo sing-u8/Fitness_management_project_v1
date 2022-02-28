@@ -5,13 +5,13 @@ import * as _ from 'lodash'
 
 import * as LessonActions from '../actions/sec.lesson.actions'
 
-import { LessonCategory } from '@schemas/lesson-category'
-import { LessonItem } from '@schemas/lesson-item'
-import { CenterUser } from '@schemas/users-center'
+import { ClassCategory } from '@schemas/class-category'
+import { ClassItem } from '@schemas/class-item'
+import { CenterUser } from '@schemas/center-user'
 import { Loading } from '@schemas/store/loading'
 
 export interface SelectedLesson {
-    lessonData: LessonItem
+    lessonData: ClassItem
     categId: string
     categName: string
     centerId: string
@@ -23,7 +23,7 @@ export const initialSelectedLesson: SelectedLesson = {
     centerId: undefined,
 }
 
-export interface LessonCategoryState extends LessonCategory {
+export interface LessonCategoryState extends ClassCategory {
     isCategOpen: boolean
 }
 
@@ -53,7 +53,7 @@ export interface State extends EntityState<LessonCategoryState> {
     error: string
 }
 
-export function selectCategoryId(categ: LessonCategory): string {
+export function selectCategoryId(categ: ClassCategory): string {
     return categ.id
 }
 export const adapter: EntityAdapter<LessonCategoryState> = createEntityAdapter<LessonCategoryState>({

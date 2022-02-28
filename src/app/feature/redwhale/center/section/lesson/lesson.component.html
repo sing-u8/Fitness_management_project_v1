@@ -251,13 +251,13 @@
             class="l-membership-item thin-scroll-y"
           >
             <gm-membership-card
-              *ngFor="let memItem of selectedLesson.lessonData.membership_item_list"
+              *ngFor="let memItem of selectedLesson.lessonData.membership_items"
               [lesMembershipItem]="memItem"
               [categId]="selectedLesson.categId"
               [categName]="selectedLesson.categName"
               [centerId]="center.id"
               [isIn]="'reservableItemList'"
-              (onReservableCardDelete)="removeReservationMembership(memItem.id, selectedLesson.lessonData.membership_item_list)">
+              (onReservableCardDelete)="removeReservationMembership(memItem.id, selectedLesson.lessonData.membership_items)">
             </gm-membership-card>
 
             <div class="add-membership-button"

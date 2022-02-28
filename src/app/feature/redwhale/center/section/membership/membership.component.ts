@@ -10,8 +10,8 @@ import { GymLessonService } from '@services/gym-lesson.service'
 // scehmas
 import { Center } from '@schemas/center'
 import { Drawer } from '@schemas/store/app/drawer.interface'
-import { LessonCategory } from '@schemas/lesson-category'
-import { LessonItem } from '@schemas/lesson-item'
+import { ClassCategory } from '@schemas/class-category'
+import { ClassItem } from '@schemas/class-item'
 import { UpdateItemRequestBody } from '@services/gym-membership.service'
 
 // ngrx reducer for type
@@ -76,8 +76,8 @@ export class MembershipComponent implements OnInit {
     public selMembershipMemo: FormControl = this.fb.control('')
 
     // reservable lesson vars in selected membership
-    public centerLessonCategList: Array<LessonCategory>
-    public centerReservableLessonItemList: Array<LessonItem>
+    public centerLessonCategList: Array<ClassCategory>
+    public centerReservableLessonItemList: Array<ClassItem>
     public isReserveLessonExist: boolean
 
     constructor(
@@ -119,7 +119,7 @@ export class MembershipComponent implements OnInit {
                     _.keys(this.selMembershipInputObj).forEach((key: SelectedMembershipType) => {
                         this.selMembershipInputObj[key].value.setValue(this.selectedMembership.membershipData[key])
                         if (key == 'count') {
-                            if (this.selectedMembership.membershipData.infinity_yn == 1) {
+                            if (this.selectedMembership.membershipData.unlimited == true) {
                                 this.selMembershipInputObj[key].isInfinit = true
                                 this.selMembershipInputObj[key].value.disable()
                             } else {
@@ -297,7 +297,7 @@ export class MembershipComponent implements OnInit {
         this.isReservLessonListModalOn = false
     }
 
-    removeReservationLesson(itemId: string, curMemLesItemList: Array<LessonItem>) {
+    removeReservationLesson(itemId: string, curMemLesItemList: Array<ClassItem>) {
         const filteredIdList = _.filter(curMemLesItemList, (v) => v.id != itemId).map((v) => String(v.id))
 
         const reqBody: UpdateItemRequestBody = { lesson_item_id_list: filteredIdList }
@@ -315,7 +315,7 @@ export class MembershipComponent implements OnInit {
             []
         )
         _.remove(this.centerReservableLessonItemList, (v) => {
-            return membItem.membershipData.lesson_item_list.some((j) => j.id == v.id)
+            return membItem.membershipData.class_items.some((j) => j.id == v.id)
         })
     }
 

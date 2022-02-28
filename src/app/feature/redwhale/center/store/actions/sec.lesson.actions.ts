@@ -2,9 +2,9 @@ import { createAction, props } from '@ngrx/store'
 
 import { TrainerFilter, SelectedLesson, LessonCategoryState } from '../reducers/sec.lesson.reducer'
 
-import { LessonCategory } from '@schemas/lesson-category'
+import { ClassCategory } from '@schemas/class-category'
 import { UpdateItemRequestBody } from '@services/gym-lesson.service'
-import { LessonItem } from '@schemas/lesson-item'
+import { ClassItem } from '@schemas/class-item'
 
 const FeatureKey = 'Gym/Lesson'
 
@@ -30,7 +30,7 @@ export const startAddLessonCateg = createAction(
 )
 export const FinishAddLessonCateg = createAction(
     `[${FeatureKey}] Finish Adding Lesson Category`,
-    props<{ lessonCateg: LessonCategory }>()
+    props<{ lessonCateg: ClassCategory }>()
 )
 export const removeLessonCateg = createAction(
     `[${FeatureKey}] Remove Lesson Category to server`,
@@ -55,7 +55,7 @@ export const finishiAddLessonToCateg = createAction(
     `[${FeatureKey}] Finishi Adding New Lesson to Lesson Category to server`,
     props<{
         categId: string
-        newLessonData: LessonItem
+        newLessonData: ClassItem
     }>()
 )
 

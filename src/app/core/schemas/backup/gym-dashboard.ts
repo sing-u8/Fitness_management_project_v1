@@ -1,6 +1,6 @@
-import { LessonItem } from '@schemas/lesson-item'
+import { ClassItem } from '@schemas/class-item'
 import { MembershipItem } from '@schemas/membership-item'
-import { CenterUser } from '@schemas/users-center'
+import { CenterUser } from '@schemas/center-user'
 import { TaskLessonTrainer, TaskReservation } from '@schemas/backup/task'
 import { MembershipTicket as _MembershipTicket } from '@schemas/membership-ticket'
 
@@ -179,7 +179,7 @@ export interface MembershipTicket {
     refund: number
     gym_name: string
     status_name: string
-    lesson_item_list: Array<LessonItem>
+    lesson_item_list: Array<ClassItem>
     membership_item_list: Array<MembershipItem>
     assignee: CenterUser
     holding_remaining_days: number
@@ -267,7 +267,7 @@ export interface MembershipPaymentsItem {
     holding_end_date: string
     id: number
     infinity_yn: number
-    lesson_item_list: Array<LessonItem>
+    lesson_item_list: Array<ClassItem>
     locker_ticket_id: null
     membership_ticket_id: number
     paid_date: string

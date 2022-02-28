@@ -111,7 +111,7 @@ export class LessongEffect {
                         const newTrainerFilterList: Array<TrainerFilter> = _.cloneDeep(initialTrainerFilterList)
                         managers.forEach((v) => {
                             newTrainerFilterList.push({
-                                name: v.gym_user_name ?? v.given_name,
+                                name: v.center_user_name ?? v.name,
                                 value: v,
                             })
                         })

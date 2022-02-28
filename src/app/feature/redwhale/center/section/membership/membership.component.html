@@ -142,7 +142,7 @@
                   <span *ngIf="btItem.value.property == 'count'">
                     {{!selectedMembership?.membershipData ?
                       'ㅡ' :
-                      selectedMembership?.membershipData?.infinity_yn == 1 ?
+                      selectedMembership?.membershipData?.unlimited == true ?
                       '무제한' :
                       selectedMembership.membershipData[btItem.value.property]+btItem.value.suffix
                     }}
@@ -233,13 +233,13 @@
             class="l-lesson-item thin-scroll-y"
           >
             <gl-lesson-card
-              *ngFor="let memItem of selectedMembership.membershipData.lesson_item_list"
+              *ngFor="let memItem of selectedMembership.membershipData.class_items"
               [memLessonItem]="memItem"
               [categId]="selectedMembership.categId"
               [categName]="selectedMembership.categName"
               [centerId]="center.id"
               [isIn]="'reservableItemList'"
-              (onReservableCardDelete)="removeReservationLesson(memItem.id, selectedMembership.membershipData.lesson_item_list)">
+              (onReservableCardDelete)="removeReservationLesson(memItem.id, selectedMembership.membershipData.class_items)">
             </gl-lesson-card>
 
             <div class="add-lesson-button"

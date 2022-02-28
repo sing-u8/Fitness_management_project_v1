@@ -7,8 +7,8 @@ import handleError from './handleError'
 import { environment } from '@environments/environment'
 
 import { Response } from '@schemas/response'
-import { LessonCategory } from '@schemas/lesson-category'
-import { LessonItem } from '@schemas/lesson-item'
+import { ClassCategory } from '@schemas/class-category'
+import { ClassItem } from '@schemas/class-item'
 
 @Injectable({
     providedIn: 'root',
@@ -18,7 +18,7 @@ export class GymLessonService {
 
     constructor(private http: HttpClient) {}
 
-    createCategory(centerId: string, requestBody: CreateCategoryRequestBody): Observable<LessonCategory> {
+    createCategory(centerId: string, requestBody: CreateCategoryRequestBody): Observable<ClassCategory> {
         const url = this.SERVER + `/${centerId}/lesson`
 
         const options = {
@@ -35,7 +35,7 @@ export class GymLessonService {
         )
     }
 
-    getCategoryList(centerId: string): Observable<Array<LessonCategory>> {
+    getCategoryList(centerId: string): Observable<Array<ClassCategory>> {
         const url = this.SERVER + `/${centerId}/lesson`
 
         const options = {
@@ -86,7 +86,7 @@ export class GymLessonService {
         )
     }
 
-    createItem(centerId: string, categoryId: string, requestBody: CreateItemRequestBody): Observable<LessonItem> {
+    createItem(centerId: string, categoryId: string, requestBody: CreateItemRequestBody): Observable<ClassItem> {
         const url = this.SERVER + `/${centerId}/lesson/${categoryId}/item`
 
         const options = {
@@ -103,7 +103,7 @@ export class GymLessonService {
         )
     }
 
-    getItem(centerId: string, categoryId: string, itemId: string): Observable<LessonItem> {
+    getItem(centerId: string, categoryId: string, itemId: string): Observable<ClassItem> {
         const url = this.SERVER + `/${centerId}/lesson/${categoryId}/item/${itemId}`
 
         const options = {

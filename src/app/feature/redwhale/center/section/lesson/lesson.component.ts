@@ -153,14 +153,14 @@ export class LessonComponent implements OnInit, AfterViewInit, OnDestroy {
                     })
                     this.selLessonMemo.setValue(this.selectedLesson.lessonData.memo)
                     this.selectedLessonTypeObj = {
-                        name: this.selectedLesson.lessonData.type == 'onetoone' ? '1:1 수업' : '그룹 수업',
-                        value: this.selectedLesson.lessonData.type,
+                        name: this.selectedLesson.lessonData.type_code == 'onetoone' ? '1:1 수업' : '그룹 수업',
+                        value: this.selectedLesson.lessonData.type_code,
                     }
                     this.lessonManagerSelectValue = {
                         name:
-                            this.selectedLesson.lessonData.trainer.gym_user_name ||
-                            this.selectedLesson.lessonData.trainer.given_name,
-                        value: this.selectedLesson.lessonData.trainer,
+                            this.selectedLesson.lessonData.instructor.center_user_name ||
+                            this.selectedLesson.lessonData.instructor.name,
+                        value: this.selectedLesson.lessonData.instructor,
                     }
                     // !! 예약 가능한 회원권리스트 초기화 함수 추가하기
                     this.initAddReservableMembershipList(this.selectedLesson)
@@ -355,7 +355,7 @@ export class LessonComponent implements OnInit, AfterViewInit, OnDestroy {
             []
         )
         _.remove(this.centerReservableMembershipItemList, (v) => {
-            return lesItem.lessonData.membership_item_list.some((j) => j.id == v.id)
+            return lesItem.lessonData.membership_items.some((j) => j.id == v.id)
         })
     }
 

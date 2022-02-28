@@ -28,7 +28,7 @@ export const FilteredLessonCategEntities = createSelector(
         const newEntities: Dictionary<FromLesson.LessonCategoryState> = Object.create(Object.prototype)
         _.keys(lesCategEntities).forEach((key) => {
             const copyEntity = _.cloneDeep(lesCategEntities[key])
-            copyEntity.items = _.filter(copyEntity.items, (item) => item.trainer.id == trainerFilter.value.id)
+            copyEntity.items = _.filter(copyEntity.items, (item) => item.instructor.id == trainerFilter.value.id)
             newEntities[key] = copyEntity
         })
         return newEntities

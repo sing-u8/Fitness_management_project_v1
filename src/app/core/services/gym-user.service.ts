@@ -7,7 +7,7 @@ import handleError from './handleError'
 import { environment } from '@environments/environment'
 
 import { Response } from '@schemas/response'
-import { CenterUser } from '@schemas/backup/gym-user'
+import { CenterUser } from '@schemas/center-user'
 
 @Injectable({
     providedIn: 'root',

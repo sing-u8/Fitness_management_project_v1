@@ -2,7 +2,7 @@ import { Component, OnInit, Input, AfterViewInit, ChangeDetectionStrategy, OnDes
 import { FormBuilder, FormControl } from '@angular/forms'
 import * as _ from 'lodash'
 
-import { LessonItem } from '@schemas/lesson-item'
+import { ClassItem } from '@schemas/class-item'
 
 // rxjs
 import { Observable, Subject } from 'rxjs'
@@ -29,7 +29,7 @@ export class LessonCategoryComponent implements OnInit, AfterViewInit, OnDestroy
     @Input() categ: FromLesson.LessonCategoryState
     @Input() centerId: string
 
-    public items: Array<LessonItem> = []
+    public items: Array<ClassItem> = []
     public name: string
     public isCategOpen: boolean
 

@@ -1,7 +1,7 @@
 import { Component, OnInit, AfterViewInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core'
 
 import { MembershipItem } from '@schemas/membership-item'
-import { LessonItem } from '@schemas/lesson-item'
+import { ClassItem } from '@schemas/class-item'
 
 // rxjs
 import { Observable, Subscription, Subject } from 'rxjs'
@@ -48,7 +48,7 @@ export class MembershipCardComponent implements OnInit, AfterViewInit, OnDestroy
         days: string
         count: string
         price: string
-        infinity_yn: number // 0 | 1
+        unlimited: boolean
     } = {
         color: '',
         category_name: '',
@@ -56,7 +56,7 @@ export class MembershipCardComponent implements OnInit, AfterViewInit, OnDestroy
         days: '',
         count: '',
         price: '',
-        infinity_yn: 0,
+        unlimited: false,
     }
     constructor(private nxStore: Store) {} // private gymSecLessonState: GymSecLessonStateService // private gymMembershipState: GymSecMembershipStateService,
 
@@ -104,7 +104,7 @@ export class MembershipCardComponent implements OnInit, AfterViewInit, OnDestroy
             .subscribe((selectedLesson) => {
                 selLesson = selectedLesson
             })
-        const membershipItemIdList: Array<string> = selLesson.lessonData.membership_item_list.map((v) => String(v.id))
+        const membershipItemIdList: Array<string> = selLesson.lessonData.membership_items.map((v) => String(v.id))
         membershipItemIdList.push(String(this.categItem.id))
         this.nxStore.dispatch(
             LessonActions.updateSelectedLesson({
@@ -126,7 +126,7 @@ export class MembershipCardComponent implements OnInit, AfterViewInit, OnDestroy
             this.cardInfo.days = String(this.categItem.days)
             this.cardInfo.count = String(this.categItem.count)
             this.cardInfo.price = String(this.categItem.price)
-            this.cardInfo.infinity_yn = this.categItem.infinity_yn
+            this.cardInfo.unlimited = this.categItem.unlimited
         } else {
             this.cardInfo.category_name = this.lesMembershipItem.category_name
             this.cardInfo.color = this.lesMembershipItem.color
@@ -134,7 +134,7 @@ export class MembershipCardComponent implements OnInit, AfterViewInit, OnDestroy
             this.cardInfo.days = String(this.lesMembershipItem.days)
             this.cardInfo.count = String(this.lesMembershipItem.count)
             this.cardInfo.price = String(this.lesMembershipItem.price)
-            this.cardInfo.infinity_yn = this.lesMembershipItem.infinity_yn
+            this.cardInfo.unlimited = this.lesMembershipItem.unlimited
         }
     }
 }

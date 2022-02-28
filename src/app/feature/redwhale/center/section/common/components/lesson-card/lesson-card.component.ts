@@ -1,7 +1,7 @@
 import { Component, OnInit, AfterViewInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core'
 
 import { MembershipItem } from '@schemas/membership-item'
-import { LessonItem } from '@schemas/lesson-item'
+import { ClassItem } from '@schemas/class-item'
 
 // rxjs
 import { Subject, Subscription } from 'rxjs'
@@ -23,8 +23,8 @@ import * as MembershipSelector from '@centerStore/selectors/sec.membership.selec
     styleUrls: ['./lesson-card.component.scss'],
 })
 export class LessonCardComponent implements OnInit, AfterViewInit, OnDestroy {
-    @Input() memLessonItem: LessonItem
-    @Input() categItem: LessonItem
+    @Input() memLessonItem: ClassItem
+    @Input() categItem: ClassItem
     @Input() categId: string
     @Input() categName: string
     @Input() centerId: string
@@ -97,7 +97,7 @@ export class LessonCardComponent implements OnInit, AfterViewInit, OnDestroy {
             .subscribe((selectedMembership) => {
                 selMembership = selectedMembership
             })
-        const lessonItemIdList: Array<string> = selMembership.membershipData.lesson_item_list.map((v) => String(v.id))
+        const lessonItemIdList: Array<string> = selMembership.membershipData.class_items.map((v) => String(v.id))
         lessonItemIdList.push(String(this.categItem.id))
         this.nxStore.dispatch(
             MembershipActions.updateSelectedMembership({
@@ -116,14 +116,14 @@ export class LessonCardComponent implements OnInit, AfterViewInit, OnDestroy {
             this.cardInfo.category_name = this.categItem.category_name
             this.cardInfo.color = this.categItem.color
             this.cardInfo.name = this.categItem.name
-            this.cardInfo.trainer_name = this.categItem.trainer.given_name
-            this.cardInfo.type_name = this.categItem.type_name
+            this.cardInfo.trainer_name = this.categItem.instructor.center_user_name
+            this.cardInfo.type_name = this.categItem.type_code
         } else {
             this.cardInfo.category_name = this.memLessonItem.category_name
             this.cardInfo.color = this.memLessonItem.color
             this.cardInfo.name = this.memLessonItem.name
-            this.cardInfo.trainer_name = this.memLessonItem.trainer.given_name
-            this.cardInfo.type_name = this.memLessonItem.type == 'onetoone' ? '1:1 수업' : '그룹 수업'
+            this.cardInfo.trainer_name = this.memLessonItem.instructor.center_user_name
+            this.cardInfo.type_name = this.memLessonItem.type_code == 'onetoone' ? '1:1 수업' : '그룹 수업'
         }
     }
 }
