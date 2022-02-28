@@ -9,13 +9,13 @@ import * as MembershipSelector from '../selectors/sec.membership.selector'
 
 import * as LessonActions from '../actions/sec.lesson.actions'
 
-import { GymMembershipService } from '@services/gym-membership.service'
+import { CenterMembershipService } from '@services/center-membership.service'
 
 import * as _ from 'lodash'
 
 @Injectable()
 export class membershipEffect {
-    constructor(private actions$: Actions, private gymMembershipApi: GymMembershipService, private store: Store) {}
+    constructor(private actions$: Actions, private gymMembershipApi: CenterMembershipService, private store: Store) {}
 
     // membership category
     public loadMembershipCategs$ = createEffect(() =>

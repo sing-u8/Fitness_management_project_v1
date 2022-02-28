@@ -3,7 +3,7 @@ import { createAction, props } from '@ngrx/store'
 import { TrainerFilter, SelectedLesson, LessonCategoryState } from '../reducers/sec.lesson.reducer'
 
 import { ClassCategory } from '@schemas/class-category'
-import { UpdateItemRequestBody } from '@services/gym-lesson.service'
+import { UpdateItemRequestBody } from '@services/center-lesson.service'
 import { ClassItem } from '@schemas/class-item'
 
 const FeatureKey = 'Gym/Lesson'

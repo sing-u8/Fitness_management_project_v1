@@ -5,14 +5,14 @@ import * as kvPipe from '@helpers/pipe/keyvalue'
 
 // services
 import { StorageService } from '@services/storage.service'
-import { GymMembershipService } from '@services/gym-membership.service'
+import { CenterMembershipService } from '@services/center-membership.service'
 
 // scehmas
 import { Center } from '@schemas/center'
 import { Drawer } from '@schemas/store/app/drawer.interface'
 import { MembershipCategory } from '@schemas/membership-category'
 import { MembershipItem } from '@schemas/membership-item'
-import { UpdateItemRequestBody } from '@services/gym-lesson.service'
+import { UpdateItemRequestBody } from '@services/center-lesson.service'
 
 // ngrx reducer for type
 import {
@@ -110,7 +110,7 @@ export class LessonComponent implements OnInit, AfterViewInit, OnDestroy {
         private route: Router,
         private nxStore: Store,
         private storageService: StorageService,
-        private centerMembershipService: GymMembershipService,
+        private centerMembershipService: CenterMembershipService,
         private fb: FormBuilder
     ) {
         this.center = this.storageService.getCenter()
@@ -214,13 +214,13 @@ export class LessonComponent implements OnInit, AfterViewInit, OnDestroy {
 
     // !! need to be add type
     onLessonTypeSelcted(event) {
-        const reqBody: UpdateItemRequestBody = { type: event.value }
+        const reqBody: UpdateItemRequestBody = { type_code: event.value }
         this.updateSelLesson(this.selectedLesson, reqBody)
     }
 
     // !! need to be add type
     onLessonManagerSelected(event) {
-        const reqBody: UpdateItemRequestBody = { trainer_id: event.value.id }
+        const reqBody: UpdateItemRequestBody = { instructor_user_id: event.value.id }
         this.updateSelLesson(this.selectedLesson, reqBody)
     }
 
@@ -341,7 +341,7 @@ export class LessonComponent implements OnInit, AfterViewInit, OnDestroy {
 
     removeReservationMembership(itemId: string, curLesMemItemList: Array<MembershipItem>) {
         const filteredIdList = _.filter(curLesMemItemList, (v) => v.id != itemId).map((v) => String(v.id))
-        const reqBody: UpdateItemRequestBody = { membership_item_id_list: filteredIdList }
+        const reqBody: UpdateItemRequestBody = { membership_item_ids: filteredIdList }
         this.updateSelLesson(this.selectedLesson, reqBody)
     }
 

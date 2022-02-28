@@ -5,14 +5,14 @@ import * as kvPipe from '@helpers/pipe/keyvalue'
 
 // services
 import { StorageService } from '@services/storage.service'
-import { GymLessonService } from '@services/gym-lesson.service'
+import { CenterLessonService } from '@services/center-lesson.service'
 
 // scehmas
 import { Center } from '@schemas/center'
 import { Drawer } from '@schemas/store/app/drawer.interface'
 import { ClassCategory } from '@schemas/class-category'
 import { ClassItem } from '@schemas/class-item'
-import { UpdateItemRequestBody } from '@services/gym-membership.service'
+import { UpdateItemRequestBody } from '@services/center-membership.service'
 
 // ngrx reducer for type
 
@@ -85,7 +85,7 @@ export class MembershipComponent implements OnInit {
         private route: Router,
         private nxStore: Store,
         private storageService: StorageService,
-        private gymLessonService: GymLessonService,
+        private gymLessonService: CenterLessonService,
         private fb: FormBuilder
     ) {
         this.center = this.storageService.getCenter()
@@ -300,7 +300,7 @@ export class MembershipComponent implements OnInit {
     removeReservationLesson(itemId: string, curMemLesItemList: Array<ClassItem>) {
         const filteredIdList = _.filter(curMemLesItemList, (v) => v.id != itemId).map((v) => String(v.id))
 
-        const reqBody: UpdateItemRequestBody = { lesson_item_id_list: filteredIdList }
+        const reqBody: UpdateItemRequestBody = { class_item_ids: filteredIdList }
         this.updateSelMembership(this.selectedMembership, reqBody)
     }
 

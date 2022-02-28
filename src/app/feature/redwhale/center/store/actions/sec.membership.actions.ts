@@ -4,7 +4,7 @@ import { SelectedMembership, MembershipCategoryState } from '../reducers/sec.mem
 
 import { MembershipCategory } from '@schemas/membership-category'
 import { MembershipItem } from '@schemas/membership-item'
-import { UpdateItemRequestBody } from '@services/gym-membership.service'
+import { UpdateItemRequestBody } from '@services/center-membership.service'
 
 const FeatureKey = 'Gym/Membership'
 

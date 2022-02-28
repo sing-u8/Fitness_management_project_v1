@@ -7,19 +7,19 @@ import handleError from './handleError'
 import { environment } from '@environments/environment'
 
 import { Response } from '@schemas/response'
-import { MembershipCategory } from '@schemas/membership-category'
-import { MembershipItem } from '@schemas/membership-item'
+import { ClassCategory } from '@schemas/class-category'
+import { ClassItem } from '@schemas/class-item'
 
 @Injectable({
     providedIn: 'root',
 })
-export class GymMembershipService {
+export class CenterLessonService {
     private SERVER = `${environment.protocol}${environment.subDomain}${environment.domain}${environment.port}${environment.version}/center`
 
     constructor(private http: HttpClient) {}
 
-    createCategory(centerId: string, requestBody: CreateCategoryRequestBody): Observable<MembershipCategory> {
-        const url = this.SERVER + `/${centerId}/membership`
+    createCategory(gymId: string, requestBody: CreateCategoryRequestBody): Observable<ClassCategory> {
+        const url = this.SERVER + `/${gymId}/class`
 
         const options = {
             headers: new HttpHeaders({
@@ -35,8 +35,8 @@ export class GymMembershipService {
         )
     }
 
-    getCategoryList(centerId: string): Observable<Array<MembershipCategory>> {
-        const url = this.SERVER + `/${centerId}/membership`
+    getCategoryList(gymId: string): Observable<Array<ClassCategory>> {
+        const url = this.SERVER + `/${gymId}/class`
 
         const options = {
             headers: new HttpHeaders({
@@ -52,8 +52,8 @@ export class GymMembershipService {
         )
     }
 
-    updateCategory(centerId: string, categoryId: string, requestBody: UpdateCategoryRequestBody): Observable<Response> {
-        const url = this.SERVER + `/${centerId}/membership/${categoryId}`
+    updateCategory(gymId: string, categoryId: string, requestBody: UpdateCategoryRequestBody): Observable<Response> {
+        const url = this.SERVER + `/${gymId}/class/${categoryId}`
 
         const options = {
             headers: new HttpHeaders({
@@ -69,8 +69,8 @@ export class GymMembershipService {
         )
     }
 
-    deleteCategory(centerId: string, categoryId: string): Observable<Response> {
-        const url = this.SERVER + `/${centerId}/membership/${categoryId}`
+    deleteCategory(gymId: string, categoryId: string): Observable<Response> {
+        const url = this.SERVER + `/${gymId}/class/${categoryId}`
 
         const options = {
             headers: new HttpHeaders({
@@ -86,8 +86,8 @@ export class GymMembershipService {
         )
     }
 
-    createItem(centerId: string, categoryId: string, requestBody: CreateItemRequestBody): Observable<MembershipItem> {
-        const url = this.SERVER + `/${centerId}/membership/${categoryId}/item`
+    createItem(gymId: string, categoryId: string, requestBody: CreateItemRequestBody): Observable<ClassItem> {
+        const url = this.SERVER + `/${gymId}/class/${categoryId}/item`
 
         const options = {
             headers: new HttpHeaders({
@@ -103,8 +103,25 @@ export class GymMembershipService {
         )
     }
 
-    getItem(centerId: string, categoryId: string, itemId: string): Observable<MembershipItem> {
-        const url = this.SERVER + `/${centerId}/membership/${categoryId}/item/${itemId}`
+    getItems(gymId: string, categoryId: string): Observable<Array<ClassItem>> {
+        const url = this.SERVER + `/${gymId}/class/${categoryId}/item`
+
+        const options = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json',
+            }),
+        }
+
+        return this.http.get<Response>(url, options).pipe(
+            map((res) => {
+                return res.dataset
+            }),
+            catchError(handleError)
+        )
+    }
+
+    getItem(gymId: string, categoryId: string, itemId: string): Observable<ClassItem> {
+        const url = this.SERVER + `/${gymId}/class/${categoryId}/item/${itemId}`
 
         const options = {
             headers: new HttpHeaders({
@@ -121,12 +138,12 @@ export class GymMembershipService {
     }
 
     updateItem(
-        centerId: string,
+        gymId: string,
         categoryId: string,
         itemId: string,
         requestBody: UpdateItemRequestBody
     ): Observable<Response> {
-        const url = this.SERVER + `/${centerId}/membership/${categoryId}/item/${itemId}`
+        const url = this.SERVER + `/${gymId}/class/${categoryId}/item/${itemId}`
 
         const options = {
             headers: new HttpHeaders({
@@ -142,8 +159,8 @@ export class GymMembershipService {
         )
     }
 
-    deleteItem(centerId: string, categoryId: string, itemId: string): Observable<Response> {
-        const url = this.SERVER + `/${centerId}/membership/${categoryId}/item/${itemId}`
+    deleteItem(gymId: string, categoryId: string, itemId: string): Observable<Response> {
+        const url = this.SERVER + `/${gymId}/class/${categoryId}/item/${itemId}`
 
         const options = {
             headers: new HttpHeaders({
@@ -160,12 +177,12 @@ export class GymMembershipService {
     }
 
     moveItem(
-        centerId: string,
+        gymId: string,
         categoryId: string,
         ItemId: string,
         requestBody: MoveItemRequestBody
     ): Observable<Response> {
-        const url = this.SERVER + `/${centerId}/membership/${categoryId}/item/${ItemId}/move`
+        const url = this.SERVER + `/${gymId}/class/${categoryId}/item/${ItemId}/move`
 
         const options = {
             headers: new HttpHeaders({
@@ -196,17 +213,20 @@ class CreateItemRequestBody {
 }
 
 export class UpdateItemRequestBody {
+    type_code?: string
     name?: string
-    days?: number
-    count?: number
-    infinity_yn?: number
-    price?: number
+    minutes?: number
+    people?: number
+    instructor_user_id?: string
     color?: string
     memo?: string
-    lesson_item_id_list?: Array<string>
+    reservation_days?: number
+    reservation_deadline_time?: number
+    reservation_cancellation_time?: number
+    membership_item_ids?: Array<string>
 }
 
 class MoveItemRequestBody {
     target_category_id: string
-    target_item_index: number
+    target_item_sequence_number: number
 }

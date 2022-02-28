@@ -12,13 +12,13 @@ import { CenterUser } from '@schemas/center-user'
 @Injectable({
     providedIn: 'root',
 })
-export class GymUsersService {
-    private SERVER = `${environment.protocol}${environment.subDomain}${environment.domain}${environment.port}${environment.version}/gym`
+export class CenterUsersService {
+    private SERVER = `${environment.protocol}${environment.subDomain}${environment.domain}${environment.port}${environment.version}/center`
 
     constructor(private http: HttpClient) {}
 
-    createUser(centerId: string, requestBody: CreateUserRequestBody): Observable<CreateUserResponse> {
-        const url = this.SERVER + `/${centerId}/users`
+    createUser(gymId: string, requestBody: CreateUserRequestBody): Observable<CreateUserResponse> {
+        const url = this.SERVER + `/${gymId}/users`
 
         const options = {
             headers: new HttpHeaders({
@@ -34,8 +34,9 @@ export class GymUsersService {
         )
     }
 
-    registerByEmail(centerId: string, requestBody: registrationByEmailRequestBody): Observable<CreateUserResponse> {
-        const url = this.SERVER + `/${centerId}/users/registrationByEmail`
+    // !! 현재 미구현 상태
+    registerByEmail(gymId: string, requestBody: registrationByEmailRequestBody): Observable<CreateUserResponse> {
+        const url = this.SERVER + `/${gymId}/users/registrationByEmail`
 
         const options = {
             headers: new HttpHeaders({
@@ -51,8 +52,18 @@ export class GymUsersService {
         )
     }
 
-    getUserList(centerId: string, q = '', role_code = '', type = ''): Observable<Array<CenterUser>> {
-        const url = this.SERVER + `/${centerId}/users?q=${q}&role_code=${role_code}&type=${type}`
+    getUserList(
+        gymId: string,
+        search = '',
+        role_code = '',
+        created_date = '',
+        page = '',
+        pageSize = ''
+    ): Observable<Array<CenterUser>> {
+        // created_date ==> YYYY-MM-DD
+        const url =
+            this.SERVER +
+            `/${gymId}/users?search=${search}&role_code=${role_code}&created_date=${created_date}&page=${page}&pageSize=${pageSize}`
 
         const options = {
             headers: new HttpHeaders({
@@ -68,8 +79,8 @@ export class GymUsersService {
         )
     }
 
-    updateUser(centerId: string, userId: string, requestBody: UpdateUserRequestBody) {
-        const url = this.SERVER + `/${centerId}/users/${userId}`
+    updateUser(gymId: string, userId: string, requestBody: UpdateUserRequestBody) {
+        const url = this.SERVER + `/${gymId}/users/${userId}`
 
         const options = {
             headers: new HttpHeaders({
@@ -87,10 +98,8 @@ export class GymUsersService {
 }
 
 class CreateUserRequestBody {
-    phone_number: string
-    verification_code: number
-    family_name: string
-    given_name: string
+    phone_number?: string
+    name?: string
     picture?: string
     sex?: string
     email?: string
@@ -109,7 +118,6 @@ class CreateUserResponse {
 
 class UpdateUserRequestBody {
     role_code?: string
-    memo?: string
-    gym_user_name?: string
-    picture?: string
+    center_user_name?: string
+    center_user_memo?: string
 }

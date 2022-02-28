@@ -7,19 +7,19 @@ import handleError from './handleError'
 import { environment } from '@environments/environment'
 
 import { Response } from '@schemas/response'
-import { ClassCategory } from '@schemas/class-category'
-import { ClassItem } from '@schemas/class-item'
+import { MembershipCategory } from '@schemas/membership-category'
+import { MembershipItem } from '@schemas/membership-item'
 
 @Injectable({
     providedIn: 'root',
 })
-export class GymLessonService {
+export class CenterMembershipService {
     private SERVER = `${environment.protocol}${environment.subDomain}${environment.domain}${environment.port}${environment.version}/center`
 
     constructor(private http: HttpClient) {}
 
-    createCategory(centerId: string, requestBody: CreateCategoryRequestBody): Observable<ClassCategory> {
-        const url = this.SERVER + `/${centerId}/lesson`
+    createCategory(gymId: string, requestBody: CreateCategoryRequestBody): Observable<MembershipCategory> {
+        const url = this.SERVER + `/${gymId}/membership`
 
         const options = {
             headers: new HttpHeaders({
@@ -35,8 +35,8 @@ export class GymLessonService {
         )
     }
 
-    getCategoryList(centerId: string): Observable<Array<ClassCategory>> {
-        const url = this.SERVER + `/${centerId}/lesson`
+    getCategoryList(gymId: string): Observable<Array<MembershipCategory>> {
+        const url = this.SERVER + `/${gymId}/membership`
 
         const options = {
             headers: new HttpHeaders({
@@ -52,8 +52,8 @@ export class GymLessonService {
         )
     }
 
-    updateCategory(centerId: string, categoryId: string, requestBody: UpdateCategoryRequestBody): Observable<Response> {
-        const url = this.SERVER + `/${centerId}/lesson/${categoryId}`
+    updateCategory(gymId: string, categoryId: string, requestBody: UpdateCategoryRequestBody): Observable<Response> {
+        const url = this.SERVER + `/${gymId}/membership/${categoryId}`
 
         const options = {
             headers: new HttpHeaders({
@@ -69,8 +69,8 @@ export class GymLessonService {
         )
     }
 
-    deleteCategory(centerId: string, categoryId: string): Observable<Response> {
-        const url = this.SERVER + `/${centerId}/lesson/${categoryId}`
+    deleteCategory(gymId: string, categoryId: string): Observable<Response> {
+        const url = this.SERVER + `/${gymId}/membership/${categoryId}`
 
         const options = {
             headers: new HttpHeaders({
@@ -86,8 +86,8 @@ export class GymLessonService {
         )
     }
 
-    createItem(centerId: string, categoryId: string, requestBody: CreateItemRequestBody): Observable<ClassItem> {
-        const url = this.SERVER + `/${centerId}/lesson/${categoryId}/item`
+    createItem(gymId: string, categoryId: string, requestBody: CreateItemRequestBody): Observable<MembershipItem> {
+        const url = this.SERVER + `/${gymId}/membership/${categoryId}/item`
 
         const options = {
             headers: new HttpHeaders({
@@ -103,8 +103,25 @@ export class GymLessonService {
         )
     }
 
-    getItem(centerId: string, categoryId: string, itemId: string): Observable<ClassItem> {
-        const url = this.SERVER + `/${centerId}/lesson/${categoryId}/item/${itemId}`
+    getItems(gymId: string, categoryId: string): Observable<Array<MembershipItem>> {
+        const url = this.SERVER + `/${gymId}/membership/${categoryId}/item`
+
+        const options = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json',
+            }),
+        }
+
+        return this.http.get<Response>(url, options).pipe(
+            map((res) => {
+                return res.dataset
+            }),
+            catchError(handleError)
+        )
+    }
+
+    getItem(gymId: string, categoryId: string, itemId: string): Observable<MembershipItem> {
+        const url = this.SERVER + `/${gymId}/membership/${categoryId}/item/${itemId}`
 
         const options = {
             headers: new HttpHeaders({
@@ -121,12 +138,12 @@ export class GymLessonService {
     }
 
     updateItem(
-        centerId: string,
+        gymId: string,
         categoryId: string,
         itemId: string,
         requestBody: UpdateItemRequestBody
     ): Observable<Response> {
-        const url = this.SERVER + `/${centerId}/lesson/${categoryId}/item/${itemId}`
+        const url = this.SERVER + `/${gymId}/membership/${categoryId}/item/${itemId}`
 
         const options = {
             headers: new HttpHeaders({
@@ -142,8 +159,8 @@ export class GymLessonService {
         )
     }
 
-    deleteItem(centerId: string, categoryId: string, itemId: string): Observable<Response> {
-        const url = this.SERVER + `/${centerId}/lesson/${categoryId}/item/${itemId}`
+    deleteItem(gymId: string, categoryId: string, itemId: string): Observable<Response> {
+        const url = this.SERVER + `/${gymId}/membership/${categoryId}/item/${itemId}`
 
         const options = {
             headers: new HttpHeaders({
@@ -160,12 +177,12 @@ export class GymLessonService {
     }
 
     moveItem(
-        centerId: string,
+        gymId: string,
         categoryId: string,
         ItemId: string,
         requestBody: MoveItemRequestBody
     ): Observable<Response> {
-        const url = this.SERVER + `/${centerId}/lesson/${categoryId}/item/${ItemId}/move`
+        const url = this.SERVER + `/${gymId}/membership/${categoryId}/item/${ItemId}/move`
 
         const options = {
             headers: new HttpHeaders({
@@ -196,20 +213,17 @@ class CreateItemRequestBody {
 }
 
 export class UpdateItemRequestBody {
-    type?: string
     name?: string
-    minutes?: number
-    people?: number
-    trainer_id?: string
+    days?: number
+    count?: number
+    unlimited?: boolean
+    price?: number
     color?: string
-    reservation_start?: number
-    reservation_end?: number
-    reservation_cancel_end?: number
     memo?: string
-    membership_item_id_list?: string[]
+    class_item_ids?: Array<string>
 }
 
 class MoveItemRequestBody {
     target_category_id: string
-    target_item_index: number
+    target_item_sequence_number: number
 }

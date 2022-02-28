@@ -13,8 +13,8 @@ import {
 import * as LessonSelector from '../selectors/sec.lesson.selector'
 import * as MembershipActions from '../actions/sec.membership.actions'
 
-import { GymLessonService } from '@services/gym-lesson.service'
-import { GymUsersService } from '@services/gym-user.service'
+import { CenterLessonService } from '@services/center-lesson.service'
+import { CenterUsersService } from '@services/center-users.service'
 
 import * as _ from 'lodash'
 
@@ -22,8 +22,8 @@ import * as _ from 'lodash'
 export class LessongEffect {
     constructor(
         private actions$: Actions,
-        private gymLessonApi: GymLessonService,
-        private gymUserApi: GymUsersService,
+        private gymLessonApi: CenterLessonService,
+        private gymUserApi: CenterUsersService,
         private store: Store
     ) {}
 
