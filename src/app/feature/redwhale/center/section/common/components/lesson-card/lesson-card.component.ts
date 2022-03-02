@@ -117,13 +117,14 @@ export class LessonCardComponent implements OnInit, AfterViewInit, OnDestroy {
             this.cardInfo.color = this.categItem.color
             this.cardInfo.name = this.categItem.name
             this.cardInfo.trainer_name = this.categItem.instructor.center_user_name
-            this.cardInfo.type_name = this.categItem.type_code
+            this.cardInfo.type_name = this.categItem.type_code == 'class_item_type_onetoone' ? '1:1 수업' : '그룹 수업'
         } else {
             this.cardInfo.category_name = this.memLessonItem.category_name
             this.cardInfo.color = this.memLessonItem.color
             this.cardInfo.name = this.memLessonItem.name
             this.cardInfo.trainer_name = this.memLessonItem.instructor.center_user_name
-            this.cardInfo.type_name = this.memLessonItem.type_code == 'onetoone' ? '1:1 수업' : '그룹 수업'
+            this.cardInfo.type_name =
+                this.memLessonItem.type_code == 'class_item_type_onetoone' ? '1:1 수업' : '그룹 수업'
         }
     }
 }

@@ -3,6 +3,10 @@
     padding: 0px;
 }
 
+p {
+    text-align: initial;
+}
+
 :host {
     height: 100%;
 }
@@ -168,6 +172,7 @@ main {
         }
 
         .p__selected-membership--margin {
+            display: flex;
             margin-bottom: 15px;
         }
 
@@ -256,6 +261,11 @@ main {
                                 display: block;
                             }
                         }
+
+                        & p {
+                            text-align: initial;
+                        }
+
                         .item-text {
                             display: flex;
                             align-items: center;
@@ -550,6 +560,12 @@ main {
             // .selected-membership-membership {
             //     min-height: 276px;
             // }
+
+            .selected-membership-lessonlist {
+                & p {
+                    text-align: initial;
+                }
+            }
             @media (min-width: 1440px) {
                 -ms-flex: 0 0 66.6666667%;
                 flex: 0 0 66.6666667%;
@@ -562,7 +578,7 @@ main {
                     }
                 }
 
-                .selected-membership-membershiplist {
+                .selected-membership-lessonlist {
                     min-height: 376px;
                 }
                 .reserve-lesson-modal {

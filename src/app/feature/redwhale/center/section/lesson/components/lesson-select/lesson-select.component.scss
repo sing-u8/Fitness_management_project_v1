@@ -2,6 +2,10 @@
     position: relative;
     display: inline-flex;
 
+    .text {
+        text-align: initial;
+    }
+
     .selected {
         height: 42px;
         padding: 15px;

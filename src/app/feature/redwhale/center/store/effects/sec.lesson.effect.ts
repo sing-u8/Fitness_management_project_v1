@@ -106,15 +106,18 @@ export class LessongEffect {
         this.actions$.pipe(
             ofType(LessonActions.startGetTrainerFilterList),
             switchMap(({ centerId }) => {
-                return this.gymUserApi.getUserList(centerId, '', 'administrator, manager, staff').pipe(
+                return this.gymUserApi.getUserList(centerId, '', '').pipe(
                     map((managers) => {
                         const newTrainerFilterList: Array<TrainerFilter> = _.cloneDeep(initialTrainerFilterList)
-                        managers.forEach((v) => {
-                            newTrainerFilterList.push({
-                                name: v.center_user_name ?? v.name,
-                                value: v,
+
+                        managers
+                            .filter((m) => m.role_code != 'member')
+                            .forEach((v) => {
+                                newTrainerFilterList.push({
+                                    name: v.center_user_name ?? v.name,
+                                    value: v,
+                                })
                             })
-                        })
 
                         return LessonActions.finishGetTrainerFilterList({ trainerFilterList: newTrainerFilterList })
                     }),

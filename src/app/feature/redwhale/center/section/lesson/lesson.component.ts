@@ -44,9 +44,9 @@ import { originalOrder } from '@helpers/pipe/keyvalue'
 type SelectedLessonObj = {
     minutes: { value: FormControl; isOn: boolean }
     people: { value: FormControl; isOn: boolean }
-    reservation_start: { value: FormControl; isOn: boolean }
-    reservation_end: { value: FormControl; isOn: boolean }
-    reservation_cancel_end: { value: FormControl; isOn: boolean }
+    reservation_days: { value: FormControl; isOn: boolean }
+    reservation_deadline_time: { value: FormControl; isOn: boolean }
+    reservation_cancellation_time: { value: FormControl; isOn: boolean }
     name: { value: FormControl; isOn: boolean }
 }
 type SelectedLessonType = keyof SelectedLessonObj
@@ -75,15 +75,15 @@ export class LessonComponent implements OnInit, AfterViewInit, OnDestroy {
     public selLessonInputObj: SelectedLessonObj = {
         minutes: { value: this.fb.control('0'), isOn: false },
         people: { value: this.fb.control('0'), isOn: false },
-        reservation_start: { value: this.fb.control('0'), isOn: false },
-        reservation_end: { value: this.fb.control('0'), isOn: false },
-        reservation_cancel_end: { value: this.fb.control('0'), isOn: false },
+        reservation_days: { value: this.fb.control('0'), isOn: false },
+        reservation_deadline_time: { value: this.fb.control('0'), isOn: false },
+        reservation_cancellation_time: { value: this.fb.control('0'), isOn: false },
         name: { value: this.fb.control(''), isOn: false },
     }
     public selLessonMemo: FormControl = this.fb.control('')
     public selectedLessonTypeObj = {
         name: '1:1 수업',
-        value: 'onetoone',
+        value: 'class_item_type_onetoone',
     }
 
     public lessonManagerSelectValue: TrainerFilter = { name: '', value: undefined }
@@ -97,7 +97,7 @@ export class LessonComponent implements OnInit, AfterViewInit, OnDestroy {
     public lessonType_list = [
         {
             name: '1:1 수업',
-            value: 'onetoone',
+            value: 'class_item_type_onetoone',
         },
         {
             name: '그룹 수업',
@@ -153,7 +153,10 @@ export class LessonComponent implements OnInit, AfterViewInit, OnDestroy {
                     })
                     this.selLessonMemo.setValue(this.selectedLesson.lessonData.memo)
                     this.selectedLessonTypeObj = {
-                        name: this.selectedLesson.lessonData.type_code == 'onetoone' ? '1:1 수업' : '그룹 수업',
+                        name:
+                            this.selectedLesson.lessonData.type_code == 'class_item_type_onetoone'
+                                ? '1:1 수업'
+                                : '그룹 수업',
                         value: this.selectedLesson.lessonData.type_code,
                     }
                     this.lessonManagerSelectValue = {
@@ -293,17 +296,17 @@ export class LessonComponent implements OnInit, AfterViewInit, OnDestroy {
         reservation_start: {
             title: '예약 가능 날짜',
             suffix: '일 전부터',
-            property: 'reservation_start',
+            property: 'reservation_days',
         },
         reservation_end: {
             title: '예약 마감 시간',
             suffix: '시간 전까지',
-            property: 'reservation_end',
+            property: 'reservation_deadline_time',
         },
         reservation_cancel_end: {
             title: '예약 취소 마감 시간',
             suffix: '시간 전까지',
-            property: 'reservation_cancel_end',
+            property: 'reservation_cancellation_time',
         },
     }
     kvOriginOrder = kvPipe.originalOrder

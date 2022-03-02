@@ -14,7 +14,7 @@
             cursor: pointer;
             display: flex;
             align-items: center;
-            width: 80%;
+            width: calc(100% - (77px + 26px));
             .mdi {
                 transform: rotateX(0deg);
                 transition: transform 0.2s linear;
@@ -159,23 +159,8 @@
         text-overflow: ellipsis;
         overflow: hidden;
     }
-    span,
-    input {
-        max-width: 70%;
-    }
-}
 
-@media (min-width: 1440px) {
-    .header-left {
-        input {
-            max-width: 80%;
-        }
-    }
-}
-@media (min-width: 1920px) {
-    .header-left {
-        input {
-            max-width: 100%;
-        }
+    input {
+        width: calc(100% - (24px + 20px));
     }
 }
