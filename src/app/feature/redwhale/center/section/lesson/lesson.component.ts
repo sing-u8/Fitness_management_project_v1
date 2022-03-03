@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core'
+import { Component, OnInit, AfterViewInit, OnDestroy, ViewChild, ElementRef } from '@angular/core'
 import { FormBuilder, FormControl } from '@angular/forms'
 import * as _ from 'lodash'
 import * as kvPipe from '@helpers/pipe/keyvalue'
@@ -60,6 +60,7 @@ export class LessonComponent implements OnInit, AfterViewInit, OnDestroy {
     // ngrx state
     public drawer$: Observable<Drawer> = this.nxStore.pipe(select(drawerSelector))
     public lessonCategEntities$ = this.nxStore.pipe(select(LessonSelector.FilteredLessonCategEntities))
+    public lessonCategsLength$ = this.nxStore.pipe(select(LessonSelector.lessonCategLength))
     public lessonIsloading$ = this.nxStore.pipe(select(LessonSelector.isLoading))
 
     public lessonManagerList: Array<TrainerFilter> = []
@@ -326,10 +327,13 @@ export class LessonComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     // selected-lesson-bottom methods
+    @ViewChild('lesson_memo') lesson_memo: ElementRef
     updateItemMemo(memo: string) {
         if (this.selectedLesson.lessonData.memo != memo) {
             const reqBody: UpdateItemRequestBody = { memo: this.selLessonMemo.value }
             this.updateSelLesson(this.selectedLesson, reqBody)
+
+            this.lesson_memo.nativeElement.scrollTop = 0
         }
     }
 

@@ -206,6 +206,7 @@ const { selectEntities, selectAll } = adapter.getSelectors()
 export const selectLessonCategEntities = selectEntities
 export const selectLessonAll = selectAll
 
+export const getLessonCategLength = (state: State) => state.ids.length
 export const getSelectedLesson = (state: State) => state.selectedLesson
 export const selectTrainerFilter = (state: State) => state.selectedTrainerFilter
 export const selectTrainerFilterList = (state: State) => state.trainerFilterList

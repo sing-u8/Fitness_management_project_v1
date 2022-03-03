@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core'
+import { Component, OnInit, AfterViewInit, OnDestroy, ViewChild, ElementRef } from '@angular/core'
 import { FormBuilder, FormControl, Validators } from '@angular/forms'
 import * as _ from 'lodash'
 import * as kvPipe from '@helpers/pipe/keyvalue'
@@ -172,8 +172,8 @@ export class MembershipComponent implements OnInit {
     // - // isItemDel modal and delete lesson method
     public isItemDelOpen: boolean
     public delModalData = {
-        text: '수업을 삭제하시겠습니까?',
-        subText: `잠깐! 수업을 삭제하시면
+        text: '회원권을 삭제하시겠습니까?',
+        subText: `잠깐! 회원권을 삭제하시면
                     다시 복구하실 수 없어요.`,
         confirmButtonText: '삭제',
     }
@@ -189,7 +189,7 @@ export class MembershipComponent implements OnInit {
         )
 
         this.isItemDelOpen = false
-        this.nxStore.dispatch(showToast({ text: '수업이 삭제되었습니다.' }))
+        this.nxStore.dispatch(showToast({ text: '회원권이 삭제되었습니다.' }))
     }
     // - //
 
@@ -281,10 +281,13 @@ export class MembershipComponent implements OnInit {
     }
 
     // selected-membership-bottom methods
+    @ViewChild('membership_memo') membership_memo: ElementRef
     updateItemMemo(memo: string) {
         if (this.selectedMembership.membershipData.memo != memo) {
             const reqBody: UpdateItemRequestBody = { memo: this.selMembershipMemo.value }
             this.updateSelMembership(this.selectedMembership, reqBody)
+
+            this.membership_memo.nativeElement.scrollTop = 0
         }
     }
 

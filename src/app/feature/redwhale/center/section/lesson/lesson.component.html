@@ -4,8 +4,10 @@
       <span class="header--left-margin rw-typo-headline1">수업</span>
       <span class="header--left-desc rw-typo-subtext1">수업을 만들고, 예약 가능한 회원권을 추가해보세요.</span>
     </div>
+    <div></div>
 
     <gl-lesson-select
+      *ngIf=" (lessonIsloading$ | async) == 'done' && (lessonCategsLength$ | async) > 0"
       [items]="trainerFilterList"
       [(ngModel)]="trainerFilter"
       [width]="'175'"
@@ -110,7 +112,6 @@
       </ng-container>
       <ng-template #selected_lesson_done>
         <div class="selected-lesson">
-
           <div class="selected-lesson-top">
 
             <div
@@ -220,6 +221,7 @@
           >
             <p class="rw-typo-subtext2">메모</p>
             <textarea
+              #lesson_memo
               placeholder="메모를 입력해주세요."
               cols="30" rows="10"
               class="rw-typo-bodytext1 thin-scroll-y"
@@ -287,7 +289,7 @@
                   <p class="categ rw-typo-subtext4 ">레드웨일</p>
                   <div class="card-title-container rw-typo-bodytext2">
                     <p class="card-title">레드웨일 수업</p>
-                    <p class="card-desc1 rw-typo-subtext3">수업타입<span class="guide-image-bar">|</span>강사</p>
+                    <p class="card-desc1 rw-typo-subtext3">수업 타입<span class="guide-image-bar">|</span>강사</p>
                   </div>
                 </div>
               </div>

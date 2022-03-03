@@ -13,6 +13,7 @@ export const LessonCategEntities = createSelector(GymLessonFature, FromLesson.se
 
 export const LessonAll = createSelector(GymLessonFature, FromLesson.selectLessonAll)
 
+export const lessonCategLength = createSelector(GymLessonFature, FromLesson.getLessonCategLength)
 export const selectedLesson = createSelector(GymLessonFature, FromLesson.getSelectedLesson)
 export const seletedTrainerFilter = createSelector(GymLessonFature, FromLesson.selectTrainerFilter)
 export const trainerFilterList = createSelector(GymLessonFature, FromLesson.selectTrainerFilterList)
