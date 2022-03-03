@@ -8,6 +8,7 @@ import { MembershipCategoryState, SelectedMembership } from '../reducers/sec.mem
 import * as MembershipSelector from '../selectors/sec.membership.selector'
 
 import * as LessonActions from '../actions/sec.lesson.actions'
+import { showToast } from '@appStore/actions/toast.action'
 
 import { CenterMembershipService } from '@services/center-membership.service'
 
@@ -95,7 +96,7 @@ export class membershipEffect {
     public updateSelectedMembership$ = createEffect(() =>
         this.actions$.pipe(
             ofType(MembershipActions.updateSelectedMembership),
-            switchMap(({ selectedMembership, reqBody }) => {
+            switchMap(({ selectedMembership, reqBody, updateType }) => {
                 return this.gymMembershipApi
                     .updateItem(
                         selectedMembership.centerId,
@@ -122,12 +123,22 @@ export class membershipEffect {
                                 }),
                                 concatLatestFrom(() => this.store.select(MembershipSelector.currentCenter)),
                                 switchMap(([memCategState, curGym]) => {
-                                    return [
-                                        MembershipActions.updateMembershipCategs({
-                                            membershipCategState: memCategState,
-                                        }),
-                                        LessonActions.startUpsertState({ centerId: curGym }),
-                                    ]
+                                    if (updateType == 'RemoveReservationLesson') {
+                                        return [
+                                            MembershipActions.updateMembershipCategs({
+                                                membershipCategState: memCategState,
+                                            }),
+                                            LessonActions.startUpsertState({ centerId: curGym }),
+                                            showToast({ text: '예약 가능한 수업 1개가 삭제되었습니다.' }),
+                                        ]
+                                    } else {
+                                        return [
+                                            MembershipActions.updateMembershipCategs({
+                                                membershipCategState: memCategState,
+                                            }),
+                                            LessonActions.startUpsertState({ centerId: curGym }),
+                                        ]
+                                    }
                                 })
                             )
                         )

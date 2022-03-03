@@ -73,9 +73,11 @@ export const setSelectedMembership = createAction(
     `[${FeatureKey}] Set Selected Membership`,
     props<{ selectedMembership: SelectedMembership }>()
 )
+
+export type UpdateType = undefined | 'RemoveReservationLesson'
 export const updateSelectedMembership = createAction(
     `[${FeatureKey} Update Selected Membership to Server]`,
-    props<{ selectedMembership: SelectedMembership; reqBody: UpdateItemRequestBody }>()
+    props<{ selectedMembership: SelectedMembership; reqBody: UpdateItemRequestBody; updateType: UpdateType }>()
 )
 export const removeSelectedMembership = createAction(
     `[${FeatureKey} remove Selected Membership to Server]`,

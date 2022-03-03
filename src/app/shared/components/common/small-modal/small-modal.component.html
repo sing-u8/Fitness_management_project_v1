@@ -1,0 +1,21 @@
+<div class="rw-modal-background" #modalBackgroundElement></div>
+<div class="rw-modal-wrapper justify-content-center align-items-center"
+  (mouseup)="!isMouseModalDown && !blockClickOutside && onCancel()" (mousedown)='resetMouseModalDown()'
+  #modalWrapperElement>
+  <div #rwModalElement class="rw-modal user-select-none" (mousedown)='onMouseModalDown(); $event.stopPropagation()'>
+    <div class="l-text">
+      <div id="text" class="rw-typo-title1 d-flex justify-content-center">{{ data?.text }}</div>
+      <div id="sub-text" class="sub-text rw-typo-subtext2 d-flex justify-content-center">{{ data?.subText }}</div>
+    </div>
+    <div class="button-group d-flex">
+      <div class="cancel col d-flex justify-content-center align-items-center rw-typo-bodytext2" *ngIf="type == 'type1'"
+        (click)="onCancel()">
+        {{ data?.cancelButtonText || '취소' }}
+      </div>
+      <div class="confirm col d-flex justify-content-center align-items-center rw-typo-bodytext2"
+        (click)="onConfirm(); $event.stopPropagation()">
+        {{ data?.confirmButtonText || '확인' }}
+      </div>
+    </div>
+  </div>
+</div>

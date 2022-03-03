@@ -11,6 +11,12 @@ p {
     height: 100%;
 }
 
+gl-center-lesson-category {
+    &:not(:first-of-type) {
+        margin-top: 5px;
+    }
+}
+
 $lesson-padding: 25px 32px 0px 32px;
 $lesson-min-width: 897px;
 
@@ -76,7 +82,7 @@ main {
                 flex: 0 0 32.7552448%;
                 max-width: 32.7552448%;
             }
-            @media (min-width: 2260px) {
+            @media (min-width: 2450px) {
                 -ms-flex: auto;
                 flex: auto;
                 max-width: 700px;
@@ -97,7 +103,7 @@ main {
                 flex: 0 0 32.1331522%;
                 max-width: 32.1331522%;
             }
-            @media (min-width: 2260px) {
+            @media (min-width: 2450px) {
                 -ms-flex: auto;
                 flex: auto;
                 max-width: 583px;
@@ -190,21 +196,48 @@ main {
                 justify-content: space-between;
                 align-items: center;
                 height: 42px;
+                position: relative;
 
-                &__title {
-                    display: flex;
-                    align-items: center;
-                    margin-left: 8px;
-                    input {
-                        height: 42px;
-                        padding-left: 10px;
-                        font-size: 1.6rem;
-                        font-weight: 700;
-                        line-height: 1.5;
-                        letter-spacing: -0.26px;
-                        color: var(--font-color);
+                .selected-lesson-top__left {
+                    width: calc(100% - 361px - 84.5px);
+                    position: relative;
+                    .selected-lesson-top__title {
+                        display: flex;
+                        align-items: center;
+                        margin-left: 8px;
+                        width: calc(100% - 56px);
+
+                        &:hover {
+                            & .edit-item-icon {
+                                display: block;
+                            }
+                        }
+                        & .edit-item-icon {
+                            margin-left: 2px;
+                            width: 21px;
+                            height: 21px;
+                            display: none;
+                        }
+                        p {
+                            min-width: 50px;
+                            white-space: nowrap;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                        }
+
+                        input {
+                            width: calc(100%);
+                            height: 42px;
+                            padding-left: 10px;
+                            font-size: 1.6rem;
+                            font-weight: 700;
+                            line-height: 1.5;
+                            letter-spacing: -0.26px;
+                            color: var(--font-color);
+                        }
                     }
                 }
+
                 &__lesson-type--margin,
                 &__trainer-select--margin {
                     margin-right: 5px;
@@ -260,6 +293,12 @@ main {
                                 display: block;
                             }
                         }
+                        & .edit-item-icon {
+                            margin-left: 2px;
+                            width: 21px;
+                            height: 21px;
+                            display: none;
+                        }
 
                         & p {
                             text-align: initial;
@@ -268,12 +307,6 @@ main {
                         .item-text {
                             display: flex;
                             align-items: center;
-                        }
-                        & .edit-item-icon {
-                            margin-left: 2px;
-                            width: 21px;
-                            height: 21px;
-                            display: none;
                         }
 
                         .l-item-input {
@@ -340,7 +373,7 @@ main {
                     display: grid;
                     height: calc(100% - 25px);
                     width: 100%;
-                    grid-template-columns: repeat(2, 49%);
+                    grid-template-columns: repeat(2, calc(50% - 5px));
                     grid-auto-rows: 102px;
                     column-gap: 10px;
 
@@ -353,9 +386,13 @@ main {
                         cursor: pointer;
                         height: 92px;
 
+                        &:hover {
+                            background-color: var(--background-color);
+                        }
+
                         img {
-                            height: 13px;
-                            width: 13px;
+                            height: 20px;
+                            width: 20px;
                             margin-right: 8px;
                         }
                         .add-membership-button__text {
@@ -422,20 +459,19 @@ main {
                                 display: flex;
                                 justify-content: center;
                                 align-items: center;
-                                width: 36px;
-                                height: 36px;
+                                width: 34px;
+                                height: 34px;
                                 border-radius: 50%;
                                 & > img {
                                     width: 24px;
                                     height: 24px;
                                 }
                             }
-
-                            & > img {
-                                left: 134px;
-                                bottom: -12px;
-                                position: absolute;
-                            }
+                        }
+                        img.pointer {
+                            left: 134px;
+                            bottom: -12px;
+                            position: absolute;
                         }
                     }
                     .guide-text {
@@ -492,10 +528,16 @@ main {
                         line-height: 1.42;
                         letter-spacing: -0.14px;
                         color: var(--grey);
+                        &:hover {
+                            background-color: var(--background-color);
+                        }
                         & > img {
                             width: 15px;
                             height: 15px;
-                            margin-top: 3.5px;
+                            margin-top: 1.5px;
+                        }
+                        & p {
+                            margin-right: 2px;
                         }
                     }
 
@@ -506,13 +548,18 @@ main {
                         position: absolute;
                         top: calc(50% - 56px);
                         left: calc(50% - 116px);
+                        & p {
+                            &:not(:first-of-type) {
+                                margin-top: 1px;
+                            }
+                        }
                         & > img {
                             width: 40px;
                             height: 18px;
-                            margin-bottom: 10px;
+                            margin-bottom: 20px;
                         }
                         & > .go-membership-button {
-                            margin-top: 10px;
+                            margin-top: 15px;
                         }
                     }
 
@@ -600,14 +647,14 @@ main {
                     left: calc(50% - 292.5px) !important;
                 }
             }
-            @media (min-width: 2260px) {
+            @media (min-width: 2450px) {
                 -ms-flex: auto;
                 flex: auto;
                 max-width: initial;
 
                 .selected-lesson-membershiplist {
                     .l-membership-item {
-                        grid-template-columns: repeat(3, 33.333333333%) !important;
+                        grid-template-columns: repeat(3, calc(33.2% - 5px)) !important;
                     }
                 }
             }
@@ -633,7 +680,7 @@ main {
                 flex: 0 0 67.8668478%;
                 max-width: 67.8668478%;
             }
-            @media (min-width: 2260px) {
+            @media (min-width: 2450px) {
                 -ms-flex: auto;
                 flex: auto;
                 max-width: initial;
@@ -659,7 +706,7 @@ main {
     z-index: 50 !important;
 }
 .guide-image-bar {
-    margin: 0px 5px;
+    margin: 0px 9px;
     color: var(--border-color);
 }
 .h-pos-relative {

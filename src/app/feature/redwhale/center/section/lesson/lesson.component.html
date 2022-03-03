@@ -14,7 +14,7 @@
   </header>
 
   <main class="l-main">
-    <section  class="main__left thin-scroll-y-overlay2 "
+    <section  class="main__left thin-scroll-y "
       [ngClass] = "{
           'main__left--flex' : (drawer$ | async).tabName == 'none',
           'main__left--flex-drawer' : (drawer$ | async).tabName != 'none'
@@ -79,7 +79,7 @@
     </section>
 
 
-    <section class="main__right thin-scroll-y-overlay2 "
+    <section class="main__right thin-scroll-y "
       [ngClass] = "{
           'main__right--flex' : (drawer$ | async).tabName == 'none',
           'main__right--flex-drawer' : (drawer$ | async).tabName != 'none'
@@ -113,7 +113,10 @@
 
           <div class="selected-lesson-top">
 
-            <div class="d-flex align-items-center">
+            <div
+              class="d-flex align-items-center selected-lesson-top__left"
+              [style.width] = "selectedLesson?.lessonData ? '' : '100% !important'"
+            >
               <gl-lesson-icon
                 [backGroundColor]="selectedLesson?.lessonData?.color"
                 [isLesson]="selectedLesson?.lessonData ? true : false"
@@ -128,6 +131,7 @@
                 >
                   {{selectedLesson?.lessonData ? selectedLesson.lessonData.name : '왼쪽 카테고리에서 수업을 선택해주세요.'}}
                 </p>
+                <img *ngIf="selectedLesson?.lessonData && !selLessonInputObj.name.isOn" class='edit-item-icon' src="assets/icons/etc/edit.svg" alt="">
                 <input
                   *ngIf="selLessonInputObj.name.isOn"
                   class="rw-input"
@@ -142,6 +146,7 @@
             <div *ngIf="selectedLesson?.lessonData " class="d-flex ">
               <div class="selected-lesson-top__lesson-type--margin">
                 <gl-lesson-select
+                  [width]="'110'"
                   [items]="lessonType_list"
                   [(ngModel)]="selectedLessonTypeObj"
                   [height_type]="'small'"
@@ -279,14 +284,14 @@
                   <img src="assets/icons/etc/workout_white.svg">
                 </div>
                 <div class="guide-image-icon__contents">
-                  <p class="categ rw-typo-subtext2 ">레드웨일</p>
-                  <div class="card-title-container rw-typo-title2">
+                  <p class="categ rw-typo-subtext4 ">레드웨일</p>
+                  <div class="card-title-container rw-typo-bodytext2">
                     <p class="card-title">레드웨일 수업</p>
-                    <p class="card-desc1 rw-typo-subtext1">수업타입<span class="guide-image-bar">|</span>강사</p>
+                    <p class="card-desc1 rw-typo-subtext3">수업타입<span class="guide-image-bar">|</span>강사</p>
                   </div>
                 </div>
               </div>
-              <img src="assets/icons/etc/cursor_pointer.svg">
+              <img class="pointer" src="assets/icons/etc/cursor_pointer.svg">
             </div>
             <div class="guide-text rw-typo-subtext2">
               <p>카테고리에서 수업을 선택하신 후,</p>

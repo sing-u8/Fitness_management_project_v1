@@ -103,6 +103,7 @@ export class LessonCardComponent implements OnInit, AfterViewInit, OnDestroy {
             MembershipActions.updateSelectedMembership({
                 selectedMembership: selMembership,
                 reqBody: { class_item_ids: lessonItemIdList },
+                updateType: undefined,
             })
         )
         // !! 예약가능한 수업 추가할 때, 순서가 틀어지지 않는지 확인하기  위 액션이 끝난 후에 아래가 실행되어야 함!

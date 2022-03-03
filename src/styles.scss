@@ -167,6 +167,13 @@
     color: var(--font-color);
 }
 
+.rw-typo-subtext3-darkgrey {
+    font-size: 1.1rem;
+    line-height: 1.45;
+    letter-spacing: -0.12px;
+    color: var(--darkgrey);
+}
+
 .rw-typo-subtext4 {
     font-size: 1.1rem;
     font-weight: 400;
@@ -280,7 +287,7 @@
     }
 
     &:disabled {
-        border: 1px solid var(--border-color);
+        border: 1px solid var(--border-color) !important;
         background-color: var(--background-color);
         color: var(--grey);
         cursor: not-allowed;

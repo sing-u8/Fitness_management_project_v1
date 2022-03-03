@@ -118,7 +118,7 @@
 
         .add-item {
             cursor: pointer;
-            height: 50px;
+            height: 35px;
             display: flex;
             align-items: center;
             font-size: 1.5rem;
@@ -126,6 +126,12 @@
             letter-spacing: -0.23px;
             color: var(--darkgrey);
             margin-bottom: 10px;
+            border-radius: 5px;
+
+            &:hover {
+                background-color: var(--border-color);
+            }
+
             img {
                 width: 21px;
                 height: 21px;
@@ -161,6 +167,6 @@
     }
 
     input {
-        width: calc(100% - (24px + 20px));
+        width: calc(100% - (27px + 20px));
     }
 }

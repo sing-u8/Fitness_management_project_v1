@@ -72,7 +72,7 @@
         [formControl]="newMembershipForm"
         class="rw-input add-item-input"
         type="text"
-        placeholder="수업명을 입력해주세요"
+        placeholder="회원권명을 입력해주세요."
       >
       <img src="assets/icons/etc/plus-darkgrey.svg">
     </div>
@@ -80,9 +80,9 @@
   </div>
 </div>
 
-<rw-modal
+<rw-small-modal
   [(visible)] = "isCategDelOpen"
   [data] = "delModalData"
   (cancel) ="onDeleteCategoryCancel()"
   (confirm) ="onDeleteCategoryConfirm()"
-></rw-modal>
+></rw-small-modal>

@@ -7,7 +7,8 @@
                         : 'var(--border-color)'"
 
   [class.selected] = "isIn=='category' && isSelected ? true : false"
-  [class.reservable-card-hover] = "isIn == 'reservableItemList'"
+  [class.reservable-card-hover] = "isIn == 'reservableItemList' "
+  [class.add-reservable-card-hover] = "isIn == 'addReservableItemList'"
   [class.card-hover-in-category] = "isIn == 'category'"
   (click) = " onClickItem()"
 >
@@ -30,13 +31,19 @@
       <p class="categ rw-typo-subtext2 ">{{cardInfo.category_name}}</p>
       <div class="card-title-container rw-typo-title2">
         <p class="card-title">{{cardInfo.name}}</p>
-        <p class="card-desc1 rw-typo-subtext1">{{cardInfo.type_name}}<span class="bar">|</span>{{cardInfo.trainer_name}}</p>
+        <div class="card-desc1 rw-typo-subtext1">
+          {{cardInfo.type_name}}
+          <span class="bar">|</span>
+          <p class="card-desc-tr-name">{{cardInfo.trainer_name}}</p>
+        </div>
       </div>
     </div>
   </div>
 
-  <p class="card-desc2 rw-typo-subtext1">
-    {{cardInfo.type_name}}<span class="bar">|</span>{{cardInfo.trainer_name}}
-  </p>
+  <div class="card-desc2 rw-typo-subtext1">
+    {{cardInfo.type_name}}
+    <span class="bar">|</span>
+    <p class="card-desc-tr-name">{{cardInfo.trainer_name}}</p>
+  </div>
 
 </div>

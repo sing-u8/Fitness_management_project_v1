@@ -11,8 +11,8 @@ p {
     cursor: pointer;
 
     padding: 15px 14px 11px 14px;
-    height: 92px;
-    min-height: 30px;
+    min-height: 92px;
+    // min-height: 30px;
     width: 100%;
     position: relative;
     display: flex;
@@ -25,7 +25,14 @@ p {
 
     &.card-hover-in-category {
         &:hover {
-            box-shadow: 0px 0px 10px 2px #b5b5b51c;
+            box-shadow: 0px 0px 10px rgba(181, 181, 181, 0.109804);
+        }
+    }
+
+    &.add-reservable-card-hover {
+        cursor: pointer;
+        &:hover {
+            box-shadow: 0px 0px 10px rgba(181, 181, 181, 0.109804);
         }
     }
 
@@ -35,6 +42,7 @@ p {
             .reservable-card-delete {
                 display: block;
             }
+            box-shadow: 0px 0px 10px rgba(181, 181, 181, 0.109804);
         }
     }
 
@@ -45,6 +53,10 @@ p {
         top: 15px;
         cursor: pointer;
         z-index: 30;
+        border-radius: 5px;
+        &:hover {
+            background-color: var(--background-color);
+        }
         img {
             width: 22px;
             height: 22px;
@@ -67,18 +79,32 @@ p {
             .card-title-container {
                 display: flex;
                 margin-top: 1px;
-                align-items: center;
+                align-items: flex-end;
                 justify-content: space-between;
                 width: 100%;
                 .card-title {
                     text-overflow: ellipsis;
                     overflow: hidden;
                     width: 65%;
+                    display: -webkit-box;
+                    -webkit-box-orient: vertical;
+                    -webkit-line-clamp: 2;
                 }
                 .card-desc1 {
                     display: none;
                     width: 35%;
                     text-align: end;
+                    position: relative;
+                    flex-direction: row;
+                    justify-content: flex-end;
+
+                    .card-desc-tr-name {
+                        display: block;
+                        text-overflow: ellipsis;
+                        overflow: hidden;
+                        white-space: nowrap;
+                        max-width: 50%;
+                    }
                 }
             }
         }
@@ -90,6 +116,18 @@ p {
         text-overflow: ellipsis;
         overflow: hidden;
         margin-top: 6px;
+        position: relative;
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+
+        .card-desc-tr-name {
+            display: block;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+            max-width: 30%;
+        }
     }
     .icon {
         display: flex;
@@ -104,20 +142,20 @@ p {
         }
     }
     .bar {
-        margin: 0px 10px;
+        margin: 0px 10.5px;
         color: var(--border-color);
     }
 }
 
 @media (min-width: 1920px) {
     .card-outer-container {
-        height: 70px;
+        min-height: 68px;
     }
     .card-desc2 {
-        display: none;
+        display: none !important;
     }
     .card-desc1 {
-        display: block !important;
+        display: flex !important;
     }
     .reservable-card-delete {
         right: 8px !important;

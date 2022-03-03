@@ -2,6 +2,7 @@
     position: relative;
     .icon-container {
         display: flex;
+        align-items: center;
 
         .lesson-icon {
             display: flex;
@@ -16,19 +17,19 @@
                 height: 24px;
             }
         }
-        .mdi {
+        .arrow-icon {
             transform: rotateX(0deg);
             transition: transform 0.2s linear;
             -moz-transition: transform 0.2s linear;
             -webkit-transition: transform 0.2s linear;
             -o-transition: transform 0.2s linear;
-            font-size: 2rem;
-            color: var(--font-color);
-            display: flex;
-            align-items: center;
+            width: 20px;
+            height: 22px;
+            background-size: cover;
+            background-image: url('/assets/icons/etc/arrow-down-fill-grey.svg');
         }
         .open {
-            &.mdi {
+            &.arrow-icon {
                 transform: rotateX(180deg);
                 transition: transform 0.2s linear;
                 -moz-transition: transform 0.2s linear;

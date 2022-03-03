@@ -101,7 +101,7 @@ export class LessonComponent implements OnInit, AfterViewInit, OnDestroy {
         },
         {
             name: '그룹 수업',
-            value: 'group',
+            value: 'class_item_type_group',
         },
     ]
 
@@ -345,7 +345,7 @@ export class LessonComponent implements OnInit, AfterViewInit, OnDestroy {
     removeReservationMembership(itemId: string, curLesMemItemList: Array<MembershipItem>) {
         const filteredIdList = _.filter(curLesMemItemList, (v) => v.id != itemId).map((v) => String(v.id))
         const reqBody: UpdateItemRequestBody = { membership_item_ids: filteredIdList }
-        this.updateSelLesson(this.selectedLesson, reqBody)
+        this.updateSelLesson(this.selectedLesson, reqBody, 'RemoveReservationMembership')
     }
 
     initAddReservableMembershipList(lesItem: FromLesson.SelectedLesson) {
@@ -368,12 +368,16 @@ export class LessonComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     // nxStore helper
-    updateSelLesson(selectedLesson: SelectedLesson, reqBody: UpdateItemRequestBody) {
-        console.log('updateSelLesson in lesson.component')
+    updateSelLesson(
+        selectedLesson: SelectedLesson,
+        reqBody: UpdateItemRequestBody,
+        updateType: LessonActions.UpdateType = undefined
+    ) {
         this.nxStore.dispatch(
             LessonActions.updateSelectedLesson({
                 selectedLesson,
                 reqBody,
+                updateType,
             })
         )
         // this.nxStore.dispatch(MembershipActions.startUpsertState({ centerId: this.center.id }))

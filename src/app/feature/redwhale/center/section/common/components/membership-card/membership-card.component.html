@@ -2,7 +2,8 @@
   class="card-outer-container"
   [style.borderColor]="isIn=='category' && cardInfo.color && isSelected ? cardInfo.color : 'var(--border-color)'"
   [class.selected] = "isIn=='category' && isSelected ? true : false"
-  [class.reservable-card-hover] = "isIn == 'reservableItemList'"
+  [class.reservable-card-hover] = "isIn == 'reservableItemList' "
+  [class.add-reservable-card-hover] = "isIn == 'addReservableItemList'"
   [class.card-hover-in-category] = "isIn == 'category'"
   (click) = " onClickItem()"
 >

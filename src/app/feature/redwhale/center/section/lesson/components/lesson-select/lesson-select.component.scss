@@ -15,27 +15,32 @@
         cursor: pointer;
 
         .text {
-            font-weight: 500;
+            font-weight: 700;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
         }
 
-        .mdi {
+        .arrow-icon {
             transform: rotateX(0deg);
             transition: transform 0.2s linear;
             -moz-transition: transform 0.2s linear;
             -webkit-transition: transform 0.2s linear;
             -o-transition: transform 0.2s linear;
             font-size: 2.2rem;
-            color: var(--font-color);
+            color: var(--grey);
+
+            width: 20px;
+            height: 22px;
+            background-size: cover;
+            background-image: url('/assets/icons/etc/arrow-down-fill-grey.svg');
         }
     }
 
     .open {
         background-color: var(--white);
 
-        .mdi {
+        .arrow-icon {
             transform: rotateX(180deg);
             transition: transform 0.2s linear;
             -moz-transition: transform 0.2s linear;
@@ -50,7 +55,7 @@
         cursor: not-allowed;
 
         .text,
-        .mdi {
+        .arrow-icon {
             color: var(--grey);
         }
     }
@@ -87,12 +92,6 @@
             }
         }
 
-        .active {
-            span {
-                font-weight: 700;
-            }
-        }
-
         .disabled {
             border: 1px solid transparent;
             background-color: var(--white);
@@ -106,6 +105,12 @@
                 color: var(--grey);
             }
         }
+    }
+}
+
+.active {
+    span {
+        font-weight: 700 !important;
     }
 }
 

@@ -40,20 +40,26 @@
         -webkit-transition: opacity 0s;
         -o-transition: opacity 0s;
 
-        .text {
-            margin-top: 44px;
-        }
+        position: relative;
 
-        .sub-text {
-            margin-top: 15px;
-            padding: 0 25px;
-            white-space: pre-line;
-            text-align: center;
+        .l-text {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: calc(100% - 50px);
+            width: 100%;
+
+            .sub-text {
+                margin-top: 20px;
+                padding: 0 25px;
+                white-space: pre-line;
+                text-align: center;
+            }
         }
 
         .button-group {
             height: 50px;
-            margin-top: 35px;
+            // margin-top: 40px;
             padding: 10px 0;
             border-top: 1px solid var(--border-color);
 

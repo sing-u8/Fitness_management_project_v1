@@ -22,6 +22,7 @@ import { EmptyIndicatorComponent } from './components/common/empty-indicator/emp
 import { ButtonComponent } from './components/common/button/button.component'
 import { TermsEULAComponent } from './components/terms/terms-eula/terms-eula.component'
 import { TermsPrivacyComponent } from './components/terms/terms-privacy/terms-privacy.component'
+import { SmallModalComponent } from './components/common/small-modal/small-modal.component'
 
 // Directives
 // import { AutoScrollDirective } from './directives/auto-scroll.directive'
@@ -102,6 +103,7 @@ import { NgxSpinnerModule } from 'ngx-spinner'
         ButtonComponent,
         TermsEULAComponent,
         TermsPrivacyComponent,
+        SmallModalComponent,
         // Directives
         // AutoScrollDirective,
         ButtonDirective,
@@ -158,6 +160,7 @@ import { NgxSpinnerModule } from 'ngx-spinner'
         ButtonComponent,
         TermsEULAComponent,
         TermsPrivacyComponent,
+        SmallModalComponent,
         // Directives
         // AutoScrollDirective,
         ButtonDirective,

@@ -1,6 +1,6 @@
 <div class="rw-select user-select-none" #selectElement>
     <div
-        class="selected rw-typo-bodytext1 d-flex justify-content-center align-items-center"
+        class="selected rw-typo-bodytext0 d-flex justify-content-center align-items-center"
         [class.open]="isOpen"
         [class.disabled]="disabled !== false"
         [class.height-small] ="height_type == 'small'"
@@ -21,7 +21,7 @@
           ></rw-avatar>
         </div>
         <span class="text flex-fill">{{ value?.name }}</span>
-        <span class="mdi mdi-chevron-down"></span>
+        <span class="arrow-icon"></span>
     </div>
     <div
       class="items"
@@ -33,7 +33,7 @@
         <div
             class="item d-flex align-items-center"
             *ngFor="let item of items"
-            [class.active]="item.value == value?.value"
+            [class.active]="item.value == value?.value || item.name == value?.name"
             [class.disabled]="item.disabled"
             [class.height-small] ="height_type == 'small'"
             (click)="onSelect(item)"
@@ -49,7 +49,7 @@
                 fontSize="10"
               ></rw-avatar>
             </div>
-            <span class="rw-typo-bodytext1">{{ item.name }}</span>
+            <span class="rw-typo-bodytext0">{{ item.name }}</span>
         </div>
     </div>
 </div>

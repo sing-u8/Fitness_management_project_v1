@@ -212,7 +212,7 @@ export class MembershipComponent implements OnInit {
             if (String(this.selMembershipInputObj[inputType].value.value) != '') {
                 reqBody[inputType] = this.selMembershipInputObj[inputType].value.value
             }
-            reqBody['infinity_yn'] = this.selMembershipInputObj[inputType].isInfinit == true ? 1 : 0
+            reqBody['unlimited'] = this.selMembershipInputObj[inputType].isInfinit == true ? true : false
 
             this.updateSelMembership(this.selectedMembership, reqBody)
         } else if (
@@ -301,7 +301,7 @@ export class MembershipComponent implements OnInit {
         const filteredIdList = _.filter(curMemLesItemList, (v) => v.id != itemId).map((v) => String(v.id))
 
         const reqBody: UpdateItemRequestBody = { class_item_ids: filteredIdList }
-        this.updateSelMembership(this.selectedMembership, reqBody)
+        this.updateSelMembership(this.selectedMembership, reqBody, 'RemoveReservationLesson')
     }
 
     // init item add reservable lesson item list
@@ -325,11 +325,16 @@ export class MembershipComponent implements OnInit {
     }
 
     // nxStore helper
-    updateSelMembership(selectedMembership: SelectedMembership, reqBody: UpdateItemRequestBody) {
+    updateSelMembership(
+        selectedMembership: SelectedMembership,
+        reqBody: UpdateItemRequestBody,
+        updateType: MembershipActions.UpdateType = undefined
+    ) {
         this.nxStore.dispatch(
             MembershipActions.updateSelectedMembership({
                 selectedMembership,
                 reqBody,
+                updateType,
             })
         )
     }

@@ -32,12 +32,12 @@ export interface TrainerFilter {
     value: CenterUser
 }
 export const initialTrainerFilter: TrainerFilter = {
-    name: '강사 전체',
+    name: '강사 전체보기',
     value: undefined,
 }
 export const initialTrainerFilterList: Array<TrainerFilter> = [
     {
-        name: '강사 전체',
+        name: '강사 전체보기',
         value: undefined,
     },
 ]

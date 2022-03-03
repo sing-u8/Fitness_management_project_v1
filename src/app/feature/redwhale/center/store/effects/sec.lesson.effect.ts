@@ -13,6 +13,8 @@ import {
 import * as LessonSelector from '../selectors/sec.lesson.selector'
 import * as MembershipActions from '../actions/sec.membership.actions'
 
+import { showToast } from '@appStore/actions/toast.action'
+
 import { CenterLessonService } from '@services/center-lesson.service'
 import { CenterUsersService } from '@services/center-users.service'
 
@@ -131,7 +133,7 @@ export class LessongEffect {
     public updateSelectedLesson$ = createEffect(() =>
         this.actions$.pipe(
             ofType(LessonActions.updateSelectedLesson),
-            switchMap(({ selectedLesson, reqBody }) => {
+            switchMap(({ selectedLesson, reqBody, updateType }) => {
                 console.log('update selected lesson - reqBody : ', reqBody)
                 return this.gymLessonApi
                     .updateItem(selectedLesson.centerId, selectedLesson.categId, selectedLesson.lessonData.id, reqBody)
@@ -154,12 +156,22 @@ export class LessongEffect {
                                 }),
                                 concatLatestFrom(() => this.store.select(LessonSelector.currentCenter)),
                                 switchMap(([lesCategState, curGym]) => {
-                                    return [
-                                        LessonActions.updateLessonCategs({
-                                            lessonCategState: lesCategState,
-                                        }),
-                                        MembershipActions.startUpsertState({ centerId: curGym }),
-                                    ]
+                                    if (updateType == 'RemoveReservationMembership') {
+                                        return [
+                                            LessonActions.updateLessonCategs({
+                                                lessonCategState: lesCategState,
+                                            }),
+                                            MembershipActions.startUpsertState({ centerId: curGym }),
+                                            showToast({ text: '예약 가능한 회원권 1개가 삭제되었습니다.' }),
+                                        ]
+                                    } else {
+                                        return [
+                                            LessonActions.updateLessonCategs({
+                                                lessonCategState: lesCategState,
+                                            }),
+                                            MembershipActions.startUpsertState({ centerId: curGym }),
+                                        ]
+                                    }
                                 })
                             )
                         )
@@ -212,6 +224,7 @@ export class LessongEffect {
                 this.gymLessonApi.getCategoryList(action.centerId).pipe(
                     map((categs) => {
                         const categState = _.map(categs, (categ) => {
+                            console.log('upsertState$ : ', lesCategEn)
                             const _categState: LessonCategoryState = {
                                 ...categ,
                                 isCategOpen: lesCategEn[categ.id].isCategOpen,
