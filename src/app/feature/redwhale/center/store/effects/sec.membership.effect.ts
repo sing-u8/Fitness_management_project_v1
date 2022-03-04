@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core'
 import { createEffect, Actions, ofType, concatLatestFrom } from '@ngrx/effects'
 import { Store } from '@ngrx/store'
-import { of } from 'rxjs'
+import { of, EMPTY } from 'rxjs'
 import { catchError, switchMap, tap, map, filter } from 'rxjs/operators'
 import * as MembershipActions from '../actions/sec.membership.actions'
 import { MembershipCategoryState, SelectedMembership } from '../reducers/sec.membership.reducer'
@@ -54,12 +54,13 @@ export class membershipEffect {
             this.actions$.pipe(
                 ofType(MembershipActions.removeMembershipCateg),
                 switchMap(({ id, centerId }) =>
-                    this.gymMembershipApi
-                        .deleteCategory(centerId, id)
-                        .pipe(catchError((err: string) => of(MembershipActions.error({ error: err }))))
+                    this.gymMembershipApi.deleteCategory(centerId, id).pipe(
+                        map(() => LessonActions.startUpsertState({ centerId: centerId })),
+                        catchError((err: string) => of(MembershipActions.error({ error: err })))
+                    )
                 )
-            ),
-        { dispatch: false }
+            )
+        // { dispatch: false }
     )
 
     public changeMembershipCategName = createEffect(
@@ -68,12 +69,12 @@ export class membershipEffect {
                 ofType(MembershipActions.changeMembershipCategName),
                 switchMap(({ centerId, id, categName }) =>
                     this.gymMembershipApi.updateCategory(centerId, id, { name: categName }).pipe(
-                        tap(),
+                        map(() => LessonActions.startUpsertState({ centerId: centerId })),
                         catchError((err: string) => of(MembershipActions.error({ error: err })))
                     )
                 )
-            ),
-        { dispatch: false }
+            )
+        // { dispatch: false }
     )
 
     // categ data
@@ -202,6 +203,10 @@ export class membershipEffect {
             switchMap(([action, memCategEn]) =>
                 this.gymMembershipApi.getCategoryList(action.centerId).pipe(
                     map((categs) => {
+                        if (_.isEmpty(memCategEn)) {
+                            return MembershipActions.finishUpsertState({ membershipCategState: [] })
+                        }
+
                         const categState = _.map(categs, (categ) => {
                             const _categState: MembershipCategoryState = {
                                 ...categ,
@@ -209,6 +214,7 @@ export class membershipEffect {
                             }
                             return _categState
                         })
+                        console.log('upser membership state : ', categs, categState)
                         return MembershipActions.finishUpsertState({ membershipCategState: categState })
                     }),
                     catchError((err: string) => of(MembershipActions.error({ error: err })))

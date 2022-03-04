@@ -57,8 +57,8 @@ export function selectCategoryId(categ: ClassCategory): string {
     return categ.id
 }
 export const adapter: EntityAdapter<LessonCategoryState> = createEntityAdapter<LessonCategoryState>({
-    selectId: selectCategoryId,
-    sortComparer: (a, b) => Number(a.id) - Number(b.id),
+    // selectId: selectCategoryId,
+    // sortComparer: false, // (a, b) => Number(a.id) - Number(b.id),
 })
 export const initialState: State = adapter.getInitialState({
     selectedLesson: initialSelectedLesson,

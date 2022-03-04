@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core'
 import { createEffect, Actions, ofType, concatLatestFrom } from '@ngrx/effects'
 import { Store } from '@ngrx/store'
-import { of } from 'rxjs'
+import { of, EMPTY } from 'rxjs'
 import { catchError, switchMap, tap, map, filter } from 'rxjs/operators'
 import * as LessonActions from '../actions/sec.lesson.actions'
 import {
@@ -65,12 +65,13 @@ export class LessongEffect {
             this.actions$.pipe(
                 ofType(LessonActions.removeLessonCateg),
                 switchMap(({ id, centerId }) =>
-                    this.gymLessonApi
-                        .deleteCategory(centerId, id)
-                        .pipe(catchError((err: string) => of(LessonActions.error({ error: err }))))
+                    this.gymLessonApi.deleteCategory(centerId, id).pipe(
+                        map(() => MembershipActions.startUpsertState({ centerId: centerId })),
+                        catchError((err: string) => of(LessonActions.error({ error: err })))
+                    )
                 )
-            ),
-        { dispatch: false }
+            )
+        // { dispatch: false }
     )
 
     public changeLessonCategName = createEffect(
@@ -79,12 +80,12 @@ export class LessongEffect {
                 ofType(LessonActions.changeLessonCategName),
                 switchMap(({ centerId, id, categName }) =>
                     this.gymLessonApi.updateCategory(centerId, id, { name: categName }).pipe(
-                        tap(),
+                        map(() => MembershipActions.startUpsertState({ centerId: centerId })),
                         catchError((err: string) => of(LessonActions.error({ error: err })))
                     )
                 )
-            ),
-        { dispatch: false }
+            )
+        // { dispatch: false }
     )
 
     // categ data
@@ -134,7 +135,6 @@ export class LessongEffect {
         this.actions$.pipe(
             ofType(LessonActions.updateSelectedLesson),
             switchMap(({ selectedLesson, reqBody, updateType }) => {
-                console.log('update selected lesson - reqBody : ', reqBody)
                 return this.gymLessonApi
                     .updateItem(selectedLesson.centerId, selectedLesson.categId, selectedLesson.lessonData.id, reqBody)
                     .pipe(
@@ -145,6 +145,7 @@ export class LessongEffect {
                         switchMap(([action, lesCategEn]) =>
                             this.gymLessonApi.getCategoryList(selectedLesson.centerId).pipe(
                                 map((categs) => {
+                                    console.log('update selected lesson  : ', reqBody, '- lesCategEn: ', lesCategEn)
                                     const categState = _.map(categs, (categ) => {
                                         const _categState: LessonCategoryState = {
                                             ...categ,
@@ -223,14 +224,17 @@ export class LessongEffect {
             switchMap(([action, lesCategEn]) =>
                 this.gymLessonApi.getCategoryList(action.centerId).pipe(
                     map((categs) => {
+                        if (_.isEmpty(lesCategEn)) {
+                            return LessonActions.finishUpsertState({ lessonCategState: [] })
+                        }
                         const categState = _.map(categs, (categ) => {
-                            console.log('upsertState$ : ', lesCategEn)
                             const _categState: LessonCategoryState = {
                                 ...categ,
                                 isCategOpen: lesCategEn[categ.id].isCategOpen,
                             }
                             return _categState
                         })
+                        console.log('upser lesson state : ', categs, categState)
                         return LessonActions.finishUpsertState({ lessonCategState: categState })
                     }),
                     catchError((err: string) => of(LessonActions.error({ error: err })))
