@@ -60,12 +60,7 @@ export class MembershipCardComponent implements OnInit, AfterViewInit, OnDestroy
     }
     constructor(private nxStore: Store) {} // private gymSecLessonState: GymSecLessonStateService // private gymMembershipState: GymSecMembershipStateService,
 
-    ngOnInit(): void {}
-    ngOnDestroy(): void {
-        this.unSubscriber$.next()
-        this.unSubscriber$.complete()
-    }
-    ngAfterViewInit(): void {
+    ngOnInit(): void {
         if (this.isIn == 'category') {
             this.nxStore
                 .pipe(select(MembershipSelector.selectedMembership), takeUntil(this.unSubscriber$))
@@ -79,6 +74,11 @@ export class MembershipCardComponent implements OnInit, AfterViewInit, OnDestroy
         }
         this.parseCardInfo()
     }
+    ngOnDestroy(): void {
+        this.unSubscriber$.next()
+        this.unSubscriber$.complete()
+    }
+    ngAfterViewInit(): void {}
 
     onClickItem() {
         if (this.isIn == 'category') {

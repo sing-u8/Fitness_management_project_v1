@@ -8,6 +8,7 @@ import * as MembershipActions from '../actions/sec.membership.actions'
 import { MembershipCategory } from '@schemas/membership-category'
 import { MembershipItem } from '@schemas/membership-item'
 import { Loading } from '@schemas/store/loading'
+import { truncate } from 'lodash'
 
 export interface SelectedMembership {
     membershipData: MembershipItem
@@ -77,7 +78,7 @@ export const membershipReducer = createImmerReducer(
         const newOneLesCategState: MembershipCategoryState = {
             ...membershipCateg,
             isCategOpen: true,
-            initialInputOn: false,
+            initialInputOn: true,
         }
         return adapter.addOne(newOneLesCategState, state)
     }),
@@ -164,8 +165,7 @@ export const membershipReducer = createImmerReducer(
     }),
     // inital input
     on(MembershipActions.disableInitInput, (state, { categId }): State => {
-        state.entities[categId].initialInputOn = false
-        return state
+        return adapter.updateOne({ id: categId, changes: { initialInputOn: false } }, state)
     })
 )
 

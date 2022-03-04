@@ -95,7 +95,7 @@ export const lessonReducer = createImmerReducer(
     }),
     on(LessonActions.startAddLessonCateg, (state) => state),
     on(LessonActions.FinishAddLessonCateg, (state, { lessonCateg }) => {
-        const newOneLesCategState: LessonCategoryState = { ...lessonCateg, isCategOpen: true, initialInputOn: false }
+        const newOneLesCategState: LessonCategoryState = { ...lessonCateg, isCategOpen: true, initialInputOn: true }
         return adapter.addOne(newOneLesCategState, state)
     }),
     on(LessonActions.removeLessonCateg, (state, { id }) => {
@@ -195,6 +195,10 @@ export const lessonReducer = createImmerReducer(
             )
         }
         return newState
+    }),
+    // inital input
+    on(LessonActions.disableInitInput, (state, { categId }): State => {
+        return adapter.updateOne({ id: categId, changes: { initialInputOn: false } }, state)
     })
 )
 

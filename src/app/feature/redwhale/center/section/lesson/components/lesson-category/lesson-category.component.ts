@@ -68,8 +68,7 @@ export class LessonCategoryComponent implements OnInit, AfterViewInit, OnDestroy
             })
     }
 
-    ngOnInit(): void {}
-    ngAfterViewInit(): void {
+    ngOnInit(): void {
         this.categNameForm.setValue(this.categ.name)
 
         // init input variable
@@ -78,6 +77,7 @@ export class LessonCategoryComponent implements OnInit, AfterViewInit, OnDestroy
         this.isCategOpen = this.categ.isCategOpen
         this.isAddLessonInputOn = this.categ.initialInputOn
     }
+    ngAfterViewInit(): void {}
     ngOnDestroy(): void {
         this.unSubscriber$.next()
         this.unSubscriber$.complete()
@@ -160,9 +160,9 @@ export class LessonCategoryComponent implements OnInit, AfterViewInit, OnDestroy
 
     // add categ item
     addCategItem(itemName: string) {
-        //   if (this.categ.initialInputOn == true) {
-        //     this.nxStore.dispatch(MembershipActions.disableInitInput({ categId: this.categ.id }))
-        // }
+        if (this.categ.initialInputOn == true) {
+            this.nxStore.dispatch(LessonActions.disableInitInput({ categId: this.categ.id }))
+        }
         if (_.trim(itemName) == '') {
             this.setAddLessonItemOff()
             return

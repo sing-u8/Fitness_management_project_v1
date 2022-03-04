@@ -68,8 +68,7 @@ export class MembershipCategoryComponent implements OnInit, AfterViewInit {
             })
     }
 
-    ngOnInit(): void {}
-    ngAfterViewInit(): void {
+    ngOnInit(): void {
         this.categNameForm.setValue(this.categ.name)
 
         // init input variable
@@ -78,6 +77,7 @@ export class MembershipCategoryComponent implements OnInit, AfterViewInit {
         this.isCategOpen = this.categ.isCategOpen
         this.isAddMembershipInputOn = this.categ.initialInputOn
     }
+    ngAfterViewInit(): void {}
     ngOnDestroy(): void {
         this.unSubscriber$.next()
         this.unSubscriber$.complete()
@@ -163,11 +163,12 @@ export class MembershipCategoryComponent implements OnInit, AfterViewInit {
 
     // add categ item
     addCategItem(itemName: string) {
-        // if (this.categ.initialInputOn == true) {
-        //     this.nxStore.dispatch(MembershipActions.disableInitInput({ categId: this.categ.id }))
-        // }
+        if (this.categ.initialInputOn == true) {
+            this.nxStore.dispatch(MembershipActions.disableInitInput({ categId: this.categ.id }))
+        }
         if (_.trim(itemName) == '') {
             this.setAddMembershipItemOff()
+
             return
         }
         this.nxStore.dispatch(
