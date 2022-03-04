@@ -37,7 +37,11 @@ export class LessongEffect {
                 this.gymLessonApi.getCategoryList(centerId).pipe(
                     map((categs) => {
                         const categState = _.map(categs, (categ) => {
-                            const _categState: LessonCategoryState = { ...categ, isCategOpen: false }
+                            const _categState: LessonCategoryState = {
+                                ...categ,
+                                isCategOpen: false,
+                                initialInputOn: false,
+                            }
                             return _categState
                         })
                         return LessonActions.finishLoadLessonCategs({ lessonCategState: categState })
@@ -95,9 +99,18 @@ export class LessongEffect {
             ofType(LessonActions.startAddLessonToCateg),
             switchMap(({ centerId, categId, categName, reqBody }) =>
                 this.gymLessonApi.createItem(centerId, categId, reqBody).pipe(
-                    map((newItem) =>
-                        LessonActions.finishiAddLessonToCateg({ categId: categId, newLessonData: newItem })
-                    ),
+                    switchMap((newItem) => [
+                        LessonActions.finishiAddLessonToCateg({ categId: categId, newLessonData: newItem }),
+
+                        LessonActions.setSelectedLesson({
+                            selectedLesson: {
+                                centerId: centerId,
+                                categId: categId,
+                                categName: categName,
+                                lessonData: newItem,
+                            },
+                        }),
+                    ]),
                     catchError((err: string) => of(LessonActions.error({ error: err })))
                 )
             )
@@ -150,6 +163,7 @@ export class LessongEffect {
                                         const _categState: LessonCategoryState = {
                                             ...categ,
                                             isCategOpen: lesCategEn[categ.id].isCategOpen,
+                                            initialInputOn: false,
                                         }
                                         return _categState
                                     })
@@ -231,6 +245,7 @@ export class LessongEffect {
                             const _categState: LessonCategoryState = {
                                 ...categ,
                                 isCategOpen: lesCategEn[categ.id].isCategOpen,
+                                initialInputOn: false,
                             }
                             return _categState
                         })

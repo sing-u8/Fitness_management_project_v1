@@ -25,6 +25,7 @@ export const initialSelectedLesson: SelectedLesson = {
 
 export interface LessonCategoryState extends ClassCategory {
     isCategOpen: boolean
+    initialInputOn: boolean
 }
 
 export interface TrainerFilter {
@@ -94,7 +95,7 @@ export const lessonReducer = createImmerReducer(
     }),
     on(LessonActions.startAddLessonCateg, (state) => state),
     on(LessonActions.FinishAddLessonCateg, (state, { lessonCateg }) => {
-        const newOneLesCategState: LessonCategoryState = { ...lessonCateg, isCategOpen: true }
+        const newOneLesCategState: LessonCategoryState = { ...lessonCateg, isCategOpen: true, initialInputOn: false }
         return adapter.addOne(newOneLesCategState, state)
     }),
     on(LessonActions.removeLessonCateg, (state, { id }) => {
@@ -102,16 +103,12 @@ export const lessonReducer = createImmerReducer(
     }),
     // categ data
     on(LessonActions.changeLessonCategName, (state, { id, categName }) => {
-        const copyState = _.cloneDeep(state)
-        _.forEach(copyState.entities[id].items, (item, idx) => {
-            copyState.entities[id].items[idx].category_name = categName
+        state.entities[id].name = categName
+        _.forEach(state.entities[id].items, (item, idx) => {
+            state.entities[id].items[idx].category_name = categName
         })
 
-        const copyOneLesCategState = state.entities[id]
-        return adapter.updateOne(
-            { id: id, changes: { ...copyOneLesCategState, name: categName, items: copyState.entities[id].items } },
-            state
-        )
+        return state
     }),
     on(LessonActions.finishiAddLessonToCateg, (state, { categId, newLessonData }) => {
         const copyOneLesCategState = state.entities[categId]

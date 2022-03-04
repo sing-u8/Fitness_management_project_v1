@@ -76,6 +76,7 @@ export class MembershipCategoryComponent implements OnInit, AfterViewInit {
         this.items = this.categ.items
         this.name = this.categ.name
         this.isCategOpen = this.categ.isCategOpen
+        this.isAddMembershipInputOn = this.categ.initialInputOn
     }
     ngOnDestroy(): void {
         this.unSubscriber$.next()
@@ -162,6 +163,9 @@ export class MembershipCategoryComponent implements OnInit, AfterViewInit {
 
     // add categ item
     addCategItem(itemName: string) {
+        // if (this.categ.initialInputOn == true) {
+        //     this.nxStore.dispatch(MembershipActions.disableInitInput({ categId: this.categ.id }))
+        // }
         if (_.trim(itemName) == '') {
             this.setAddMembershipItemOff()
             return
@@ -177,6 +181,7 @@ export class MembershipCategoryComponent implements OnInit, AfterViewInit {
                 },
             })
         )
+
         this.setAddMembershipItemOff()
     }
 }

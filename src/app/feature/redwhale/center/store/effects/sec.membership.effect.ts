@@ -26,7 +26,11 @@ export class membershipEffect {
                 this.gymMembershipApi.getCategoryList(centerId).pipe(
                     map((categs) => {
                         const categState = _.map(categs, (categ) => {
-                            const _categState: MembershipCategoryState = { ...categ, isCategOpen: false }
+                            const _categState: MembershipCategoryState = {
+                                ...categ,
+                                isCategOpen: false,
+                                initialInputOn: false,
+                            }
                             return _categState
                         })
                         return MembershipActions.finishLoadMembershipCategs({ membershipCategState: categState })
@@ -84,9 +88,20 @@ export class membershipEffect {
             ofType(MembershipActions.startAddMembershipToCateg),
             switchMap(({ centerId, categId, categName, reqBody }) =>
                 this.gymMembershipApi.createItem(centerId, categId, reqBody).pipe(
-                    map((newItem) =>
-                        MembershipActions.finishiAddMembershipToCateg({ categId: categId, newMembershipData: newItem })
-                    ),
+                    switchMap((newItem) => [
+                        MembershipActions.finishiAddMembershipToCateg({
+                            categId: categId,
+                            newMembershipData: newItem,
+                        }),
+                        MembershipActions.setSelectedMembership({
+                            selectedMembership: {
+                                centerId: centerId,
+                                categId: categId,
+                                categName: categName,
+                                membershipData: newItem,
+                            },
+                        }),
+                    ]),
                     catchError((err: string) => of(MembershipActions.error({ error: err })))
                 )
             )
@@ -117,6 +132,7 @@ export class membershipEffect {
                                         const _categState: MembershipCategoryState = {
                                             ...categ,
                                             isCategOpen: memCategEn[categ.id].isCategOpen,
+                                            initialInputOn: false,
                                         }
                                         return _categState
                                     })
@@ -211,6 +227,7 @@ export class membershipEffect {
                             const _categState: MembershipCategoryState = {
                                 ...categ,
                                 isCategOpen: memCategEn[categ.id].isCategOpen,
+                                initialInputOn: false,
                             }
                             return _categState
                         })

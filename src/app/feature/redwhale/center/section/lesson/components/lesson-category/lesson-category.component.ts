@@ -76,6 +76,7 @@ export class LessonCategoryComponent implements OnInit, AfterViewInit, OnDestroy
         this.items = this.categ.items
         this.name = this.categ.name
         this.isCategOpen = this.categ.isCategOpen
+        this.isAddLessonInputOn = this.categ.initialInputOn
     }
     ngOnDestroy(): void {
         this.unSubscriber$.next()
@@ -159,6 +160,9 @@ export class LessonCategoryComponent implements OnInit, AfterViewInit, OnDestroy
 
     // add categ item
     addCategItem(itemName: string) {
+        //   if (this.categ.initialInputOn == true) {
+        //     this.nxStore.dispatch(MembershipActions.disableInitInput({ categId: this.categ.id }))
+        // }
         if (_.trim(itemName) == '') {
             this.setAddLessonItemOff()
             return

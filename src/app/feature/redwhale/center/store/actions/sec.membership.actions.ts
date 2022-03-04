@@ -42,6 +42,7 @@ export const changeMembershipCategName = createAction(
     `[${FeatureKey}] Change Membership Category Name to Server`,
     props<{ centerId: string; id: string; categName: string }>()
 )
+
 export const startAddMembershipToCateg = createAction(
     `[${FeatureKey}] Start Add New Membership to Membership Category to server`,
     props<{
@@ -101,4 +102,10 @@ export const startUpsertState = createAction(
 export const finishUpsertState = createAction(
     `[${FeatureKey}] Finish Upsert State called by lesson screen`,
     props<{ membershipCategState: Array<MembershipCategoryState> }>()
+)
+
+// initial input
+export const disableInitInput = createAction(
+    `[${FeatureKey}] disable InitInput of membership category`,
+    props<{ categId: string }>()
 )

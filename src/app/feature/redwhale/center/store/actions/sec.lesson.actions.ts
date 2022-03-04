@@ -119,3 +119,9 @@ export const finishUpsertState = createAction(
     `[${FeatureKey}] Finish Upsert State called by membership screen`,
     props<{ lessonCategState: Array<LessonCategoryState> }>()
 )
+
+// initial input
+export const disableInitInput = createAction(
+    `[${FeatureKey}] disable InitInput of lesson category`,
+    props<{ categId: string }>()
+)

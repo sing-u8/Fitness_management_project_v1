@@ -24,6 +24,7 @@ export const initialSelectedMembership: SelectedMembership = {
 
 export interface MembershipCategoryState extends MembershipCategory {
     isCategOpen: boolean
+    initialInputOn: boolean
 }
 
 export type currentCenter = string
@@ -73,7 +74,11 @@ export const membershipReducer = createImmerReducer(
     }),
     on(MembershipActions.startAddMembershipCateg, (state) => state),
     on(MembershipActions.FinishAddMembershipCateg, (state, { membershipCateg }) => {
-        const newOneLesCategState: MembershipCategoryState = { ...membershipCateg, isCategOpen: true }
+        const newOneLesCategState: MembershipCategoryState = {
+            ...membershipCateg,
+            isCategOpen: true,
+            initialInputOn: false,
+        }
         return adapter.addOne(newOneLesCategState, state)
     }),
     on(MembershipActions.removeMembershipCateg, (state, { id }) => {
@@ -81,16 +86,12 @@ export const membershipReducer = createImmerReducer(
     }),
     // categ data
     on(MembershipActions.changeMembershipCategName, (state, { id, categName }) => {
-        const copyState = _.cloneDeep(state)
-        _.forEach(copyState.entities[id].items, (item, idx) => {
-            copyState.entities[id].items[idx].category_name = categName
+        state.entities[id].name = categName
+        _.forEach(state.entities[id].items, (item, idx) => {
+            state.entities[id].items[idx].category_name = categName
         })
 
-        const copyOneLesCategState = state.entities[id]
-        return adapter.updateOne(
-            { id: id, changes: { ...copyOneLesCategState, name: categName, items: copyState.entities[id].items } },
-            state
-        )
+        return state
     }),
     on(MembershipActions.finishiAddMembershipToCateg, (state, { categId, newMembershipData }) => {
         const copyOneLesCategState = state.entities[categId]
@@ -100,7 +101,10 @@ export const membershipReducer = createImmerReducer(
     }),
     on(MembershipActions.setCategIsOpen, (state, { id, isOpen }) => {
         const copyOneLesCategState = state.entities[id]
-        return adapter.updateOne({ id: id, changes: { ...copyOneLesCategState, isCategOpen: isOpen } }, state)
+        return adapter.updateOne(
+            { id: id, changes: { ...copyOneLesCategState, isCategOpen: isOpen, initialInputOn: false } },
+            state
+        )
     }),
 
     // current gym
@@ -157,6 +161,11 @@ export const membershipReducer = createImmerReducer(
             )
         }
         return newState
+    }),
+    // inital input
+    on(MembershipActions.disableInitInput, (state, { categId }): State => {
+        state.entities[categId].initialInputOn = false
+        return state
     })
 )
 
