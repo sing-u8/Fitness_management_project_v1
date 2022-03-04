@@ -158,7 +158,7 @@
                     }}
                   </span>
                   <span *ngIf="btItem.value.property == 'price'">
-                    {{selectedMembership?.membershipData ? btItem.value.suffix+selectedMembership.membershipData[btItem.value.property] : 'ㅡ'}}
+                    {{selectedMembership?.membershipData ? btItem.value.suffix+(selectedMembership.membershipData[btItem.value.property] | numberWithCommas) : 'ㅡ'}}
                   </span>
 
                   <img *ngIf="selectedMembership?.membershipData" class='edit-item-icon' src="assets/icons/etc/edit.svg" alt="">

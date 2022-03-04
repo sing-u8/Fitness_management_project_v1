@@ -200,6 +200,9 @@ export class MembershipComponent implements OnInit {
                 this.selMembershipInputObj[key].isOn = false
                 return true
             }
+            if (this.selMembershipInputObj[inputType].value.value == '0') {
+                this.selMembershipInputObj[inputType].value.setValue('')
+            }
             return false
         })
         this.selMembershipInputObj[inputType].isOn = true
@@ -213,7 +216,7 @@ export class MembershipComponent implements OnInit {
                 reqBody[inputType] = this.selMembershipInputObj[inputType].value.value
             }
             reqBody['unlimited'] = this.selMembershipInputObj[inputType].isInfinit == true ? true : false
-
+            this.selMembershipInputObj[inputType].value.setValue(String(reqBody[inputType]))
             this.updateSelMembership(this.selectedMembership, reqBody)
         } else if (
             String(this.selMembershipInputObj[inputType].value.value) != '' &&
@@ -225,6 +228,7 @@ export class MembershipComponent implements OnInit {
                     ? Number(this.selMembershipInputObj[inputType].value.value.replace(/[^0-9]/gi, ''))
                     : this.selMembershipInputObj[inputType].value.value
 
+            // this.selMembershipInputObj[inputType].value.setValue(String(reqBody[inputType]))
             this.updateSelMembership(this.selectedMembership, reqBody as UpdateItemRequestBody)
         }
         this.selMembershipInputObj[inputType].isOn = false

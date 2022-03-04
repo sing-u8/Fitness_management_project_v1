@@ -60,7 +60,7 @@ export class LessonComponent implements OnInit, AfterViewInit, OnDestroy {
     // ngrx state
     public drawer$: Observable<Drawer> = this.nxStore.pipe(select(drawerSelector))
     public lessonCategEntities$ = this.nxStore.pipe(select(LessonSelector.FilteredLessonCategEntities))
-    public lessonCategsLength$ = this.nxStore.pipe(select(LessonSelector.lessonCategLength))
+    public lessonLength$ = this.nxStore.pipe(select(LessonSelector.lessonLength))
     public lessonIsloading$ = this.nxStore.pipe(select(LessonSelector.isLoading))
 
     public lessonManagerList: Array<TrainerFilter> = []

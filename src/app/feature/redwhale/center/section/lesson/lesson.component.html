@@ -7,7 +7,7 @@
     <div></div>
 
     <gl-lesson-select
-      *ngIf=" (lessonIsloading$ | async) == 'done' && (lessonCategsLength$ | async) > 0"
+      *ngIf=" (lessonIsloading$ | async) == 'done' && (lessonLength$ | async) > 0"
       [items]="trainerFilterList"
       [(ngModel)]="trainerFilter"
       [width]="'175'"
