@@ -29,6 +29,7 @@ export class TermsComponent implements OnInit, OnDestroy {
 
     user: User
     isUserEmpty: boolean
+    isSocialUser: boolean
 
     registration: any
 
@@ -51,6 +52,8 @@ export class TermsComponent implements OnInit, OnDestroy {
         this.user = this.storageService.getUser()
 
         this.isUserEmpty = this.storageService.isUserEmpty()
+        this.isSocialUser = this.storageService.isSocialUser()
+        console.log('isSocialUser: ', this.isSocialUser)
 
         this.nxStore.pipe(select(registrationSelector), takeUntil(this.unSubscriber$)).subscribe((reg) => {
             this.termsEULA = reg.service_terms
@@ -168,9 +171,12 @@ export class TermsComponent implements OnInit, OnDestroy {
                 },
             })
         } else {
-            console.log('aklsdfj;asdkjf;alkdsjf;alksdjf;alksdjf;')
             this.router.navigateByUrl('/auth/registration/info')
         }
+    }
+
+    cancelWhenSocialUser() {
+        this.storageService.logout()
     }
 
     showModal(name: string) {

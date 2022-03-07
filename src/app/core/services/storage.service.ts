@@ -27,11 +27,16 @@ export class StorageService {
     isUserEmpty(): boolean {
         const user = JSON.parse(this.storage.getItem(this.userKey))
         return (
+            // 한번 info화면에서 이메일 정보를 입력한 뒤의 경우와 단순히 빈 유저 데이터일 경우
             (!_.isEmpty(user) &&
                 Object.keys(user).length == 1 &&
                 !!Object.keys(user).find((key) => key == 'sign_in_method')) ||
             _.isEmpty(user)
         )
+    }
+    isSocialUser(): boolean {
+        const user = JSON.parse(this.storage.getItem(this.userKey))
+        return this.isUserEmpty() ? false : user?.sign_in_method == 'email' ? false : true
     }
 
     async removeUser() {

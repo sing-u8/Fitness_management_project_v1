@@ -41,16 +41,47 @@
                     ></rw-checkbox>
                 </div>
             </div>
-            <div
-                class="next rw-typo-title2"
-                rw-button
-                rwButtonHeight="55"
-                rwButtonColor="var(--red)"
-                [rwButtonDisabled]="!formCheck()"
-                (click)="formCheck() && next()"
-            >
-                <span>다음</span>
-            </div>
+
+            <ng-template #none_social_user_next_button [ngIf]="!isSocialUser" [ngIfElse]="social_user_next_button">
+                <div
+                    class="next rw-typo-title2"
+                    rw-button
+                    rwButtonHeight="55"
+                    rwButtonColor="var(--red)"
+                    [rwButtonDisabled]="!formCheck()"
+                    (click)="formCheck() && next()"
+                >
+                    <span>다음</span>
+                </div>
+            </ng-template>
+            <ng-template #social_user_next_button>
+                <div class="social-buttons">
+                    <div
+                        class="next rw-typo-title2"
+                        rw-button
+                        rwButtonHeight="55"
+                        rwButtonWidth="78"
+                        rwButtonBorderColor="var(--border-color)"
+                        rwButtonFontColor="var(--grey)"
+                        (click)="cancelWhenSocialUser()"
+                    >
+                        <span>취소</span>
+                    </div>
+                    <div
+                        class="next rw-typo-title2"
+                        rw-button
+                        rwButtonHeight="55"
+                        rwButtonWidth="327"
+                        rwButtonColor="var(--red)"
+                        [rwButtonDisabled]="!formCheck()"
+                        (click)="formCheck() && next()"
+                    >
+                        <span>다음</span>
+                    </div>
+                </div>
+            </ng-template>
+
+
             <div class="h-line" *ngIf="isUserEmpty"></div>
             <div class="login d-flex justify-content-between" *ngIf="isUserEmpty">
                 <div class="rw-typo-bodytext1">이미 레드웨일 계정이 있으신가요?</div>
