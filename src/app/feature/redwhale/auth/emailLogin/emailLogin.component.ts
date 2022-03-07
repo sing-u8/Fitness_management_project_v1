@@ -56,7 +56,8 @@ export class EmailLoginComponent implements OnInit, OnDestroy {
         this.subscription = authState(this.fireAuth).subscribe({
             next: (firebaseUser) => {
                 const user = this.storageService.getUser()
-                if (firebaseUser && !_.isEmpty(user)) {
+                const isUserEmpty = this.storageService.isUserEmpty()
+                if (firebaseUser && !isUserEmpty) {
                     this.storageService.setSignInMethod(this.signInMethod)
                     this.router.navigateByUrl('/redwhale-home')
                 }

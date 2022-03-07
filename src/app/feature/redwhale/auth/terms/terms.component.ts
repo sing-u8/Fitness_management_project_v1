@@ -50,9 +50,7 @@ export class TermsComponent implements OnInit, OnDestroy {
     ) {
         this.user = this.storageService.getUser()
 
-        this.isUserEmpty =
-            (Object.keys(this.user).length == 1 && !!Object.keys(this.user).find((key) => key == 'sign_in_method')) ||
-            _.isEmpty(this.user)
+        this.isUserEmpty = this.storageService.isUserEmpty()
 
         this.nxStore.pipe(select(registrationSelector), takeUntil(this.unSubscriber$)).subscribe((reg) => {
             this.termsEULA = reg.service_terms

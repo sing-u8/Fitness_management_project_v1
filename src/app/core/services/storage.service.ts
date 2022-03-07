@@ -7,6 +7,8 @@ declare let Kakao: any
 import { User } from '@schemas/user'
 import { Center } from '@schemas/center'
 
+import * as _ from 'lodash'
+
 type UserOrEmpty = User | { sign_in_method: string }
 
 @Injectable({ providedIn: 'root' })
@@ -21,6 +23,13 @@ export class StorageService {
     }
     setUser(user: UserOrEmpty): void {
         this.storage.setItem(this.userKey, JSON.stringify(user))
+    }
+    isUserEmpty(): boolean {
+        const user = JSON.parse(this.storage.getItem(this.userKey))
+        return (
+            (Object.keys(user).length == 1 && !!Object.keys(user).find((key) => key == 'sign_in_method')) ||
+            _.isEmpty(user)
+        )
     }
 
     async removeUser() {
