@@ -37,6 +37,13 @@ export class EmailComponent implements OnInit, AfterViewInit, OnDestroy {
     public verificationCodeTwo = ''
     public verificationCodeThree = ''
     public verificationCodeFour = ''
+    public prevCodeNumbers = {
+        one: '',
+        two: '',
+        three: '',
+        four: '',
+    }
+
     public error: string
     public isNumberValid = false
     public verficationCode: number
@@ -157,12 +164,16 @@ export class EmailComponent implements OnInit, AfterViewInit, OnDestroy {
 
         if (name == 'one') {
             this.verificationCodeOne = event.key
+            this.prevCodeNumbers.one = event.key
         } else if (name == 'two') {
             this.verificationCodeTwo = event.key
+            this.prevCodeNumbers.two = event.key
         } else if (name == 'three') {
             this.verificationCodeThree = event.key
+            this.prevCodeNumbers.three = event.key
         } else if (name == 'four') {
             this.verificationCodeFour = event.key
+            this.prevCodeNumbers.four = event.key
         }
 
         if (nextElement) {
@@ -175,26 +186,56 @@ export class EmailComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     prevNumber(name: InputName, prevElement: HTMLInputElement, prevName: InputName) {
-        if (name == 'one') {
-            this.verificationCodeOne = ''
-        } else if (name == 'two') {
-            this.verificationCodeTwo = ''
-        } else if (name == 'three') {
-            this.verificationCodeThree = ''
-        } else if (name == 'four') {
-            this.verificationCodeFour = ''
-        }
+        console.log(
+            'prevNumber - **** : ',
+            this.verificationCodeOne,
+            ' ',
+            this.verificationCodeTwo,
+            ' ',
+            this.verificationCodeThree,
+            ' ',
+            this.verificationCodeFour
+        )
+        // if (name == 'one') {
+        //     this.verificationCodeOne = ''
+        // } else if (name == 'two') {
+        //     this.verificationCodeTwo = ''
+        // } else if (name == 'three') {
+        //     this.verificationCodeThree = ''
+        // } else if (name == 'four') {
+        //     this.verificationCodeFour = ''
+        // }
 
         this.error = ''
         this.isNumberValid = false
         if (prevElement) {
-            prevElement.focus()
             if (prevName == 'one') {
                 this.verificationCodeOne = ''
+                if (this.prevCodeNumbers.one != '') {
+                    this.prevCodeNumbers.one = ''
+                } else {
+                    prevElement.focus()
+                }
             } else if (prevName == 'two') {
                 this.verificationCodeTwo = ''
+                if (this.prevCodeNumbers.two != '') {
+                    this.prevCodeNumbers.two = ''
+                } else {
+                    prevElement.focus()
+                }
             } else if (prevName == 'three') {
                 this.verificationCodeThree = ''
+                if (this.prevCodeNumbers.three != '') {
+                    this.prevCodeNumbers.three = ''
+                } else {
+                    prevElement.focus()
+                }
+            } else if (prevName == 'four') {
+                if (this.prevCodeNumbers.four != '') {
+                    this.prevCodeNumbers.four = ''
+                } else {
+                    prevElement.focus()
+                }
             }
         }
     }

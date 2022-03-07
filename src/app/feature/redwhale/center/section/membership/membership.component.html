@@ -214,13 +214,13 @@
 
 
       <!-- reservable membership -->
-      <ng-container #selected_memLessonList_pending *ngIf = "(membershipIsloading$ | async) != 'done' else selected_memLessonList_done">
+      <ng-container #selected_memLessonList_pending *ngIf = "(membershipIsloading$ | async) != 'done' ;else selected_memLessonList_done">
         <div class="selected-membership-lessonlist">
           <p class="rw-typo-subtext2 selected-membership-lessonlist--margin">
             예약 가능한 수업
           </p>
           <ngx-skeleton-loader
-            count=5
+            count=4
             appearance="circle"
             [theme]="{'width':'calc(50% - 10px)', 'height' : '92px', 'border-radius' : '5px'}"
           ></ngx-skeleton-loader>

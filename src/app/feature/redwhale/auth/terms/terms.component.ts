@@ -53,6 +53,17 @@ export class TermsComponent implements OnInit, OnDestroy {
             this.termsPrivacy = reg.privacy
             this.marketingSMS = reg.sms_marketing
             this.marketingEmail = reg.email_marketing
+            if (this.marketingSMS && this.marketingEmail) {
+                this.marketing = true
+            } else {
+                this.marketing = false
+            }
+
+            if (this.marketing && this.termsEULA && this.termsPrivacy) {
+                this.all = true
+            } else {
+                this.all = false
+            }
         })
     }
 
@@ -103,7 +114,7 @@ export class TermsComponent implements OnInit, OnDestroy {
             this.marketing = false
         }
 
-        if (this.termsEULA && this.termsPrivacy && this.marketing) {
+        if (this.termsEULA && this.termsPrivacy && this.marketingSMS && this.marketingEmail) {
             this.all = true
         } else {
             this.all = false
