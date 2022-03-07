@@ -174,7 +174,7 @@ export class LessonCategoryComponent implements OnInit, AfterViewInit, OnDestroy
                 categName: this.name,
                 reqBody: {
                     name: itemName,
-                    sequence_number: 0,
+                    sequence_number: this.categ.items.length + 1,
                 },
             })
         )
