@@ -27,7 +27,9 @@ export class StorageService {
     isUserEmpty(): boolean {
         const user = JSON.parse(this.storage.getItem(this.userKey))
         return (
-            (Object.keys(user).length == 1 && !!Object.keys(user).find((key) => key == 'sign_in_method')) ||
+            (!_.isEmpty(user) &&
+                Object.keys(user).length == 1 &&
+                !!Object.keys(user).find((key) => key == 'sign_in_method')) ||
             _.isEmpty(user)
         )
     }

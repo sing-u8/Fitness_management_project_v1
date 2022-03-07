@@ -74,6 +74,7 @@
     color: var(--grey);
     border-radius: 7px;
     cursor: pointer;
+    position: relative;
 
     font-size: 8rem;
     justify-content: center;
@@ -83,6 +84,16 @@
         width: 50px;
         height: 50px;
     }
+
+    // &:before {
+    //     content: '';
+    //     position: absolute;
+    //     border: 3px dashed #e9e9e9;
+    //     top: -8px;
+    //     bottom: -8px;
+    //     left: -8px;
+    //     right: -8px;
+    // }
 }
 
 //type - resize

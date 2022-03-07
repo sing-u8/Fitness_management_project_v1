@@ -95,7 +95,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
 
     signInWithKakao(btLoadingFns: ClickEmitterType) {
-        btLoadingFns.showLoading()
+        // btLoadingFns.showLoading()
         this.signInMethod = 'kakao'
         const kakao$ = new Observable(function subscribe(observer) {
             Kakao.Auth.loginForm({
@@ -118,12 +118,12 @@ export class LoginComponent implements OnInit, OnDestroy {
 
                 this.authService.signInWithKakao({ accessToken }).subscribe((user) => {
                     signInWithCustomToken(this.fireAuth, String(user.custom_token)).then(() => {
-                        btLoadingFns.hideLoading()
+                        // btLoadingFns.hideLoading()
                     })
                 })
             },
             error: (e) => {
-                btLoadingFns.hideLoading()
+                // btLoadingFns.hideLoading()
                 this.nxStore.dispatch(showModal({ data: { text: this.TAG, subText: e.message } }))
             },
         })

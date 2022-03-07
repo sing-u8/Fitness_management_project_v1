@@ -17,8 +17,8 @@ export class CenterUsersService {
 
     constructor(private http: HttpClient) {}
 
-    createUser(gymId: string, requestBody: CreateUserRequestBody): Observable<CreateUserResponse> {
-        const url = this.SERVER + `/${gymId}/users`
+    createUser(centerId: string, requestBody: CreateUserRequestBody): Observable<CreateUserResponse> {
+        const url = this.SERVER + `/${centerId}/users`
 
         const options = {
             headers: new HttpHeaders({
@@ -35,8 +35,8 @@ export class CenterUsersService {
     }
 
     // !! 현재 미구현 상태
-    registerByEmail(gymId: string, requestBody: registrationByEmailRequestBody): Observable<CreateUserResponse> {
-        const url = this.SERVER + `/${gymId}/users/registrationByEmail`
+    registerByEmail(centerId: string, requestBody: registrationByEmailRequestBody): Observable<CreateUserResponse> {
+        const url = this.SERVER + `/${centerId}/users/registrationByEmail`
 
         const options = {
             headers: new HttpHeaders({
@@ -53,7 +53,7 @@ export class CenterUsersService {
     }
 
     getUserList(
-        gymId: string,
+        centerId: string,
         search = '',
         role_code = '',
         created_date = '',
@@ -63,7 +63,7 @@ export class CenterUsersService {
         // created_date ==> YYYY-MM-DD
         const url =
             this.SERVER +
-            `/${gymId}/users?search=${search}&role_code=${role_code}&created_date=${created_date}&page=${page}&pageSize=${pageSize}`
+            `/${centerId}/users?search=${search}&role_code=${role_code}&created_date=${created_date}&page=${page}&pageSize=${pageSize}`
 
         const options = {
             headers: new HttpHeaders({
@@ -79,8 +79,8 @@ export class CenterUsersService {
         )
     }
 
-    updateUser(gymId: string, userId: string, requestBody: UpdateUserRequestBody) {
-        const url = this.SERVER + `/${gymId}/users/${userId}`
+    updateUser(centerId: string, userId: string, requestBody: UpdateUserRequestBody) {
+        const url = this.SERVER + `/${centerId}/users/${userId}`
 
         const options = {
             headers: new HttpHeaders({

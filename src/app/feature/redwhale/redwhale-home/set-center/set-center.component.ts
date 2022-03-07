@@ -78,8 +78,8 @@ export class SetCenterComponent implements OnInit {
             .getCenter(centerId)
             .pipe(
                 combineLatestWith(
-                    this.fileService.getFile('center_picture', centerId),
-                    this.fileService.getFile('center_background', centerId)
+                    this.fileService.getFile('file_type_center_picture', centerId),
+                    this.fileService.getFile('file_type_center_background', centerId)
                 )
             )
             .subscribe(([center, cp, cbg]) => {
@@ -111,12 +111,12 @@ export class SetCenterComponent implements OnInit {
     // -------------------------------photo funcs---------------------------------//
     registerPhoto(photoType: FileTypeCode, photoEle: any) {
         this.onChangeFile(photoType, photoEle.files)
-        photoType == 'center_picture' ? this.toggleCenterProfileFlag() : this.toggleCenterBackgroundFlag()
+        photoType == 'file_type_center_picture' ? this.toggleCenterProfileFlag() : this.toggleCenterBackgroundFlag()
     }
     removePhoto(photoType: FileTypeCode) {
         this.addRemoveRwFileList(this.photoSrc[photoType])
         this.resetPhotoTexts(photoType)
-        photoType == 'center_picture' ? this.toggleCenterProfileFlag() : this.toggleCenterBackgroundFlag()
+        photoType == 'file_type_center_picture' ? this.toggleCenterProfileFlag() : this.toggleCenterBackgroundFlag()
     }
 
     onChangeFile(photoType: FileTypeCode, photoFile: FileList) {
@@ -149,18 +149,18 @@ export class SetCenterComponent implements OnInit {
     }
     setPhotoTag(photoType: FileTypeCode): FileTypeCode {
         let tag: FileTypeCode = undefined
-        if (photoType === 'center_picture') {
-            tag = 'center_picture'
-        } else if (photoType === 'center_background') {
-            tag = 'center_background'
+        if (photoType === 'file_type_center_picture') {
+            tag = 'file_type_center_picture'
+        } else if (photoType === 'file_type_center_background') {
+            tag = 'file_type_center_background'
         }
         return tag
     }
     setPhotoReqbodyProp(photoType: FileTypeCode) {
         let prop = ''
-        if (photoType === 'center_picture') {
+        if (photoType === 'file_type_center_picture') {
             prop = 'picture'
-        } else if (photoType === 'center_background') {
+        } else if (photoType === 'file_type_center_background') {
             prop = 'background'
         }
         return prop
@@ -183,8 +183,8 @@ export class SetCenterComponent implements OnInit {
             })
             .subscribe({
                 next: (center) => {
-                    this.createApiPhotoFileAsPossible('center_background', this.center, () => {
-                        this.createApiPhotoFileAsPossible('center_picture', this.center, () => {
+                    this.createApiPhotoFileAsPossible('file_type_center_background', this.center, () => {
+                        this.createApiPhotoFileAsPossible('file_type_center_picture', this.center, () => {
                             this.centerService
                                 .updateCenter(this.center.id, {
                                     name: this.centerNameForm.value,

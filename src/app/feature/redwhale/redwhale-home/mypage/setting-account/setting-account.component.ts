@@ -200,7 +200,7 @@ export class SettingAccountComponent implements OnInit {
 
         this.saveIfRwPicture(this.user.picture)
 
-        const reqBody: CreateFileRequestBody = { type_code: 'user_picture' }
+        const reqBody: CreateFileRequestBody = { type_code: 'file_type_user_picture' }
         this.fileservice.createFile(reqBody, files).subscribe((__) => {
             this.usersService.getUser(this.user.id).subscribe({
                 next: (resData) => {

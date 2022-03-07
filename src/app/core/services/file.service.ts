@@ -9,7 +9,12 @@ import { environment } from '@environments/environment'
 import { Response } from '@schemas/response'
 import { File } from '@schemas/file'
 
-export type FileTypeCode = 'user_picture' | 'user_background' | 'center_picture' | 'center_background' | 'chat'
+export type FileTypeCode =
+    | 'file_type_user_picture'
+    | 'file_type_user_background'
+    | 'file_type_center_picture'
+    | 'file_type_center_background'
+    | 'file_type_chat'
 
 @Injectable({
     providedIn: 'root',
