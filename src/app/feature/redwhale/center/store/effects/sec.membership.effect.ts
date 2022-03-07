@@ -89,7 +89,7 @@ export class membershipEffect {
             switchMap(({ centerId, categId, categName, reqBody }) =>
                 this.gymMembershipApi.createItem(centerId, categId, reqBody).pipe(
                     switchMap((newItem) => [
-                        MembershipActions.finishiAddMembershipToCateg({
+                        MembershipActions.finishAddMembershipToCateg({
                             categId: categId,
                             newMembershipData: newItem,
                         }),

@@ -94,10 +94,10 @@ export const membershipReducer = createImmerReducer(
 
         return state
     }),
-    on(MembershipActions.finishiAddMembershipToCateg, (state, { categId, newMembershipData }) => {
+    on(MembershipActions.finishAddMembershipToCateg, (state, { categId, newMembershipData }) => {
         const copyOneLesCategState = state.entities[categId]
         const copyCategItems = _.cloneDeep(state.entities[categId].items)
-        copyCategItems.push(newMembershipData)
+        copyCategItems.unshift(newMembershipData)
         return adapter.updateOne({ id: categId, changes: { ...copyOneLesCategState, items: copyCategItems } }, state)
     }),
     on(MembershipActions.setCategIsOpen, (state, { id, isOpen }) => {

@@ -52,8 +52,8 @@ export const startAddMembershipToCateg = createAction(
         reqBody: { name: string; sequence_number: number }
     }>()
 )
-export const finishiAddMembershipToCateg = createAction(
-    `[${FeatureKey}] Finishi Adding New Membership to Membership Category to server`,
+export const finishAddMembershipToCateg = createAction(
+    `[${FeatureKey}] Finish Adding New Membership to Membership Category to server`,
     props<{
         categId: string
         newMembershipData: MembershipItem

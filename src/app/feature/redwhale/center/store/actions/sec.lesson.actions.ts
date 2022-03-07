@@ -51,8 +51,8 @@ export const startAddLessonToCateg = createAction(
         reqBody: { name: string; sequence_number: number }
     }>()
 )
-export const finishiAddLessonToCateg = createAction(
-    `[${FeatureKey}] Finishi Adding New Lesson to Lesson Category to server`,
+export const finishAddLessonToCateg = createAction(
+    `[${FeatureKey}] Finish Adding New Lesson to Lesson Category to server`,
     props<{
         categId: string
         newLessonData: ClassItem

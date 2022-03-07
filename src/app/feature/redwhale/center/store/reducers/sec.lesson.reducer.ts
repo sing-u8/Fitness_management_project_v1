@@ -79,11 +79,9 @@ export const lessonReducer = createImmerReducer(
     }),
     on(LessonActions.finishLoadLessonCategs, (state, { lessonCategState }): State => {
         const newState: State = { ...state, ...{ isLoading: 'done' } }
-        console.log('finishi load lesson categs')
         return adapter.setMany(lessonCategState, newState)
     }),
     on(LessonActions.updateLessonCategs, (state, { lessonCategState }): State => {
-        console.log('LessonActions.updateLessonCategs')
         const copyState: State = adapter.upsertMany(lessonCategState, _.cloneDeep(state))
         copyState.selectedLesson.lessonData = copyState.entities[copyState.selectedLesson.categId].items.find(
             (membership) => membership.id == copyState.selectedLesson.lessonData.id
@@ -93,7 +91,6 @@ export const lessonReducer = createImmerReducer(
     on(LessonActions.resetLessonCategs, (state) => {
         return adapter.removeAll({ ...state })
     }),
-    on(LessonActions.startAddLessonCateg, (state) => state),
     on(LessonActions.FinishAddLessonCateg, (state, { lessonCateg }) => {
         const newOneLesCategState: LessonCategoryState = { ...lessonCateg, isCategOpen: true, initialInputOn: true }
         return adapter.addOne(newOneLesCategState, state)
@@ -110,10 +107,10 @@ export const lessonReducer = createImmerReducer(
 
         return state
     }),
-    on(LessonActions.finishiAddLessonToCateg, (state, { categId, newLessonData }) => {
+    on(LessonActions.finishAddLessonToCateg, (state, { categId, newLessonData }) => {
         const copyOneLesCategState = state.entities[categId]
         const copyCategItems = _.cloneDeep(state.entities[categId].items)
-        copyCategItems.push(newLessonData)
+        copyCategItems.unshift(newLessonData)
         return adapter.updateOne({ id: categId, changes: { ...copyOneLesCategState, items: copyCategItems } }, state)
     }),
     on(LessonActions.setCategIsOpen, (state, { id, isOpen }) => {

@@ -100,7 +100,7 @@ export class LessongEffect {
             switchMap(({ centerId, categId, categName, reqBody }) =>
                 this.gymLessonApi.createItem(centerId, categId, reqBody).pipe(
                     switchMap((newItem) => [
-                        LessonActions.finishiAddLessonToCateg({ categId: categId, newLessonData: newItem }),
+                        LessonActions.finishAddLessonToCateg({ categId: categId, newLessonData: newItem }),
 
                         LessonActions.setSelectedLesson({
                             selectedLesson: {
