@@ -186,18 +186,6 @@ export class EmailComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     prevNumber(name: InputName, prevElement: HTMLInputElement, prevName: InputName) {
-        console.log(
-            'prevNumber - **** : ',
-            this.verificationCodeOne,
-            ' ',
-            this.verificationCodeTwo,
-            ' ',
-            this.verificationCodeThree,
-            ' ',
-            this.verificationCodeFour
-        )
-
-        console.log('prev code nubmers : ', this.prevCodeNumbers)
         // if (name == 'one') {
         //     this.verificationCodeOne = ''
         // } else if (name == 'two') {
@@ -210,36 +198,50 @@ export class EmailComponent implements OnInit, AfterViewInit, OnDestroy {
 
         this.error = ''
         this.isNumberValid = false
-        if (prevElement) {
-            if (prevName == 'one') {
+        if (name == 'one') {
+            if (this.prevCodeNumbers.one != '') {
+                this.prevCodeNumbers.one = ''
+            }
+        } else if (name == 'two') {
+            if (this.prevCodeNumbers.two != '') {
+                this.prevCodeNumbers.two = ''
+
                 this.verificationCodeOne = ''
-                if (this.prevCodeNumbers.one != '') {
-                    this.prevCodeNumbers.one = ''
-                } else {
-                    prevElement.focus()
-                }
-            } else if (prevName == 'two') {
+                prevElement.focus()
+            } else {
+                this.verificationCodeOne = ''
+                prevElement.focus()
+            }
+        } else if (name == 'three') {
+            if (this.prevCodeNumbers.three != '') {
+                this.prevCodeNumbers.three = ''
+
                 this.verificationCodeTwo = ''
-                if (this.prevCodeNumbers.two != '') {
-                    this.prevCodeNumbers.two = ''
-                } else {
-                    prevElement.focus()
-                }
-            } else if (prevName == 'three') {
+                prevElement.focus()
+            } else {
+                this.verificationCodeTwo = ''
+                prevElement.focus()
+            }
+        } else if (name == 'four') {
+            if (this.prevCodeNumbers.four != '') {
+                this.prevCodeNumbers.four = ''
+            } else {
                 this.verificationCodeThree = ''
-                if (this.prevCodeNumbers.three != '') {
-                    this.prevCodeNumbers.three = ''
-                } else {
-                    prevElement.focus()
-                }
-            } else if (prevName == 'four') {
-                if (this.prevCodeNumbers.four != '') {
-                    this.prevCodeNumbers.four = ''
-                } else {
-                    prevElement.focus()
-                }
+                prevElement.focus()
             }
         }
+
+        console.log(
+            'prevNumber - **** : ',
+            this.verificationCodeOne,
+            ' ',
+            this.verificationCodeTwo,
+            ' ',
+            this.verificationCodeThree,
+            ' ',
+            this.verificationCodeFour
+        )
+        console.log('prev code nubmers : ', this.prevCodeNumbers)
     }
 
     formCheck() {
