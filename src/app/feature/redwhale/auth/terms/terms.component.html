@@ -51,8 +51,8 @@
             >
                 <span>다음</span>
             </div>
-            <div class="h-line" *ngIf="!user"></div>
-            <div class="login d-flex justify-content-between" *ngIf="!user">
+            <div class="h-line" *ngIf="isUserEmpty"></div>
+            <div class="login d-flex justify-content-between" *ngIf="isUserEmpty">
                 <div class="rw-typo-bodytext1">이미 레드웨일 계정이 있으신가요?</div>
                 <div class="rw-typo-bodytext1" [routerLink]="['/auth/login']">로그인하기</div>
             </div>

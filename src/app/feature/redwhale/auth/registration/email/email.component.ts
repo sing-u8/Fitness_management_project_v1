@@ -196,6 +196,8 @@ export class EmailComponent implements OnInit, AfterViewInit, OnDestroy {
             ' ',
             this.verificationCodeFour
         )
+
+        console.log('prev code nubmers : ', this.prevCodeNumbers)
         // if (name == 'one') {
         //     this.verificationCodeOne = ''
         // } else if (name == 'two') {

@@ -14,8 +14,11 @@ export class AuthGuard implements CanActivate {
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
         const url = state.url.split('/')
         const user = this.storageService.getUser()
-        console.log('auth guard : ', url, user, !_.isEmpty(user))
-        if (!_.isEmpty(user)) {
+        const isUserEmpty =
+            (Object.keys(user).length == 1 && !!Object.keys(user).find((key) => key == 'sign_in_method')) ||
+            _.isEmpty(user)
+        console.log('auth guard ----  ', isUserEmpty)
+        if (!isUserEmpty) {
             if (!user.service_terms || !user.privacy) {
                 this.router.navigateByUrl('/auth/terms')
                 return false

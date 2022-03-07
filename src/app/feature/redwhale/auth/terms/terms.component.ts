@@ -28,6 +28,7 @@ export class TermsComponent implements OnInit, OnDestroy {
     public unSubscriber$ = new Subject<void>()
 
     user: User
+    isUserEmpty: boolean
 
     registration: any
 
@@ -48,6 +49,11 @@ export class TermsComponent implements OnInit, OnDestroy {
         private usersService: UsersService
     ) {
         this.user = this.storageService.getUser()
+
+        this.isUserEmpty =
+            (Object.keys(this.user).length == 1 && !!Object.keys(this.user).find((key) => key == 'sign_in_method')) ||
+            _.isEmpty(this.user)
+
         this.nxStore.pipe(select(registrationSelector), takeUntil(this.unSubscriber$)).subscribe((reg) => {
             this.termsEULA = reg.service_terms
             this.termsPrivacy = reg.privacy
@@ -143,7 +149,7 @@ export class TermsComponent implements OnInit, OnDestroy {
             })
         )
 
-        if (!_.isEmpty(this.user)) {
+        if (!this.isUserEmpty) {
             const requestBody = {
                 service_terms: this.termsEULA,
                 privacy: this.termsPrivacy,
@@ -164,6 +170,7 @@ export class TermsComponent implements OnInit, OnDestroy {
                 },
             })
         } else {
+            console.log('aklsdfj;asdkjf;alkdsjf;alksdjf;alksdjf;')
             this.router.navigateByUrl('/auth/registration/info')
         }
     }
