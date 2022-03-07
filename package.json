@@ -37,7 +37,6 @@
     "immer": "^9.0.12",
     "ng-recaptcha": "^9.0.0",
     "ngrx-immer": "^2.0.0",
-    "ngrx-slice": "^6.2.0",
     "ngx-device-detector": "^3.0.0",
     "ngx-skeleton-loader": "^4.0.0",
     "ngx-spinner": "^13.0.0",
