@@ -6,8 +6,7 @@ import { CenterGuard } from '@guards/center.guard'
 import { NotFoundComponent } from './core/not-found/not-found.component'
 
 const routes: Routes = [
-    { path: '', redirectTo: 'auth', pathMatch: 'full' },
-    { path: '/', redirectTo: 'auth', pathMatch: 'full' },
+    { path: '', loadChildren: () => import('./feature/homepage/homepage.module').then((m) => m.HomepageModule) },
     {
         path: 'auth',
         loadChildren: () => import('./feature/redwhale/auth/auth.module').then((m) => m.AuthModule),
