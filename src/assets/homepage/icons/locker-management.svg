@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="63" height="63" viewBox="0 0 63 63">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: none;
+      }
+
+      .cls-2 {
+        fill: #6ad2c0;
+      }
+
+      .cls-3 {
+        fill: #fff;
+      }
+    </style>
+  </defs>
+  <g id="락커_관리" data-name="락커 관리" transform="translate(4634 23882)">
+    <g id="그룹_5144" data-name="그룹 5144" transform="translate(-4623 -23871)">
+      <g id="사각형_2835" data-name="사각형 2835">
+        <rect id="사각형_3112" data-name="사각형 3112" class="cls-1" width="41.373" height="41.373" rx="2"/>
+        <path id="패스_2231" data-name="패스 2231" class="cls-2" d="M167.736,43.873h-33.1a4.141,4.141,0,0,1-4.137-4.137V6.637A4.141,4.141,0,0,1,134.637,2.5h33.1a4.141,4.141,0,0,1,4.137,4.137v33.1A4.141,4.141,0,0,1,167.736,43.873Z" transform="translate(-130.5 -2.5)"/>
+      </g>
+      <g id="패스_1914" data-name="패스 1914" transform="translate(14.886 12.298)">
+        <path id="패스_2232" data-name="패스 2232" class="cls-1" d="M143.488,8.445a5.792,5.792,0,1,1-5.792,5.792,5.793,5.793,0,0,1,5.792-5.792Z" transform="translate(-137.696 -8.445)"/>
+        <path id="패스_2233" data-name="패스 2233" class="cls-3" d="M143.5,11.341a2.9,2.9,0,1,0,2.9,2.9,2.908,2.908,0,0,0-2.9-2.9m0-2.9a5.8,5.8,0,1,1-5.8,5.8A5.8,5.8,0,0,1,143.5,8.445Z" transform="translate(-137.696 -8.445)"/>
+      </g>
+      <path id="패스_2234" data-name="패스 2234" class="cls-3" d="M141.248,20.819a1.448,1.448,0,0,1-1.448-1.448V14.4a1.448,1.448,0,1,1,2.9,0v4.971A1.448,1.448,0,0,1,141.248,20.819Z" transform="translate(-120.562 8.669)"/>
+    </g>
+    <g id="그룹_13734" data-name="그룹 13734" transform="translate(-4634 -23882)">
+      <rect id="사각형_3622" data-name="사각형 3622" class="cls-1" width="63" height="63" transform="translate(0 0.001)"/>
+    </g>
+  </g>
+</svg>

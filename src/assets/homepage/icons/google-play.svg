@@ -1,0 +1,20 @@
+<svg id="구글플레이" xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 21 21">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: none;
+      }
+
+      .cls-2 {
+        fill: #fff;
+      }
+    </style>
+  </defs>
+  <rect id="사각형_3373" data-name="사각형 3373" class="cls-1" width="21" height="21"/>
+  <g id="그룹_7434" data-name="그룹 7434" transform="translate(3 2.999)">
+    <path id="패스_2456" data-name="패스 2456" class="cls-2" d="M813.809,348.25a1.561,1.561,0,0,0-1.207-.209l7.181,7.181,2.327-2.327Zm0,0" transform="translate(-811.394 -347.999)"/>
+    <path id="패스_2457" data-name="패스 2457" class="cls-2" d="M783.808,363.086a1.56,1.56,0,0,0-.316.939v12.792a1.56,1.56,0,0,0,.316.939l7.335-7.335Zm0,0" transform="translate(-783.492 -362.46)"/>
+    <path id="패스_2458" data-name="패스 2458" class="cls-2" d="M1008.217,480.006l-2.092-1.17-2.536,2.536,2.536,2.536,2.092-1.17a1.565,1.565,0,0,0,0-2.731Zm0,0" transform="translate(-994.465 -473.411)"/>
+    <path id="패스_2459" data-name="패스 2459" class="cls-2" d="M819.79,557.785l-7.181,7.181a1.552,1.552,0,0,0,1.207-.208l8.3-4.645Zm0,0" transform="translate(-811.4 -549.087)"/>
+  </g>
+</svg>

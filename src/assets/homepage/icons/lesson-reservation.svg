@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="63" height="63" viewBox="0 0 63 63">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: none;
+      }
+
+      .cls-2 {
+        fill: #6b9cb2;
+      }
+
+      .cls-3 {
+        fill: #fff;
+      }
+    </style>
+  </defs>
+  <g id="수업_예약" data-name="수업 예약" transform="translate(0.476 -0.439)">
+    <rect id="사각형_3115" data-name="사각형 3115" class="cls-1" width="63" height="63" transform="translate(-0.476 0.44)"/>
+    <g id="그룹_12718" data-name="그룹 12718" transform="translate(13.524 8.439)">
+      <rect id="사각형_3923" data-name="사각형 3923" class="cls-2" width="35.7" height="46.2" rx="3"/>
+      <g id="그룹_12717" data-name="그룹 12717" transform="translate(9.066 12.381)">
+        <rect id="사각형_3924" data-name="사각형 3924" class="cls-3" width="17.197" height="3.338" rx="1.669"/>
+        <rect id="사각형_3925" data-name="사각형 3925" class="cls-3" width="17.197" height="3.338" rx="1.669" transform="translate(0 9.104)"/>
+        <rect id="사각형_3926" data-name="사각형 3926" class="cls-3" width="17.197" height="3.338" rx="1.669" transform="translate(0 18.209)"/>
+      </g>
+    </g>
+  </g>
+</svg>
