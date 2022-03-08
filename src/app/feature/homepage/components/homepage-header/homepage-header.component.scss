@@ -1,0 +1,39 @@
+* {
+    padding: 0px;
+    margin: 0px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+section.l-header {
+    position: fixed;
+    top: 0;
+    z-index: 5;
+
+    width: 100vw;
+    height: 55px; // 50px in mobile version
+    display: flex;
+    align-items: center;
+    background-color: var(--white);
+    padding: 0px 18px;
+
+    div.header__left {
+        .redwhale-logo {
+            width: 130px;
+            height: 20px;
+            background-size: cover;
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+            background-image: url('/assets/homepage/icons/redwhale-word-logo.svg');
+        }
+    }
+    div.header__midle {
+    }
+    div.header__right {
+        display: flex;
+        align-items: center;
+    }
+}
