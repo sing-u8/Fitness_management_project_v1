@@ -3,7 +3,35 @@
         <div class="redwhale-logo"></div>
     </div>
     <div class="header__middle">
-
+        <a
+            [routerLink]="['/']"
+            [routerLinkActiveOptions]="{exact: true}"
+            routerLinkActive="active"
+            class="header__nav"
+        >
+            서비스 소개
+        </a>
+        <a
+            [routerLink]="['/fare-guide']"
+            routerLinkActive="active"
+            class="header__nav"
+        >
+            요금 안내
+        </a>
+        <a
+            [routerLink]="['/introduction-inquiry']"
+            routerLinkActive="active"
+            class="header__nav"
+        >
+            도입 문의
+        </a>
+        <a
+            [routerLink]="['/FAQ']"
+            routerLinkActive="active"
+            class="header__nav"
+        >
+            자주 묻는 질문
+        </a>
     </div>
     <div class="header__right">
         <hp-button
@@ -11,12 +39,16 @@
             [height]="'38'"
             [borderColor]="'var(--red)'"
             [fontColor]="'var(--red)'"
+            [text]="'로그인'"
+            (onClick)="navigateTo('/auth/login')"
         ></hp-button>
         <hp-button
-            [width]="'78'"
+            [width]="'132'"
             [height]="'38'"
-            [borderColor]="'var(--red)'"
-            [fontColor]="'var(--red)'"
+            [bgColor]="'var(--red)'"
+            [fontColor]="'var(--white)'"
+            [text]="'무료로 시작하기'"
+            (onClick)="navigateTo('/auth/login')"
         ></hp-button>
     </div>
 </section>

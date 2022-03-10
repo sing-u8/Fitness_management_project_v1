@@ -9,6 +9,7 @@ import {
     OnChanges,
     SimpleChanges,
     AfterViewChecked,
+    AfterViewInit,
     EventEmitter,
     RendererStyleFlags2,
 } from '@angular/core'
@@ -18,7 +19,7 @@ import {
     templateUrl: './button.component.html',
     styleUrls: ['./button.component.scss'],
 })
-export class ButtonComponent implements OnInit, OnChanges, AfterViewChecked {
+export class ButtonComponent implements OnInit, OnChanges, AfterViewChecked, AfterViewInit {
     @Input() width: string
     @Input() height: string
     @Input() bgColor: string
@@ -35,7 +36,15 @@ export class ButtonComponent implements OnInit, OnChanges, AfterViewChecked {
 
     constructor(private renderer: Renderer2) {}
 
-    ngOnInit(): void {
+    ngOnInit(): void {}
+    ngOnChanges(changes: SimpleChanges): void {
+        if (changes['disabled'] && !changes['disabled'].firstChange) {
+            if (changes['disabled'].previousValue != changes['disabled'].currentValue) {
+                this.changed = true
+            }
+        }
+    }
+    ngAfterViewInit(): void {
         if (this.width) {
             this.renderer.setStyle(this.button_el.nativeElement, 'width', `${this.width}px`)
         }
@@ -55,13 +64,6 @@ export class ButtonComponent implements OnInit, OnChanges, AfterViewChecked {
 
         if (this.fontColor) {
             this.renderer.setStyle(this.button_el.nativeElement, 'color', `${this.fontColor}`)
-        }
-    }
-    ngOnChanges(changes: SimpleChanges): void {
-        if (changes['disabled'] && !changes['disabled'].firstChange) {
-            if (changes['disabled'].previousValue != changes['disabled'].currentValue) {
-                this.changed = true
-            }
         }
     }
     ngAfterViewChecked(): void {

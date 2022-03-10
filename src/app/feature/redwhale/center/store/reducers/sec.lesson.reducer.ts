@@ -110,7 +110,7 @@ export const lessonReducer = createImmerReducer(
     on(LessonActions.finishAddLessonToCateg, (state, { categId, newLessonData }) => {
         const copyOneLesCategState = state.entities[categId]
         const copyCategItems = _.cloneDeep(state.entities[categId].items)
-        copyCategItems.unshift(newLessonData)
+        copyCategItems.push(newLessonData)
         return adapter.updateOne({ id: categId, changes: { ...copyOneLesCategState, items: copyCategItems } }, state)
     }),
     on(LessonActions.setCategIsOpen, (state, { id, isOpen }) => {

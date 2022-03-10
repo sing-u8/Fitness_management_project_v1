@@ -16,10 +16,14 @@ section.l-header {
     height: 55px; // 50px in mobile version
     display: flex;
     align-items: center;
+    justify-content: center;
     background-color: var(--white);
     padding: 0px 18px;
 
     div.header__left {
+        position: absolute;
+        left: 18px;
+        z-index: 5;
         .redwhale-logo {
             width: 130px;
             height: 20px;
@@ -30,10 +34,53 @@ section.l-header {
             background-image: url('/assets/homepage/icons/redwhale-word-logo.svg');
         }
     }
-    div.header__midle {
-    }
-    div.header__right {
+    div.header__middle {
+        z-index: 5;
         display: flex;
         align-items: center;
+
+        .header__nav {
+            &:not(:first-of-type) {
+                margin-left: 25px;
+            }
+        }
+    }
+    div.header__right {
+        position: absolute;
+        right: 18px;
+        z-index: 5;
+        display: flex;
+        align-items: center;
+
+        hp-button {
+            &:first-of-type {
+                margin-right: 12px;
+            }
+        }
+    }
+
+    .header__nav {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 10px 12px 7px;
+        background-color: var(--white);
+        color: var(--hp-grey);
+        cursor: pointer;
+        text-decoration: none;
+
+        font-size: 1.4rem;
+        font-weight: 500;
+        line-height: 1.43;
+        letter-spacing: -0.2px;
+
+        &.active {
+            font-weight: 700;
+            color: var(--hp-black);
+        }
+
+        &:hover {
+            background-color: var(--hp-lighergrey);
+        }
     }
 }

@@ -1,0 +1,49 @@
+* {
+    padding: 0px;
+    margin: 0px;
+}
+
+div.find-more-button {
+    width: 132px;
+    height: 25px;
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    justify-content: space-between;
+    cursor: pointer;
+
+    .text {
+        display: flex;
+        align-items: center;
+        margin-bottom: 3px;
+
+        &.white-text {
+            color: var(--white);
+        }
+    }
+
+    div.l-right-arrow-icon {
+        width: 25px;
+        height: 25px;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        background-image: url('/assets/icons/etc/arrow-long-right.svg');
+        background-size: cover;
+
+        &.white-right-arrow-icon {
+            background-image: url('/assets/icons/etc/arrow-long-right-white.svg');
+        }
+    }
+
+    &:hover {
+        div.l-right-arrow-icon {
+            background-image: url('/assets/icons/etc/arrow-long-right-red-fill.svg');
+        }
+        .white-right-arrow-icon {
+            background-image: url('/assets/icons/etc/arrow-long-right-red-fill.svg') !important;
+        }
+    }
+}

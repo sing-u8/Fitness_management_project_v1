@@ -25,7 +25,7 @@ export type ClickEmitterType = {
     templateUrl: './button.component.html',
     styleUrls: ['./button.component.scss'],
 })
-export class ButtonComponent implements OnInit, OnChanges, AfterViewChecked {
+export class ButtonComponent implements OnInit, OnChanges, AfterViewChecked, AfterViewInit {
     @Input() width: string
     @Input() height: string
     @Input() color: string

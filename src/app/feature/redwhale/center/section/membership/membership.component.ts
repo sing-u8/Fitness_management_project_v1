@@ -33,7 +33,7 @@ import * as MembershipActions from '@centerStore/actions/sec.membership.actions'
 
 import { ActivatedRoute, Router } from '@angular/router'
 
-import { originalOrder } from '@helpers/pipe/keyvalue'
+import { originalOrder, reverseOrder } from '@helpers/pipe/keyvalue'
 
 // screen types
 type SelectedMembershipObj = {
@@ -348,4 +348,5 @@ export class MembershipComponent implements OnInit {
 
     // keyValue pipe helper
     public originOrder = originalOrder
+    public reverseOrder = reverseOrder
 }

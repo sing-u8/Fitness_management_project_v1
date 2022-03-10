@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
+    <g id="Group_13638" data-name="Group 13638" transform="translate(-0.697 50.301) rotate(-90)">
+    <g id="Ellipse_571" data-name="Ellipse 571" transform="translate(0.301 0.697)" fill="#fff" stroke="#e34a5e" stroke-width="1">
+        <circle cx="25" cy="25" r="25" stroke="none"/>
+        <circle cx="25" cy="25" r="24.5" fill="none"/>
+    </g>
+    <g id="오른긴화살표" transform="translate(11.032 9.768)">
+        <rect id="Rectangle_3119" data-name="Rectangle 3119" width="29.372" height="29.372" fill="none"/>
+        <path id="오른긴화살표-2" data-name="오른긴화살표" d="M-98.694-211.035l-5.825,5.84a.941.941,0,0,1-1.323-.145.939.939,0,0,1,0-1.175l4.235-4.245h-13.628a.941.941,0,0,1-.829-1.041.941.941,0,0,1,.829-.827H-101.6l-4.235-4.246a.939.939,0,0,1-.145-1.322.94.94,0,0,1,1.322-.145.947.947,0,0,1,.146.146l5.825,5.84A.942.942,0,0,1-98.694-211.035Z" transform="translate(122.062 227.016)" fill="#e34a5e"/>
+    </g>
+    </g>
+</svg>

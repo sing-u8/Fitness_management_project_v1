@@ -37,6 +37,7 @@ export class LessongEffect {
                 this.gymLessonApi.getCategoryList(centerId).pipe(
                     map((categs) => {
                         const categState = _.map(categs, (categ) => {
+                            categ.items = _.reverse(categ.items)
                             const _categState: LessonCategoryState = {
                                 ...categ,
                                 isCategOpen: false,
@@ -160,6 +161,7 @@ export class LessongEffect {
                                 map((categs) => {
                                     console.log('update selected lesson  : ', reqBody, '- lesCategEn: ', lesCategEn)
                                     const categState = _.map(categs, (categ) => {
+                                        categ.items = _.reverse(categ.items)
                                         const _categState: LessonCategoryState = {
                                             ...categ,
                                             isCategOpen: lesCategEn[categ.id].isCategOpen,
@@ -242,6 +244,7 @@ export class LessongEffect {
                             return LessonActions.finishUpsertState({ lessonCategState: [] })
                         }
                         const categState = _.map(categs, (categ) => {
+                            categ.items = _.reverse(categ.items)
                             const _categState: LessonCategoryState = {
                                 ...categ,
                                 isCategOpen: lesCategEn[categ.id].isCategOpen,

@@ -33,6 +33,12 @@
     --lightblue: #88a1e4;
     --blue: #4e70c9;
     --darkblue: #3457b1;
+
+    --hp-lighergrey: #f9f9f9;
+    --hp-lightgrey: #979797;
+    --hp-grey: #606060;
+    --hp-black: #212121;
+    --hp-red: #e34a5e;
 }
 
 // Typography
@@ -971,4 +977,74 @@ gridster-item {
             color: var(--black-400);
         }
     }
+}
+
+// homepage
+.hp-headline1 {
+    font-family: 'Noto Sans KR';
+    font-weight: 700;
+    font-size: 4rem;
+    letter-spacing: -1.6px;
+    color: var(--hp-black);
+}
+
+.hp-headline2 {
+    font-family: 'Noto Sans KR';
+    font-weight: 500;
+    font-size: 3.2rem;
+    letter-spacing: -1.024px;
+    color: var(--hp-black);
+}
+
+.hp-title1 {
+    font-family: 'Noto Sans KR';
+    font-weight: 700;
+    font-size: 2.9rem;
+    letter-spacing: -0.841px;
+    color: var(--hp-black);
+}
+.hp-title2 {
+    font-family: 'Noto Sans KR';
+    font-weight: 700;
+    font-size: 1.6rem;
+    letter-spacing: -0.256px;
+    color: var(--hp-red);
+}
+
+.hp-body-text1 {
+    font-family: 'Noto Sans KR';
+    font-weight: 700;
+    font-size: 1.8rem;
+    letter-spacing: -0.324px;
+    color: var(--hp-grey);
+}
+.hp-body-text2 {
+    font-family: 'Noto Sans KR';
+    font-weight: 500;
+    font-size: 1.6rem;
+    letter-spacing: -0.256px;
+    color: var(--hp-black);
+}
+
+.hp-sub-text {
+    font-family: 'Noto Sans KR';
+    font-weight: 500;
+    font-size: 1.5rem;
+    letter-spacing: -0.225px;
+    color: var(--hp-grey);
+}
+
+.hp-tab-menu {
+    font-family: 'Noto Sans KR';
+    font-weight: 700;
+    font-size: 1.6rem;
+    letter-spacing: -0.256px;
+    color: var(--hp-lightgrey);
+}
+.hp-more-btn {
+    font-family: 'Noto Sans KR';
+    font-weight: 500;
+    font-size: 1.5rem;
+    letter-spacing: -0.225px;
+    color: var(--hp-black);
 }

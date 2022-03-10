@@ -1,0 +1,132 @@
+* {
+    padding: 0px;
+    margin: 0px;
+}
+
+// elements
+div.scroll-up-button {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: 1px solid var(--border-color);
+    cursor: pointer;
+
+    position: fixed;
+    right: 55px;
+    bottom: 55px;
+
+    background-image: url('/assets/icons/etc/arrow-large-long-up.svg');
+    background-size: cover;
+
+    &:hover {
+        // border-color: var(--red);
+        background-image: url('/assets/icons/etc/arrow-large-long-up-red.svg');
+    }
+}
+
+//
+section.l-main {
+    // element, modifier
+    div.sec {
+        &--common {
+            width: 100%;
+        }
+        &__bg-white {
+            background-color: var(--white);
+        }
+        &__bg-lightergrey {
+            background-color: var(--hp-lighergrey);
+        }
+    }
+
+    @media (min-width: 360px) {
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        width: 100%;
+        overflow-y: overlay;
+
+        div#sec1 {
+            height: 431px;
+        }
+        div#sec2 {
+            height: 792px;
+        }
+        div#sec3 {
+            height: 956px;
+        }
+        div#sec4 {
+            height: 4173px;
+        }
+        div#sec5 {
+            height: 833px;
+        }
+        div#sec6 {
+            height: 898px;
+        }
+        div#sec7 {
+            min-height: 985px;
+        }
+    }
+    @media (min-width: 768px) {
+        div#sec1 {
+            height: 671px;
+        }
+        div#sec2 {
+            height: 1030px;
+        }
+        div#sec3 {
+            height: 1150px;
+        }
+        div#sec4 {
+            height: 5025px;
+        }
+        div#sec5 {
+            height: 1047px;
+        }
+        div#sec6 {
+            height: 1063px;
+        }
+        div#sec7 {
+            min-height: 1180px;
+        }
+    }
+    @media (min-width: 1280px) {
+        div#sec1 {
+            height: 947px;
+        }
+        div#sec2 {
+            height: 986px;
+        }
+        div#sec3 {
+            height: 744px;
+        }
+        div#sec4 {
+            height: 3992px;
+        }
+        div#sec5 {
+            height: 907px;
+        }
+        div#sec6 {
+            height: 1503px;
+        }
+        div#sec7 {
+            min-height: 1187px;
+        }
+    }
+    @media (min-width: 1440px) {
+    }
+    @media (min-width: 1920px) {
+    }
+}
+
+.grid {
+    margin-left: 40px;
+    display: grid;
+    gap: 10px;
+    grid-template-rows: repeat(2, 188px);
+    grid-template-columns: repeat(3, 200px);
+}

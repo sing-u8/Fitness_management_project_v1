@@ -12,7 +12,7 @@ import { showToast } from '@appStore/actions/toast.action'
 
 import { CenterMembershipService } from '@services/center-membership.service'
 
-import * as _ from 'lodash'
+import _ from 'lodash'
 
 @Injectable()
 export class membershipEffect {
@@ -26,6 +26,7 @@ export class membershipEffect {
                 this.gymMembershipApi.getCategoryList(centerId).pipe(
                     map((categs) => {
                         const categState = _.map(categs, (categ) => {
+                            categ.items = _.reverse(categ.items)
                             const _categState: MembershipCategoryState = {
                                 ...categ,
                                 isCategOpen: false,
@@ -129,6 +130,7 @@ export class membershipEffect {
                             this.gymMembershipApi.getCategoryList(selectedMembership.centerId).pipe(
                                 map((categs) => {
                                     const categState = _.map(categs, (categ) => {
+                                        categ.items = _.reverse(categ.items)
                                         const _categState: MembershipCategoryState = {
                                             ...categ,
                                             isCategOpen: memCategEn[categ.id].isCategOpen,
@@ -224,6 +226,7 @@ export class membershipEffect {
                         }
 
                         const categState = _.map(categs, (categ) => {
+                            categ.items = _.reverse(categ.items)
                             const _categState: MembershipCategoryState = {
                                 ...categ,
                                 isCategOpen: memCategEn[categ.id].isCategOpen,
