@@ -9,6 +9,7 @@ import { ButtonComponent } from './button/button.component'
 import { FindMoreButtonComponent } from './find-more-button/find-more-button.component'
 import { FunctionBoxComponent } from './function-box/function-box.component'
 import { FreeStartFooterComponent } from './free-start-footer/free-start-footer.component'
+import { HomepageFooterComponent } from './homepage-footer/homepage-footer.component'
 
 @NgModule({
     declarations: [
@@ -17,6 +18,7 @@ import { FreeStartFooterComponent } from './free-start-footer/free-start-footer.
         FindMoreButtonComponent,
         FunctionBoxComponent,
         FreeStartFooterComponent,
+        HomepageFooterComponent,
     ],
     imports: [CommonModule, RouterModule, FormsModule, SharedModule],
     exports: [
@@ -25,6 +27,7 @@ import { FreeStartFooterComponent } from './free-start-footer/free-start-footer.
         FindMoreButtonComponent,
         FunctionBoxComponent,
         FreeStartFooterComponent,
+        HomepageFooterComponent,
     ],
 })
 export class ComponentsModule {}
