@@ -1,0 +1,17 @@
+<section class="fap-list">
+    <div class="title">자주 묻는 질문</div>
+
+    <div class="l-faq" *ngFor="let faq of faqList; index as idx">
+        <div class="faq-header" (click)="toggleFAQ(idx)">
+            <span>{{faq.title}}</span>
+            <div class="arrow" [class.isOpen]="faq.isOpen"></div>
+        </div>
+        <div class="faq-body" [class.isOpen] ="faq.isOpen">
+            {{faq.desc}}
+        </div>
+    </div>
+
+    <hp-find-more-button
+        [text]="'더 많은 질문 보기'"
+    ></hp-find-more-button>
+</section>

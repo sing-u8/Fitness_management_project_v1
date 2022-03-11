@@ -10,6 +10,8 @@ import { FindMoreButtonComponent } from './find-more-button/find-more-button.com
 import { FunctionBoxComponent } from './function-box/function-box.component'
 import { FreeStartFooterComponent } from './free-start-footer/free-start-footer.component'
 import { HomepageFooterComponent } from './homepage-footer/homepage-footer.component'
+import { FAQListComponent } from './faq-list/faq-list.component'
+import { MainCarouselComponent } from './main-carousel/main-carousel.component'
 
 @NgModule({
     declarations: [
@@ -19,6 +21,8 @@ import { HomepageFooterComponent } from './homepage-footer/homepage-footer.compo
         FunctionBoxComponent,
         FreeStartFooterComponent,
         HomepageFooterComponent,
+        FAQListComponent,
+        MainCarouselComponent,
     ],
     imports: [CommonModule, RouterModule, FormsModule, SharedModule],
     exports: [
@@ -28,6 +32,8 @@ import { HomepageFooterComponent } from './homepage-footer/homepage-footer.compo
         FunctionBoxComponent,
         FreeStartFooterComponent,
         HomepageFooterComponent,
+        FAQListComponent,
+        MainCarouselComponent,
     ],
 })
 export class ComponentsModule {}
