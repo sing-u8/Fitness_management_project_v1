@@ -73,7 +73,6 @@ export class MainCarouselComponent implements OnInit {
         if (!this.isTimerSet) {
             this.autoScrollTimer = setInterval(() => {
                 this.imageIdx = (this.imageIdx + 1) % this.imageLength
-                // this.exportImageIdx(this.imageIdx)
                 const [curIndex, curNav] = this.checkNavImage()
                 this.naviTo(curNav)
             }, 10000)
@@ -114,13 +113,7 @@ export class MainCarouselComponent implements OnInit {
         if (auto == false) {
             const navObjKeys = _.keys(this.naviObj)
             const curIndex = _.findIndex(navObjKeys, (v, i) => v == prop)
-
             this.imageIdx = curIndex
-            // this.renderer.setStyle(
-            //     this.images_el.nativeElement,
-            //     'transform',
-            //     `translate(calc( ${curIdx} / ${this.imageLength} * -100%))`
-            // )
         }
     }
 
