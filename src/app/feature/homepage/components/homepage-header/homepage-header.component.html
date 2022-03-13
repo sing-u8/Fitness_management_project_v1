@@ -48,7 +48,43 @@
             [bgColor]="'var(--red)'"
             [fontColor]="'var(--white)'"
             [text]="'무료로 시작하기'"
-            (onClick)="navigateTo('/auth/login')"
+            (onClick)="false"
         ></hp-button>
+    </div>
+</section>
+
+
+<section class="l-header-mobile">
+    <div class="redwhale-logo"></div>
+    <div (click)="toggleMenu()" class="hamburger-logo"></div>
+
+    <div class="menu-content" [style.display] = "isMenuOpen ? 'flex' : 'none'">
+        <div class="l-menu-item">
+            <a [routerLink]="['/']" class="menu-item">서비스 소개</a>
+            <a [routerLink]="['/fare-guide']" class="menu-item">요금 안내</a>
+            <a [routerLink]="['/introduction-inquiry']" class="menu-item">도입 문의</a>
+            <a [routerLink]="['/FAQ']" class="menu-item">자주 묻는 질문</a>
+        </div>
+
+        <hp-button
+            *ngIf="isMobileWidth"
+            [width]="'294'"
+            [height]="'50'"
+            [text] = "'무료로 시작하기'"
+            [bgColor]="'var(--red)'"
+            [fontColor]="'var(--white)'"
+            (onClick)="false"
+        ></hp-button>
+
+        <hp-button
+            *ngIf="!isMobileWidth"
+            [width]="'460'"
+            [height]="'50'"
+            [text] = "'무료로 시작하기'"
+            [bgColor]="'var(--red)'"
+            [fontColor]="'var(--white)'"
+            (onClick)="false"
+        ></hp-button>
+
     </div>
 </section>

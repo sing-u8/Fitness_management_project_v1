@@ -12,8 +12,9 @@ br.mobile {
 section.main-carousel {
     display: flex;
     flex-direction: column;
-    align-items: center;
     position: relative;
+    overflow-x: hidden;
+
     .title {
         display: flex;
         flex-direction: column;
@@ -35,20 +36,19 @@ section.main-carousel {
             }
         }
     }
+
     .images {
         overflow-x: hidden;
         display: flex;
         flex-direction: row;
-        width: 100%;
+        width: 400%;
+        transform: translate(calc(0 / 4 * 100%));
 
-        .l-one,
-        .l-two,
-        .l-three,
-        .-four {
-            min-width: 100%;
-            max-width: 100%;
-        }
-        div {
+        div.l-one,
+        div.l-two,
+        div.l-three,
+        div.l-four {
+            width: calc(100% / 4);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -128,7 +128,10 @@ section.main-carousel {
             }
         }
         .images {
-            div {
+            div.l-one,
+            div.l-two,
+            div.l-three,
+            div.l-four {
                 .four-images {
                     width: 297px;
                     height: 222px;
@@ -229,7 +232,10 @@ section.main-carousel {
                 width: 440px;
                 height: 328px;
             }
-            div {
+            div.l-one,
+            div.l-two,
+            div.l-three,
+            div.l-four {
                 .image {
                     &__one {
                         width: 180px;
@@ -300,7 +306,10 @@ section.main-carousel {
             }
         }
         .images {
-            div {
+            div.l-one,
+            div.l-two,
+            div.l-three,
+            div.l-four {
                 .four-images {
                     width: 806px;
                     height: 601px;

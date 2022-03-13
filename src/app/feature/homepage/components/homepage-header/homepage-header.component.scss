@@ -14,7 +14,7 @@ section.l-header {
 
     width: 100vw;
     height: 55px; // 50px in mobile version
-    display: flex;
+    display: none; //flex;
     align-items: center;
     justify-content: center;
     background-color: var(--white);
@@ -25,6 +25,7 @@ section.l-header {
         left: 18px;
         z-index: 5;
         .redwhale-logo {
+            cursor: pointer;
             width: 130px;
             height: 20px;
             background-size: cover;
@@ -82,5 +83,106 @@ section.l-header {
         &:hover {
             background-color: var(--hp-lighergrey);
         }
+    }
+}
+
+section.l-header-mobile {
+    display: flex; // flex
+    align-items: center;
+    justify-content: space-between;
+    padding: 0px 18px 0px 24px;
+    width: 100vw;
+    height: 50px;
+
+    .redwhale-logo {
+        cursor: pointer;
+        width: 115.5px;
+        height: 17.5px;
+        background-size: cover;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-image: url('/assets/homepage/icons/redwhale-word-logo.svg');
+    }
+    .hamburger-logo {
+        cursor: pointer;
+        width: 30px;
+        height: 30px;
+        background-size: cover;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-image: url('/assets/homepage/icons/hamburger.svg');
+    }
+
+    .menu-content {
+        z-index: 1000;
+        position: absolute;
+        top: 50px;
+        left: 0;
+        right: 0;
+        width: 100vw;
+        height: calc(100vh - 50px);
+        background-color: var(--white);
+        display: none; // flex
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+
+        .l-menu-item {
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            margin-top: 20.5vh; // 필요에 따라 수정 필요
+            margin-bottom: 70px;
+        }
+
+        .menu-item {
+            cursor: pointer;
+            text-decoration: none;
+
+            color: var(--font-color);
+            font-weight: 700;
+            font-size: 1.8rem;
+            letter-spacing: -0.324px;
+
+            height: 54px;
+            display: flex;
+            align-items: center;
+            &:not(:last-of-type) {
+                margin-bottom: 15px;
+            }
+        }
+
+        hp-button {
+            margin-bottom: 60px;
+        }
+    }
+}
+
+@media (min-width: 200px) {
+}
+@media (min-width: 768px) {
+    .menu-content {
+        .menu-item {
+            height: 54px;
+            &:not(:last-of-type) {
+                margin-bottom: 20px;
+            }
+        }
+
+        hp-button {
+            margin-bottom: 90px;
+        }
+    }
+}
+
+@media (min-width: 960px) {
+    section.l-header {
+        display: flex;
+    }
+
+    section.l-header-mobile {
+        display: none;
     }
 }
