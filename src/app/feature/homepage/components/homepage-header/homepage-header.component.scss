@@ -88,6 +88,8 @@ section.l-header {
 
 section.l-header-mobile {
     display: flex; // flex
+    position: fixed;
+    top: 0;
     align-items: center;
     justify-content: space-between;
     padding: 0px 18px 0px 24px;

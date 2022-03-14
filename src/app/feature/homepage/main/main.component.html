@@ -2,38 +2,91 @@
 
     <div (click)="false" class="scroll-up-button"></div>
 
-    <div id="sec1" class="sec--common sec__bg-white">
-        <hp-find-more-button></hp-find-more-button>
-    </div>
+    <div id="sec1" class="sec--common sec__bg-lightergrey">
 
-    <div id="sec2" class="sec--common sec__bg-lightergrey">
-        <div class="grid">
-            <hp-function-box [type] = "'m-member'"></hp-function-box>
-            <hp-function-box [type] = "'m-schedule'"></hp-function-box>
-            <hp-function-box [type] = "'r-class'"></hp-function-box>
-            <hp-function-box [type] = "'m-sale'"></hp-function-box>
-            <hp-function-box [type] = "'m-locker'"></hp-function-box>
-            <hp-function-box [type] = "'chat'"></hp-function-box>
+        <div class="sec1__l-text">
+            <div class="sec1__text">쉽고 간편한 센터 관리, 레드웨일로 시작하세요.</div>
+            <div class="sec1__button" (click)="false">무료로 시작하기</div>
+        </div>
+        <div class="sec1__l-image">
+            <div class="sec1__image1"></div>
+            <div class="sec1__image2"></div>
         </div>
 
-
-        <hp-free-start-footer></hp-free-start-footer>
     </div>
 
-    <div id="sec3" class="sec--common sec__bg-white">
-        <hp-faq-list></hp-faq-list>
+    <div id="sec2" class="sec--common sec__bg-white">
+
+        <div class="sec2__l-text">
+            <div class="sec2__text">
+                기간 제한 없이,<br> 무료로 사용해보고<br> 결정하세요.
+            </div>
+            <hp-find-more-button></hp-find-more-button>
+        </div>
+
+        <div class="sec2__talks">
+            <div class="talk1">
+                센터 관리 프로그램 금액이 너무 비싸요.
+            </div>
+            <div class="talk2">
+                가입비부터 초기 설치비까지 0원!<br>
+                지금 바로 무료로 시작하실 수 있어요.
+            </div>
+            <div class="talk3">
+                정보 이동 시, 정보가 손실되진 않나요?
+            </div>
+            <div class="talk4">
+                편리하고 안전한 데이터 이동을 위해<br>
+                회원 정보를 무료로, 원격 이동시켜드려요.
+            </div>
+        </div>
+
     </div>
 
-    <div id="sec4" class="sec--common sec__bg-lightergrey">
-        <hp-homepage-footer></hp-homepage-footer>
+    <div id="sec3" class="sec--common sec__bg-lightergrey">
+
+        <div class="sec3__l-text">
+            <div class="sec3__text">
+                복잡한 센터 관리,<br>
+                이제는 쉽고 간편하게!
+            </div>
+            <hp-find-more-button></hp-find-more-button>
+        </div>
+        <div class="sec3__l-box">
+            <div class="sec3__box1">
+                <hp-function-box [type]="'m-member'"></hp-function-box>
+                <hp-function-box [type]="'m-schedule'"></hp-function-box>
+                <hp-function-box [type]="'r-class'"></hp-function-box>
+            </div>
+            <div class="sec3__box2">
+                <hp-function-box [type]="'m-sale'"></hp-function-box>
+                <hp-function-box [type]="'m-locker'"></hp-function-box>
+                <hp-function-box [type]="'chat'"></hp-function-box>
+            </div>
+        </div>
+
     </div>
 
-    <div id="sec5" class="sec--common sec__bg-white"></div>
+    <div id="sec4" class="sec--common sec__bg-white ">
 
-    <div id="sec6" class="sec--common sec__bg-lightergrey">
-        <hp-main-carousel></hp-main-carousel>
     </div>
 
-    <div id="sec7" class="sec--common sec__bg-white"></div>
+    <div id="sec5" class="sec--common sec__bg-lightergrey"></div>
+
+    <div id="sec6" class="sec--common sec__bg-white ">
+
+    </div>
+
+    <div id="sec7" class="sec--common sec__bg-lightergrey"></div>
 
 </section>
+
+
+
+
+
+        <!-- <hp-main-carousel></hp-main-carousel>
+        <hp-homepage-footer></hp-homepage-footer>
+        <hp-faq-list></hp-faq-list>
+        <hp-free-start-footer></hp-free-start-footer>
+        <hp-find-more-button></hp-find-more-button> -->
