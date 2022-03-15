@@ -6,7 +6,7 @@
 
         <div class="sec1__l-text">
             <div class="sec1__text">쉽고 간편한 센터 관리, 레드웨일로 시작하세요.</div>
-            <div class="sec1__button" (click)="false">무료로 시작하기</div>
+            <div class="sec1__button" (click)="onReceiveIntroOpen()">무료로 시작하기</div>
         </div>
         <div class="sec1__l-image">
             <div class="sec1__image1"></div>
@@ -21,7 +21,8 @@
             <div class="sec2__text">
                 기간 제한 없이,<br> 무료로 사용해보고<br> 결정하세요.
             </div>
-            <hp-find-more-button></hp-find-more-button>
+            <hp-find-more-button
+            ></hp-find-more-button>
         </div>
 
         <div class="sec2__talks">
@@ -209,3 +210,9 @@
 
 </section>
 
+
+<hp-receive-introduction-modal
+    [(visible)]="receiveIntroVisible"
+    (cancel)="onReceiveIntroClose()"
+    (confirm)="onReceiveIntroFinish()"
+></hp-receive-introduction-modal>

@@ -12,15 +12,12 @@ import {
 } from '@angular/core'
 
 @Component({
-    selector: 'rw-modal',
-    templateUrl: './modal.component.html',
-    styleUrls: ['./modal.component.scss'],
+    selector: 'hp-receive-introduction-modal',
+    templateUrl: './receive-introduction-modal.component.html',
+    styleUrls: ['./receive-introduction-modal.component.scss'],
 })
-export class ModalComponent implements OnChanges, AfterViewChecked {
+export class ReceiveIntroductionModalComponent implements OnChanges, AfterViewChecked {
     @Input() visible: boolean
-    @Input() data: any
-    @Input() type: string
-
     @Input() blockClickOutside = false
 
     @ViewChild('modalBackgroundElement') modalBackgroundElement
@@ -35,7 +32,6 @@ export class ModalComponent implements OnChanges, AfterViewChecked {
     public isMouseModalDown: boolean
 
     constructor(private el: ElementRef, private renderer: Renderer2) {
-        this.type = 'type1'
         this.isMouseModalDown = false
     }
 

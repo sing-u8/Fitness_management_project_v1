@@ -1,0 +1,14 @@
+<div class="rw-modal-background" #modalBackgroundElement></div>
+<div
+    class="rw-modal-wrapper"
+    (mouseup)="!isMouseModalDown && !blockClickOutside && onCancel()"
+    (mousedown) = 'resetMouseModalDown()'
+    #modalWrapperElement
+>
+    <div
+        class="rw-modal user-select-none"
+        (mousedown) ='onMouseModalDown(); $event.stopPropagation()'
+    >
+
+    </div>
+</div>

@@ -9,4 +9,15 @@ export class MainComponent implements OnInit {
     constructor() {}
 
     ngOnInit(): void {}
+
+    public receiveIntroVisible = false
+    onReceiveIntroClose() {
+        this.receiveIntroVisible = false
+    }
+    onReceiveIntroFinish() {
+        this.receiveIntroVisible = false
+    }
+    onReceiveIntroOpen() {
+        this.receiveIntroVisible = true
+    }
 }
