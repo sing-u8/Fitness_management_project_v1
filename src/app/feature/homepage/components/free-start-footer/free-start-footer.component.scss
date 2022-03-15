@@ -29,143 +29,143 @@ section.free-start-footer {
     user-select: none;
 }
 
-@media (min-width: 200px) {
-    // 360px
-    @keyframes m-saleAnimation {
-        from {
+// @media (min-width: 200px) {
+// 360px
+@keyframes m-saleAnimation {
+    from {
+        bottom: 42px;
+    }
+    to {
+        bottom: 52px;
+    }
+}
+@keyframes m-lockerAnimation {
+    from {
+        bottom: 0px;
+    }
+    to {
+        bottom: 10px;
+    }
+}
+@keyframes m-scheduleAnimation {
+    from {
+        top: 0px;
+    }
+    to {
+        top: -10px;
+    }
+}
+@keyframes m-chatAnimation {
+    from {
+        bottom: 0px;
+    }
+    to {
+        bottom: 10px;
+    }
+}
+@keyframes m-memberAnimation {
+    from {
+        top: 0px;
+    }
+    to {
+        top: -10px;
+    }
+}
+@keyframes m-lessonAnimation {
+    from {
+        bottom: 46px;
+    }
+    to {
+        bottom: 56px;
+    }
+}
+
+section.free-start-footer {
+    height: 239px;
+}
+
+div.text {
+    width: 203px;
+    .title {
+        font-size: 2.3rem;
+        margin-bottom: 17px;
+    }
+    .l-left-icons {
+        position: absolute;
+        left: -81px;
+        width: 91px;
+        height: 192px;
+
+        .sale-icon {
             bottom: 42px;
+            left: 16px;
+            position: absolute;
+            width: 37px;
+            height: 37px;
+            background-size: cover;
+            background-image: url('/assets/homepage/icons/sale-management.svg');
+            animation: 1s ease-in-out 0s infinite alternate m-saleAnimation;
         }
-        to {
-            bottom: 52px;
-        }
-    }
-    @keyframes m-lockerAnimation {
-        from {
+        .locker-icon {
             bottom: 0px;
+            right: 0px;
+            position: absolute;
+            width: 45px;
+            height: 46px;
+            background-size: cover;
+            background-image: url('/assets/homepage/icons/locker-management.svg');
+            animation: 1s ease-in-out 0.5s infinite alternate m-lockerAnimation;
         }
-        to {
-            bottom: 10px;
-        }
-    }
-    @keyframes m-scheduleAnimation {
-        from {
+        .schedule-icon {
             top: 0px;
-        }
-        to {
-            top: -10px;
+            left: 0px;
+            position: absolute;
+            width: 59px;
+            height: 58px;
+            background-size: cover;
+            background-image: url('/assets/homepage/icons/schedule-management.svg');
+            animation: 1s ease-in-out 1s infinite alternate m-scheduleAnimation;
         }
     }
-    @keyframes m-chatAnimation {
-        from {
+    .l-right-icons {
+        position: absolute;
+        right: -98px;
+        width: 104px;
+        height: 203px;
+
+        .chat-icon {
             bottom: 0px;
+            left: 0px;
+            position: absolute;
+            width: 63px;
+            height: 64px;
+            background-size: cover;
+            background-image: url('/assets/homepage/icons/chat.svg');
+            animation: 1s ease-in-out 0s infinite alternate m-chatAnimation;
         }
-        to {
-            bottom: 10px;
-        }
-    }
-    @keyframes m-memberAnimation {
-        from {
+        .member-icon {
             top: 0px;
+            left: 19px;
+            position: absolute;
+            width: 47px;
+            height: 47px;
+            background-size: cover;
+            background-image: url('/assets/homepage/icons/member-management.svg');
+            animation: 1s ease-in-out 1s infinite alternate m-memberAnimation;
         }
-        to {
-            top: -10px;
-        }
-    }
-    @keyframes m-lessonAnimation {
-        from {
+        .lesson-icon {
             bottom: 46px;
-        }
-        to {
-            bottom: 56px;
-        }
-    }
-
-    section.free-start-footer {
-        height: 239px;
-    }
-
-    div.text {
-        width: 203px;
-        .title {
-            font-size: 2.3rem;
-            margin-bottom: 17px;
-        }
-        .l-left-icons {
+            right: 0px;
             position: absolute;
-            left: -81px;
-            width: 91px;
-            height: 192px;
-
-            .sale-icon {
-                bottom: 42px;
-                left: 16px;
-                position: absolute;
-                width: 37px;
-                height: 37px;
-                background-size: cover;
-                background-image: url('/assets/homepage/icons/sale-management.svg');
-                animation: 1s ease-in-out 0s infinite alternate m-saleAnimation;
-            }
-            .locker-icon {
-                bottom: 0px;
-                right: 0px;
-                position: absolute;
-                width: 45px;
-                height: 46px;
-                background-size: cover;
-                background-image: url('/assets/homepage/icons/locker-management.svg');
-                animation: 1s ease-in-out 0.5s infinite alternate m-lockerAnimation;
-            }
-            .schedule-icon {
-                top: 0px;
-                left: 0px;
-                position: absolute;
-                width: 59px;
-                height: 58px;
-                background-size: cover;
-                background-image: url('/assets/homepage/icons/schedule-management.svg');
-                animation: 1s ease-in-out 1s infinite alternate m-scheduleAnimation;
-            }
-        }
-        .l-right-icons {
-            position: absolute;
-            right: -98px;
-            width: 104px;
-            height: 203px;
-
-            .chat-icon {
-                bottom: 0px;
-                left: 0px;
-                position: absolute;
-                width: 63px;
-                height: 64px;
-                background-size: cover;
-                background-image: url('/assets/homepage/icons/chat.svg');
-                animation: 1s ease-in-out 0s infinite alternate m-chatAnimation;
-            }
-            .member-icon {
-                top: 0px;
-                left: 19px;
-                position: absolute;
-                width: 47px;
-                height: 47px;
-                background-size: cover;
-                background-image: url('/assets/homepage/icons/member-management.svg');
-                animation: 1s ease-in-out 1s infinite alternate m-memberAnimation;
-            }
-            .lesson-icon {
-                bottom: 46px;
-                right: 0px;
-                position: absolute;
-                width: 41px;
-                height: 42px;
-                background-size: cover;
-                background-image: url('/assets/homepage/icons/lesson-reservation.svg');
-                animation: 1s ease-in-out 0.5s infinite alternate m-lessonAnimation;
-            }
+            width: 41px;
+            height: 42px;
+            background-size: cover;
+            background-image: url('/assets/homepage/icons/lesson-reservation.svg');
+            animation: 1s ease-in-out 0.5s infinite alternate m-lessonAnimation;
         }
     }
 }
+
 @media (min-width: 768px) {
     @keyframes t-saleAnimation {
         from {

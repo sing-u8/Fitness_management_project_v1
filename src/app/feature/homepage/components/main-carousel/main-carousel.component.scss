@@ -98,106 +98,106 @@ section.main-carousel {
     }
 }
 
-@media (min-width: 200px) {
-    section.main-carousel {
-        width: 312px;
-        .title {
-            width: 100%;
-            span {
-                font-size: 2.5rem;
-                font-weight: 700;
-                letter-spacing: -0.625px;
-                color: var(--font-color);
+// @media (min-width: 200px) {
+section.main-carousel {
+    width: 312px;
+    .title {
+        width: 100%;
+        span {
+            font-size: 2.5rem;
+            font-weight: 700;
+            letter-spacing: -0.625px;
+            color: var(--font-color);
+        }
+    }
+
+    .navi {
+        margin: 28px 0px 25px 0px;
+        span {
+            font-size: 1.4rem;
+            font-weight: 700;
+            line-height: 1.43;
+            letter-spacing: -0.2px;
+
+            &:nth-child(2) {
+                margin: 0px 17px 0px 19px;
+            }
+            &:nth-child(3) {
+                margin-right: 17px;
             }
         }
-
-        .navi {
-            margin: 28px 0px 25px 0px;
-            span {
-                font-size: 1.4rem;
-                font-weight: 700;
-                line-height: 1.43;
-                letter-spacing: -0.2px;
-
-                &:nth-child(2) {
-                    margin: 0px 17px 0px 19px;
-                }
-                &:nth-child(3) {
-                    margin-right: 17px;
-                }
+    }
+    .images {
+        div.l-one,
+        div.l-two,
+        div.l-three,
+        div.l-four {
+            .four-images {
+                width: 297px;
+                height: 222px;
+                margin-bottom: 36px;
             }
-        }
-        .images {
-            div.l-one,
-            div.l-two,
-            div.l-three,
-            div.l-four {
-                .four-images {
-                    width: 297px;
+            .image {
+                &__one {
+                    width: 125.5px;
                     height: 222px;
                     margin-bottom: 36px;
                 }
-                .image {
-                    &__one {
-                        width: 125.5px;
-                        height: 222px;
-                        margin-bottom: 36px;
-                    }
-                    &__two {
-                        width: 312px;
-                        height: 222px;
-                        margin-bottom: 36px;
-                    }
-                    &__three {
-                        width: 312px;
-                        height: 222px;
-                        margin-bottom: 36px;
-                    }
-                    &__four_one {
-                        width: 145px;
-                        height: 206px;
-                        left: 0;
-                        bottom: 0;
-                        z-index: 5;
-                    }
-                    &__four_two {
-                        width: 144px;
-                        height: 67px;
-                        right: 0;
-                        top: 0;
-                    }
-                    &__four_three {
-                        width: 144px;
-                        height: 75px;
-                        right: 32px;
-                        top: 82px;
-                        z-index: 10;
-                    }
+                &__two {
+                    width: 312px;
+                    height: 222px;
+                    margin-bottom: 36px;
                 }
-                .desc {
-                    font-size: 1.5rem;
-                    font-weight: 700;
-                    line-height: 1.4;
-                    letter-spacing: -0.23px;
-                    .desc-small {
-                        font-size: 1.2rem;
-                        font-weight: 500;
-                        line-height: 1.42;
-                        letter-spacing: -0.14px;
-                        margin-top: 11.6px;
-                    }
+                &__three {
+                    width: 312px;
+                    height: 222px;
+                    margin-bottom: 36px;
                 }
-                .pig-arrow {
-                    // position: absolute;
+                &__four_one {
+                    width: 145px;
+                    height: 206px;
+                    left: 0;
+                    bottom: 0;
+                    z-index: 5;
+                }
+                &__four_two {
+                    width: 144px;
+                    height: 67px;
+                    right: 0;
+                    top: 0;
+                }
+                &__four_three {
+                    width: 144px;
+                    height: 75px;
+                    right: 32px;
+                    top: 82px;
+                    z-index: 10;
+                }
+            }
+            .desc {
+                font-size: 1.5rem;
+                font-weight: 700;
+                line-height: 1.4;
+                letter-spacing: -0.23px;
+                .desc-small {
+                    font-size: 1.2rem;
+                    font-weight: 500;
+                    line-height: 1.42;
+                    letter-spacing: -0.14px;
+                    margin-top: 11.6px;
+                }
+            }
+            .pig-arrow {
+                // position: absolute;
 
-                    width: 39.1px;
-                    height: 26.13px;
-                    transform: rotateZ(121deg);
-                }
+                width: 39.1px;
+                height: 26.13px;
+                transform: rotateZ(121deg);
             }
         }
     }
 }
+
 @media (min-width: 768px) {
     br.mobile {
         display: none !important;

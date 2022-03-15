@@ -42,34 +42,34 @@ div.l-function-box {
     }
 }
 
-@media (min-width: 200px) {
-    div.l-function-box {
-        width: 150px;
-        height: 165px;
-        .icon {
-            margin-top: 23px;
-            img {
-                width: 53px;
-                height: 53px;
-            }
+// @media (min-width: 200px) {
+div.l-function-box {
+    width: 150px;
+    height: 165px;
+    .icon {
+        margin-top: 23px;
+        img {
+            width: 53px;
+            height: 53px;
         }
+    }
 
-        .title {
-            font-weight: 700;
-            font-size: 1.4rem;
-            line-height: 1.79;
-            letter-spacing: -0.2px;
-            margin-bottom: 10px;
-        }
-        .desc {
-            p {
-                font-size: 1.2rem;
-                line-height: 1.42;
-                letter-spacing: -0.14px;
-            }
+    .title {
+        font-weight: 700;
+        font-size: 1.4rem;
+        line-height: 1.79;
+        letter-spacing: -0.2px;
+        margin-bottom: 10px;
+    }
+    .desc {
+        p {
+            font-size: 1.2rem;
+            line-height: 1.42;
+            letter-spacing: -0.14px;
         }
     }
 }
+
 @media (min-width: 768px) {
     div.l-function-box {
         width: 193px;
