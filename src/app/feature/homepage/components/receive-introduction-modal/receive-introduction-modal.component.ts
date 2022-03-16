@@ -10,6 +10,7 @@ import {
     AfterViewChecked,
     ViewChild,
 } from '@angular/core'
+import { FormBuilder, FormControl, Validators } from '@angular/forms'
 
 @Component({
     selector: 'hp-receive-introduction-modal',
@@ -31,8 +32,20 @@ export class ReceiveIntroductionModalComponent implements OnChanges, AfterViewCh
 
     public isMouseModalDown: boolean
 
-    constructor(private el: ElementRef, private renderer: Renderer2) {
+    public isInputDataComplete = false
+    public isTermsOpen = false
+
+    public nameInputForm: FormControl
+    public emailInputForm: FormControl
+
+    public privacyRadio = false
+    public noticeRadio = false
+
+    constructor(private el: ElementRef, private renderer: Renderer2, private fb: FormBuilder) {
         this.isMouseModalDown = false
+
+        this.nameInputForm = this.fb.control('')
+        this.emailInputForm = this.fb.control('')
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -79,5 +92,13 @@ export class ReceiveIntroductionModalComponent implements OnChanges, AfterViewCh
     }
     resetMouseModalDown() {
         this.isMouseModalDown = false
+    }
+
+    // ------------------------------------------------- //
+    togglePrivacyRadio() {
+        this.privacyRadio = !this.privacyRadio
+    }
+    toggleNoticeRadio() {
+        this.noticeRadio = !this.noticeRadio
     }
 }

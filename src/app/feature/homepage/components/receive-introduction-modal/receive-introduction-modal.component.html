@@ -7,8 +7,62 @@
 >
     <div
         class="rw-modal user-select-none"
+        [class.terms-open] = "isTermsOpen"
+        [class.input-data-complete] = "isInputDataComplete"
         (mousedown) ='onMouseModalDown(); $event.stopPropagation()'
     >
+        <div *ngIf="!isInputDataComplete" class="input-data-page">
+            <div class="page-header"><div (click)="onCancel()" class="close-button"></div></div>
+            <div class="input-data-page__body">
+                <div class="title">레드웨일의 기능이 <br>궁금하신가요? 🤗</div>
+                <div class="desc">
+                    기능 소개 및 서비스 설명이 담긴<br>
+                    레드웨일 소개서를 이메일로 보내드려요.
+                </div>
+                <div class="l-body-form">
+                    <form class="l-input">
+                        <div class="input-name"></div>
+                        <input
+                            type="text"
+                            placeholder="신청하시는 분의 이름"
+                            [formControl]="nameInputForm"
+                        >
+                    </form>
+                    <form class="l-input">
+                        <div class="input-name"></div>
+                        <input
+                            type="email"
+                            placeholder="소개서를 전달받으실 이메일 주소"
+                            [formControl]="emailInputForm"
+                        >
+                    </form>
 
+                    <div class="l-radio-button" (click)="togglePrivacyRadio()">
+                        <rw-radio-button
+                            [checked]="privacyRadio"
+                        ></rw-radio-button>
+                        <span>
+                            [필수] 이메일 발송을 위한
+                            <span class="underbar_click">개인정보 수집 동의</span>
+                        </span>
+                    </div>
+                    <div class="l-radio-button" (click)="toggleNoticeRadio()">
+                        <rw-radio-button
+                            [checked]="noticeRadio"
+                        ></rw-radio-button>
+                        <span>
+                            [선택] 센터 운영에 도움이 되는 소식을 받을게요.
+                        </span>
+                    </div>
+
+
+
+                </div>
+            </div>
+        </div>
+        <div *ngIf="isInputDataComplete" class="input-finish-page">
+            <div class="page-header"><div (click)="onCancel()" class="close-button"></div></div>
+            <div class="input-finish-page__body"></div>
+        </div>
     </div>
 </div>
