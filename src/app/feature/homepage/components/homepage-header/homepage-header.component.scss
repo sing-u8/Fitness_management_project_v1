@@ -181,10 +181,10 @@ section.l-header-mobile {
 
 @media (min-width: 960px) {
     section.l-header {
-        display: flex;
+        display: flex !important;
     }
 
     section.l-header-mobile {
-        display: none;
+        display: none !important;
     }
 }
