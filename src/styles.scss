@@ -1063,3 +1063,65 @@ gridster-item {
     letter-spacing: -0.225px;
     color: var(--hp-black);
 }
+
+// homepage scroll animation style
+.hp-scroll-ani {
+    .hp-SA1 {
+        position: relative;
+        transform: translateY(100px);
+        opacity: 0;
+        transition: all 2s ease;
+
+        &.active {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    .hp-SA2 {
+        position: relative;
+        transform: translateY(100px);
+        opacity: 0;
+        transition: all 2s ease 0.5s;
+
+        &.active {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+    .hp-SA3 {
+        position: relative;
+        transform: translateY(100px);
+        opacity: 0;
+        transition: all 2s ease 1s;
+
+        &.active {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    .hp-SA4 {
+        position: relative;
+        transform: translateY(100px);
+        opacity: 0;
+        transition: all 2s ease 1.5s;
+
+        &.active {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    .hp-SA5 {
+        position: relative;
+        transform: translateY(100px);
+        opacity: 0;
+        transition: all 2s ease 2s;
+
+        &.active {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+}
