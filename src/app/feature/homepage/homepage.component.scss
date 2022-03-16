@@ -6,5 +6,11 @@
 .l-homepage {
     position: relative;
     width: 100vw;
-    margin-top: 55px;
+    margin-top: 50px;
+}
+
+@media (min-width: 960px) {
+    .l-homepage {
+        margin-top: 55px;
+    }
 }

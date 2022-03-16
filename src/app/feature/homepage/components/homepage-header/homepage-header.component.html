@@ -60,10 +60,10 @@
 
     <div class="menu-content" [style.display] = "isMenuOpen ? 'flex' : 'none'">
         <div class="l-menu-item">
-            <a [routerLink]="['/']" class="menu-item">서비스 소개</a>
-            <a [routerLink]="['/fare-guide']" class="menu-item">요금 안내</a>
-            <a [routerLink]="['/introduction-inquiry']" class="menu-item">도입 문의</a>
-            <a [routerLink]="['/FAQ']" class="menu-item">자주 묻는 질문</a>
+            <a [routerLink]="['/']" (click)="toggleMenu()" class="menu-item">서비스 소개</a>
+            <a [routerLink]="['/fare-guide']" (click)="toggleMenu()" class="menu-item">요금 안내</a>
+            <a [routerLink]="['/introduction-inquiry']" (click)="toggleMenu()" class="menu-item">도입 문의</a>
+            <a [routerLink]="['/FAQ']" (click)="toggleMenu()" class="menu-item">자주 묻는 질문</a>
         </div>
 
         <hp-button

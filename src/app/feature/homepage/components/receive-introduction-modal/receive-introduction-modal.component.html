@@ -11,9 +11,9 @@
         [class.input-data-complete] = "isInputDataComplete"
         (mousedown) ='onMouseModalDown(); $event.stopPropagation()'
     >
-        <div *ngIf="!isInputDataComplete" class="input-data-page">
+        <div *ngIf="!isInputDataComplete" class="input-data-page ">
             <div class="page-header"><div (click)="onCancel()" class="close-button"></div></div>
-            <div class="input-data-page__body">
+            <div class="input-data-page__body thin-scroll-y-overlay2">
                 <div class="title">레드웨일의 기능이 <br>궁금하신가요? 🤗</div>
                 <div class="desc">
                     기능 소개 및 서비스 설명이 담긴<br>
@@ -23,52 +23,113 @@
                     <form class="l-input">
                         <div class="input-name"></div>
                         <input
+                            [class.input-error] = "nameInputForm.invalid && !nameInputForm.pristine"
                             type="text"
                             placeholder="신청하시는 분의 이름"
                             [formControl]="nameInputForm"
                         >
+                        <div *ngIf="nameInputForm.invalid && !nameInputForm.pristine" class="error">
+                            <div class="error-icon"></div>
+                            이름을 입력해주세요
+                        </div>
                     </form>
                     <form class="l-input">
                         <div class="input-name"></div>
                         <input
+                            [class.input-error] = "emailInputForm.invalid && !emailInputForm.pristine"
                             type="email"
                             placeholder="소개서를 전달받으실 이메일 주소"
                             [formControl]="emailInputForm"
                         >
+                        <div *ngIf="emailInputForm.invalid && !emailInputForm.pristine" class="error">
+                            <div class="error-icon"></div>
+                            {{emailError}}
+                        </div>
                     </form>
 
-                    <div class="l-radio-button" (click)="togglePrivacyRadio()">
-                        <rw-radio-button
-                            [checked]="privacyRadio"
-                        ></rw-radio-button>
-                        <span>
-                            [필수] 이메일 발송을 위한
-                            <span class="underbar_click">개인정보 수집 동의</span>
-                        </span>
+                    <div
+                        class="l-radio-button d-flex flex-column align-items-start"
+                        style="cursor:auto !important"
+                        (click)="togglePrivacyRadio()"
+                    >
+                        <div
+                            class=" d-flex align-items-center"
+                            style="cursor:pointer !important"
+                        >
+                            <rw-radio-button [checked]="privacyRadio"></rw-radio-button>
+                            <div class="radio-margin d-flex align-item-center">
+                                <span class="radio-text">[필수] 이메일 발송을 위한</span>
+                                <span class="underbar_click" (click)="toggleTermGrid($event)"> 개인정보 수집 동의</span>
+                            </div>
+                        </div>
+                        <table *ngIf="isTermsOpen" class="term-table">
+                            <tr>
+                                <td>수집 목적</td>
+                                <td>수집 항목</td>
+                                <td>수집 근거</td>
+                                <td>보유 기간</td>
+                            </tr>
+                            <tr>
+                                <td>본인 확인,<br>제품 소개<br>요청에 대한 처리</td>
+                                <td>이름,<br>이메일</td>
+                                <td>정보<br>주체의<br>동의</td>
+                                <td>문의<br>등록 후<br>1년</td>
+                            </tr>
+                        </table>
                     </div>
                     <div class="l-radio-button" (click)="toggleNoticeRadio()">
                         <rw-radio-button
                             [checked]="noticeRadio"
                         ></rw-radio-button>
-                        <span>
+                        <span class="radio-margin radio-text">
                             [선택] 센터 운영에 도움이 되는 소식을 받을게요.
                         </span>
                     </div>
 
-                    <rw-button
-                        [height]="'48'"
-                        [width]="'290'"
-                        [color]="'var(--red)'"
-                        [disabled]="true"
-                        (onClick)="false"
-                    ></rw-button>
+                    <div
+                        class="button"
+                        [class.disabled] = "!(privacyRadio && nameInputForm.valid && emailInputForm.valid )"
+                        (click) = "(privacyRadio && nameInputForm.valid && emailInputForm.valid )
+                                    && onSendInputData() "
+                    >
+                        신청하기
+                    </div>
 
                 </div>
             </div>
         </div>
+
         <div *ngIf="isInputDataComplete" class="input-finish-page">
             <div class="page-header"><div (click)="onCancel()" class="close-button"></div></div>
-            <div class="input-finish-page__body"></div>
+            <div class="input-finish-page__body thin-scroll-y-overlay2">
+                <div class="title">
+                    {{nameInputForm.value}}님,<br>
+                    레드웨일 소개서를<br>
+                    신청해주셔서 감사합니다. 💌
+                </div>
+                <div class="email">
+                    {{emailInputForm.value}}
+                </div>
+                <div class="l-desc">
+                    <div class="desc-text">
+                        입력하신 이메일 주소로<br>
+                        레드웨일 소개서를 보내드렸어요.
+                    </div>
+                    <div class="desc-text">
+                        더 궁금하신 점이 있으시다면,<br>
+                        <span class="desc-text--underbar">도입 문의</span>에 문의 사항을 남겨주세요.
+                    </div>
+                </div>
+                <div
+                    class="button"
+                    style="margin-top: 0px;"
+                    (click)="onCancel()"
+                >
+                    확인
+                </div>
+            </div>
         </div>
+
+
     </div>
 </div>

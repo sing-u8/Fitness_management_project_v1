@@ -10,7 +10,7 @@ import {
     AfterViewChecked,
     ViewChild,
 } from '@angular/core'
-import { FormBuilder, FormControl, Validators } from '@angular/forms'
+import { FormBuilder, FormControl, Validators, ValidationErrors, ValidatorFn, AbstractControl } from '@angular/forms'
 
 @Component({
     selector: 'hp-receive-introduction-modal',
@@ -37,6 +37,7 @@ export class ReceiveIntroductionModalComponent implements OnChanges, AfterViewCh
 
     public nameInputForm: FormControl
     public emailInputForm: FormControl
+    public emailError = ''
 
     public privacyRadio = false
     public noticeRadio = false
@@ -44,8 +45,8 @@ export class ReceiveIntroductionModalComponent implements OnChanges, AfterViewCh
     constructor(private el: ElementRef, private renderer: Renderer2, private fb: FormBuilder) {
         this.isMouseModalDown = false
 
-        this.nameInputForm = this.fb.control('')
-        this.emailInputForm = this.fb.control('')
+        this.nameInputForm = this.fb.control('', [Validators.required, this.nameValidator()])
+        this.emailInputForm = this.fb.control('', [Validators.required, this.emailValidator()])
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -80,6 +81,16 @@ export class ReceiveIntroductionModalComponent implements OnChanges, AfterViewCh
 
     onCancel(): void {
         this.cancel.emit({})
+        this.emailInputForm.setValue('')
+        this.emailInputForm.markAsPristine()
+        // this.emailInputForm.reset()
+        this.nameInputForm.setValue('')
+        this.nameInputForm.markAsPristine()
+        // this.nameInputForm.reset()
+        this.isInputDataComplete = false
+
+        this.privacyRadio = false
+        this.noticeRadio = false
     }
 
     onConfirm(): void {
@@ -93,6 +104,33 @@ export class ReceiveIntroductionModalComponent implements OnChanges, AfterViewCh
     resetMouseModalDown() {
         this.isMouseModalDown = false
     }
+    // ------------------------------------------------- //
+    onSendInputData() {
+        this.isInputDataComplete = true
+    }
+
+    // ------------------------------------------------- //
+    nameValidator(): ValidatorFn {
+        return (control: AbstractControl): ValidationErrors | null => {
+            if (control.value.length < 2) {
+                return { nameError: true }
+            }
+            return null
+        }
+    }
+    emailValidator(): ValidatorFn {
+        return (control: AbstractControl): ValidationErrors | null => {
+            const emailRegex = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/
+            if (control.value == '') {
+                this.emailError = '이메일 주소를 입력해주세요.'
+                return { emailNone: true }
+            } else if (!emailRegex.test(control.value)) {
+                this.emailError = '이메일 양식을 확인해주세요.'
+                return { eamilFormError: true }
+            }
+            return null
+        }
+    }
 
     // ------------------------------------------------- //
     togglePrivacyRadio() {
@@ -100,5 +138,10 @@ export class ReceiveIntroductionModalComponent implements OnChanges, AfterViewCh
     }
     toggleNoticeRadio() {
         this.noticeRadio = !this.noticeRadio
+    }
+
+    toggleTermGrid(event) {
+        this.isTermsOpen = !this.isTermsOpen
+        event.stopPropagation()
     }
 }
