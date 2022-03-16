@@ -42,4 +42,13 @@ export class HomepageHeaderComponent implements OnInit, OnDestroy {
             this.isMobileWidth = true
         }
     }
+
+    // ----------  free start modal ---------------//
+    public isFreeStartModalVisible = false
+    toggleFreeStartModalVisible() {
+        this.isFreeStartModalVisible = !this.isFreeStartModalVisible
+    }
+    onFreeStartCancel() {
+        this.isFreeStartModalVisible = false
+    }
 }

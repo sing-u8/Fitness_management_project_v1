@@ -48,7 +48,7 @@
             [bgColor]="'var(--red)'"
             [fontColor]="'var(--white)'"
             [text]="'무료로 시작하기'"
-            (onClick)="false"
+            (onClick)="toggleFreeStartModalVisible()"
         ></hp-button>
     </div>
 </section>
@@ -73,7 +73,7 @@
             [text] = "'무료로 시작하기'"
             [bgColor]="'var(--red)'"
             [fontColor]="'var(--white)'"
-            (onClick)="false"
+            (onClick)="toggleFreeStartModalVisible()"
         ></hp-button>
 
         <hp-button
@@ -83,8 +83,14 @@
             [text] = "'무료로 시작하기'"
             [bgColor]="'var(--red)'"
             [fontColor]="'var(--white)'"
-            (onClick)="false"
+            (onClick)="toggleFreeStartModalVisible()"
         ></hp-button>
 
     </div>
 </section>
+
+<hp-free-start-modal
+    [(visible)]="isFreeStartModalVisible"
+    (cancel)="onFreeStartCancel()"
+    (confirm)="onFreeStartCancel()"
+></hp-free-start-modal>

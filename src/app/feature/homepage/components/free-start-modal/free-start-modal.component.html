@@ -1,0 +1,35 @@
+<div class="rw-modal-background" #modalBackgroundElement></div>
+<div
+    class="rw-modal-wrapper"
+    (mouseup)="!isMouseModalDown && !blockClickOutside && onCancel()"
+    (mousedown) = 'resetMouseModalDown()'
+    #modalWrapperElement
+>
+    <div
+        class="rw-modal user-select-none"
+        (mousedown) ='onMouseModalDown(); $event.stopPropagation()'
+    >
+        <div class="free-start-page ">
+            <div class="page-header"><div (click)="onCancel()" class="close-button"></div></div>
+            <div class="free-start-page__body thin-scroll-y-overlay2">
+                <div class="title">
+                    지금 바로 PC에서<br>
+                    무료로 시작하실 수 있어요!
+                </div>
+                <div class="desc">
+                    관리자용 앱이 곧 출시될 예정이에요.<br>
+                    그 전까지만 PC로 이용해주시길 부탁드려요. 🙏
+                </div>
+
+                <div
+                    class="button"
+                    (click) = "false"
+                >
+                    도입하기
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>

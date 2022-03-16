@@ -13,6 +13,7 @@ import { HomepageFooterComponent } from './homepage-footer/homepage-footer.compo
 import { FAQListComponent } from './faq-list/faq-list.component'
 import { MainCarouselComponent } from './main-carousel/main-carousel.component'
 import { ReceiveIntroductionModalComponent } from './receive-introduction-modal/receive-introduction-modal.component'
+import { FreeStartModalComponent } from './free-start-modal/free-start-modal.component'
 
 @NgModule({
     declarations: [
@@ -25,6 +26,7 @@ import { ReceiveIntroductionModalComponent } from './receive-introduction-modal/
         FAQListComponent,
         MainCarouselComponent,
         ReceiveIntroductionModalComponent,
+        FreeStartModalComponent,
     ],
     imports: [CommonModule, RouterModule, FormsModule, ReactiveFormsModule, SharedModule],
     exports: [
@@ -37,6 +39,7 @@ import { ReceiveIntroductionModalComponent } from './receive-introduction-modal/
         FAQListComponent,
         MainCarouselComponent,
         ReceiveIntroductionModalComponent,
+        FreeStartModalComponent,
     ],
 })
 export class ComponentsModule {}
