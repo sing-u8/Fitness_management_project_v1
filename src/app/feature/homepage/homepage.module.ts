@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core'
 import { CommonModule } from '@angular/common'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { SharedModule } from '@shared/shared.module'
 
 import { HomepageRoutingModule } from './homepage-routing.module'
@@ -20,7 +21,7 @@ import { FrequentlyAskedQuestionsComponent } from './frequently-asked-questions/
         IntorductionInquiryComponent,
         FrequentlyAskedQuestionsComponent,
     ],
-    imports: [CommonModule, HomepageRoutingModule, SharedModule, ComponentsModule],
+    imports: [CommonModule, HomepageRoutingModule, SharedModule, ComponentsModule, FormsModule, ReactiveFormsModule],
     exports: [],
     providers: [],
 })

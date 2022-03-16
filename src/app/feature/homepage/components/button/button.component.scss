@@ -19,3 +19,8 @@
         opacity: 0.8;
     }
 }
+
+.button-disabled {
+    background-color: var(--lightergrey);
+    color: var(--white);
+}

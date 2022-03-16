@@ -41,6 +41,7 @@ export class ButtonComponent implements OnInit, OnChanges, AfterViewChecked, Aft
         if (changes['disabled'] && !changes['disabled'].firstChange) {
             if (changes['disabled'].previousValue != changes['disabled'].currentValue) {
                 this.changed = true
+                console.log('button is disabled : ', this.isDisabled)
             }
         }
     }
@@ -66,23 +67,19 @@ export class ButtonComponent implements OnInit, OnChanges, AfterViewChecked, Aft
             this.renderer.setStyle(this.button_el.nativeElement, 'color', `${this.fontColor}`)
         }
     }
+
+    public isDisabled = false
     ngAfterViewChecked(): void {
         if (this.changed) {
             this.changed = false
 
-            // if (this.disabled) {
-            //     this.renderer.addClass(this.button_el.nativeElement, 'cmp-button-disabled')
-
-            //     if (this.borderColor) {
-            //         this.renderer.setStyle(this.button_el.nativeElement, 'border', `1px solid transparent`)
-            //     }
-            // } else {
-            //     this.renderer.removeClass(this.button_el.nativeElement, 'cmp-button-disabled')
-
-            //     if (this.borderColor) {
-            //         this.renderer.setStyle(this.button_el.nativeElement, 'border', `1px solid ${this.borderColor}`)
-            //     }
-            // }
+            if (this.disabled) {
+                this.isDisabled = true
+                console.log('button is disabled true: ', this.isDisabled)
+            } else {
+                this.isDisabled = false
+                console.log('button is disabled false : ', this.isDisabled)
+            }
         }
     }
 }
