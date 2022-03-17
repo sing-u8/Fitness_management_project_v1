@@ -1,6 +1,8 @@
+import { UserInfo } from '@schemas/user-info'
+
 export interface LockerItemHistory {
-    user_name: string
-    user_picture: string
+    id: string
     start_date: string
     end_date: string
+    user: UserInfo
 }

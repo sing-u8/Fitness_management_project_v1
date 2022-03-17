@@ -1,3 +1,4 @@
+import { UserLocker } from '@schemas/user-locker'
 export interface LockerItem {
     id: string
     state_code: string
@@ -7,4 +8,5 @@ export interface LockerItem {
     y: number
     rows: number
     cols: number
+    user_locker: UserLocker
 }

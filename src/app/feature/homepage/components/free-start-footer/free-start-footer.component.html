@@ -6,7 +6,7 @@
         <hp-find-more-button
             [text] = "'무료로 시작하기'"
             [whiteMode]="true"
-            (onClick)="toggleFreeStartModalVisible()"
+            (onClick)="onFreeStartClick.emit()"
         ></hp-find-more-button>
 
         <div class="l-left-icons">
@@ -22,9 +22,3 @@
 
     </div>
 </section>
-
-<hp-free-start-modal
-    [(visible)]="isFreeStartModalVisible"
-    (cancel)="onFreeStartCancel()"
-    (confirm)="onFreeStartCancel()"
-></hp-free-start-modal>
