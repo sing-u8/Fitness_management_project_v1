@@ -6,6 +6,11 @@ import { Component, OnInit } from '@angular/core'
     styleUrls: ['./locker.component.scss'],
 })
 export class LockerComponent implements OnInit {
+    // <----
+    public isEditMode = false
+
+    // ----->
+
     constructor() {}
 
     ngOnInit(): void {}
