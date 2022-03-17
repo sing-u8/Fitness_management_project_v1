@@ -1,65 +1,62 @@
-import { Injectable } from "@angular/core";
-import { Router, ActivatedRoute } from "@angular/router";
+import { Injectable } from '@angular/core'
+import { Router, ActivatedRoute } from '@angular/router'
 
-import { DeviceDetectorService } from "ngx-device-detector";
+import { DeviceDetectorService } from 'ngx-device-detector'
 
 @Injectable({
-  providedIn: "root",
+    providedIn: 'root',
 })
 export class DeeplinkService {
-  private defaultURI = `https://links.redwhale.xyz/`;
-  private defaultQuery = `&apn=xyz.redwhale.m&isi=1532693624&ibi=xyz.redwhale.m`;
+    private defaultURI = `https://links.redwhale.xyz/`
+    private defaultQuery = `&apn=xyz.redwhale.m&isi=1532693624&ibi=xyz.redwhale.m`
 
-  constructor(
-    private deviceService: DeviceDetectorService,
-    private activatedRoute: ActivatedRoute,
-    private router: Router
-  ) {}
+    constructor(
+        private deviceService: DeviceDetectorService,
+        private activatedRoute: ActivatedRoute,
+        private router: Router
+    ) {}
 
-  isDeeplinkingAvailable(): boolean {
-    if (!this.deviceService.isMobile() || window.location.pathname == "/")
-      return false;
-    return true;
-  }
-  isMobile(): boolean {
-    return this.deviceService.isMobile();
-  }
-
-  launchAppWhenInMobile(query?: string): void {
-    if (!this.isDeeplinkingAvailable()) return null;
-    if (this.filterLink()) {
-      return null;
+    isDeeplinkingAvailable(): boolean {
+        if (!this.deviceService.isMobile() || window.location.pathname == '/') return false
+        return true
+    }
+    isMobile(): boolean {
+        return this.deviceService.isMobile()
     }
 
-    let replacedUrl = this.defaultURI;
-    replacedUrl += `?link=${window.location.href}${this.defaultQuery}`;
-    if (query) replacedUrl += `&${encodeURIComponent(query)}`;
+    launchAppWhenInMobile(query?: string): void {
+        if (!this.isDeeplinkingAvailable()) return null
+        if (this.filterLink()) {
+            return null
+        }
 
-    // window.location.replace(replacedUrl)
-  }
+        let replacedUrl = this.defaultURI
+        replacedUrl += `?link=${window.location.href}${this.defaultQuery}`
+        if (query) replacedUrl += `&${encodeURIComponent(query)}`
 
-  returnDeeplink(query?: string): string {
-    let replacedUrl = this.defaultURI;
-    replacedUrl += `?link=${window.location.href}${this.defaultQuery}`;
-    if (query) replacedUrl += `&${encodeURIComponent(query)}`;
-    return replacedUrl;
-  }
-
-  onLoginWhenInMobile() {
-    if (!this.isMobile()) return null;
-    window.location.replace(
-      `${this.defaultURI}?link=${window.location.origin}/auth/login${this.defaultQuery}`
-    );
-  }
-
-  // filter link function
-  filterLink() {
-    const urlList = window.location.href.split("/");
-    console.log("filterLink : ", urlList, urlList.includes("auth"));
-    if (urlList.includes("m.reset-password") || urlList.includes("auth")) {
-      return true;
-    } else {
-      return false;
+        // window.location.replace(replacedUrl)
     }
-  }
+
+    returnDeeplink(query?: string): string {
+        let replacedUrl = this.defaultURI
+        replacedUrl += `?link=${window.location.href}${this.defaultQuery}`
+        if (query) replacedUrl += `&${encodeURIComponent(query)}`
+        return replacedUrl
+    }
+
+    onLoginWhenInMobile() {
+        if (!this.isMobile()) return null
+        window.location.replace(`${this.defaultURI}?link=${window.location.origin}/auth/login${this.defaultQuery}`)
+    }
+
+    // filter link function
+    filterLink() {
+        const urlList = window.location.href.split('/')
+        console.log('filterLink : ', urlList, urlList.includes('auth'))
+        if (urlList.includes('m.reset-password') || urlList.includes('auth')) {
+            return true
+        } else {
+            return false
+        }
+    }
 }

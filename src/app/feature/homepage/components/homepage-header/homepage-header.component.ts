@@ -1,5 +1,6 @@
 import { Component, OnInit, Renderer2, OnDestroy } from '@angular/core'
 import { Router } from '@angular/router'
+import { DeviceDetectorService } from 'ngx-device-detector'
 
 @Component({
     selector: 'hp-header',
@@ -12,7 +13,7 @@ export class HomepageHeaderComponent implements OnInit, OnDestroy {
 
     public isMobileWidth = false
 
-    constructor(private router: Router, private renderer: Renderer2) {}
+    constructor(private router: Router, private renderer: Renderer2, private deviceDetector: DeviceDetectorService) {}
 
     ngOnInit(): void {
         this.checkIsMobile(window.innerWidth)
@@ -46,7 +47,11 @@ export class HomepageHeaderComponent implements OnInit, OnDestroy {
     // ----------  free start modal ---------------//
     public isFreeStartModalVisible = false
     toggleFreeStartModalVisible() {
-        this.isFreeStartModalVisible = !this.isFreeStartModalVisible
+        if (this.deviceDetector.isDesktop()) {
+            this.router.navigateByUrl('/auth/login')
+        } else {
+            this.isFreeStartModalVisible = !this.isFreeStartModalVisible
+        }
     }
     onFreeStartCancel() {
         this.isFreeStartModalVisible = false

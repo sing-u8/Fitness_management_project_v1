@@ -1,4 +1,6 @@
 import { Component, OnInit, Renderer2, OnDestroy, AfterViewInit } from '@angular/core'
+import { Router } from '@angular/router'
+import { DeviceDetectorService } from 'ngx-device-detector'
 import _ from 'lodash'
 @Component({
     selector: 'rw-main',
@@ -6,7 +8,7 @@ import _ from 'lodash'
     styleUrls: ['./main.component.scss'],
 })
 export class MainComponent implements OnInit, OnDestroy, AfterViewInit {
-    constructor(private renderer: Renderer2) {}
+    constructor(private renderer: Renderer2, private deviceDetector: DeviceDetectorService, private router: Router) {}
 
     ngOnInit(): void {}
     ngOnDestroy(): void {}
@@ -18,6 +20,29 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit {
         })
     }
 
+    // ----------  free start modal ---------------//
+    public isFreeStartModalVisible = false
+    toggleFreeStartModalVisible() {
+        console.log('this.deviceDetector.isDesktop() : ', this.deviceDetector.isDesktop())
+        if (this.deviceDetector.isDesktop()) {
+            this.router.navigateByUrl('/auth/login')
+        } else {
+            this.isFreeStartModalVisible = !this.isFreeStartModalVisible
+        }
+    }
+    onFreeStartCancel() {
+        this.isFreeStartModalVisible = false
+    }
+
+    // ----------  scroll func ---------------//
+    scrollTop() {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth',
+        })
+    }
+
+    // ----------  introduction modal funcs and vars ---------------//
     public receiveIntroVisible = false
     onReceiveIntroClose() {
         this.receiveIntroVisible = false
@@ -29,7 +54,7 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit {
         this.receiveIntroVisible = true
     }
 
-    // animation funcs and vals
+    // -------------------- animation funcs and vals  ------------------//
     public scrollListener = undefined
     public elementVisibleHeight = 150
     public hpSAobjList: Array<{ parent: Element; children: Array<Element> }> = undefined

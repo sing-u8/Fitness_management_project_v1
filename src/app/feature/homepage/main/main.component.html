@@ -1,6 +1,6 @@
 <section class="l-main thin-scroll-y-overlay2">
 
-    <div (click)="false" class="scroll-up-button"></div>
+    <div (click)="scrollTop()" class="scroll-up-button"></div>
 
     <div id="sec1" class="sec--common sec__bg-lightergrey hp-scroll-ani">
 
@@ -8,7 +8,7 @@
             <div class="sec1__text hp-SA1">쉽고 간편한 센터 관리, 레드웨일로 시작하세요.</div>
             <div
                 class="sec1__button hp-SA2"
-                (click)="onReceiveIntroOpen()"
+                (click)="toggleFreeStartModalVisible()"
             >
                 무료로 시작하기
             </div>
@@ -27,6 +27,7 @@
                 기간 제한 없이,<br> 무료로 사용해보고<br> 결정하세요.
             </div>
             <hp-find-more-button
+                (onClick)="onReceiveIntroOpen()"
             ></hp-find-more-button>
         </div>
 
@@ -56,7 +57,9 @@
                 복잡한 센터 관리,<br>
                 이제는 쉽고 간편하게!
             </div>
-            <hp-find-more-button></hp-find-more-button>
+            <hp-find-more-button
+                (onClick)="onReceiveIntroOpen()"
+            ></hp-find-more-button>
         </div>
         <div class="sec3__l-box">
             <div class="sec3__box1 hp-SA2">
@@ -82,7 +85,9 @@
                     한 화면에서 관리하는<br>
                     센터 회원의 모든 것
                 </div>
-                <hp-find-more-button></hp-find-more-button>
+                <hp-find-more-button
+                    (onClick)="onReceiveIntroOpen()"
+                ></hp-find-more-button>
             </div>
             <div class="sec4-1__images">
                 <div class="sec4-1__image1 hp-SA2"></div>
@@ -97,7 +102,9 @@
                     한 눈에 확인하는 일정,<br>
                     띠링! 자동 알림까지
                 </div>
-                <hp-find-more-button></hp-find-more-button>
+                <hp-find-more-button
+                    (onClick)="onReceiveIntroOpen()"
+                ></hp-find-more-button>
             </div>
             <div class="sec4-2__images">
                 <div class="sec4-2__image1 hp-SA2"></div>
@@ -113,7 +120,9 @@
                     실시간으로 예약하고<br>
                     확인하는 수업
                 </div>
-                <hp-find-more-button></hp-find-more-button>
+                <hp-find-more-button
+                    (onClick)="onReceiveIntroOpen()"
+                ></hp-find-more-button>
             </div>
             <div class="sec4-3__images hp-SA">
                 <div class="sec4-3__image1"></div>
@@ -129,7 +138,9 @@
                     한 번에 조회하는<br>
                     우리 센터 매출
                 </div>
-                <hp-find-more-button></hp-find-more-button>
+                <hp-find-more-button
+                    (onClick)="onReceiveIntroOpen()"
+                ></hp-find-more-button>
             </div>
             <div class="sec4-4__images">
                 <div class="sec4-4__image1 hp-SA2"></div>
@@ -143,7 +154,9 @@
                     더는 헷갈리지 않게,<br>
                     센터 락커 구조 그대로
                 </div>
-                <hp-find-more-button></hp-find-more-button>
+                <hp-find-more-button
+                    (onClick)="onReceiveIntroOpen()"
+                ></hp-find-more-button>
             </div>
             <div class="sec4-5__images">
                 <div class="sec4-5__image1 hp-SA2"></div>
@@ -158,7 +171,9 @@
                     회원 관리부터<br>
                     마케팅까지 완벽하게
                 </div>
-                <hp-find-more-button></hp-find-more-button>
+                <hp-find-more-button
+                    (onClick)="onReceiveIntroOpen()"
+                ></hp-find-more-button>
             </div>
             <div class="sec4-6__images">
                 <div class="sec4-6__image1 hp-SA2"></div>
@@ -222,3 +237,10 @@
     (cancel)="onReceiveIntroClose()"
     (confirm)="onReceiveIntroFinish()"
 ></hp-receive-introduction-modal>
+
+
+<hp-free-start-modal
+    [(visible)]="isFreeStartModalVisible"
+    (cancel)="onFreeStartCancel()"
+    (confirm)="onFreeStartCancel()"
+></hp-free-start-modal>
