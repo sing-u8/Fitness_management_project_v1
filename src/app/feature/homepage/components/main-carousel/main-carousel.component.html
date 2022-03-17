@@ -5,7 +5,7 @@
         <span>레드웨일 하나로 간편하게!</span>
     </div>
 
-    <div class="navi">
+    <div class="navi hp-SA2">
         <span [class.active]="naviObj.reentrance" (click)="naviTo('reentrance', false)">재등록 유도</span>
         <span [class.active]="naviObj.counselMember" (click)="naviTo('counselMember', false)">회원 상담</span>
         <span [class.active]="naviObj.adjustSchedule" (click)="naviTo('adjustSchedule', false)">일정 조율</span>
@@ -13,7 +13,8 @@
     </div>
 
     <div
-        #images class="images"
+        #images
+        class="images hp-SA2"
         [@imageIndicator]= "{value: 'move', params:{imgIdx:imageIdx ,imgListLen:imageLength }} "
     >
         <div class="l-one">

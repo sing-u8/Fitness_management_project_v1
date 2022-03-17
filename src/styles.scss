@@ -1070,7 +1070,7 @@ gridster-item {
         position: relative;
         transform: translateY(100px);
         opacity: 0;
-        transition: all 2s ease;
+        transition: all 0.7s ease;
 
         &.active {
             transform: translateY(0);
@@ -1082,7 +1082,7 @@ gridster-item {
         position: relative;
         transform: translateY(100px);
         opacity: 0;
-        transition: all 2s ease 0.5s;
+        transition: all 0.7s ease 0.25s;
 
         &.active {
             transform: translateY(0);
@@ -1093,7 +1093,7 @@ gridster-item {
         position: relative;
         transform: translateY(100px);
         opacity: 0;
-        transition: all 2s ease 1s;
+        transition: all 0.7s ease 0.5s;
 
         &.active {
             transform: translateY(0);
@@ -1105,7 +1105,7 @@ gridster-item {
         position: relative;
         transform: translateY(100px);
         opacity: 0;
-        transition: all 2s ease 1.5s;
+        transition: all 0.7s ease 0.75s;
 
         &.active {
             transform: translateY(0);
@@ -1117,7 +1117,7 @@ gridster-item {
         position: relative;
         transform: translateY(100px);
         opacity: 0;
-        transition: all 2s ease 2s;
+        transition: all 0.7s ease 1s;
 
         &.active {
             transform: translateY(0);
