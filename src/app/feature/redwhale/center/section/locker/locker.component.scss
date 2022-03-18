@@ -10,6 +10,7 @@
 * {
     margin: 0px;
     padding: 0px;
+    text-align: initial;
 }
 
 :host {
@@ -64,7 +65,6 @@ $locker-min-width: 897px;
         .main-left {
             display: flex;
             flex-direction: column;
-            // width: 100%;
             width: 245px; // 220 + 여백 25
             height: 100%;
             position: relative;
@@ -76,7 +76,7 @@ $locker-min-width: 897px;
                 width: 280px; // 250 + 여백 30
             }
 
-            .left-inner-content {
+            &__content {
                 display: flex;
                 flex-direction: column;
                 width: 100%;
@@ -104,6 +104,50 @@ $locker-min-width: 897px;
         }
 
         .main-right {
+            transition: max-width 0.2s ease-in;
+            -moz-transition: max-width 0.2s ease-in;
+            -webkit-transition: max-width 0.2s ease-in;
+            -o-transition: max-width 0.2s ease-in;
+            display: flex;
+            flex-direction: column;
+            padding-left: 28px;
+            position: relative;
+            width: calc(100% - 245px);
+            height: 100%;
+
+            @media (min-width: 1440px) {
+                width: calc(100% - 280px);
+                padding-left: 33px;
+            }
+
+            .main-right__header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            .l-locker {
+                display: flex;
+                flex-direction: column;
+                width: 100%;
+                height: 100%;
+                position: relative;
+                padding: 12px 20px;
+                background-color: var(--white);
+                box-shadow: 0px 0px 10px #b5b5b51c;
+                border-radius: 5px;
+
+                .l-locker__header {
+                    position: relative;
+                    width: 100%;
+                    height: 48px;
+                    display: flex;
+                    justify-content: space-between;
+                }
+
+                .l-locker__section {
+                }
+            }
         }
     }
 }
