@@ -11,10 +11,10 @@
 
     <main class="l-main thin-scroll-y">
         <div class="main-left">
-            <p *ngIf="!isEditMode " class="rw-typo-title1 content-title-margin">
+            <p *ngIf="!isEditMode " class="rw-typo-title1 main-title-margin">
                 락커 상세 정보
             </p>
-            <p *ngIf="isEditMode" class="rw-typo-title1 content-title-margin">
+            <p *ngIf="isEditMode" class="rw-typo-title1 main-title-margin">
                 도움말
             </p>
 
@@ -22,13 +22,39 @@
                 class="main-left__content"
                 [class.thin-scroll-y] = "isEditMode"
             >
+                <div *ngIf="!isEditMode && !(curLockerItem$ | async)" class="select-locker-guide-box rw-typo-bodytext0">
+                    락커를 선택해주세요.
+                </div>
 
+                <ng-container *ngIf="isEditMode">
+                    <rw-locker-tip-dropdown
+                        *ngFor="let item of helpTexts"
+                        [title]="item.title"
+                    >
+                        <span class="rw-typo-bodytext1">{{item.text}}</span>
+                    </rw-locker-tip-dropdown>
+                </ng-container>
+
+                <ng-container
+                    *ngIf="(curLockerItem$ | async) && !isEditMode"
+                >
+                    <!-- <rw-locker-detail-box
+                        [lockerItem]="(curLockerItem$ | async)"
+                    >
+                    </rw-locker-detail-box> -->
+                </ng-container>
             </div>
         </div>
 
         <div class="main-right">
             <div class="main-right__header main-title-margin">
                 <p class="rw-typo-title1 ">락커</p>
+                <rw-switch
+                    [text]="LockerGlobalMode == 'normal' ? '변경 모드 켜기' : '변경 모드 끄기'"
+                    [(ngModel)] = "isEditMode"
+                    (change)="LockerGlobalMode == 'normal'&& onEditModeChange($event)"
+                    [disabled] = "LockerGlobalMode == 'moveLockerTicket' ? true : false"
+                ></rw-switch>
             </div>
 
             <div class="l-locker">

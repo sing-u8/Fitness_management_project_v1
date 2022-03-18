@@ -6,7 +6,7 @@ import { MembershipCategory } from '@schemas/membership-category'
 import { MembershipItem } from '@schemas/membership-item'
 import { UpdateItemRequestBody } from '@services/center-membership.service'
 
-const FeatureKey = 'Gym/Membership'
+const FeatureKey = 'Center/Membership'
 
 // start, finish로 나눠져있거나, action 설명에 to server가 적혀있으면 effect와 연관이 있는 actions
 

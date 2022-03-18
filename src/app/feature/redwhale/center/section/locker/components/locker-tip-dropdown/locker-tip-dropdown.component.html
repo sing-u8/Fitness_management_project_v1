@@ -1,0 +1,13 @@
+<div class="dropdown-container">
+  <div
+    class="header"
+    [class.open] ="isDropDownOpen"
+    (click)="toggleDropdown()"
+  >
+    <span class="rw-typo-bodytext0">{{title}}</span>
+    <span class="mdi mdi-chevron-down"></span>
+  </div>
+  <div *ngIf="isDropDownOpen" class="content">
+    <ng-content></ng-content>
+  </div>
+</div>

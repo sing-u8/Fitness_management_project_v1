@@ -87,7 +87,7 @@ export class CenterLockerService {
         )
     }
 
-    createItem(centerId: string, categoryId: string, requestBody: CreateItemRequestBody): Observable<Response> {
+    createItem(centerId: string, categoryId: string, requestBody: CreateItemRequestBody): Observable<LockerItem> {
         const url = this.SERVER + `/${centerId}/locker/${categoryId}/item`
 
         const options = {
@@ -98,7 +98,7 @@ export class CenterLockerService {
 
         return this.http.post<Response>(url, requestBody, options).pipe(
             map((res) => {
-                return res
+                return res.dataset[0]
             }),
             catchError(handleError)
         )
@@ -212,15 +212,15 @@ export class CenterLockerService {
     // }
 }
 
-class CreateCategoryRequestBody {
+export interface CreateCategoryRequestBody {
     name: string
 }
 
-class UpdateCategoryRequestBody {
+export interface UpdateCategoryRequestBody {
     name: string
 }
 
-class CreateItemRequestBody {
+export interface CreateItemRequestBody {
     name: string
     x?: number
     y?: number
@@ -228,7 +228,7 @@ class CreateItemRequestBody {
     cols?: number
 }
 
-class UpdateItemRequestBody {
+export interface UpdateItemRequestBody {
     state_code?: string // locker_item_state_ + empty, ...
     name?: string
     x?: number

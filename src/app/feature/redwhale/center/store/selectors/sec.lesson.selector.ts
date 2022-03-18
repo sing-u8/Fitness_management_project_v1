@@ -2,24 +2,24 @@ import { createSelector } from '@ngrx/store'
 import { GymFeature, GymState } from './sec.selector'
 import * as FromLesson from '@centerStore/reducers/sec.lesson.reducer'
 
-import * as _ from 'lodash'
+import _ from 'lodash'
 import { Dictionary } from '@ngrx/entity'
 
-export const FeatureKey = 'Gym/Lesson'
+export const FeatureKey = 'Center/Lesson'
 
-export const GymLessonFature = createSelector(GymFeature, (state: GymState) => state[FeatureKey])
+export const GymLessonFeature = createSelector(GymFeature, (state: GymState) => state[FeatureKey])
 
-export const LessonCategEntities = createSelector(GymLessonFature, FromLesson.selectLessonCategEntities)
+export const LessonCategEntities = createSelector(GymLessonFeature, FromLesson.selectLessonCategEntities)
 
-export const LessonAll = createSelector(GymLessonFature, FromLesson.selectLessonAll)
+export const LessonAll = createSelector(GymLessonFeature, FromLesson.selectLessonAll)
 
-export const lessonLength = createSelector(GymLessonFature, FromLesson.getLessonLength)
-export const selectedLesson = createSelector(GymLessonFature, FromLesson.getSelectedLesson)
-export const seletedTrainerFilter = createSelector(GymLessonFature, FromLesson.selectTrainerFilter)
-export const trainerFilterList = createSelector(GymLessonFature, FromLesson.selectTrainerFilterList)
-export const currentCenter = createSelector(GymLessonFature, FromLesson.selectCurrentGym)
-export const isLoading = createSelector(GymLessonFature, FromLesson.selectIsLoading)
-export const error = createSelector(GymLessonFature, FromLesson.selectError)
+export const lessonLength = createSelector(GymLessonFeature, FromLesson.getLessonLength)
+export const selectedLesson = createSelector(GymLessonFeature, FromLesson.getSelectedLesson)
+export const seletedTrainerFilter = createSelector(GymLessonFeature, FromLesson.selectTrainerFilter)
+export const trainerFilterList = createSelector(GymLessonFeature, FromLesson.selectTrainerFilterList)
+export const currentCenter = createSelector(GymLessonFeature, FromLesson.selectCurrentGym)
+export const isLoading = createSelector(GymLessonFeature, FromLesson.selectIsLoading)
+export const error = createSelector(GymLessonFeature, FromLesson.selectError)
 
 export const FilteredLessonCategEntities = createSelector(
     LessonCategEntities,

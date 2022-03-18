@@ -1,7 +1,7 @@
-import { Action, createReducer, on } from '@ngrx/store'
+import { on } from '@ngrx/store'
 import { createImmerReducer } from 'ngrx-immer/store'
-import { EntityState, EntityAdapter, createEntityAdapter, Update } from '@ngrx/entity'
-import * as _ from 'lodash'
+import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity'
+import _ from 'lodash'
 
 import * as LessonActions from '../actions/sec.lesson.actions'
 

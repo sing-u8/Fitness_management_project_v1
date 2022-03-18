@@ -35,7 +35,6 @@ import { showToast } from '@appStore/actions/toast.action'
 import * as FromLesson from '@centerStore/reducers/sec.lesson.reducer'
 import * as LessonSelector from '@centerStore/selectors/sec.lesson.selector'
 import * as LessonActions from '@centerStore/actions/sec.lesson.actions'
-import * as MembershipActions from '@centerStore/actions/sec.membership.actions'
 import { ActivatedRoute, Router } from '@angular/router'
 
 import { originalOrder } from '@helpers/pipe/keyvalue'

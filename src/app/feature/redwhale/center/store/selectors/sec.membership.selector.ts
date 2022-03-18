@@ -4,7 +4,7 @@ import * as FromMembership from '@centerStore/reducers/sec.membership.reducer'
 
 import * as _ from 'lodash'
 
-export const FeatureKey = 'Gym/Membership'
+export const FeatureKey = 'Center/Membership'
 
 export const GymMembershipFature = createSelector(GymFeature, (state: GymState) => state[FeatureKey])
 

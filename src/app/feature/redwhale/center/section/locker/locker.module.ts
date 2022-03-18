@@ -4,23 +4,18 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms'
 
 import { SharedModule } from '@shared/shared.module'
 
-import { MembershipComponent } from './membership.component'
-
 // components
-import { MembershipCategoryComponent } from './components/membership-category/membership-category.component'
+import { LockerComponent } from './locker.component'
+import { LockerDetailBoxComponent } from './components/locker-detail-box/locker-detail-box.component'
+import { LockerTipDropdownComponent } from './components/locker-tip-dropdown/locker-tip-dropdown.component'
 
-// section module
 import { CommonModule as SectionCommonModule } from '@redwhale/center/section/common/common.module'
 
 // ngxSkeletonLoader module
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader'
 
 @NgModule({
-    declarations: [
-        MembershipComponent,
-        // components
-        MembershipCategoryComponent,
-    ],
+    declarations: [LockerComponent, LockerDetailBoxComponent, LockerTipDropdownComponent],
     imports: [
         AngularCommonModule,
         SharedModule,
@@ -30,4 +25,4 @@ import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader'
         SectionCommonModule,
     ],
 })
-export class MembershipModule {}
+export class LockerModule {}

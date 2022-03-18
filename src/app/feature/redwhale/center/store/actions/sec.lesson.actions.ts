@@ -6,7 +6,7 @@ import { ClassCategory } from '@schemas/class-category'
 import { UpdateItemRequestBody } from '@services/center-lesson.service'
 import { ClassItem } from '@schemas/class-item'
 
-const FeatureKey = 'Gym/Lesson'
+const FeatureKey = 'Center/Lesson'
 
 // start, finish로 나눠져있거나, action 설명에 to server가 적혀있으면 effect와 연관이 있는 actions
 

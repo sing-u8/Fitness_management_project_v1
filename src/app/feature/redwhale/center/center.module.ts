@@ -13,13 +13,14 @@ import { DrawerModule } from './drawer/drawer.module'
 // sections
 import { CommunityComponent } from './section/community/community.component'
 import { DashboardComponent } from './section/dashboard/dashboard.component'
-import { LockerComponent } from './section/locker/locker.component'
+
 import { SaleComponent } from './section/sale/sale.component'
 import { ScheduleComponent } from './section/schedule/schedule.component'
 
 // sections modules
 import { LessonModule } from './section/lesson/lesson.module'
 import { MembershipModule } from './section/membership/membership.module'
+import { LockerModule } from './section/locker/locker.module'
 
 // ngrx
 import { StoreModule } from '@ngrx/store'
@@ -28,7 +29,8 @@ import { EffectsModule } from '@ngrx/effects'
 // -- // feature key
 import { FeatureKey as GymFeatureKey } from '@centerStore/selectors/sec.selector'
 import { FeatureKey as LessonFeatureKey } from '@centerStore/selectors/sec.lesson.selector'
-import { FeatureKey as MembershipFeatureKey } from './store/selectors/sec.membership.selector'
+import { FeatureKey as MembershipFeatureKey } from '@centerStore/selectors/sec.membership.selector'
+import { FeatureKey as LockerFeatureKey } from '@centerStore/selectors/sec.locker.selector'
 
 // - // states reducer and effect
 import { lessonReducer } from '@centerStore/reducers/sec.lesson.reducer'
@@ -36,6 +38,9 @@ import { LessongEffect } from '@centerStore/effects/sec.lesson.effect'
 
 import { membershipReducer } from '@centerStore/reducers/sec.membership.reducer'
 import { membershipEffect } from '@centerStore/effects/sec.membership.effect'
+
+import { lockerReducer } from '@centerStore/reducers/sec.locker.reducer'
+// ! locker effect need to be add
 
 @NgModule({
     declarations: [
@@ -46,7 +51,6 @@ import { membershipEffect } from '@centerStore/effects/sec.membership.effect'
         CommunityComponent,
         DashboardComponent,
         // LessonComponent,
-        LockerComponent,
         SaleComponent,
         ScheduleComponent,
         // sections --> //
@@ -61,10 +65,12 @@ import { membershipEffect } from '@centerStore/effects/sec.membership.effect'
         // sections modules
         LessonModule,
         MembershipModule,
+        LockerModule,
         // <-- ngrx     //
         StoreModule.forFeature(GymFeatureKey, {
             [LessonFeatureKey]: lessonReducer,
             [MembershipFeatureKey]: membershipReducer,
+            [LockerFeatureKey]: lockerReducer,
         }),
         EffectsModule.forFeature([LessongEffect, membershipEffect]),
         // ngrx     --> //
