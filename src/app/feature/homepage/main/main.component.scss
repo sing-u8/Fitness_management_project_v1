@@ -39,6 +39,7 @@ div.scroll-up-button {
 
 //
 section.l-main {
+    overflow-x: hidden;
     // element, modifier
     div.sec {
         &--common {
@@ -353,7 +354,7 @@ section.l-main {
                     position: absolute;
                     left: 126px;
                     top: 20px;
-                    width: 198px;
+                    width: 236px;
                     height: 324px;
                     z-index: 2;
                     background-size: cover;
@@ -504,7 +505,7 @@ section.l-main {
                     z-index: 2;
                     background-size: cover;
                     background-image: url('/assets/homepage/images/main/6-2.png');
-                    box-shadow: 0 0 14px rgb(172 172 172 / 100%);
+                    filter: drop-shadow(0 0 14px rgb(172 172 172 / 100%));
                 }
             }
         }

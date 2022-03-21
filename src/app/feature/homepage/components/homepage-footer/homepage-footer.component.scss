@@ -62,7 +62,7 @@ section.homepage-footer {
             border-bottom: 1px solid #eaeaea;
             span {
                 &:not(:first-of-type) {
-                    margin-left: 3px;
+                    margin-left: px;
                 }
                 &:nth-child(1) {
                     margin-top: 20px;
@@ -87,7 +87,7 @@ section.homepage-footer {
 
             pre {
                 &:first-of-type {
-                    margin-left: 3px;
+                    margin-left: 0px;
                     margin-top: 20px;
                     margin-bottom: 13px;
                 }
@@ -97,7 +97,7 @@ section.homepage-footer {
                 }
                 &:nth-child(5) {
                     position: absolute;
-                    left: -6px;
+                    left: 0px;
                     bottom: 22px;
                 }
             }
@@ -140,7 +140,7 @@ section.homepage-footer {
                 border-bottom: 1px solid #eaeaea;
                 span {
                     &:not(:first-of-type) {
-                        margin-left: 3px;
+                        margin-left: 0px;
                     }
                     &:nth-child(1) {
                         margin-top: 20px;
@@ -165,7 +165,7 @@ section.homepage-footer {
 
                 pre {
                     &:first-of-type {
-                        margin-left: 3px;
+                        margin-left: 0px;
                         margin-top: 21px;
                         margin-bottom: 13px;
                     }
@@ -175,7 +175,7 @@ section.homepage-footer {
                     }
                     &:nth-child(5) {
                         position: absolute;
-                        left: -6px;
+                        left: 0px;
                         bottom: 22px;
                     }
                 }
@@ -239,12 +239,16 @@ section.homepage-footer {
                             .bar {
                                 margin: 0px 14px;
                             }
+
+                            &:first-of-type {
+                                margin-bottom: 10px;
+                            }
                         }
                     }
                     .footer-left-bottom {
                         position: absolute;
                         bottom: 0px;
-                        left: -8px;
+                        left: 0px;
                     }
                 }
                 .footer-right {
