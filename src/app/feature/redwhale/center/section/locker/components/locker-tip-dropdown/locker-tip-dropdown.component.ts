@@ -8,7 +8,7 @@ import { Component, OnInit, Input } from '@angular/core'
 export class LockerTipDropdownComponent implements OnInit {
     @Input() title: string
 
-    public isDropDownOpen: boolean
+    public isDropDownOpen = false
     constructor() {}
 
     ngOnInit(): void {}

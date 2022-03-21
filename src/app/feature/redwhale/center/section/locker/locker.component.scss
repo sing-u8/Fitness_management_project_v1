@@ -97,8 +97,10 @@ $locker-min-width: 897px;
                     }
                 }
 
-                rw-locker-tip-drowdown {
-                    margin-bottom: 10px;
+                rw-locker-tip-dropdown {
+                    &:not(:last-of-type) {
+                        margin-bottom: 10px;
+                    }
                 }
             }
         }
