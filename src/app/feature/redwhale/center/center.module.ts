@@ -40,6 +40,7 @@ import { membershipReducer } from '@centerStore/reducers/sec.membership.reducer'
 import { membershipEffect } from '@centerStore/effects/sec.membership.effect'
 
 import { lockerReducer } from '@centerStore/reducers/sec.locker.reducer'
+import { LockerEffect } from '@centerStore/effects/sec.locker.effect'
 // ! locker effect need to be add
 
 @NgModule({
@@ -72,7 +73,7 @@ import { lockerReducer } from '@centerStore/reducers/sec.locker.reducer'
             [MembershipFeatureKey]: membershipReducer,
             [LockerFeatureKey]: lockerReducer,
         }),
-        EffectsModule.forFeature([LessongEffect, membershipEffect]),
+        EffectsModule.forFeature([LessongEffect, membershipEffect, LockerEffect]),
         // ngrx     --> //
     ],
     exports: [],

@@ -1,0 +1,87 @@
+<gridster-item
+    class="grid-locker-item user-select-none"
+    [class.is-using] = "lockerGlobalMode != 'moveLockerTicket'
+                    && lockerItem.state_code == 'use'"
+    [class.selected] = "lockerGlobalMode != 'moveLockerTicket'
+                    && selected && !editMode"
+    [class.move-locker-ticket-X] = "lockerGlobalMode == 'moveLockerTicket'
+                                && (lockerItem.state_code=='use' || lockerItem.state_code=='stop')"
+    [class.move-locker-ticket-O] = "lockerGlobalMode == 'moveLockerTicket'
+                                && lockerItem.state_code=='empty'"
+    [class.move-locker-ticket-selected] = "lockerGlobalMode == 'moveLockerTicket'
+                                        && selected "
+    [class.be-moved-locker] = "isSameWillBeMovedLocker"
+    [item]="lockerItem"
+    (click) = "onItemClick()"
+>
+    <div
+        class="grid-locker-item-inner-container"
+        [class.hide-warning-icon-container] = "editMode"
+
+    >
+        <div
+            [class.show] = "lockerGlobalMode == 'moveLockerTicket'
+                        && (lockerItem.state_code=='use' || lockerItem.state_code=='stop')
+                        && !selected"
+            class="move-locker-ticket-unavailable-mark"
+        >
+            <div class="ur-dl"></div>
+            <div class="ul-dr"></div>
+        </div>
+
+        <div class="grid-locker-item-header">
+            <div class="locker-name rw-typo-bodytext2">
+                <ng-container [ngSwitch] ="doNameInputShow">
+                    <ng-container *ngSwitchCase="false">
+                        <span>{{lockerItem.name}}</span>
+                        <img
+                            *ngIf="editMode"
+                            (click) = "toggleNameInputShow(); $event.stopPropagation();"
+                            (mousedown)="$event.stopPropagation()"
+                            (touchstart)="$event.stopPropagation()"
+                            class="edit-icon"
+                            src="assets/icons/etc/edit-darkgrey.svg"
+                        >
+                    </ng-container>
+                    <ng-container *ngSwitchCase="true">
+                        <input
+                            type="text"
+                            class="rw-input"
+                            placeholder="{{lockerItem.name}}"
+                            rw-autoFocus
+                            (mousedown)="$event.stopPropagation()"
+                            (touchstart)="$event.stopPropagation()"
+                            [formControl]="nameInput"
+                            maxlength="3"
+                            (keyup)="onInputKeyUp($event)"
+                            (keyup.enter)="changeItemName()"
+                            (rwClickOutside)="changeItemName()"
+                        >
+                    </ng-container>
+                </ng-container>
+            </div>
+
+            <div
+                *ngIf= "!doNameInputShow && lockerGlobalMode != 'moveLockerTicket'"
+                class="warning-icon-container"
+            >
+              <img *ngIf="lockerItem.state_code == 'use' && isSevenDaysRemain" src="assets/icons/etc/exceed_period.svg">
+              <img *ngIf="lockerItem.state_code == 'use' && isExceed" src="assets/icons/etc/exceed_period_red.svg">
+              <img *ngIf="lockerItem.state_code == 'stop'" src="assets/icons/etc/unavailable.svg">
+            </div>
+        </div>
+        <div class="grid-locker-item-footer">
+            <p class="rw-typo-bodytext2">{{'locker_ticket?.user_name'}}</p>
+        </div>
+
+        <div
+            *ngIf="editMode && '___locker_ticket!!___'"
+            class="delete-icon"
+            (mousedown)="$event.stopPropagation()"
+            (touchstart)="$event.stopPropagation()"
+            (click) = "deleteItem()"
+        >
+            <img src="assets/icons/etc/close_grey.svg">
+        </div>
+    </div>
+</gridster-item>

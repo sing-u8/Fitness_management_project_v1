@@ -32,7 +32,9 @@ export class LockerEffect {
             ofType(LockerActions.startLoadLockerCategs),
             switchMap(({ centerId }) =>
                 this.centerLokcerApi.getCategoryList(centerId).pipe(
-                    map((categs) => LockerActions.finishLoadLockerCategs({ lockerCategList: categs })),
+                    map((categs) => {
+                        return LockerActions.finishLoadLockerCategs({ lockerCategList: categs })
+                    }),
                     catchError((err: string) => of(LockerActions.error({ error: err })))
                 )
             )

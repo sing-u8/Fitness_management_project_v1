@@ -1,0 +1,44 @@
+<div
+    *ngIf= !isChangeName
+    #categoryContainer
+    class="category-container"
+    [class.selected] = "isActivated == true "
+    [class.editModePadding] = "isEditMode == true "
+    (click) ="setCategActivate()"
+>
+    <span class="rw-typo-bodytext0 category-name">{{category.name}}</span>
+    <div
+        [class.show]="isEditMode"
+        #lockerCategoryImage
+        class="locker-category-image-container"
+        (click) ="toggleDropdown($event)"
+        (rwClickOutside) = "closeDropdown($event)"
+    >
+        <img  *ngIf="isActivated" src="assets/icons/etc/menu-vertical-pink.svg">
+        <img  *ngIf="!isActivated" src="assets/icons/etc/menu-vertical-grey.svg">
+    </div>
+
+    <div
+        #categoryDropDown
+        [class.show] = "isDropdownOpen"
+        class="dropdown"
+    >
+        <div (click)="toggleIsChangeName($event)" class="dropdown-item rw-typo-subtext0">
+            <span>이름 변경</span>
+        </div>
+        <div (click)="emitOnDeleteCategory($event)" class="dropdown-item rw-typo-subtext0">
+            <span>카테고리 삭제</span>
+        </div>
+    </div>
+</div>
+
+<input
+    *ngIf="isChangeName"
+    class="rw-input rw-typo-bodytext0 change-categ-input"
+    type="text"
+    rw-autoFocus
+    (rwClickOutside) = "changeCategName(changeNameInput.value)"
+    (keyup.enter) = "changeCategName(changeNameInput.value)"
+    placeholder="카테고리명을 입력해주세요."
+    [(ngModel)]="changeNameInput"
+>

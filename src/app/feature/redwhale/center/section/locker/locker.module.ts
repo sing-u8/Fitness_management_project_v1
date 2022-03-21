@@ -12,10 +12,12 @@ import { LockerTipDropdownComponent } from './components/locker-tip-dropdown/loc
 import { CommonModule as SectionCommonModule } from '@redwhale/center/section/common/common.module'
 
 // ngxSkeletonLoader module
-import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader'
+import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
+import { LockerCategoryComponent } from './components/locker-category/locker-category.component';
+import { LockerItemComponent } from './components/locker-item/locker-item.component'
 
 @NgModule({
-    declarations: [LockerComponent, LockerDetailBoxComponent, LockerTipDropdownComponent],
+    declarations: [LockerComponent, LockerDetailBoxComponent, LockerTipDropdownComponent, LockerCategoryComponent, LockerItemComponent],
     imports: [
         AngularCommonModule,
         SharedModule,

@@ -1,0 +1,210 @@
+* {
+    padding: 0px;
+    margin: 0px;
+    text-align: initial;
+}
+
+.grid-locker-item {
+    background-color: var(--white) !important;
+    border: 1px solid rgba(207, 207, 207, 0.5) !important;
+    border-radius: 5px;
+    overflow: visible;
+
+    &:hover {
+        border: 1px solid rgba(207, 207, 207, 1) !important;
+    }
+
+    &.is-using {
+        background-color: var(--background-color) !important;
+    }
+    &.selected {
+        box-shadow: 0px 0px 10px #b5b5b526;
+        border: 2px solid var(--font-color) !important;
+        &:hover {
+            border: 2px solid var(--font-color) !important;
+        }
+    }
+    // move locker ticket css
+    &.move-locker-ticket-X {
+        box-shadow: 0px 0px 10px #b5b5b526;
+        background-color: #cfcfcf !important;
+        opacity: 0.3;
+        .grid-locker-item-inner-container {
+            cursor: not-allowed;
+        }
+    }
+    &.move-locker-ticket-O {
+        opacity: 1;
+        &:hover {
+            box-shadow: 0px 0px 10px #e34a5e26;
+            border: 2px solid var(--red) !important;
+            background-color: #e34a5e0d !important ;
+
+            .locker-name {
+                color: var(--red) !important;
+            }
+        }
+    }
+    &.move-locker-ticket-selected {
+        border: 2px solid #212121 !important;
+        background-color: var(--background-color) !important ;
+        opacity: 1;
+        .grid-locker-item-inner-container {
+            cursor: pointer;
+        }
+    }
+    &.be-moved-locker {
+        box-shadow: 0px 0px 10px #e34a5e26;
+        border: 2px solid var(--red) !important;
+        background-color: #e34a5e0d !important ;
+
+        .locker-name {
+            color: var(--red) !important;
+        }
+        opacity: 1;
+    }
+
+    .move-locker-ticket-unavailable-mark {
+        position: absolute;
+        opacity: 0;
+        -webkit-transition: opacity 0.2s 0s ease-in-out;
+        -moz-transition: opacity 0.2s 0s ease-in-out;
+        -o-transition: opacity 0.2s 0s ease-in-out;
+        transition: opacity 0.2s 0s ease-in-out;
+        &.show {
+            opacity: 1;
+        }
+        .ur-dl {
+            position: absolute;
+            width: 1px;
+            height: 87px;
+            background-color: var(--darkgrey);
+            transform: rotate(45deg);
+            left: 30.5px;
+            top: -18px;
+            border-radius: 3px;
+        }
+        .ul-dr {
+            position: absolute;
+            width: 1px;
+            height: 87px;
+            background-color: var(--darkgrey);
+            transform: rotate(135deg);
+            left: 31.5px;
+            top: -17.5px;
+            border-radius: 3px;
+        }
+    }
+    // move locker ticket css
+
+    .grid-locker-item-inner-container {
+        width: 100%;
+        height: 100%;
+        padding: 6px 0px 10px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        cursor: pointer;
+        position: relative;
+
+        &:hover {
+            .delete-icon {
+                display: flex;
+            }
+
+            .edit-icon {
+                display: block !important;
+            }
+            &.hide-warning-icon-container {
+                .warning-icon-container {
+                    display: none !important;
+                }
+            }
+        }
+        .grid-locker-item-header {
+            display: flex;
+            justify-content: space-between;
+            padding: 0 6px 0 9px;
+
+            .locker-name {
+                display: flex;
+
+                .edit-icon {
+                    display: none;
+                    width: 18px;
+                    height: 18px;
+                    margin-left: 2px;
+                    border-radius: 2px;
+                    &:hover {
+                        background-color: var(--background-color);
+                    }
+                }
+
+                input {
+                    display: flex;
+                    align-items: center;
+                    width: 40px;
+                    height: 25px;
+                    font-size: 1.3rem;
+                    line-height: 1.46;
+                    letter-spacing: -0.17px;
+                    padding: 0 5px;
+
+                    position: absolute; // must be absolute to grid-locker-item-inner-container
+                    left: 5px;
+                    top: 5px;
+                }
+            }
+            .warning-icon-container {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                & img {
+                    width: 20px;
+                    height: 20px;
+                }
+            }
+        }
+
+        .grid-locker-item-footer {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            & > p {
+                width: 48px;
+                text-align: center;
+                text-overflow: ellipsis;
+                overflow: hidden;
+            }
+        }
+
+        .delete-icon {
+            display: none; // or flex
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #f1f1f1;
+            border-radius: 50%;
+            background-color: var(--white);
+
+            width: 18px;
+            height: 18px;
+            overflow: hidden;
+
+            position: absolute;
+            left: calc(50% - 9px);
+            left: -7px;
+            bottom: -7px;
+            &:hover {
+                background-color: var(--background-color);
+            }
+
+            & > img {
+                width: 18px;
+                height: 18px;
+            }
+        }
+    }
+}

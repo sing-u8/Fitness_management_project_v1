@@ -57,12 +57,12 @@ import { FilesizePipe } from './pipes/filesize.pipe'
 // import { DragulaModule } from 'ng2-dragula'
 
 // FullCalendar
-// import { FullCalendarModule } from '@fullcalendar/angular'
-// import dayGridPlugin from '@fullcalendar/daygrid'
-// import timeGridPlugin from '@fullcalendar/timegrid'
-// import listPlugin from '@fullcalendar/list'
-// import interactionPlugin from '@fullcalendar/interaction'
-// import resourceTimeGridPlugin from '@fullcalendar/resource-timegrid'
+import { FullCalendarModule } from '@fullcalendar/angular'
+import dayGridPlugin from '@fullcalendar/daygrid'
+import timeGridPlugin from '@fullcalendar/timegrid'
+import listPlugin from '@fullcalendar/list'
+import interactionPlugin from '@fullcalendar/interaction'
+import resourceTimeGridPlugin from '@fullcalendar/resource-timegrid'
 
 // Angular-Gridster2
 import { GridsterModule } from 'angular-gridster2'
@@ -74,13 +74,13 @@ import { NgxSpinnerModule } from 'ngx-spinner'
 
 // module for each feature
 
-// FullCalendarModule.registerPlugins([
-//     dayGridPlugin,
-//     timeGridPlugin,
-//     listPlugin,
-//     interactionPlugin,
-//     resourceTimeGridPlugin,
-// ])
+FullCalendarModule.registerPlugins([
+    dayGridPlugin,
+    timeGridPlugin,
+    listPlugin,
+    interactionPlugin,
+    resourceTimeGridPlugin,
+])
 
 @NgModule({
     declarations: [
@@ -188,6 +188,11 @@ import { NgxSpinnerModule } from 'ngx-spinner'
         WordEllipsisPipe,
         TrimTextPipe,
         FilesizePipe,
+
+        // FullCalendar
+        FullCalendarModule,
+        // Angular-Gridstar2
+        GridsterModule,
     ],
     providers: [],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],

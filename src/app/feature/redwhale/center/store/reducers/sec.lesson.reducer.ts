@@ -177,7 +177,7 @@ export const lessonReducer = createImmerReducer(
         })
     }),
     on(LessonActions.error, (state, { error }) => {
-        console.log('Gym/Lesson error: ', error)
+        console.log('Center/Lesson error: ', error)
         return state
     }),
 

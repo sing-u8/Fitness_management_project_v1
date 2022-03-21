@@ -40,7 +40,7 @@ export class LockerComponent implements OnInit, AfterViewInit, OnDestroy {
     public curLockerCateg$ = this.nxStore.pipe(select(LockerSelector.curLockerCateg))
     public curLockerItem$ = this.nxStore.pipe(select(LockerSelector.curLockerItem))
     public willBeMovedLockerItem$ = this.nxStore.pipe(select(LockerSelector.willBeMovedLockerItem))
-    public isLoading = this.nxStore.pipe(select(LockerSelector.isLoading))
+    public isLoading$ = this.nxStore.pipe(select(LockerSelector.isLoading))
     public curLockerItemList: Array<LockerItem> = []
     public LockerGlobalMode: FromLocker.LockerGlobalMode = 'normal'
 
@@ -73,6 +73,7 @@ export class LockerComponent implements OnInit, AfterViewInit, OnDestroy {
         this.nxStore
             .pipe(select(LockerSelector.curCenterId), takeUntil(this.unSubscriber$))
             .subscribe((curCenterId) => {
+                console.log('LockerSelector.curCenterId select : ', curCenterId, ',,,', this.center.id)
                 if (curCenterId != this.center.id) {
                     this.nxStore.dispatch(LockerActions.resetAll())
                     this.nxStore.dispatch(LockerActions.startLoadLockerCategs({ centerId: this.center.id }))
