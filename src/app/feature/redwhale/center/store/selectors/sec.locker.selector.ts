@@ -11,6 +11,8 @@ export const GymLockerFeatrue = createSelector(GymFeature, (state: GymState) => 
 export const LockerCategEntities = createSelector(GymLockerFeatrue, FromLocker.selectLockerCategEntities)
 export const AllLockerState = createSelector(GymLockerFeatrue, FromLocker.selectLockerStateAll)
 
+export const lockerCategLength = createSelector(GymLockerFeatrue, FromLocker.selectLockerCategLength)
+
 export const curLockerCateg = createSelector(GymLockerFeatrue, FromLocker.selectCurLockerCateg)
 export const curLockerItem = createSelector(GymLockerFeatrue, FromLocker.selectCurLockerItem)
 export const curLockerItemList = createSelector(GymLockerFeatrue, FromLocker.selectCurLockerItemList)

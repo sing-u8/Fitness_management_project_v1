@@ -35,7 +35,10 @@ export const startDeleteLockerCategory = createAction(
     `[${FeatureKey}] Start Delete Locker Category`,
     props<{ centerId: string; categoryId: string }>()
 )
-export const finishDeleteLockerCategory = createAction(`[${FeatureKey}] Finish Delete Locker Category`)
+export const finishDeleteLockerCategory = createAction(
+    `[${FeatureKey}] Finish Delete Locker Category`,
+    props<{ deletedCategId: string }>()
+)
 
 export const startUpdateLockerCategory = createAction(
     `[${FeatureKey}] Start Update Locker Category`,
@@ -74,7 +77,7 @@ export const finishUpdateLockerItem = createAction(
 
 export const startDeleteLockerItem = createAction(
     `[${FeatureKey}] Start Delete Locker item`,
-    props<{ centerId: string; categoryId: string; itemId: string }>()
+    props<{ centerId: string; categoryId: string; itemId: string; itemName: string }>()
 )
 export const finishDeleteLockerItem = createAction(`[${FeatureKey}] finish Delete Locker item`)
 

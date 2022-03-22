@@ -61,7 +61,7 @@
                     class="main-left__content"
                     [class.thin-scroll-y] = "isEditMode"
                 >
-                    <div *ngIf="!isEditMode && !(curLockerItem$ | async)" class="select-locker-guide-box rw-typo-bodytext0">
+                    <div *ngIf="!isEditMode && !curLockerItem" class="select-locker-guide-box rw-typo-bodytext0">
                         락커를 선택해주세요.
                     </div>
 
@@ -75,10 +75,10 @@
                     </ng-container>
 
                     <ng-container
-                        *ngIf="(curLockerItem$ | async) && !isEditMode"
+                        *ngIf="curLockerItem && !isEditMode"
                     >
                         <!-- <rw-locker-detail-box
-                            [lockerItem]="(curLockerItem$ | async)"
+                            [lockerItem]="curLockerItem"
                         >
                         </rw-locker-detail-box> -->
                     </ng-container>
@@ -98,10 +98,110 @@
 
                 <div class="l-locker">
                     <div class="l-locker__header">
-                        <div class="l-locker-category"></div>
-                        <div class="l-locker-categ-index"></div>
+                        <div
+                            #l_locker_category
+                            class="l-locker-category locker-scroll-x"
+                            [class.full-width] = "!(isEditMode  && curLockerCateg)"
+                        >
+                            <rw-locker-category
+                                *ngFor = "let categ of (lockerCategEntites$ | async) | keyvalue : originOrder"
+                                [category] ="categ.value"
+                                [isEditMode] = "isEditMode"
+                                (onDeleteCategory) = "setWillBeDeletedCategory($event)"
+                            ></rw-locker-category>
+                            <div *ngIf="isEditMode" class="l-add-locker-category">
+
+                                <ng-container [ngSwitch]="isCategInputOpen">
+                                    <div
+                                        *ngSwitchCase="false" class="add-locker-category__button"
+                                        (click)="openCategInput(); $event.stopPropagation()"
+                                    >
+                                        <img src="assets/icons/etc/add-category.svg">
+                                        <span *ngIf="lockerCategLength == 0" class="rw-typo-bodytext0">
+                                            카테고리 추가
+                                        </span>
+                                    </div>
+                                    <input
+                                        *ngSwitchCase="true"
+                                        rw-autoFocus
+                                        (rwClickOutside)="createCategory(categInput.value)"
+                                        (keyup.enter)="createCategory(categInput.value)"
+                                        type="text" class="rw-input rw-typo-bodytext0"
+                                        placeholder="카테고리명을 입력해주세요."
+                                        [formControl]="categInput"
+                                    >
+                                </ng-container>
+
+                            </div>
+                        </div>
+
+                        <div
+                            *ngIf="isEditMode && curLockerCateg"
+                            class="l-locker-categ-index rw-typo-bodytext0"
+                        >
+                            <div class="locker-index">
+                                <input
+                                    type="text" class="rw-input"
+                                    [disabled]="curLockerItemList.length >= 100"
+                                    [formControl]="lockerItemCountInput"
+                                >
+                                <p class="index-text" [class.grey]="curLockerItemList.length >= 100">번부터</p>
+                            </div>
+                            <div class="add-locker-item-button " rw-button rwButtonWidth="138" rwButtonHeight="38" rwButtonColor="var(--darkgrey)"
+                                rwButtonFontColor="var(--white)" [rwButtonDisabled]="curLockerItemList.length >= 100"
+                                (click)="curLockerItemList.length < 100 && addGridItem()">
+                                <img src="assets/icons/etc/plus-white.svg">
+                                <span>락커 추가하기</span>
+                            </div>
+                        </div>
+
                     </div>
-                    <div class="l-locker__section"></div>
+                    <div class="l-locker__section">
+
+                        <ng-template #guide_image_container *ngIf="!curLockerCateg">
+                            <div class="guide-image-container">
+                                <div *ngIf="!isEditMode && !curLockerCateg" class="alter-mode-guide-image">
+                                    <div class="alter-mode-card rw-typo-bodytext0">
+                                        <rw-switch text="변경모드" [disabled]="true"></rw-switch>
+                                        <img src="assets/icons/etc/cursor_pointer.svg">
+                                    </div>
+                                    <p class="rw-typo-subtext2">변경하기 모드를 켜신 후,</p>
+                                    <p class="rw-typo-subtext2">락커 카테고리 및 락커를 추가해보세요!</p>
+                                </div>
+
+                                <div *ngIf="isEditMode && !curLockerCateg" class="create-category-guide-image">
+                                    <img src="assets/icons/etc/cursor_pointer.svg">
+                                    <div class="locker-item-container">
+                                        <div class="locker-item">
+                                            <div class="item-header rw-typo-subtext2">
+                                                <span>0</span>
+                                                <img src="assets/icons/etc/password-grey.svg">
+                                            </div>
+                                            <div class="bottom rw-typo-subtext2">레드웨일</div>
+                                        </div>
+                                        <div class="locker-item">
+                                            <div class="item-header rw-typo-subtext2">
+                                                <span>0</span>
+                                                <img src="assets/icons/etc/password-grey.svg">
+                                            </div>
+                                            <div class="bottom rw-typo-subtext2">레드웨일</div>
+                                        </div>
+                                        <div class="locker-item">
+                                            <div class="item-header rw-typo-subtext2">
+                                                <span>0</span>
+                                                <img src="assets/icons/etc/password-grey.svg">
+                                            </div>
+                                            <div class="bottom rw-typo-subtext2">레드웨일</div>
+                                        </div>
+                                    </div>
+                                    <p class="rw-typo-subtext2">카테고리별로 락커를 추가하신 후,</p>
+                                    <p class="rw-typo-subtext2">락커 위치를 자유롭게 변경해보세요!</p>
+                                </div>
+                            </div>
+                        </ng-template>
+
+
+                    </div>
                 </div>
             </div>
         </ng-template>

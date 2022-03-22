@@ -41,7 +41,7 @@ export class LockerCategoryComponent implements OnInit, OnDestroy, AfterViewInit
     @Output() onDeleteCategory = new EventEmitter()
     emitOnDeleteCategory(e) {
         this.onDeleteCategory.emit(this.category)
-        // this.closeDropdown(e)
+        this.closeDropdown(e)
         e.stopPropagation()
     }
 

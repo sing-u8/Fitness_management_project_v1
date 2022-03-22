@@ -4,6 +4,8 @@ import { Store } from '@ngrx/store'
 import { of, EMPTY } from 'rxjs'
 import { catchError, switchMap, tap, map, filter } from 'rxjs/operators'
 
+import { showToast } from '@appStore/actions/toast.action'
+
 import * as LockerActions from '../actions/sec.locker.actions'
 import * as LockerSelector from '../selectors/sec.locker.selector'
 
@@ -47,11 +49,11 @@ export class LockerEffect {
             ofType(LockerActions.startCreateLockerCateg),
             switchMap(({ centerId, categName }) =>
                 this.centerLokcerApi.createCategory(centerId, { name: categName }).pipe(
-                    map((categ) => {
-                        // this.setLockerCategList([...this.lockerCategList, newCateg])
-                        // this.setLockerCateg(newCateg)
-                        // this.getItemList(this.gymId.value, newCateg.id)
-                        return LockerActions.finishCreateLockerCateg({ lockerCateg: categ })
+                    switchMap((categ) => {
+                        return [
+                            LockerActions.finishCreateLockerCateg({ lockerCateg: categ }),
+                            LockerActions.startGetLockerItemList({ centerId: centerId, categoryId: categ.id }),
+                        ]
                     }),
                     catchError((err: string) => of(LockerActions.error({ error: err })))
                 )
@@ -64,10 +66,12 @@ export class LockerEffect {
             ofType(LockerActions.startDeleteLockerCategory),
             switchMap(({ centerId, categoryId }) =>
                 this.centerLokcerApi.deleteCategory(centerId, categoryId).pipe(
-                    map((_) => {
-                        // const filteredCategList = this.lockerCategList.filter((v) => v.id != categoryId)
-                        // this.setLockerCategList([...filteredCategList])
-                        return LockerActions.finishDeleteLockerCategory()
+                    switchMap((_) => {
+                        return [
+                            LockerActions.finishDeleteLockerCategory({ deletedCategId: categoryId }),
+                            LockerActions.resetCurLockerItemList(),
+                            showToast({ text: '카테고리가 삭제되었습니다.' }),
+                        ]
                     }),
                     catchError((err: string) => of(LockerActions.error({ error: err })))
                 )
@@ -104,7 +108,6 @@ export class LockerEffect {
             switchMap(({ centerId, categoryId }) =>
                 this.centerLokcerApi.getItemList(centerId, categoryId).pipe(
                     map((lockerItems) => {
-                        // this.setLockerItemList(list)
                         return LockerActions.finishGetLockerItemList({ lockerItems: lockerItems })
                     }),
                     catchError((err: string) => of(LockerActions.error({ error: err })))
@@ -119,6 +122,7 @@ export class LockerEffect {
             switchMap(({ centerId, categoryId, reqBody }) =>
                 this.centerLokcerApi.createItem(centerId, categoryId, reqBody).pipe(
                     switchMap((lockerItem) => {
+                        console.log('new Locker Item : ', lockerItem)
                         return this.centerLokcerApi.getItemList(centerId, categoryId).pipe(
                             map((lockerItems) => {
                                 return LockerActions.finishCreateLockerItem({ lockerItems: lockerItems })
@@ -150,11 +154,13 @@ export class LockerEffect {
     public deleteLockerItem = createEffect(() =>
         this.actions$.pipe(
             ofType(LockerActions.startDeleteLockerItem),
-            switchMap(({ centerId, categoryId, itemId }) =>
+            switchMap(({ centerId, categoryId, itemId, itemName }) =>
                 this.centerLokcerApi.deleteItem(centerId, categoryId, itemId).pipe(
-                    map((lockerItem) => {
-                        // this.setLockerItemList(list)
-                        return LockerActions.finishDeleteLockerItem()
+                    switchMap((_) => {
+                        return [
+                            LockerActions.finishDeleteLockerItem(),
+                            showToast({ text: `[락커${itemName}]이 삭제되었습니다.` }),
+                        ]
                     }),
                     catchError((err: string) => of(LockerActions.error({ error: err })))
                 )

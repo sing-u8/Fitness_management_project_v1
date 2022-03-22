@@ -58,16 +58,17 @@ export const lockerReducer = createImmerReducer(
         const newState: State = { ...state, ...{ isLoading: 'done' } }
         return adapter.setMany(lockerCategList, newState)
     }),
-    // 아직 미구현 ----------------------------
     // - // locker category
-    on(LockerActions.finishCreateLockerCateg, (state) => {
-        return state
+    on(LockerActions.finishCreateLockerCateg, (state, { lockerCateg }) => {
+        state.curLockerCateg = lockerCateg
+        return adapter.addOne(lockerCateg, state)
     }),
+    // 아직 미구현 ----------------------------
     on(LockerActions.startDeleteLockerCategory, (state) => {
         return state
     }),
-    on(LockerActions.finishDeleteLockerCategory, (state) => {
-        return state
+    on(LockerActions.finishDeleteLockerCategory, (state, { deletedCategId }) => {
+        return adapter.removeOne(deletedCategId, state)
     }),
     on(LockerActions.startUpdateLockerCategory, (state) => {
         return state
@@ -76,7 +77,8 @@ export const lockerReducer = createImmerReducer(
         return state
     }),
     // -- // locker item
-    on(LockerActions.finishGetLockerItemList, (state) => {
+    on(LockerActions.finishGetLockerItemList, (state, { lockerItems }) => {
+        state.curLockerItemList = lockerItems
         return state
     }),
     on(LockerActions.finishCreateLockerItem, (state) => {
@@ -90,7 +92,11 @@ export const lockerReducer = createImmerReducer(
         return state
     }),
 
-    on(LockerActions.startDeleteLockerItem, (state) => {
+    on(LockerActions.startDeleteLockerItem, (state, { itemId }) => {
+        state.curLockerItemList = _.filter(state.curLockerItemList, (lockerItem) => lockerItem.id != itemId)
+        if (state.curLockerItem?.id == itemId) {
+            state.curLockerItem = initialLockerState.curLockerItem
+        }
         return state
     }),
     on(LockerActions.finishDeleteLockerItem, (state) => {
@@ -179,6 +185,10 @@ export const lockerReducer = createImmerReducer(
 const { selectEntities, selectAll } = adapter.getSelectors()
 export const selectLockerCategEntities = selectEntities
 export const selectLockerStateAll = selectAll
+
+export const selectLockerCategLength = (state: State) => {
+    return state.ids.length
+}
 
 export const selectCurLockerCateg = (state: State) => state.curLockerCateg
 export const selectCurLockerItem = (state: State) => state.curLockerItem
