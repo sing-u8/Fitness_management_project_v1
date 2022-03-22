@@ -209,3 +209,26 @@
     </main>
 
 </section>
+
+
+<rw-modal
+    [(visible)]="delCategModalVisible"
+    [data]="delCategData"
+    (cancel)="onDelCategoryCancel()"
+    (confirm)="onDelCategoryConfirm()"
+></rw-modal>
+
+<rw-modal
+    [(visible)]="doShowBlockDelCategory"
+    [data]="blockDelCategTexts"
+    (cancel)="closeShowBlockDelCategory()"
+    (confirm)="closeShowBlockDelCategory()"
+    type="type2"
+></rw-modal>
+
+<rw-modal
+    [(visible)]="doShowMoveLockerTicketModal"
+    [data]="moveLockerTicketData"
+    (cancel)="closeShowMoveLockerTicketModal()"
+    (confirm)="modifyLockerTicket()"
+></rw-modal>

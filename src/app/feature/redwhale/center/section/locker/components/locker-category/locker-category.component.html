@@ -40,5 +40,5 @@
     (rwClickOutside) = "changeCategName(changeNameInput.value)"
     (keyup.enter) = "changeCategName(changeNameInput.value)"
     placeholder="카테고리명을 입력해주세요."
-    [(ngModel)]="changeNameInput"
+    [formControl]="changeNameInput"
 >

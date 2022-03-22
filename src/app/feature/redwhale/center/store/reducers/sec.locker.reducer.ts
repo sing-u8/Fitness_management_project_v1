@@ -8,6 +8,7 @@ import * as LockerActions from '../actions/sec.locker.actions'
 import { LockerCategory } from '@schemas/locker-category'
 import { LockerItem } from '@schemas/locker-item'
 import { Loading } from '@schemas/store/loading'
+import { curLockerCateg } from '../selectors/sec.locker.selector'
 
 export const initialLockerState: {
     curLockerCateg: LockerCategory
@@ -60,8 +61,9 @@ export const lockerReducer = createImmerReducer(
     }),
     // - // locker category
     on(LockerActions.finishCreateLockerCateg, (state, { lockerCateg }) => {
-        state.curLockerCateg = lockerCateg
-        return adapter.addOne(lockerCateg, state)
+        const copyState = adapter.addOne(lockerCateg, state)
+        copyState.curLockerCateg = lockerCateg
+        return copyState
     }),
     // 아직 미구현 ----------------------------
     on(LockerActions.startDeleteLockerCategory, (state) => {
