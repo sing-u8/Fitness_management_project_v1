@@ -66,7 +66,9 @@ export const lockerReducer = createImmerReducer(
         return copyState
     }),
     on(LockerActions.startDeleteLockerCategory, (state, { categoryId }) => {
-        return adapter.removeOne(categoryId, state)
+        const stateCopy = adapter.removeOne(categoryId, state)
+        stateCopy.curLockerItemList = initialLockerState.curLockerItemList
+        return stateCopy
     }),
     on(LockerActions.finishDeleteLockerCategory, (state, { deletedCategId }) => {
         const newState = adapter.removeOne(deletedCategId, state)
@@ -86,8 +88,10 @@ export const lockerReducer = createImmerReducer(
         state.curLockerItemList = lockerItems
         return state
     }),
-    on(LockerActions.finishCreateLockerItem, (state, { lockerItems }) => {
-        state.curLockerItemList = lockerItems
+    on(LockerActions.finishCreateLockerItem, (state, { lockerItem }) => {
+        const changedItemIdx = _.findIndex(state.curLockerItemList, (item) => item.name == lockerItem.name)
+
+        state.curLockerItemList[changedItemIdx] = lockerItem
         return state
     }),
 

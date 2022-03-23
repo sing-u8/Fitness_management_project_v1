@@ -63,7 +63,7 @@ export const startCreateLockerItem = createAction(
 )
 export const finishCreateLockerItem = createAction(
     `[${FeatureKey}] finish Create Locker item`,
-    props<{ lockerItems?: Array<LockerItem> }>()
+    props<{ lockerItem?: LockerItem }>()
 )
 
 export const addLockerItemToList = createAction(

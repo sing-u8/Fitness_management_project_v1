@@ -30,7 +30,7 @@ import { Drawer } from '@schemas/store/app/drawer.interface'
 
 // rxjs
 import { Observable, Subject } from 'rxjs'
-import { takeUntil } from 'rxjs/operators'
+import { takeUntil, debounceTime } from 'rxjs/operators'
 
 // ngrx
 import { Store, select } from '@ngrx/store'
@@ -108,8 +108,6 @@ export class LockerComponent implements OnInit, AfterViewInit, OnDestroy {
         this.categInput = this.fb.control('')
         this.lockerItemCountInput = this.fb.control('0')
 
-        this.initGridster()
-
         this.center = this.storageService.getCenter()
         this.nxStore
             .pipe(select(LockerSelector.curCenterId), takeUntil(this.unSubscriber$))
@@ -150,7 +148,7 @@ export class LockerComponent implements OnInit, AfterViewInit, OnDestroy {
         this.nxStore
             .pipe(select(LockerSelector.curLockerItem), takeUntil(this.unSubscriber$))
             .subscribe((curLockerItem) => {
-                this.curLockerItem = _.cloneDeep(curLockerItem)
+                this.curLockerItem = curLockerItem
             })
         this.nxStore
             .pipe(select(LockerSelector.lockerCategLength), takeUntil(this.unSubscriber$))
@@ -163,7 +161,9 @@ export class LockerComponent implements OnInit, AfterViewInit, OnDestroy {
         })
     }
 
-    ngOnInit(): void {}
+    ngOnInit(): void {
+        this.initGridster()
+    }
     ngAfterViewInit(): void {}
     ngOnDestroy(): void {
         this.unSubscriber$.next()
@@ -334,6 +334,7 @@ export class LockerComponent implements OnInit, AfterViewInit, OnDestroy {
             fixedColWidth: 65,
             fixedRowHeight: 65,
             pushItems: false,
+            swap: false,
             draggable: {
                 enabled: false,
             },
@@ -394,10 +395,9 @@ export class LockerComponent implements OnInit, AfterViewInit, OnDestroy {
                 } as LockerItem,
             })
         )
-        // this.testItemList.push({ name: String(this.testItemList.length + 1), rows: 1, cols: 1 })
     }
     createGridItem(item: GridsterItem) {
-        console.log('createGridItem item : ', item, item['name'])
+        console.log('createGridItem item !!!!!!!!!!!!!!: ', item, item['name'])
         this.nxStore.dispatch(
             LockerActions.startCreateLockerItem({
                 centerId: this.center.id,

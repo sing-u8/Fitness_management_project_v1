@@ -14,6 +14,7 @@ import { Store, select } from '@ngrx/store'
 import * as LockerSelector from '@centerStore/selectors/sec.locker.selector'
 import * as LockerAction from '@centerStore/actions/sec.locker.actions'
 import { LockerGlobalMode } from '@centerStore/reducers/sec.locker.reducer'
+import _ from 'lodash'
 
 @Component({
     selector: 'rw-locker-item',
@@ -136,7 +137,7 @@ export class LockerItemComponent implements OnInit, OnDestroy, AfterViewInit {
             this.onAnotherEmptyLockerClick()
         } else if (this.lockerGlobalMode != 'moveLockerTicket') {
             console.log('in locker item componenet setCurLockeritem: ', this.lockerItem)
-            this.nxStore.dispatch(LockerAction.setCurLockerItem({ lockerItem: this.lockerItem }))
+            this.nxStore.dispatch(LockerAction.setCurLockerItem({ lockerItem: _.cloneDeep(this.lockerItem) }))
             this.selected = true
         }
     }
