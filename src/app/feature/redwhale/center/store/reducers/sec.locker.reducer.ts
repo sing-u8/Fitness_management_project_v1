@@ -77,10 +77,10 @@ export const lockerReducer = createImmerReducer(
         // const copyOneCateg = _.cloneDeep(state.entities[categoryId])
         return adapter.updateOne({ id: categoryId, changes: { name: updateName } }, state)
     }),
-    // 아직 미구현 ----------------------------
     on(LockerActions.finishUpdateLockerCategory, (state) => {
         return state
     }),
+    // 아직 미구현 ----------------------------
     // -- // locker item
     on(LockerActions.finishGetLockerItemList, (state, { lockerItems }) => {
         state.curLockerItemList = lockerItems
@@ -91,11 +91,23 @@ export const lockerReducer = createImmerReducer(
         return state
     }),
 
-    on(LockerActions.startUpdateLockerItem, (state) => {
+    on(LockerActions.startUpdateLockerItem, (state, { itemId, reqBody }) => {
+        let newItem: LockerItem = undefined
+        _.find(state.curLockerItemList, (item, idx) => {
+            if (item.id == itemId) {
+                state.curLockerItemList[idx] = { ...state.curLockerItemList[idx], ...reqBody }
+                newItem = state.curLockerItemList[idx]
+                return true
+            }
+            // if (state.curLockerItem && state.curLockerItem.id == newItem.id) {
+            //     state.curLockerItem = newItem
+            // }
+            return false
+        })
         return state
     }),
     on(LockerActions.finishUpdateLockerItem, (state, { lockerItem }) => {
-        if (state.curLockerItem.id == lockerItem.id) {
+        if (state.curLockerItem && state.curLockerItem.id == lockerItem.id) {
             state.curLockerItem = lockerItem
         }
         state.curLockerItemList = _.map(state.curLockerItemList, (item) => {

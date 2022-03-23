@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core'
 import { createEffect, Actions, ofType, concatLatestFrom } from '@ngrx/effects'
 import { Store } from '@ngrx/store'
 import { of, EMPTY } from 'rxjs'
-import { catchError, switchMap, tap, map, filter } from 'rxjs/operators'
+import { catchError, switchMap, tap, map, filter, mergeMap, exhaustMap } from 'rxjs/operators'
 
 import { showToast } from '@appStore/actions/toast.action'
 
@@ -113,7 +113,7 @@ export class LockerEffect {
             ofType(LockerActions.startCreateLockerItem),
             switchMap(({ centerId, categoryId, reqBody }) =>
                 this.centerLokcerApi.createItem(centerId, categoryId, reqBody).pipe(
-                    switchMap((lockerItem) => {
+                    mergeMap((lockerItem) => {
                         console.log('new Locker Item : ', lockerItem)
                         return this.centerLokcerApi.getItemList(centerId, categoryId).pipe(
                             map((lockerItems) => {

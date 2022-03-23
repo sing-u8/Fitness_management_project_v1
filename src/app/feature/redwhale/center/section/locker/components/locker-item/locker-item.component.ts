@@ -111,7 +111,7 @@ export class LockerItemComponent implements OnInit, OnDestroy, AfterViewInit {
             this.toggleNameInputShow()
             return
         }
-        this.lockerItem.name = this.nameInput.value
+        // this.lockerItem.name = this.nameInput.value
 
         this.nxStore.dispatch(
             LockerAction.startUpdateLockerItem({
@@ -135,6 +135,7 @@ export class LockerItemComponent implements OnInit, OnDestroy, AfterViewInit {
             // !! state_code_name 명칭 리스트 파악 필요
             this.onAnotherEmptyLockerClick()
         } else if (this.lockerGlobalMode != 'moveLockerTicket') {
+            console.log('in locker item componenet setCurLockeritem: ', this.lockerItem)
             this.nxStore.dispatch(LockerAction.setCurLockerItem({ lockerItem: this.lockerItem }))
             this.selected = true
         }
