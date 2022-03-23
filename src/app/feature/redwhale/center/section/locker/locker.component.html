@@ -97,15 +97,18 @@
                 </div>
 
                 <div class="l-locker">
-                    <div class="l-locker__header">
+                    <div
+                        *ngIf="!(lockerCategLength == 0 && !isEditMode)"
+                        class="l-locker__header"
+                    >
                         <div
                             #l_locker_category
                             class="l-locker-category locker-scroll-x"
                             [class.full-width] = "!(isEditMode  && curLockerCateg)"
                         >
                             <rw-locker-category
-                                *ngFor = "let categ of (lockerCategEntites$ | async) | keyvalue : originOrder"
-                                [category] ="categ.value"
+                                *ngFor = "let categ of lockerCategList"
+                                [category] ="categ"
                                 [isEditMode] = "isEditMode"
                                 (onDeleteCategory) = "setWillBeDeletedCategory($event)"
                             ></rw-locker-category>
@@ -158,7 +161,7 @@
                     </div>
                     <div class="l-locker__section">
 
-                        <ng-template #guide_image_container *ngIf="!curLockerCateg">
+                        <ng-template #LockerItemsEmpty [ngIf]="!curLockerCateg" [ngIfElse]="LockerItemsExist">
                             <div class="guide-image-container">
                                 <div *ngIf="!isEditMode && !curLockerCateg" class="alter-mode-guide-image">
                                     <div class="alter-mode-card rw-typo-bodytext0">
@@ -200,6 +203,29 @@
                             </div>
                         </ng-template>
 
+                        <ng-template #LockerItemsExist>
+                            <div class="l-locker-item">
+                                <gridster
+                                    class="thin-scroll-x thin-scroll-y"
+                                    [options]="gridsterOptions"
+                                >
+                                    <rw-locker-item
+                                        *ngFor="let item of curLockerItemList; let i =index"
+                                        [lockerItem]="item"
+                                        [editMode]="isEditMode"
+                                        (onItemDelete)="onDeleteLockerItem($event)"
+                                        (onMovableLockerClick)="onMovableLockerClick($event)"
+                                    ></rw-locker-item>
+                                </gridster>
+                            </div>
+                        </ng-template>
+
+                        <div
+                            *ngIf="LockerGlobalMode == 'moveLockerTicket'"
+                            class="move-locker-ticket-guide-image rw-typo-bodytext0-bold">
+                            <span>이동할 자리를 선택해주세요.</span>
+                            <div class="edge"></div>
+                        </div>
 
                     </div>
                 </div>

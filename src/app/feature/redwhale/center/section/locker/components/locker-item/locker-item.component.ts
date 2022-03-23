@@ -87,19 +87,18 @@ export class LockerItemComponent implements OnInit, OnDestroy, AfterViewInit {
 
     // ------------------------------------------------------------------------ //
     setStatusIcon() {
-        // !! need to code to get locker ticket
-        // if (this.lockerItem.locker_ticket) {
-        //     const date1 = dayjs().format('YYYY-MM-DD')
-        //     const date2 = dayjs(this.lockerItem.locker_ticket.end_date)
-        //     const dayDiff = date2.diff(date1, 'day')
-        //     if (dayDiff < 8 && dayDiff >= 0) {
-        //         this.isSevenDaysRemain = true
-        //         this.isExceed = false
-        //     } else if (dayDiff < 0) {
-        //         this.isExceed = true
-        //         this.isSevenDaysRemain = false
-        //     }
-        // }
+        if (this.lockerItem.user_locker) {
+            const date1 = dayjs().format('YYYY-MM-DD')
+            const date2 = dayjs(this.lockerItem.user_locker.end_date)
+            const dayDiff = date2.diff(date1, 'day')
+            if (dayDiff < 8 && dayDiff >= 0) {
+                this.isSevenDaysRemain = true
+                this.isExceed = false
+            } else if (dayDiff < 0) {
+                this.isExceed = true
+                this.isSevenDaysRemain = false
+            }
+        }
     }
 
     toggleNameInputShow() {
@@ -129,7 +128,10 @@ export class LockerItemComponent implements OnInit, OnDestroy, AfterViewInit {
     onItemClick() {
         if (this.isEditMode()) {
             return
-        } else if (this.lockerGlobalMode == 'moveLockerTicket' && this.lockerItem.state_code == 'empty') {
+        } else if (
+            this.lockerGlobalMode == 'moveLockerTicket' &&
+            this.lockerItem.state_code == 'locker_item_state_empty'
+        ) {
             // !! state_code_name 명칭 리스트 파악 필요
             this.onAnotherEmptyLockerClick()
         } else if (this.lockerGlobalMode != 'moveLockerTicket') {

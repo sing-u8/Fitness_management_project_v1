@@ -9,7 +9,7 @@ export const FeatureKey = 'Center/Locker'
 export const GymLockerFeatrue = createSelector(GymFeature, (state: GymState) => state[FeatureKey])
 
 export const LockerCategEntities = createSelector(GymLockerFeatrue, FromLocker.selectLockerCategEntities)
-export const AllLockerState = createSelector(GymLockerFeatrue, FromLocker.selectLockerStateAll)
+export const LockerCategList = createSelector(GymLockerFeatrue, FromLocker.selectLockerCategList)
 
 export const lockerCategLength = createSelector(GymLockerFeatrue, FromLocker.selectLockerCategLength)
 

@@ -9,7 +9,7 @@ import {
     QueryList,
 } from '@angular/core'
 import { FormBuilder, FormControl } from '@angular/forms'
-import { CompactType, GridsterConfig, GridType } from 'angular-gridster2'
+import { CompactType, GridsterConfig, GridsterItem, GridType } from 'angular-gridster2'
 
 import _ from 'lodash'
 import { originalOrder } from '@helpers/pipe/keyvalue'
@@ -48,15 +48,15 @@ import * as LockerActions from '@centerStore/actions/sec.locker.actions'
 })
 export class LockerComponent implements OnInit, AfterViewInit, OnDestroy {
     // ngrx state
-    public lockerCategEntites$ = this.nxStore.pipe(select(LockerSelector.LockerCategEntities))
     public isLoading$ = this.nxStore.pipe(select(LockerSelector.isLoading))
 
     public curLockerCateg: LockerCategory = FromLocker.initialLockerState.curLockerCateg
-    public curLockerItemList: Array<Partial<LockerItem>> = FromLocker.initialLockerState.curLockerItemList
+    public curLockerItemList: Array<LockerItem> = FromLocker.initialLockerState.curLockerItemList
     public LockerGlobalMode: FromLocker.LockerGlobalMode = FromLocker.initialLockerState.lockerGlobalMode
     public willBeMovedLockerItem: LockerItem = FromLocker.initialLockerState.willBeMovedLockerItem
     public curLockerItem: LockerItem = FromLocker.initialLockerState.curLockerItem
     public lockerCategLength = 0
+    public lockerCategList: Array<LockerCategory> = []
 
     // component vars
     public center: Center = undefined
@@ -108,6 +108,8 @@ export class LockerComponent implements OnInit, AfterViewInit, OnDestroy {
         this.categInput = this.fb.control('')
         this.lockerItemCountInput = this.fb.control('0')
 
+        this.initGridster()
+
         this.center = this.storageService.getCenter()
         this.nxStore
             .pipe(select(LockerSelector.curCenterId), takeUntil(this.unSubscriber$))
@@ -132,8 +134,10 @@ export class LockerComponent implements OnInit, AfterViewInit, OnDestroy {
         this.nxStore
             .pipe(select(LockerSelector.curLockerItemList), takeUntil(this.unSubscriber$))
             .subscribe((curLockerItemList) => {
-                this.curLockerItemList = curLockerItemList
+                this.curLockerItemList = _.cloneDeep(curLockerItemList)
                 this.lockerItemCountInput.setValue(String(this.getMaximumLockerId(curLockerItemList) + 1))
+
+                console.log('curLockerItemList,  testLockerItemList : ', this.curLockerItemList)
             })
         this.nxStore.pipe(select(LockerSelector.LockerGlobalMode), takeUntil(this.unSubscriber$)).subscribe((lgm) => {
             this.LockerGlobalMode = lgm
@@ -153,6 +157,10 @@ export class LockerComponent implements OnInit, AfterViewInit, OnDestroy {
             .subscribe((lcLength) => {
                 this.lockerCategLength = lcLength
             })
+
+        this.nxStore.pipe(select(LockerSelector.LockerCategList), takeUntil(this.unSubscriber$)).subscribe((lcList) => {
+            this.lockerCategList = lcList
+        })
     }
 
     ngOnInit(): void {}
@@ -279,11 +287,10 @@ export class LockerComponent implements OnInit, AfterViewInit, OnDestroy {
         this.delCategModalVisible = onOff
     }
     setWillBeDeletedCategory(categ: LockerCategory) {
-        // !!
-        // if (_.find(this.curLockerItemList, (item) => item.)) {
-        //     this.toggleShowBlockDelCategory()
-        //     return
-        // }
+        if (_.find(this.curLockerItemList, (item) => item.user_locker)) {
+            this.toggleShowBlockDelCategory()
+            return
+        }
         this.willBeDeletedCategory = categ
         this.setDelCategModalVisible(true)
     }
@@ -348,8 +355,13 @@ export class LockerComponent implements OnInit, AfterViewInit, OnDestroy {
 
     changeGridsterOptionToEditMode() {
         if (this.lockerCategLength > 0 && !this.curLockerCateg) {
-            // !! this.nxStore.dispatch(LockerActions.setCurLockerCateg({lockerCateg: }))
-            // !! this.nxStore.dispatch(LockerActions.startGetLockerItemList({centerId: this.center.id, categoryId: }))
+            this.nxStore.dispatch(LockerActions.setCurLockerCateg({ lockerCateg: this.lockerCategList[0] }))
+            this.nxStore.dispatch(
+                LockerActions.startGetLockerItemList({
+                    centerId: this.center.id,
+                    categoryId: this.lockerCategList[0].id,
+                })
+            )
         }
         this.gridsterOptions = {
             ...this.gridsterOptions,
@@ -373,19 +385,24 @@ export class LockerComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     addGridItem() {
-        this.curLockerItemList.push({
-            name: String(this.curLockerItemList.length++),
-            rows: 1,
-            cols: 1,
-        })
+        this.nxStore.dispatch(
+            LockerActions.addLockerItemToList({
+                lockerItem: {
+                    name: String(this.curLockerItemList.length + 1),
+                    rows: 1,
+                    cols: 1,
+                } as LockerItem,
+            })
+        )
+        // this.testItemList.push({ name: String(this.testItemList.length + 1), rows: 1, cols: 1 })
     }
-    createGridItem(item) {
+    createGridItem(item: GridsterItem) {
         this.nxStore.dispatch(
             LockerActions.startCreateLockerItem({
                 centerId: this.center.id,
                 categoryId: this.curLockerCateg.id,
                 reqBody: {
-                    name: item.name,
+                    name: item['name'],
                     x: item.x,
                     y: item.y,
                     rows: item.rows,
@@ -401,14 +418,14 @@ export class LockerComponent implements OnInit, AfterViewInit, OnDestroy {
         //     _.assign(this.itemList[this.itemList.length - 1], newItem)
         // })
     }
-    updateGridItem(item) {
+    updateGridItem(item: GridsterItem) {
         this.nxStore.dispatch(
             LockerActions.startUpdateLockerItem({
                 centerId: this.center.id,
                 categoryId: this.curLockerCateg.id,
-                itemId: String(item.id),
+                itemId: String(item['id']),
                 reqBody: {
-                    name: item.name,
+                    name: item['name'],
                     x: item.x,
                     y: item.y,
                     rows: item.rows,

@@ -85,14 +85,6 @@ export class LockerEffect {
             switchMap(({ centerId, categoryId, updateName }) =>
                 this.centerLokcerApi.updateCategory(centerId, categoryId, { name: updateName }).pipe(
                     map((_) => {
-                        // const updateCategList = this.lockerCategList.map((v) => {
-                        //     if (v.id != categoryId) {
-                        //         return v
-                        //     } else {
-                        //         return { ...v, name: updateName }
-                        //     }
-                        // })
-                        // this.setLockerCategList([...updateCategList])
                         return LockerActions.finishUpdateLockerCategory()
                     }),
                     catchError((err: string) => of(LockerActions.error({ error: err })))

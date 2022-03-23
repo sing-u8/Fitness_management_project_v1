@@ -148,6 +148,8 @@ export class LockerCategoryComponent implements OnInit, OnDestroy, AfterViewInit
                     updateName: changedName,
                 })
             )
+            this.isChangeName = false
+            this.changeNameInput.setValue(changedName)
         }
     }
 }

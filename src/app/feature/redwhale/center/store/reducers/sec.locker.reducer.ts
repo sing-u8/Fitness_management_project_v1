@@ -65,16 +65,19 @@ export const lockerReducer = createImmerReducer(
         copyState.curLockerCateg = lockerCateg
         return copyState
     }),
-    // 아직 미구현 ----------------------------
-    on(LockerActions.startDeleteLockerCategory, (state) => {
-        return state
+    on(LockerActions.startDeleteLockerCategory, (state, { categoryId }) => {
+        return adapter.removeOne(categoryId, state)
     }),
     on(LockerActions.finishDeleteLockerCategory, (state, { deletedCategId }) => {
-        return adapter.removeOne(deletedCategId, state)
+        const newState = adapter.removeOne(deletedCategId, state)
+        newState.curLockerCateg = initialLockerState.curLockerCateg
+        return newState
     }),
-    on(LockerActions.startUpdateLockerCategory, (state) => {
-        return state
+    on(LockerActions.startUpdateLockerCategory, (state, { categoryId, updateName }) => {
+        // const copyOneCateg = _.cloneDeep(state.entities[categoryId])
+        return adapter.updateOne({ id: categoryId, changes: { name: updateName } }, state)
     }),
+    // 아직 미구현 ----------------------------
     on(LockerActions.finishUpdateLockerCategory, (state) => {
         return state
     }),
@@ -83,14 +86,24 @@ export const lockerReducer = createImmerReducer(
         state.curLockerItemList = lockerItems
         return state
     }),
-    on(LockerActions.finishCreateLockerItem, (state) => {
+    on(LockerActions.finishCreateLockerItem, (state, { lockerItems }) => {
+        state.curLockerItemList = lockerItems
         return state
     }),
 
     on(LockerActions.startUpdateLockerItem, (state) => {
         return state
     }),
-    on(LockerActions.finishUpdateLockerItem, (state) => {
+    on(LockerActions.finishUpdateLockerItem, (state, { lockerItem }) => {
+        if (state.curLockerItem.id == lockerItem.id) {
+            state.curLockerItem = lockerItem
+        }
+        state.curLockerItemList = _.map(state.curLockerItemList, (item) => {
+            if (item.id == lockerItem.id) {
+                return lockerItem
+            }
+            return item
+        })
         return state
     }),
 
@@ -124,6 +137,10 @@ export const lockerReducer = createImmerReducer(
     }),
     on(LockerActions.resetCurLockerItemList, (state) => {
         state.curLockerItemList = initialLockerState.curLockerItemList
+        return state
+    }),
+    on(LockerActions.addLockerItemToList, (state, { lockerItem }) => {
+        state.curLockerItemList.push(lockerItem)
         return state
     }),
     // - // cur Locker Item
@@ -186,7 +203,7 @@ export const lockerReducer = createImmerReducer(
 // selecting fucntion from reducer
 const { selectEntities, selectAll } = adapter.getSelectors()
 export const selectLockerCategEntities = selectEntities
-export const selectLockerStateAll = selectAll
+export const selectLockerCategList = selectAll
 
 export const selectLockerCategLength = (state: State) => {
     return state.ids.length

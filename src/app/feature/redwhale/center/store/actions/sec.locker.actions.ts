@@ -66,6 +66,11 @@ export const finishCreateLockerItem = createAction(
     props<{ lockerItems?: Array<LockerItem> }>()
 )
 
+export const addLockerItemToList = createAction(
+    `[${FeatureKey}] Add Current Locker Item to CurLocker List`,
+    props<{ lockerItem: LockerItem }>()
+)
+
 export const startUpdateLockerItem = createAction(
     `[${FeatureKey}] Start Update Locker item`,
     props<{ centerId: string; categoryId: string; itemId: string; reqBody: UpdateItemRequestBody }>()
