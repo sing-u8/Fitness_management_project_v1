@@ -38,11 +38,11 @@ const routes: Routes = [
     //             (m) => m.MembershipLockerFullModalModule
     //         ),
     // },
-    // {
-    //     path: 'register-member',
-    //     canActivate: [CenterMemberBlockGuard],
-    //     loadChildren: () => import('./register-member/register-member.module').then((m) => m.RegisterMemberModule),
-    // },
+    {
+        path: 'register-member',
+        canActivate: [CenterMemberBlockGuard],
+        loadChildren: () => import('./register-member/register-member.module').then((m) => m.RegisterMemberModule),
+    },
     // { path: 'touch-pad', component: TouchPadComponent, canActivate: [CenterMemberBlockGuard] },
 ]
 
