@@ -1,7 +1,25 @@
 import { Component, OnInit, Input, OnChanges, OnDestroy } from '@angular/core'
-import { Subscription } from 'rxjs'
-import * as _ from 'lodash'
-import * as dayjs from 'dayjs'
+import { Subject } from 'rxjs'
+import { takeUntil } from 'rxjs/operators'
+import _ from 'lodash'
+import dayjs from 'dayjs'
+
+import { StorageService } from '@services/storage.service'
+import { CenterUsersLockerService } from '@services/center-users-locker.service.service'
+
+// schema
+import { CenterUser } from '@schemas/center-user'
+import { LockerItem } from '@schemas/locker-item'
+import { Center } from '@schemas/center'
+import { LockerCategory } from '@schemas/locker-category'
+
+// ngrx
+import { Store, select } from '@ngrx/store'
+import { showToast } from '@appStore/actions/toast.action'
+
+import * as FromLocker from '@centerStore/reducers/sec.locker.reducer'
+import * as LockerSelector from '@centerStore/selectors/sec.locker.selector'
+import * as LockerActions from '@centerStore/actions/sec.locker.actions'
 
 @Component({
     selector: 'rw-locker-detail-box',
@@ -9,37 +27,37 @@ import * as dayjs from 'dayjs'
     styleUrls: ['./locker-detail-box.component.scss'],
 })
 export class LockerDetailBoxComponent implements OnInit, OnChanges, OnDestroy {
-    // @Input() lockerItem: LockerItem
+    @Input() lockerItem: LockerItem
 
-    // public gym: Gym
+    public center: Center
 
-    // public lockerGlobalMode: LockerGlobalMode
-    public lockerGlobalModeSubscription: Subscription
-    public doShowMoveLockerTicketModal: boolean
+    public curLockerCateg: LockerCategory
+    public lockerGlobalMode: FromLocker.LockerGlobalMode
+    public doShowMoveLockerTicketModal = false
 
-    public doShowRestartLockerModal: boolean
-    public doDropDownShow: boolean
-    public doShowRegisterLockerModal: boolean
-    public doShowEmptyLockerModal: boolean
-    public doDatePickerShow: boolean
-    public doShowChangeDateModal: boolean
-    public dateEditMode: boolean
-    public doShowlockerHistory: boolean
-    public doShowChargeModal: boolean
-    public doShowAdditionalChargeModal: boolean
+    public doShowRestartLockerModal = false
+    public doDropDownShow = false
+    public doShowRegisterLockerModal = false
+    public doDatePickerShow = false
+    public doShowEmptyLockerModal = false
+    public doShowChangeDateModal = false
+    public dateEditMode = false
+    public doShowlockerHistory = false
+    public doShowChargeModal = false
+    public doShowAdditionalChargeModal = false
 
-    public lockerEmptyTitle: string
+    public lockerEmptyTitle = ''
 
-    // public willRegisteredMember: GymUser
+    public willRegisteredMember: CenterUser = undefined
 
-    public lockerDate: { startDate: string; endDate: string }
-    public lockerDateDiff: number
+    public lockerDate: { startDate: string; endDate: string } = { startDate: '', endDate: '' }
+    public lockerDateDiff: number = undefined
 
-    // public lockerHistoryList: Array<LockerTicketHistory>
+    public lockerHistoryList: Array<any> = [] // !! locker history type
 
-    public dateRemain: number
+    public dateRemain: number = undefined
 
-    public statusColor: { border: string; font: string }
+    public statusColor: { border: string; font: string } = { border: '', font: '' }
 
     public restartLockerText = {
         text: '사용 불가 설정을 해제하시겠어요?',
@@ -51,11 +69,347 @@ export class LockerDetailBoxComponent implements OnInit, OnChanges, OnDestroy {
     public moveLockerTicketText: any
     public changeDateText: any
 
-    constructor() {}
+    public unsubscriber$ = new Subject<void>()
 
-    ngOnInit(): void {}
-    ngOnChanges(): void {}
-    ngOnDestroy(): void {
-        this.lockerGlobalModeSubscription.unsubscribe()
+    constructor(
+        private storageService: StorageService,
+        private centerUserLockerService: CenterUsersLockerService,
+        private nxStore: Store
+    ) {}
+
+    ngOnInit(): void {
+        this.nxStore.pipe(select(LockerSelector.LockerGlobalMode), takeUntil(this.unsubscriber$)).subscribe((lgm) => {
+            this.lockerGlobalMode = lgm
+        })
+        this.nxStore.pipe(select(LockerSelector.curLockerCateg), takeUntil(this.unsubscriber$)).subscribe((clc) => {
+            this.curLockerCateg = clc
+        })
     }
+    ngOnChanges(): void {
+        this.initLockerDateReamin()
+        this.initLockerDate()
+        this.setStatusColor()
+        this.cancelChangeDate()
+        this.closeDoDatePickerShow()
+        this.getLockerHistory()
+        this.willRegisteredMember = undefined
+    }
+    ngOnDestroy(): void {
+        this.unsubscriber$.next()
+        this.unsubscriber$.complete()
+    }
+
+    // check gloabl locker ticket -  move locker ticket
+    checkMoveLockerTicketMode() {
+        return this.lockerGlobalMode == 'moveLockerTicket' ? true : false
+    }
+    // locker history method
+    getLockerHistory() {
+        // console.log('categ id: ', this.center.id, this.curLockerCateg.id, this.lockerItem.id)
+        // this.gymLockerService
+        //     .getLockerHistory(this.center.id, this.curLockerCateg.id, this.lockerItem.id)
+        //     .subscribe((histories) => {
+        //         this.lockerHistoryList = histories
+        //         console.log('this.lockerHistoryList: ', this.lockerHistoryList)
+        //     })
+    }
+    //
+    initChangeDateText() {
+        this.changeDateText = {
+            text: `[락커 ${this.lockerItem.name}] 만료일을 변경하시겠어요?`,
+            subText: `변경할 만료일을 선택하신 후,
+        [변경하기] 버튼을 눌러주세요.`,
+            cancelButtonText: '취소',
+            confirmButtonText: '변경',
+        }
+    }
+    // lockerdate remain method
+    initLockerDateReamin() {
+        if (this.lockerItem.user_locker) {
+            const date1 = dayjs().format('YYYY-MM-DD')
+            const date2 = dayjs(this.lockerItem.user_locker.end_date)
+            this.dateRemain = date2.diff(date1, 'day') >= 0 ? date2.diff(date1, 'day') + 1 : date2.diff(date1, 'day')
+        } else {
+            this.dateRemain = undefined
+        }
+    }
+    // locker date method
+    initLockerDate() {
+        if (this.lockerItem.user_locker) {
+            this.lockerDate.startDate = this.lockerItem.user_locker.start_date
+            this.lockerDate.endDate = this.lockerItem.user_locker.end_date
+        } else {
+            this.resetLockerDate()
+        }
+    }
+    resetLockerDate() {
+        this.lockerDate.startDate = dayjs().format('YYYY-MM-DD')
+        this.lockerDate.endDate = ''
+    }
+
+    // flag method
+    toggleDropdown() {
+        this.doDropDownShow = !this.doDropDownShow
+    }
+    closeDropdown() {
+        this.doDropDownShow = false
+    }
+
+    toggleRegisterLockerModal() {
+        this.doShowRegisterLockerModal = !this.doShowRegisterLockerModal
+    }
+    closeRegisterLockerModal() {
+        this.doShowRegisterLockerModal = false
+    }
+    onRegisterMemberChoose(member: CenterUser) {
+        this.willRegisteredMember = member
+        this.closeRegisterLockerModal()
+    }
+
+    toggleShowEmptyLockerModal() {
+        this.lockerEmptyTitle = this.lockerItem.name
+        this.doShowEmptyLockerModal = !this.doShowEmptyLockerModal
+    }
+    closeShowEmptyLockerModal() {
+        this.doShowEmptyLockerModal = false
+    }
+    onEmptyLockerModaConfirm(refund: string) {
+        this.emptyLocker(refund)
+        this.closeShowEmptyLockerModal()
+    }
+
+    openShowlockerHistory() {
+        this.doShowlockerHistory = !this.doShowlockerHistory
+        this.closeDropdown()
+    }
+    closeShowlockerHistory() {
+        this.doShowlockerHistory = false
+    }
+
+    toggleMoveLockerTicketMode() {
+        if (this.lockerGlobalMode == 'normal') {
+            this.nxStore.dispatch(LockerActions.setLockerGlobalMode({ lockerMode: 'moveLockerTicket' }))
+        } else if (this.lockerGlobalMode == 'moveLockerTicket') {
+            this.nxStore.dispatch(LockerActions.setLockerGlobalMode({ lockerMode: 'normal' }))
+        }
+    }
+    resetMoveLockerTicketMode() {
+        this.nxStore.dispatch(LockerActions.setLockerGlobalMode({ lockerMode: 'normal' }))
+    }
+    openShowMoveLockerTicketModal() {
+        this.moveLockerTicketText = {
+            text: `[락커 ${this.lockerItem.name}]으로 자리를 이동하시겠어요?`,
+            subText: `이동 버튼을 클릭하시면,
+            즉시 회원의 락커 자리가 변경돼요.`,
+            cancelButtonText: '취소',
+            confirmButtonText: '이동',
+        }
+        this.doShowMoveLockerTicketModal = true
+    }
+    closeShowMoveLockerTicketModal() {
+        this.doShowMoveLockerTicketModal = false
+    }
+
+    toggleShowChargeModal() {
+        this.doShowChargeModal = !this.doShowChargeModal
+    }
+    closeShowChargeModal() {
+        this.doShowChargeModal = false
+    }
+    toggleShowAdditionalChargeModal() {
+        this.doShowAdditionalChargeModal = !this.doShowAdditionalChargeModal
+    }
+    closeShowAdditionalChargeModal() {
+        this.doShowAdditionalChargeModal = false
+    }
+
+    // strongly coupled ! --->
+    toggleDoDatePickerShow() {
+        if (this.lockerItem.state_code == 'locker_item_state_empty' || this.dateEditMode == true) {
+            this.doDatePickerShow = !this.doDatePickerShow
+        } else if (this.lockerItem.state_code == 'locker_item_state_use') {
+            this.initChangeDateText()
+            this.toggleShowChangeDateModal()
+        }
+    }
+    closeDoDatePickerShow() {
+        this.doDatePickerShow = false
+    }
+
+    toggleShowChangeDateModal() {
+        this.doShowChangeDateModal = !this.doShowChangeDateModal
+    }
+    closeShowChangeDateModal() {
+        this.doShowChangeDateModal = false
+        this.dateEditMode = false
+    }
+
+    onChangeDateModalConfirm() {
+        this.doDatePickerShow = true
+        this.dateEditMode = true
+        this.doShowChangeDateModal = false
+    }
+    // <---- strongly coupled !
+    cancelChangeDate() {
+        this.dateEditMode = false
+    }
+
+    // 결제 가격 수정되는 방식에 따라 수정 필요!  결제 담당자 에러 때문에  주석 처리 ; 나중에 수정되면 수정하기!
+    changeDate(modalReturn: {
+        pay_card: number
+        pay_cash: number
+        pay_trans: number
+        unpaid: number
+        pay_date: string
+        assignee_id: string
+    }) {
+        // !! API가 달라져서 수정 필요
+        // console.log('modalReturn: ' + modalReturn)
+        // const reqBody: ModifyLockerTicketRequestBody = {
+        //     locker_item_id: Number(this.lockerItem.id),
+        //     // start_date: this.lockerDate.startDate,
+        //     end_date: this.lockerDate.endDate,
+        //     pay_card: modalReturn.pay_card,
+        //     pay_cash: modalReturn.pay_cash,
+        //     pay_trans: modalReturn.pay_trans,
+        //     unpaid: modalReturn.unpaid,
+        //     pay_date: modalReturn.pay_date,
+        //     assignee_id: modalReturn.assignee_id,
+        // }
+        // console.log('reqBody: ', reqBody)
+        // this.closeShowAdditionalChargeModal()
+        // this.gymUserLockerTicketService
+        //     .modifyLockerTicket(
+        //         this.center.id,
+        //         this.lockerItem.locker_ticket.user_id,
+        //         this.lockerItem.locker_ticket.id,
+        //         reqBody
+        //     )
+        //     .subscribe((__) => {
+        //         this.getLockerItem()
+        //         this.globalService.showToast(`[락커 ${this.lockerItem.name}] 만료일이 변경되었습니다.`)
+        //     })
+    }
+
+    toggleShowRestartLockerModal() {
+        this.doShowRestartLockerModal = !this.doShowRestartLockerModal
+    }
+    closeShowRestartLockerModal() {
+        this.doShowRestartLockerModal = false
+    }
+    setLockerUnavailable() {
+        // this.gymLockerState.stopItem(this.center.id, this.curLockerCateg.id, this.lockerItem.id, () => {
+        //     this.nxStore.dispatch(showToast({ text: `[락커 ${this.lockerItem.name}]사용 불가 설정되었습니다.` }))
+        // })
+    }
+    setLockerAvailable() {
+        // this.gymLockerState.restartItem(this.center.id, this.curLockerCateg.id, this.lockerItem.id, () => {
+        //     this.closeShowRestartLockerModal()
+        //     this.nxStore.dispatch(showToast({ text: `[락커 ${this.lockerItem.name}]사용 불가 설정이 해제되었습니다.` }))
+        // })
+    }
+
+    // locker status color method
+    setStatusColor() {
+        const _statusColor = {
+            empty: 'var(--darkgreen)',
+            stop: 'var(--darkyellow)',
+            use: '#707070',
+            exceed: 'var(--darkred)',
+        }
+        if (this.lockerItem.state_code == 'empty') {
+            this.statusColor = { border: _statusColor.empty, font: _statusColor.empty }
+            // this.lockerItem.state_code_name = '사용 가능'
+        } else if (this.lockerItem.state_code == 'stop') {
+            this.statusColor = { border: _statusColor.stop, font: _statusColor.stop }
+        } else {
+            this.statusColor =
+                dayjs(this.lockerItem.user_locker.end_date).diff(dayjs(), 'day') < 0
+                    ? { border: _statusColor.exceed, font: _statusColor.exceed }
+                    : { border: _statusColor.use, font: 'var(--font-color)' }
+
+            // this.lockerItem.status_name =
+            //     dayjs(this.lockerItem.user_locker.end_date).diff(dayjs(), 'day') < 0
+            //         ? '기간 초과'
+            //         : this.lockerItem.status_name
+        }
+    }
+
+    // on click method in search modal
+
+    isLockerDateExist() {
+        console.log('isLockerDateExist: ', this.lockerDate.startDate && this.lockerDate.endDate)
+        return this.lockerDate.startDate && this.lockerDate.endDate
+    }
+
+    setLockerDate(changedLockerDate: { startDate: string; endDate: string }) {
+        this.lockerDate.startDate = changedLockerDate.startDate
+        this.lockerDate.endDate = changedLockerDate.endDate
+
+        this.lockerDateDiff = dayjs(this.lockerDate.endDate).diff(dayjs(this.lockerDate.startDate), 'day') + 1
+    }
+
+    // // #buttonBox1 method
+    // getLockerItem() {
+    //     this.gymLockerState.getItemList(this.center.id, this.curLockerCateg.id, (itemList) => {
+    //         console.log('changed lockeritem in locker detail box: ')
+    //         this.gymLockerState.setLockerItem(_.find(itemList, (item) => item.id == this.lockerItem.id))
+    //     })
+    // }
+
+    // registerMember(modalReturn) {
+    //     const reqBody: CreateLockerTicketRequestBody = {
+    //         locker_item_id: Number(this.lockerItem.id),
+    //         start_date: this.lockerDate.startDate,
+    //         end_date: this.lockerDate.endDate,
+    //         pay_card: modalReturn.pay_card,
+    //         pay_cash: modalReturn.pay_cash,
+    //         pay_trans: modalReturn.pay_trans,
+    //         unpaid: modalReturn.unpaid,
+    //         pay_date: modalReturn.pay_date,
+    //         assignee_id: modalReturn.assignee_id,
+    //     }
+    //     this.closeShowChargeModal()
+    //     console.log('registerMember reqBody: ', reqBody)
+    //     this.gymUserLockerTicketService
+    //         .createLockerTicket(this.center.id, this.willRegisteredMember.id, reqBody)
+    //         .subscribe((lockerTicket) => {
+    //             this.getLockerItem()
+    //             this.willRegisteredMember = undefined
+
+    //             this.globalService.showToast(`[락커 ${this.lockerItem.name}]에 회원이 등록되었습니다.`)
+    //             console.log(this.gymLockerState.lockerItem)
+    //             // this.gymLockerState.setLockerItemInList(this.gymLockerState.lockerItem) // 나중에 필요하면 수정해서 교체하기
+    //         })
+    // }
+
+    // resetRegisterBox() {
+    //     this.willRegisteredMember = undefined
+    //     this.resetLockerDate()
+    //     this.globalService.showToast(`[락커 ${this.lockerItem.name}] 입력중인 정보가 초기화되었습니다.`)
+    // }
+
+    // // buttonBox2 method
+    emptyLocker(_refund: string) {
+        //     let refundPrice = 0
+        //     if (_refund) {
+        //         refundPrice = Number(_refund)
+        //     }
+        //     this.gymUserLockerTicketService
+        //         .finishLockerTicket(
+        //             this.center.id,
+        //             this.lockerItem.locker_ticket.user_id,
+        //             this.lockerItem.locker_ticket.id,
+        //             {
+        //                 refund: refundPrice,
+        //             }
+        //         )
+        //         .subscribe(() => {
+        //             this.getLockerItem()
+        //             this.globalService.showToast(`[락커 ${this.lockerItem.name}] 락커 비우기가 완료되었습니다.`)
+        //         })
+    }
+
+    // move locker ticket method
+    moveLockerTicket() {}
 }

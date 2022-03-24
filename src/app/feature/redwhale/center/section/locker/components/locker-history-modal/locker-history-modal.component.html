@@ -1,0 +1,61 @@
+<div class="rw-modal-background" #modalBackgroundElement></div>
+
+<div
+  class="rw-modal-wrapper justify-content-center align-items-center"
+  (mouseup)="!isMouseModalDown && onCancel()"
+  (mousedown)='resetMouseModalDown()'
+  #modalWrapperElement
+>
+  <div
+    class="rw-modal user-select-none"
+    [class.empty] = "historyList.length == 0"
+    (mousedown)='onMouseModalDown(); $event.stopPropagation()'
+  >
+      <div class="header">
+        <span class="rw-typo-bodytext0">[락커 {{lockerName}}] 사용 내역</span>
+        <img src="assets/icons/etc/close.svg" (click)="onCancel()">
+      </div>
+      <div class="history-list thin-scroll-y-overlay">
+
+        <ng-container *ngIf="historyList.length > 0 else emptyHistory">
+          <div
+            *ngFor = "let item of historyList; let i = index"
+            class="history-card"
+            (click) = onConfirm(item)
+          >
+            <div class="card-left">
+              <p class="rw-typo-subtext2 index">{{historyList.length - i}}</p>
+              <rw-avatar
+                [image]="item.picture"
+                [text]="item.user_name"
+                size="37"
+                fontSize="12"
+              ></rw-avatar>
+              <div class="left-texts">
+                <p class="rw-typo-bodytext0-bold">{{item.user_name}}</p>
+                <p *ngIf="item.end_date" class="rw-typo-subtext2">
+                  {{item.start_date | dashToDot}} - {{item.end_date | dashToDot}}
+                </p>
+                <p *ngIf="!item.end_date" class="rw-typo-subtext2">
+                  {{item.start_date | dashToDot}} ~
+                </p>
+              </div>
+            </div>
+            <div *ngIf="i == 0 && !item.end_date" class="card-right">
+              <div class="dot"></div>
+              <p class="rw-typo-subtext2">사용중</p>
+            </div>
+          </div>
+        </ng-container>
+
+        <ng-template #emptyHistory>
+          <div class="empty-image-container">
+            <img src="assets/icons/etc/empty_screen.svg">
+            <p class="rw-typo-subtext2">아직 [락커 {{lockerName}}]을 사용한 회원이 없어요.</p>
+          </div>
+        </ng-template>
+
+      </div>
+
+  </div>
+</div>

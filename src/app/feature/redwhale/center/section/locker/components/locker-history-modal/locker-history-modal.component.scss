@@ -1,0 +1,151 @@
+* {
+    padding: 0px;
+    margin: 0px;
+}
+
+.rw-modal-background {
+    display: none;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: var(--font-color);
+    opacity: 0;
+    transition: opacity 0.3s cubic-bezier(0.25, 0.8, 0.25, 0.8);
+    -moz-transition: opacity 0.3s cubic-bezier(0.25, 0.8, 0.25, 0.8);
+    -webkit-transition: opacity 0.3s cubic-bezier(0.25, 0.8, 0.25, 0.8);
+    -o-transition: opacity 0.3s cubic-bezier(0.25, 0.8, 0.25, 0.8);
+    z-index: 999;
+}
+
+.rw-modal-background-show {
+    opacity: 0.3;
+}
+
+.rw-modal-wrapper {
+    display: none;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1000;
+
+    .rw-modal {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 310px;
+        min-height: 130px;
+        max-height: 410px;
+        padding: 15px 0px 5px 0px;
+        border: 1px solid var(--border-color);
+        background-color: var(--white);
+        border-radius: 5px;
+        opacity: 0;
+        transition: opacity 0s;
+        -moz-transition: opacity 0s;
+        -webkit-transition: opacity 0s;
+        -o-transition: opacity 0s;
+        position: relative;
+
+        &.empty {
+            height: 244px !important;
+        }
+
+        $inner-width: 277px;
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            width: $inner-width;
+            height: 33px;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 18px;
+            & > span {
+                font-weight: 700;
+            }
+            & > img {
+                width: 20px;
+                height: 20px;
+                border-radius: 3px;
+                cursor: pointer;
+
+                &:hover {
+                    background-color: var(--background-color);
+                }
+            }
+        }
+
+        .history-list {
+            width: 100%;
+            height: calc(100% - 61px); // modal padding:15px + 5px and + header height: 33px + margin-bt: 18px
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            .history-card {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                width: 260px;
+                height: 37px;
+                border-radius: 5px;
+                // padding: 8px 15px;
+                margin-bottom: 20px;
+
+                .card-left {
+                    display: flex;
+                    align-items: center;
+
+                    .index {
+                        margin-right: 20px;
+                    }
+
+                    .left-texts {
+                        margin-left: 10px;
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
+                    }
+                }
+                .card-right {
+                    display: flex;
+                    align-items: center;
+
+                    .dot {
+                        margin-right: 4px;
+                        background-color: var(--red);
+                        height: 4px;
+                        width: 4px;
+                        border-radius: 50%;
+                    }
+                    & p {
+                        color: var(--red) !important;
+                    }
+                }
+            }
+
+            .empty-image-container {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                margin-top: 45px;
+
+                img {
+                    width: 37px;
+                    height: 18px;
+                    margin-bottom: 16px;
+                }
+            }
+        }
+    }
+}
+
+.rw-modal-wrapper-show {
+    .rw-modal {
+        opacity: 1;
+    }
+}

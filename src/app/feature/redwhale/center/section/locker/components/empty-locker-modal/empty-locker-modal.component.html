@@ -1,0 +1,61 @@
+
+<div class="rw-modal-background" #modalBackgroundElement></div>
+
+<div
+  class="rw-modal-wrapper justify-content-center align-items-center"
+  (mouseup)="!isMouseModalDown && onCancel()"
+  (mousedown) = 'resetMouseModalDown()'
+  #modalWrapperElement
+>
+    <div
+      class="rw-modal user-select-none"
+      (mousedown) ='onMouseModalDown(); $event.stopPropagation()'
+    >
+      <div class="header">
+        <div class="rw-typo-title1">[락커 {{lockerItemName}}]를 비우시겠어요?</div>
+        <div class="rw-typo-subtext0-regular subtitle">환불이 발생한 경우, 매출 집계를 위해 환불 금액을 입력해주세요.</div>
+
+        <div class="input-container" #inputContainer>
+          <p class="input-title">환불 금액</p>
+          <input
+            type="text"
+            class="rw-input"
+            placeholder="0"
+            [(ngModel)]="refundInput"
+            (keyup.enter) ="onConfirm()"
+            (keyup) = "onInputKeyup($event)"
+          >
+          <div class="rw-typo-bodytext0 input-icon">￦</div>
+        </div>
+      </div>
+
+      <div class="footer">
+        <div
+          class="cancel"
+          rw-button
+          rwButtonBorderColor="var(--border-color)"
+          rwButtonFontColor="var(--grey)"
+          (click) ="onCancel()"
+        >
+          취소
+        </div>
+        <div
+          class="confirm"
+          rw-button
+          rwButtonColor="var(--red)"
+          rwButtonFontColor="var(--white)"
+          (click) ="onConfirm()"
+        >
+          락커 비우기
+        </div>
+      </div>
+
+
+    </div>
+</div>
+
+
+<!--
+  #emptyInput = ngModel
+pattern="^(\d*([,](?=\d{3}))?\d+)+((?!\2)[,]\d\d)?$"
+-->

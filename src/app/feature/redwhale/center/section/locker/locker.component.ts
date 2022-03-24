@@ -26,7 +26,6 @@ import { CenterUsersLockerService } from '@services/center-users-locker.service.
 import { LockerCategory } from '@schemas/locker-category'
 import { LockerItem } from '@schemas/locker-item'
 import { Center } from '@schemas/center'
-import { Drawer } from '@schemas/store/app/drawer.interface'
 
 // rxjs
 import { Observable, Subject } from 'rxjs'
@@ -34,7 +33,6 @@ import { takeUntil, debounceTime } from 'rxjs/operators'
 
 // ngrx
 import { Store, select } from '@ngrx/store'
-import { drawerSelector } from '@appStore/selectors'
 import { showToast } from '@appStore/actions/toast.action'
 
 import * as FromLocker from '@centerStore/reducers/sec.locker.reducer'

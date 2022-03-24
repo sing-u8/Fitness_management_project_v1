@@ -86,6 +86,11 @@ export const startDeleteLockerItem = createAction(
 )
 export const finishDeleteLockerItem = createAction(`[${FeatureKey}] finish Delete Locker item`)
 
+// export const startStopItem = createAction(
+//     `[${FeatureKey}] Start Stop Locker item`,
+//     props<{ centerId: string; categoryId: string; itemId: string; itemName: string }>()
+// )
+
 // -------------------------------------------------------------------------------------------------------------- //
 // cur Locker Categ
 export const setCurLockerCateg = createAction(
