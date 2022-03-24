@@ -357,37 +357,36 @@ export class LockerDetailBoxComponent implements OnInit, OnChanges, OnDestroy {
     //     })
     // }
 
-    // registerMember(modalReturn) {
-    //     const reqBody: CreateLockerTicketRequestBody = {
-    //         locker_item_id: Number(this.lockerItem.id),
-    //         start_date: this.lockerDate.startDate,
-    //         end_date: this.lockerDate.endDate,
-    //         pay_card: modalReturn.pay_card,
-    //         pay_cash: modalReturn.pay_cash,
-    //         pay_trans: modalReturn.pay_trans,
-    //         unpaid: modalReturn.unpaid,
-    //         pay_date: modalReturn.pay_date,
-    //         assignee_id: modalReturn.assignee_id,
-    //     }
-    //     this.closeShowChargeModal()
-    //     console.log('registerMember reqBody: ', reqBody)
-    //     this.gymUserLockerTicketService
-    //         .createLockerTicket(this.center.id, this.willRegisteredMember.id, reqBody)
-    //         .subscribe((lockerTicket) => {
-    //             this.getLockerItem()
-    //             this.willRegisteredMember = undefined
+    registerMember(modalReturn) {
+        //     const reqBody: CreateLockerTicketRequestBody = {
+        //         locker_item_id: Number(this.lockerItem.id),
+        //         start_date: this.lockerDate.startDate,
+        //         end_date: this.lockerDate.endDate,
+        //         pay_card: modalReturn.pay_card,
+        //         pay_cash: modalReturn.pay_cash,
+        //         pay_trans: modalReturn.pay_trans,
+        //         unpaid: modalReturn.unpaid,
+        //         pay_date: modalReturn.pay_date,
+        //         assignee_id: modalReturn.assignee_id,
+        //     }
+        //     this.closeShowChargeModal()
+        //     console.log('registerMember reqBody: ', reqBody)
+        //     this.gymUserLockerTicketService
+        //         .createLockerTicket(this.center.id, this.willRegisteredMember.id, reqBody)
+        //         .subscribe((lockerTicket) => {
+        //             this.getLockerItem()
+        //             this.willRegisteredMember = undefined
+        //             this.globalService.showToast(`[락커 ${this.lockerItem.name}]에 회원이 등록되었습니다.`)
+        //             console.log(this.gymLockerState.lockerItem)
+        //             // this.gymLockerState.setLockerItemInList(this.gymLockerState.lockerItem) // 나중에 필요하면 수정해서 교체하기
+        //         })
+    }
 
-    //             this.globalService.showToast(`[락커 ${this.lockerItem.name}]에 회원이 등록되었습니다.`)
-    //             console.log(this.gymLockerState.lockerItem)
-    //             // this.gymLockerState.setLockerItemInList(this.gymLockerState.lockerItem) // 나중에 필요하면 수정해서 교체하기
-    //         })
-    // }
-
-    // resetRegisterBox() {
-    //     this.willRegisteredMember = undefined
-    //     this.resetLockerDate()
-    //     this.globalService.showToast(`[락커 ${this.lockerItem.name}] 입력중인 정보가 초기화되었습니다.`)
-    // }
+    resetRegisterBox() {
+        //     this.willRegisteredMember = undefined
+        //     this.resetLockerDate()
+        //     this.globalService.showToast(`[락커 ${this.lockerItem.name}] 입력중인 정보가 초기화되었습니다.`)
+    }
 
     // // buttonBox2 method
     emptyLocker(_refund: string) {

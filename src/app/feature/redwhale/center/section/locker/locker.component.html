@@ -61,7 +61,10 @@
                     class="main-left__content"
                     [class.thin-scroll-y] = "isEditMode"
                 >
-                    <div *ngIf="!isEditMode && !curLockerItem" class="select-locker-guide-box rw-typo-bodytext0">
+                    <div
+                        *ngIf="!isEditMode && !curLockerItem"
+                        class="select-locker-guide-box rw-typo-bodytext0"
+                    >
                         락커를 선택해주세요.
                     </div>
 
@@ -77,10 +80,10 @@
                     <ng-container
                         *ngIf="curLockerItem && !isEditMode"
                     >
-                        <!-- <rw-locker-detail-box
+                        <rw-locker-detail-box
                             [lockerItem]="curLockerItem"
                         >
-                        </rw-locker-detail-box> -->
+                        </rw-locker-detail-box>
                     </ng-container>
                 </div>
             </div>

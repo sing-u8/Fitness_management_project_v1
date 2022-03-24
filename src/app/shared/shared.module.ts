@@ -5,12 +5,12 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 // Components
 import { AvatarComponent } from './components/common/avatar/avatar.component'
 import { CheckboxComponent } from './components/common/checkbox/checkbox.component'
-// import { DatepickerComponent } from './components/common/datepicker/datepicker.component'
+import { DatepickerComponent } from './components/common/datepicker/datepicker.component'
 import { ModalComponent } from './components/common/modal/modal.component'
 import { RadioButtonComponent } from './components/common/radio-button/radio-button.component'
 import { SelectComponent } from './components/common/select/select.component'
 import { SwitchComponent } from './components/common/switch/switch.component'
-// import { TimepickerComponent } from './components/common/timepicker/timepicker.component'
+import { TimepickerComponent } from './components/common/timepicker/timepicker.component'
 import { ToastComponent } from './components/common/toast/toast.component'
 import { UploadTaskComponent } from './components/common/upload-task/upload-task.component'
 import { Datepicker2Component } from './components/common/datepicker2/datepicker2.component'
@@ -86,12 +86,12 @@ FullCalendarModule.registerPlugins([
     declarations: [
         AvatarComponent,
         CheckboxComponent,
-        // DatepickerComponent,
+        DatepickerComponent,
         ModalComponent,
         RadioButtonComponent,
         SelectComponent,
         SwitchComponent,
-        // TimepickerComponent,
+        TimepickerComponent,
         ToastComponent,
         UploadTaskComponent,
         Datepicker2Component,
@@ -143,12 +143,12 @@ FullCalendarModule.registerPlugins([
     exports: [
         AvatarComponent,
         CheckboxComponent,
-        // DatepickerComponent,
+        DatepickerComponent,
         ModalComponent,
         RadioButtonComponent,
         SelectComponent,
         SwitchComponent,
-        // TimepickerComponent,
+        TimepickerComponent,
         ToastComponent,
         UploadTaskComponent,
         Datepicker2Component,
