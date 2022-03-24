@@ -317,10 +317,10 @@ export class LockerDetailBoxComponent implements OnInit, OnChanges, OnDestroy {
             use: '#707070',
             exceed: 'var(--darkred)',
         }
-        if (this.lockerItem.state_code == 'empty') {
+        if (this.lockerItem.state_code == 'locker_item_state_empty') {
             this.statusColor = { border: _statusColor.empty, font: _statusColor.empty }
             // this.lockerItem.state_code_name = '사용 가능'
-        } else if (this.lockerItem.state_code == 'stop') {
+        } else if (this.lockerItem.state_code == 'locker_item_state_stop') {
             this.statusColor = { border: _statusColor.stop, font: _statusColor.stop }
         } else {
             this.statusColor =

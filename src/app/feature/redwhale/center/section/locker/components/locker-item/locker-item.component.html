@@ -1,13 +1,13 @@
 <gridster-item
     class="grid-locker-item user-select-none"
     [class.is-using] = "lockerGlobalMode != 'moveLockerTicket'
-                    && lockerItem.state_code == 'use'"
+                    && lockerItem.state_code == 'locker_item_state_use'"
     [class.selected] = "lockerGlobalMode != 'moveLockerTicket'
                     && selected && !editMode"
     [class.move-locker-ticket-X] = "lockerGlobalMode == 'moveLockerTicket'
-                                && (lockerItem.state_code=='use' || lockerItem.state_code=='stop')"
+                                && (lockerItem.state_code=='locker_item_state_use' || lockerItem.state_code=='locker_item_state_stop')"
     [class.move-locker-ticket-O] = "lockerGlobalMode == 'moveLockerTicket'
-                                && lockerItem.state_code=='empty'"
+                                && lockerItem.state_code=='locker_item_state_empty'"
     [class.move-locker-ticket-selected] = "lockerGlobalMode == 'moveLockerTicket'
                                         && selected "
     [class.be-moved-locker] = "isSameWillBeMovedLocker"
@@ -21,7 +21,7 @@
     >
         <div
             [class.show] = "lockerGlobalMode == 'moveLockerTicket'
-                        && (lockerItem.state_code=='use' || lockerItem.state_code=='stop')
+                        && (lockerItem.state_code=='locker_item_state_use' || lockerItem.state_code=='locker_item_state_stop')
                         && !selected"
             class="move-locker-ticket-unavailable-mark"
         >
@@ -65,9 +65,9 @@
                 *ngIf= "!doNameInputShow && lockerGlobalMode != 'moveLockerTicket'"
                 class="warning-icon-container"
             >
-              <img *ngIf="lockerItem.state_code == 'use' && isSevenDaysRemain" src="assets/icons/etc/exceed_period.svg">
-              <img *ngIf="lockerItem.state_code == 'use' && isExceed" src="assets/icons/etc/exceed_period_red.svg">
-              <img *ngIf="lockerItem.state_code == 'stop'" src="assets/icons/etc/unavailable.svg">
+              <img *ngIf="lockerItem.state_code == 'locker_item_state_use' && isSevenDaysRemain" src="assets/icons/etc/exceed_period.svg">
+              <img *ngIf="lockerItem.state_code == 'locker_item_state_use' && isExceed" src="assets/icons/etc/exceed_period_red.svg">
+              <img *ngIf="lockerItem.state_code == 'locker_item_state_stop'" src="assets/icons/etc/unavailable.svg">
             </div>
         </div>
         <div class="grid-locker-item-footer">

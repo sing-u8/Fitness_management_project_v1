@@ -1,12 +1,12 @@
 <div class="locker-detail-box-container" [class.avatar-exit]="lockerItem.user_locker"
-    [class.locker-stop]="lockerItem.state_code == 'stop'">
+    [class.locker-stop]="lockerItem.state_code == 'locker_item_state_stop'">
     <div class="locker-detail-box" [class.move-locket-ticket-mode]="lockerGlobalMode == 'moveLockerTicket'">
 
         <div class="header">
             <div class="top">
                 <div class="left">
                     <span class="rw-typo-title1">락커 {{lockerItem?.name}}</span>
-                    <div class="locker-state_code rw-typo-bodytext2" [style.borderColor]="statusColor.border"
+                    <div class="locker-status rw-typo-bodytext2" [style.borderColor]="statusColor.border"
                         [style.color]="statusColor.font">
                         {{lockerItem.state_code_name}}
                     </div>
@@ -19,7 +19,7 @@
                         <div class="dropdown " (rwClickOutside)="closeDropdown()" (click)="openShowlockerHistory()">
                             사용 내역
                         </div>
-                        <div class="dropdown" *ngIf="!lockerItem.user_locker && lockerItem.state_code != 'stop'"
+                        <div class="dropdown" *ngIf="!lockerItem.user_locker && lockerItem.state_code != 'locker_item_state_stop'"
                             (rwClickOutside)="closeDropdown()" (click)="setLockerUnavailable()">
                             사용 불가 설정
                         </div>
@@ -30,7 +30,7 @@
 
             <div class="middle">
 
-                <div #avatar0 *ngIf="lockerItem.state_code == 'stop'; else avatar1"></div>
+                <div #avatar0 *ngIf="lockerItem.state_code == 'locker_item_state_stop'; else avatar1"></div>
 
                 <ng-template #avatar1>
                     <div *ngIf="willRegisteredMember else avatar2" class="avatar-container">
@@ -85,7 +85,7 @@
 
 
 
-        <div *ngIf="lockerItem.state_code != 'stop'" class="footer rw-typo-bodytext2">
+        <div *ngIf="lockerItem.state_code != 'locker_item_state_stop'" class="footer rw-typo-bodytext2">
             <div class="date-container">
 
                 <div class="date">
@@ -96,7 +96,7 @@
                         (click)="!checkMoveLockerTicketMode() && toggleDoDatePickerShow(); $event.stopPropagation()">
                         <span *ngIf="lockerDate.endDate">{{lockerDate.endDate | dashToDot}}</span>
                         <span
-                            *ngIf="lockerDate.startDate && lockerDate.endDate && (lockerItem.state_code =='empty' || dateEditMode)">
+                            *ngIf="lockerDate.startDate && lockerDate.endDate && (lockerItem.state_code =='locker_item_state_empty' || dateEditMode)">
                             ({{lockerDateDiff}}일)
                         </span>
                         <span *ngIf="!lockerDate.endDate">만료일</span>
@@ -120,7 +120,7 @@
 
     <!-- detail box buttons  -->
 
-    <div #buttonBox0 *ngIf="lockerItem.state_code == 'stop' else buttonBox1" class="stop-button" rw-button
+    <div #buttonBox0 *ngIf="lockerItem.state_code == 'locker_item_state_stop' else buttonBox1" class="stop-button" rw-button
         rwButtonFontColor="var(--darkgrey)" rwButtonColor="var(--white)" (click)="toggleShowRestartLockerModal()">
         <img src="assets/icons/etc/release_unavailable.svg">
         <span class="rw-typo-bodytext2">사용 불가 해제</span>
