@@ -8,11 +8,15 @@ import { map, catchError } from 'rxjs/operators'
 import { StorageService } from '@services/storage.service'
 import { FileService } from '@services/file.service'
 import { AuthService } from '@services/auth.service'
-import { CenterUsersService } from '@services/center-users.service'
+import { CenterUsersService, CreateUserRequestBody } from '@services/center-users.service'
 import { GlobalService } from '@services/global.service'
 import { PictureManagementService, LocalFileData } from '@services/helper/picture-management.service'
 
 import { Center } from '@schemas/center'
+
+// ngrx
+import { Store } from '@ngrx/store'
+import { showToast } from '@appStore/actions/toast.action'
 
 type Gender = 'male' | 'female' | ''
 @Component({
@@ -48,8 +52,7 @@ export class DirectRegistrationComponent implements OnInit, OnDestroy {
         private fb: FormBuilder,
         private authService: AuthService,
         private centerUsersService: CenterUsersService,
-
-        private globalService: GlobalService
+        private nxStore: Store
     ) {
         this.gender = ''
         this.localFileData = { src: undefined, file: undefined }
@@ -197,7 +200,7 @@ export class DirectRegistrationComponent implements OnInit, OnDestroy {
             //         )
             //     })
         } else {
-            this.globalService.showToast('회원 등록이 완료되었습니다.')
+            this.nxStore.dispatch(showToast({ text: '회원 등록이 완료되었습니다.' }))
             afterFn ? afterFn() : null
         }
     }
@@ -218,23 +221,23 @@ export class DirectRegistrationComponent implements OnInit, OnDestroy {
     // register method
     registerNewMember() {
         console.log('register new member: ', this.registerForm)
-        const registerBody = {
-            email: this.email.value as string,
-            given_name: this.name.value as string,
-            phone_number: this.phone_number.value as string,
-            birth_date: this.birth_date.value as string,
+        const registerBody: CreateUserRequestBody = {
+            name: this.name.value as string,
             sex: this.gender as string,
+            birth_date: this.birth_date.value as string,
+            email: this.email.value as string,
+            phone_number: this.phone_number.value as string,
         }
-        this.centerUsersService.registerByEmail(this.center.id, registerBody).subscribe(
-            (res) => {
-                const user = res[0]
-                this.registerAvatar(user.id, () => {
+        this.centerUsersService.createUser(this.center.id, registerBody).subscribe({
+            next: (createdUser) => {
+                this.registerAvatar(createdUser.id, () => {
                     this.backMainRegistraion()
                 })
             },
-            (err) => {
+
+            error: (err) => {
                 console.log('err in registeration by email: ', err)
-            }
-        )
+            },
+        })
     }
 }

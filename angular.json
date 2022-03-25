@@ -46,7 +46,8 @@
               "qrcode",
               "lodash",
               "dayjs",
-              "file-saver"
+              "file-saver",
+              "moment-timezone"
             ]
           },
           "configurations": {

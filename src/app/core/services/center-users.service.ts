@@ -17,26 +17,8 @@ export class CenterUsersService {
 
     constructor(private http: HttpClient) {}
 
-    createUser(centerId: string, requestBody: CreateUserRequestBody): Observable<CreateUserResponse> {
+    createUser(centerId: string, requestBody: CreateUserRequestBody): Observable<CenterUser> {
         const url = this.SERVER + `/${centerId}/users`
-
-        const options = {
-            headers: new HttpHeaders({
-                'Content-Type': 'application/json',
-            }),
-        }
-
-        return this.http.post<Response>(url, requestBody, options).pipe(
-            map((res) => {
-                return res.dataset[0]
-            }),
-            catchError(handleError)
-        )
-    }
-
-    // !! 현재 미구현 상태
-    registerByEmail(centerId: string, requestBody: registrationByEmailRequestBody): Observable<CreateUserResponse> {
-        const url = this.SERVER + `/${centerId}/users/registrationByEmail`
 
         const options = {
             headers: new HttpHeaders({
@@ -79,7 +61,7 @@ export class CenterUsersService {
         )
     }
 
-    updateUser(centerId: string, userId: string, requestBody: UpdateUserRequestBody) {
+    updateUser(centerId: string, userId: string, requestBody: UpdateUserRequestBody): Observable<CenterUser> {
         const url = this.SERVER + `/${centerId}/users/${userId}`
 
         const options = {
@@ -90,33 +72,22 @@ export class CenterUsersService {
 
         return this.http.put<Response>(url, requestBody, options).pipe(
             map((res) => {
-                return res
+                return res.dataset[0]
             }),
             catchError(handleError)
         )
     }
 }
 
-class CreateUserRequestBody {
-    phone_number?: string
-    name?: string
-    picture?: string
-    sex?: string
-    email?: string
-}
-
-class registrationByEmailRequestBody {
-    email: string
-    given_name: string
-    phone_number: string
+export interface CreateUserRequestBody {
+    name: string
     sex: string
     birth_date: string
-}
-class CreateUserResponse {
-    id: string
+    email: string
+    phone_number: string
 }
 
-class UpdateUserRequestBody {
+export interface UpdateUserRequestBody {
     role_code?: string
     center_user_name?: string
     center_user_memo?: string

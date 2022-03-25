@@ -21,4 +21,5 @@ export interface CenterUser {
     role_name: string
     center_user_name: string
     center_user_memo: string
+    created_at: string
 }

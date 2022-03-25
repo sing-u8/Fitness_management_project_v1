@@ -9,8 +9,11 @@ import { RegisterMemberComponent } from './register-member.component'
 import { DirectRegistrationComponent } from './direct-registration/direct-registration.component'
 import { NewMemberCardComponent } from './components/new-member-card/new-member-card.component'
 
+// ngxSkeletonLoader module
+import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader'
+
 @NgModule({
     declarations: [RegisterMemberComponent, DirectRegistrationComponent, NewMemberCardComponent],
-    imports: [CommonModule, RegisterMemberRoutingModule, ReactiveFormsModule, SharedModule],
+    imports: [CommonModule, RegisterMemberRoutingModule, ReactiveFormsModule, SharedModule, NgxSkeletonLoaderModule],
 })
 export class RegisterMemberModule {}

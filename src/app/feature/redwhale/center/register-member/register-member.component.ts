@@ -31,6 +31,8 @@ export class RegisterMemberComponent implements OnInit, AfterViewInit {
     public selectedMember: CenterUser
     public selectedMemberAge: string
 
+    public loadingGetMembers = false
+
     constructor(
         private router: Router,
         private activatedRoute: ActivatedRoute,
@@ -69,19 +71,23 @@ export class RegisterMemberComponent implements OnInit, AfterViewInit {
 
     // get membership list
     getMembershipList(afterFn?: () => void) {
-        // this.centerUsersService.getUserList(this.center.id, '', 'member').subscribe((centerUsers) => {
-        //     this.registeredUserList = centerUsers
-        //         .reverse()
-        //         .filter((v) => this.timeService.isRegisteredToday(v.registration_at))
-        //     this.registeredUserTimeList = Array.from({ length: this.registeredUserList.length }, () => {
-        //         return { today: '', fullTime: '' }
-        //     })
-        //     this.registeredUserList.forEach((v, i) => {
-        //         this.registeredUserTimeList[i].today = this.timeService.getTodayRegisteredTime(v.registration_at)
-        //         this.registeredUserTimeList[i].fullTime = v.registration_at.slice(0, v.registration_at.length - 3)
-        //     })
-        //     afterFn ? afterFn() : null
-        // })
+        this.loadingGetMembers = true
+        this.centerUsersService.getUserList(this.center.id, '', 'member').subscribe((centerUsers) => {
+            this.registeredUserList = centerUsers
+                .reverse()
+                .filter((v) => this.timeService.isRegisteredToday(v.created_at))
+            this.registeredUserTimeList = Array.from({ length: this.registeredUserList.length }, () => {
+                return { today: '', fullTime: '' }
+            })
+            this.registeredUserList.forEach((v, i) => {
+                this.registeredUserTimeList[i].today = this.timeService.getTodayRegisteredTime(v.created_at)
+                this.registeredUserTimeList[i].fullTime = v.created_at.slice(0, v.created_at.length - 3)
+            })
+            afterFn ? afterFn() : null
+
+            this.loadingGetMembers = false
+            console.log('registeredUserList ---- ', this.registeredUserList)
+        })
     }
 
     // card method
@@ -94,7 +100,16 @@ export class RegisterMemberComponent implements OnInit, AfterViewInit {
     // --- member detail method
     // textarea method
     getUserAge(birth_date: string) {
-        return birth_date + ' (' + this.timeService.getKoreanMemberAge(birth_date) + '세)'
+        const birth = String(birth_date)
+            .split('-')
+            .reduce((pre, cur, idx) => {
+                if (idx == 0) {
+                    return pre + cur
+                } else {
+                    return pre + '.' + cur
+                }
+            }, '')
+        return birth + ' (' + this.timeService.getKoreanMemberAge(birth_date) + '세)'
     }
 
     onTextAreaBlur(event) {

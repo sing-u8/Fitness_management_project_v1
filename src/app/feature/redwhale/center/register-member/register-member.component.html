@@ -79,27 +79,42 @@
 
         </div>
         <div class="content-container">
+
           <div *ngIf='isMemberDetail == false' class="content">
 
             <div class="content-header rw-typo-title2">
               오늘 등록한 회원
             </div>
 
-            <div *ngIf='false' class="not-registered rw-typo-bodytext1">
-              <img src="assets/icons/etc/empty_screen.svg" >
-              <p>아직 등록한 회원이 없어요.</p>
-            </div>
+            <ng-template #loading_members [ngIf]="loadingGetMembers == true" [ngIfElse]="loading_members_done">
+              <div class="new-members">
+                <ngx-skeleton-loader
+                  *ngFor="let _ of [1,2,3,4]"
+                  count = 1
+                  appearance="line"
+                  [theme]="{width: '545px', height: '65px', 'border-radius': '5px'}"
+                ></ngx-skeleton-loader>
+              </div>
+            </ng-template>
 
-            <div *ngIf='registeredUserList.length > 0' class="new-members">
-                <ng-template ngFor let-item [ngForOf]="registeredUserList" let-i=index>
-                  <new-member-card
-                    [cardIndex]="registeredUserList.length - i" [member]="item"
-                    [memberLength]=registeredUserList.length
-                    [registeredTime] = registeredUserTimeList[i].today
-                    (sendMemberData)="onCardClick($event, registeredUserTimeList[i].fullTime)"
-                  ></new-member-card>
-                </ng-template>
-            </div>
+            <ng-template #loading_members_done>
+              <div *ngIf='registeredUserList.length == 0' class="not-registered rw-typo-bodytext1">
+                <img src="assets/icons/etc/empty_screen.svg" >
+                <p>아직 등록한 회원이 없어요.</p>
+              </div>
+
+              <div *ngIf='registeredUserList.length > 0' class="new-members">
+                  <ng-template ngFor let-item [ngForOf]="registeredUserList" let-i=index>
+                    <new-member-card
+                      [cardIndex]="registeredUserList.length - i" [member]="item"
+                      [memberLength]=registeredUserList.length
+                      [registeredTime] = registeredUserTimeList[i].today
+                      (sendMemberData)="onCardClick($event, registeredUserTimeList[i].fullTime)"
+                    ></new-member-card>
+                  </ng-template>
+              </div>
+            </ng-template>
+
 
           </div>
 
@@ -131,7 +146,7 @@
                 </div>
                 <div class="detail-item">
                   <div class="category rw-typo-subtext2">전화번호</div>
-                  <div class=" rw-typo-bodytext0">{{selectedMember.phone_number}}</div>
+                  <div class=" rw-typo-bodytext0">{{selectedMember.phone_number | phoneNumber}}</div>
                 </div>
                 <div class="detail-item">
                   <div class="category rw-typo-subtext2">이메일</div>
