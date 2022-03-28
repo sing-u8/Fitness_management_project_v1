@@ -250,15 +250,17 @@ export class LockerComponent implements OnInit, AfterViewInit, OnDestroy {
         this.openShowMoveLockerTicketModal(willBeMovedLocker)
     }
     modifyLockerTicket() {
-        // !! this.gymLockerState.moveLockerPlace(this.gym.id, this.item, this.willBeMovedLockerItem, () => {
-
         this.nxStore.dispatch(
-            showToast({
-                text: `${this.curLockerItem.user_locker.user.name}님의 자리가 [락커 ${this.willBeMovedLockerItem.name}]으로 이동되었습니다.`,
+            LockerActions.startMoveLockerTicket({
+                centerId: this.center.id,
+                userId: this.curLockerItem.user_locker.user.id,
+                lockerTicketId: this.curLockerItem.user_locker.id,
+                startLockerReqBody: { locker_item_id: this.willBeMovedLockerItem.id },
             })
         )
-        this.nxStore.dispatch(LockerActions.resetWillBeMovedLockerItem())
-        // })
+        // this.nxStore.dispatch(LockerActions.resetWillBeMovedLockerItem())
+        // this.nxStore.dispatch(LockerActions.setLockerGlobalMode({ lockerMode: 'normal' }))
+        this.doShowMoveLockerTicketModal = false
     }
 
     // locker category methods

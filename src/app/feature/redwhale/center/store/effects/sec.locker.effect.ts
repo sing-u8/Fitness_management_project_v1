@@ -236,4 +236,43 @@ export class LockerEffect {
     )
 
     // public expireLockerTicket = createEffect(() => this.actions$.pipe(ofType(LockerActions.startExpireLockerTicket)))
+
+    public moveLockerTicket = createEffect(() =>
+        this.actions$.pipe(
+            ofType(LockerActions.startMoveLockerTicket),
+            switchMap(({ centerId, userId, lockerTicketId, startLockerReqBody }) =>
+                this.centerUsersLockerApi.stopLockerTicket(centerId, userId, lockerTicketId).pipe(
+                    switchMap((__) =>
+                        this.centerUsersLockerApi
+                            .startLockerTicket(centerId, userId, lockerTicketId, startLockerReqBody)
+                            .pipe(
+                                concatLatestFrom(() => [
+                                    this.store.select(LockerSelector.curLockerCateg),
+                                    this.store.select(LockerSelector.curLockerItem),
+                                ]),
+                                switchMap(([__, curLockerCateg, curLockerItem]) =>
+                                    this.centerLokcerApi.getItemList(centerId, curLockerCateg.id).pipe(
+                                        switchMap((lockerItems) => {
+                                            const movedLockerItem = _.find(
+                                                lockerItems,
+                                                (item) => item.id == startLockerReqBody.locker_item_id
+                                            )
+                                            return [
+                                                LockerActions.finishMoveLockerTicket({ lockerItems, movedLockerItem }),
+                                                LockerActions.resetWillBeMovedLockerItem(),
+                                                LockerActions.setLockerGlobalMode({ lockerMode: 'normal' }),
+                                                showToast({
+                                                    text: `${curLockerItem.user_locker.user.name}님의 자리가 [락커 ${movedLockerItem.name}]으로 이동되었습니다.`,
+                                                }),
+                                            ]
+                                        })
+                                    )
+                                )
+                            )
+                    ),
+                    catchError((err: string) => of(LockerActions.error({ error: err })))
+                )
+            )
+        )
+    )
 }

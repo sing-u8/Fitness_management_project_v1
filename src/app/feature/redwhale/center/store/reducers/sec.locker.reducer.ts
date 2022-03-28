@@ -141,9 +141,16 @@ export const lockerReducer = createImmerReducer(
         state.curLockerItem = lockerItem
         return state
     }),
+
     on(LockerActions.finishRefundLockerTicket, (state, { lockerItem, lockerItems }) => {
         state.curLockerItemList = lockerItems
         state.curLockerItem = lockerItem
+        return state
+    }),
+
+    on(LockerActions.finishMoveLockerTicket, (state, { movedLockerItem, lockerItems }) => {
+        state.curLockerItemList = lockerItems
+        state.curLockerItem = movedLockerItem
         return state
     }),
     // sync

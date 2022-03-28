@@ -88,7 +88,7 @@ export class CenterUsersLockerService {
     ): Observable<Response> {
         const url = this.SERVER + `/${centerId}/users/${userId}/locker/${lockerId}/start`
 
-        return this.http.put<Response>(url, reqBody, this.options).pipe(
+        return this.http.post<Response>(url, reqBody, this.options).pipe(
             map((res) => {
                 return res.dataset[0]
             }),
@@ -101,7 +101,7 @@ export class CenterUsersLockerService {
         const url = this.SERVER + `/${centerId}/users/${userId}/locker/${lockerId}/stop`
         const reqBody = {}
 
-        return this.http.put<Response>(url, reqBody, this.options).pipe(
+        return this.http.post<Response>(url, reqBody, this.options).pipe(
             map((res) => {
                 return res
             }),
@@ -118,7 +118,7 @@ export class CenterUsersLockerService {
     ): Observable<Response> {
         const url = this.SERVER + `/${centerId}/users/${userId}/locker/${lockerId}/pause`
 
-        return this.http.put<Response>(url, reqBody, this.options).pipe(
+        return this.http.post<Response>(url, reqBody, this.options).pipe(
             map((res) => {
                 return res
             }),
@@ -131,7 +131,7 @@ export class CenterUsersLockerService {
         const url = this.SERVER + `/${centerId}/users/${userId}/locker/${lockerId}/resume`
         const reqBody = {}
 
-        return this.http.put<Response>(url, reqBody, this.options).pipe(
+        return this.http.post<Response>(url, reqBody, this.options).pipe(
             map((res) => {
                 return res
             }),

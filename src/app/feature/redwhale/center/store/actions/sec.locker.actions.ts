@@ -11,6 +11,7 @@ import {
     ExpireLockerTicketReqBody,
     RefundLockerTicketReqBody,
     CreateLockerTicketUnpaidReqBody,
+    StartLockerTicketReqBody,
 } from '@services/center-users-locker.service.service'
 
 const FeatureKey = 'Center/Locker'
@@ -129,6 +130,14 @@ export const finishRefundLockerTicket = createAction(
     props<{ lockerItems: LockerItem[]; lockerItem: LockerItem }>()
 )
 
+export const startMoveLockerTicket = createAction(
+    `[${FeatureKey}] Start Move Locker Ticket`,
+    props<{ centerId: string; userId: string; lockerTicketId: string; startLockerReqBody: StartLockerTicketReqBody }>()
+)
+export const finishMoveLockerTicket = createAction(
+    `[${FeatureKey}] Finish Refund Locker Ticket`,
+    props<{ lockerItems: LockerItem[]; movedLockerItem: LockerItem }>()
+)
 // -------------------------------------------------------------------------------------------------------------- //
 // cur Locker Categ
 export const setCurLockerCateg = createAction(
