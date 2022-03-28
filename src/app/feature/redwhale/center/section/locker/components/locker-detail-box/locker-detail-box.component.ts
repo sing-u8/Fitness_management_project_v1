@@ -5,13 +5,19 @@ import _ from 'lodash'
 import dayjs from 'dayjs'
 
 import { StorageService } from '@services/storage.service'
-import { CenterUsersLockerService } from '@services/center-users-locker.service.service'
+import {
+    CenterUsersLockerService,
+    CreateLockerTicketReqBody,
+    CreateLockerTicketUnpaidReqBody,
+} from '@services/center-users-locker.service.service'
 
 // schema
 import { CenterUser } from '@schemas/center-user'
 import { LockerItem } from '@schemas/locker-item'
 import { Center } from '@schemas/center'
 import { LockerCategory } from '@schemas/locker-category'
+
+import { LockerChargeType } from '../../components/locker-charge-modal/locker-charge-modal.component'
 
 // ngrx
 import { Store, select } from '@ngrx/store'
@@ -78,6 +84,7 @@ export class LockerDetailBoxComponent implements OnInit, OnChanges, OnDestroy {
     ) {}
 
     ngOnInit(): void {
+        this.center = this.storageService.getCenter()
         this.nxStore.pipe(select(LockerSelector.LockerGlobalMode), takeUntil(this.unsubscriber$)).subscribe((lgm) => {
             this.lockerGlobalMode = lgm
         })
@@ -227,7 +234,7 @@ export class LockerDetailBoxComponent implements OnInit, OnChanges, OnDestroy {
     toggleDoDatePickerShow() {
         if (this.lockerItem.state_code == 'locker_item_state_empty' || this.dateEditMode == true) {
             this.doDatePickerShow = !this.doDatePickerShow
-        } else if (this.lockerItem.state_code == 'locker_item_state_use') {
+        } else if (this.lockerItem.state_code == 'locker_item_state_in_use') {
             this.initChangeDateText()
             this.toggleShowChangeDateModal()
         }
@@ -349,51 +356,75 @@ export class LockerDetailBoxComponent implements OnInit, OnChanges, OnDestroy {
         this.lockerDateDiff = dayjs(this.lockerDate.endDate).diff(dayjs(this.lockerDate.startDate), 'day') + 1
     }
 
-    // // #buttonBox1 method
-    // getLockerItem() {
-    //     this.gymLockerState.getItemList(this.center.id, this.curLockerCateg.id, (itemList) => {
-    //         console.log('changed lockeritem in locker detail box: ')
-    //         this.gymLockerState.setLockerItem(_.find(itemList, (item) => item.id == this.lockerItem.id))
-    //     })
-    // }
-
-    registerMember(modalReturn) {
-        //     const reqBody: CreateLockerTicketRequestBody = {
-        //         locker_item_id: Number(this.lockerItem.id),
-        //         start_date: this.lockerDate.startDate,
-        //         end_date: this.lockerDate.endDate,
-        //         pay_card: modalReturn.pay_card,
-        //         pay_cash: modalReturn.pay_cash,
-        //         pay_trans: modalReturn.pay_trans,
-        //         unpaid: modalReturn.unpaid,
-        //         pay_date: modalReturn.pay_date,
-        //         assignee_id: modalReturn.assignee_id,
-        //     }
-        //     this.closeShowChargeModal()
-        //     console.log('registerMember reqBody: ', reqBody)
-        //     this.gymUserLockerTicketService
-        //         .createLockerTicket(this.center.id, this.willRegisteredMember.id, reqBody)
-        //         .subscribe((lockerTicket) => {
-        //             this.getLockerItem()
-        //             this.willRegisteredMember = undefined
-        //             this.globalService.showToast(`[락커 ${this.lockerItem.name}]에 회원이 등록되었습니다.`)
-        //             console.log(this.gymLockerState.lockerItem)
-        //             // this.gymLockerState.setLockerItemInList(this.gymLockerState.lockerItem) // 나중에 필요하면 수정해서 교체하기
-        //         })
+    // !! 추가 수정 필요 03/25
+    registerMember(modalReturn: LockerChargeType) {
+        const createLockerTicketReqBody: CreateLockerTicketReqBody = {
+            locker_item_id: this.lockerItem.id,
+            start_date: this.lockerDate.startDate,
+            end_date: this.lockerDate.endDate,
+            payment: {
+                card: modalReturn.pay_card,
+                trans: modalReturn.pay_trans,
+                vbank: 0,
+                phone: 0,
+                cash: modalReturn.pay_cash,
+            },
+        }
+        const createLockerTicketUnpaidReqBody: CreateLockerTicketUnpaidReqBody = {
+            amount: modalReturn.unpaid,
+        }
+        this.nxStore.dispatch(
+            LockerActions.startCreateLockerTicket({
+                centerId: this.center.id,
+                registerMemberId: this.willRegisteredMember.id,
+                createLockerTicketReqBody,
+                createLockerTicketUnpaidReqBody,
+            })
+        )
+        this.closeShowChargeModal()
+        this.willRegisteredMember = undefined
+        // this.nxStore.dispatch(showToast({ text: `[락커 ${this.lockerItem.name}]에 회원이 등록되었습니다.` }))
     }
 
     resetRegisterBox() {
-        //     this.willRegisteredMember = undefined
-        //     this.resetLockerDate()
-        //     this.globalService.showToast(`[락커 ${this.lockerItem.name}] 입력중인 정보가 초기화되었습니다.`)
+        this.willRegisteredMember = undefined
+        this.resetLockerDate()
+        this.nxStore.dispatch(showToast({ text: `[락커 ${this.lockerItem.name}]입력중인 정보가 초기화되었습니다.` }))
     }
 
     // // buttonBox2 method
     emptyLocker(_refund: string) {
-        //     let refundPrice = 0
-        //     if (_refund) {
-        //         refundPrice = Number(_refund)
-        //     }
+        let refundPrice = '0'
+        if (Number(_refund) > 0) {
+            refundPrice = _refund
+            this.nxStore.dispatch(
+                LockerActions.startRefundLockerTicket({
+                    centerId: this.center.id,
+                    userId: this.lockerItem.user_locker.user.id,
+                    lockerTicketId: this.lockerItem.user_locker.id,
+                    reqBody: {
+                        amount: refundPrice,
+                    },
+                })
+            )
+        } else {
+            // this.nxStore.dispatch(
+            //     LockerActions.startExpireLockerTicket({
+            //         centerId: this.center.id,
+            //         userId: this.lockerItem.user_locker.user.id,
+            //         lockerTicketId: this.lockerItem.user_locker.id,
+            //         reqBody: {
+            //             payment: {
+            //                 card: 0,
+            //                 trans: 0,
+            //                 vbank: 0,
+            //                 phone: 0,
+            //                 cash: 0,
+            //             },
+            //         },
+            //     })
+            // )
+        }
         //     this.gymUserLockerTicketService
         //         .finishLockerTicket(
         //             this.center.id,

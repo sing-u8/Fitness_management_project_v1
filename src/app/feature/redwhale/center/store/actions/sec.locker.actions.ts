@@ -6,6 +6,12 @@ import { LockerCategory } from '@schemas/locker-category'
 import { LockerItem } from '@schemas/locker-item'
 
 import { CreateItemRequestBody, UpdateItemRequestBody } from '@services/center-locker.service'
+import {
+    CreateLockerTicketReqBody,
+    ExpireLockerTicketReqBody,
+    RefundLockerTicketReqBody,
+    CreateLockerTicketUnpaidReqBody,
+} from '@services/center-users-locker.service.service'
 
 const FeatureKey = 'Center/Locker'
 
@@ -90,6 +96,38 @@ export const finishDeleteLockerItem = createAction(`[${FeatureKey}] finish Delet
 //     `[${FeatureKey}] Start Stop Locker item`,
 //     props<{ centerId: string; categoryId: string; itemId: string; itemName: string }>()
 // )
+// locker ticket 락커 이용권
+export const startCreateLockerTicket = createAction(
+    `[${FeatureKey}] Start Create Locker Ticket`,
+    props<{
+        centerId: string
+        registerMemberId: string
+        createLockerTicketReqBody: CreateLockerTicketReqBody
+        createLockerTicketUnpaidReqBody: CreateLockerTicketUnpaidReqBody
+    }>()
+)
+export const finishCreateLockerTicket = createAction(
+    `[${FeatureKey}] finish Create Locker Ticket`,
+    props<{ lockerItems: LockerItem[]; lockerItem: LockerItem }>()
+)
+
+export const startExpireLockerTicket = createAction(
+    `[${FeatureKey}] Start Expire Locker Ticket`,
+    props<{ centerId: string; userId: string; lockerTicketId: string; reqBody: ExpireLockerTicketReqBody }>()
+)
+export const finishExpireLockerTicket = createAction(
+    `[${FeatureKey}] Finish Expire Locker Ticket`,
+    props<{ lockerItems: LockerItem[]; lockerItem: LockerItem }>()
+)
+
+export const startRefundLockerTicket = createAction(
+    `[${FeatureKey}] Start Refund Locker Ticket`,
+    props<{ centerId: string; userId: string; lockerTicketId: string; reqBody: RefundLockerTicketReqBody }>()
+)
+export const finishRefundLockerTicket = createAction(
+    `[${FeatureKey}] Finish Refund Locker Ticket`,
+    props<{ lockerItems: LockerItem[]; lockerItem: LockerItem }>()
+)
 
 // -------------------------------------------------------------------------------------------------------------- //
 // cur Locker Categ

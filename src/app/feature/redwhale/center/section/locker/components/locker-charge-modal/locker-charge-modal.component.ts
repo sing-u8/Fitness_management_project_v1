@@ -20,6 +20,15 @@ import { User } from '@schemas/user'
 import { CenterUser } from '@schemas/center-user'
 import { Center } from '@schemas/center'
 
+export interface LockerChargeType {
+    pay_card: number
+    pay_cash: number
+    pay_trans: number
+    unpaid: number
+    pay_date: string
+    assignee_id: string
+}
+
 @Component({
     selector: 'rw-locker-charge-modal',
     templateUrl: './locker-charge-modal.component.html',
@@ -34,7 +43,7 @@ export class LockerChargeModalComponent implements OnChanges, AfterViewChecked {
 
     @Output() visibleChange = new EventEmitter<boolean>()
     @Output() cancel = new EventEmitter<any>()
-    @Output() confirm = new EventEmitter<any>()
+    @Output() confirm = new EventEmitter<LockerChargeType>()
 
     changed: boolean
 
@@ -60,20 +69,18 @@ export class LockerChargeModalComponent implements OnChanges, AfterViewChecked {
         this.paid_date = dayjs().format('YYYY.MM.DD')
         this.center = this.storageService.getCenter()
         this.user = this.storageService.getUser()
-        this.centerUsersService
-            .getUserList(this.center.id, '', 'administrator, manager, staff')
-            .subscribe((managers) => {
-                this.staffList = managers
-                managers.forEach((v) => {
-                    this.staffSelect_list.push({
-                        name: v.center_user_name ?? v.name,
-                        value: v,
-                    })
-                    this.user.id == v.id
-                        ? (this.lockerStaffSelectValue = { name: v.center_user_name ?? v.name, value: v })
-                        : null
+        this.centerUsersService.getUserList(this.center.id, '', 'owner').subscribe((managers) => {
+            this.staffList = managers
+            managers.forEach((v) => {
+                this.staffSelect_list.push({
+                    name: v.center_user_name ?? v.name,
+                    value: v,
                 })
+                this.user.id == v.id
+                    ? (this.lockerStaffSelectValue = { name: v.center_user_name ?? v.name, value: v })
+                    : null
             })
+        })
     }
 
     ngOnChanges(changes: SimpleChanges) {

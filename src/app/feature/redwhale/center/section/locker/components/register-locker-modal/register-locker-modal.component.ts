@@ -61,11 +61,9 @@ export class RegisterLockerModalComponent implements AfterViewChecked, OnChanges
 
     ngAfterViewInit(): void {
         this.center = this.storageService.getCenter()
-        this.centerUsersService
-            .getUserList(this.center.id, '', 'manager, staff, member', '')
-            .subscribe((memberList) => {
-                this.centerUsers = memberList.reverse()
-            })
+        this.centerUsersService.getUserList(this.center.id, '', '', '').subscribe((memberList) => {
+            this.centerUsers = memberList.reverse()
+        })
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -119,7 +117,7 @@ export class RegisterLockerModalComponent implements AfterViewChecked, OnChanges
             return control.valueChanges.pipe(
                 distinctUntilChanged(),
                 debounceTime(500),
-                switchMap((v) => this.centerUsersService.getUserList(this.center.id, v, 'manager, staff, member')),
+                switchMap((v) => this.centerUsersService.getUserList(this.center.id, v, '')),
                 map((memberList) => {
                     this.centerUsers = memberList.reverse()
                     return null

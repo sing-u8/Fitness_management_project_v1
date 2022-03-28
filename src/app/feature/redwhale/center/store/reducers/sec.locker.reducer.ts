@@ -82,7 +82,6 @@ export const lockerReducer = createImmerReducer(
     on(LockerActions.finishUpdateLockerCategory, (state) => {
         return state
     }),
-    // 아직 미구현 ----------------------------
     // -- // locker item
     on(LockerActions.finishGetLockerItemList, (state, { lockerItems }) => {
         state.curLockerItemList = lockerItems
@@ -136,6 +135,12 @@ export const lockerReducer = createImmerReducer(
 
     // ---------------------------- 아직 미구현
 
+    // - // locker ticket
+    on(LockerActions.finishCreateLockerTicket, (state, { lockerItems, lockerItem }) => {
+        state.curLockerItemList = lockerItems
+        state.curLockerItem = lockerItem
+        return state
+    }),
     // sync
     // - // cur Locker Categ
     on(LockerActions.setCurLockerCateg, (state, { lockerCateg }) => {
