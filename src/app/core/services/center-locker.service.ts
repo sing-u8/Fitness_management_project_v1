@@ -160,7 +160,7 @@ export class CenterLockerService {
         )
     }
 
-    getItemHistory(centerId: string, categoryId: string, itemId: string): Observable<LockerItemHistory> {
+    getItemHistories(centerId: string, categoryId: string, itemId: string): Observable<LockerItemHistory[]> {
         const url = this.SERVER + `/${centerId}/locker/${categoryId}/item/${itemId}/history`
 
         const options = {
@@ -171,7 +171,7 @@ export class CenterLockerService {
 
         return this.http.get<Response>(url, options).pipe(
             map((res) => {
-                return res.dataset[0]
+                return res.dataset
             }),
             catchError(handleError)
         )

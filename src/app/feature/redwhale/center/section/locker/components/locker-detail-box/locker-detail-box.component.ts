@@ -10,12 +10,14 @@ import {
     CreateLockerTicketReqBody,
     CreateLockerTicketUnpaidReqBody,
 } from '@services/center-users-locker.service.service'
+import { CenterLockerService } from '@services/center-locker.service'
 
 // schema
 import { CenterUser } from '@schemas/center-user'
 import { LockerItem } from '@schemas/locker-item'
 import { Center } from '@schemas/center'
 import { LockerCategory } from '@schemas/locker-category'
+import { LockerItemHistory } from '@schemas/locker-item-history'
 
 import { LockerChargeType } from '../../components/locker-charge-modal/locker-charge-modal.component'
 
@@ -59,7 +61,7 @@ export class LockerDetailBoxComponent implements OnInit, OnChanges, OnDestroy {
     public lockerDate: { startDate: string; endDate: string } = { startDate: '', endDate: '' }
     public lockerDateDiff: number = undefined
 
-    public lockerHistoryList: Array<any> = [] // !! locker history type
+    public lockerHistoryList: Array<LockerItemHistory> = []
 
     public dateRemain: number = undefined
 
@@ -80,10 +82,9 @@ export class LockerDetailBoxComponent implements OnInit, OnChanges, OnDestroy {
     constructor(
         private storageService: StorageService,
         private centerUserLockerService: CenterUsersLockerService,
+        private centerLockerService: CenterLockerService,
         private nxStore: Store
-    ) {}
-
-    ngOnInit(): void {
+    ) {
         this.center = this.storageService.getCenter()
         this.nxStore.pipe(select(LockerSelector.LockerGlobalMode), takeUntil(this.unsubscriber$)).subscribe((lgm) => {
             this.lockerGlobalMode = lgm
@@ -92,6 +93,8 @@ export class LockerDetailBoxComponent implements OnInit, OnChanges, OnDestroy {
             this.curLockerCateg = clc
         })
     }
+
+    ngOnInit(): void {}
     ngOnChanges(): void {
         this.initLockerDateReamin()
         this.initLockerDate()
@@ -112,13 +115,12 @@ export class LockerDetailBoxComponent implements OnInit, OnChanges, OnDestroy {
     }
     // locker history method
     getLockerHistory() {
-        // console.log('categ id: ', this.center.id, this.curLockerCateg.id, this.lockerItem.id)
-        // this.gymLockerService
-        //     .getLockerHistory(this.center.id, this.curLockerCateg.id, this.lockerItem.id)
-        //     .subscribe((histories) => {
-        //         this.lockerHistoryList = histories
-        //         console.log('this.lockerHistoryList: ', this.lockerHistoryList)
-        //     })
+        this.centerLockerService
+            .getItemHistories(this.center.id, this.curLockerCateg.id, this.lockerItem.id)
+            .subscribe((histories) => {
+                console.log('getLockerHistory : ', histories)
+                // this.lockerHistoryList = histories
+            })
     }
     //
     initChangeDateText() {
@@ -262,15 +264,10 @@ export class LockerDetailBoxComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     // 결제 가격 수정되는 방식에 따라 수정 필요!  결제 담당자 에러 때문에  주석 처리 ; 나중에 수정되면 수정하기!
-    changeDate(modalReturn: {
-        pay_card: number
-        pay_cash: number
-        pay_trans: number
-        unpaid: number
-        pay_date: string
-        assignee_id: string
-    }) {
+    changeDate(modalReturn: LockerChargeType) {
         // !! API가 달라져서 수정 필요
+        // const changeDataReqBody = {
+        // }
         // console.log('modalReturn: ' + modalReturn)
         // const reqBody: ModifyLockerTicketRequestBody = {
         //     locker_item_id: Number(this.lockerItem.id),

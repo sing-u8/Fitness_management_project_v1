@@ -131,9 +131,18 @@ export class LockerComponent implements OnInit, AfterViewInit, OnDestroy {
             .pipe(select(LockerSelector.curLockerItemList), takeUntil(this.unSubscriber$))
             .subscribe((curLockerItemList) => {
                 this.curLockerItemList = _.cloneDeep(curLockerItemList)
+                // console.log(
+                //     'curlockeritemlist difference: ',
+                //     _.differenceWith(curLockerItemList, this.curLockerItemList, _.isEqual)
+                // )
+                // if (this.curLockerItemList.length == 0) {
+                //     this.curLockerItemList = _.cloneDeep(curLockerItemList)
+                // } else {
+                //     const diffItem = _.differenceWith(curLockerItemList, this.curLockerItemList, _.isEqual)[0]
+                //     const diffIndex = _.findIndex(this.curLockerItemList, (item) => item.name == diffItem.name)
+                //     this.curLockerItemList[diffIndex] = diffItem
+                // }
                 this.lockerItemCountInput.setValue(String(this.getMaximumLockerId(curLockerItemList) + 1))
-
-                console.log('curLockerItemList,  testLockerItemList : ', this.curLockerItemList)
             })
         this.nxStore.pipe(select(LockerSelector.LockerGlobalMode), takeUntil(this.unSubscriber$)).subscribe((lgm) => {
             this.LockerGlobalMode = lgm

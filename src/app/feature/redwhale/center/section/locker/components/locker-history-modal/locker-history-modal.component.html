@@ -26,13 +26,13 @@
             <div class="card-left">
               <p class="rw-typo-subtext2 index">{{historyList.length - i}}</p>
               <rw-avatar
-                [image]="item.picture"
-                [text]="item.user_name"
+                [image]="item.user.picture"
+                [text]="item.user.name"
                 size="37"
                 fontSize="12"
               ></rw-avatar>
               <div class="left-texts">
-                <p class="rw-typo-bodytext0-bold">{{item.user_name}}</p>
+                <p class="rw-typo-bodytext0-bold">{{item.user.name}}</p>
                 <p *ngIf="item.end_date" class="rw-typo-subtext2">
                   {{item.start_date | dashToDot}} - {{item.end_date | dashToDot}}
                 </p>

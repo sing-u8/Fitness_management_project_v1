@@ -11,6 +11,9 @@ import {
     ViewChild,
 } from '@angular/core'
 
+// schema
+import { LockerItemHistory } from '@schemas/locker-item-history'
+
 @Component({
     selector: 'rw-locker-history-modal',
     templateUrl: './locker-history-modal.component.html',
@@ -18,7 +21,7 @@ import {
 })
 export class LockerHistoryModalComponent implements AfterViewChecked, OnChanges {
     @Input() visible: boolean
-    @Input() historyList: Array<any>
+    @Input() historyList: Array<LockerItemHistory>
     @Input() lockerName: string
 
     @ViewChild('modalBackgroundElement') modalBackgroundElement
