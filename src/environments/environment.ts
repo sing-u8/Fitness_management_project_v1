@@ -1,5 +1,5 @@
 export const environment = {
-    production: true,
+    production: false,
     protocol: 'https://',
     subDomain: 'dev.',
     domain: 'redwhale.xyz',

@@ -46,7 +46,6 @@ export class NavComponent implements OnInit, OnDestroy {
             .subscribe((centerData) => {
                 this.centerApiData = centerData
                 this.isLoading = true
-                console.log('rw-centerNav centerApiData: ', this.centerApiData)
             })
 
         this.centerChangedSubscription = this.globalService
