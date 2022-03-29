@@ -23,8 +23,8 @@ export class CreateGymComponent implements OnInit {
 
     public centerCreationAvailable: boolean
 
-    public photoSrc: { center_picture: string; center_background: string }
-    public photoName: { center_picture: string; center_background: string }
+    public photoSrc: { file_type_center_picture: string; file_type_center_background: string }
+    public photoName: { file_type_center_picture: string; file_type_center_background: string }
 
     private apiCreateFileReq: { picture?: string; background?: string }
     private localPhotoFiles: { center_picture: FileList; center_background: FileList }
@@ -52,8 +52,8 @@ export class CreateGymComponent implements OnInit {
 
         this.centerCreationAvailable = false
 
-        this.photoSrc = { center_picture: '', center_background: '' }
-        this.photoName = { center_picture: '', center_background: '' }
+        this.photoSrc = { file_type_center_picture: '', file_type_center_background: '' }
+        this.photoName = { file_type_center_picture: '', file_type_center_background: '' }
 
         this.apiCreateFileReq = { picture: undefined, background: undefined }
         this.localPhotoFiles = { center_picture: undefined, center_background: undefined }
@@ -92,7 +92,9 @@ export class CreateGymComponent implements OnInit {
             this.photoSrc[photoType] = e.target.result as string
             this.photoName[photoType] = photoFile[0].name
 
-            console.log('photoSrc , photoName : ', this.photoSrc, ' - ', this.photoName)
+            console.log('onChangeFile --------------')
+            console.log('photoSrc -- ', this.photoSrc)
+            console.log('photoName -- ', this.photoName)
         }
         fileReader.readAsDataURL(photoFile[0])
     }

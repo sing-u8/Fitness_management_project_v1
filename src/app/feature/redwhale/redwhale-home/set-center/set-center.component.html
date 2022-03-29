@@ -27,7 +27,7 @@
                 <p class="rw-typo-subtext2 ">미리보기</p>
                 <div class="item-container">
                   <center-preview-item centerName={{centerNameForm.value}} centerAddress={{centerAddrForm.value}}
-                    centerAvatar={{photoSrc.center_picture}} centerBackgroundImage={{photoSrc.center_background}}>
+                    centerAvatar={{photoSrc.file_type_center_picture}} centerBackgroundImage={{photoSrc.file_type_center_background}}>
                   </center-preview-item>
                 </div>
               </div>
@@ -74,7 +74,7 @@
                 <div class="setting-picture-container picture-container-mb-1">
                   <p class="rw-typo-subtext2">센터 프로필 사진</p>
                   <div class="d-flex align-items-center">
-                    <p class="rw-typo-bodytext1 picture-name">{{photoName.center_picture}}</p>
+                    <p class="rw-typo-bodytext1 picture-name">{{photoName.file_type_center_picture}}</p>
                     <div (click)="centerProfile.click()" *ngIf="isCenterProfileRegistered == false "
                       class="cg-typo-subtext register-button" rw-button rwButtonColor="var(--darkgrey)">
                       <span class="mdi mdi-plus"></span>
@@ -94,7 +94,7 @@
                 <div class="setting-picture-container picture-container-mb-2">
                   <p class="rw-typo-subtext2">센터 배경 사진</p>
                   <div class="d-flex align-items-center">
-                    <p class="rw-typo-bodytext1 picture-name">{{photoName.center_background}}</p>
+                    <p class="rw-typo-bodytext1 picture-name">{{photoName.file_type_center_background}}</p>
                     <div (click)="centerBackground.click()" *ngIf="isCenterBackgroundRegistered == false "
                       rw-button rwButtonColor="var(--darkgrey)"
                       class="cg-typo-subtext register-button"

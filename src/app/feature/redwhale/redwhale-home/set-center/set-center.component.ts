@@ -30,8 +30,8 @@ export class SetCenterComponent implements OnInit {
 
     public centerCreationAvailable: boolean
 
-    public photoSrc: { center_picture: string; center_background: string }
-    public photoName: { center_picture: string; center_background: string }
+    public photoSrc: { file_type_center_picture: string; file_type_center_background: string }
+    public photoName: { file_type_center_picture: string; file_type_center_background: string }
 
     private localPhotoFiles: { center_picture: FileList; center_background: FileList }
 
@@ -60,8 +60,8 @@ export class SetCenterComponent implements OnInit {
 
         this.centerCreationAvailable = false
 
-        this.photoSrc = { center_picture: '', center_background: '' }
-        this.photoName = { center_picture: '', center_background: '' }
+        this.photoSrc = { file_type_center_picture: '', file_type_center_background: '' }
+        this.photoName = { file_type_center_picture: '', file_type_center_background: '' }
 
         this.localPhotoFiles = { center_picture: undefined, center_background: undefined }
 
@@ -85,13 +85,13 @@ export class SetCenterComponent implements OnInit {
             .subscribe(([center, cp, cbg]) => {
                 this.center = center
                 if (center.background) {
-                    this.photoSrc.center_background = cbg[0]?.url ?? undefined
-                    this.photoName.center_background = cbg[0]?.originalname ?? undefined
+                    this.photoSrc.file_type_center_background = cbg[0]?.url ?? undefined
+                    this.photoName.file_type_center_background = cbg[0]?.originalname ?? undefined
                     this.isCenterBackgroundRegistered = true
                 }
                 if (center.picture) {
-                    this.photoSrc.center_picture = cp[0]?.url ?? undefined
-                    this.photoName.center_picture = cp[0]?.originalname ?? undefined
+                    this.photoSrc.file_type_center_picture = cp[0]?.url ?? undefined
+                    this.photoName.file_type_center_picture = cp[0]?.originalname ?? undefined
                     this.isCenterProfileRegistered = true
                 }
 
