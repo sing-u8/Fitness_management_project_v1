@@ -41,14 +41,15 @@ import { originalOrder } from '@helpers/pipe/keyvalue'
 
 // screen types
 type SelectedLessonObj = {
-    minutes: { value: FormControl; isOn: boolean }
-    people: { value: FormControl; isOn: boolean }
-    reservation_days: { value: FormControl; isOn: boolean }
-    reservation_deadline_time: { value: FormControl; isOn: boolean }
-    reservation_cancellation_time: { value: FormControl; isOn: boolean }
+    duration: { value: FormControl; isOn: boolean }
+    capacity: { value: FormControl; isOn: boolean }
+    start_booking_until: { value: FormControl; isOn: boolean }
+    end_booking_before: { value: FormControl; isOn: boolean }
+    cancel_booking_before: { value: FormControl; isOn: boolean }
     name: { value: FormControl; isOn: boolean }
 }
 type SelectedLessonType = keyof SelectedLessonObj
+type ButtinItems = keyof Omit<SelectedLessonObj, 'name'>
 
 @Component({
     selector: 'lesson',
@@ -73,11 +74,11 @@ export class LessonComponent implements OnInit, AfterViewInit, OnDestroy {
     public center: Center
 
     public selLessonInputObj: SelectedLessonObj = {
-        minutes: { value: this.fb.control('0'), isOn: false },
-        people: { value: this.fb.control('0'), isOn: false },
-        reservation_days: { value: this.fb.control('0'), isOn: false },
-        reservation_deadline_time: { value: this.fb.control('0'), isOn: false },
-        reservation_cancellation_time: { value: this.fb.control('0'), isOn: false },
+        duration: { value: this.fb.control('0'), isOn: false },
+        capacity: { value: this.fb.control('0'), isOn: false },
+        start_booking_until: { value: this.fb.control('0'), isOn: false },
+        end_booking_before: { value: this.fb.control('0'), isOn: false },
+        cancel_booking_before: { value: this.fb.control('0'), isOn: false },
         name: { value: this.fb.control(''), isOn: false },
     }
     public selLessonMemo: FormControl = this.fb.control('')
@@ -161,9 +162,9 @@ export class LessonComponent implements OnInit, AfterViewInit, OnDestroy {
                     }
                     this.lessonManagerSelectValue = {
                         name:
-                            this.selectedLesson.lessonData.instructor.center_user_name ||
-                            this.selectedLesson.lessonData.instructor.name,
-                        value: this.selectedLesson.lessonData.instructor,
+                            this.selectedLesson.lessonData.instructors[0].center_user_name ||
+                            this.selectedLesson.lessonData.instructors[0].name,
+                        value: this.selectedLesson.lessonData.instructors[0],
                     }
                     // !! 예약 가능한 회원권리스트 초기화 함수 추가하기
                     this.initAddReservableMembershipList(this.selectedLesson)
@@ -282,31 +283,31 @@ export class LessonComponent implements OnInit, AfterViewInit, OnDestroy {
         }
     }
 
-    public btItems = {
-        minutes: {
+    public btItems: Record<ButtinItems, { title: string; suffix: string; property: string }> = {
+        duration: {
             title: '수업 진행 시간',
             suffix: '분',
-            property: 'minutes',
+            property: 'duration',
         },
-        people: {
+        capacity: {
             title: '정원',
             suffix: '명',
-            property: 'people',
+            property: 'capacity',
         },
-        reservation_start: {
+        start_booking_until: {
             title: '예약 가능 날짜',
             suffix: '일 전부터',
-            property: 'reservation_days',
+            property: 'start_booking_until',
         },
-        reservation_end: {
+        end_booking_before: {
             title: '예약 마감 시간',
             suffix: '시간 전까지',
-            property: 'reservation_deadline_time',
+            property: 'end_booking_before',
         },
-        reservation_cancel_end: {
+        cancel_booking_before: {
             title: '예약 취소 마감 시간',
             suffix: '시간 전까지',
-            property: 'reservation_cancellation_time',
+            property: 'cancel_booking_before',
         },
     }
     kvOriginOrder = kvPipe.originalOrder

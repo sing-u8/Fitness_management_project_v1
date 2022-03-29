@@ -1,0 +1,24 @@
+<div class="rw-select user-select-none" #selectElement>
+  <div
+      class="selected rw-typo-bodytext1 d-flex justify-content-center align-items-center"
+      [class.open]="isOpen"
+      [class.disabled]="disabled !== false"
+      #selectedElement
+      (click)="toggle()"
+      (rwClickOutside)="close()"
+  >
+      <span class="text flex-fill">{{ value?.name }}</span>
+      <span class="mdi mdi-chevron-down"></span>
+  </div>
+  <div class="items" #itemsElement (click)="$event.stopPropagation()">
+      <div
+          class="item d-flex align-items-center"
+          *ngFor="let item of items"
+          [class.active]="item.value == value?.value"
+          [class.disabled]="item.disabled"
+          (click)="onSelect(item)"
+      >
+          <span class="rw-typo-bodytext1">{{ item.name }}</span>
+      </div>
+  </div>
+</div>

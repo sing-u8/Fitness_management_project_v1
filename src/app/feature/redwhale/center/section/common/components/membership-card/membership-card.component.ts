@@ -1,10 +1,9 @@
 import { Component, OnInit, AfterViewInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core'
 
 import { MembershipItem } from '@schemas/membership-item'
-import { ClassItem } from '@schemas/class-item'
 
 // rxjs
-import { Observable, Subscription, Subject } from 'rxjs'
+import { Subscription, Subject } from 'rxjs'
 import { takeUntil } from 'rxjs/operators'
 
 // ngrx

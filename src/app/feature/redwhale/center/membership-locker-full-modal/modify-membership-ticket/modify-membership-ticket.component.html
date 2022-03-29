@@ -1,0 +1,114 @@
+<section class="register-membership-locker user-select-none thin-scroll-x-overlay thin-scroll-y">
+  <div class="header">
+    <div class="header-text-container">
+      <p class="rw-typo-headline1 membership-title">{{routerState?.ticket?.name}}</p>
+      <p class="rw-typo-headline2">회원권 정보를 수정해보세요.</p>
+    </div>
+
+    <div class="cg-typo-subtext close-button" rw-button rwButtonWidth="85" rwButtonHeight="40"
+      rwButtonBorderColor="var(--font-color)" (click)="backToDashboard()">
+      <span class="mdi mdi-close"></span>
+      <span>닫기</span>
+    </div>
+  </div>
+
+  <main>
+    <div class="main-inner-container">
+
+      <section class="membership-ticket-window">
+        <div class="rw-typo-title2 window-header">회원권</div>
+        <div class="membership-info">
+          <span class="rw-typo-subtext0-regular small-title">회원권 기본 정보</span>
+          <div class="membership-card">
+            <div  class="icon">
+              <img src="assets/icons/etc/ticket-white.svg">
+            </div>
+            <div class="card-text">
+              <span class="rw-typo-subtext0-regular" [style.color]="'var(--grey)'">{{routerState?.ticket?.category_name}}</span>
+              <span class="rw-typo-bodytext0-bold">{{routerState?.ticket?.name}}</span>
+            </div>
+          </div>
+
+        </div>
+        <div class="reservable-lessons">
+          <span class="rw-typo-subtext0-regular small-title">예약 가능한 수업</span>
+          <rw-lesson-selector
+            [(ngModel)] = "lessonItemList"
+          ></rw-lesson-selector>
+        </div>
+        <div class="datepick-container">
+
+          <div class="date-picker">
+            <span class="rw-typo-subtext0-regular small-title">시작일</span>
+            <div
+              class="date-pick-button"
+              rw-button rwButtonColor="var(--white)"
+              rwButtonFontColor="var(--font-color)"
+              (click) ="datepickFlag.start = !datepickFlag.start; datepickFlag.end = false ;$event.stopPropagation()"
+            >
+              {{date.startDate | dateFormat:'YYYY.MM.DD'}}
+            </div>
+            <rw-datepicker
+              *ngIf = "datepickFlag.start"
+              (rwClickOutside) = "datepickFlag.start = false; $event.stopPropagation()"
+              mode="reg-ml" [option]="'looseOnlyStart'" [data]="date" (dataChange) = "onDatePickRangeChange($event, 'start')"
+            ></rw-datepicker>
+          </div>
+
+          <div class="date-picker">
+            <span class="rw-typo-subtext0-regular small-title">만료일</span>
+            <div
+              class="date-pick-button"
+              rw-button rwButtonColor="var(--white)"
+              rwButtonFontColor="var(--font-color)"
+              (click) ="datepickFlag.end = !datepickFlag.end; datepickFlag.start=false; $event.stopPropagation()"
+            >
+              <span *ngIf="!date.endDate || datepickFlag.start; else showEndDate">만료일을 선택해주세요.</span>
+              <ng-template #showEndDate>
+                <span >{{date.endDate | dateFormat:'YYYY.MM.DD'}} ({{dayDiff}}일)</span>
+              </ng-template>
+
+            </div>
+            <rw-datepicker
+              *ngIf = "datepickFlag.end"
+              (rwClickOutside) = "(!isStartDateClicked && datepickFlag.end = false); $event.stopPropagation()"
+              mode="reg-ml" [option]="'looseOnlyEnd'" [data]="date" (dataChange) = "onDatePickRangeChange($event, 'end')"
+            ></rw-datepicker>
+          </div>
+
+        </div>
+        <div class="count-container">
+          <span class="rw-typo-subtext0-regular small-title">횟수</span>
+          <div class="count">
+            <div class="input-container">
+              <input type="text" placeholder="0" [(ngModel)]="count.count" (keyup)="onCountKeyup($event)" class="rw-input" [disabled]="count.infinite">
+              <div class="input-count" [class.disabled] = count.infinite>회</div>
+            </div>
+            <rw-checkbox [checked]="count.infinite" (click)="count.infinite = !count.infinite" text="무제한"></rw-checkbox>
+          </div>
+        </div>
+
+        <div class="delete-save-button">
+          <div
+            class="save-button"
+            rw-button rwButtonColor="var(--font-color)"
+            rwButtonFontColor="var(--white)"
+            [rwButtonDisabled] = '!date.startDate || !date.endDate || !isLessonSelected() || !checkCount()'
+            (click)= "saveMembershipTicket()"
+          >
+            저장
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+</section>
+
+
+<rw-modify-ticket-charge-modal
+  [(visible)] ="doShowCargeModal"
+  [type] = "'modify'"
+  (cancel)= "doShowCargeModal = false"
+  (confirm) = "modifyMembershipTicketData($event)"
+></rw-modify-ticket-charge-modal>

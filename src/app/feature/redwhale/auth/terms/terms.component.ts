@@ -53,7 +53,6 @@ export class TermsComponent implements OnInit, OnDestroy {
 
         this.isUserEmpty = this.storageService.isUserEmpty()
         this.isSocialUser = this.storageService.isSocialUser()
-        console.log('isSocialUser: ', this.isSocialUser)
 
         this.nxStore.pipe(select(registrationSelector), takeUntil(this.unSubscriber$)).subscribe((reg) => {
             this.termsEULA = reg.service_terms

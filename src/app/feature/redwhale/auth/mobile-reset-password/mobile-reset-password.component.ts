@@ -9,6 +9,10 @@ import { User } from '@schemas/user'
 import { TextFieldComponent } from './components/text-field/text-field.component'
 import { ButtonComponent, ClickEmitterType } from '@shared/components/common/button/button.component'
 
+// ngrx
+import { Store } from '@ngrx/store'
+import { showToast } from '@appStore/actions/toast.action'
+
 @Component({
     selector: 'rw-mobile-reset-password',
     templateUrl: './mobile-reset-password.component.html',
@@ -37,7 +41,8 @@ export class MobileResetPasswordComponent implements OnInit, OnDestroy {
         private renderer: Renderer2,
         private router: Router,
         private activatedRoute: ActivatedRoute,
-        private authService: AuthService
+        private authService: AuthService,
+        private nxStore: Store
     ) {
         this.passwordForm = new FormControl('', {
             validators: [this.inputValidator('password')],
@@ -146,7 +151,11 @@ export class MobileResetPasswordComponent implements OnInit, OnDestroy {
             },
             (e) => {
                 this.isTokenValid = false
-                this.showMrpToast(e.message)
+                if (e.code == 'FUNCTION_AUTH_008') {
+                    this.nxStore.dispatch(showToast({ text: '만료된 비밀번호 재설정 링크입니다.' }))
+                } else if (e.code == 'FUNCTION_AUTH_011') {
+                    this.nxStore.dispatch(showToast({ text: '유효하지 않은 토큰입니다.' }))
+                }
             }
         )
     }

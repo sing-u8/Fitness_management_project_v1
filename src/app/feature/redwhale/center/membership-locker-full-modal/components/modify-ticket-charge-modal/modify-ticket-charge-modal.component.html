@@ -1,0 +1,91 @@
+<div class="rw-modal-background" #modalBackgroundElement></div>
+
+<div
+  class="rw-modal-wrapper justify-content-center align-items-center"
+  (mouseup)="!isMouseModalDown && onCancel()"
+  (mousedown) = 'resetMouseModalDown()'
+  #modalWrapperElement
+>
+    <div
+      class="rw-modal user-select-none"
+      (mousedown) ='onMouseModalDown(); $event.stopPropagation()'
+    >
+      <div class="header">
+        <span class="rw-typo-bodytext0"> {{type == 'modify' ? '추가 결제 정보' : '결제 정보'}}</span>
+        <img src="assets/icons/etc/close.svg" (click)="onCancel()">
+      </div>
+
+
+      <div class="inputs">
+
+        <div class="selector-container">
+          <span class="rw-typo-subtext0-regular">결제 담당자</span>
+          <rw-modify-ticket-staff-select
+            [width] = "'235'"
+            [items] = "staffSelect_list"
+            [(ngModel)] = "lockerStaffSelectValue"
+          ></rw-modify-ticket-staff-select>
+        </div>
+
+        <div class="input-container">
+          <span class="rw-typo-subtext0-regular">현금</span>
+          <input
+            rw-input
+            placeholder="0"
+            [(ngModel)]="inputs.pay_cash"
+            (keyup) = "onInputKeyup($event, 'pay_cash')"
+          />
+          <div class="currency">￦</div>
+        </div>
+
+        <div class="input-container">
+          <span class="rw-typo-subtext0-regular">카드</span>
+          <input
+            rw-input
+            placeholder="0"
+            [(ngModel)]="inputs.pay_card"
+            (keyup) = "onInputKeyup($event, 'pay_card')"
+          />
+          <div class="currency">￦</div>
+        </div>
+
+        <div class="input-container">
+          <span class="rw-typo-subtext0-regular">계좌이체</span>
+          <input
+            rw-input
+            placeholder="0"
+            [(ngModel)]="inputs.pay_trans"
+            (keyup) = "onInputKeyup($event, 'pay_trans')"
+          />
+          <div class="currency">￦</div>
+        </div>
+
+        <div class="input-container">
+          <span class="rw-typo-subtext0-regular">미수금</span>
+          <input
+            rw-input
+            placeholder="0"
+            [(ngModel)]="inputs.unpaid"
+            (keyup) = "onInputKeyup($event, 'unpaid')"
+          />
+          <div class="currency">￦</div>
+        </div>
+
+      </div>
+
+      <div
+        class="rw-typo-title2 save-button"
+        rw-button
+        rwButtonColor="var(--red)"
+        rwButtonFontColor="var(--white)"
+        (click) ="onConfirm()"
+      >
+       ￦ {{total}} 저장하기
+      </div>
+
+      <div class="rw-typo-subtext0-regular  pay-day">
+        결제일 : {{paid_date}}
+      </div>
+
+    </div>
+</div>

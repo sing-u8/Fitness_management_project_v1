@@ -1,0 +1,170 @@
+<section class="register-membership-locker user-select-none thin-scroll-x-overlay thin-scroll-y">
+  <div class="header">
+    <div class="header-text-container">
+      <p class="rw-typo-headline1">{{user?.gym_user_name}}님의</p>
+      <p class="rw-typo-headline1">회원권과 락커를 등록해주세요.</p>
+    </div>
+
+    <div class="cg-typo-subtext close-button" rw-button rwButtonWidth="85" rwButtonHeight="40"
+      rwButtonBorderColor="var(--font-color)" (click)="backToDashboard()">
+      <span class="mdi mdi-close"></span>
+      <span>닫기</span>
+    </div>
+  </div>
+
+  <main>
+    <div class="main-inner-container">
+
+      <article class="membership-and-locker">
+
+        <ng-container #none_membership_locker *ngIf="itemList.length == 0; else presence_membership_locker">
+
+          <div class="empty-memberhip-card">
+            <div class="rw-typo-title2 title">회원권</div>
+            <div class="membership-content" (click) = "toggleMembershipListModal()">
+              <div class="card-icon">
+                <img src="assets/icons/etc/ticket-white.svg">
+              </div>
+              <div class="card-texts">
+                <div class="rw-typo-subtext0-regular top">회원권</div>
+                <div class="rw-typo-bodytext0 bottom">
+                  <span>등록하실 회원권을 선택해주세요.</span>
+                  <img src="assets/icons/etc/short_right_arrow_grey.svg">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="empty-locker-card">
+            <div class="rw-typo-title2 title">락커</div>
+            <div class="locker-content" (click) = "toggleLockerSelectModal()">
+              <div class="card-icon">
+                <img src="assets/icons/etc/locker-white.svg">
+              </div>
+              <div class="card-texts">
+                <div class="rw-typo-subtext0-regular top">락커</div>
+                <div class="rw-typo-bodytext0 bottom">
+                  <span>등록하실 락커를 선택해주세요.</span>
+                  <img src="assets/icons/etc/short_right_arrow_grey.svg">
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </ng-container>
+
+        <ng-template #presence_membership_locker>
+          <div class="presence-membership-locker">
+            <div class="membership-locker-buttons">
+              <div
+                class="add-membership-ticket-button"
+                rw-button rwButtonColor="var(--white)"
+                (click)="toggleMembershipListModal()"
+              >
+                <span class="rw-typo-title2">회원권 추가</span>
+                <img src="assets/icons/etc/plus.svg" >
+              </div>
+              <div
+                class="add-locker-button"
+                rw-button rwButtonColor="var(--white)"
+                (click)="toggleLockerSelectModal()"
+              >
+                <span class="rw-typo-title2">락커 추가</span>
+                <img src="assets/icons/etc/plus.svg" >
+              </div>
+            </div>
+
+            <div class="window-item" *ngFor="let item of itemList; let idx = index">
+              <ng-container class="window-item" *ngIf="item.type == 'membership'">
+                <rw-membership-ticket-window
+                  [membershipState] = item
+                  [index]="idx"
+                ></rw-membership-ticket-window>
+              </ng-container>
+              <ng-container class="window-item" *ngIf="item.type == 'locker'">
+                <rw-locker-window
+                  [lockerState]="item"
+                  [index]="idx"
+                ></rw-locker-window>
+              </ng-container>
+            </div>
+
+          </div>
+        </ng-template>
+
+
+      </article>
+      <aside class="pay-information-container">
+
+        <div class="pay-infomation-inner-container">
+
+          <div class="pay-information">
+
+            <div class="rw-typo-title2 title">결제 정보</div>
+
+            <div class="total-price">
+              <span class="rw-typo-subtext0-regular">총 결제 금액</span>
+              <span class="rw-typo-headline1">￦ {{totalPay | numberWithCommas}}</span>
+            </div>
+
+            <div class="input-list">
+
+              <div
+                *ngFor = "let item of totalPriceInput | keyvalue"
+                class="input-container"
+              >
+                <div class="rw-typo-subtext0-regular input-title">{{item.value.name}}</div>
+                <div class="input-inner-container">
+                  <input
+                    class="rw-input"
+                    type="text"
+                    placeholder="0"
+                    [(ngModel)]="item.value.price"
+                    (keypress) = "restrictToNumber($event)"
+                    (keyup) = "onInputKeyup($event, item.key)"
+                  >
+                  <div class="currency">￦</div>
+                </div>
+              </div>
+
+            </div>
+
+            <div class="rw-typo-subtext0-regular date-text">
+              결제일 : {{today}}
+            </div>
+
+          </div>
+
+          <div
+            *ngIf="itemList.length > 0"
+            class="rw-typo-title2 pay-button"
+            rw-button
+            rwButtonColor="var(--red)"
+            rwButtonFontColor="var(--white)"
+            [rwButtonDisabled] = "!samePrice || !allItemDone"
+            (click) = "samePrice && allItemDone && registerMembershipLocker()"
+          >
+            모두 저장하기
+          </div>
+
+        </div>
+
+      </aside>
+    </div>
+  </main>
+</section>
+
+
+
+
+<rw-lockerSelectModal
+  [(visible)] = "doShowLockerSelectModal"
+  (confirm) = "onLockerSelected($event)"
+  (cancel) = "closeLockerSelectModal()"
+></rw-lockerSelectModal>
+
+<rw-membershipTicketListModal
+  [(visible)] = "doShowMembershipListModal"
+  (confirm) = "onMembershipTicketSelected($event)"
+  (cancel) = "closeMembershipListModal()"
+></rw-membershipTicketListModal>

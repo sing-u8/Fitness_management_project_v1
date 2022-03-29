@@ -139,7 +139,8 @@ export class EmailComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     checkDigit(event) {
-        const code = event.which ? event.which : event.keyCode
+        console.log('email keycheck: ', event.keyCode, ' - ', event.which)
+        const code = event.keyCode
         if (code < 48 || code > 57) {
             return false
         } else {

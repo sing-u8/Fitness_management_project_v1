@@ -9,4 +9,7 @@ export class DashboardComponent implements OnInit {
     constructor() {}
 
     ngOnInit(): void {}
+
+    // dummy func
+    goToRegisterNewMember() {}
 }

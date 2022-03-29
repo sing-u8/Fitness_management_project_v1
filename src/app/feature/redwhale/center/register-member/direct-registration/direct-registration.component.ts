@@ -131,7 +131,7 @@ export class DirectRegistrationComponent implements OnInit, OnDestroy {
             //     }),
             //     catchError((e) => {
             //         console.log('e: ', e, this.registerForm)
-            //         return e.code == 'FUNCTION:AUTH:007' ? of({ isExisted: true }) : of({ isNonEmailForm: true })
+            //         return e.code == 'FUNCTION_AUTH_007' ? of({ isExisted: true }) : of({ isNonEmailForm: true })
             //     })
             // )
         }

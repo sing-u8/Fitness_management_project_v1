@@ -1,1 +1,59 @@
-<div class="dashboard"></div>
+<article class="member-management">
+    <header>
+        <div class="header-text">
+            <span class="header-text__title rw-typo-headline1">회원관리</span>
+            <span class="header-text__title-desc rw-typo-subtext1">한 화면에서 쉽고 간편하게 회원을 관리해보세요.</span>
+        </div>
+
+        <div class="register-member-button" rw-button rwButtonWidth="130" rwButtonHeight="43" rwButtonColor="var(--red)"
+            rwButtonFontColor="var(--white)" (click)="goToRegisterNewMember()">
+            신규 회원 등록
+        </div>
+    </header>
+
+    <main class="l-main thin-scroll-y">
+        <section class="l-entire-member">
+            <div class="entire-member__header">
+                <!-- <rw-user-list-select
+                    [items]="usersSelectCateg"
+                    [holdMode]="holdModeFlags.partial"
+                    [(ngModel)]="selectedUserList"
+                    (onTypeChange)="onSelectedUserListChange($event)"
+                ></rw-user-list-select>
+
+                <div
+                    class="holding-all-button"
+                    *ngIf="userLists[selectedUserList.key].length > 0
+                            && selectedUserList.key != 'expired'
+                            && selectedUserList.key != 'employee'"
+                    rw-button
+                    [rwButtonFontColor]="'var(--darkgrey)'"
+                    [rwButtonColor]="'var(--white)'"
+                    (click)="holdModeFlags.partial
+                            ? toggleHodlingMode()
+                            : toggleHoldDropDown()"
+                    (rwClickOutside)="closeHoldDropDown()"
+                >
+                    {{holdModeFlags.partial ? '일괄 홀딩 취소' : '일괄 홀딩' }}
+
+                    <div *ngIf="showHoldDropdown" class="hold-dropdown">
+                        <div
+                            class="rw-typo-subtext0 holding-button"
+                            (click)="toggleHodlingMode();closeHoldDropDown(); $event.stopPropagation()"
+                        >
+                            일부 회원 홀딩
+                        </div>
+                        <div
+                            class="rw-typo-subtext0 holding-button"
+                            (click)="openAllHoldModal();closeHoldDropDown(); $event.stopPropagation()"
+                        >
+                            전체 회원 홀딩
+                        </div>
+                    </div>
+                </div> -->
+            </div>
+        </section>
+        <section class="l-member-detail-left"></section>
+        <section class="l-member-detail-right"></section>
+    </main>
+</article>

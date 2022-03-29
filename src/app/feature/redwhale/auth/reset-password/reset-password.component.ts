@@ -165,8 +165,12 @@ export class ResetPasswordComponent implements OnInit {
             },
             error: (e) => {
                 this.isTokenValid = false
-                this.nxStore.dispatch(showToast({ text: e.message }))
-                this.router.navigate(['auth', 'email'])
+                if (e.code == 'FUNCTION_AUTH_008') {
+                    this.nxStore.dispatch(showToast({ text: '만료된 비밀번호 재설정 링크입니다.' }))
+                } else if (e.code == 'FUNCTION_AUTH_011') {
+                    this.nxStore.dispatch(showToast({ text: '유효하지 않은 토큰입니다.' }))
+                }
+                this.router.navigateByUrl('/auth/forgot-password')
             },
         })
     }
@@ -178,9 +182,9 @@ export class ResetPasswordComponent implements OnInit {
                 this.router.navigateByUrl('/redwhale-home')
             },
             error: (e) => {
-                if (e.code == 'FUNCTION:AUTH:008') {
+                if (e.code == 'FUNCTION_AUTH_008') {
                     this.nxStore.dispatch(showToast({ text: '만료된 비밀번호 재설정 링크입니다.' }))
-                } else if (e.code == 'FUNCTION:AUTH:011') {
+                } else if (e.code == 'FUNCTION_AUTH_011') {
                     this.nxStore.dispatch(showToast({ text: '유효하지 않은 토큰입니다.' }))
                 }
 

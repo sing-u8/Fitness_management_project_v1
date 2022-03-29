@@ -4,17 +4,17 @@ import { MembershipItem } from './membership-item'
 export interface ClassItem {
     id: string
     category_name: string
-    type_code: string
+    type_code: string // class_item_type_onetoone, class_item_type_group
     type_code_name: string
     name: string
-    minutes: number
-    people: number
-    instructor: CenterUser
+    duration: number
+    capacity: number
+    instructors: CenterUser[]
     color: string
     memo: string
-    reservation_days: number
-    reservation_deadline_time: number
-    reservation_cancellation_time: number
+    start_booking_until: number
+    end_booking_before: number
+    cancel_booking_before: number
     sequence_number: number
     membership_items: Array<MembershipItem>
 }

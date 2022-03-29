@@ -1,0 +1,27 @@
+<gridster-item
+  class="grid-locker-item user-select-none"
+  [class.is-using] = "lockerItem.status == 'use'"
+  [class.move-locker-ticket-X] = "lockerItem.status=='use' || lockerItem.status=='stop'"
+  [class.move-locker-ticket-O] = "lockerItem.status=='empty'"
+
+  [item]="lockerItem"
+  (click) = "onItemClick()"
+>
+  <div
+    class="grid-locker-item-inner-container"
+  >
+    <div
+      [class.show] = " (lockerItem.status=='use' || lockerItem.status=='stop')"
+      class="move-locker-ticket-unavailable-mark"
+    >
+      <div class="ur-dl"></div>
+      <div class="ul-dr"></div>
+    </div>
+
+    <div class="grid-locker-item-header">
+      <div class="locker-name rw-typo-bodytext2">
+        <span class="rw-typo-subtext3">{{lockerItem.name}}</span>
+      </div>
+    </div>
+  </div>
+</gridster-item>
