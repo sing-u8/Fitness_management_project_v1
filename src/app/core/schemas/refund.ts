@@ -1,11 +1,7 @@
-export interface Payment {
+export interface Refund {
     id: string
-    card: number
-    trans: number
-    vbank: number
-    phone: number
-    cash: number
     memo: string
+    amount: number
     created_by: string
     created_at: string
     updated_by: string

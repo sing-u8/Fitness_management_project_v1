@@ -4,5 +4,5 @@ export interface Calendar {
     type_code: string
     type_code_name: string
     name: string
-    owner: CenterUser
+    calendar_user: CenterUser
 }

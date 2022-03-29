@@ -1,9 +1,9 @@
 import { CodeItem } from './codeItem'
 
 export interface CodeCategory {
-    id: string
+    code: string
     text_ko: string
     text_en: string
     sequence_number: number
-    items: CodeItem
+    items: Array<CodeItem>
 }
