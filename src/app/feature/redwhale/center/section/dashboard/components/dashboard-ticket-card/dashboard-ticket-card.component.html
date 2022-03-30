@@ -1,0 +1,133 @@
+<section
+  #membership_ticket *ngIf="membershipTicket; else locker_ticket"
+  class="dashboard-ticket-card"
+  (click)="onMembershipTicketClick()"
+>
+  <div class="top">
+    <div class="dashboard-ticket-name">
+      <div
+        class="icon"
+        [class.use] = "membershipTicket.status == 'use'"
+        [class.hold] = "membershipTicket.status == 'holding'"
+        [class.finished] = "membershipTicket.status == 'expired'"
+      >
+        <img src="assets/icons/etc/ticket-white.svg">
+      </div>
+      <span class="rw-typo-bodytext0-bold">{{membershipTicket.name}}</span>
+    </div>
+    <div
+      class="status"
+      [class.use] = "membershipTicket.status == 'use'"
+      [class.hold] = "membershipTicket.status == 'holding'"
+      [class.finished] = "membershipTicket.status == 'expired'"
+    >
+      <span class="rw-typo-subtext0">{{membershipStatus}}</span>
+    </div>
+  </div>
+  <div *ngIf="membershipTicket.holding_reservation_days > 0" class="rw-typo-subtext0 middle">
+    <ng-container *ngIf="isSameHoldDate" >
+      {{membershipTicket.holding_reservation_days}}일 후 홀딩 예정 ({{membershipTicket.holding_start_date | dateFormat:'YYYY.MM.DD'}})
+    </ng-container>
+    <ng-container *ngIf="!isSameHoldDate">
+      {{membershipTicket.holding_reservation_days}}일 후 홀딩 예정 ({{membershipTicket.holding_start_date | dateFormat:'YYYY.MM.DD'}} - {{membershipTicket.holding_end_date | dateFormat:'YYYY.MM.DD'}})
+    </ng-container>
+
+  </div>
+  <div *ngIf="membershipTicket.status == 'holding'" class="rw-typo-subtext0 middle">
+    <ng-container *ngIf="isSameHoldDate"  >
+      1일간 홀딩 ({{membershipTicket.holding_start_date | dateFormat:'YYYY.MM.DD'}})
+    </ng-container>
+    <ng-container *ngIf="!isSameHoldDate">
+      {{membershipTicket.holding_remaining_days}}일간 홀딩 ({{membershipTicket.holding_start_date | dateFormat:'YYYY.MM.DD'}} - {{membershipTicket.holding_end_date | dateFormat:'YYYY.MM.DD'}})
+    </ng-container>
+  </div>
+  <div class="bottom">
+    <div class="date">
+      <div class="rw-typo-subtext0-regular small-title">기간</div>
+      <div class="rw-typo-bodytext2-regular">
+        {{membershipTicket.start_date | dateFormat:"YYYY.MM.DD"}} - {{membershipTicket.end_date | dateFormat:"YYYY.MM.DD"}} ({{date | dayDiff}}일)
+      </div>
+    </div>
+    <div class="count">
+      <div class="rw-typo-subtext0-regular small-title">잔여 기간 / 횟수</div>
+      <div *ngIf="!membershipTicket.infinity_yn" class="rw-typo-bodytext2-regular">
+        {{membershipTicket?.remaining_days < 0 ? 0 : membershipTicket?.remaining_days}}일 / {{membershipTicket.count}}회 남음
+      </div>
+      <div *ngIf="membershipTicket.infinity_yn" class="rw-typo-bodytext2-regular">
+        {{membershipTicket?.remaining_days < 0 ? 0 : membershipTicket?.remaining_days}}일 / 무제한 남음
+      </div>
+    </div>
+    <div class="pay">
+      <div class="rw-typo-subtext0-regular small-title">결제 금액</div>
+      <div class="rw-typo-bodytext2-regular">￦{{membershipTicket.price | numberWithCommas}}</div>
+    </div>
+  </div>
+</section>
+
+
+
+<ng-template #locker_ticket >
+  <section class="dashboard-ticket-card" (click)="onLockerTicketClick()">
+    <div class="top">
+      <div class="dashboard-ticket-name">
+        <div
+          class="icon"
+          [class.use] = "lockerTicket.status == 'use'"
+          [class.hold] = "lockerTicket.status == 'holding'"
+          [class.expired] = "lockerTicket.status == 'expired'"
+        >
+          <img src="assets/icons/etc/locker-white.svg">
+        </div>
+        <span class="rw-typo-bodytext0-bold">[{{lockerTicket.locker_category_name}}] {{lockerTicket.locker_item_name}}</span>
+      </div>
+      <div
+        class="status"
+        [class.use] = "lockerTicket.status == 'use'"
+        [class.hold] = "lockerTicket.status == 'holding'"
+        [class.expired] = "lockerTicket.status == 'expired'"
+      >
+        <span class="rw-typo-subtext0">{{lockerStatus}}</span>
+      </div>
+    </div>
+    <div *ngIf="lockerTicket.holding_reservation_days > 0" class="rw-typo-subtext0 middle">
+
+      <ng-container *ngIf="isSameHoldDate" >
+        {{lockerTicket.holding_reservation_days}}일 후 홀딩 예정 ({{lockerTicket.holding_start_date | dateFormat:'YYYY.MM.DD'}})
+      </ng-container>
+      <ng-container *ngIf="!isSameHoldDate">
+        {{lockerTicket.holding_reservation_days}}일 후 홀딩 예정 ({{lockerTicket.holding_start_date | dateFormat:'YYYY.MM.DD'}} - {{lockerTicket.holding_end_date | dateFormat:'YYYY.MM.DD'}})
+      </ng-container>
+
+    </div>
+    <div *ngIf="lockerTicket.status == 'holding'" class="rw-typo-subtext0 middle">
+      <ng-container *ngIf="isSameHoldDate"  >
+        1일간 홀딩 ({{lockerTicket.holding_start_date | dateFormat:'YYYY.MM.DD'}})
+      </ng-container>
+      <ng-container *ngIf="!isSameHoldDate">
+        {{lockerTicket.holding_remaining_days}}일간 홀딩 ({{lockerTicket.holding_start_date | dateFormat:'YYYY.MM.DD'}} - {{lockerTicket.holding_end_date | dateFormat:'YYYY.MM.DD'}})
+      </ng-container>
+
+    </div>
+    <div class="bottom">
+      <div class="date">
+        <span class="rw-typo-subtext0-regular small-title">기간</span>
+        <span class="rw-typo-bodytext2-regular">
+          {{lockerTicket.start_date | dateFormat:"YYYY.MM.DD"}} - {{lockerTicket.end_date | dateFormat:"YYYY.MM.DD"}} ({{date | dayDiff}}일)
+        </span>
+      </div>
+      <div class="count">
+        <span class="rw-typo-subtext0-regular small-title">잔여 기간</span>
+        <span class="rw-typo-bodytext2-regular">
+          {{lockerTicket?.remaining_days < 0 ? 0 : lockerTicket?.remaining_days}}일 남음 {{lockerTicket?.remaining_days < 0 ? '(' + -lockerTicket?.remaining_days+'일 초과)' : ''}}
+        </span>
+      </div>
+      <div class="pay">
+        <span class="rw-typo-subtext0-regular small-title">결제 금액</span>
+        <span class="rw-typo-bodytext2-regular">￦{{lockerTicket.price | numberWithCommas}}</span>
+      </div>
+    </div>
+  </section>
+
+</ng-template>
+
+

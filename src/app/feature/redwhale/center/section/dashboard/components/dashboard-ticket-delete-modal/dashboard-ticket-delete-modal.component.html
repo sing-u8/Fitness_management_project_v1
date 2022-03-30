@@ -1,0 +1,34 @@
+<div class="rw-modal-background" #modalBackgroundElement></div>
+
+<div class="rw-modal-wrapper justify-content-center align-items-center" (mouseup)="!isMouseModalDown && onCancel()"
+  (mousedown)='resetMouseModalDown()' #modalWrapperElement>
+  <div class="rw-modal user-select-none" (mousedown)='onMouseModalDown(); $event.stopPropagation()'>
+    <div class="title-container">
+      <div class="text rw-typo-title1">{{modalTitle}}</div>
+      <div class="sub-text rw-typo-subtext0-regular">환불이 발생한 경우, 매출 집계를 위해 환불 금액을 입력해주세요.</div>
+    </div>
+
+    <div id='price' class="input">
+      <p class="rw-typo-subtext1">환불 금액</p>
+      <input
+        class="rw-input" type="text"
+        placeholder="0" [(ngModel)]="price" #refund=ngModel
+        (keypress)="restrictToNumber($event)"
+        (keyup)="onInputKeyup($event)"
+        (keyup.enter)="onConfirm()"
+      >
+      <span class="currency">￦</span>
+    </div>
+
+    <div class="button-group">
+      <div class="cancel " rw-button (click)="onCancel()">
+        취소
+      </div>
+      <div class="confirm" rw-button rwButtonColor="var(--red)"
+        (click)="onConfirm()">
+        {{deleteText}}
+      </div>
+    </div>
+
+  </div>
+</div>

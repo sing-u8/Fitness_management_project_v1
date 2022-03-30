@@ -1,0 +1,139 @@
+* {
+    padding: 0px;
+    margin: 0px;
+}
+
+.payment-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    position: relative;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 20px;
+
+    .top {
+        width: 100%;
+        height: 42px;
+        display: flex;
+        justify-content: space-between;
+
+        .header {
+            display: flex;
+            flex-direction: column;
+
+            .price {
+                text-decoration: underline;
+            }
+        }
+        .date {
+            color: var(--grey);
+        }
+    }
+    .middle {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        margin-top: 20px;
+        margin-bottom: 15px;
+
+        .price-types {
+            display: flex;
+            margin-bottom: 18px;
+        }
+
+        .ticket-container {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            border-radius: 5px;
+            border: 1px solid var(--border-color);
+            padding: 13px 18px;
+
+            .ticket-item {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                &:not(:last-of-type) {
+                    margin-bottom: 10px;
+                }
+                .item-left {
+                    display: flex;
+                    align-items: center;
+                    span {
+                        color: var(--darkgrey);
+                    }
+                    .icon {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        width: 32px;
+                        height: 32px;
+                        border-radius: 50%;
+                        background-color: var(--grey);
+                        margin-right: 8px;
+                        & > img {
+                            width: 21px;
+                            height: 21px;
+                        }
+                    }
+                }
+                .item-right {
+                    color: var(--darkgrey);
+                }
+            }
+        }
+    }
+    .bottom {
+        display: flex;
+        justify-content: flex-end;
+        width: 100%;
+        margin-bottom: 20px;
+
+        .modify-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 104px;
+            height: 34px;
+            border-color: var(--border-color);
+            border-radius: 5px;
+            border: 1px solid var(--border-color);
+            color: var(--darkgrey) !important;
+            cursor: pointer;
+            padding: 8px 10px;
+
+            &:hover {
+                background-color: var(--background-color);
+            }
+        }
+    }
+}
+
+.type-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 16px;
+    font-size: 1.1rem;
+    line-height: 1.45;
+    letter-spacing: -0.12px;
+    color: var(--font-color);
+    margin-right: 5px;
+
+    border: 1px solid var(--grey);
+    border-radius: 5px;
+}
+
+.cash,
+.card,
+.trans,
+.unpaid {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    margin-right: 12px;
+}
+.unpaid {
+    margin-right: 0px;
+}

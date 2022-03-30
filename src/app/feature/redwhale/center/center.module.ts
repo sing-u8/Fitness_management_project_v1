@@ -30,6 +30,7 @@ import { FeatureKey as GymFeatureKey } from '@centerStore/selectors/sec.selector
 import { FeatureKey as LessonFeatureKey } from '@centerStore/selectors/sec.lesson.selector'
 import { FeatureKey as MembershipFeatureKey } from '@centerStore/selectors/sec.membership.selector'
 import { FeatureKey as LockerFeatureKey } from '@centerStore/selectors/sec.locker.selector'
+import { FeatureKey as DashboardFeatureKey } from '@centerStore/selectors/sec.dashoboard.selector'
 
 // - // states reducer and effect
 import { lessonReducer } from '@centerStore/reducers/sec.lesson.reducer'
@@ -40,6 +41,7 @@ import { membershipEffect } from '@centerStore/effects/sec.membership.effect'
 
 import { lockerReducer } from '@centerStore/reducers/sec.locker.reducer'
 import { LockerEffect } from '@centerStore/effects/sec.locker.effect'
+import { dashboardReducer } from './store/reducers/sec.dashboard.reducer'
 // ! locker effect need to be add
 
 @NgModule({
@@ -71,6 +73,7 @@ import { LockerEffect } from '@centerStore/effects/sec.locker.effect'
             [LessonFeatureKey]: lessonReducer,
             [MembershipFeatureKey]: membershipReducer,
             [LockerFeatureKey]: lockerReducer,
+            [DashboardFeatureKey]: dashboardReducer,
         }),
         EffectsModule.forFeature([LessongEffect, membershipEffect, LockerEffect]),
         // ngrx     --> //

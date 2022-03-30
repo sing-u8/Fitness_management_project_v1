@@ -1,0 +1,64 @@
+<div class="rw-select user-select-none" #selectElement>
+    <div
+        class="selected rw-typo-title2-medium d-flex justify-content-center align-items-center"
+        [class.open]="isOpen"
+        [class.hold-mode] = "holdMode"
+        #selectedElement
+        (click)="!holdMode && toggle()"
+        (rwClickOutside)="close()"
+    >
+        <span class="text flex-fill active">{{ value?.value.name}} <span class="grey">{{value?.value.userSize}}</span></span>
+        <span *ngIf="!holdMode" class="mdi mdi-menu-down"></span>
+    </div>
+    <div class="items" #itemsElement (click)="$event.stopPropagation()">
+        <div
+            class="item d-flex align-items-center"
+            [class.active]="items.member.name == value?.value.name"
+            (click)="onSelect(items.member, 'member')"
+        >
+            <span class="rw-typo-title2-medium">{{ items.member.name }} <span class="grey">{{items.member.userSize}}</span></span>
+        </div>
+        <div
+            class="item d-flex align-items-center"
+            [class.active]="items.attendance.name == value?.value.name"
+            (click)="onSelect(items.attendance, 'attendance')"
+        >
+            <span class="rw-typo-title2-medium">{{ items.attendance.name }} <span class="grey">{{items.attendance.userSize}}</span></span>
+        </div>
+        <div
+            class="item d-flex align-items-center"
+            [class.active]="items.valid.name == value?.value.name"
+            (click)="onSelect(items.valid, 'valid')"
+        >
+            <span class="rw-typo-title2-medium">{{ items.valid.name }} <span class="grey">{{items.valid.userSize}}</span></span>
+        </div>
+        <div
+            class="item d-flex align-items-center"
+            [class.active]="items.unpaid.name == value?.value.name"
+            (click)="onSelect(items.unpaid, 'unpaid')"
+        >
+            <span class="rw-typo-title2-medium">{{ items.unpaid.name }} <span class="grey">{{items.unpaid.userSize}}</span></span>
+        </div>
+        <div
+            class="item d-flex align-items-center"
+            [class.active]="items.imminent.name == value?.value.name"
+            (click)="onSelect(items.imminent, 'imminent')"
+        >
+            <span class="rw-typo-title2-medium">{{ items.imminent.name }} <span class="grey">{{items.imminent.userSize}}</span></span>
+        </div>
+        <div
+            class="item d-flex align-items-center"
+            [class.active]="items.expired.name == value?.value.name"
+            (click)="onSelect(items.expired, 'expired')"
+        >
+            <span class="rw-typo-title2-medium">{{ items.expired.name }} <span class="grey">{{items.expired.userSize}}</span></span>
+        </div>
+        <div
+            class="item d-flex align-items-center"
+            [class.active]="items.employee.name == value?.value.name"
+            (click)="onSelect(items.employee, 'employee')"
+        >
+            <span class="rw-typo-title2-medium">{{ items.employee.name }} <span class="grey">{{items.employee.userSize}}</span></span>
+        </div>
+    </div>
+</div>

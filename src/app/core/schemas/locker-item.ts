@@ -1,7 +1,7 @@
 import { UserLocker } from '@schemas/user-locker'
 export interface LockerItem {
     id: string
-    state_code: string // locker_item_state_ + empty, [in_use, stop]
+    state_code: 'locker_item_state_empty' | 'locker_item_state_in_use' | 'locker_item_state_stop' // locker_item_state_ + empty, [in_use, stop]
     state_code_name: string
     name: string
     x: number

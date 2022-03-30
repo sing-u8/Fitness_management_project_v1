@@ -2,22 +2,20 @@ import { createSelector } from '@ngrx/store'
 import { GymFeature, GymState } from './sec.selector'
 import * as FromLocker from '@centerStore/reducers/sec.locker.reducer'
 
-import _ from 'lodash'
-
 export const FeatureKey = 'Center/Locker'
 
-export const GymLockerFeatrue = createSelector(GymFeature, (state: GymState) => state[FeatureKey])
+export const GymLockerFeature = createSelector(GymFeature, (state: GymState) => state[FeatureKey])
 
-export const LockerCategEntities = createSelector(GymLockerFeatrue, FromLocker.selectLockerCategEntities)
-export const LockerCategList = createSelector(GymLockerFeatrue, FromLocker.selectLockerCategList)
+export const LockerCategEntities = createSelector(GymLockerFeature, FromLocker.selectLockerCategEntities)
+export const LockerCategList = createSelector(GymLockerFeature, FromLocker.selectLockerCategList)
 
-export const lockerCategLength = createSelector(GymLockerFeatrue, FromLocker.selectLockerCategLength)
+export const lockerCategLength = createSelector(GymLockerFeature, FromLocker.selectLockerCategLength)
 
-export const curLockerCateg = createSelector(GymLockerFeatrue, FromLocker.selectCurLockerCateg)
-export const curLockerItem = createSelector(GymLockerFeatrue, FromLocker.selectCurLockerItem)
-export const curLockerItemList = createSelector(GymLockerFeatrue, FromLocker.selectCurLockerItemList)
-export const willBeMovedLockerItem = createSelector(GymLockerFeatrue, FromLocker.selectWillBeMovedLockerItem)
-export const LockerGlobalMode = createSelector(GymLockerFeatrue, FromLocker.selectLockerGlobalMode)
-export const curCenterId = createSelector(GymLockerFeatrue, FromLocker.selectCurCenterId)
-export const isLoading = createSelector(GymLockerFeatrue, FromLocker.selectIsLoading)
-export const error = createSelector(GymLockerFeatrue, FromLocker.selectError)
+export const curLockerCateg = createSelector(GymLockerFeature, FromLocker.selectCurLockerCateg)
+export const curLockerItem = createSelector(GymLockerFeature, FromLocker.selectCurLockerItem)
+export const curLockerItemList = createSelector(GymLockerFeature, FromLocker.selectCurLockerItemList)
+export const willBeMovedLockerItem = createSelector(GymLockerFeature, FromLocker.selectWillBeMovedLockerItem)
+export const LockerGlobalMode = createSelector(GymLockerFeature, FromLocker.selectLockerGlobalMode)
+export const curCenterId = createSelector(GymLockerFeature, FromLocker.selectCurCenterId)
+export const isLoading = createSelector(GymLockerFeature, FromLocker.selectIsLoading)
+export const error = createSelector(GymLockerFeature, FromLocker.selectError)

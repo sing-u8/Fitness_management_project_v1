@@ -2,8 +2,6 @@ import { createSelector } from '@ngrx/store'
 import { GymFeature, GymState } from './sec.selector'
 import * as FromMembership from '@centerStore/reducers/sec.membership.reducer'
 
-import * as _ from 'lodash'
-
 export const FeatureKey = 'Center/Membership'
 
 export const GymMembershipFature = createSelector(GymFeature, (state: GymState) => state[FeatureKey])

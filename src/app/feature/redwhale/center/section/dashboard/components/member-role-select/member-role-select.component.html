@@ -1,0 +1,48 @@
+<div class="member-role-select-container">
+  <div
+    class="member-role-select"
+    [class.open]='visible'
+    [class.show-arrow] = "showArrow"
+    [class.none-arrow] = "!showArrow"
+    (click)="emitToggleSelect()"
+    (rwClickOutside)="emitClose()"
+  >
+    <span class="rw-typo-subtext0">{{userRoleText}}</span>
+    <!-- <img class="mdi" *ngIf="showArrow" src="assets/icons/etc/arrow-down-fill-grey.svg"> -->
+    <span *ngIf="showArrow" class="mdi mdi-menu-down"></span>
+  </div>
+  <div *ngIf="visible" class="role-dropdown" (click)="$event.stopPropagation()">
+    <div class="dropdown-title">권한 변경</div>
+    <div *ngIf="employeeRole == 'administrator'" class="transfer-admin">
+      <rw-radio-button text="운영자 양도" textSize="13" [checked]="userRole.administrator"
+        (click)="emitSetUserRole('administrator')"></rw-radio-button>
+    </div>
+
+    <div
+      *ngIf="employeeRole == 'administrator'"
+      class="manager"
+    >
+      <rw-radio-button text="관리 직원" textSize="13" [checked]="userRole.manager" (click)="emitSetUserRole('manager')">
+      </rw-radio-button>
+    </div>
+
+    <div
+      *ngIf="employeeRole == 'manager' || employeeRole == 'administrator'"
+      class="staff"
+    >
+      <rw-radio-button text="일반 직원" textSize="13" [checked]="userRole.staff" (click)="emitSetUserRole('staff')">
+      </rw-radio-button>
+    </div>
+
+    <div class="member">
+      <rw-radio-button text="회원" textSize="13" [checked]="userRole.member" (click)="emitSetUserRole('member')">
+      </rw-radio-button>
+    </div>
+
+    <div class="save" (click)="emitSaveRole(); $event.stopPropagation()">
+      <span class="rw-typo-bodytext2-bold">저장</span>
+    </div>
+
+  </div>
+
+</div>

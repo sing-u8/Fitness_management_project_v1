@@ -1,0 +1,43 @@
+<section class="reservation-card" [class.do-not-cancel] ="reservation?.status == 'deleted' || reservation?.status == 'task_end'">
+  <div class="top">
+    <div #image_container class="image-container" [style.backgroundColor] = "reservation?.task?.color ? reservation.task.color : 'var(--lightgrey)'">
+      <img src="assets/icons/etc/workout_white.svg">
+    </div>
+    <div class="contents">
+      <div class="rw-typo-bodytext0-bold title">{{reservation?.task?.name}}</div>
+      <div class="rw-typo-bodytext2-regular desc">
+        {{reservation_dateTime}}
+        <span class="divider"> &nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp; </span>
+        {{reservation?.task?.lesson?.trainers[0]?.gym_user_name ? reservation?.task?.lesson?.trainers[0]?.gym_user_name : reservation?.task?.lesson?.trainers[0]?.given_name}}
+      </div>
+
+      <div *ngIf="reservation?.status == 'cancel_reservation_not_allowed'" class=" rw-typo-bodytext2-regular no-reserve-cancel-notification">
+        회원의 예약 취소 기간이 마감되었어요.
+      </div>
+    </div>
+  </div>
+  <div class="bottom" >
+    <div
+      *ngIf="reservation?.status == 'cancel_reservation_not_allowed' || reservation?.status == 'valid'"
+      class="rw-typo-bodytext2-bold button "
+      [class.cancel-not-aloowed] = "reservation?.status == 'cancel_reservation_not_allowed'"
+      [class.canCancel] = "reservation?.status == 'valid'"
+      (click) = "reservation?.status == 'valid' && cancelReservation()"
+    >
+      예약 취소
+    </div>
+
+    <div
+      *ngIf="reservation?.status == 'deleted'"
+      class="rw-typo-bodytext2-bold button canceled"
+    >
+      예약 취소됨
+    </div>
+    <div
+      *ngIf="reservation?.status == 'task_end'"
+      class="rw-typo-bodytext2-bold button lesson-end"
+    >
+      수업 종료
+    </div>
+  </div>
+</section>

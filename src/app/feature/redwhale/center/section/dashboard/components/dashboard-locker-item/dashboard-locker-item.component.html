@@ -1,0 +1,28 @@
+<gridster-item
+  class="grid-locker-item user-select-none"
+  [class.is-using] = "lockerItem.state_code == 'locker_item_state_in_use'"
+  [class.move-locker-ticket-X] = "(lockerItem.state_code=='locker_item_state_in_use' || lockerItem.state_code=='locker_item_state_stop') && !selected"
+  [class.move-locker-ticket-O] = "lockerItem.state_code=='locker_item_state_empty' && !selected"
+  [class.selected] = "selected"
+  [item]="lockerItem"
+  (click) = "onItemClick()"
+>
+  <div
+    class="grid-locker-item-inner-container"
+  >
+    <div
+      [class.show] = " (lockerItem.state_code=='locker_item_state_in_use' || lockerItem.state_code=='locker_item_state_stop') && !selected"
+      class="move-locker-ticket-unavailable-mark"
+    >
+      <div class="ur-dl"></div>
+      <div class="ul-dr"></div>
+    </div>
+
+    <div class="grid-locker-item-header">
+      <div class="locker-name rw-typo-bodytext2">
+        <span class="rw-typo-subtext3">{{lockerItem.name}}</span>
+      </div>
+    </div>
+    <p *ngIf="lockerItem.user_locker != null" class="rw-typo-subtext3 user-name">{{lockerItem.user_locker.user.name}}</p>
+  </div>
+</gridster-item>
