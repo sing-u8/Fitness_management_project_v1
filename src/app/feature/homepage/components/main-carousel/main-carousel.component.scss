@@ -35,6 +35,10 @@ section.main-carousel {
                 text-underline-offset: 3px;
                 text-decoration-thickness: 3px;
             }
+
+            &:hover {
+                color: var(--red);
+            }
         }
     }
 
