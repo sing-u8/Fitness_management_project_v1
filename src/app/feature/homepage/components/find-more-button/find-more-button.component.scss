@@ -16,9 +16,10 @@ div.find-more-button {
         display: flex;
         align-items: center;
         margin-bottom: 1.5px;
+        color: var(--font-color) !important;
 
         &.white-text {
-            color: var(--white);
+            color: var(--white) !important;
         }
     }
 

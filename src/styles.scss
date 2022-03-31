@@ -110,6 +110,13 @@
     letter-spacing: -0.2px;
     color: var(--font-color);
 }
+.rw-typo-bodytext1_darkgrey {
+    font-size: 1.4rem;
+    font-weight: 400;
+    line-height: 1.43;
+    letter-spacing: -0.2px;
+    color: var(--darkgrey);
+}
 
 .rw-typo-bodytext2 {
     font-size: 1.3rem;
@@ -124,6 +131,14 @@
     font-weight: 400;
     letter-spacing: -0.17px;
     color: var(--font-color);
+}
+
+.rw-typo-bodytext2-regular_darkgrey {
+    font-size: 1.3rem;
+    line-height: 1.46;
+    font-weight: 400;
+    letter-spacing: -0.17px;
+    color: var(--darkgrey);
 }
 
 .rw-typo-bodytext2-bold {

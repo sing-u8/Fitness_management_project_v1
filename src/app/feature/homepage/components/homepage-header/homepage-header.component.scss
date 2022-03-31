@@ -26,7 +26,7 @@ section.l-header {
         z-index: 5;
         .redwhale-logo {
             cursor: pointer;
-            width: 130px;
+            width: 122px;
             height: 20px;
             background-size: cover;
             -webkit-background-size: cover;
@@ -81,7 +81,8 @@ section.l-header {
         }
 
         &:hover {
-            background-color: var(--hp-lighergrey);
+            // background-color: var(--hp-lighergrey);
+            opacity: 0.8;
         }
     }
 }
@@ -117,6 +118,17 @@ section.l-header-mobile {
         -moz-background-size: cover;
         -o-background-size: cover;
         background-image: url('/assets/homepage/icons/hamburger.svg');
+    }
+    .close-button {
+        cursor: pointer;
+        width: 30px;
+        height: 30px;
+        background-image: url('/assets/icons/etc/close.svg');
+        background-size: cover;
+        border-radius: 5px;
+        &:hover {
+            background-color: var(--background-color);
+        }
     }
 
     .menu-content {

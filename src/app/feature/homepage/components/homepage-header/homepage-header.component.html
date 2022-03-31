@@ -56,7 +56,8 @@
 
 <section class="l-header-mobile">
     <div class="redwhale-logo"></div>
-    <div (click)="toggleMenu()" class="hamburger-logo"></div>
+    <div *ngIf="!isMenuOpen" (click)="toggleMenu()" class="hamburger-logo"></div>
+    <div *ngIf="isMenuOpen" (click)="toggleMenu()" class="close-button"></div>
 
     <div class="menu-content" [style.display] = "isMenuOpen ? 'flex' : 'none'">
         <div class="l-menu-item">

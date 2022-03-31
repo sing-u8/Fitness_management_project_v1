@@ -14,6 +14,7 @@ section.main-carousel {
     flex-direction: column;
     position: relative;
     overflow-x: hidden;
+    overflow-y: hidden;
 
     .title {
         display: flex;
@@ -88,6 +89,7 @@ section.main-carousel {
                 }
             }
             .desc {
+                position: relative;
                 color: var(--darkgrey);
                 text-align: center;
 
@@ -96,7 +98,7 @@ section.main-carousel {
                 }
             }
             .pig-arrow {
-                display: none;
+                position: absolute;
                 background-size: cover;
                 background-image: url('/assets/homepage/icons/pig-arrow.svg');
             }
@@ -194,11 +196,11 @@ section.main-carousel {
                 }
             }
             .pig-arrow {
-                // position: absolute;
-
-                width: 39.1px;
-                height: 26.13px;
-                transform: rotateZ(121deg);
+                width: 27px;
+                height: 39px;
+                transform: rotateZ(5deg);
+                top: -54px;
+                right: 20px;
             }
         }
     }
@@ -235,8 +237,8 @@ section.main-carousel {
         }
         .images {
             .four-images {
-                width: 440px;
-                height: 328px;
+                width: 440px !important;
+                height: 328px !important;
             }
             div.l-one,
             div.l-two,
@@ -280,6 +282,11 @@ section.main-carousel {
                     }
                 }
                 .pig-arrow {
+                    width: 34px;
+                    height: 48px;
+                    transform: rotate(5deg);
+                    top: -56px;
+                    right: 54px;
                 }
             }
         }
@@ -296,7 +303,7 @@ section.main-carousel {
         }
 
         .navi {
-            margin: 32px 0px 27px 0px;
+            margin: 32px 0px 32px 0px;
             span {
                 font-weight: 700;
                 font-size: 1.6rem;
@@ -317,8 +324,8 @@ section.main-carousel {
             div.l-three,
             div.l-four {
                 .four-images {
-                    width: 806px;
-                    height: 601px;
+                    width: 806px !important;
+                    height: 601px !important;
                 }
                 .image {
                     &__one {
@@ -362,6 +369,11 @@ section.main-carousel {
                     }
                 }
                 .pig-arrow {
+                    width: 43px;
+                    height: 62px;
+                    transform: rotate(5deg);
+                    top: -72px;
+                    right: -27px;
                 }
             }
         }

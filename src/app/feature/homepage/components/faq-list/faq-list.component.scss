@@ -37,6 +37,9 @@ section.fap-list {
                     transform: rotateZ(180deg);
                 }
             }
+            &:hover {
+                opacity: 0.8;
+            }
         }
         div.faq-body {
             border-radius: 15px;

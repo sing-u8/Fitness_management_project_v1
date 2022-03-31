@@ -5,12 +5,14 @@
 
 .l-homepage {
     position: relative;
+    height: calc(100vh - 50px);
     width: 100vw;
     margin-top: 50px;
 }
 
 @media (min-width: 960px) {
     .l-homepage {
+        height: calc(100vh - 55px);
         margin-top: 55px;
     }
 }

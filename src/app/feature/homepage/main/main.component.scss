@@ -11,7 +11,7 @@ div.scroll-up-button {
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    border: 1px solid var(--border-color);
+    // border: 1px solid var(--border-color);
     cursor: pointer;
     z-index: 20;
 
@@ -109,7 +109,7 @@ section.l-main {
             .sec1__button {
                 width: 157px;
                 height: 46px;
-                border-radius: 4px;
+                border-radius: 8px;
                 border-color: var(--font-color);
                 color: var(--white);
                 background-color: var(--font-color);
@@ -160,7 +160,7 @@ section.l-main {
             flex-direction: column;
             justify-content: flex-start;
             width: 312px;
-            margin: 170px 0px 53px 0px;
+            margin: 200px 0px 53px 0px;
             .sec2__text {
                 font-size: 2.5rem;
                 font-weight: bold;
@@ -500,10 +500,10 @@ section.l-main {
                     position: absolute;
                     left: 88px;
                     top: 133px;
-                    width: 52px;
+                    width: 51px;
                     height: 60px;
                     z-index: 2;
-                    background-size: cover;
+                    background-size: contain;
                     background-image: url('/assets/homepage/images/main/6-2.png');
                     filter: drop-shadow(0 0 14px rgb(172 172 172 / 100%));
                 }
@@ -621,7 +621,7 @@ section.l-main {
                 top: 0px;
                 background-size: cover;
                 background-image: url('/assets/homepage/images/main/8-1.png');
-                box-shadow: 0 0 16px rgb(181 181 181 / 20%);
+                filter: drop-shadow(0 0 16px #b5b5b533);
             }
             .sec5__image2 {
                 position: absolute;
@@ -631,7 +631,7 @@ section.l-main {
                 bottom: 0px;
                 background-size: cover;
                 background-image: url('/assets/homepage/images/main/8-2.png');
-                box-shadow: 0 0 16px rgb(181 181 181 / 20%);
+                filter: drop-shadow(0 0 16px #b5b5b533);
             }
         }
         .sec5__image3 {
@@ -940,7 +940,7 @@ section.l-main {
                     height: 348px;
                     margin-top: 60px;
                     .sec4-6__image1 {
-                        width: 299px;
+                        width: 304px;
                         height: 57px;
                     }
                     .sec4-6__image2 {
@@ -1280,6 +1280,7 @@ section.l-main {
             }
             .sec4-6 {
                 margin-top: 200px;
+                margin-bottom: 200px;
                 flex-direction: row-reverse;
                 .sec4-6__images {
                     width: 408px;
@@ -1291,7 +1292,7 @@ section.l-main {
                     }
                     .sec4-6__image2 {
                         top: 67px;
-                        width: 362px;
+                        width: 365px;
                         height: 84px;
                     }
                     .sec4-6__image3 {
@@ -1315,7 +1316,7 @@ section.l-main {
             }
         }
         div#sec5 {
-            height: 907px;
+            height: 923px;
             .sec5__l-text {
                 .sec5__text {
                     margin: 123px 0px 66px;

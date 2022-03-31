@@ -5,44 +5,56 @@
         <span>레드웨일 하나로 간편하게!</span>
     </div>
 
-    <div class="navi hp-SA2">
+    <div class="navi hp-SA1">
         <span [class.active]="naviObj.reentrance" (click)="naviTo('reentrance', false)">재등록 유도</span>
         <span [class.active]="naviObj.counselMember" (click)="naviTo('counselMember', false)">회원 상담</span>
         <span [class.active]="naviObj.adjustSchedule" (click)="naviTo('adjustSchedule', false)">일정 조율</span>
         <span [class.active]="naviObj.manageWorkout" (click)="naviTo('manageWorkout', false)">운동 관리</span>
     </div>
 
-    <div
-        #images
-        class="images hp-SA2"
-        [@imageIndicator]= "{value: 'move', params:{imgIdx:imageIdx ,imgListLen:imageLength }} "
-    >
-        <div class="l-one">
-            <div class="image image__one"></div>
-            <div class="desc">곧 만료되는 회원에게<br class="mobile"> 재등록 유도 메시지를 보내 보세요.</div>
-            <div class="pig-arrow"></div>
-        </div>
-        <div class="l-two">
-            <div class="image image__two"></div>
-            <div class="desc">회원 정보를 보면서<br class="mobile"> 정확한 회원 상담을 진행해 보세요.</div>
-            <div class="pig-arrow"></div>
-        </div>
-        <div class="l-three">
-            <div class="image image__three"></div>
-            <div class="desc">캘린더 화면에서 일정을 확인하고,<br class="mobile"> 채팅으로 조율해 보세요.</div>
-            <div class="pig-arrow"></div>
-        </div>
-        <div class="l-four">
-            <div class="four-images">
-                <div class="image image__four_one"></div>
-                <div class="image image__four_two"></div>
-                <div class="image image__four_three"></div>
+    <div class="hp-SA2">
+        <div
+            #images
+            class="images"
+            [@imageIndicator]= "{value: 'move', params:{imgIdx:imageIdx ,imgListLen:imageLength }} "
+        >
+            <div class="l-one">
+                <div class="image image__one"></div>
+                <div class="desc">
+                    곧 만료되는 회원에게<br class="mobile">
+                    재등록 유도 메시지를 보내 보세요.
+                    <div class="pig-arrow"></div>
+                </div>
             </div>
-            <div class="desc">
-                회원의 운동과 식단을 기록하고,<br class="mobile"> 맞춤 운동 미션을 전달해 보세요.
-                <div class="desc-small">* 운동 미션 기능은 곧 추가될 예정이에요.</div>
+            <div class="l-two">
+                <div class="image image__two"></div>
+                <div class="desc">
+                    회원 정보를 보면서<br class="mobile">
+                    정확한 회원 상담을 진행해 보세요.
+                    <div class="pig-arrow"></div>
+                </div>
             </div>
-            <div class="pig-arrow"></div>
+            <div class="l-three">
+                <div class="image image__three"></div>
+                <div class="desc">
+                    캘린더 화면에서 일정을 확인하고,<br class="mobile">
+                    채팅으로 조율해 보세요.
+                    <div class="pig-arrow"></div>
+                </div>
+            </div>
+            <div class="l-four">
+                <div class="four-images">
+                    <div class="image image__four_one"></div>
+                    <div class="image image__four_two"></div>
+                    <div class="image image__four_three"></div>
+                </div>
+                <div class="desc">
+                    회원의 운동과 식단을 기록하고,<br class="mobile">
+                    맞춤 운동 미션을 전달해 보세요.
+                    <div class="desc-small">* 운동 미션 기능은 곧 추가될 예정이에요.</div>
+                    <div class="pig-arrow"></div>
+                </div>
+            </div>
         </div>
     </div>
 

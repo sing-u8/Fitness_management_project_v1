@@ -2,6 +2,8 @@ import { Component, OnInit, Renderer2, OnDestroy, AfterViewInit } from '@angular
 import { Router } from '@angular/router'
 import { DeviceDetectorService } from 'ngx-device-detector'
 import _ from 'lodash'
+
+import { HomepageComponent } from '../homepage.component'
 @Component({
     selector: 'rw-main',
     templateUrl: './main.component.html',
@@ -15,7 +17,7 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit {
     ngAfterViewInit(): void {
         this.initScrollAniEls()
         this.onScroll()
-        this.scrollListener = this.renderer.listen('window', 'scroll', () => {
+        this.scrollListener = this.renderer.listen(document.getElementById('l-homepage'), 'scroll', () => {
             this.onScroll()
         })
     }
@@ -71,7 +73,6 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit {
             SAlist = _.flattenDeep(SAlist)
             return { parent: ani, children: SAlist }
         })
-        console.log('hpSAobj : ', this.hpSAobjList)
     }
 
     onScroll() {
