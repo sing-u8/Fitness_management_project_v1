@@ -10,7 +10,7 @@ p {
 .card-outer-container {
     cursor: pointer;
 
-    padding: 15px 14px 11px 14px;
+    padding: 13px 14px 11px 14px;
     min-height: 92px;
     // min-height: 30px;
     width: 100%;
@@ -54,13 +54,14 @@ p {
         cursor: pointer;
         z-index: 30;
         border-radius: 5px;
-        &:hover {
-            background-color: var(--background-color);
-        }
         img {
             width: 22px;
             height: 22px;
             cursor: pointer;
+            border-radius: 5px;
+            &:hover {
+                background-color: var(--background-color);
+            }
         }
     }
 

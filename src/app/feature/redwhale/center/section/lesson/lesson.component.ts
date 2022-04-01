@@ -126,9 +126,9 @@ export class LessonComponent implements OnInit, AfterViewInit, OnDestroy {
         this.nxStore.dispatch(LessonActions.startGetTrainerFilterList({ centerId: this.center.id }))
 
         this.centerMembershipService.getCategoryList(this.center.id).subscribe((categs) => {
-            this.isReserveMembershipExist = categs.some((v) => {
-                return v.items.length > 0
-            })
+            // this.isReserveMembershipExist = categs.some((v) => {
+            //     return v.items.length > 0
+            // })
             this.centerMembershipCategList = categs
             if (this.selectedLesson.lessonData) this.initAddReservableMembershipList(this.selectedLesson)
         })
@@ -364,6 +364,7 @@ export class LessonComponent implements OnInit, AfterViewInit, OnDestroy {
         _.remove(this.centerReservableMembershipItemList, (v) => {
             return lesItem.lessonData.membership_items.some((j) => j.id == v.id)
         })
+        this.isReserveMembershipExist = this.centerReservableMembershipItemList.length > 0 ? true : false
     }
 
     // - // route

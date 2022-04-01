@@ -33,3 +33,9 @@ export const setCurUesrData = createAction(
     `[${FeatureKey}] Set Current User Data`,
     props<{ curUserData: Partial<CurUseData> }>()
 )
+
+// search user input
+export const setUserSearchInput = createAction(
+    `[${FeatureKey}] Set User Search Input`,
+    props<{ searchInput: string }>()
+)

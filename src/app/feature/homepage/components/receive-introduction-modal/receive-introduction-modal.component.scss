@@ -254,7 +254,7 @@
                     text-decoration: underline;
                     text-underline-offset: 5px;
                     text-decoration-thickness: 2px;
-                    margin: 27px 0px 31px;
+                    margin: 20px 0px 30px;
                 }
                 .l-desc {
                     display: flex;
@@ -268,7 +268,7 @@
                         letter-spacing: -0.2px;
                         color: var(--font-color);
                         &:first-of-type {
-                            margin-bottom: 13px;
+                            margin-bottom: 10px;
                         }
                         &--underbar {
                             color: var(--red);

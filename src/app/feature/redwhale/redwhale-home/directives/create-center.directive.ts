@@ -31,20 +31,20 @@ export class CreateCenterDirective implements OnInit, OnDestroy {
             this.inputControl && this.inputControl.addValidators([this.nameValidator()])
             this.inputChangeSubscription = this.inputControl.valueChanges
                 .pipe(
-                    filter((value) => value != _.replace(value, /[^가-힣a-zA-Z0-9-_]/gi, '')),
+                    filter((value) => value != _.replace(value, /[^a-zA-Z0-9ㄱ-ㅎ가-힣-_]/g, '')),
                     distinctUntilChanged()
                 )
                 .subscribe((value) => {
-                    this.inputControl.setValue(_.replace(value, /[^가-힣a-zA-Z0-9-_]/gi, ''))
+                    this.inputControl.setValue(_.replace(value, /[^a-zA-Z0-9ㄱ-ㅎ가-힣-_]/g, ''))
                 })
         } else if (this.inputType == 'url') {
             this.inputChangeSubscription = this.inputControl.valueChanges
                 .pipe(
-                    filter((value) => value != _.replace(value, /[^a-zA-Z0-9]/gi, '')),
+                    filter((value) => value != _.replace(value, /[^a-zA-Z0-9-_]/gi, '')),
                     distinctUntilChanged()
                 )
                 .subscribe((value) => {
-                    this.inputControl.setValue(_.replace(value, /[^a-zA-Z0-9]/gi, ''))
+                    this.inputControl.setValue(_.replace(value, /[^a-zA-Z0-9-_]/gi, ''))
                 })
             this.inputControl && this.inputControl.addValidators([this.urlValidator()])
         }

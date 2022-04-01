@@ -15,10 +15,14 @@
         cursor: pointer;
 
         .text {
-            font-weight: 700;
+            font-weight: 500;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
+
+            &.text--open {
+                font-weight: 700;
+            }
         }
 
         .arrow-icon {

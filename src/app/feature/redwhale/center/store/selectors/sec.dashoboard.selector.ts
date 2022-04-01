@@ -12,7 +12,7 @@ export const error = createSelector(DashboardFeature, FromDashboard.selectError)
 export const searchInput = createSelector(DashboardFeature, FromDashboard.selectSearchInput)
 
 // main
-export const userCategs = createSelector(DashboardFeature, FromDashboard.selectUsersSelectCategs)
+export const usersSelectCategs = createSelector(DashboardFeature, FromDashboard.selectUsersSelectCategs)
 export const usersLists = createSelector(DashboardFeature, FromDashboard.selectUsersLists)
 export const curMemberManageCateg = createSelector(DashboardFeature, FromDashboard.selectCurMemberManageCateg)
 export const curUserListSelect = createSelector(DashboardFeature, FromDashboard.selectCurUserListSelect)

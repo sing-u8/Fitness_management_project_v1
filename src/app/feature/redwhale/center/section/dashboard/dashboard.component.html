@@ -14,18 +14,18 @@
     <main class="l-main thin-scroll-y">
         <section class="l-entire-member">
             <div class="entire-member__header">
-                <!-- <rw-user-list-select
-                    [items]="usersSelectCateg"
+                <rw-user-list-select
+                    [items]="(usersSelectCateg$ | async)"
                     [holdMode]="holdModeFlags.partial"
-                    [(ngModel)]="selectedUserList"
+                    [(ngModel)]="selectedUserList$_"
                     (onTypeChange)="onSelectedUserListChange($event)"
                 ></rw-user-list-select>
 
                 <div
                     class="holding-all-button"
-                    *ngIf="userLists[selectedUserList.key].length > 0
-                            && selectedUserList.key != 'expired'
-                            && selectedUserList.key != 'employee'"
+                    *ngIf="(usersLists$ | async)[selectedUserList$_.key].length > 0
+                            && selectedUserList$_.key != 'expired'
+                            && selectedUserList$_.key != 'employee'"
                     rw-button
                     [rwButtonFontColor]="'var(--darkgrey)'"
                     [rwButtonColor]="'var(--white)'"
@@ -50,8 +50,14 @@
                             전체 회원 홀딩
                         </div>
                     </div>
-                </div> -->
+                </div>
             </div>
+
+            <div class="entile-member__body">
+                <ng-template #member_list_x [ngIf]=""></ng-template>
+
+            </div>
+
         </section>
         <section class="l-member-detail-left"></section>
         <section class="l-member-detail-right"></section>

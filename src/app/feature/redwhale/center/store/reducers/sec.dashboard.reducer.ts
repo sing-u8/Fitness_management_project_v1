@@ -28,7 +28,7 @@ export type CurUseData = {
 }
 
 const MemberManageCategoryInit = 'membershipLocker'
-const UsersSelectCategInit = {
+const UsersSelectCategInit: UsersSelectCateg = {
     member: { name: '전체 회원', userSize: 0 },
     attendance: { name: '오늘 출석한 회원', userSize: 0 },
     valid: { name: '유효한 회원', userSize: 0 },
@@ -94,6 +94,10 @@ export const dashboardReducer = createImmerReducer(
     // async
     // on()
     // sync
+    on(DashboardActions.setUserSearchInput, (state, { searchInput }) => {
+        state.curSearchInput = searchInput
+        return state
+    }),
     on(DashboardActions.setUsersSelectCateg, (state, { usersSelectCateg }) => {
         state.usersSelectCategs = usersSelectCateg
         return state
@@ -120,7 +124,7 @@ export const selectSearchInput = (state: State) => state.curSearchInput
 
 // main
 export const selectUsersSelectCategs = (state: State) => state.usersSelectCategs
-export const selectUsersLists = (state: State) => state.curSearchInput
-export const selectCurMemberManageCateg = (state: State) => state.curSearchInput
-export const selectCurUserListSelect = (state: State) => state.curSearchInput
-export const selectCurUserData = (state: State) => state.curSearchInput
+export const selectUsersLists = (state: State) => state.usersLists
+export const selectCurMemberManageCateg = (state: State) => state.curMemberManageCateg
+export const selectCurUserListSelect = (state: State) => state.curUserListSelect
+export const selectCurUserData = (state: State) => state.curUserData

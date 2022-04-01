@@ -20,6 +20,7 @@ import { UserLocker } from '@schemas/user-locker'
 
 // rxjs
 import { Observable, Subject } from 'rxjs'
+import { debounceTime, distinctUntilChanged, map, takeUntil } from 'rxjs/operators'
 
 // ngrx
 import { Store, select } from '@ngrx/store'
@@ -142,21 +143,60 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     // public doShowChangeNameModal = false
     // public willChangedName = ''
 
-    // public showHoldDropdown = false
-    // public doShowHoldAllModal = false
-    // public doShowHoldPartialModal = false
-    // public holdModeFlags = { all: false, partial: false }
-    // public holdingNumber = 0
+    public showHoldDropdown = false
+    public doShowHoldAllModal = false
+    public doShowHoldPartialModal = false
+    public holdModeFlags = { all: false, partial: false }
+    public holdingNumber = 0
 
     // public userSearchInput: FormControl
-    // public usersSelectCateg: UsersSelectCateg
-    // public selectedUserList: SelectedUserList
-    // public userLists: UsersList
+    // public usersSelectCateg: UsersSelectCateg    // -----
+    // public selectedUserList: SelectedUserList  // ----
+    // public userLists: UsersList  // ----
     // public searchUserLists: UsersList
     // public managerLists: Record<Manager, Array<{ user: GetUserReturn; holdSelected: boolean }>>
 
+    public userSearchInput: FormControl
+    public userSearchInput$_: string
+    public usersSelectCateg$: Observable<FromDashboard.UsersSelectCateg>
+    public curUserData$: Observable<FromDashboard.CurUseData>
+    public usersLists$: Observable<FromDashboard.UsersLists>
+    public selectedUserList$_: FromDashboard.UserListSelect // Observable<FromDashboard.UserListSelect>
+
     public unsubscribe$ = new Subject<void>()
-    constructor() {}
+    constructor(
+        private centerService: CenterService,
+        private storageService: StorageService,
+        private usersCenterService: UsersCenterService,
+        private nxStore: Store,
+        private fb: FormBuilder,
+        private router: Router,
+        private activatedRoute: ActivatedRoute,
+        private renderer: Renderer2
+    ) {
+        this.center = this.storageService.getCenter()
+        this.centerStaff = this.storageService.getUser()
+
+        // <-- ngrx codes
+        this.usersSelectCateg$ = this.nxStore.select(DashboardSelector.usersSelectCategs)
+        this.curUserData$ = this.nxStore.select(DashboardSelector.curUserData)
+        this.usersLists$ = this.nxStore.select(DashboardSelector.usersLists)
+        this.nxStore
+            .pipe(select(DashboardSelector.curUserListSelect), takeUntil(this.unsubscribe$))
+            .subscribe((selectedUserList) => {
+                this.selectedUserList$_ = _.cloneDeep(selectedUserList) // !! 바꿀 때마다 받을 지 화면을 들어올 때만 맏을지 결정하기
+            })
+        this.nxStore
+            .pipe(select(DashboardSelector.searchInput), takeUntil(this.unsubscribe$))
+            .subscribe((searchInput) => {
+                this.userSearchInput$_ = _.cloneDeep(searchInput)
+            })
+        // ngrx codes --> //
+        this.userSearchInput = this.fb.control(this.userSearchInput$_, {
+            asyncValidators: [this.searchMemberValidator()],
+        })
+        // waitAttendances()
+    }
 
     ngOnInit(): void {}
     ngAfterViewInit(): void {}
@@ -166,4 +206,113 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     goToRegisterNewMember() {}
+
+    // -------------------------------------- holding mode method --------------------------------------
+    toggleHoldDropDown() {
+        this.showHoldDropdown = !this.showHoldDropdown
+    }
+    closeHoldDropDown() {
+        // this.getSerachUserList(this.userSearchInput.value)
+        this.showHoldDropdown = false
+    }
+
+    openAllHoldModal() {
+        this.doShowHoldAllModal = true
+    }
+    closeAllHoldModal() {
+        this.doShowHoldAllModal = false
+    }
+    onHoldAllCancel() {
+        this.closeAllHoldModal()
+    }
+    onHoldAllConfirm(event: { date: { startDate: string; endDate: string }; holdWithLocker: boolean }) {
+        // this.GymDashboardService.holdAllMember(this.gym.id, {
+        //     start_date: event.date.startDate,
+        //     end_date: event.date.endDate,
+        //     including_locker_ticket_yn: event.holdWithLocker,
+        // }).subscribe((__) => {
+        //     this.getUserList(this.selectedUserList.key, '', '', false, () => {
+        //         this.getAllUserDetail()
+        //         this.closeAllHoldModal()
+        //         if (event.holdWithLocker) {
+        //             this.globalService.showToast(
+        //                 `${this.userLists.member.length}명 회원의 회원권 / 락커 홀딩이 예약되었습니다.`
+        //             )
+        //         } else {
+        //             this.globalService.showToast(
+        //                 `${this.userLists.member.length}명 회원의 회원권 홀딩이 예약되었습니다.`
+        //             )
+        //         }
+        //     })
+        // })
+    }
+
+    openPartialHoldModal() {
+        this.doShowHoldPartialModal = true
+    }
+    closePartialHoldModal() {
+        this.doShowHoldPartialModal = false
+    }
+    onHoldPartialCancel() {
+        this.closePartialHoldModal()
+    }
+    onHoldPartialConfirm(event: { date: { startDate: string; endDate: string }; holdWithLocker: boolean }) {
+        // const user_ids = _.map(
+        //     _.filter(this.userLists[this.selectedUserList.key], (item) => item.holdSelected),
+        //     (item) => item.user.id
+        // )
+        // console.log('hold: ', user_ids, event.date.startDate, event.date.endDate, event.holdWithLocker)
+        // this.GymDashboardService.holdPartialMember(this.gym.id, {
+        //     user_ids: user_ids,
+        //     start_date: event.date.startDate,
+        //     end_date: event.date.endDate,
+        //     including_locker_ticket_yn: event.holdWithLocker,
+        // }).subscribe((__) => {
+        //     this.getAllUserDetail()
+        //     this.closePartialHoldModal()
+        //     if (event.holdWithLocker) {
+        //         this.globalService.showToast(`${this.holdingNumber}명 회원의 회원권 / 락커 홀딩이 예약되었습니다.`)
+        //     } else {
+        //         this.globalService.showToast(`${this.holdingNumber}명 회원의 회원권 홀딩이 예약되었습니다.`)
+        //     }
+        //     this.toggleHodlingMode()
+        // })
+    }
+
+    toggleHodlingMode() {
+        this.holdingNumber = 0
+        this.holdModeFlags.partial = !this.holdModeFlags.partial
+        // this.resetSelectedCategListHold()
+    }
+    onPartialHoldClick(holdFlag: boolean) {
+        // this.holdingNumber
+        // !! 500명으로 제한 해야함
+        this.holdingNumber += holdFlag ? 1 : -1
+    }
+    resetSelectedCategListHold() {
+        // this.userLists[this.selectedUserList.key].forEach((item, index) => {
+        //     this.userLists[this.selectedUserList.key][index].holdSelected = false
+        // })
+    }
+
+    // ------------------------------------------- selectedUserList method ----------------------------------------------
+    onSelectedUserListChange(type: string) {
+        // this.gymDashboardState.setSelectedUserList(this.selectedUserList)
+        // this.getUserList(type, '', '', true, () => {
+        //     this.getSerachUserList(this.userSearchInput.value)
+        // })
+    }
+    // -- //-------------------------------------- member search  validator method --------------------------------------
+    searchMemberValidator(): AsyncValidatorFn {
+        return (control: AbstractControl): Observable<ValidationErrors | null> => {
+            return control.valueChanges.pipe(
+                debounceTime(0),
+                distinctUntilChanged(),
+                map((value) => {
+                    // this.getSerachUserList(value)
+                    return null
+                })
+            )
+        }
+    }
 }

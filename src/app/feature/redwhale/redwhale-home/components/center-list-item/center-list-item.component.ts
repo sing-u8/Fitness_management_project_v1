@@ -139,8 +139,8 @@ export class CenterListItemComponent implements OnInit, AfterViewInit {
     public doShowOwnerModal = false
     public onwerModaldata = {
         text: '운영자는 센터를 나가실 수 없어요.',
-        subText: `센터 운영자는 운영자 권한 양도
-                    후에 센터 나가기가 가능합니다.`,
+        subText: `센터 운영자는 운영자 권한 양도 후에
+                센터 나가기가 가능합니다.`,
     }
     showOwerModal() {
         this.doShowOwnerModal = true

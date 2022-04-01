@@ -102,9 +102,9 @@ export class MembershipComponent implements OnInit {
         this.nxStore.dispatch(MembershipActions.setCurrentGym({ currentCenter: this.center.id }))
 
         this.gymLessonService.getCategoryList(this.center.id).subscribe((categs) => {
-            this.isReserveLessonExist = categs.some((v) => {
-                return v.items.length > 0
-            })
+            // this.isReserveLessonExist = categs.some((v) => {
+            //     return v.items.length > 0
+            // })
             this.centerLessonCategList = categs
             if (this.selectedMembership.membershipData) {
                 this.initAddReservableLessonList(this.selectedMembership) // !
@@ -324,6 +324,7 @@ export class MembershipComponent implements OnInit {
         _.remove(this.centerReservableLessonItemList, (v) => {
             return membItem.membershipData.class_items.some((j) => j.id == v.id)
         })
+        this.isReserveLessonExist = this.centerReservableLessonItemList.length > 0 ? true : false
     }
 
     // - // route

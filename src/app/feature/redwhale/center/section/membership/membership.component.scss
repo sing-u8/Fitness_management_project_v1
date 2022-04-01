@@ -198,7 +198,7 @@ main {
                 position: relative;
 
                 .selected-membership-top__left {
-                    width: calc(100% - 91px - 84.5px);
+                    width: calc(100% - 361px - 84.5px);
                     position: relative;
                     .selected-membership-top__title {
                         display: flex;
@@ -256,7 +256,7 @@ main {
                     justify-content: center;
                     align-items: center;
                     cursor: pointer;
-                    width: 91px;
+                    width: 100px;
                     height: 35px;
                     background-color: var(--white);
                     border: 1px solid #f1f1f1;
@@ -418,7 +418,7 @@ main {
                 .l-guide-image {
                     display: flex;
                     flex-direction: column;
-                    width: 288px;
+                    width: 325px;
                     position: absolute;
                     left: calc(50% - 144px);
                     top: calc(50% - 60px);
@@ -430,7 +430,7 @@ main {
                         flex-direction: column;
                         align-items: flex-start;
 
-                        width: 288px;
+                        width: 100%;
                         height: 66px;
                         border: 1px solid var(--border-color);
                         background-color: var(--white);

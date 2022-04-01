@@ -20,7 +20,12 @@
             fontSize="10"
           ></rw-avatar>
         </div>
-        <span class="text flex-fill">{{ value?.name }}</span>
+        <span
+          class="text flex-fill"
+          [class.text--open]="isOpen"
+        >
+          {{ value?.name }}
+        </span>
         <span class="arrow-icon"></span>
     </div>
     <div
