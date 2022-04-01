@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, AfterViewInit, Renderer2, ViewChild, ElementRef, OnChanges } from '@angular/core'
+import _ from 'lodash'
 
 @Component({
     selector: 'center-preview-item',
@@ -31,7 +32,7 @@ export class CenterPreviewItemComponent implements OnInit, AfterViewInit, OnChan
     }
     initCenterAvatar() {
         if (this.centerAvatar.length < 2) {
-            this.centerAvatar = this.centerName.slice(0, 1)
+            this.centerAvatar = _.trim(this.centerName).slice(0, 1)
             this.renderer.setStyle(this.list_avatar.nativeElement, 'backgroundImage', `none`)
         } else {
             this.renderer.setStyle(this.list_avatar.nativeElement, 'backgroundImage', `url(${this.centerAvatar})`)
@@ -50,6 +51,6 @@ export class CenterPreviewItemComponent implements OnInit, AfterViewInit, OnChan
     }
 
     resetCenterName() {
-        if (!this.centerName) this.centerName = '센터 이름'
+        if (!_.trim(this.centerName)) this.centerName = '센터 이름'
     }
 }

@@ -6,6 +6,7 @@
     #modalWrapperElement
 >
     <div
+        #rw_modal
         class="rw-modal user-select-none"
         [class.terms-open] = "isTermsOpen"
         [class.input-data-complete] = "isInputDataComplete"
@@ -70,7 +71,10 @@
                                 <td>보유 기간</td>
                             </tr>
                             <tr>
-                                <td>본인 확인,<br>제품 소개<br>요청에 대한 처리</td>
+                                <td>
+                                    본인 확인,<br>제품 소개<br>요청에
+                                    <br class="mobile__show"> 대한 처리
+                                </td>
                                 <td>이름,<br>이메일</td>
                                 <td>정보<br>주체의<br>동의</td>
                                 <td>문의<br>등록 후<br>1년</td>

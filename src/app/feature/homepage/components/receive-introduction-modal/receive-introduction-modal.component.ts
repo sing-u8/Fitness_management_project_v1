@@ -11,6 +11,7 @@ import {
     ViewChild,
 } from '@angular/core'
 import { FormBuilder, FormControl, Validators, ValidationErrors, ValidatorFn, AbstractControl } from '@angular/forms'
+import { DeviceDetectorService } from 'ngx-device-detector'
 
 @Component({
     selector: 'hp-receive-introduction-modal',
@@ -23,6 +24,7 @@ export class ReceiveIntroductionModalComponent implements OnChanges, AfterViewCh
 
     @ViewChild('modalBackgroundElement') modalBackgroundElement
     @ViewChild('modalWrapperElement') modalWrapperElement
+    @ViewChild('rw_modal') rwModalElement: ElementRef
 
     @Output() visibleChange = new EventEmitter<boolean>()
     @Output() cancel = new EventEmitter<any>()
@@ -42,7 +44,12 @@ export class ReceiveIntroductionModalComponent implements OnChanges, AfterViewCh
     public privacyRadio = false
     public noticeRadio = false
 
-    constructor(private el: ElementRef, private renderer: Renderer2, private fb: FormBuilder) {
+    constructor(
+        private el: ElementRef,
+        private renderer: Renderer2,
+        private fb: FormBuilder,
+        private deviceDetector: DeviceDetectorService
+    ) {
         this.isMouseModalDown = false
 
         this.nameInputForm = this.fb.control('', [Validators.required, this.nameValidator()])
@@ -62,6 +69,7 @@ export class ReceiveIntroductionModalComponent implements OnChanges, AfterViewCh
             this.changed = false
 
             if (this.visible) {
+                this.setHeightWhenMobile()
                 this.renderer.addClass(this.modalBackgroundElement.nativeElement, 'display-block')
                 this.renderer.addClass(this.modalWrapperElement.nativeElement, 'display-flex')
                 setTimeout(() => {
@@ -88,6 +96,7 @@ export class ReceiveIntroductionModalComponent implements OnChanges, AfterViewCh
         this.nameInputForm.markAsPristine()
         // this.nameInputForm.reset()
         this.isInputDataComplete = false
+        this.isTermsOpen = false
 
         this.privacyRadio = false
         this.noticeRadio = false
@@ -143,5 +152,13 @@ export class ReceiveIntroductionModalComponent implements OnChanges, AfterViewCh
     toggleTermGrid(event) {
         this.isTermsOpen = !this.isTermsOpen
         event.stopPropagation()
+    }
+
+    // ----------------------------------
+    setHeightWhenMobile() {
+        if (window.innerWidth < 760) {
+            const height = window.innerHeight - 50
+            this.renderer.setStyle(this.rwModalElement.nativeElement, 'height', `${height}px`)
+        }
     }
 }

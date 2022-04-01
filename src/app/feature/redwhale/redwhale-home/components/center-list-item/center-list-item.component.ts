@@ -18,6 +18,8 @@ import { GymConfirmModalService } from '@services/home/gym-confirm-modal.service
 
 import { Center } from '@schemas/center'
 
+import _ from 'lodash'
+
 @Component({
     selector: 'center-list-item',
     templateUrl: './center-list-item.component.html',
@@ -64,7 +66,7 @@ export class CenterListItemComponent implements OnInit, AfterViewInit {
     }
     initCenterAvatar() {
         if (!this.center.picture) {
-            this.centerAvatar = this.center.name.slice(0, 1)
+            this.centerAvatar = _.trim(this.center.name).slice(0, 1)
             this.renderer.setStyle(this.list_avatar.nativeElement, 'backgroundColor', this.center.color)
         } else {
             this.centerAvatar = this.center.picture

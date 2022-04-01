@@ -66,30 +66,30 @@ section.main-carousel {
 
                 &__one {
                     background-image: url('/assets/homepage/images/carousel/one.png');
-                    box-shadow: 0 15px 30px rgb(181 181 181 / 19%);
+                    filter: drop-shadow(0 15px 30px rgb(181 181 181 / 19%));
                 }
                 &__two {
                     background-image: url('/assets/homepage/images/carousel/two.png');
-                    box-shadow: 0 20px 30px rgb(181 181 181 / 15%);
+                    filter: drop-shadow(0 20px 30px rgb(181 181 181 / 15%));
                 }
                 &__three {
                     background-image: url('/assets/homepage/images/carousel/three.png');
-                    box-shadow: 0 20px 30px rgb(181 181 181 / 15%);
+                    filter: drop-shadow(0 20px 30px rgb(181 181 181 / 15%));
                 }
                 &__four_one {
                     position: absolute;
                     background-image: url('/assets/homepage/images/carousel/four-one.png');
-                    box-shadow: 0 -15px 30px rgb(181 181 181 / 19%);
+                    filter: drop-shadow(0 -15px 30px rgb(181 181 181 / 19%));
                 }
                 &__four_two {
                     position: absolute;
                     background-image: url('/assets/homepage/images/carousel/four-two.png');
-                    box-shadow: 0 0 10px rgb(181 181 181 / 20%);
+                    filter: drop-shadow(0 0 10px rgb(181 181 181 / 20%));
                 }
                 &__four_three {
                     position: absolute;
                     background-image: url('/assets/homepage/images/carousel/four-three.png');
-                    box-shadow: 0 0 10px rgb(181 181 181 / 20%);
+                    filter: drop-shadow(0 0 10px rgb(181 181 181 / 20%));
                 }
             }
             .desc {

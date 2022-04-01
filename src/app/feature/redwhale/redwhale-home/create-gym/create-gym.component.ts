@@ -12,6 +12,8 @@ import { ClickEmitterType } from '@shared/components/common/button/button.compon
 import { Store } from '@ngrx/store'
 import { showToast } from '@appStore/actions/toast.action'
 
+import _ from 'lodash'
+
 @Component({
     selector: 'create-gym',
     templateUrl: './create-gym.component.html',
@@ -140,6 +142,7 @@ export class CreateGymComponent implements OnInit {
 
     createCenter(btLoadingFns: ClickEmitterType) {
         btLoadingFns.showLoading()
+        this.centerNameForm.setValue(_.trim(this.centerNameForm.value))
         this.centerService
             .createCenter({ name: this.centerNameForm.value, address: this.centerAddrForm.value })
             .subscribe({

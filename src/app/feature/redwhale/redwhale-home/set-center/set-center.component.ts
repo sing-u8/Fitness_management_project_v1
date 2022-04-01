@@ -175,7 +175,7 @@ export class SetCenterComponent implements OnInit {
 
     modifyCenter(btLoadingFns: ClickEmitterType) {
         btLoadingFns.showLoading()
-
+        this.centerNameForm.setValue(_.trim(this.centerNameForm.value))
         this.centerService
             .updateCenter(this.center.id, {
                 name: this.centerNameForm.value,

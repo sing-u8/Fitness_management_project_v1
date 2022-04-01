@@ -75,7 +75,7 @@ export class MainCarouselComponent implements OnInit {
                 this.imageIdx = (this.imageIdx + 1) % this.imageLength
                 const [curIndex, curNav] = this.checkNavImage()
                 this.naviTo(curNav)
-            }, 5000)
+            }, 500000)
             this.isTimerSet = true
         }
     }

@@ -31,11 +31,11 @@ export class CreateCenterDirective implements OnInit, OnDestroy {
             this.inputControl && this.inputControl.addValidators([this.nameValidator()])
             this.inputChangeSubscription = this.inputControl.valueChanges
                 .pipe(
-                    filter((value) => value != _.replace(value, /[^a-zA-Z0-9ㄱ-ㅎ가-힣-_]/g, '')),
+                    filter((value) => value != _.replace(value, /[^a-zA-Z0-9ㄱ-ㅎ가-힣-_\s]/g, '')),
                     distinctUntilChanged()
                 )
                 .subscribe((value) => {
-                    this.inputControl.setValue(_.replace(value, /[^a-zA-Z0-9ㄱ-ㅎ가-힣-_]/g, ''))
+                    this.inputControl.setValue(_.replace(value, /[^a-zA-Z0-9ㄱ-ㅎ가-힣-_\s]/g, ''))
                 })
         } else if (this.inputType == 'url') {
             this.inputChangeSubscription = this.inputControl.valueChanges
@@ -84,7 +84,7 @@ export class CreateCenterDirective implements OnInit, OnDestroy {
 
     nameValidator(): ValidatorFn {
         return (control: AbstractControl): ValidationErrors | null => {
-            if (this.inputControl.value == '') {
+            if (this.inputControl.value == '' || _.trim(this.inputControl.value) == '') {
                 return { empty: true }
             }
             return null
