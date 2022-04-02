@@ -15,6 +15,7 @@ import { LockerChargeModalComponent } from './components/locker-charge-modal/loc
 import { RegisterLockerModalComponent } from './components/register-locker-modal/register-locker-modal.component'
 import { EmptyLockerModalComponent } from './components/empty-locker-modal/empty-locker-modal.component'
 import { LockerHistoryModalComponent } from './components/locker-history-modal/locker-history-modal.component'
+import { LockerDatepickerComponent } from './components/locker-datepicker/locker-datepicker.component'
 
 import { CommonModule as SectionCommonModule } from '@redwhale/center/section/common/common.module'
 
@@ -33,6 +34,7 @@ import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader'
         RegisterLockerModalComponent,
         EmptyLockerModalComponent,
         LockerHistoryModalComponent,
+        LockerDatepickerComponent,
     ],
     imports: [
         AngularCommonModule,

@@ -106,10 +106,10 @@
                 </div>
 
                 <div *ngIf="doDatePickerShow" class="datepicker-container" (rwClickOutside)="toggleDoDatePickerShow()">
-                    <rw-datepicker *ngIf="dateEditMode" id="register" mode="multiline" [(data)]="lockerDate"
-                        [option]="'extend'" (dataChange)="setLockerDate($event)"></rw-datepicker>
-                    <rw-datepicker *ngIf="!dateEditMode" mode="multiline" [(data)]="lockerDate" [option]="'register'"
-                        (dataChange)="setLockerDate($event)"></rw-datepicker>
+                    <rw-locker-datepicker *ngIf="dateEditMode" id="register" mode="multiline" [(data)]="lockerDate"
+                        [option]="'extend'" (dataChange)="setLockerDate($event)"></rw-locker-datepicker>
+                    <rw-locker-datepicker *ngIf="!dateEditMode" mode="multiline" [(data)]="lockerDate" [option]="'register'"
+                        (dataChange)="setLockerDate($event)"></rw-locker-datepicker>
 
                 </div>
 
