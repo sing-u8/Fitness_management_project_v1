@@ -98,6 +98,8 @@ export class LockerComponent implements OnInit, AfterViewInit, OnDestroy {
 
     public originOrder = originalOrder
 
+    public alterGuide = true
+
     @ViewChildren(LockerCategoryComponent) lockerCategories!: QueryList<LockerCategoryComponent>
     @ViewChild('l_locker_category') l_locker_category: ElementRef
 

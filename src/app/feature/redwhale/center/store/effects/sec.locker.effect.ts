@@ -145,7 +145,7 @@ export class LockerEffect {
                     switchMap((_) => {
                         return [
                             LockerActions.finishDeleteLockerItem(),
-                            showToast({ text: `[락커${itemName}]이 삭제되었습니다.` }),
+                            showToast({ text: `[락커${itemName}] 삭제되었습니다.` }),
                         ]
                     }),
                     catchError((err: string) => of(LockerActions.error({ error: err })))

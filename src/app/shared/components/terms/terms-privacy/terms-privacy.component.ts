@@ -62,4 +62,17 @@ export class TermsPrivacyComponent implements OnChanges, AfterViewChecked {
     onCancel(): void {
         this.cancel.emit({})
     }
+
+    openKoplco() {
+        window.open('https://kopico.go.kr/main/main.do')
+    }
+    openPrivacy() {
+        window.open('https://privacy.klsa.or.kr')
+    }
+    openSpo() {
+        window.open('https://spo.go.kr')
+    }
+    openCyberbureau() {
+        window.open('https://cyberbureau.police.go.kr')
+    }
 }

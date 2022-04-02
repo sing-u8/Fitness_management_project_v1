@@ -33,7 +33,7 @@
         background-color: var(--white);
 
         &.move-locket-ticket-mode {
-            opacity: 0.5;
+            opacity: 0.3;
         }
 
         .header {
@@ -268,6 +268,7 @@
 
             &.move-locket-ticket-mode-button {
                 color: var(--red) !important;
+                font-weight: 700 !important;
             }
         }
         .emptying-button {
@@ -275,7 +276,7 @@
                 cursor: auto;
                 img,
                 span {
-                    opacity: 0.5;
+                    opacity: 0.3;
                 }
             }
         }
@@ -306,6 +307,7 @@
             width: 146px;
             height: 42px;
             border-radius: 5px;
+            font-weight: 700 !important;
         }
 
         @media (min-width: 1440px) {

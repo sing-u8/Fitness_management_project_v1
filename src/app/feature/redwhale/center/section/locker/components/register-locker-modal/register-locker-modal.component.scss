@@ -38,7 +38,7 @@
         align-items: center;
         width: 388px;
         height: 430px;
-        padding: 20px 0px 10px 0px;
+        padding: 15px 0px 10px 0px;
         border: 1px solid var(--border-color);
         background-color: var(--white);
         border-radius: 5px;
@@ -75,7 +75,7 @@
 
         .member-list {
             width: 100%;
-            height: calc(100% - 65px); // modal padding:20px + 10px and + header height: 35px
+            height: calc(100% - 35px); // modal padding:15px + 10px and + header height: 35px
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -86,7 +86,8 @@
                 position: relative;
                 input {
                     width: 100%;
-                    padding: 12px 45px 12px 15px;
+                    padding: 14px 45px 12px 15px;
+                    height: 45px !important;
                 }
                 // input::placeholder {
                 //     color: var(--font-color);
@@ -102,8 +103,9 @@
                     height: 20px;
                     width: 20px;
                     border-radius: 3px;
-                    top: 15px;
+                    top: 13px;
                     right: 13px;
+                    cursor: pointer;
                 }
             }
 
@@ -142,5 +144,25 @@
 .rw-modal-wrapper-show {
     .rw-modal {
         opacity: 1;
+    }
+}
+
+.empty-guide {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    height: calc(100% - 65px);
+
+    img {
+        margin-bottom: 10px;
+    }
+
+    .grey {
+        color: var(--grey);
+    }
+    .top-image {
+        margin-bottom: 20px;
     }
 }

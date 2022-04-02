@@ -25,28 +25,35 @@
           <img src="assets/icons/etc/search.svg">
         </form>
 
-        <div
-          *ngFor = "let item of centerUsers; let i = index"
-          class="member-card"
-          (click) = onConfirm(item)
-        >
-          <div class="card-left">
-            <rw-avatar
-              [image]="item.picture"
-              [text]="item.center_user_name"
-              [backgroundColor]="item.color"
-              size="45"
-              fontSize="12"
-            ></rw-avatar>
-            <div class="left-texts">
-              <p class="rw-typo-bodytext0-bold">{{item.center_user_name}}</p>
-              <p class="rw-typo-subtext2">{{item.phone_number | phoneNumber}}</p>
+        <ng-template #users_o [ngIf]="centerUsers.length > 0" [ngIfElse]="users_x">
+          <div
+            *ngFor = "let item of centerUsers; let i = index"
+            class="member-card"
+            (click) = onConfirm(item)
+          >
+            <div class="card-left">
+              <rw-avatar
+                [image]="item.picture"
+                [text]="item.center_user_name"
+                [backgroundColor]="item.color"
+                size="45"
+                fontSize="12"
+              ></rw-avatar>
+              <div class="left-texts">
+                <p class="rw-typo-bodytext0-bold">{{item.center_user_name}}</p>
+                <p class="rw-typo-subtext1">{{item.phone_number | phoneNumber}}</p>
+              </div>
             </div>
           </div>
-          <!-- <div class="card-right">
-            <p class="rw-typo-subtext2">{{item.phone_number | phoneNumber}}</p>
-          </div> -->
-        </div>
+        </ng-template>
+        <ng-template #users_x>
+          <div  class="empty-guide">
+            <img src="assets/icons/etc/empty_screen.svg" class="top-image">
+            <p class="rw-typo-subtext0-regular grey">검색하신 회원을 찾을 수 없습니다.</p>
+            <p class="rw-typo-subtext0-regular grey">검색어를 다시 확인해주세요!</p>
+          </div>
+        </ng-template>
+
 
       </div>
 

@@ -120,8 +120,15 @@
 
     <!-- detail box buttons  -->
 
-    <div #buttonBox0 *ngIf="lockerItem.state_code == 'locker_item_state_stop' else buttonBox1" class="stop-button" rw-button
-        rwButtonFontColor="var(--darkgrey)" rwButtonColor="var(--white)" (click)="toggleShowRestartLockerModal()">
+    <div
+        #buttonBox0
+        *ngIf="lockerItem.state_code == 'locker_item_state_stop' else buttonBox1"
+        class="stop-button"
+        rw-button
+        rwButtonFontColor="var(--darkgrey)"
+        rwButtonColor="var(--white)"
+        (click)="toggleShowRestartLockerModal()"
+    >
         <img src="assets/icons/etc/release_unavailable.svg">
         <span class="rw-typo-bodytext2">사용 불가 해제</span>
     </div>
@@ -145,8 +152,10 @@
         <div *ngIf="lockerItem.user_locker && !dateEditMode else buttonBox3"
             class="locker-control-buttons rw-typo-bodytext2">
             <div class="move-place-button"
-                [class.move-locket-ticket-mode-button]="lockerGlobalMode == 'moveLockerTicket'" rw-button
-                rwButtonColor="var(--white)" (click)="toggleMoveLockerTicketMode()">
+                [class.move-locket-ticket-mode-button]="lockerGlobalMode == 'moveLockerTicket'"
+                rw-button
+                rwButtonColor="var(--white)"
+                (click)="toggleMoveLockerTicketMode()">
                 <img *ngIf="lockerGlobalMode != 'moveLockerTicket'" src="assets/icons/etc/change_place.svg">
                 <img *ngIf="lockerGlobalMode == 'moveLockerTicket'" src="assets/icons/etc/change_place_red.svg">
                 <span>
@@ -169,8 +178,13 @@
                 (click)="cancelChangeDate()">
                 취소
             </div>
-            <div class="modify" rw-button rwButtonFontColor="var(--white)" rwButtonColor="var(--darkgrey)"
-                (click)="toggleShowAdditionalChargeModal()">
+            <div
+                class="modify"
+                rw-button
+                rwButtonFontColor="var(--white)"
+                rwButtonColor="var(--darkgrey)"
+                (click)="toggleShowAdditionalChargeModal()"
+            >
                 변경하기
             </div>
         </div>

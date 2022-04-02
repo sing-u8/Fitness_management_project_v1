@@ -12,7 +12,9 @@
     >
       <div class="header">
         <span class="rw-typo-bodytext0"> {{type == 'modify' ? '추가 결제 정보' : '결제 정보'}}</span>
-        <img src="assets/icons/etc/close.svg" (click)="onCancel()">
+        <div class="l-close" (click)="onCancel()">
+          <img src="assets/icons/etc/close.svg" >
+        </div>
       </div>
 
 
@@ -74,10 +76,11 @@
       </div>
 
       <div
-        class="rw-typo-title2 save-button"
+        class="rw-typo-bodytext0-bold save-button"
         rw-button
         rwButtonColor="var(--red)"
         rwButtonFontColor="var(--white)"
+        rwButtonHeight="45"
         (click) ="onConfirm()"
       >
         ￦ {{total}} 저장하기

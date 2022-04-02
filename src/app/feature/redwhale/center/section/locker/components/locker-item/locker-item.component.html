@@ -62,7 +62,7 @@
             </div>
 
             <div
-                *ngIf= "!doNameInputShow && lockerGlobalMode != 'moveLockerTicket'"
+                *ngIf= "!doNameInputShow && !editMode && lockerGlobalMode != 'moveLockerTicket'"
                 class="warning-icon-container"
             >
               <img *ngIf="lockerItem.state_code == 'locker_item_state_in_use' && isSevenDaysRemain" src="assets/icons/etc/exceed_period.svg">
@@ -71,7 +71,12 @@
             </div>
         </div>
         <div class="grid-locker-item-footer">
-            <p class="rw-typo-bodytext2">{{lockerItem?.user_locker?.user.name}}</p>
+            <p
+                [class.editmode-username]="editMode"
+                class="rw-typo-bodytext2"
+            >
+                {{lockerItem?.user_locker?.user.name}}
+            </p>
         </div>
 
         <div

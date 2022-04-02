@@ -3,7 +3,7 @@
         bottom: 10px;
     }
     to {
-        bottom: 25px;
+        bottom: 20px;
     }
 }
 
@@ -101,6 +101,10 @@ $locker-min-width: 897px;
                     &:not(:last-of-type) {
                         margin-bottom: 10px;
                     }
+                    span {
+                        line-height: 1.6;
+                        color: #606060;
+                    }
                 }
             }
         }
@@ -176,18 +180,24 @@ $locker-min-width: 897px;
                                 background-color: var(--background-color);
                                 cursor: pointer;
                                 border-radius: 4px;
-                                box-shadow: 0px 0px 10px #b5b5b526;
+                                // box-shadow: 0px 0px 10px #b5b5b526;
                                 margin-right: 5px;
-
+                                &:hover {
+                                    background-color: #cfcfcf;
+                                }
                                 img {
-                                    width: 20px !important;
-                                    height: 18px !important;
+                                    width: 24px !important;
+                                    height: 24px !important;
+                                    margin-left: 6px;
+                                    &.word-x {
+                                        margin-left: 0px;
+                                    }
                                 }
 
                                 span {
                                     color: var(--darkgrey) !important;
                                     margin-left: 4px !important;
-                                    margin-right: 14px !important;
+                                    margin-right: 6px !important;
                                 }
                             }
 
@@ -233,6 +243,10 @@ $locker-min-width: 897px;
                             & img {
                                 width: 20px;
                                 height: 20px;
+                                margin-right: 2px;
+                            }
+                            & span {
+                                margin-right: 6px;
                             }
                         }
                     }
@@ -283,6 +297,14 @@ $locker-min-width: 897px;
 
                                 ::ng-deep rw-switch .rw-switch {
                                     cursor: auto !important;
+                                    .switch {
+                                        .box {
+                                            background-color: #e9e9e9;
+                                        }
+                                    }
+                                    .text {
+                                        color: #c9c9c9;
+                                    }
                                 }
 
                                 & > img {
@@ -346,6 +368,7 @@ $locker-min-width: 897px;
 
                                     &:nth-child(odd) {
                                         margin-top: 8px;
+                                        opacity: 0.5;
                                     }
                                 }
                             }
@@ -360,6 +383,12 @@ $locker-min-width: 897px;
                     .l-locker-item {
                         width: 100%;
                         height: 100%;
+
+                        ::ng-deep gridster {
+                            .grid-locker-item {
+                                box-shadow: none !important;
+                            }
+                        }
                     }
                 }
             }
@@ -434,4 +463,8 @@ $locker-min-width: 897px;
     &::-webkit-scrollbar-corner {
         background-color: transparent;
     }
+}
+
+.grey {
+    color: #c9c9c9;
 }

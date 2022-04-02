@@ -73,7 +73,9 @@
                             *ngFor="let item of helpTexts"
                             [title]="item.title"
                         >
-                            <span class="rw-typo-bodytext1">{{item.text}}</span>
+                            <span
+                                class="rw-typo-bodytext1"
+                            >{{item.text}}</span>
                         </rw-locker-tip-dropdown>
                     </ng-container>
 
@@ -92,7 +94,7 @@
                 <div class="main-right__header main-title-margin">
                     <p class="rw-typo-title1 ">락커</p>
                     <rw-switch
-                        [text]="LockerGlobalMode == 'normal' ? '변경 모드 켜기' : '변경 모드 끄기'"
+                        [text]="!isEditMode ? '변경모드 끄기' : '변경모드 켜기'"
                         [(ngModel)] = "isEditMode"
                         (change)="LockerGlobalMode == 'normal'&& onEditModeChange($event)"
                         [disabled] = "LockerGlobalMode == 'moveLockerTicket' ? true : false"
@@ -119,10 +121,14 @@
 
                                 <ng-container [ngSwitch]="isCategInputOpen">
                                     <div
-                                        *ngSwitchCase="false" class="add-locker-category__button"
+                                        *ngSwitchCase="false"
+                                        class="add-locker-category__button"
                                         (click)="openCategInput(); $event.stopPropagation()"
                                     >
-                                        <img src="assets/icons/etc/add-category.svg">
+                                        <img
+                                            [class.word-x]="lockerCategLength != 0"
+                                            src="assets/icons/etc/add-category.svg"
+                                        >
                                         <span *ngIf="lockerCategLength == 0" class="rw-typo-bodytext0">
                                             카테고리 추가
                                         </span>
@@ -151,11 +157,21 @@
                                     [disabled]="curLockerItemList.length >= 100"
                                     [formControl]="lockerItemCountInput"
                                 >
-                                <p class="index-text" [class.grey]="curLockerItemList.length >= 100">번부터</p>
+                                <p
+                                    class="index-text"
+                                    [class.grey]="curLockerItemList.length >= 100"
+                                >
+                                    번부터
+                                </p>
                             </div>
-                            <div class="add-locker-item-button " rw-button rwButtonWidth="138" rwButtonHeight="38" rwButtonColor="var(--darkgrey)"
-                                rwButtonFontColor="var(--white)" [rwButtonDisabled]="curLockerItemList.length >= 100"
-                                (click)="curLockerItemList.length < 100 && addGridItem()">
+                            <div class="add-locker-item-button"
+                                rw-button rwButtonWidth="138"
+                                rwButtonHeight="38"
+                                rwButtonColor="var(--darkgrey)"
+                                rwButtonFontColor="var(--white)"
+                                [rwButtonDisabled]="curLockerItemList.length >= 100"
+                                (click)="curLockerItemList.length < 100 && addGridItem()"
+                            >
                                 <img src="assets/icons/etc/plus-white.svg">
                                 <span>락커 추가하기</span>
                             </div>
@@ -168,7 +184,11 @@
                             <div class="guide-image-container">
                                 <div *ngIf="!isEditMode && !curLockerCateg" class="alter-mode-guide-image">
                                     <div class="alter-mode-card rw-typo-bodytext0">
-                                        <rw-switch text="변경모드" [disabled]="true"></rw-switch>
+                                        <rw-switch
+                                            text="변경모드"
+                                            [disabled]="true"
+                                            [(ngModel)]="alterGuide"
+                                        ></rw-switch>
                                         <img src="assets/icons/etc/cursor_pointer.svg">
                                     </div>
                                     <p class="rw-typo-subtext2">변경하기 모드를 켜신 후,</p>
