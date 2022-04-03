@@ -153,6 +153,14 @@
                         margin-top: 7px;
                         .user-name {
                             text-align: center;
+                            display: -webkit-box;
+                            min-width: 10px;
+                            max-width: 125px;
+                            text-overflow: ellipsis;
+                            -webkit-line-clamp: 2;
+                            line-clamp: 2;
+                            overflow: hidden;
+                            -webkit-box-orient: vertical;
                         }
                         .date-remain {
                             position: relative;

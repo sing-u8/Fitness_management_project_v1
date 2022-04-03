@@ -70,12 +70,13 @@
 
                     <ng-container *ngIf="isEditMode">
                         <rw-locker-tip-dropdown
-                            *ngFor="let item of helpTexts"
+                            *ngFor="let item of helpTexts; last as isLast"
                             [title]="item.title"
                         >
-                            <span
-                                class="rw-typo-bodytext1"
-                            >{{item.text}}</span>
+                            <span *ngIf="!isLast" class="rw-typo-bodytext1">{{item.text}}</span>
+                            <span *ngIf="isLast" class="rw-typo-bodytext1">
+                                카테고리 내 락커는 <span class="bold">최대 100개</span>까지 생성하실 수 있으며, 락커 카테고리는 필요하신 만큼 추가하실 수 있어요.
+                            </span>
                         </rw-locker-tip-dropdown>
                     </ng-container>
 
