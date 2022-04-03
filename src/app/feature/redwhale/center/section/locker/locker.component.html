@@ -154,8 +154,9 @@
                         >
                             <div class="locker-index">
                                 <input
-                                    type="text" class="rw-input"
-                                    [disabled]="curLockerItemList.length >= 100"
+                                    type="text"
+                                    class="rw-input"
+                                    [attr.disabled]="curLockerItemList.length >= 100"
                                     [formControl]="lockerItemCountInput"
                                 >
                                 <p

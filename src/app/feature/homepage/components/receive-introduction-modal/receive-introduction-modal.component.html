@@ -63,7 +63,10 @@
                                 <span class="underbar_click" (click)="toggleTermGrid($event)"> 개인정보 수집 동의</span>
                             </div>
                         </div>
-                        <table *ngIf="isTermsOpen" class="term-table">
+                        <table
+                            (click)="$event.stopPropagation()"
+                            *ngIf="isTermsOpen" class="term-table"
+                        >
                             <tr>
                                 <td>수집 목적</td>
                                 <td>수집 항목</td>

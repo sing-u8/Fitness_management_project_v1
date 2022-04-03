@@ -272,7 +272,7 @@ section.l-main {
                 }
             }
             .talk4 {
-                width: 280px;
+                width: 275px;
                 height: 67.5px;
                 color: var(--white);
                 background-color: var(--font-color);
@@ -404,9 +404,10 @@ section.l-main {
                     left: 0px;
                     top: 0px;
                     width: 199px;
-                    height: 41px;
+                    height: 40px;
                     z-index: 3;
-                    background-size: cover;
+                    background-size: contain;
+                    background-repeat: no-repeat;
                     background-image: url('/assets/homepage/images/main/2-3.png');
                     box-shadow: 0 0 35px rgb(181 181 181 / 17%);
                     border-radius: 10px;
@@ -430,7 +431,7 @@ section.l-main {
                     z-index: 1;
                     background-size: cover;
                     background-image: url('/assets/homepage/images/main/3-1.png');
-                    border-radius: 10px;
+                    border-radius: 5px;
                 }
                 .sec4-2__image2 {
                     position: absolute;
@@ -553,7 +554,7 @@ section.l-main {
                     background-size: contain;
                     background-image: url('/assets/homepage/images/main/6-2.png');
                     filter: drop-shadow(0 0 14px rgb(172 172 172));
-                    border-radius: 10px;
+                    // border-radius: 5px;
                 }
             }
         }
@@ -568,9 +569,10 @@ section.l-main {
                     position: absolute;
                     right: 0px;
                     top: 0px;
-                    width: 230px;
+                    width: 234px;
                     height: 43px;
-                    background-size: cover;
+                    background-size: contain;
+                    background-repeat: no-repeat;
                     background-image: url('/assets/homepage/images/main/7-1.png');
                     box-shadow: 0 0 16px rgb(181 181 181 / 0.17);
                     border-radius: 10px;
@@ -579,9 +581,10 @@ section.l-main {
                     position: absolute;
                     right: 0px;
                     top: 52px;
-                    width: 277px;
+                    width: 283px;
                     height: 64px;
-                    background-size: cover;
+                    background-size: contain;
+                    background-repeat: no-repeat;
                     background-image: url('/assets/homepage/images/main/7-2.png');
                     box-shadow: 0 0 16px rgb(181 181 181 / 17%);
                     border-radius: 10px;
@@ -668,22 +671,24 @@ section.l-main {
 
             .sec5__image1 {
                 position: absolute;
-                width: 231px;
+                width: 239px;
                 height: 47px;
                 right: 0px;
                 top: 0px;
-                background-size: cover;
+                background-size: contain;
+                background-repeat: no-repeat;
                 background-image: url('/assets/homepage/images/main/8-1.png');
                 filter: drop-shadow(0 0 16px #b5b5b533);
                 border-radius: 10px;
             }
             .sec5__image2 {
                 position: absolute;
-                width: 224px;
-                height: 47px;
+                width: 230px;
+                height: 53px;
                 left: 0px;
                 bottom: 0px;
-                background-size: cover;
+                background-size: contain;
+                background-repeat: no-repeat;
                 background-image: url('/assets/homepage/images/main/8-2.png');
                 filter: drop-shadow(0 0 16px #b5b5b533);
                 border-radius: 10px;
@@ -808,7 +813,7 @@ section.l-main {
                     }
                 }
                 .talk2 {
-                    width: 280px;
+                    width: 279px;
                     height: 84px;
                     padding: 0 20px;
                     &::before {
@@ -833,7 +838,7 @@ section.l-main {
                     }
                 }
                 .talk4 {
-                    width: 315px;
+                    width: 310px;
                     height: 84px;
                     padding: 0 20px;
                     &::before {
@@ -913,7 +918,7 @@ section.l-main {
                     }
                     .sec4-1__image3 {
                         width: 223px;
-                        height: 46px;
+                        height: 45px;
                     }
                 }
             }
@@ -1011,12 +1016,12 @@ section.l-main {
                     height: 348px;
                     margin-top: 60px;
                     .sec4-6__image1 {
-                        width: 304px;
+                        width: 308px;
                         height: 57px;
                     }
                     .sec4-6__image2 {
                         top: 68px;
-                        width: 361px;
+                        width: 365px;
                         height: 83px;
                     }
                     .sec4-6__image3 {
@@ -1063,12 +1068,12 @@ section.l-main {
                 height: 135px;
 
                 .sec5__image1 {
-                    width: 285px;
+                    width: 289px;
                     height: 57px;
                 }
                 .sec5__image2 {
-                    width: 274px;
-                    height: 57px;
+                    width: 250px;
+                    height: 58px;
                 }
             }
             .sec5__image3 {
@@ -1173,7 +1178,7 @@ section.l-main {
                     }
                 }
                 .talk2 {
-                    width: 310px;
+                    width: 308px;
                     height: 99px;
 
                     &::before {
@@ -1193,7 +1198,7 @@ section.l-main {
                     }
                 }
                 .talk4 {
-                    width: 346px;
+                    width: 344px;
                     height: 100px;
                     &::before {
                         border-top: 18px solid transparent;
@@ -1264,7 +1269,7 @@ section.l-main {
                     }
                     .sec4-1__image3 {
                         width: 260px;
-                        height: 54px;
+                        height: 52px;
                     }
                 }
             }
@@ -1364,13 +1369,13 @@ section.l-main {
                     height: 348px;
                     margin-top: 50px;
                     .sec4-6__image1 {
-                        width: 300px;
+                        width: 304px;
                         height: 56px;
                     }
                     .sec4-6__image2 {
                         top: 67px;
-                        width: 365px;
-                        height: 84px;
+                        width: 369px;
+                        height: 83px;
                     }
                     .sec4-6__image3 {
                         bottom: 98px;

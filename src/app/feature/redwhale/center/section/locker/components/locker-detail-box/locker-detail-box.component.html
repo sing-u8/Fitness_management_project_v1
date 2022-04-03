@@ -1,5 +1,8 @@
-<div class="locker-detail-box-container" [class.avatar-exit]="lockerItem.user_locker"
-    [class.locker-stop]="lockerItem.state_code == 'locker_item_state_stop'">
+<div
+    class="locker-detail-box-container"
+    [class.avatar-exit]="lockerItem.user_locker"
+    [class.locker-stop]="lockerItem.state_code == 'locker_item_state_stop'"
+>
     <div class="locker-detail-box" [class.move-locket-ticket-mode]="lockerGlobalMode == 'moveLockerTicket'">
 
         <div class="header">

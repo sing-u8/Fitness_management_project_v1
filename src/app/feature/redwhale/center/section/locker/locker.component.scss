@@ -197,7 +197,7 @@ $locker-min-width: 897px;
                                 span {
                                     color: var(--darkgrey) !important;
                                     margin-left: 4px !important;
-                                    margin-right: 6px !important;
+                                    margin-right: 9px !important;
                                 }
                             }
 
@@ -300,10 +300,14 @@ $locker-min-width: 897px;
                                     .switch {
                                         .box {
                                             background-color: #e9e9e9;
+                                            opacity: 1;
                                         }
                                     }
                                     .text {
                                         color: #c9c9c9;
+                                    }
+                                    &.disabled {
+                                        opacity: 1 !important;
                                     }
                                 }
 

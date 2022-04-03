@@ -119,8 +119,8 @@
                             color: var(--font-color);
 
                             &::placeholder {
-                                font-size: 1.4rem;
-                                font-weight: 500;
+                                font-size: 1.4rem !important;
+                                font-weight: 400 !important;
                                 line-height: normal;
                                 letter-spacing: -0.2px;
                                 text-align: left;
@@ -202,10 +202,10 @@
                 td {
                     border: 1px solid #eaeaea;
                     border-collapse: collapse;
-                    font-weight: 400;
+                    font-weight: 400 !important;
                 }
 
-                width: 100%;
+                width: 273px;
                 height: 115px;
                 margin: 5px 0 0 30px;
                 border-radius: 3px;
@@ -222,7 +222,8 @@
                         background-color: var(--white);
                         max-height: 66px;
                         td {
-                            padding: 8px 10px 10px 10px;
+                            vertical-align: text-top;
+                            padding: 8px 13px 13px 9px;
                         }
                     }
                 }
@@ -381,7 +382,7 @@
     }
 
     .button {
-        margin-bottom: 45px;
+        margin-bottom: 42px;
     }
 }
 @media (min-width: 1280px) {

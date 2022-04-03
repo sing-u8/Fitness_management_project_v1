@@ -9,12 +9,13 @@
     border-radius: 5px;
     position: relative;
     width: 220px;
-    height: 242px;
+    // height: 242px;
+    min-height: 242px;
     &.avatar-exit {
-        height: 260px;
+        min-height: 260px;
     }
     &.locker-stop {
-        height: 60px;
+        min-height: 60px;
     }
 
     @media (min-width: 1440px) {
@@ -161,6 +162,7 @@
                             line-clamp: 2;
                             overflow: hidden;
                             -webkit-box-orient: vertical;
+                            word-wrap: break-word;
                         }
                         .date-remain {
                             position: relative;
@@ -192,6 +194,7 @@
             align-items: center;
             justify-content: center;
             position: relative;
+            margin-top: 19px;
 
             color: var(--darkgrey);
 
@@ -240,7 +243,7 @@
     }
     .locker-control-buttons {
         position: absolute;
-        top: 270px;
+        bottom: -50px;
         left: 0px;
         display: flex;
         justify-content: space-between;
