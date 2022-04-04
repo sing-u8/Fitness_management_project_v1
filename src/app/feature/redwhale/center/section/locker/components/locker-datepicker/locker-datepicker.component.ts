@@ -22,7 +22,7 @@ import moment from 'moment-timezone'
 })
 export class LockerDatepickerComponent implements OnInit, OnChanges, AfterViewChecked, AfterViewInit {
     @Input() isShadow = true
-    @Input() mode: string // date, week, multi, multiline
+    @Input() mode: 'date' | 'week' | 'multi' | 'multiline'
     @Input() data: any
     @Input() option: 'normal' | 'register' | 'extend'
     @Input() width: string
@@ -73,7 +73,7 @@ export class LockerDatepickerComponent implements OnInit, OnChanges, AfterViewCh
         } else if (this.mode == 'week' && this.data.startDate) {
             this.currentDate = moment(this.data.startDate)
         } else if (false) {
-        } else if ((this.mode == 'multiline' || this.mode == 'multiline-component') && this.data.startDate) {
+        } else if (this.mode == 'multiline' && this.data.startDate) {
             this.multiLineSelectDate({ date: this.data?.startDate })
             this.multiLineSelectDate({ date: this.data?.endDate })
             this.currentDate = moment()
@@ -95,9 +95,6 @@ export class LockerDatepickerComponent implements OnInit, OnChanges, AfterViewCh
             const paddingSide = (Number(this.width) - 255) / 2 + 10
             this.renderer.setStyle(this.multiline_datepicker.nativeElement, 'width', `${this.width}px`)
             this.renderer.setStyle(this.multiline_datepicker.nativeElement, 'padding', `10px ${paddingSide}px`)
-        }
-        if (this.mode == 'multiline-component') {
-            this.renderer.setStyle(this.multiline_datepicker.nativeElement, 'boxShadow', `none`)
         }
     }
     ngAfterViewChecked() {
@@ -161,9 +158,9 @@ export class LockerDatepickerComponent implements OnInit, OnChanges, AfterViewCh
                 if (date.format('YYYYMMDD') == this.today.format('YYYYMMDD')) {
                     weekCol['color'] = 'rgb(51, 102, 255)'
                 } else if (date.format('MM') != currentDate.format('MM')) {
-                    weekCol['color'] = 'rgb(228, 233, 242)'
+                    weekCol['color'] = 'rgb(207, 207, 207)'
                 } else {
-                    weekCol['color'] = 'rgb(143, 155, 179)'
+                    weekCol['color'] = 'rgb(96, 96, 96)'
                 }
 
                 if (this.mode == 'date') {

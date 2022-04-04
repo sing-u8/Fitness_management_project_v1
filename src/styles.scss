@@ -211,17 +211,20 @@
     max-width: 150px;
     padding: 6px 10px !important;
     font-size: 1.1rem;
+    font-weight: 400;
+    line-height: 16px;
+    letter-spacing: -0.12px;
     text-align: center;
     color: var(--white);
     overflow-wrap: break-word;
-    background-color: var(--font-color);
+    background-color: var(--darkgrey);
     border-radius: 6px;
     opacity: 0;
     z-index: 999;
 }
 
 .rw-tooltip-show {
-    opacity: 0.8;
+    opacity: 0.85;
 }
 
 .rw-tooltip-top {
@@ -233,7 +236,7 @@
         margin-left: -5px;
         border-width: 5px;
         border-style: solid;
-        border-color: var(--font-color) transparent transparent transparent;
+        border-color: var(--darkgrey) transparent transparent transparent;
     }
 }
 
@@ -246,7 +249,7 @@
         margin-top: -5px;
         border-width: 5px;
         border-style: solid;
-        border-color: transparent var(--font-color) transparent transparent;
+        border-color: transparent var(--darkgrey) transparent transparent;
     }
 }
 
@@ -259,7 +262,7 @@
         margin-left: -5px;
         border-width: 5px;
         border-style: solid;
-        border-color: transparent transparent var(--font-color) transparent;
+        border-color: transparent transparent var(--darkgrey) transparent;
     }
 }
 
@@ -272,7 +275,7 @@
         margin-top: -5px;
         border-width: 5px;
         border-style: solid;
-        border-color: transparent transparent transparent var(--font-color);
+        border-color: transparent transparent transparent var(--darkgrey);
     }
 }
 

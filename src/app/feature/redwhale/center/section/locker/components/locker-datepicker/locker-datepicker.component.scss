@@ -23,12 +23,45 @@
                     color: var(--darkgrey);
                 }
             }
+            .arrow {
+                width: 20px;
+                height: 20px;
+                cursor: pointer;
+                &.left {
+                    background-image: url('/assets/icons/etc/chevron_left.svg');
+                    &:hover {
+                        background-image: url('/assets/icons/etc/chevron_left_focus.svg');
+                    }
+                }
+                &.left-double {
+                    background-image: url('/assets/icons/etc/chevron_double_left.svg');
+                    &:hover {
+                        background-image: url('/assets/icons/etc/chevron_double_left_focus.svg');
+                    }
+                }
+                &.right {
+                    transform: rotate(180deg);
+                    background-image: url('/assets/icons/etc/chevron_left.svg');
+                    &:hover {
+                        background-image: url('/assets/icons/etc/chevron_left_focus.svg');
+                    }
+                }
+                &.right-double {
+                    transform: rotate(180deg);
+                    background-image: url('/assets/icons/etc/chevron_double_left.svg');
+                    &:hover {
+                        background-image: url('/assets/icons/etc/chevron_double_left_focus.svg');
+                    }
+                }
+            }
         }
 
         .center {
-            font-size: 1.5rem;
-            font-weight: 500;
+            font-size: 1.4rem;
             color: var(--font-color);
+            font-weight: 700;
+            line-height: 20px;
+            letter-spacing: -0.2px;
         }
     }
 
@@ -65,9 +98,20 @@
         .week-row {
             .week-col {
                 width: 34px;
-                height: 26px;
+                height: 28px;
                 border-radius: unset;
                 font-size: 1.1rem;
+                position: relative;
+                // &.start-date, &.end-date {
+                //     background-color: transparent !important;
+                //     cursor: auto !important;
+                // }
+                // .week-col__edge {
+                //     cursor: pointer !important;
+                //     background-color: var(--red);
+                //     height: 100%;
+                //     width: 28px;
+                // }
             }
         }
     }
@@ -148,12 +192,12 @@
             }
         }
         .between {
-            color: var(--white) !important;
-            background-color: var(--lighterred);
+            color: var(--darkgrey) !important;
+            background-color: rgba(227, 74, 94, 0.05);
 
             &:hover {
-                background-color: var(--lighterred);
-                color: var(--white) !important;
+                background-color: rgba(227, 74, 94, 0.05);
+                color: var(--darkgrey) !important;
             }
         }
     }

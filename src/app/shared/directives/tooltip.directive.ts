@@ -8,9 +8,9 @@ export class TooltipDirective implements OnDestroy {
     @Input() rwTooltipPlacement: string
     @Input() rwTooltipDelay: number
     @Input() rwTooltipDisabled: boolean
+    @Input() offset = '10'
 
     private tooltip: HTMLElement
-    private offset = 10
 
     constructor(private el: ElementRef, private renderer: Renderer2) {
         this.rwTooltipTitle = 'Tooltip'
@@ -67,7 +67,7 @@ export class TooltipDirective implements OnDestroy {
                 hostPos.width > toolTipPos.width
                     ? hostPos.width / 2 - toolTipPos.width / 2
                     : (toolTipPos.width / 2 - hostPos.width / 2) * -1
-            this.renderer.setStyle(this.tooltip, 'top', `${hostPos.top - toolTipPos.height - this.offset}px`)
+            this.renderer.setStyle(this.tooltip, 'top', `${hostPos.top - toolTipPos.height - Number(this.offset)}px`)
             this.renderer.setStyle(this.tooltip, 'left', `${hostPos.left + adjusment}px`)
         } else if (this.rwTooltipPlacement == 'right') {
             const adjusment =
@@ -75,13 +75,13 @@ export class TooltipDirective implements OnDestroy {
                     ? hostPos.height / 2 - toolTipPos.height / 2
                     : (toolTipPos.height / 2 - hostPos.height / 2) * -1
             this.renderer.setStyle(this.tooltip, 'top', `${hostPos.top + adjusment}px`)
-            this.renderer.setStyle(this.tooltip, 'left', `${hostPos.right + this.offset}px`)
+            this.renderer.setStyle(this.tooltip, 'left', `${hostPos.right + Number(this.offset)}px`)
         } else if (this.rwTooltipPlacement == 'bottom') {
             const adjusment =
                 hostPos.width > toolTipPos.width
                     ? hostPos.width / 2 - toolTipPos.width / 2
                     : (toolTipPos.width / 2 - hostPos.width / 2) * -1
-            this.renderer.setStyle(this.tooltip, 'top', `${hostPos.bottom + this.offset}px`)
+            this.renderer.setStyle(this.tooltip, 'top', `${hostPos.bottom + Number(this.offset)}px`)
             this.renderer.setStyle(this.tooltip, 'left', `${hostPos.left + adjusment}px`)
         } else {
             const adjusment =
@@ -89,7 +89,7 @@ export class TooltipDirective implements OnDestroy {
                     ? hostPos.height / 2 - toolTipPos.height / 2
                     : (toolTipPos.height / 2 - hostPos.height / 2) * -1
             this.renderer.setStyle(this.tooltip, 'top', `${hostPos.top + adjusment}px`)
-            this.renderer.setStyle(this.tooltip, 'left', `${hostPos.left - toolTipPos.width - this.offset}px`)
+            this.renderer.setStyle(this.tooltip, 'left', `${hostPos.left - toolTipPos.width - Number(this.offset)}px`)
         }
     }
 }
