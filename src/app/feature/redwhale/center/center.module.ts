@@ -19,7 +19,6 @@ import { ScheduleComponent } from './section/schedule/schedule.component'
 import { LessonModule } from './section/lesson/lesson.module'
 import { MembershipModule } from './section/membership/membership.module'
 import { LockerModule } from './section/locker/locker.module'
-import { DashboardModule } from './section/dashboard/dashboard.module'
 
 // ngrx
 import { StoreModule } from '@ngrx/store'
@@ -69,7 +68,6 @@ import { SecLockerStateService } from '@services/state/redwhale/center/sec-locke
         LessonModule,
         MembershipModule,
         LockerModule,
-        DashboardModule,
         // <-- ngrx     //
         StoreModule.forFeature(GymFeatureKey, {
             [LessonFeatureKey]: lessonReducer,
