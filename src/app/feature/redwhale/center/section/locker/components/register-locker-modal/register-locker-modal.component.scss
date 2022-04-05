@@ -58,17 +58,27 @@
             width: $outer-width;
             height: 35px;
             border-bottom: 1px solid var(--border-color);
+            position: relative;
             & > span {
                 font-weight: 700;
             }
-            & > img {
-                width: 20px;
-                height: 20px;
+            .l-close {
+                position: absolute;
+                right: 0px;
+                top: -4.5px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 26px;
+                height: 26px;
                 border-radius: 3px;
                 cursor: pointer;
-
                 &:hover {
                     background-color: var(--background-color);
+                }
+                img {
+                    width: 20px;
+                    height: 20px;
                 }
             }
         }

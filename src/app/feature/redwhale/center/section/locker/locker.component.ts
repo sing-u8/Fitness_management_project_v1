@@ -21,6 +21,7 @@ import { StorageService } from '@services/storage.service'
 import { CenterLockerService } from '@services/center-locker.service'
 import { UsersLockerService } from '@services/users-locker.service'
 import { CenterUsersLockerService } from '@services/center-users-locker.service.service'
+import { SecLockerStateService } from '@services/state/redwhale/center/sec-locker-state.service'
 
 // schemas
 import { LockerCategory } from '@schemas/locker-category'
@@ -103,7 +104,12 @@ export class LockerComponent implements OnInit, AfterViewInit, OnDestroy {
     @ViewChildren(LockerCategoryComponent) lockerCategories!: QueryList<LockerCategoryComponent>
     @ViewChild('l_locker_category') l_locker_category: ElementRef
 
-    constructor(private nxStore: Store, private storageService: StorageService, private fb: FormBuilder) {
+    constructor(
+        private nxStore: Store,
+        private storageService: StorageService,
+        private fb: FormBuilder,
+        private lockerSerState: SecLockerStateService
+    ) {
         // input formcontrol
         this.categInput = this.fb.control('')
         this.lockerItemCountInput = this.fb.control('0')
@@ -129,6 +135,13 @@ export class LockerComponent implements OnInit, AfterViewInit, OnDestroy {
             })
 
         this.nxStore.dispatch(LockerActions.setCurCenterId({ centerId: this.center.id }))
+        this.lockerSerState
+            .selectLockerItemList((state) => state)
+            .pipe(takeUntil(this.unSubscriber$))
+            .subscribe((curLockerItemList) => {
+                this.curLockerItemList = _.cloneDeep(curLockerItemList)
+                this.lockerItemCountInput.setValue(String(this.getMaximumLockerId(curLockerItemList) + 1))
+            })
         this.nxStore
             .pipe(select(LockerSelector.curLockerItemList), takeUntil(this.unSubscriber$))
             .subscribe((curLockerItemList) => {

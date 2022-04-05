@@ -15,6 +15,7 @@ import { LockerItem } from '@schemas/locker-item'
 import { CenterLockerService } from '@services/center-locker.service'
 import { UsersLockerService } from '@services/users-locker.service'
 import { CenterUsersLockerService } from '@services/center-users-locker.service.service'
+import { SecLockerStateService } from '@services/state/redwhale/center/sec-locker-state.service'
 
 import _ from 'lodash'
 
@@ -25,7 +26,8 @@ export class LockerEffect {
         private store: Store,
         private centerLokcerApi: CenterLockerService,
         private usersLockerApi: UsersLockerService,
-        private centerUsersLockerApi: CenterUsersLockerService
+        private centerUsersLockerApi: CenterUsersLockerService,
+        private lockerSerState: SecLockerStateService
     ) {}
 
     // locker state entity

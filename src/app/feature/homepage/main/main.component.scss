@@ -409,7 +409,8 @@ section.l-main {
                     background-size: contain;
                     background-repeat: no-repeat;
                     background-image: url('/assets/homepage/images/main/2-3.png');
-                    box-shadow: 0 0 35px rgb(181 181 181 / 17%);
+                    // box-shadow: 0 0 35px rgb(181 181 181 / 17%);
+                    filter: drop-shadow(0 0 35px rgb(181 181 181 / 0.17));
                     border-radius: 10px;
                 }
             }
@@ -552,6 +553,7 @@ section.l-main {
                     height: 60px;
                     z-index: 2;
                     background-size: contain;
+                    background-repeat: no-repeat;
                     background-image: url('/assets/homepage/images/main/6-2.png');
                     filter: drop-shadow(0 0 14px rgb(172 172 172));
                     // border-radius: 5px;
@@ -574,8 +576,9 @@ section.l-main {
                     background-size: contain;
                     background-repeat: no-repeat;
                     background-image: url('/assets/homepage/images/main/7-1.png');
-                    box-shadow: 0 0 16px rgb(181 181 181 / 0.17);
-                    border-radius: 10px;
+                    filter: drop-shadow(0 0 16px rgb(181 181 181 / 0.3));
+                    // box-shadow: 0 0 16px rgb(181 181 181 / 0.17);
+                    // border-radius: 10px;
                 }
                 .sec4-6__image2 {
                     position: absolute;
@@ -586,8 +589,9 @@ section.l-main {
                     background-size: contain;
                     background-repeat: no-repeat;
                     background-image: url('/assets/homepage/images/main/7-2.png');
-                    box-shadow: 0 0 16px rgb(181 181 181 / 17%);
-                    border-radius: 10px;
+                    filter: drop-shadow(0 0 16px rgb(181 181 181 / 0.3));
+                    // box-shadow: 0 0 16px rgb(181 181 181 / 17%);
+                    // border-radius: 10px;
                 }
                 .sec4-6__image3 {
                     position: absolute;
@@ -601,16 +605,37 @@ section.l-main {
                     border-radius: 10px;
                 }
                 .sec4-6__image4 {
+                    font-size: 1.4rem;
+                    font-weight: 500;
+                    line-height: 1.6;
+                    letter-spacing: -0.2px;
                     position: absolute;
                     left: 26px;
                     bottom: 0px;
-                    width: 206px;
-                    height: 69px;
                     z-index: 4;
-                    background-size: cover;
-                    background-image: url('/assets/homepage/images/main/7-3-2.png');
-                    box-shadow: 0 0 20px rgb(181 181 181 / 19%);
+                    width: 206px;
+                    height: 66px;
+                    color: var(--font-color);
+                    background-color: var(--white);
+                    padding: 0px 15px;
+                    display: flex;
+                    align-items: center;
                     border-radius: 10px;
+                    box-shadow: 0 0 35px rgba(181, 181, 181, 0.27);
+                    &::before {
+                        border-top: 10px solid transparent;
+                        border-right: 15px solid transparent;
+                        border-left: 15px solid var(--white);
+                        border-bottom: 10px solid var(--white);
+                        border-radius: 7px;
+                        transform: skew(325deg, 345deg);
+                        content: '';
+                        position: absolute;
+                        top: 48px;
+                        left: -3px;
+                        z-index: 0;
+                        box-shadow: 0 0 35px rgba(181, 181, 181, 0.27);
+                    }
                 }
                 .sec4-6__image5 {
                     position: absolute;
@@ -1030,10 +1055,18 @@ section.l-main {
                         height: 33px;
                     }
                     .sec4-6__image4 {
+                        font-size: 1.6rem;
+                        line-height: 1.75;
+                        letter-spacing: -0.26px;
+                        padding: 0 23px;
                         left: 33px;
                         bottom: 0px;
                         width: 268px;
                         height: 89px;
+                        &::before {
+                            top: 72px;
+                            left: -5px;
+                        }
                     }
                     .sec4-6__image5 {
                         left: 230px;
@@ -1383,10 +1416,6 @@ section.l-main {
                         height: 34px;
                     }
                     .sec4-6__image4 {
-                        left: 33px;
-                        bottom: 0px;
-                        width: 268px;
-                        height: 89px;
                     }
                     .sec4-6__image5 {
                         left: 231px;

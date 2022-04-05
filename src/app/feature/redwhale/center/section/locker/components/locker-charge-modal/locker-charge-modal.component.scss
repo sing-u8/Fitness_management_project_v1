@@ -53,10 +53,14 @@
             height: 37px;
             border-bottom: 1px solid var(--border-color);
             margin-bottom: 20px;
+            position: relative;
             & > span {
                 font-weight: 700;
             }
             .l-close {
+                position: absolute;
+                right: 0px;
+                top: -4.5px;
                 display: flex;
                 align-items: center;
                 justify-content: center;

@@ -44,5 +44,6 @@ import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader'
         NgxSkeletonLoaderModule,
         SectionCommonModule,
     ],
+    providers: [],
 })
 export class LockerModule {}
