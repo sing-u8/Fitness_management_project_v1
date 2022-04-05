@@ -42,9 +42,6 @@ import { lockerReducer } from '@centerStore/reducers/sec.locker.reducer'
 import { LockerEffect } from '@centerStore/effects/sec.locker.effect'
 import { dashboardReducer } from './store/reducers/sec.dashboard.reducer'
 
-//
-import { SecLockerStateService } from '@services/state/redwhale/center/sec-locker-state.service'
-
 @NgModule({
     declarations: [
         CenterComponent,
@@ -79,6 +76,6 @@ import { SecLockerStateService } from '@services/state/redwhale/center/sec-locke
         // ngrx     --> //
     ],
     exports: [],
-    providers: [SecLockerStateService],
+    providers: [],
 })
 export class CenterModule {}

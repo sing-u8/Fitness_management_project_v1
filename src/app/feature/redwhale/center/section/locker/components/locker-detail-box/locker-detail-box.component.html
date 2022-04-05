@@ -1,7 +1,7 @@
 <div
     class="locker-detail-box-container"
     [class.avatar-exit]="lockerItem.user_locker"
-    [class.locker-stop]="lockerItem.state_code == 'locker_item_state_stop'"
+    [class.locker-stop]="lockerItem.state_code == 'locker_item_state_stop_using'"
 >
     <div class="locker-detail-box" [class.move-locket-ticket-mode]="lockerGlobalMode == 'moveLockerTicket'">
 
@@ -22,7 +22,7 @@
                         <div class="dropdown " (rwClickOutside)="closeDropdown()" (click)="openShowlockerHistory()">
                             사용 내역
                         </div>
-                        <div class="dropdown" *ngIf="!lockerItem.user_locker && lockerItem.state_code != 'locker_item_state_stop'"
+                        <div class="dropdown" *ngIf="!lockerItem.user_locker && lockerItem.state_code != 'locker_item_state_stop_using'"
                             (rwClickOutside)="closeDropdown()" (click)="setLockerUnavailable()">
                             사용 불가 설정
                         </div>
@@ -33,7 +33,7 @@
 
             <div class="middle">
 
-                <div #avatar0 *ngIf="lockerItem.state_code == 'locker_item_state_stop'; else avatar1"></div>
+                <div #avatar0 *ngIf="lockerItem.state_code == 'locker_item_state_stop_using'; else avatar1"></div>
 
                 <ng-template #avatar1>
                     <div *ngIf="willRegisteredMember else avatar2" class="avatar-container">
@@ -88,7 +88,7 @@
 
 
 
-        <div *ngIf="lockerItem.state_code != 'locker_item_state_stop'" class="footer rw-typo-bodytext2">
+        <div *ngIf="lockerItem.state_code != 'locker_item_state_stop_using'" class="footer rw-typo-bodytext2">
             <div class="date-container">
 
                 <div class="date">
@@ -138,7 +138,7 @@
 
     <div
         #buttonBox0
-        *ngIf="lockerItem.state_code == 'locker_item_state_stop' else buttonBox1"
+        *ngIf="lockerItem.state_code == 'locker_item_state_stop_using' else buttonBox1"
         class="stop-button"
         rw-button
         rwButtonFontColor="var(--darkgrey)"

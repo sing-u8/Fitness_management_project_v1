@@ -15,7 +15,6 @@ import { LockerItem } from '@schemas/locker-item'
 import { CenterLockerService } from '@services/center-locker.service'
 import { UsersLockerService } from '@services/users-locker.service'
 import { CenterUsersLockerService } from '@services/center-users-locker.service.service'
-import { SecLockerStateService } from '@services/state/redwhale/center/sec-locker-state.service'
 
 import _ from 'lodash'
 
@@ -26,8 +25,7 @@ export class LockerEffect {
         private store: Store,
         private centerLokcerApi: CenterLockerService,
         private usersLockerApi: UsersLockerService,
-        private centerUsersLockerApi: CenterUsersLockerService,
-        private lockerSerState: SecLockerStateService
+        private centerUsersLockerApi: CenterUsersLockerService
     ) {}
 
     // locker state entity
@@ -109,34 +107,38 @@ export class LockerEffect {
         )
     )
 
-    public createLockerItem = createEffect(() =>
-        this.actions$.pipe(
-            ofType(LockerActions.startCreateLockerItem),
-            exhaustMap(({ centerId, categoryId, reqBody }) =>
-                this.centerLokcerApi.createItem(centerId, categoryId, reqBody).pipe(
-                    map((lockerItem) => {
-                        console.log('new Locker Item : ', lockerItem)
-                        return LockerActions.finishCreateLockerItem({ lockerItem: lockerItem })
-                    }),
-                    catchError((err: string) => of(LockerActions.error({ error: err })))
-                )
-            )
-        )
-    )
+    // !! replaced with locker component method
+    // public createLockerItem = createEffect(
+    //     () =>
+    //         this.actions$.pipe(
+    //             ofType(LockerActions.startCreateLockerItem),
+    //             exhaustMap(({ centerId, categoryId, reqBody, cbFn }) => {
+    //                 console.log('startCreateLockerItem in EFFECT!!!!')
+    //                 return this.centerLokcerApi.createItem(centerId, categoryId, reqBody).pipe(
+    //                     tap((lockerItem) => {
+    //                         console.log('startCreateLockerItem AND After createItem API in EFFECT!!!!')
+    //                         cbFn(lockerItem)
+    //                     }),
+    //                     catchError((err: string) => of(LockerActions.error({ error: err })))
+    //                 )
+    //             })
+    //         ),
+    //     { dispatch: false }
+    // )
 
-    public updateLockerItem = createEffect(() =>
-        this.actions$.pipe(
-            ofType(LockerActions.startUpdateLockerItem),
-            switchMap(({ centerId, categoryId, itemId, reqBody }) =>
-                this.centerLokcerApi.updateItem(centerId, categoryId, itemId, reqBody).pipe(
-                    map((lockerItem) => {
-                        // this.setLockerItemList(list)
-                        return LockerActions.finishUpdateLockerItem({ lockerItem })
-                    }),
-                    catchError((err: string) => of(LockerActions.error({ error: err })))
+    public updateLockerItem = createEffect(
+        () =>
+            this.actions$.pipe(
+                ofType(LockerActions.startUpdateLockerItem),
+                switchMap(({ centerId, categoryId, itemId, reqBody }) =>
+                    this.centerLokcerApi
+                        .updateItem(centerId, categoryId, itemId, reqBody)
+                        .pipe(catchError((err: string) => of(LockerActions.error({ error: err }))))
                 )
-            )
-        )
+            ),
+        {
+            dispatch: false,
+        }
     )
 
     public deleteLockerItem = createEffect(() =>
@@ -185,6 +187,7 @@ export class LockerEffect {
                                                 lockerItems,
                                                 (item) => item.id == resUserLocker.locker_item_id
                                             )
+
                                             return [
                                                 LockerActions.finishCreateLockerTicket({
                                                     lockerItems,
@@ -219,6 +222,7 @@ export class LockerEffect {
                         return this.centerLokcerApi.getItemList(centerId, curLockerCateg.id).pipe(
                             switchMap((lockerItems) => {
                                 const updatedLockerItem = _.find(lockerItems, (item) => item.id == curLockerItem.id)
+
                                 return [
                                     LockerActions.finishRefundLockerTicket({
                                         lockerItems,
@@ -259,6 +263,7 @@ export class LockerEffect {
                                                 lockerItems,
                                                 (item) => item.id == startLockerReqBody.locker_item_id
                                             )
+
                                             return [
                                                 LockerActions.finishMoveLockerTicket({ lockerItems, movedLockerItem }),
                                                 LockerActions.resetWillBeMovedLockerItem(),

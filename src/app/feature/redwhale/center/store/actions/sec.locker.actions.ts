@@ -64,14 +64,20 @@ export const finishGetLockerItemList = createAction(
     props<{ lockerItems?: Array<LockerItem> }>()
 )
 
-export const startCreateLockerItem = createAction(
-    `[${FeatureKey}] Start Create Locker item`,
-    props<{ centerId: string; categoryId: string; reqBody: CreateItemRequestBody }>()
-)
-export const finishCreateLockerItem = createAction(
-    `[${FeatureKey}] finish Create Locker item`,
-    props<{ lockerItem?: LockerItem }>()
-)
+// !! replaced with locker component method
+// export const startCreateLockerItem = createAction(
+//     `[${FeatureKey}] Start Create Locker item`,
+//     props<{
+//         centerId: string
+//         categoryId: string
+//         reqBody: CreateItemRequestBody
+//         cbFn?: (newItem: LockerItem) => void
+//     }>()
+// )
+// export const finishCreateLockerItem = createAction(
+//     `[${FeatureKey}] finish Create Locker item`,
+//     props<{ lockerItem?: LockerItem }>()
+// )
 
 export const addLockerItemToList = createAction(
     `[${FeatureKey}] Add Current Locker Item to CurLocker List`,
@@ -82,10 +88,11 @@ export const startUpdateLockerItem = createAction(
     `[${FeatureKey}] Start Update Locker item`,
     props<{ centerId: string; categoryId: string; itemId: string; reqBody: UpdateItemRequestBody }>()
 )
-export const finishUpdateLockerItem = createAction(
-    `[${FeatureKey}] finish Update Locker item`,
-    props<{ lockerItem?: LockerItem }>()
-)
+// !! not be needed
+// export const finishUpdateLockerItem = createAction(
+//     `[${FeatureKey}] finish Update Locker item`,
+//     props<{ lockerItem?: LockerItem }>()
+// )
 
 export const startDeleteLockerItem = createAction(
     `[${FeatureKey}] Start Delete Locker item`,

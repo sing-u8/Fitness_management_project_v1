@@ -21,7 +21,6 @@ import { StorageService } from '@services/storage.service'
 import { CenterLockerService } from '@services/center-locker.service'
 import { UsersLockerService } from '@services/users-locker.service'
 import { CenterUsersLockerService } from '@services/center-users-locker.service.service'
-import { SecLockerStateService } from '@services/state/redwhale/center/sec-locker-state.service'
 
 // schemas
 import { LockerCategory } from '@schemas/locker-category'
@@ -107,8 +106,8 @@ export class LockerComponent implements OnInit, AfterViewInit, OnDestroy {
     constructor(
         private nxStore: Store,
         private storageService: StorageService,
-        private fb: FormBuilder,
-        private lockerSerState: SecLockerStateService
+        private centerLockerApi: CenterLockerService,
+        private fb: FormBuilder
     ) {
         // input formcontrol
         this.categInput = this.fb.control('')
@@ -119,6 +118,7 @@ export class LockerComponent implements OnInit, AfterViewInit, OnDestroy {
             .pipe(select(LockerSelector.curCenterId), takeUntil(this.unSubscriber$))
             .subscribe((curCenterId) => {
                 if (curCenterId != this.center.id) {
+                    // this.lockerSerState.resetLockerItemList()
                     this.nxStore.dispatch(LockerActions.resetAll())
                     this.nxStore.dispatch(LockerActions.startLoadLockerCategs({ centerId: this.center.id }))
                 }
@@ -135,28 +135,11 @@ export class LockerComponent implements OnInit, AfterViewInit, OnDestroy {
             })
 
         this.nxStore.dispatch(LockerActions.setCurCenterId({ centerId: this.center.id }))
-        this.lockerSerState
-            .selectLockerItemList((state) => state)
-            .pipe(takeUntil(this.unSubscriber$))
-            .subscribe((curLockerItemList) => {
-                this.curLockerItemList = _.cloneDeep(curLockerItemList)
-                this.lockerItemCountInput.setValue(String(this.getMaximumLockerId(curLockerItemList) + 1))
-            })
+
         this.nxStore
             .pipe(select(LockerSelector.curLockerItemList), takeUntil(this.unSubscriber$))
             .subscribe((curLockerItemList) => {
                 this.curLockerItemList = _.cloneDeep(curLockerItemList)
-                // console.log(
-                //     'curlockeritemlist difference: ',
-                //     _.differenceWith(curLockerItemList, this.curLockerItemList, _.isEqual)
-                // )
-                // if (this.curLockerItemList.length == 0) {
-                //     this.curLockerItemList = _.cloneDeep(curLockerItemList)
-                // } else {
-                //     const diffItem = _.differenceWith(curLockerItemList, this.curLockerItemList, _.isEqual)[0]
-                //     const diffIndex = _.findIndex(this.curLockerItemList, (item) => item.name == diffItem.name)
-                //     this.curLockerItemList[diffIndex] = diffItem
-                // }
                 this.lockerItemCountInput.setValue(String(this.getMaximumLockerId(curLockerItemList) + 1))
             })
         this.nxStore.pipe(select(LockerSelector.LockerGlobalMode), takeUntil(this.unSubscriber$)).subscribe((lgm) => {
@@ -410,38 +393,34 @@ export class LockerComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     addGridItem() {
-        this.nxStore.dispatch(
-            LockerActions.addLockerItemToList({
-                lockerItem: {
-                    name: String(this.curLockerItemList.length + 1),
-                    rows: 1,
-                    cols: 1,
-                } as LockerItem,
-            })
-        )
+        this.curLockerItemList.push({ name: String(this.curLockerItemList.length + 1), rows: 1, cols: 1 } as LockerItem)
+        // this.nxStore.dispatch(
+        //     LockerActions.addLockerItemToList({
+        //         lockerItem: {
+        //             name: String(this.curLockerItemList.length + 1),
+        //             rows: 1,
+        //             cols: 1,
+        //         } as LockerItem,
+        //     })
+        // )
     }
     createGridItem(item: GridsterItem) {
         console.log('createGridItem item !!!!!!!!!!!!!!: ', item, item['name'])
-        this.nxStore.dispatch(
-            LockerActions.startCreateLockerItem({
-                centerId: this.center.id,
-                categoryId: this.curLockerCateg.id,
-                reqBody: {
-                    name: item['name'],
-                    x: item.x,
-                    y: item.y,
-                    rows: item.rows,
-                    cols: item.cols,
-                },
+        this.centerLockerApi
+            .createItem(this.center.id, this.curLockerCateg.id, {
+                name: item['name'],
+                x: item.x,
+                y: item.y,
+                rows: item.rows,
+                cols: item.cols,
             })
-        )
-        // this.gymLockerState.createItem(this.gym.id, this.selectedCateg.id, item, (newList) => {
-        //     const _newItem = this.itemList[this.itemList.length - 1]
-        //     const newItem = _.find(newList, (item) => {
-        //         return _newItem.x == item.x && _newItem.y == item.y
-        //     })
-        //     _.assign(this.itemList[this.itemList.length - 1], newItem)
-        // })
+            .subscribe((lockerItem) => {
+                console.log('new created locker item in just API!! : ', lockerItem)
+                const newItemIdx = _.findIndex(this.curLockerItemList, (item) => {
+                    return lockerItem.x == item.x && lockerItem.y == item.y
+                })
+                _.assign(this.curLockerItemList[newItemIdx], lockerItem)
+            })
     }
     updateGridItem(item: GridsterItem) {
         this.nxStore.dispatch(
