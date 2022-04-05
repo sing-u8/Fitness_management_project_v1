@@ -54,7 +54,6 @@ export class LockerDatepickerComponent implements OnInit, OnChanges, AfterViewCh
     afterViewCheckedStartDate
 
     constructor(private zone: NgZone, private renderer: Renderer2) {
-        this.mode = 'date'
         this.selectedDate = ''
         this.selectedDateIndex = {
             i: -1,

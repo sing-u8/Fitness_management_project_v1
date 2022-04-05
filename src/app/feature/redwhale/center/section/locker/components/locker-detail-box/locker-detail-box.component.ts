@@ -234,6 +234,7 @@ export class LockerDetailBoxComponent implements OnInit, OnChanges, OnDestroy {
 
     // strongly coupled ! --->
     toggleDoDatePickerShow() {
+        console.log('toggleDoDatePickerShow ----- start', this.doDatePickerShow, 'dateEditMode ----', this.dateEditMode)
         if (this.lockerItem.state_code == 'locker_item_state_empty' || this.dateEditMode == true) {
             this.doDatePickerShow = !this.doDatePickerShow
         } else if (this.lockerItem.state_code == 'locker_item_state_in_use') {

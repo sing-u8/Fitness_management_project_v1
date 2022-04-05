@@ -95,7 +95,9 @@
                     <span *ngIf="lockerDate.startDate">{{lockerDate.startDate | dashToDot}}</span>
                     <span *ngIf="!lockerDate.startDate">시작일</span>
                     <span> &nbsp;&nbsp;-&nbsp;&nbsp; </span>
-                    <div class="end-date" [class.move-locket-ticket-mode]="lockerGlobalMode == 'moveLockerTicket'"
+                    <div
+                        class="end-date"
+                        [class.move-locket-ticket-mode]="lockerGlobalMode == 'moveLockerTicket'"
                         (click)="!checkMoveLockerTicketMode() && toggleDoDatePickerShow(); $event.stopPropagation()">
                         <span *ngIf="lockerDate.endDate">{{lockerDate.endDate | dashToDot}}</span>
                         <span
@@ -109,10 +111,21 @@
                 </div>
 
                 <div *ngIf="doDatePickerShow" class="datepicker-container" (rwClickOutside)="toggleDoDatePickerShow()">
-                    <rw-locker-datepicker *ngIf="dateEditMode" id="register" mode="multiline" [(data)]="lockerDate"
-                        [option]="'extend'" (dataChange)="setLockerDate($event)"></rw-locker-datepicker>
-                    <rw-locker-datepicker *ngIf="!dateEditMode" mode="multiline" [(data)]="lockerDate" [option]="'register'"
-                        (dataChange)="setLockerDate($event)"></rw-locker-datepicker>
+                    <rw-locker-datepicker
+                        *ngIf="dateEditMode"
+                        id="register"
+                        [mode]="'multiline'"
+                        [(data)]="lockerDate"
+                        [option]="'extend'"
+                        (dataChange)="setLockerDate($event)"
+                    ></rw-locker-datepicker>
+                    <rw-locker-datepicker
+                        *ngIf="!dateEditMode"
+                        [mode]="'multiline'"
+                        [(data)]="lockerDate"
+                        [option]="'register'"
+                        (dataChange)="setLockerDate($event)"
+                    ></rw-locker-datepicker>
 
                 </div>
 

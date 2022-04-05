@@ -100,7 +100,8 @@
                 width: 34px;
                 height: 28px;
                 border-radius: unset;
-                font-size: 1.1rem;
+                font-size: 1.2rem;
+                padding-bottom: 1px;
                 position: relative;
                 // &.start-date, &.end-date {
                 //     background-color: transparent !important;
@@ -204,5 +205,5 @@
 }
 
 .isShadow {
-    box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16) !important;
+    box-shadow: 0 0 10px #b5b5b530 !important;
 }

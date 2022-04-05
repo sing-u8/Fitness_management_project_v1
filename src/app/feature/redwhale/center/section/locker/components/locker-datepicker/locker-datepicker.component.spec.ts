@@ -1,25 +1,24 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing'
 
-import { LockerDatepickerComponent } from './locker-datepicker.component';
+import { LockerDatepickerComponent } from './locker-datepicker.component'
 
 describe('LockerDatepickerComponent', () => {
-  let component: LockerDatepickerComponent;
-  let fixture: ComponentFixture<LockerDatepickerComponent>;
+    let component: LockerDatepickerComponent
+    let fixture: ComponentFixture<LockerDatepickerComponent>
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [ LockerDatepickerComponent ]
+    beforeEach(async () => {
+        await TestBed.configureTestingModule({
+            declarations: [LockerDatepickerComponent],
+        }).compileComponents()
     })
-    .compileComponents();
-  });
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(LockerDatepickerComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+    beforeEach(() => {
+        fixture = TestBed.createComponent(LockerDatepickerComponent)
+        component = fixture.componentInstance
+        fixture.detectChanges()
+    })
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-});
+    it('should create', () => {
+        expect(component).toBeTruthy()
+    })
+})
