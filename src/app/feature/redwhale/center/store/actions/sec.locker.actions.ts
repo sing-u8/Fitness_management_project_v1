@@ -96,14 +96,30 @@ export const startUpdateLockerItem = createAction(
 
 export const startDeleteLockerItem = createAction(
     `[${FeatureKey}] Start Delete Locker item`,
-    props<{ centerId: string; categoryId: string; itemId: string; itemName: string }>()
+    props<{ centerId: string; categoryId: string; item: LockerItem; curItemList: LockerItem[] }>()
 )
-export const finishDeleteLockerItem = createAction(`[${FeatureKey}] finish Delete Locker item`)
+// !! not be needed
+// export const finishDeleteLockerItem = createAction(`[${FeatureKey}] finish Delete Locker item`)
 
-// export const startStopItem = createAction(
-//     `[${FeatureKey}] Start Stop Locker item`,
-//     props<{ centerId: string; categoryId: string; itemId: string; itemName: string }>()
-// )
+export const startStopItem = createAction(
+    `[${FeatureKey}] Start Stop Locker item`,
+    props<{
+        centerId: string
+        categoryId: string
+        selectedItem: LockerItem
+        curItemList: LockerItem[]
+    }>()
+)
+export const startResumeItem = createAction(
+    `[${FeatureKey}] Start Resume Locker item`,
+    props<{
+        centerId: string
+        categoryId: string
+        selectedItem: LockerItem
+        curItemList: LockerItem[]
+    }>()
+)
+
 // locker ticket 락커 이용권
 export const startCreateLockerTicket = createAction(
     `[${FeatureKey}] Start Create Locker Ticket`,

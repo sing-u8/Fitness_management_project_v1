@@ -144,18 +144,45 @@ export class LockerEffect {
     public deleteLockerItem = createEffect(() =>
         this.actions$.pipe(
             ofType(LockerActions.startDeleteLockerItem),
-            switchMap(({ centerId, categoryId, itemId, itemName }) =>
-                this.centerLokcerApi.deleteItem(centerId, categoryId, itemId).pipe(
+            switchMap(({ centerId, categoryId, item }) =>
+                this.centerLokcerApi.deleteItem(centerId, categoryId, item.id).pipe(
                     switchMap((_) => {
-                        return [
-                            LockerActions.finishDeleteLockerItem(),
-                            showToast({ text: `[락커${itemName}] 삭제되었습니다.` }),
-                        ]
+                        return [showToast({ text: `[락커${item.name}] 삭제되었습니다.` })]
                     }),
                     catchError((err: string) => of(LockerActions.error({ error: err })))
                 )
             )
         )
+    )
+
+    public stopLockerItem = createEffect(
+        () =>
+            this.actions$.pipe(
+                ofType(LockerActions.startStopItem),
+                switchMap(({ centerId, categoryId, selectedItem }) =>
+                    this.centerLokcerApi
+                        .updateItem(centerId, categoryId, selectedItem.id, {
+                            state_code: 'locker_item_state_stop_using',
+                        })
+                        .pipe(catchError((err: string) => of(LockerActions.error({ error: err }))))
+                )
+            ),
+        { dispatch: false }
+    )
+
+    public resumeLockerItem = createEffect(
+        () =>
+            this.actions$.pipe(
+                ofType(LockerActions.startResumeItem),
+                switchMap(({ centerId, categoryId, selectedItem }) =>
+                    this.centerLokcerApi
+                        .updateItem(centerId, categoryId, selectedItem.id, {
+                            state_code: 'locker_item_state_empty',
+                        })
+                        .pipe(catchError((err: string) => of(LockerActions.error({ error: err }))))
+                )
+            ),
+        { dispatch: false }
     )
 
     // locker ticket
@@ -222,7 +249,7 @@ export class LockerEffect {
                         return this.centerLokcerApi.getItemList(centerId, curLockerCateg.id).pipe(
                             switchMap((lockerItems) => {
                                 const updatedLockerItem = _.find(lockerItems, (item) => item.id == curLockerItem.id)
-
+                                console.log('in effect curLockerItem : ', updatedLockerItem)
                                 return [
                                     LockerActions.finishRefundLockerTicket({
                                         lockerItems,

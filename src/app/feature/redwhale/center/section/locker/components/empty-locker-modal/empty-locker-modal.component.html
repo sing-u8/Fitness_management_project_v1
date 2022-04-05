@@ -33,8 +33,8 @@
         <div
           class="cancel"
           rw-button
-          rwButtonBorderColor="var(--border-color)"
-          rwButtonFontColor="var(--grey)"
+          [rwButtonBorderColor]="'var(--border-color)'"
+          [rwButtonFontColor]="'var(--grey)'"
           (click) ="onCancel()"
         >
           취소
@@ -42,8 +42,8 @@
         <div
           class="confirm"
           rw-button
-          rwButtonColor="var(--red)"
-          rwButtonFontColor="var(--white)"
+          [rwButtonColor]="'var(--red)'"
+          [rwButtonFontColor]="'var(--white)'"
           (click) ="onConfirm()"
         >
           락커 비우기

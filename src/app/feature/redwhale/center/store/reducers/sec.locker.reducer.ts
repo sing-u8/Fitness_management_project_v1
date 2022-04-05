@@ -101,18 +101,44 @@ export const lockerReducer = createImmerReducer(
         return state
     }),
 
-    on(LockerActions.startDeleteLockerItem, (state, { itemId }) => {
-        state.curLockerItemList = _.filter(state.curLockerItemList, (lockerItem) => lockerItem.id != itemId)
-        if (state.curLockerItem?.id == itemId) {
+    on(LockerActions.startDeleteLockerItem, (state, { item, curItemList }) => {
+        state.curLockerItemList = _.filter(curItemList, (lockerItem) => lockerItem.id != item.id)
+        if (state.curLockerItem?.id == item.id) {
             state.curLockerItem = initialLockerState.curLockerItem
         }
         return state
     }),
-    on(LockerActions.finishDeleteLockerItem, (state) => {
+
+    on(LockerActions.startStopItem, (state, { selectedItem, curItemList }) => {
+        state.curLockerItemList = _.map(curItemList, (lockerItem) => {
+            if (lockerItem.id == selectedItem.id) {
+                return {
+                    ...lockerItem,
+                    state_code: 'locker_item_state_stop_using',
+                    state_code_name: '사용중지',
+                }
+            }
+            return lockerItem
+        })
+        state.curLockerItem.state_code = 'locker_item_state_stop_using'
+        state.curLockerItem.state_code_name = '사용중지'
         return state
     }),
-
-    // ---------------------------- 아직 미구현
+    on(LockerActions.startResumeItem, (state, { selectedItem, curItemList }) => {
+        state.curLockerItemList = _.map(curItemList, (lockerItem) => {
+            if (lockerItem.id == selectedItem.id) {
+                return {
+                    ...lockerItem,
+                    state_code: 'locker_item_state_empty',
+                    state_code_name: '비어있음',
+                }
+            }
+            return lockerItem
+        })
+        state.curLockerItem.state_code = 'locker_item_state_empty'
+        state.curLockerItem.state_code_name = '비어있음'
+        return state
+    }),
 
     // - // locker ticket
     on(LockerActions.finishCreateLockerTicket, (state, { lockerItems, lockerItem }) => {
@@ -123,6 +149,7 @@ export const lockerReducer = createImmerReducer(
 
     on(LockerActions.finishRefundLockerTicket, (state, { lockerItem, lockerItems }) => {
         state.curLockerItemList = lockerItems
+        console.log('state.curLockerItem : lockerItem ---', state.curLockerItem, lockerItem)
         state.curLockerItem = lockerItem
         return state
     }),

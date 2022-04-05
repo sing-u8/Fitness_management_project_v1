@@ -325,8 +325,8 @@ export class LockerComponent implements OnInit, AfterViewInit, OnDestroy {
             LockerActions.startDeleteLockerItem({
                 centerId: this.center.id,
                 categoryId: this.curLockerCateg.id,
-                itemId: lockerItem.id,
-                itemName: lockerItem.name,
+                item: lockerItem,
+                curItemList: this.curLockerItemList,
             })
         )
     }
@@ -341,7 +341,7 @@ export class LockerComponent implements OnInit, AfterViewInit, OnDestroy {
             fixedColWidth: 65,
             fixedRowHeight: 65,
             pushItems: false,
-            swap: false,
+            swap: true,
             draggable: {
                 enabled: false,
             },

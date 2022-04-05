@@ -36,6 +36,7 @@ import * as LockerActions from '@centerStore/actions/sec.locker.actions'
 })
 export class LockerDetailBoxComponent implements OnInit, OnChanges, OnDestroy {
     @Input() lockerItem: LockerItem
+    @Input() curLockerItems: LockerItem[]
 
     public center: Center
 
@@ -118,8 +119,7 @@ export class LockerDetailBoxComponent implements OnInit, OnChanges, OnDestroy {
         this.centerLockerService
             .getItemHistories(this.center.id, this.curLockerCateg.id, this.lockerItem.id)
             .subscribe((histories) => {
-                console.log('getLockerHistory : ', histories)
-                // this.lockerHistoryList = histories
+                this.lockerHistoryList = histories
             })
     }
     //
@@ -303,15 +303,27 @@ export class LockerDetailBoxComponent implements OnInit, OnChanges, OnDestroy {
         this.doShowRestartLockerModal = false
     }
     setLockerUnavailable() {
-        // this.gymLockerState.stopItem(this.center.id, this.curLockerCateg.id, this.lockerItem.id, () => {
-        //     this.nxStore.dispatch(showToast({ text: `[락커 ${this.lockerItem.name}]사용 불가 설정되었습니다.` }))
-        // })
+        this.nxStore.dispatch(
+            LockerActions.startStopItem({
+                centerId: this.center.id,
+                categoryId: this.curLockerCateg.id,
+                selectedItem: this.lockerItem,
+                curItemList: this.curLockerItems,
+            })
+        )
+        this.nxStore.dispatch(showToast({ text: `[락커 ${this.lockerItem.name}]사용 불가 설정되었습니다.` }))
     }
     setLockerAvailable() {
-        // this.gymLockerState.restartItem(this.center.id, this.curLockerCateg.id, this.lockerItem.id, () => {
-        //     this.closeShowRestartLockerModal()
-        //     this.nxStore.dispatch(showToast({ text: `[락커 ${this.lockerItem.name}]사용 불가 설정이 해제되었습니다.` }))
-        // })
+        this.closeShowRestartLockerModal()
+        this.nxStore.dispatch(
+            LockerActions.startResumeItem({
+                centerId: this.center.id,
+                categoryId: this.curLockerCateg.id,
+                selectedItem: this.lockerItem,
+                curItemList: this.curLockerItems,
+            })
+        )
+        this.nxStore.dispatch(showToast({ text: `[락커 ${this.lockerItem.name}]사용 불가 설정이 해제되었습니다.` }))
     }
 
     // locker status color method

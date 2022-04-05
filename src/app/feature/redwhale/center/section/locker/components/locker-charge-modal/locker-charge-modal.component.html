@@ -78,9 +78,9 @@
       <div
         class="rw-typo-bodytext0-bold save-button"
         rw-button
-        rwButtonColor="var(--red)"
-        rwButtonFontColor="var(--white)"
-        rwButtonHeight="45"
+        [rwButtonColor]="'var(--red)'"
+        [rwButtonFontColor]="'var(--white)'"
+        [rwButtonHeight]="'45'"
         (click) ="onConfirm()"
       >
         ￦ {{total}} 저장하기
