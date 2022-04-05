@@ -131,7 +131,8 @@ export class SettingAccountComponent implements OnInit {
         if (modalType == 'DELAVATAR') {
             this.delAvatarFlag = true
             this.delModalTextData = this.settingAcountModalService.initModal(modalType as modalType)
-        } else if (modalType == 'EMAIL' || modalType == 'PHONE') {
+        } else if (modalType == 'PHONE') {
+            // modalType == 'EMAIL' // !!  email part removed
             this.certAccountModalFlag = true
             this.certSetModalTextData = this.settingAcountModalService.initModal(modalType as modalType)
             this.activatedCertSettingModalType = modalType as modalType
