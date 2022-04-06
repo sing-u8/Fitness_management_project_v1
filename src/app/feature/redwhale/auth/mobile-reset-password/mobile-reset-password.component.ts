@@ -145,19 +145,19 @@ export class MobileResetPasswordComponent implements OnInit, OnDestroy {
     }
 
     checkResetPasswordLinkMail() {
-        this.authService.checkResetPasswordLinkMail({ token: this.token }).subscribe(
-            (v) => {
+        this.authService.checkResetPasswordLinkMail({ token: this.token }).subscribe({
+            next: (v) => {
                 this.isTokenValid = true
             },
-            (e) => {
+            error: (e) => {
                 this.isTokenValid = false
                 if (e.code == 'FUNCTION_AUTH_008') {
-                    this.nxStore.dispatch(showToast({ text: '만료된 비밀번호 재설정 링크입니다.' }))
+                    this.showMrpToast('만료된 비밀번호 재설정 링크입니다.')
                 } else if (e.code == 'FUNCTION_AUTH_011') {
-                    this.nxStore.dispatch(showToast({ text: '유효하지 않은 토큰입니다.' }))
+                    this.showMrpToast('유효하지 않은 토큰입니다.')
                 }
-            }
-        )
+            },
+        })
     }
 
     changePassword(btLoadingFns: ClickEmitterType) {

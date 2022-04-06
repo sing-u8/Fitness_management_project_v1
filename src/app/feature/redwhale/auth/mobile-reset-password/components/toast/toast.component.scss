@@ -4,13 +4,13 @@
 }
 
 .mrp-toast {
-    $width: 288px;
-    $height: 53px;
+    $width: 252px;
+    $height: 44px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 15px 22px;
+    padding: 12px 20px;
 
     position: absolute;
     width: $width;

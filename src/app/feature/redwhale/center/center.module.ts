@@ -13,12 +13,12 @@ import { DrawerModule } from './drawer/drawer.module'
 // sections
 import { CommunityComponent } from './section/community/community.component'
 import { SaleComponent } from './section/sale/sale.component'
-import { ScheduleComponent } from './section/schedule/schedule.component'
 
 // sections modules
 import { LessonModule } from './section/lesson/lesson.module'
 import { MembershipModule } from './section/membership/membership.module'
 import { LockerModule } from './section/locker/locker.module'
+import { ScheduleModule } from './section/schedule/schedule.module'
 
 // ngrx
 import { StoreModule } from '@ngrx/store'
@@ -49,9 +49,7 @@ import { dashboardReducer } from './store/reducers/sec.dashboard.reducer'
 
         // <-- sections //
         CommunityComponent,
-        // LessonComponent,
         SaleComponent,
-        ScheduleComponent,
         // sections --> //
     ],
     imports: [
@@ -65,6 +63,7 @@ import { dashboardReducer } from './store/reducers/sec.dashboard.reducer'
         LessonModule,
         MembershipModule,
         LockerModule,
+        ScheduleModule,
         // <-- ngrx     //
         StoreModule.forFeature(GymFeatureKey, {
             [LessonFeatureKey]: lessonReducer,

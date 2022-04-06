@@ -24,6 +24,7 @@ export class CenterCalendarService {
 
     constructor(private http: HttpClient) {}
 
+    // 캘린더 생성
     createCalendar(centerId: string, reqBody: CreateCalendarReqBody): Observable<Calendar> {
         const url = this.SERVER + `/${centerId}/calendar`
 
@@ -35,8 +36,12 @@ export class CenterCalendarService {
         )
     }
 
-    getCalendars(centerId: string): Observable<Array<Calendar>> {
-        const url = this.SERVER + `/${centerId}/calendar`
+    // 캘린더 조회
+
+    getCalendars(centerId: string, querys: GetCalendarQuery): Observable<Array<Calendar>> {
+        const url =
+            this.SERVER +
+            `/${centerId}/calendar?typeCode=${querys.typeCode}&page=${querys.page}&pageSize=${querys.pageSize}`
 
         return this.http.get<Response>(url, this.options).pipe(
             map((res) => {
@@ -134,6 +139,12 @@ export interface CreateCalendarReqBody {
     user_id: string
     type_code: 'calendar_type_user_calendar' | 'calendar_type_center_calendar'
     name: string
+}
+
+export interface GetCalendarQuery {
+    typeCode?: 'calendar_type_user_calendar' | 'calendar_type_center_calendar'
+    page?: number
+    pageSize?: number
 }
 
 export interface UpdateCalendarReqBody {
