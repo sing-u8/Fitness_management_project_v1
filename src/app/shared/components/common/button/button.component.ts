@@ -30,6 +30,7 @@ export class ButtonComponent implements OnInit, OnChanges, AfterViewChecked, Aft
     @Input() height: string
     @Input() color: string
     @Input() borderColor: string
+    @Input() borderRadius: string
     @Input() fontColor: string
     @Input() disabled: boolean
     @Input() loadingName = 'loading-button'
@@ -106,6 +107,10 @@ export class ButtonComponent implements OnInit, OnChanges, AfterViewChecked, Aft
             if (this.borderColor) {
                 this.renderer.setStyle(this.button_el.nativeElement, 'border', `1px solid transparent`)
             }
+        }
+
+        if (this.borderRadius) {
+            this.renderer.setStyle(this.button_el.nativeElement, 'borderRadius', `${this.borderRadius}px`)
         }
     }
     ngOnInit(): void {}
