@@ -394,18 +394,8 @@ export class LockerComponent implements OnInit, AfterViewInit, OnDestroy {
 
     addGridItem() {
         this.curLockerItemList.push({ name: String(this.curLockerItemList.length + 1), rows: 1, cols: 1 } as LockerItem)
-        // this.nxStore.dispatch(
-        //     LockerActions.addLockerItemToList({
-        //         lockerItem: {
-        //             name: String(this.curLockerItemList.length + 1),
-        //             rows: 1,
-        //             cols: 1,
-        //         } as LockerItem,
-        //     })
-        // )
     }
     createGridItem(item: GridsterItem) {
-        console.log('createGridItem item !!!!!!!!!!!!!!: ', item, item['name'])
         this.centerLockerApi
             .createItem(this.center.id, this.curLockerCateg.id, {
                 name: item['name'],
@@ -415,7 +405,6 @@ export class LockerComponent implements OnInit, AfterViewInit, OnDestroy {
                 cols: item.cols,
             })
             .subscribe((lockerItem) => {
-                console.log('new created locker item in just API!! : ', lockerItem)
                 const newItemIdx = _.findIndex(this.curLockerItemList, (item) => {
                     return lockerItem.x == item.x && lockerItem.y == item.y
                 })
@@ -435,6 +424,7 @@ export class LockerComponent implements OnInit, AfterViewInit, OnDestroy {
                     rows: item.rows,
                     cols: item.cols,
                 },
+                curLockerItems: _.cloneDeep(this.curLockerItemList),
             })
         )
     }

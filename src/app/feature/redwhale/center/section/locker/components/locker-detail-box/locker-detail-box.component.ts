@@ -42,7 +42,6 @@ export class LockerDetailBoxComponent implements OnInit, OnChanges, OnDestroy {
 
     public curLockerCateg: LockerCategory
     public lockerGlobalMode: FromLocker.LockerGlobalMode
-    public doShowMoveLockerTicketModal = false
 
     public doShowRestartLockerModal = false
     public doDropDownShow = false
@@ -75,7 +74,7 @@ export class LockerDetailBoxComponent implements OnInit, OnChanges, OnDestroy {
         cancelButtonText: '취소',
         confirmButtonText: '사용 불가 해제',
     }
-    public moveLockerTicketText: any
+
     public changeDateText: any
 
     public unsubscriber$ = new Subject<void>()
@@ -204,19 +203,6 @@ export class LockerDetailBoxComponent implements OnInit, OnChanges, OnDestroy {
     }
     resetMoveLockerTicketMode() {
         this.nxStore.dispatch(LockerActions.setLockerGlobalMode({ lockerMode: 'normal' }))
-    }
-    openShowMoveLockerTicketModal() {
-        this.moveLockerTicketText = {
-            text: `[락커 ${this.lockerItem.name}]으로 자리를 이동하시겠어요?`,
-            subText: `이동 버튼을 클릭하시면,
-            즉시 회원의 락커 자리가 변경돼요.`,
-            cancelButtonText: '취소',
-            confirmButtonText: '이동',
-        }
-        this.doShowMoveLockerTicketModal = true
-    }
-    closeShowMoveLockerTicketModal() {
-        this.doShowMoveLockerTicketModal = false
     }
 
     toggleShowChargeModal() {
@@ -403,18 +389,17 @@ export class LockerDetailBoxComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     // // buttonBox2 method
-    emptyLocker(_refund: string) {
-        let refundPrice = '0'
-        if (Number(_refund) > 0) {
-            refundPrice = _refund
+    emptyLocker(refund: string) {
+        if (Number(refund) > 0) {
             this.nxStore.dispatch(
                 LockerActions.startRefundLockerTicket({
                     centerId: this.center.id,
                     userId: this.lockerItem.user_locker.user.id,
                     lockerTicketId: this.lockerItem.user_locker.id,
                     reqBody: {
-                        amount: refundPrice,
+                        amount: refund,
                     },
+                    curLockerItems: this.curLockerItems,
                 })
             )
         } else {
@@ -435,21 +420,5 @@ export class LockerDetailBoxComponent implements OnInit, OnChanges, OnDestroy {
             //     })
             // )
         }
-        //     this.gymUserLockerTicketService
-        //         .finishLockerTicket(
-        //             this.center.id,
-        //             this.lockerItem.locker_ticket.user_id,
-        //             this.lockerItem.locker_ticket.id,
-        //             {
-        //                 refund: refundPrice,
-        //             }
-        //         )
-        //         .subscribe(() => {
-        //             this.getLockerItem()
-        //             this.globalService.showToast(`[락커 ${this.lockerItem.name}] 락커 비우기가 완료되었습니다.`)
-        //         })
     }
-
-    // move locker ticket method
-    moveLockerTicket() {}
 }

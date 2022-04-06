@@ -222,9 +222,6 @@
 <rw-modal [(visible)]="doShowChangeDateModal" [data]="changeDateText" (cancel)="closeShowChangeDateModal()"
     (confirm)="onChangeDateModalConfirm()"></rw-modal>
 
-<rw-modal [(visible)]="doShowMoveLockerTicketModal" [data]="moveLockerTicketText"
-    (cancel)="closeShowMoveLockerTicketModal()" (confirm)="moveLockerTicket()"></rw-modal>
-
 <rw-locker-history-modal [(visible)]="doShowlockerHistory" [historyList]="lockerHistoryList"
     [lockerName]="lockerItem.name" (cancel)="closeShowlockerHistory()"></rw-locker-history-modal>
 

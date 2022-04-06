@@ -86,7 +86,13 @@ export const addLockerItemToList = createAction(
 
 export const startUpdateLockerItem = createAction(
     `[${FeatureKey}] Start Update Locker item`,
-    props<{ centerId: string; categoryId: string; itemId: string; reqBody: UpdateItemRequestBody }>()
+    props<{
+        centerId: string
+        categoryId: string
+        itemId: string
+        reqBody: UpdateItemRequestBody
+        curLockerItems: LockerItem[]
+    }>()
 )
 // !! not be needed
 // export const finishUpdateLockerItem = createAction(
@@ -146,7 +152,13 @@ export const finishExpireLockerTicket = createAction(
 
 export const startRefundLockerTicket = createAction(
     `[${FeatureKey}] Start Refund Locker Ticket`,
-    props<{ centerId: string; userId: string; lockerTicketId: string; reqBody: RefundLockerTicketReqBody }>()
+    props<{
+        centerId: string
+        userId: string
+        lockerTicketId: string
+        reqBody: RefundLockerTicketReqBody
+        curLockerItems: LockerItem[]
+    }>()
 )
 export const finishRefundLockerTicket = createAction(
     `[${FeatureKey}] Finish Refund Locker Ticket`,

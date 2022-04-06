@@ -249,12 +249,12 @@ export class LockerEffect {
                         return this.centerLokcerApi.getItemList(centerId, curLockerCateg.id).pipe(
                             switchMap((lockerItems) => {
                                 const updatedLockerItem = _.find(lockerItems, (item) => item.id == curLockerItem.id)
-                                console.log('in effect curLockerItem : ', updatedLockerItem)
                                 return [
                                     LockerActions.finishRefundLockerTicket({
                                         lockerItems,
                                         lockerItem: updatedLockerItem,
                                     }),
+                                    LockerActions.setCurLockerItem({ lockerItem: updatedLockerItem }),
                                     showToast({
                                         text: `[락커 ${updatedLockerItem.name}] 락커 비우기가 완료되었습니다.`,
                                     }),

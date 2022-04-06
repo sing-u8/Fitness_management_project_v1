@@ -23,6 +23,7 @@ import _ from 'lodash'
 })
 export class LockerItemComponent implements OnInit, OnDestroy, AfterViewInit {
     @Input() lockerItem: LockerItem
+    @Input() curLockerItems: LockerItem[]
     @Input() editMode: boolean
     @Input() switchPlaceMode: boolean
 
@@ -120,6 +121,7 @@ export class LockerItemComponent implements OnInit, OnDestroy, AfterViewInit {
                 categoryId: this.curLockerCateg.id,
                 itemId: this.lockerItem.id,
                 reqBody: { name: this.nameInput.value },
+                curLockerItems: _.cloneDeep(this.curLockerItems),
             })
         )
 
@@ -133,7 +135,6 @@ export class LockerItemComponent implements OnInit, OnDestroy, AfterViewInit {
             this.lockerGlobalMode == 'moveLockerTicket' &&
             this.lockerItem.state_code == 'locker_item_state_empty'
         ) {
-            // !! state_code_name 명칭 리스트 파악 필요
             this.onAnotherEmptyLockerClick()
         } else if (this.lockerGlobalMode != 'moveLockerTicket') {
             console.log('in locker item componenet setCurLockeritem: ', this.lockerItem)
