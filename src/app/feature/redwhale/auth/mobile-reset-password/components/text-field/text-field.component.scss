@@ -45,7 +45,7 @@
         div#status {
             position: absolute;
             right: 50px;
-            bottom: 19px;
+            bottom: 16px;
             img#check {
                 width: 19px;
                 height: 19px;
@@ -59,10 +59,18 @@
             position: absolute;
             right: 19px;
             bottom: 19px;
-            #invisible,
-            #visible {
+            .invisible,
+            .visible {
                 width: 21px;
                 height: 21px;
+            }
+            .invisible {
+                background-image: url('/assets/icons/mobile/invisible.svg');
+                background-size: cover;
+            }
+            .visible {
+                background-image: url('/assets/icons/mobile/visible.svg');
+                        background-size: cover;
             }
         }
     }

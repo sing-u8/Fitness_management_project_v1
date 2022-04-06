@@ -45,18 +45,16 @@
     </div>
 
     <div id="visible">
-      <img
+      <div
         *ngIf="!textVisible"
-        id="invisible"
-        src="assets/icons/mobile/invisible.svg" alt="invisible.svg"
+        class="invisible"
         (click)="toggleVisible()"
-      >
-      <img
+      ></div>
+      <div
         *ngIf="textVisible"
-        id="visible"
-        src="assets/icons/mobile/visible.svg" alt="visible.svg"
+        class="visible"
         (click)="toggleVisible()"
-      >
+      ></div>
     </div>
 
 
