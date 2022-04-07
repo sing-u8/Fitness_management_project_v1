@@ -29,6 +29,7 @@ export class TextFieldComponent implements OnInit, AfterViewInit, OnChanges {
     @Input() validatorErrs: ValidationErrors = {}
     @Input() form: FormControl
     @Input() width: string
+    @Input() autoFocus: boolean
 
     @Output() onEnter = new EventEmitter()
     Enter(event: Event) {
@@ -67,6 +68,14 @@ export class TextFieldComponent implements OnInit, AfterViewInit, OnChanges {
                 `${Number(this.width) / 10}rem`,
                 RendererStyleFlags2.Important
             )
+        }
+        this.onInputLoad()
+    }
+
+    onInputLoad() {
+        if (this.autoFocus) {
+            this.input_el.nativeElement.click()
+            this.input_el.nativeElement.focus()
         }
     }
 

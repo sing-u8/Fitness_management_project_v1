@@ -27,6 +27,12 @@
                 border-color: #6a6a6a;
                 outline: none;
             }
+
+            &::placeholder {
+                font-weight: 500;
+                font-size: 1.7rem;
+                color: #B9B9B9;
+            }
         }
 
         &-title {
@@ -53,6 +59,10 @@
             img#error {
                 width: 18px;
                 height: 18px;
+            }
+
+            &.not-focused {
+                right: 19px;
             }
         }
         div#visible {

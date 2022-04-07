@@ -1,4 +1,8 @@
-<div class="l-text-field" #l_text_field_el>
+<div
+  class="l-text-field" #l_text_field_el
+  (rwClickOutside)="onInputBlured()"
+  (click)="onInputFocused()"
+>
 
   <div class="text-field">
     <div
@@ -21,11 +25,13 @@
       [formControl] = "form"
       (keyup.enter) = "Enter($event)"
       (keyup) = "keyUp($event)"
-      (focus)="onInputFocused()"
-      (blur)="onInputBlured()"
+      (load)="onInputLoad()"
     >
 
-    <div *ngIf="form.dirty" id="status">
+    <div
+      *ngIf="form.dirty" id="status"
+      [class.not-focused] = "!isFocused"
+    >
       <img
         *ngIf="form.errors?.['status'] == 'error'  else warning"
         id="error" src="assets/icons/mobile/error.svg" alt="error.svg"
@@ -38,22 +44,24 @@
       </ng-template>
       <ng-template #valid>
         <img
-          *ngIf="form.valid"
+          *ngIf="form.valid && isFocused"
           id="check" src="assets/icons/mobile/check.svg" alt="check.svg"
         >
       </ng-template>
     </div>
 
-    <div id="visible">
+    <div
+      id="visible" *ngIf="form.value.length > 0 && isFocused "
+    >
       <div
         *ngIf="!textVisible"
         class="invisible"
-        (click)="toggleVisible()"
+        (click)="toggleVisible(); $event.stopPropagation()"
       ></div>
       <div
         *ngIf="textVisible"
         class="visible"
-        (click)="toggleVisible()"
+        (click)="toggleVisible(); $event.stopPropagation()"
       ></div>
     </div>
 

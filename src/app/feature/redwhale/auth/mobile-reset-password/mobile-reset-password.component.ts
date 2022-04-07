@@ -1,4 +1,4 @@
-import { Component, OnInit, Renderer2, OnDestroy, ViewChild } from '@angular/core'
+import { Component, OnInit, Renderer2, OnDestroy, ViewChild, ElementRef, AfterViewInit } from '@angular/core'
 import { FormControl, ValidatorFn, ValidationErrors, AbstractControl } from '@angular/forms'
 import { Router, ActivatedRoute } from '@angular/router'
 
@@ -9,16 +9,12 @@ import { User } from '@schemas/user'
 import { TextFieldComponent } from './components/text-field/text-field.component'
 import { ButtonComponent, ClickEmitterType } from '@shared/components/common/button/button.component'
 
-// ngrx
-import { Store } from '@ngrx/store'
-import { showToast } from '@appStore/actions/toast.action'
-
 @Component({
     selector: 'rw-mobile-reset-password',
     templateUrl: './mobile-reset-password.component.html',
     styleUrls: ['./mobile-reset-password.component.scss'],
 })
-export class MobileResetPasswordComponent implements OnInit, OnDestroy {
+export class MobileResetPasswordComponent implements OnInit, OnDestroy, AfterViewInit {
     public passwordForm: FormControl
     public passwordConfirmForm: FormControl
     public guideTextObj = {
@@ -37,12 +33,15 @@ export class MobileResetPasswordComponent implements OnInit, OnDestroy {
 
     public resizeUnListener: () => void
 
+    @ViewChild('l_section') l_section_el: ElementRef
+    @ViewChild('middle') middle_el: ElementRef
+    @ViewChild('new_password') new_password: TextFieldComponent
+
     constructor(
         private renderer: Renderer2,
         private router: Router,
         private activatedRoute: ActivatedRoute,
-        private authService: AuthService,
-        private nxStore: Store
+        private authService: AuthService
     ) {
         this.passwordForm = new FormControl('', {
             validators: [this.inputValidator('password')],
@@ -50,13 +49,7 @@ export class MobileResetPasswordComponent implements OnInit, OnDestroy {
         this.passwordConfirmForm = new FormControl('', {
             validators: [this.inputSameValidator('passwordConfirm'), this.inputValidator('passwordConfirm')],
         }) // ! validator array에서 앞에 있는 것부터 순서대로 검증함. (필요에 따라 순서를 생각해야함)
-
-        this.resizeUnListener = this.renderer.listen('window', 'resize', (e) => {
-            this.screenWidth = String(window.innerWidth)
-            this.textFieldWidth = String(window.innerWidth - 40)
-        })
     }
-
     ngOnInit(): void {
         this.token = this.activatedRoute.snapshot.queryParams['token']
 
@@ -66,9 +59,27 @@ export class MobileResetPasswordComponent implements OnInit, OnDestroy {
             this.checkResetPasswordLinkMail()
         }
     }
+    ngAfterViewInit(): void {
+        const vh = window.innerHeight * 0.01
+        this.renderer.setStyle(this.l_section_el.nativeElement, 'height', `calc(${vh}px * 100)`)
+        this.renderer.setStyle(this.middle_el.nativeElement, 'height', `calc(${vh}px * 100 - 105px)`)
+
+        this.resizeUnListener = this.renderer.listen('window', 'resize', (e) => {
+            this.screenWidth = String(window.innerWidth)
+            this.textFieldWidth = String(window.innerWidth - 40)
+
+            const vh = window.innerHeight * 0.01
+            this.renderer.setStyle(this.l_section_el.nativeElement, 'height', `calc(${vh}px * 100)`)
+            this.renderer.setStyle(this.middle_el.nativeElement, 'height', `calc(${vh}px * 100 - 105px)`)
+        })
+
+        // this.new_password.input_el.nativeElement.focus()
+        // this.new_password.input_el.nativeElement.click()
+    }
     ngOnDestroy(): void {
         this.resizeUnListener()
     }
+
     navigateOnClose() {
         this.router.navigate(['auth/login'])
     }
