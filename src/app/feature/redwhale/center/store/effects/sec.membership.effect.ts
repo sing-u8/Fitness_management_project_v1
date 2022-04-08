@@ -15,7 +15,7 @@ import { CenterMembershipService } from '@services/center-membership.service'
 import _ from 'lodash'
 
 @Injectable()
-export class membershipEffect {
+export class MembershipEffect {
     constructor(private actions$: Actions, private gymMembershipApi: CenterMembershipService, private store: Store) {}
 
     // membership category

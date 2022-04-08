@@ -42,7 +42,7 @@ export class TextFieldComponent implements OnInit, AfterViewInit, OnChanges {
     public textVisible = false
 
     @ViewChild('l_text_field_el') l_text_field_el: ElementRef
-    @ViewChild('input_el') input_el: ElementRef
+    @ViewChild('input_el') input_el: ElementRef<HTMLInputElement>
 
     constructor(private renderer: Renderer2) {}
 
@@ -69,13 +69,28 @@ export class TextFieldComponent implements OnInit, AfterViewInit, OnChanges {
                 RendererStyleFlags2.Important
             )
         }
+        this.renderer.listen(this.input_el.nativeElement, 'touchstart', (event) => {
+            console.log('touch start input : ', event)
+            this.input_el.nativeElement.click()
+            this.input_el.nativeElement.focus()
+        })
+        this.renderer.listen(this.input_el.nativeElement, 'onclick', (event) => {
+            console.log('click input : ', event)
+            this.input_el.nativeElement.click()
+            this.input_el.nativeElement.focus()
+        })
         this.onInputLoad()
     }
 
     onInputLoad() {
         if (this.autoFocus) {
-            this.input_el.nativeElement.click()
-            this.input_el.nativeElement.focus()
+            // this.input_el.nativeElement.click()
+            // this.input_el.nativeElement.focus()
+
+            this.input_el.nativeElement.dispatchEvent(new Event('onclick'))
+            if (window.hasOwnProperty('ontouchstart')) {
+                // this.input_el.nativeElement.dispatchEvent(new TouchEvent('touchstart'))
+            }
         }
     }
 

@@ -1,3 +1,5 @@
+import { CalendarTaskClass } from '@schemas/calendar-task-class'
+
 export interface CalendarTask {
     id: string
     calendar_task_group_id: string
@@ -15,4 +17,5 @@ export interface CalendarTask {
     repeat_termination_type_code: string
     repeat_count: number
     repeat_end_date: string
+    class: CalendarTaskClass
 }

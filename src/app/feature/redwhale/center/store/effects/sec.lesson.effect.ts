@@ -19,7 +19,7 @@ import { showToast } from '@appStore/actions/toast.action'
 import { CenterLessonService } from '@services/center-lesson.service'
 import { CenterUsersService } from '@services/center-users.service'
 
-import * as _ from 'lodash'
+import _ from 'lodash'
 
 @Injectable()
 export class LessongEffect {

@@ -1,1 +1,121 @@
-<div class="schedule"></div>
+<article class="schedule">
+
+    <header class="l-header">
+        <div class="header__l-title">
+            <span class="header__title rw-typo-headline1">스케줄</span>
+            <span class="header__title-desc rw-typo-subtext1">수업 일정을 한 눈에 쉽고 간편하게 관리해보세요.</span>
+        </div>
+
+        <div
+            class="setting-operating-hour-button"
+            rw-button rwButtonColor="var(--white)"
+            (click)="openCenterOperatingModal()"
+        >
+            <img src="assets/icons/header/settings.svg">
+            <span class="rw-typo-bodytext0-bold">운영시간 설정</span>
+        </div>
+    </header>
+
+    <main class="l-schedule-body">
+
+        <div class="schedule-body__left thin-scroll-y-overlay2">
+
+            <p
+                id="schedule-body__left-header"
+                class="rw-typo-title1 schedule-body--title-margin schedule-body--option-margin"
+            >
+                옵션
+            </p>
+
+            <div class="schedule-body__left-body">
+
+                <rw-datepicker2
+                    [class.display-none]="selectedDateViewType !='resourceTimeGridDay'
+                        && selectedDateViewType !='dayGridMonth'"
+                    mode="date"
+                    [data]="datePickerData"
+                    (dataChange)="onDatePickerClick($event)"
+                ></rw-datepicker2>
+                <rw-datepicker2
+                    [class.display-none]="selectedDateViewType !='timeGridWeek'"
+                    mode="week" [data]="weekPickerData"
+                    (dataChange)="onWeekPickerClick($event)"
+                ></rw-datepicker2>
+
+                <!-- <rw-sch-instructor-dropdown [instructorList]="instructorList" [type]="'manager'"></rw-sch-instructor-dropdown>
+
+                <rw-sch-filter-dropdown [filter]="lectureFilter" [type]="'manager'"></rw-sch-filter-dropdown> -->
+
+            </div>
+
+        </div>
+
+        <div class="schedule-body__right">
+
+            <header class="schedule-body__right-header schedule-body--title-margin">
+
+                <div class="header-left">
+                    <p class="rw-typo-title1 ">캘린더</p>
+                    <div class="divider"></div>
+                    <p class="rw-typo-title1">
+                        {{calendarTitle}}
+                    </p>
+                    <div class="date-buttons">
+                        <div class="prev" rw-button rwButtonColor="var(--white)" (click)="onMoveDate('prev')">
+                            <img src="assets/icons/etc/short_left_arrow_darkgrey.svg">
+                        </div>
+                        <div class="next" rw-button rwButtonColor="var(--white)" (click)="onMoveDate('next')">
+                            <img src="assets/icons/etc/short_right_arrow_darkgrey.svg">
+                        </div>
+                        <div class="rw-typo-bodytext2 today" rw-button rwButtonColor="var(--white)" (click)="onMoveDate('today')">
+                            오늘
+                        </div>
+                    </div>
+                </div>
+
+                <div class="header-right">
+                    <div
+                        class="rw-typo-title2 date-view-type"
+                        [class.selected]="dateViewTypes.day.type == selectedDateViewType"
+                        (click)="changeView('resourceTimeGridDay')"
+                    >
+                        {{dateViewTypes.day.name}}
+                    </div>
+                    <div
+                        class="rw-typo-title2 date-view-type"
+                        [class.selected]="dateViewTypes.week.type == selectedDateViewType"
+                        (click)="changeView('timeGridWeek')"
+                    >
+                        {{dateViewTypes.week.name}}
+                    </div>
+                    <div
+                        class="rw-typo-title2 date-view-type"
+                        [class.selected]="dateViewTypes.month.type == selectedDateViewType"
+                        (click)="changeView('dayGridMonth')"
+                    >
+                        {{dateViewTypes.month.name}}
+                    </div>
+                </div>
+
+            </header>
+
+            <section class="schedule-body__right-body">
+                <div class="l-fullcalendar">
+                    <full-calendar
+                        (rwClickOutside)="hideScheduleDropdown()"
+                        #full_calendar
+                        [ngClass] = "{
+                                        'fc-resourceTimeGridDay': selectedDateViewType == 'resourceTimeGridDay',
+                                        'fc-timeGridWeek': selectedDateViewType == 'timeGridWeek',
+                                        'fc-dayGridMonth': selectedDateViewType == 'dayGridMonth'
+                                    }"
+                        [options] = "fullCalendarOptions"
+                    ></full-calendar>
+                </div>
+            </section>
+
+        </div>
+
+    </main>
+
+</article>
