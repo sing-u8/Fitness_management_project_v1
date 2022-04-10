@@ -40,7 +40,9 @@ export class CenterCalendarService {
     getCalendars(centerId: string, querys: GetCalendarQuery): Observable<Array<Calendar>> {
         const url =
             this.SERVER +
-            `/${centerId}/calendar?typeCode=${querys.typeCode}&page=${querys.page}&pageSize=${querys.pageSize}`
+            `/${centerId}/calendar?typeCode=${querys.typeCode}&page=${querys.page ?? ''}&pageSize=${
+                querys.pageSize ?? ''
+            }`
 
         return this.http.get<Response>(url, this.options).pipe(
             map((res) => {

@@ -19,7 +19,7 @@ import isBetween from 'dayjs/plugin/isBetween'
 dayjs.extend(isBetween)
 import _ from 'lodash'
 
-type Time = { key: string; name: string; isDisabled: boolean }
+export type Time = { key: string; name: string; isDisabled: boolean }
 
 // 쓰이는 곳마다 key의 format A가 한글이 되었다가 영어로 되었다가 함
 @Component({
@@ -42,7 +42,7 @@ export class TimePicker2Component implements OnInit, AfterViewInit, OnChanges {
     @Input() endTime: string // 00:00:00
     @Input() disableTimeUntil: string // 00:00:00
 
-    @Output() onTimeClick = new EventEmitter<Time>()
+    @Output() onTimeClick = new EventEmitter<Pick<Time, 'key' | 'name'>>()
 
     public isOpen = false
     public timeList: Array<Time> = []

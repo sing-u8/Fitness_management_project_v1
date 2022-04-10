@@ -23,6 +23,7 @@ import { ButtonComponent } from './components/common/button/button.component'
 import { TermsEULAComponent } from './components/terms/terms-eula/terms-eula.component'
 import { TermsPrivacyComponent } from './components/terms/terms-privacy/terms-privacy.component'
 import { SmallModalComponent } from './components/common/small-modal/small-modal.component'
+import { MemberListModalComponent } from './components/common/member-list-modal/member-list-modal.component'
 
 // Directives
 // import { AutoScrollDirective } from './directives/auto-scroll.directive'
@@ -104,6 +105,7 @@ FullCalendarModule.registerPlugins([
         TermsEULAComponent,
         TermsPrivacyComponent,
         SmallModalComponent,
+        MemberListModalComponent,
         // Directives
         // AutoScrollDirective,
         ButtonDirective,
@@ -161,6 +163,7 @@ FullCalendarModule.registerPlugins([
         TermsEULAComponent,
         TermsPrivacyComponent,
         SmallModalComponent,
+        MemberListModalComponent,
         // Directives
         // AutoScrollDirective,
         ButtonDirective,

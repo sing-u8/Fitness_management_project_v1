@@ -14,12 +14,13 @@ import koLocale from '@fullcalendar/core/locales/ko'
 import { StorageService } from '@services/storage.service'
 import { CenterCalendarService } from '@services/center-calendar.service'
 import { CenterService } from '@services/center.service'
+import { CenterUsersService } from '@services/center-users.service'
 
 // schemas
 import { Center } from '@schemas/center'
 
 // rxjs
-import { Observable, Subject } from 'rxjs'
+import { Observable, Subject, lastValueFrom } from 'rxjs'
 import { takeUntil } from 'rxjs/operators'
 
 // ngrx
@@ -30,6 +31,7 @@ import { showToast } from '@appStore/actions/toast.action'
 import * as FromSchedule from '@centerStore/reducers/sec.schedule.reducer'
 import * as ScheduleSelector from '@centerStore/selectors/sec.schedule.selector'
 import * as ScheduleActions from '@centerStore/actions/sec.schedule.actions'
+import { CenterUser } from '@schemas/center-user'
 
 // temp
 export type GymOperatingTime = { start: string; end: string }
@@ -42,6 +44,7 @@ export type ViewType = 'resourceTimeGridDay' | 'timeGridWeek' | 'dayGridMonth'
 })
 export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
     public center: Center
+    public user: CenterUser
     public unsubscriber$ = new Subject<void>()
 
     public dateViewTypes = {
@@ -69,6 +72,10 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
     public activeEnd: string
     public calendarTitle: string
 
+    // ngrx vars
+    public instructorList$_: FromSchedule.InstructorType[]
+    public lectureFilter$_: FromSchedule.LectureFilter
+
     constructor(
         private nxStore: Store,
         private storageService: StorageService,
@@ -76,6 +83,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
         // private gymDashboardStateService: GymDashboardStateService,
         // private gymLessonService: GymLessonService,
         private centerService: CenterService,
+        private centerUsersService: CenterUsersService,
         private renderer: Renderer2,
         private activatedRoute: ActivatedRoute,
         private router: Router,
@@ -84,12 +92,39 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
         this.center = this.storageService.getCenter()
 
         // !! code get center operationtime state
+    }
+
+    async ngOnInit(): Promise<void> {
+        const userData = this.storageService.getUser()
+        // console.log('before get user using api')
+        // this.user = (await lastValueFrom(this.centerUsersService.getUserList(this.center.id))).find(
+        //     (centerUser) => centerUser.id == userData.id
+        // )
+        // console.log('after get user using api : ', this.user)
+
+        this.nxStore
+            .pipe(select(ScheduleSelector.curCenterId), takeUntil(this.unsubscriber$))
+            .subscribe((curCenterid) => {
+                if (curCenterid != this.center.id) {
+                    this.nxStore.dispatch(ScheduleActions.resetAll())
+                    this.nxStore.dispatch(ScheduleActions.setCurCenterId({ centerId: this.center.id }))
+                    this.nxStore.dispatch(ScheduleActions.startLoadScheduleState())
+                }
+            })
+        this.nxStore
+            .pipe(select(ScheduleSelector.instructorList), takeUntil(this.unsubscriber$))
+            .subscribe((instructorList) => {
+                this.instructorList$_ = _.cloneDeep(instructorList)
+            })
+        this.nxStore
+            .pipe(select(ScheduleSelector.lectureFilter), takeUntil(this.unsubscriber$))
+            .subscribe((lectureFilter) => {
+                this.lectureFilter$_ = _.cloneDeep(lectureFilter)
+            })
 
         this.initDatePickerData()
         this.initFullCalendar()
     }
-
-    ngOnInit(): void {}
     ngAfterViewInit(): void {
         this.setCalendarTitle('timeGridWeek')
 

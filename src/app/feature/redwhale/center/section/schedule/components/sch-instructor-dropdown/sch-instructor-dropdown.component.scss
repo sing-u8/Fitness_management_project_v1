@@ -1,0 +1,186 @@
+* {
+    margin: 0px;
+    padding: 0px;
+}
+
+.dropdown-container {
+    background-color: var(--white);
+    border-radius: 5px;
+    width: 250px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0px 5px;
+
+        width: calc(100% - 25px);
+        height: 46px;
+        cursor: pointer;
+        .mdi {
+            transform: rotateX(0deg);
+            transition: transform 0.2s linear;
+            -moz-transition: transform 0.2s linear;
+            -webkit-transition: transform 0.2s linear;
+            -o-transition: transform 0.2s linear;
+            font-size: 2.2rem;
+            color: var(--font-color);
+        }
+        &.open {
+            border-bottom: 1px solid var(--border-color);
+            .mdi {
+                transform: rotateX(180deg);
+                transition: transform 0.2s linear;
+                -moz-transition: transform 0.2s linear;
+                -webkit-transition: transform 0.2s linear;
+                -o-transition: transform 0.2s linear;
+            }
+        }
+    }
+
+    .content {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        text-overflow: clip;
+        width: 100%;
+        height: 0px;
+        overflow: hidden;
+        position: relative;
+        // padding: 20px 0px;
+        // transition: min-height, height 0.2s ease-in-out;
+        // -moz-transition: min-height, height 0.2s ease-in-out;
+        // -webkit-transition: min-height, height 0.2s ease-in-out;
+        // -o-transition: min-height, height 0.2s ease-in-out;
+
+        &.show {
+            height: auto;
+        }
+
+        .instructor-list {
+            display: flex;
+            flex-direction: column;
+            width: calc(100% - 34px);
+            padding: 12px 0px;
+
+            .select-button {
+                width: 215px;
+                height: 35px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                border-radius: 5px;
+                border: 1px solid var(--grey);
+
+                & > img {
+                    width: 18px;
+                    height: 18px;
+                    margin-top: 3.5px;
+                    margin-right: 3px;
+                }
+            }
+
+            rw-checkbox {
+                margin-top: 12px;
+            }
+
+            .add-instructor-button {
+                // width: 100%;
+                width: 105px;
+                display: flex;
+                align-items: center;
+                font-weight: 500;
+                font-size: 13px;
+                line-height: 20px;
+                letter-spacing: -0.196px;
+                color: var(--red);
+                cursor: pointer;
+                text-align: center;
+                margin-top: 12px;
+
+
+                &:hover {
+                    opacity: 0.8;
+                }
+
+                .plus-icon {
+                    background-image: url('/assets/icons/etc/plus-red.svg');
+                    background-size: contain;
+                    background-repeat: no-repeat;
+                    width: 20px;
+                    height: 20px;
+                    margin-right: 5px;
+                }
+            }
+        }
+    }
+}
+
+.empty-button {
+    width: 170px;
+    height: 35px;
+    background-color: var(--white);
+    border: 1px solid #e9e9e9;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 1.2rem;
+    line-height: 1.42;
+    letter-spacing: -0.14px;
+    color: var(--grey);
+    margin-top: 20px;
+
+    &:hover {
+        background-color: #e9e9e9;
+    }
+
+    & > img {
+        width: 18px;
+        height: 18px;
+        margin-top: 3.5px;
+    }
+}
+
+.empty-guide {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 202px;
+    width: 100%;
+    padding: 30px 20px;
+
+    #emtpy-screen {
+        width: 40px;
+        height: 18px;
+        margin-bottom: 15px;
+    }
+
+    & p {
+        color: var(--grey);
+    }
+
+    .find-text {
+        margin-top: 8px;
+    }
+    .top-image {
+        margin-bottom: 20px;
+    }
+
+    & > .empty-guide-button {
+        margin-top: 20px;
+    }
+}
+
+.grey {
+    color: var(--grey);
+}

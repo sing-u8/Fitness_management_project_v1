@@ -7,3 +7,15 @@ import _ from 'lodash'
 export const FeatureKey = 'Center/Schedule'
 
 export const GymScheduleFeature = createSelector(GymFeature, (state: GymState) => state[FeatureKey])
+
+// common
+export const isLoading = createSelector(GymScheduleFeature, FromSchedule.selectIsLoading)
+export const error = createSelector(GymScheduleFeature, FromSchedule.selectError)
+export const curCenterId = createSelector(GymScheduleFeature, FromSchedule.selectCurCenterId)
+
+// main
+export const taskList = createSelector(GymScheduleFeature, FromSchedule.selectTaskList)
+export const instructorList = createSelector(GymScheduleFeature, FromSchedule.selectInstructorList)
+export const calendarConfig = createSelector(GymScheduleFeature, FromSchedule.selectCalendarConfigInfo)
+export const operatingHour = createSelector(GymScheduleFeature, FromSchedule.selectOperatingHour)
+export const lectureFilter = createSelector(GymScheduleFeature, FromSchedule.selectLectureFilter)

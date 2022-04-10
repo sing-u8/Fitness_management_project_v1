@@ -1,0 +1,18 @@
+<div class="dropdown-container">
+  <div class="header" [class.open]="isContentOpen" (click)="toggleContent()">
+    <span class="rw-typo-bodytext0-bold">필터</span>
+    <span class="mdi mdi-chevron-down"></span>
+  </div>
+  <div class="content" [class.show] ="isContentOpen">
+
+    <rw-checkbox
+        *ngFor="let item of filter | keyvalue"
+        [text]="item.value.filterName"
+        [checked]="item.value.selected"
+        (click)="onCheckBoxSelect(item.key)"
+    ></rw-checkbox>
+
+  </div>
+
+
+</div>

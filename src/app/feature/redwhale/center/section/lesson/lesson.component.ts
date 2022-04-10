@@ -118,11 +118,11 @@ export class LessonComponent implements OnInit, AfterViewInit, OnDestroy {
         this.nxStore.pipe(select(LessonSelector.currentCenter), takeUntil(this.unSubscriber$)).subscribe((curGym) => {
             if (curGym != this.center.id) {
                 this.nxStore.dispatch(LessonActions.resetAll())
+                this.nxStore.dispatch(LessonActions.setCurrentGym({ currentCenter: this.center.id }))
                 this.nxStore.dispatch(LessonActions.startLoadLessonCategs({ centerId: this.center.id }))
             }
         })
 
-        this.nxStore.dispatch(LessonActions.setCurrentGym({ currentCenter: this.center.id }))
         this.nxStore.dispatch(LessonActions.startGetTrainerFilterList({ centerId: this.center.id }))
 
         this.centerMembershipService.getCategoryList(this.center.id).subscribe((categs) => {

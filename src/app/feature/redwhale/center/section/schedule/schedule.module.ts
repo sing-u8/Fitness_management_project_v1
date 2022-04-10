@@ -6,6 +6,9 @@ import { SharedModule } from '@shared/shared.module'
 
 // components
 import { ScheduleComponent } from './schedule.component'
+import { SchInstructorDropdownComponent } from './components/sch-instructor-dropdown/sch-instructor-dropdown.component'
+import { SchFilterDropdownComponent } from './components/sch-filter-dropdown/sch-filter-dropdown.component'
+import { SchCenterOpratingModalComponent } from './components/sch-center-operating-modal/sch-center-operating-modal.component'
 
 // section module
 import { CommonModule as SectionCommonModule } from '../common/common.module'
@@ -17,6 +20,9 @@ import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader'
     declarations: [
         // components
         ScheduleComponent,
+        SchInstructorDropdownComponent,
+        SchFilterDropdownComponent,
+        SchCenterOpratingModalComponent,
     ],
     imports: [
         AngularCommonModule,

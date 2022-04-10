@@ -1,0 +1,77 @@
+<div class="dropdown-container">
+  <div class="header" [class.open]="isContentOpen" (click)="toggleContent()">
+    <span class="rw-typo-bodytext0-bold">강사별 보기</span>
+    <span class="mdi mdi-chevron-down"></span>
+  </div>
+  <div class="content" [class.show] ="isContentOpen">
+
+    <ng-template
+      #instructorlist_empty
+      [ngIf]="!instructorList || instructorList.length == 0"
+      [ngIfElse]="instructorlist_exist"
+    >
+      <div class="empty-guide">
+        <img src="assets/icons/etc/empty_screen.svg" id="emtpy-screen" >
+        <p class="rw-typo-subtext0-regular">등록된 직원이 없어요.</p>
+        <p class="rw-typo-subtext0-regular">회원으로 등록하신 후, 권한을 직원으로</p>
+        <p class="rw-typo-subtext0-regular">변경하여 센터 직원을 추가해보세요!</p>
+        <div class="empty-button" (click)="goToRegisterMember()">
+            <p>직원 등록하기</p>
+            <img src="assets/icons/etc/short_right_arrow_grey.svg">
+        </div>
+      </div>
+    </ng-template>
+
+    <ng-template #instructorlist_exist>
+      <div class="instructor-list">
+
+        <div
+          *ngIf="instructorList.length > 1"
+          (click)="onSelectButtonClick()"
+          class="select-button"
+          rw-button
+          rwButtonColor="var(--white)"
+        >
+          <img src="assets/icons/etc/check.svg">
+          <span *ngIf="isAllChecked" class="rw-typo-bodytext2-bold">전체 선택 해제</span>
+          <span *ngIf="!isAllChecked" class="rw-typo-bodytext2-bold">전체 선택</span>
+        </div>
+
+        <rw-checkbox
+          *ngFor="let item of instructorList; let idx = index"
+          [text]="item.instructor.name"
+          [checked]="item.selected"
+          (click)="onCheckBoxSelect(idx)"
+        ></rw-checkbox>
+
+        <div
+          class="add-instructor-button"
+          (click)="false"
+        >
+          <div class="plus-icon"></div>
+          강사 추가하기
+        </div>
+
+
+      </div>
+    </ng-template>
+
+  </div>
+
+</div>
+
+
+
+<rw-modal
+  [(visible)]="noAddtionalInstructor"
+  [data]="noAdditionanlInstructorData"
+  (cancel)="onCancelNoAddInst()"
+  (confirm)="onConfirmNoAddInst();"
+></rw-modal>
+
+<rw-modal
+  [(visible)]="addlInstructor"
+  [data]="addlInstructorData"
+  (cancel)="onCancelAddInst()"
+  (confirm)="onConfirmAddInst();"
+></rw-modal>

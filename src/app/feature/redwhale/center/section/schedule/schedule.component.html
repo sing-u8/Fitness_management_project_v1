@@ -42,9 +42,13 @@
                     (dataChange)="onWeekPickerClick($event)"
                 ></rw-datepicker2>
 
-                <!-- <rw-sch-instructor-dropdown [instructorList]="instructorList" [type]="'manager'"></rw-sch-instructor-dropdown>
+                <rw-sch-instructor-dropdown
+                    [instructorList]="instructorList$_"
+                ></rw-sch-instructor-dropdown>
 
-                <rw-sch-filter-dropdown [filter]="lectureFilter" [type]="'manager'"></rw-sch-filter-dropdown> -->
+                <rw-sch-filter-dropdown
+                    [filter]="lectureFilter$_"
+                ></rw-sch-filter-dropdown>
 
             </div>
 
@@ -119,3 +123,12 @@
     </main>
 
 </article>
+
+
+<rw-sch-center-operating-modal
+    [(visible)] = "doShowCenterOperModal"
+    [daysString] = 'operatingDayOfWeek'
+    [time] = 'operatingTime'
+    (cancel)="onCenterOperatingModalCancel()"
+    (confirm)="onCenterOperatingModalConfirm($event)"
+></rw-sch-center-operating-modal>
