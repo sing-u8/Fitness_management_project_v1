@@ -64,6 +64,7 @@ export interface State {
     curCenterId: string
     isLoading: Loading
     error: string
+    doLessonsExist: boolean
 
     // main
     taskList: CalendarTask[]
@@ -87,6 +88,7 @@ export const initialState: State = {
     curCenterId: undefined,
     isLoading: 'idle',
     error: '',
+    doLessonsExist: true,
     // main
     taskList: [],
     instructorList: [],
@@ -180,6 +182,10 @@ export const scheduleReducer = createImmerReducer(
     on(ScheduleActions.setError, (state, { error }) => {
         state.error = error
         return state
+    }),
+    on(ScheduleActions.setDoLessonsExist, (state, { doExist }) => {
+        state.doLessonsExist = doExist
+        return state
     })
 )
 
@@ -187,6 +193,7 @@ export const scheduleReducer = createImmerReducer(
 export const selectCurCenterId = (state: State) => state.curCenterId
 export const selectError = (state: State) => state.error
 export const selectIsLoading = (state: State) => state.isLoading
+export const selectDoLessonsExist = (state: State) => state.doLessonsExist
 
 // main
 export const selectTaskList = (state: State) => state.taskList

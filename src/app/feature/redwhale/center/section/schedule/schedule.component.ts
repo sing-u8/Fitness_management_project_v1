@@ -27,7 +27,7 @@ import { takeUntil } from 'rxjs/operators'
 import { Store, select } from '@ngrx/store'
 import { drawerSelector } from '@appStore/selectors'
 import { showToast } from '@appStore/actions/toast.action'
-import { openDrawer, closeDrawer } from '@appStore/actions/drawer.action'
+import { openDrawer, closeDrawer, setScheduleDrawerIsReset } from '@appStore/actions/drawer.action'
 
 import * as FromSchedule from '@centerStore/reducers/sec.schedule.reducer'
 import * as ScheduleSelector from '@centerStore/selectors/sec.schedule.selector'
@@ -91,8 +91,11 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
         private location: Location
     ) {
         this.center = this.storageService.getCenter()
-
-        // !! code get center operationtime state
+        this.nxStore
+            .pipe(select(ScheduleSelector.operatingHour), takeUntil(this.unsubscriber$))
+            .subscribe((operatingHour) => {
+                this.operatingTime = operatingHour
+            })
     }
 
     async ngOnInit(): Promise<void> {
@@ -102,13 +105,19 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
         //     (centerUser) => centerUser.id == userData.id
         // )
         // console.log('after get user using api : ', this.user)
+        this.nxStore
+            .pipe(select(ScheduleSelector.doLessonsExist), takeUntil(this.unsubscriber$))
+            .subscribe((doExist) => {
+                this.doShowEmptyLessonModal = doExist ? false : true
+            })
 
         this.nxStore
             .pipe(select(ScheduleSelector.curCenterId), takeUntil(this.unsubscriber$))
             .subscribe((curCenterid) => {
+                console.log('select(ScheduleSelector.curCenterId) !!!!!')
                 if (curCenterid != this.center.id) {
+                    console.log('select(ScheduleSelector.curCenterId)  ---curCenterid != this.center.id !!!!!')
                     this.nxStore.dispatch(ScheduleActions.resetAll())
-                    this.nxStore.dispatch(ScheduleActions.setCurCenterId({ centerId: this.center.id }))
                     this.nxStore.dispatch(ScheduleActions.startLoadScheduleState())
                 }
             })
@@ -137,7 +146,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
         // })
     }
     ngOnDestroy(): void {
-        // this.closeDrawer()
+        this.closeDrawer()
         this.unsubscriber$.next()
         this.unsubscriber$.complete()
     }
@@ -393,19 +402,24 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
         this.setDrawerDate()
 
         this.nxStore.dispatch(openDrawer({ tabName: 'general-schedule' }))
-        // this.globalService.setResetScheduleDrawerState(true)
-        this.fullCalendar.getApi().updateSize()
+        this.nxStore.dispatch(setScheduleDrawerIsReset({ isReset: true }))
+
+        // this.fullCalendar.getApi().updateSize()
     }
     openLessonScheduleDrawer() {
         this.setDrawerDate()
 
         this.nxStore.dispatch(openDrawer({ tabName: 'lesson-schedule' }))
-        // this.globalService.setResetScheduleDrawerState(true)
-        this.fullCalendar.getApi().updateSize()
+        this.nxStore.dispatch(setScheduleDrawerIsReset({ isReset: true }))
+
+        // this.fullCalendar.getApi().updateSize()
     }
     closeDrawer() {
         this.nxStore.dispatch(closeDrawer())
-        this.fullCalendar.getApi().updateSize()
+        const calApi = this.fullCalendar.getApi()
+        if (calApi?.updateSize) {
+            calApi.updateSize()
+        }
     }
 
     setDrawerDate() {

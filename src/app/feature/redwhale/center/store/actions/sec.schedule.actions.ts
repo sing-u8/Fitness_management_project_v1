@@ -79,3 +79,4 @@ export const setModifyLessonOption = createAction(
 export const resetAll = createAction(`[${FeatureKey}] Reset All Schedule States`)
 export const setCurCenterId = createAction(`[${FeatureKey}] Set Current Center Id`, props<{ centerId: string }>())
 export const setError = createAction(`[${FeatureKey}] Set Schedule Error Message`, props<{ error: string }>())
+export const setDoLessonsExist = createAction(`[${FeatureKey}] Set Do Lessons Exist`, props<{ doExist: boolean }>())

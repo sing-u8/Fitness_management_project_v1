@@ -12,6 +12,7 @@ export const GymScheduleFeature = createSelector(GymFeature, (state: GymState) =
 export const isLoading = createSelector(GymScheduleFeature, FromSchedule.selectIsLoading)
 export const error = createSelector(GymScheduleFeature, FromSchedule.selectError)
 export const curCenterId = createSelector(GymScheduleFeature, FromSchedule.selectCurCenterId)
+export const doLessonsExist = createSelector(GymScheduleFeature, FromSchedule.selectDoLessonsExist)
 
 // main
 export const taskList = createSelector(GymScheduleFeature, FromSchedule.selectTaskList)

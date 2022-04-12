@@ -148,3 +148,10 @@
     (confirm)="onCenterOperatingModalConfirm($event)"
 ></rw-sch-center-operating-modal>
 
+<rw-modal
+    [(visible)]="doShowEmptyLessonModal"
+    [data]="emptyLessonText"
+    [blockClickOutside]="true"
+    (cancel)="onEmptyLessonModalCancel()"
+    (confirm)="onEmptyLessonModalConfirm()"
+></rw-modal>

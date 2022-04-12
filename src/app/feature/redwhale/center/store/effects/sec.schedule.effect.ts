@@ -7,6 +7,7 @@ import { catchError, switchMap, tap, map, filter, find, mergeMap } from 'rxjs/op
 import { StorageService } from '@services/storage.service'
 import { CenterCalendarService } from '@services/center-calendar.service'
 import { CenterUsersService } from '@services/center-users.service'
+import { CenterLessonService } from '@services/center-lesson.service'
 
 import * as ScheduleActions from '../actions/sec.schedule.actions'
 import * as ScheduleSelector from '../selectors/sec.schedule.selector'
@@ -23,33 +24,46 @@ export class ScheduleEffect {
         private store: Store,
         private storageService: StorageService,
         private centerCalendarApi: CenterCalendarService,
-        private centerUsersApi: CenterUsersService
+        private centerUsersApi: CenterUsersService,
+        private centerLessonApi: CenterLessonService
     ) {}
 
     public loadScheduleState = createEffect(() => {
-        const center = this.storageService.getCenter()
-        const user = this.storageService.getUser()
         return this.actions$.pipe(
             ofType(ScheduleActions.startLoadScheduleState),
             switchMap(() => {
+                const center = this.storageService.getCenter()
+                const user = this.storageService.getUser()
                 return forkJoin({
                     centerUsers: this.centerUsersApi.getUserList(center.id),
                     calendars: this.centerCalendarApi.getCalendars(center.id, {
                         typeCode: 'calendar_type_user_calendar',
                     }),
+                    lessonCategs: this.centerLessonApi.getCategoryList(center.id),
                 }).pipe(
-                    map(({ centerUsers, calendars }) => {
+                    map(({ centerUsers, calendars, lessonCategs }) => {
                         const curCenterUser = _.find(centerUsers, (centerUser) => centerUser.id == user.id)
                         const curCalendar = _.find(calendars, (cal) => cal.calendar_user.id == curCenterUser.id)
-                        return { curCenterUser, curCalendar, calendars }
+                        const doLessonsExist =
+                            lessonCategs.length > 0 &&
+                            lessonCategs.reduce((acc, curCateg) => [...acc, curCateg.items], []).length > 0
+                                ? true
+                                : false
+                        return { curCenterUser, curCalendar, calendars, doLessonsExist }
                     }),
                     switchMap((value) => {
                         const instructorList: ScheduleReducer.InstructorType[] = value.calendars.map((calendar) => ({
                             selected: true,
                             instructor: calendar,
                         }))
-                        if (value.curCalendar == undefined && value.curCenterUser.role_code == 'owner') {
+                        if (!value.doLessonsExist) {
                             return [
+                                ScheduleActions.setDoLessonsExist({ doExist: false }),
+                                ScheduleActions.finishLoadScheduleState({ instructorList }),
+                            ]
+                        } else if (value.curCalendar == undefined && value.curCenterUser.role_code == 'owner') {
+                            return [
+                                ScheduleActions.setCurCenterId({ centerId: center.id }),
                                 ScheduleActions.startCreateInstructor({
                                     centerId: center.id,
                                     reqBody: {
@@ -61,7 +75,10 @@ export class ScheduleEffect {
                                 ScheduleActions.finishLoadScheduleState({ instructorList }),
                             ]
                         } else {
-                            return [ScheduleActions.finishLoadScheduleState({ instructorList })]
+                            return [
+                                ScheduleActions.setCurCenterId({ centerId: center.id }),
+                                ScheduleActions.finishLoadScheduleState({ instructorList }),
+                            ]
                         }
                     }),
                     catchError((err: string) =>
