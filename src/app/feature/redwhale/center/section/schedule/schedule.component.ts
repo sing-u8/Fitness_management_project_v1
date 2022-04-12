@@ -18,6 +18,7 @@ import { CenterUsersService } from '@services/center-users.service'
 
 // schemas
 import { Center } from '@schemas/center'
+import { Calendar } from '@schemas/calendar'
 
 // rxjs
 import { Observable, Subject, lastValueFrom } from 'rxjs'
@@ -141,9 +142,9 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
         const calView = this.fullCalendar.getApi().view
         this.activeStart = dayjs(calView.activeStart).format('YYYY-MM-DD')
         this.activeEnd = dayjs(calView.activeEnd).format('YYYY-MM-DD')
-        // this.getCalendarIds(() => {
-        //     this.getTaskList(this.selectedDateViewType)
-        // })
+        this.getCalendarIds(() => {
+            this.getTaskList(this.selectedDateViewType)
+        })
     }
     ngOnDestroy(): void {
         this.closeDrawer()
@@ -273,7 +274,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
         const calView = this.fullCalendar.getApi().view
         this.activeStart = dayjs(calView.activeStart).format('YYYY-MM-DD')
         this.activeEnd = dayjs(calView.activeEnd).format('YYYY-MM-DD')
-        // this.getTaskList(this.selectedDateViewType)
+        this.getTaskList(this.selectedDateViewType)
     }
     onWeekPickerClick(rDate: { startDate: string; endDate: string }) {
         console.log('onWeekPickerClick: ', rDate)
@@ -284,7 +285,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
         const calView = calendarApi.view
         this.activeStart = dayjs(calView.activeStart).format('YYYY-MM-DD')
         this.activeEnd = dayjs(calView.activeEnd).format('YYYY-MM-DD')
-        // this.getTaskList(this.selectedDateViewType)
+        this.getTaskList(this.selectedDateViewType)
     }
 
     // --------------------- functions for top of full calendar ---------------------
@@ -299,7 +300,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
         this.activeEnd = dayjs(calendarApi.view.activeEnd).format('YYYY-MM-DD')
         console.log('activeStart, activeEnd: ', this.activeStart, '; ', this.activeEnd)
 
-        // this.getTaskList(viewType)
+        this.getTaskList(viewType)
         this.initViewsOption(viewType)
         this.setDatePickerWhenViewChange(viewType)
         this.setCalendarTitle(viewType)
@@ -309,13 +310,13 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
         switch (viewType) {
             case 'resourceTimeGridDay':
                 const resoruces = []
-                // _.forEach(_.filter(this.instructorList, ['selected', true]), (value) => {
-                //     resoruces.push({
-                //         id: value.instructor.id,
-                //         title: value.instructor.name,
-                //         instructorData: value.instructor,
-                //     })
-                // })
+                _.forEach(_.filter(this.instructorList$_, ['selected', true]), (value) => {
+                    resoruces.push({
+                        id: value.instructor.id,
+                        title: value.instructor.name,
+                        instructorData: value.instructor,
+                    })
+                })
 
                 this.fullCalendar.options = { ...this.fullCalendar.options, ...{ resources: resoruces } }
 
@@ -345,7 +346,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
 
         this.setDatePickerWhenViewChange(this.selectedDateViewType)
         this.setCalendarTitle(this.selectedDateViewType)
-        // this.getTaskList(this.selectedDateViewType)
+        this.getTaskList(this.selectedDateViewType)
     }
 
     setDatePickerWhenViewChange(viewType: ViewType) {
@@ -385,6 +386,54 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.calendarTitle = calendarApi.view.title
                 break
         }
+    }
+
+    // calendar service
+    public calIds: Array<Calendar> = []
+    getCalendarIds(fn?: () => void) {
+        this.CenterCalendarService.getCalendars(this.center.id, {}).subscribe((calIds) => {
+            this.calIds = calIds
+            fn ? fn() : null
+        })
+    }
+
+    getTaskList(viewType: ViewType, calendarId?: string) {
+        console.log('this.activeStart : ', this.activeStart)
+        // this.CenterCalendarService.getCalendarTasks(
+        //     this.center.id,
+        //     calendarId,
+        //     this.activeStart,
+        //     this.activeEnd
+        // ).subscribe((tasks) => {
+        //     this.eventList = tasks.map((task) => {
+        //         console.log('getTaskList  one : ', task)
+        //         if (viewType == 'resourceTimeGridDay') {
+        //             return {
+        //                 title: task.name,
+        //                 start: task.start,
+        //                 end: task.end,
+        //                 resourceId: task.id,
+        //                 originItem: task,
+        //                 assginee: this.calIds.length > 0 ? _.find(this.calIds, (calId) => calId.id == task.id) : null,
+        //                 textColor: '#212121',
+        //                 color: task.type_code == 'general' ? '#F6F6F6' : '#FFFFFF',
+        //             }
+        //         } else {
+        //             return {
+        //                 title: task.name,
+        //                 start: task.start,
+        //                 end: task.end,
+        //                 originItem: task,
+        //                 assginee: this.calIds.length > 0 ? _.find(this.calIds, (calId) => calId.id == task.id) : null,
+        //                 textColor: '#212121',
+        //                 color: task.type_code == 'general' ? '#F6F6F6' : '#FFFFFF',
+        //             }
+        //         }
+        //     })
+        //     console.log('getTaskList - start, end: ', this.activeStart, ', ', this.activeEnd, '; ', viewType)
+        //     console.log('getTaskList : ', this.eventList)
+        //     // this.setEventsFiltersChange(this.instructorList, this.lectureFilter)
+        // })
     }
 
     // ------------------------------------------- schedule dropdown  ------------------------------------------//

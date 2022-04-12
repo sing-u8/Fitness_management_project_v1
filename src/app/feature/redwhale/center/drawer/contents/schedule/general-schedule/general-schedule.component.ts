@@ -156,14 +156,15 @@ export class GeneralScheduleComponent implements OnInit, AfterViewInit, OnDestro
         const selectedStaff = _.find(this.instructorList, (item) => {
             return this.StaffSelectValue.value.id == item.instructor.calendar_user.id
         })
+        console.log('this.timepick.startTime : ', this.timepick.startTime, this.timepick.endTime)
         const reqBody: CreateCalendarTaskReqBody = {
             type_code: 'calendar_task_type_normal',
             name: this.planTexts.planTitle,
             start_date: dayjs(this.datepick.date).format('YYYY-MM-DD'),
             end_date: dayjs(this.datepick.date).format('YYYY-MM-DD'),
             all_day: false,
-            start_time: this.timepick.startTime,
-            end_time: this.timepick.endTime, // !!확인 필요
+            start_time: this.timepick.startTime.slice(0, 5),
+            end_time: this.timepick.endTime.slice(0, 5), // !!확인 필요
             memo: this.planTexts.planDetail,
             repeat: false,
         }
@@ -202,7 +203,6 @@ export class GeneralScheduleComponent implements OnInit, AfterViewInit, OnDestro
                 if (schedulingInstructor != undefined && schedulingInstructor.calendar_user.id == v.id) {
                     this.StaffSelectValue = { name: v.center_user_name ?? v.name, value: v }
                     this.nxStore.dispatch(ScheduleActions.setSchedulingInstructor({ schedulingInstructor: undefined }))
-                    console.log('this.StaffSelectValue : ', this.StaffSelectValue)
                     return true
                 } else if (schedulingInstructor == undefined && this.user.id == v.id) {
                     this.StaffSelectValue = { name: v.center_user_name ?? v.name, value: v }
