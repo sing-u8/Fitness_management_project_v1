@@ -10,3 +10,4 @@ export const drawerSelector = createSelector(appFeatureSelector, (appState) => a
 export const toastSelector = createSelector(appFeatureSelector, (appState) => appState.toast)
 export const modalSelector = createSelector(appFeatureSelector, (appState) => appState.modal)
 export const registrationSelector = createSelector(appFeatureSelector, (appState) => appState.registration)
+export const scheduleIsResetSelector = createSelector(appFeatureSelector, (appState) => appState.scheduleDrawerIsReset)

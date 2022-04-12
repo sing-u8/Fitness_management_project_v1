@@ -30,13 +30,15 @@ import { Center } from '@schemas/center'
 })
 export class MemberListModalComponent implements AfterViewChecked, OnChanges, AfterViewInit {
     @Input() visible: boolean
+    @Input() title = '회원 검색'
+    @Input() searchPlaceholder = '회원의 이름 또는 전화번호를 검색해주세요.'
 
     @ViewChild('modalBackgroundElement') modalBackgroundElement
     @ViewChild('modalWrapperElement') modalWrapperElement
 
     @Output() visibleChange = new EventEmitter<boolean>()
     @Output() cancel = new EventEmitter<any>()
-    @Output() confirm = new EventEmitter<any>()
+    @Output() confirm = new EventEmitter<CenterUser>()
 
     changed: boolean
 

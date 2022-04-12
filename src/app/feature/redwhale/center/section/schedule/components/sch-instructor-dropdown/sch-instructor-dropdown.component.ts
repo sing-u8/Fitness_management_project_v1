@@ -3,12 +3,16 @@ import { Router, ActivatedRoute } from '@angular/router'
 
 import _ from 'lodash'
 
+import { WordService } from '@services/helper/word.service'
+import { StorageService } from '@services/storage.service'
+
 import { CenterUser } from '@schemas/center-user'
+import { Center } from '@schemas/center'
 
 // ngrx
 import { Store } from '@ngrx/store'
 import * as FromSchedule from '@centerStore/reducers/sec.schedule.reducer'
-import * as ScheduleActoins from '@centerStore/actions/sec.schedule.actions'
+import * as ScheduleActions from '@centerStore/actions/sec.schedule.actions'
 
 @Component({
     selector: 'rw-sch-instructor-dropdown',
@@ -18,12 +22,22 @@ import * as ScheduleActoins from '@centerStore/actions/sec.schedule.actions'
 export class SchInstructorDropdownComponent implements OnInit, OnChanges {
     @Input() instructorList: Array<FromSchedule.InstructorType> = []
 
+    public center: Center
+
     public isContentOpen = true
     public selectedNum = 0
     public isAllChecked = true
 
     public isInit = false
-    constructor(private nxStore: Store, private router: Router, private activatedRoute: ActivatedRoute) {}
+    constructor(
+        private nxStore: Store,
+        private router: Router,
+        private activatedRoute: ActivatedRoute,
+        private wordService: WordService,
+        private storageService: StorageService
+    ) {
+        this.center = this.storageService.getCenter()
+    }
 
     ngOnInit(): void {}
     ngOnChanges(): void {
@@ -41,7 +55,7 @@ export class SchInstructorDropdownComponent implements OnInit, OnChanges {
         this.selectedNum += this.instructorList[idx].selected == true ? 1 : -1
         this.checkIsAllChecked()
         this.isInit = true
-        this.nxStore.dispatch(ScheduleActoins.setInstructorList({ instructorList: this.instructorList }))
+        this.nxStore.dispatch(ScheduleActions.setInstructorList({ instructorList: this.instructorList }))
     }
 
     onSelectButtonClick() {
@@ -58,7 +72,7 @@ export class SchInstructorDropdownComponent implements OnInit, OnChanges {
         }
         this.checkIsAllChecked()
         this.isInit = true
-        this.nxStore.dispatch(ScheduleActoins.setInstructorList({ instructorList: this.instructorList }))
+        this.nxStore.dispatch(ScheduleActions.setInstructorList({ instructorList: this.instructorList }))
     }
 
     checkIsAllChecked() {
@@ -102,9 +116,39 @@ export class SchInstructorDropdownComponent implements OnInit, OnChanges {
         this.addlInstructor = !this.addlInstructor
     }
     onCancelAddInst() {
-        this.toggleNoAdditionalInstructorModal()
+        this.toggleAddInstructorModal()
+        this.willBeAddedInstructor = undefined
     }
     onConfirmAddInst() {
-        this.toggleNoAdditionalInstructorModal()
+        this.toggleAddInstructorModal()
+        this.nxStore.dispatch(
+            ScheduleActions.startCreateInstructor({
+                centerId: this.center.id,
+                reqBody: {
+                    calendar_user_id: this.willBeAddedInstructor.id,
+                    type_code: 'calendar_type_user_calendar',
+                    name: this.willBeAddedInstructor.center_user_name,
+                },
+            })
+        )
+        this.willBeAddedInstructor = undefined
+    }
+
+    // add instructor list modal
+    public addInstructorList = false
+    toggleAddInstructorListModal() {
+        this.addInstructorList = !this.addInstructorList
+    }
+    onMemberListModalCancel() {
+        this.toggleAddInstructorListModal()
+    }
+    onMemberListModalConfirm(centerUser: CenterUser) {
+        this.toggleAddInstructorListModal()
+        this.willBeAddedInstructor = centerUser
+        this.addlInstructorData.text = `'${this.wordService.ellipsis(
+            centerUser.center_user_name,
+            6
+        )}' 강사를 추가하시겠어요?`
+        this.toggleAddInstructorModal()
     }
 }

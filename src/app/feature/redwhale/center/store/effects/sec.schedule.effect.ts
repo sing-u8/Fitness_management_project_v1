@@ -53,7 +53,7 @@ export class ScheduleEffect {
                                 ScheduleActions.startCreateInstructor({
                                     centerId: center.id,
                                     reqBody: {
-                                        user_id: user.id,
+                                        calendar_user_id: user.id,
                                         type_code: 'calendar_type_user_calendar',
                                         name: value.curCenterUser.center_user_name,
                                     },

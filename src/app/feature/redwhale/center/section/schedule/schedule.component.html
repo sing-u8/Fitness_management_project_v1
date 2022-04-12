@@ -124,6 +124,21 @@
 
 </article>
 
+<div
+    [class.show] = "doShowScheduleDropdown"  class="schdule-dropdown" #schdule_dropdown >
+    <div
+        class="rw-typo-subtext0 dropdown-item"
+        (click)="openLessonScheduleDrawer(); hideScheduleDropdown()"
+    >
+        수업 일정 추가
+    </div>
+    <div
+        class="rw-typo-subtext0 dropdown-item"
+        (click)="openGeneralScheduleDrawer(); hideScheduleDropdown()"
+    >
+        기타 일정 추가
+    </div>
+</div>
 
 <rw-sch-center-operating-modal
     [(visible)] = "doShowCenterOperModal"
@@ -132,3 +147,4 @@
     (cancel)="onCenterOperatingModalCancel()"
     (confirm)="onCenterOperatingModalConfirm($event)"
 ></rw-sch-center-operating-modal>
+

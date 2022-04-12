@@ -4,7 +4,7 @@ import { createImmerReducer } from 'ngrx-immer/store'
 import { AppStateInterface } from '@schemas/store/app/appState.interface'
 
 import { showToast, hideToast } from '@appStore/actions/toast.action'
-import { openDrawer, closeDrawer } from '@appStore/actions/drawer.action'
+import { openDrawer, closeDrawer, setScheduleDrawerIsReset } from '@appStore/actions/drawer.action'
 import { showModal, hideModal } from '@appStore/actions/modal.action'
 import { setRegistration, removeRegistration } from '@appStore/actions/registration.action'
 import { debugLog } from '@appStore/actions/log.action'
@@ -37,6 +37,8 @@ const initialState: AppStateInterface = {
         password: undefined,
         passwordValid: false,
     },
+    // schedule is reset
+    scheduleDrawerIsReset: false,
 }
 
 export const appReducer = createImmerReducer(
@@ -88,6 +90,10 @@ export const appReducer = createImmerReducer(
             password: undefined,
             passwordValid: false,
         }
+        return state
+    }),
+    on(setScheduleDrawerIsReset, (state, action) => {
+        state.scheduleDrawerIsReset = action.isReset
         return state
     }),
     // -------------------------------------------------------------------------------------//

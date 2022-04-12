@@ -46,7 +46,7 @@
 
         <div
           class="add-instructor-button"
-          (click)="false"
+          (click)="toggleAddInstructorListModal()"
         >
           <div class="plus-icon"></div>
           강사 추가하기
@@ -75,3 +75,11 @@
   (cancel)="onCancelAddInst()"
   (confirm)="onConfirmAddInst();"
 ></rw-modal>
+
+<rw-member-list-modal
+    [visible]="addInstructorList"
+    [title]="'강사 검색'"
+    [searchPlaceholder]="'강사의 이름 또는 전화번호를 검색해주세요.'"
+    (cancel)="onMemberListModalCancel()"
+    (confirm)="onMemberListModalConfirm($event)"
+></rw-member-list-modal>

@@ -8,4 +8,5 @@ export interface AppStateInterface {
     drawer: Drawer
     modal: Modal
     registration: Registration
+    scheduleDrawerIsReset: boolean
 }

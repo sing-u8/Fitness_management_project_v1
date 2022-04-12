@@ -12,5 +12,7 @@ export enum ActionTypes {
     SHOW_TOAST = '[APP] Show toast',
     HIDE_TOAST = '[APP] Hide toast',
 
+    SET_SCHEDULE_IS_RESET = `[APP] Set Schedule Is Reset`,
+
     LOG = '[APP] LOG FOR DEBUG',
 }

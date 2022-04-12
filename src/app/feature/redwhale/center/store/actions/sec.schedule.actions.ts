@@ -49,6 +49,31 @@ export const setLectureFilter = createAction(
     `[${FeatureKey}] Set Lecture Filter`,
     props<{ lectureFilter: FromSchReducer.LectureFilter }>()
 )
+export const setSelectedDate = createAction(
+    `[${FeatureKey}] Set Selected Date`,
+    props<{ selectedDate: FromSchReducer.SelectedDate }>()
+)
+export const setSchedulingInstructor = createAction(
+    `[${FeatureKey}] Set Scheduling Instructor`,
+    props<{ schedulingInstructor: Calendar }>()
+)
+export const setIsScheduleEventChanged = createAction(
+    `[${FeatureKey}] Set IsScheduleEventChanged`,
+    props<{ isScheduleEventChanged: boolean }>()
+)
+
+export const setModifyGeneralEvent = createAction(
+    `[${FeatureKey}] Set ModifyGeneralEvent`,
+    props<{ event: CalendarTask }>()
+)
+export const setModifyLessonEvent = createAction(
+    `[${FeatureKey}] Set ModifyLessonEvent`,
+    props<{ event: CalendarTask }>()
+)
+export const setModifyLessonOption = createAction(
+    `[${FeatureKey}] Set ModifyLessonOption`,
+    props<{ option: FromSchReducer.ModifyLessonOption }>()
+)
 
 // common
 export const resetAll = createAction(`[${FeatureKey}] Reset All Schedule States`)

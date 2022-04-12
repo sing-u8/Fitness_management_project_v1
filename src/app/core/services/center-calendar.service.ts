@@ -143,7 +143,7 @@ export class CenterCalendarService {
 }
 
 export interface CreateCalendarReqBody {
-    user_id: string
+    calendar_user_id: string
     type_code: 'calendar_type_user_calendar' | 'calendar_type_center_calendar'
     name: string
 }
@@ -163,7 +163,7 @@ export interface CreateCalendarTaskReqBody {
     name: string
     start_date: string
     end_date: string
-    all_day: string
+    all_day: boolean
     start_time?: string
     end_time?: string
     color?: string
@@ -181,7 +181,7 @@ export interface CreateCalendarTaskReqBody {
         | 'calendar_task_group_repeat_termination_type_date'
     repeat_count?: number
     repeat_end_date?: string
-    class: ClassForCU
+    class?: ClassForCU
 }
 
 export interface UpdateCalendarTaskReqBody {
@@ -207,7 +207,7 @@ export interface UpdateCalendarTaskReqBody {
         | 'calendar_task_group_repeat_termination_type_date'
     repeat_count?: number
     repeat_end_date?: string
-    class: ClassForCU
+    class?: ClassForCU // !일반 일정일 때는 추가해야하나 ?
 }
 
 export interface ClassForCU {

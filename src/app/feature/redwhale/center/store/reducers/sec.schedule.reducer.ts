@@ -45,6 +45,16 @@ export const CalendarConfigInfoInit: CalendarConfigInfo = {
 export type CenterOperatingHour = { start: string; end: string }
 export const CenterOperationHourInit = { start: undefined, end: undefined }
 
+export type ViewType = 'resourceTimeGridDay' | 'timeGridWeek' | 'dayGridMonth'
+export type SelectedDate = { startDate: Date; endDate: Date; viewType: ViewType }
+const SelectedDateInit = {
+    startDate: undefined,
+    endDate: undefined,
+    viewType: undefined,
+}
+
+export type ModifyLessonOption = 'this' | 'from_now_on' | 'all'
+
 // init states
 export const InstructorListInit: InstructorType[] = []
 export const TaskListInit: CalendarTask[] = []
@@ -61,6 +71,15 @@ export interface State {
     calendarConfig: CalendarConfigInfo
     operatingHour: CenterOperatingHour
     lectureFilter: LectureFilter
+    selectedDate: SelectedDate
+    schedulingInstructor: Calendar
+    isScheduleEventChanged: boolean
+
+    modifyGeneralEvent: CalendarTask
+    modifyLessonEvent: CalendarTask
+    modifyLessonOption: ModifyLessonOption
+
+    // lessonTaskReservState
 }
 
 export const initialState: State = {
@@ -74,6 +93,13 @@ export const initialState: State = {
     calendarConfig: CalendarConfigInfoInit,
     operatingHour: CenterOperationHourInit,
     lectureFilter: LectureFilterInit,
+    selectedDate: SelectedDateInit,
+    schedulingInstructor: undefined,
+    isScheduleEventChanged: false,
+
+    modifyGeneralEvent: undefined,
+    modifyLessonEvent: undefined,
+    modifyLessonOption: 'this',
 }
 
 export const scheduleReducer = createImmerReducer(
@@ -120,6 +146,27 @@ export const scheduleReducer = createImmerReducer(
         state.lectureFilter = lectureFilter
         return state
     }),
+    on(ScheduleActions.setSelectedDate, (state, { selectedDate }) => {
+        state.selectedDate = selectedDate
+        return state
+    }),
+    on(ScheduleActions.setIsScheduleEventChanged, (state, { isScheduleEventChanged }) => {
+        state.isScheduleEventChanged = isScheduleEventChanged
+        return state
+    }),
+
+    on(ScheduleActions.setModifyGeneralEvent, (state, { event }) => {
+        state.modifyGeneralEvent = event
+        return state
+    }),
+    on(ScheduleActions.setModifyLessonEvent, (state, { event }) => {
+        state.modifyLessonEvent = event
+        return state
+    }),
+    on(ScheduleActions.setModifyLessonOption, (state, { option }) => {
+        state.modifyLessonOption = option
+        return state
+    }),
 
     // common
     on(ScheduleActions.resetAll, (state) => {
@@ -147,3 +194,9 @@ export const selectInstructorList = (state: State) => state.instructorList
 export const selectCalendarConfigInfo = (state: State) => state.calendarConfig
 export const selectOperatingHour = (state: State) => state.operatingHour
 export const selectLectureFilter = (state: State) => state.lectureFilter
+export const selectSelectedDate = (state: State) => state.selectedDate
+export const selectSchedulingInstructor = (state: State) => state.schedulingInstructor
+export const selectIsScheduleEventChanged = (state: State) => state.isScheduleEventChanged
+export const selectModifyGeneralEvent = (state: State) => state.modifyGeneralEvent
+export const selectModifyLessonEvent = (state: State) => state.modifyLessonEvent
+export const selectModifyLessonOption = (state: State) => state.modifyLessonOption

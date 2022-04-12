@@ -1,0 +1,128 @@
+<div class="community d-flex flex-column">
+  <div class="header">
+      <div class="title">
+        <span class="rw-typo-subtext4">{{titleTime}}</span>
+        <span class="rw-typo-title2">기타 일정을 입력해주세요.</span>
+      </div>
+      <div class="image-container">
+        <img src="assets/icons/etc/close.svg" (click)="showCancelModal()" />
+      </div>
+  </div>
+
+  <div class="content thin-scroll-y-overlay2">
+
+    <div class="plan-and-detail-info">
+      <p class="small-title">일정명 / 상세 정보</p>
+      <input
+        class="rw-input plan-input"
+        required
+        placeholder="일정명을 입력해주세요."
+        [(ngModel)]="planTexts.planTitle"
+        #plan_title = ngModel
+      >
+      <textarea
+        class="rw-textarea plan-textarea thin-scroll-y thin-scroll-x"
+        placeholder="일정 상세 정보를 입력해주세요. (선택)"
+        [(ngModel)]="planTexts.planDetail"
+        #plan_detail = ngModel
+      ></textarea>
+    </div>
+
+    <div class="assignee">
+      <p class="small-title">담당자</p>
+      <rw-user-select
+        [width] = "'285'"
+        [height] = "'48'"
+        [items] = "staffSelect_list"
+        [(ngModel)] = "StaffSelectValue"
+      ></rw-user-select>
+    </div>
+
+    <div class="date">
+      <p class="small-title">일자</p>
+      <div
+        class="date-pick-button"
+        (click) ="checkClickDatePickOutside($event); $event.stopPropagation()"
+      >
+
+        <span *ngIf="!datepick.date;else showDate" class="rw-typo-bodytext0">일자를 선택해주세요.</span>
+        <ng-template #showDate>
+          <span class="rw-typo-bodytext0">{{datepick.date | dateFormat:'YYYY.MM.DD (dd)'}}</span>
+        </ng-template>
+
+        <div
+          #datepicker
+          [class.display-none] = "!doShowDatepick"
+          (rwClickOutside) = "doShowDatepick = false"
+          class="datepicker"
+        >
+          <rw-datepicker2
+            mode="date"
+            [(data)]="datepick"
+            [shadowOn]="true"
+          ></rw-datepicker2>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="time-select">
+
+      <div class="start-time">
+        <p class="small-title">시작 시간</p>
+        <rw-time-picker2
+          [time] = "timepick.startTime"
+          [startTime]= "centerOperatingTime.start"
+          [endTime]= "centerOperatingTime.end"
+          width="135"
+          (onTimeClick)="onTimeClick($event, 'start')"
+        ></rw-time-picker2>
+      </div>
+      <div class="end-time">
+        <p class="small-title">종료 시간</p>
+        <rw-time-picker2
+          [time] = "timepick.endTime"
+          [startTime]= "centerOperatingTime.start"
+          [endTime]= "centerOperatingTime.end"
+          [disableTimeUntil]= "timepick.startTime"
+          width="135"
+          (onTimeClick)="onTimeClick($event, 'end')"
+        ></rw-time-picker2>
+      </div>
+    </div>
+
+    <div
+      class="save-button"
+      rw-button
+      rwButtonColor="var(--red)"
+      [rwButtonDisabled]="plan_title.invalid"
+      (click) = "plan_title.valid && showConfirmSaveModal()"
+    >
+      저장하기
+    </div>
+
+    <div class="detail">
+      <span class="rw-typo-subtext0-regular">기타 일정은 운영자 및 직원에게만 보여지며,</span>
+      <span class="rw-typo-subtext0-regular">회원에게는 보여지지 않아요. 🙈</span>
+    </div>
+
+  </div>
+</div>
+
+
+
+<rw-modal
+  [(visible)]="doShowConfirmSaveModal"
+  [data]="confirmModalText"
+  (cancel)="hideConfirmSaveModal()"
+  (confirm)="onConfirmSave()"
+></rw-modal>
+
+
+<rw-modal
+  [(visible)]="doShowCancelModal"
+  [data]="cancelModalText"
+  (cancel)="hideCancelModal()"
+  (confirm)="onCancelModalConfirm()"
+></rw-modal>

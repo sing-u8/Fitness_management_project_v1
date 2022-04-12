@@ -27,6 +27,7 @@ import { takeUntil } from 'rxjs/operators'
 import { Store, select } from '@ngrx/store'
 import { drawerSelector } from '@appStore/selectors'
 import { showToast } from '@appStore/actions/toast.action'
+import { openDrawer, closeDrawer } from '@appStore/actions/drawer.action'
 
 import * as FromSchedule from '@centerStore/reducers/sec.schedule.reducer'
 import * as ScheduleSelector from '@centerStore/selectors/sec.schedule.selector'
@@ -385,6 +386,50 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
     }
     hideScheduleDropdown() {
         this.doShowScheduleDropdown = false
+    }
+
+    // drawer function
+    openGeneralScheduleDrawer() {
+        this.setDrawerDate()
+
+        this.nxStore.dispatch(openDrawer({ tabName: 'general-schedule' }))
+        // this.globalService.setResetScheduleDrawerState(true)
+        this.fullCalendar.getApi().updateSize()
+    }
+    openLessonScheduleDrawer() {
+        this.setDrawerDate()
+
+        this.nxStore.dispatch(openDrawer({ tabName: 'lesson-schedule' }))
+        // this.globalService.setResetScheduleDrawerState(true)
+        this.fullCalendar.getApi().updateSize()
+    }
+    closeDrawer() {
+        this.nxStore.dispatch(closeDrawer())
+        this.fullCalendar.getApi().updateSize()
+    }
+
+    setDrawerDate() {
+        if (!this.drawerDate.endDate) {
+            this.nxStore.dispatch(
+                ScheduleActions.setSelectedDate({
+                    selectedDate: {
+                        startDate: this.drawerDate.startDate,
+                        endDate: new Date(this.drawerDate.startDate.getTime() + 30 * 60000),
+                        viewType: this.selectedDateViewType,
+                    },
+                })
+            )
+        } else {
+            this.nxStore.dispatch(
+                ScheduleActions.setSelectedDate({
+                    selectedDate: {
+                        startDate: this.drawerDate.startDate,
+                        endDate: this.drawerDate.endDate,
+                        viewType: this.selectedDateViewType,
+                    },
+                })
+            )
+        }
     }
 
     // <-------------------------------------- fullcalendar option functions----------------------------------------------------------//
