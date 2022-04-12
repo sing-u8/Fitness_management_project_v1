@@ -321,7 +321,6 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
 
     setDatePickerWhenViewChange(viewType: ViewType) {
         const calendarApi = this.fullCalendar.getApi()
-
         const activeStart = dayjs(calendarApi.view.activeStart).format('YYYY-MM-DD')
         const activeEnd = dayjs(calendarApi.view.activeEnd).subtract(1, 'day').format('YYYY-MM-DD')
         console.log("dayjs(calendarApi.view.activeEnd).subtract(1, 'day').format('YYYY-MM-DD') : ", activeEnd)
@@ -575,7 +574,11 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
 
     public setSchedulingInstructor(arg) {
         if (arg.view.type == 'resourceTimeGridDay') {
-            // this.gymScheduleState.setSchedulingInstructor(arg.resource.extendedProps.instructorData as Calendar)
+            this.nxStore.dispatch(
+                ScheduleActions.setSchedulingInstructor({
+                    schedulingInstructor: arg.resource.extendedProps.instructorData as Calendar,
+                })
+            )
         }
     }
 
@@ -763,18 +766,18 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
         // }
     }
 
-    getRepeatDayOfWeek(repeatCode: string) {
-        if (!repeatCode) return ''
-        if (repeatCode == 'all') {
-            return ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']
-        } else if (repeatCode == 'weekdays') {
-            return ['mon', 'tue', 'wed', 'thu', 'fri']
-        } else if (repeatCode == 'weekend') {
-            return ['sun', 'sat']
-        } else {
-            return _.split(repeatCode, '_')
-        }
-    }
+    // getRepeatDayOfWeek(repeatCode: string) {
+    //     if (!repeatCode) return ''
+    //     if (repeatCode == 'all') {
+    //         return ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']
+    //     } else if (repeatCode == 'weekdays') {
+    //         return ['mon', 'tue', 'wed', 'thu', 'fri']
+    //     } else if (repeatCode == 'weekend') {
+    //         return ['sun', 'sat']
+    //     } else {
+    //         return _.split(repeatCode, '_')
+    //     }
+    // }
 
     public dayCellLeave = true
     dayCellDidMount(arg) {
