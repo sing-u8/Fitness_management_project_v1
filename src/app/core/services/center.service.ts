@@ -132,12 +132,12 @@ class UpdateCenterRequestBody {
     name?: string
     address?: string
     color?: string
-    timezone?: string
+    // timezone?: string
     // picture?: string
     // background?: string
-    // operating_days?: Array<string> // all (매일 반복) , weekdays (평일마다 반복), weekend (주말마다 반복), ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']
-    // operating_start_time?: string
-    // operating_end_time?: string
+    day_of_the_week?: Array<number> // [0sun ~ 0sat]
+    open_time?: string
+    close_time?: string
 }
 
 class DelegateRequestBody {

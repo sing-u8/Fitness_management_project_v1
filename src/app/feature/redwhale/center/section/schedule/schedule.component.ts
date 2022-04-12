@@ -95,7 +95,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
         this.nxStore
             .pipe(select(ScheduleSelector.operatingHour), takeUntil(this.unsubscriber$))
             .subscribe((operatingHour) => {
-                this.operatingTime = operatingHour
+                this.operatingTime = _.cloneDeep(operatingHour)
             })
     }
 
@@ -173,7 +173,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
     }
     // --------------------------------- modal operating fucntions and texts --------------------------------//
     public operatingTime: GymOperatingTime = { start: undefined, end: undefined }
-    public operatingDayOfWeek = { value: '' }
+    public operatingDayOfWeek: { value: number[] } = { value: [] }
     public doShowCenterOperModal = false
     openCenterOperatingModal() {
         this.doShowCenterOperModal = true
@@ -182,80 +182,50 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
         this.doShowCenterOperModal = false
         this.getOperatingData(this.center.id)
     }
-    onCenterOperatingModalConfirm(Return: { operatingTime: GymOperatingTime; operatingDayOfWeek: { value: string } }) {
-        // this.gymService
-        //     .updateGym(this.gym.id, {
-        //         operating_days: _.split(Return.operatingDayOfWeek.value, '_'),
-        //         operating_start_time: Return.operatingTime.start,
-        //         operating_end_time: Return.operatingTime.end,
-        //         address: this.gym.address,
-        //     })
-        //     .subscribe((gymData) => {
-        //         // UI가 두 번 변함!!!
-        //         this.fullCalendar.options = {
-        //             ...this.fullCalendar.options,
-        //             ...{
-        //                 hiddenDays: this.getHiddenDays(_.split(Return.operatingDayOfWeek.value, '_')),
-        //                 slotMinTime: Return.operatingTime.start,
-        //                 slotMaxTime: Return.operatingTime.end,
-        //             },
-        //         }
-        //         // this.fullCalendar
-        //         //     .getApi()
-        //         //     .setOption('hiddenDays', this.getHiddenDays(_.split(Return.operatingDayOfWeek.value, '_')))
-        //         this.changeView(this.selectedDateViewType)
-        //         this.globalService.showToast('센터 운영 시간이 변경되었습니다.')
-        //         this.doShowCenterOperModal = false
-        //     })
+    onCenterOperatingModalConfirm(Return: {
+        operatingTime: GymOperatingTime
+        operatingDayOfWeek: { value: number[] }
+    }) {
+        this.centerService
+            .updateCenter(this.center.id, {
+                day_of_the_week: Return.operatingDayOfWeek.value,
+                open_time: Return.operatingTime.start.slice(0, 5),
+                close_time: Return.operatingTime.end.slice(0, 5),
+            })
+            .subscribe((gymData) => {
+                // UI가 두 번 변함!!!
+                this.fullCalendar.options = {
+                    ...this.fullCalendar.options,
+                    ...{
+                        hiddenDays: this.getHiddenDays(Return.operatingDayOfWeek.value),
+                        slotMinTime: Return.operatingTime.start,
+                        slotMaxTime: Return.operatingTime.end,
+                    },
+                }
+                // this.fullCalendar
+                //     .getApi()
+                //     .setOption('hiddenDays', this.getHiddenDays(Return.operatingDayOfWeek.value)))
+                this.changeView(this.selectedDateViewType)
+                this.nxStore.dispatch(showToast({ text: '센터 운영 시간이 변경되었습니다.' }))
+                this.doShowCenterOperModal = false
+            })
     }
 
-    getOperatingData(gymId: string, fn?: () => void) {
-        // this.gymService.getGym(gymId).subscribe((gym) => {
-        //     const operatingTime = this.getReseponseOperatingTime(gym.operating_start_time, gym.operating_end_time)
-        //     this.gymScheduleState.setGymOperatingTime(operatingTime)
-        //     this.operatingDayOfWeek.value = this.getResponseOperatingDays(gym.operating_days)
-        //     fn ? fn() : null
-        // })
-    }
-
-    getResponseOperatingDays(days: string) {
-        if (!days) return 'sun_mon_tue_wed_thu_fri_sat'
-        if (days == 'all') {
-            return 'sun_mon_tue_wed_thu_fri_sat'
-        } else if (days == 'weekdays') {
-            return 'mon_tue_wed_thu_fri'
-        } else if (days == 'weekend') {
-            return 'sun_sat'
-        } else {
-            return days
-        }
-    }
-    getReseponseOperatingTime(start: string, end: string): GymOperatingTime {
-        let startTime = start ?? '08:00:00'
-        let endTime = end ?? '22:00:00'
-        if (start == '00:00:00' && end == '00:00:00') {
-            startTime = '08:00:00'
-            endTime = '22:00:00'
-            // this.gymService
-            //     .updateGym(this.gym.id, {
-            //         operating_start_time: startTime,
-            //         operating_end_time: endTime,
-            //         address: this.gym.address,
-            //     })
-            //     .subscribe()
-        }
-
-        return { start: startTime, end: endTime }
-    }
-
-    getHiddenDays(days: string[]) {
-        const matcher = { sun: 0, mon: 1, tue: 2, wed: 3, thu: 4, fri: 5, sat: 6 }
-        const newHiddenDays = [0, 1, 2, 3, 4, 5, 6]
-        const daysNumber = _.map(days, (day) => {
-            return matcher[day]
+    getOperatingData(centerId: string, fn?: () => void) {
+        this.centerService.getCenter(centerId).subscribe((center) => {
+            const operatingTime: GymOperatingTime = {
+                start: center.open_time,
+                end: center.close_time,
+            }
+            this.nxStore.dispatch(ScheduleActions.setOperatingHour({ operatingHour: operatingTime }))
+            this.operatingDayOfWeek.value = center.day_of_the_week
+            fn ? fn() : null
         })
-        console.log('daysNumber: ', daysNumber, days)
-        return _.difference(newHiddenDays, daysNumber)
+    }
+
+    getHiddenDays(days: number[]) {
+        const newHiddenDays = [0, 1, 2, 3, 4, 5, 6]
+        return _.difference(newHiddenDays, days)
     }
 
     // --------------------- fucntions for datepicker related to fullcalendar  --------------
@@ -498,8 +468,8 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
     // <-------------------------------------- fullcalendar option functions----------------------------------------------------------//
     // fullcalendar fucntions
     initFullCalendar(): void {
-        // const hiddenDays = this.getHiddenDays(_.split(this.getResponseOperatingDays(this.center.operating_days), '_'))
-        // const operatingTime = this.getReseponseOperatingTime(this.center.operating_start_time, this.center.operating_end_time)
+        const hiddenDays = this.getHiddenDays(this.center.day_of_the_week)
+        const operatingTime = { start: this.center.open_time, end: this.center.close_time }
         // console.log('initFullCalendar: operatingTime: ', this.operatingTime, hiddenDays)
         this.selectedDateViewType = 'timeGridWeek'
         this.fullCalendarOptions = {
@@ -523,9 +493,9 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
                     fixedWeekCount: false,
                 },
             },
-            // slotMinTime: operatingTime.start,
-            // slotMaxTime: operatingTime.end,
-            // hiddenDays: hiddenDays,
+            slotMinTime: operatingTime.start,
+            slotMaxTime: operatingTime.end,
+            hiddenDays: hiddenDays,
             selectable: true,
             editable: true,
             droppable: true,
@@ -543,7 +513,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
             events: [],
             resources: [],
         }
-        this.getOperatingData(this.center.id, () => {})
+        this.getOperatingData(this.center.id)
     }
 
     // full calendar event functions

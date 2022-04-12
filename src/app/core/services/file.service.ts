@@ -14,6 +14,8 @@ export type FileTypeCode =
     | 'file_type_user_background'
     | 'file_type_center_picture'
     | 'file_type_center_background'
+    | 'file_type_center_user_picture'
+    | 'file_type_center_user_background'
     | 'file_type_chat'
 
 @Injectable({
@@ -27,13 +29,14 @@ export class FileService {
     getFile(
         type_code: FileTypeCode,
         center_id = '',
+        cneter_user_id = '',
         chat_room_id = '',
         page = '',
         pageSize = ''
     ): Observable<Array<File>> {
         const url =
             this.SERVER +
-            `/files?type_code=${type_code}&center_id=${center_id}&chat_room_id=${chat_room_id}&page=${page}&pageSize=${pageSize}`
+            `/files?type_code=${type_code}&center_id=${center_id}&cneter_user_id=${cneter_user_id}&chat_room_id=${chat_room_id}&page=${page}&pageSize=${pageSize}`
 
         const options = {
             headers: new HttpHeaders({
@@ -134,6 +137,7 @@ export class FileService {
 export interface CreateFileRequestBody {
     type_code: FileTypeCode
     center_id?: string
+    cneter_user_id?: string
     chat_room_id?: string
     // files  : FileList   -- is already in other param
 }

@@ -21,5 +21,7 @@ export interface CenterUser {
     role_name: string
     center_user_name: string
     center_user_memo: string
+    center_user_picture: string
+    center_user_background: string
     created_at: string
 }

@@ -20,7 +20,7 @@ import _ from 'lodash'
 export class SchCenterOpratingModalComponent implements AfterViewChecked, OnChanges {
     @Input() visible: boolean
     @Input() time: { start: string; end: string }
-    @Input() daysString: { value: string }
+    @Input() daysString: { value: number[] }
 
     @ViewChild('modalBackgroundElement') modalBackgroundElement
     @ViewChild('modalWrapperElement') modalWrapperElement
@@ -30,13 +30,13 @@ export class SchCenterOpratingModalComponent implements AfterViewChecked, OnChan
     @Output() confirm = new EventEmitter<any>()
 
     public dayOfWeek = [
-        { key: 'sun', name: '일', selected: true },
-        { key: 'mon', name: '월', selected: true },
-        { key: 'tue', name: '화', selected: true },
-        { key: 'wed', name: '수', selected: true },
-        { key: 'thu', name: '목', selected: true },
-        { key: 'fri', name: '금', selected: true },
-        { key: 'sat', name: '토', selected: true },
+        { key: 0, name: '일', selected: true },
+        { key: 1, name: '월', selected: true },
+        { key: 2, name: '화', selected: true },
+        { key: 3, name: '수', selected: true },
+        { key: 4, name: '목', selected: true },
+        { key: 5, name: '금', selected: true },
+        { key: 6, name: '토', selected: true },
     ]
 
     // public prevDayOfWeek = []
@@ -117,31 +117,25 @@ export class SchCenterOpratingModalComponent implements AfterViewChecked, OnChan
     }
 
     setDaysString() {
-        this.daysString.value = _.trim(
-            _.reduce(
-                this.dayOfWeek,
-                (acc, val) => {
-                    return val.selected ? acc + `${val.key}_` : acc
-                },
-                ''
-            ),
-            '_'
+        this.daysString.value = _.map(
+            _.filter(this.dayOfWeek, (day) => day.selected),
+            (day) => day.key
         )
     }
 
-    initDayOfWeek(days: string) {
+    initDayOfWeek(days: number[]) {
         if (days) {
             const dayWeek = [
-                { key: 'sun', name: '일', selected: false },
-                { key: 'mon', name: '월', selected: false },
-                { key: 'tue', name: '화', selected: false },
-                { key: 'wed', name: '수', selected: false },
-                { key: 'thu', name: '목', selected: false },
-                { key: 'fri', name: '금', selected: false },
-                { key: 'sat', name: '토', selected: false },
+                { key: 0, name: '일', selected: false },
+                { key: 1, name: '월', selected: false },
+                { key: 2, name: '화', selected: false },
+                { key: 3, name: '수', selected: false },
+                { key: 4, name: '목', selected: false },
+                { key: 5, name: '금', selected: false },
+                { key: 6, name: '토', selected: false },
             ]
 
-            _.forEach(_.split(days, '_'), (day) => {
+            _.forEach(days, (day) => {
                 _.find(dayWeek, (item, idx) => {
                     if (item.key == day) {
                         dayWeek[idx].selected = true
@@ -156,10 +150,11 @@ export class SchCenterOpratingModalComponent implements AfterViewChecked, OnChan
     }
 
     onStartTimeClick(time: { key: string; name: string }) {
-        console.log('onStartTimeClick: ', time)
         this.time.start = time.key
+        console.log('onStartTimeClick: ', time, this.time.start)
     }
     onEndTimeClick(time: { key: string; name: string }) {
         this.time.end = time.key
+        console.log('onEndTimeClick: ', time, this.time.start)
     }
 }
