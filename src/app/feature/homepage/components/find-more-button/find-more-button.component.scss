@@ -4,11 +4,12 @@
 }
 
 div.find-more-button {
-    width: 136px;
+    // width: 136px;
+    max-width: 137px;
     height: 25px;
     display: flex;
     flex-direction: row;
-    align-content: center;
+    align-items: center;
     justify-content: space-between;
     cursor: pointer;
 
@@ -24,6 +25,8 @@ div.find-more-button {
     }
 
     div.l-right-arrow-icon {
+        margin-left: 10px;
+        margin-top: 1px;
         width: 25px;
         height: 25px;
         position: relative;

@@ -1,4 +1,10 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, Input } from '@angular/core'
+
+export type FaqListType = {
+    title: string
+    desc: string
+    isOpen: boolean
+}
 
 @Component({
     selector: 'hp-faq-list',
@@ -6,11 +12,8 @@ import { Component, OnInit } from '@angular/core'
     styleUrls: ['./faq-list.component.scss'],
 })
 export class FAQListComponent implements OnInit {
-    public faqList: Array<{
-        title: string
-        desc: string
-        isOpen: boolean
-    }> = [
+    @Input() animation = false
+    @Input() faqList: Array<FaqListType> = [
         {
             title: '자주 묻는 질문 1',
             desc: '답변을 입력해주세요. 답변을 입력해주세요. 답변을 입력해주세요. 답변을 입력해주세요. 답변을 입력해주세요. 답변을 입력해주세요. 답변을 입력해주세요. 답변을 입력해주세요. 답변을 입력해주세요. 답변을 입력해주세요. 답변을 입력해주세요.',

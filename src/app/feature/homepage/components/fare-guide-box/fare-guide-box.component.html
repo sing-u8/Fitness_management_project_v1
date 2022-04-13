@@ -1,0 +1,27 @@
+<section class="l-fare-guide-box">
+
+    <p class="type">{{data.type}}</p>
+    <div class="l-price">
+        <span class="price">{{data.price}}</span>
+        <span class="price-unit">{{data.price_unit}}</span>
+    </div>
+
+    <div class="divider"></div>
+
+    <p class="desc-title">{{data.desc_title}}</p>
+    <p class="desc-element">
+        <span class="check-icon"></span>
+        {{data.desc_element.one}}
+    </p>
+    <p class="desc-element">
+        <span class="check-icon"></span>
+        {{data.desc_element.two}}
+    </p>
+
+    <div class="button" (click)="onButtonClick.emit()">
+        {{data.button_name}}
+    </div>
+
+    <ng-content #name></ng-content>
+
+</section>

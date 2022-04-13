@@ -1,0 +1,35 @@
+
+<section class="l-fare-guide-option-table">
+    <div class="table-header table--common">
+        <div class="header__left">{{data.header.one}}</div>
+        <div class="header__right">
+            <div>{{data.header.two}}</div>
+            <div>{{data.header.three}}</div>
+        </div>
+    </div>
+    <div class="table-body table--common">
+        <div
+            id="body-item"
+            [class.sub-text-exist] = "item.subText"
+            *ngFor="let item of data.bodyItems"
+        >
+            <div
+                class="body__left"
+            >
+                {{item.one}}
+                <div *ngIf="item.subText" class="sub-text">관리자 앱은 곧<br> 추가될 예정이에요!</div>
+            </div>
+            <div class="body__right">
+                <div>
+                    <div *ngIf="item.two" class="check-icon"></div>
+                    <div *ngIf="!item.two" class="minus-icon"></div>
+                </div>
+                <div>
+                    <div *ngIf="item.three" class="check-icon"></div>
+                    <div *ngIf="!item.three" class="minus-icon"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+

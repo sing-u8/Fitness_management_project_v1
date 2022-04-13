@@ -14,6 +14,8 @@ import { FAQListComponent } from './faq-list/faq-list.component'
 import { MainCarouselComponent } from './main-carousel/main-carousel.component'
 import { ReceiveIntroductionModalComponent } from './receive-introduction-modal/receive-introduction-modal.component'
 import { FreeStartModalComponent } from './free-start-modal/free-start-modal.component'
+import { FareGuideBoxComponent } from './fare-guide-box/fare-guide-box.component'
+import { FareGuideOptionTableComponent } from './fare-guide-option-table/fare-guide-option-table.component'
 
 @NgModule({
     declarations: [
@@ -27,6 +29,8 @@ import { FreeStartModalComponent } from './free-start-modal/free-start-modal.com
         MainCarouselComponent,
         ReceiveIntroductionModalComponent,
         FreeStartModalComponent,
+        FareGuideBoxComponent,
+        FareGuideOptionTableComponent,
     ],
     imports: [CommonModule, RouterModule, FormsModule, ReactiveFormsModule, SharedModule],
     exports: [
@@ -40,6 +44,8 @@ import { FreeStartModalComponent } from './free-start-modal/free-start-modal.com
         MainCarouselComponent,
         ReceiveIntroductionModalComponent,
         FreeStartModalComponent,
+        FareGuideBoxComponent,
+        FareGuideOptionTableComponent,
     ],
 })
 export class ComponentsModule {}

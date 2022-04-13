@@ -1,1 +1,56 @@
-<p>fare-guide works!</p>
+<article class="l-fare-guide">
+    <div id="sec1" class="sec--common sec__bg-white">
+
+        <div class="sec1__l-text">
+            <div class="sec1__text-title">
+                요금 안내
+            </div>
+            <div class="sec1__text-desc">
+                기간 제한 없이, 기능 제한 없이<br>
+                무료로 사용해보고 결정하세요.
+            </div>
+        </div>
+
+        <div class="l-fare-guide-box">
+            <hp-fare-guide-box
+                *ngFor="let box of fareGuideBoxes; index as idx; last as last"
+                [data]="box"
+                (onButtonClick)="fareGuideClickFuncs[idx]()"
+            >
+                <div *ngIf="last" class="small-text">
+                    부가가치세 10%는 별도입니다.
+                </div>
+            </hp-fare-guide-box>
+        </div>
+
+    </div>
+
+    <div id="sec2" class="sec--common sec__bg-lightergrey">
+        <hp-fare-guide-option-table
+            *ngFor="let table of optionTables"
+            [data] = "table"
+        ></hp-fare-guide-option-table>
+    </div>
+
+    <div id="sec3" class="sec--common sec__bg-white">
+        <div class="discount-card">
+            <div class="card-title">
+                다지점 센터는<br>
+                30%를 할인해드려요.
+            </div>
+            <hp-find-more-button
+                [text]="'도입 문의하기'"
+                [maxWidth]="'120px'"
+                [whiteMode]="true"
+                (onClick)="false"
+            ></hp-find-more-button>
+            <div class="gift-image"></div>
+        </div>
+
+        <hp-faq-list
+            [faqList]="faqList"
+        ></hp-faq-list>
+
+        <hp-homepage-footer></hp-homepage-footer>
+    </div>
+</article>

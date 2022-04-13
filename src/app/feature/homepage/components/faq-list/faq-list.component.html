@@ -1,15 +1,15 @@
 <section
     class="fap-list"
-    [class.hp-scroll-ani] = "true"
+    [class.hp-scroll-ani] = "animation"
 >
     <div
         class="title"
-        [class.hp-SA1] = "true"
+        [class.hp-SA1] = "animation"
     >자주 묻는 질문</div>
 
     <div
         class="l-faq"
-        [class.hp-SA2] = "true"
+        [class.hp-SA2] = "animation"
         *ngFor="let faq of faqList; index as idx"
     >
         <div class="faq-header" (click)="toggleFAQ(idx)">
@@ -22,7 +22,8 @@
     </div>
 
     <hp-find-more-button
-        [class.hp-SA2] = "true"
+        [class.hp-SA2] = "animation"
         [text]="'더 많은 질문 보기'"
+        [maxWidth]="'140px'"
     ></hp-find-more-button>
 </section>
