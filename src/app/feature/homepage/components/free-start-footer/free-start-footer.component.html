@@ -10,14 +10,14 @@
         ></hp-find-more-button>
 
         <div class="l-left-icons">
-            <div class="sale-icon"></div>
-            <div class="locker-icon"></div>
-            <div class="schedule-icon"></div>
+            <div [class.none-animation]="!animation" class="sale-icon"></div>
+            <div [class.none-animation]="!animation" class="locker-icon"></div>
+            <div [class.none-animation]="!animation" class="schedule-icon"></div>
         </div>
         <div class="l-right-icons">
-            <div class="chat-icon"></div>
-            <div class="lesson-icon"></div>
-            <div class="member-icon"></div>
+            <div [class.none-animation]="!animation" class="chat-icon"></div>
+            <div [class.none-animation]="!animation" class="lesson-icon"></div>
+            <div [class.none-animation]="!animation" class="member-icon"></div>
         </div>
 
     </div>
