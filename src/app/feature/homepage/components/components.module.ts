@@ -16,6 +16,7 @@ import { ReceiveIntroductionModalComponent } from './receive-introduction-modal/
 import { FreeStartModalComponent } from './free-start-modal/free-start-modal.component'
 import { FareGuideBoxComponent } from './fare-guide-box/fare-guide-box.component'
 import { FareGuideOptionTableComponent } from './fare-guide-option-table/fare-guide-option-table.component'
+import { InquirySelectComponent } from './inquiry-select/inquiry-select.component'
 
 @NgModule({
     declarations: [
@@ -31,6 +32,7 @@ import { FareGuideOptionTableComponent } from './fare-guide-option-table/fare-gu
         FreeStartModalComponent,
         FareGuideBoxComponent,
         FareGuideOptionTableComponent,
+        InquirySelectComponent,
     ],
     imports: [CommonModule, RouterModule, FormsModule, ReactiveFormsModule, SharedModule],
     exports: [
@@ -46,6 +48,7 @@ import { FareGuideOptionTableComponent } from './fare-guide-option-table/fare-gu
         FreeStartModalComponent,
         FareGuideBoxComponent,
         FareGuideOptionTableComponent,
+        InquirySelectComponent,
     ],
 })
 export class ComponentsModule {}

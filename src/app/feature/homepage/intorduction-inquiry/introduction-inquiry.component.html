@@ -1,0 +1,99 @@
+<article class="l-intro-inquiry">
+
+    <div class="intro-inquiry-body">
+        <p class="body-title">도입 문의</p>
+        <div class="body-desc-box">
+            기존에 겪고 계신 어려움이나 <br id="mobile">
+            레드웨일에 대한 문의를 남겨주세요. <br id="tablet">
+            영업일 기준 24시간 이내에 <br id="mobile">
+            답변을 보내드려요. 💌
+        </div>
+
+        <form [formGroup]="inquiryForm" class="l-form">
+            <div class="l-input">
+                <label for="center-name" class="input-label">센터명</label>
+                <input
+                    class="inquiry-input"
+                    formControlName="centerName"
+                    id="center-name"  type="text"
+                    placeholder="센터명을 입력해주세요."
+                >
+                <div *ngIf="centerName.invalid" class="error">
+                    <div class="error-icon"></div>
+                    {{errors.centerName}}
+                </div>
+            </div>
+            <div class="input-group">
+                <div class="l-input">
+                    <label for="contact-name" class="input-label">담당자 이름</label>
+                    <input
+                        class="inquiry-input"
+                        formControlName="contactName"
+                        id="contact-name"  type="text"
+                        placeholder="이름을 입력해주세요."
+                    >
+                    <div *ngIf="contactName.invalid" class="error">
+                        <div class="error-icon"></div>
+                        {{errors.contactName}}
+                    </div>
+                </div>
+                <div class="l-input">
+                    <label for="position" class="input-label">직책</label>
+                    <inquiry-select
+                        [items]="positionItems"
+                        (position)="onPositionChanged($event)"
+                    ></inquiry-select>
+                </div>
+            </div>
+            <div class="l-input">
+                <label for="email" class="input-label">이메일 주소</label>
+                <input
+                    class="inquiry-input"
+                    formControlName="email"
+                    id="email"  type="text"
+                    placeholder="답변 받으실 이메일 주소"
+                >
+                <div *ngIf="email.invalid" class="error">
+                    <div class="error-icon"></div>
+                    {{errors.email}}
+                </div>
+            </div>
+            <div class="l-input">
+                <label for="phone" class="input-label">전화번호</label>
+                <input
+                    class="inquiry-input"
+                    formControlName="phone"
+                    id="phone"  type="text"
+                    placeholder="연락 가능한 전화번호"
+                >
+                <div *ngIf="phone.invalid" class="error">
+                    <div class="error-icon"></div>
+                    {{errors.phone}}
+                </div>
+            </div>
+            <div class="l-input">
+                <label for="enquiry" class="input-label">문의 사항</label>
+                <textarea
+                    formControlName="enquiry"
+                    name="" id="enquiry"
+                    cols="30" rows="10"
+                    placeholder=
+                    "기존에 겪고 계신 어려움이나 레드웨일에 대한 문의를 남겨주세요.
+                    최대한 빠르게 이메일로 답장을 보내드립니다.
+                    이제 레드웨일로 쉽고 간편하게 센터를 관리해 보세요!"
+                ></textarea>
+                <div *ngIf="enquiry.invalid" class="error">
+                    <div class="error-icon"></div>
+                    {{errors.enquiry}}
+                </div>
+            </div>
+        </form>
+
+    </div>
+
+    <div class="intro-inquiry-bottom">
+        <hp-free-start-footer></hp-free-start-footer>
+        <hp-homepage-footer></hp-homepage-footer>
+    </div>
+
+</article>

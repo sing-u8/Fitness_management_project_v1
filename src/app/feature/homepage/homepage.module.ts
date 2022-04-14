@@ -10,7 +10,7 @@ import { ComponentsModule } from './components/components.module'
 import { HomepageComponent } from './homepage.component'
 import { MainComponent } from './main/main.component'
 import { FareGuideComponent } from './fare-guide/fare-guide.component'
-import { IntorductionInquiryComponent } from './intorduction-inquiry/intorduction-inquiry.component'
+import { IntroductionInquiryComponent } from './intorduction-inquiry/introduction-inquiry.component'
 import { FrequentlyAskedQuestionsComponent } from './frequently-asked-questions/frequently-asked-questions.component'
 
 @NgModule({
@@ -18,7 +18,7 @@ import { FrequentlyAskedQuestionsComponent } from './frequently-asked-questions/
         HomepageComponent,
         MainComponent,
         FareGuideComponent,
-        IntorductionInquiryComponent,
+        IntroductionInquiryComponent,
         FrequentlyAskedQuestionsComponent,
     ],
     imports: [CommonModule, HomepageRoutingModule, SharedModule, ComponentsModule, FormsModule, ReactiveFormsModule],

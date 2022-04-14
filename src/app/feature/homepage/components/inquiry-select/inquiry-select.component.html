@@ -1,0 +1,17 @@
+
+<div class="homepage-select" #selectElement>
+  <div class="selected" [class.open]="isOpen" [class.disabled]="disabled !== false" #selectedElement (click)="toggle()"
+    (rwClickOutside)="close()">
+    <span class="text">{{ value?.name }}</span>
+    <span class="mdi mdi-chevron-down"></span>
+  </div>
+  <div class="items" #itemsElement (click)="$event.stopPropagation()">
+    <div
+      class="item" *ngFor="let item of items"
+      [class.active]="item.name == value?.name"
+      (click)="onSelect(item)"
+    >
+      <span>{{ item.name }}</span>
+    </div>
+  </div>
+</div>

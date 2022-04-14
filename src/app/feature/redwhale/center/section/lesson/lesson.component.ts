@@ -1,6 +1,6 @@
 import { Component, OnInit, AfterViewInit, OnDestroy, ViewChild, ElementRef } from '@angular/core'
 import { FormBuilder, FormControl } from '@angular/forms'
-import * as _ from 'lodash'
+import _ from 'lodash'
 import * as kvPipe from '@helpers/pipe/keyvalue'
 
 // services
