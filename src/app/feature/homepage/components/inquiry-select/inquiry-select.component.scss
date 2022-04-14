@@ -67,6 +67,10 @@
     .open {
         border: 1px solid #686868;
 
+        .text {
+            font-weight: 700;
+        }
+
         .mdi {
             top: 2px;
             transform: rotateX(180deg);
@@ -91,7 +95,7 @@
     .items {
         display: none;
         position: absolute;
-        top: 60px;
+        top: 55px;
         border-radius: 5px;
         border: 1px solid #686868;
         background-color: #ffffff;
@@ -130,7 +134,7 @@
                 overflow: hidden;
                 text-overflow: ellipsis;
                 white-space: nowrap;
-                font-size: (16rem/10);
+                font-size: (15rem/10);
             }
         }
 
