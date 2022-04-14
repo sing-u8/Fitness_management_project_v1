@@ -14,11 +14,13 @@
                 <label for="center-name" class="input-label">센터명</label>
                 <input
                     class="inquiry-input"
+                    [class.input-error] ="centerName.invalid && centerName.dirty"
                     formControlName="centerName"
                     id="center-name"  type="text"
+                    required
                     placeholder="센터명을 입력해주세요."
                 >
-                <div *ngIf="centerName.invalid" class="error">
+                <div *ngIf="centerName.invalid && centerName.dirty" class="error">
                     <div class="error-icon"></div>
                     {{errors.centerName}}
                 </div>
@@ -28,11 +30,13 @@
                     <label for="contact-name" class="input-label">담당자 이름</label>
                     <input
                         class="inquiry-input"
+                        [class.input-error] ="contactName.invalid && contactName.dirty"
                         formControlName="contactName"
                         id="contact-name"  type="text"
+                        required
                         placeholder="이름을 입력해주세요."
                     >
-                    <div *ngIf="contactName.invalid" class="error">
+                    <div *ngIf="contactName.invalid && contactName.dirty" class="error">
                         <div class="error-icon"></div>
                         {{errors.contactName}}
                     </div>
@@ -49,11 +53,13 @@
                 <label for="email" class="input-label">이메일 주소</label>
                 <input
                     class="inquiry-input"
+                    [class.input-error] ="email.invalid && email.dirty"
                     formControlName="email"
                     id="email"  type="text"
+                    required
                     placeholder="답변 받으실 이메일 주소"
                 >
-                <div *ngIf="email.invalid" class="error">
+                <div *ngIf="email.invalid && email.dirty" class="error">
                     <div class="error-icon"></div>
                     {{errors.email}}
                 </div>
@@ -62,11 +68,13 @@
                 <label for="phone" class="input-label">전화번호</label>
                 <input
                     class="inquiry-input"
+                    [class.input-error] ="phone.invalid && phone.dirty"
                     formControlName="phone"
+                    maxlength="11" required
                     id="phone"  type="text"
                     placeholder="연락 가능한 전화번호"
                 >
-                <div *ngIf="phone.invalid" class="error">
+                <div *ngIf="phone.invalid && phone.dirty" class="error">
                     <div class="error-icon"></div>
                     {{errors.phone}}
                 </div>
@@ -75,6 +83,8 @@
                 <label for="enquiry" class="input-label">문의 사항</label>
                 <textarea
                     formControlName="enquiry"
+                    [class.input-error] ="enquiry.invalid && enquiry.dirty"
+                    required
                     name="" id="enquiry"
                     cols="30" rows="10"
                     placeholder=
@@ -82,12 +92,72 @@
                     최대한 빠르게 이메일로 답장을 보내드립니다.
                     이제 레드웨일로 쉽고 간편하게 센터를 관리해 보세요!"
                 ></textarea>
-                <div *ngIf="enquiry.invalid" class="error">
+                <div *ngIf="enquiry.invalid && enquiry.dirty" class="error">
                     <div class="error-icon"></div>
                     {{errors.enquiry}}
                 </div>
             </div>
         </form>
+
+        <div class="l-radio-text">
+            <div class="radio-text" (click)="togglePrivacyAgree()">
+                <div class="radio"><div [class.none]="!privacyAgree" class="inner-circle"></div></div>
+                <span>
+                    답변을 위해 최소한의
+                    <span
+                        class="underscore"
+                        (click)="toggleShowPrivacy(); $event.stopPropagation()"
+                    >
+                        개인정보 수집 동의
+                    </span>
+                    가 필요해요. [필수]
+
+                </span>
+            </div>
+            <div *ngIf="showPrivacy" class="l-privacy-table">
+                <table  class="privacy-table">
+                    <tr>
+                        <td>수집 목적</td>
+                        <td>수집 항목</td>
+                        <td>수집 근거</td>
+                        <td>보유 기간</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            본인 확인,
+                            도입 관련
+                            상담 및 문의
+                        </td>
+                        <td>
+                            이름,
+                            연락처,
+                            이메일,
+                            직책
+                        </td>
+                        <td>
+                            정보
+                            주체의
+                            동의
+                        </td>
+                        <td>
+                            문의
+                            등록 후
+                            1년
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div
+            class="inquiry-button"
+            rw-button
+            rwButtonColor="var(--red)"
+            [rwButtonDisabled]="inquiryForm.invalid || !privacyAgree"
+            (click)="!(inquiryForm.invalid || !privacyAgree) && true"
+        >
+            문의 등록하기
+        </div>
 
     </div>
 

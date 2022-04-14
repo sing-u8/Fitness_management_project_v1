@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core'
-import { FormBuilder, FormGroup, Validators, ValidationErrors, ValidatorFn } from '@angular/forms'
+import { FormBuilder, FormGroup, Validators, ValidationErrors, ValidatorFn, AbstractControl } from '@angular/forms'
 
 @Component({
     selector: 'rw-introduction-inquiry',
@@ -31,13 +31,24 @@ export class IntroductionInquiryComponent implements OnInit {
     onPositionChanged(value: { name: string; code: string }) {
         this.position = value
     }
+
+    public privacyAgree = false
+    togglePrivacyAgree() {
+        this.privacyAgree = !this.privacyAgree
+    }
+
+    public showPrivacy = false
+    toggleShowPrivacy() {
+        this.showPrivacy = !this.showPrivacy
+    }
+
     constructor(private fb: FormBuilder) {
         this.inquiryForm = this.fb.group({
-            centerName: ['', { Validators: [Validators.required] }],
-            contactName: ['', { Validators: [Validators.required] }],
-            email: ['', { Validators: [Validators.required] }],
-            phone: ['', { Validators: [Validators.required] }],
-            enquiry: ['', { Validators: [Validators.required] }],
+            centerName: ['', [this.centerNameValidator()]],
+            contactName: ['', [this.contactNameValidator()]],
+            email: ['', [this.emailValidator()]],
+            phone: ['', [this.phoneValidator()]],
+            enquiry: ['', [this.enquiryValidator()]],
         })
     }
 
@@ -58,4 +69,60 @@ export class IntroductionInquiryComponent implements OnInit {
     }
 
     ngOnInit(): void {}
+
+    centerNameValidator(): ValidatorFn {
+        return (control: AbstractControl): ValidationErrors | null => {
+            console.log('centerName validator : ', control, control.value, this.errors)
+            if (control.value == '') {
+                this.errors.centerName = '센터명을 입력해주세요.'
+
+                return { centerNameNone: true }
+            }
+            return null
+        }
+    }
+    contactNameValidator(): ValidatorFn {
+        return (control: AbstractControl): ValidationErrors | null => {
+            if (control.value == '') {
+                this.errors.contactName = '이름을 입력해주세요.'
+                return { contactNameNone: true }
+            }
+            return null
+        }
+    }
+    emailValidator(): ValidatorFn {
+        return (control: AbstractControl): ValidationErrors | null => {
+            const emailRegex = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/
+            if (control.value == '') {
+                this.errors.email = '이메일 주소를 입력해주세요.'
+                return { emailNone: true }
+            } else if (!emailRegex.test(control.value)) {
+                this.errors.email = '이메일 양식을 확인해주세요.'
+                return { eamilFormError: true }
+            }
+            return null
+        }
+    }
+    phoneValidator(): ValidatorFn {
+        return (control: AbstractControl): ValidationErrors | null => {
+            const phoneRegex = /^[0-9]{10,11}$/
+            if (control.value == '') {
+                this.errors.phone = '전화번호를 입력해주세요.'
+                return { phoneNone: true }
+            } else if (!phoneRegex.test(control.value)) {
+                this.errors.email = '전화번호를 확인해주세요.'
+                return { phoneFormError: true }
+            }
+            return null
+        }
+    }
+    enquiryValidator(): ValidatorFn {
+        return (control: AbstractControl): ValidationErrors | null => {
+            if (control.value == '') {
+                this.errors.enquiry = '문의 사항을 입력해주세요.'
+                return { enquiryNone: true }
+            }
+            return null
+        }
+    }
 }
