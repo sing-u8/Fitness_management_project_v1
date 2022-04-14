@@ -1,1 +1,21 @@
-<p>frequently-asked-questions works!</p>
+<article class="l-faq">
+
+    <hp-faq-list-section></hp-faq-list-section>
+
+    <div class="inquiry-card">
+        <div class="card-title">
+            아직 문제가<br>
+            해결되지 않으셨나요?
+        </div>
+        <hp-find-more-button
+            [text]="'문의하기'"
+            [maxWidth]="'90px'"
+            [whiteMode]="true"
+            (onClick)="false"
+        ></hp-find-more-button>
+        <div class="crying-icon"></div>
+    </div>
+
+    <hp-homepage-footer></hp-homepage-footer>
+
+</article>

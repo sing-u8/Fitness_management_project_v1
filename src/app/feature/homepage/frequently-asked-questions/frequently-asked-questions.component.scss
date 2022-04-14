@@ -1,0 +1,121 @@
+* {
+    padding: 0px;
+    margin: 0px;
+    text-align: initial;
+}
+
+article.l-faq {
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    hp-faq-list-section {
+        margin-top: 46px;
+    }
+
+
+    .inquiry-card {
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        margin: 100px 0 105px;
+
+        width: 312px;
+        height: 150px;
+        padding: 34px 0 25px 26px;
+        border-radius: 10px;
+        background-color: #212121;
+        margin-top: 70px;
+
+        position: relative;
+
+        .card-title {
+            font-size: 1.9rem;
+            line-height: 1.47;
+            letter-spacing: -0.36px;
+            font-weight: 700;
+            font-stretch: normal;
+            font-style: normal;
+            color: #ffffff;
+            margin-bottom: 10px;
+        }
+
+        .crying-icon {
+            background-image: url('/assets/homepage/images/question/Crying-Emoji-large.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            width: 160px;
+            height: 160px;
+            position: absolute;
+            bottom: -5px;
+            right: -80px;
+        }
+    }
+
+    @media (min-width: 768px) {
+
+        hp-faq-list-section {
+            margin-top: 74px;
+        }
+
+        .inquiry-card {
+            width: 460px;
+            height: 130px;
+            padding: 39px 0 34px 31px;
+            border-radius: 15px;
+            margin: 115px 0 155px;
+
+            .card-title {
+                font-size: 19px;
+                line-height: 1.63;
+                letter-spacing: -0.36px;
+
+                br {
+                    display: none;
+                }
+            }
+
+            .crying-icon {
+                width: 152px;
+                height: 152px;
+                position: absolute;
+                bottom: -12px;
+                right: -30px;
+            }
+        }
+    }
+    @media (min-width: 1280px) {
+
+        hp-faq-list-section {
+            margin-top: 113px;
+        }
+
+        .inquiry-card {
+            width: 735px;
+            height: 146px;
+            padding: 45px 0 40px 35px;
+            border-radius: 15px;
+            margin: 140px 0 200px;
+
+            .card-title {
+                font-size: 2.1rem;
+                line-height: 1.48;
+                letter-spacing: -0.44px;
+            }
+
+            .crying-icon {
+                width: 190px;
+                height: 190px;
+                bottom: -27px;
+                right: -37px;
+            }
+        }
+    }
+    @media (min-width: 1440px) {
+
+    }
+    @media (min-width: 1920px) {
+
+    }
+}

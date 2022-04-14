@@ -1,0 +1,211 @@
+* {
+    padding: 0px;
+    margin: 0px;
+}
+
+section.fap-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
+    div.title {
+        color: var(--font-color);
+        font-weight: 700;
+    }
+
+    div.l-faq {
+        width: 100%;
+        position: relative;
+
+        div.faq-header {
+            border-radius: 15px;
+            background-color: var(--hp-lighergrey);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+
+            .arrow {
+                background-image: url('/assets/icons/etc/short_down_arrow.svg');
+                background-size: cover;
+
+                &.isOpen {
+                    transform: rotateZ(180deg);
+                }
+            }
+
+            &:hover {
+                opacity: 0.8;
+            }
+        }
+
+        div.faq-body {
+            border-radius: 15px;
+            color: var(--darkgrey);
+            background-color: var(--hp-lighergrey);
+            // display: flex;
+            display: none;
+            justify-content: flex-start;
+
+            &.isOpen {
+                display: flex;
+            }
+        }
+    }
+}
+
+// @media (min-width: 200px) {
+section.fap-list {
+    width: 312px;
+    position: relative;
+
+    div.title {
+        font-size: 2.5rem;
+        letter-spacing: -0.625px;
+        margin-bottom: 35px;
+    }
+
+    div.l-faq {
+        display: flex;
+        flex-direction: column;
+
+        &:not(:last-of-type) {
+            margin-bottom: 15px;
+        }
+
+        div.faq-header {
+            width: 100%;
+            height: 53px;
+            padding: 0px 15px;
+
+            font-size: 1.4rem;
+            font-weight: 500;
+            line-height: 1.43;
+            letter-spacing: -0.2px;
+
+            .arrow {
+                width: 23px;
+                height: 23px;
+            }
+        }
+
+        div.faq-body {
+            width: 100%;
+            height: auto;
+            padding: 16.5px 15px;
+
+            font-size: 1.4rem;
+            font-weight: 500;
+            line-height: 1.43;
+            letter-spacing: -0.2px;
+
+            &.isOpen {
+                margin-top: 8px;
+            }
+        }
+    }
+}
+
+hp-find-more-button {
+    margin-top: 25px;
+}
+
+@media (min-width: 768px) {
+    section.fap-list {
+        width: 460px;
+
+        div.title {
+            font-size: 3rem;
+            letter-spacing: -0.9px;
+            margin-bottom: 45px;
+        }
+
+        div.l-faq {
+            &:not(:last-of-type) {
+                margin-bottom: 25px;
+            }
+
+            div.faq-header {
+                height: 58px;
+                padding: 0px 24px;
+
+                font-weight: 500;
+                font-size: 1.6rem;
+                letter-spacing: -0.256px;
+                line-height: 1.5;
+
+                .arrow {
+                    width: 27px;
+                    height: 27px;
+                }
+            }
+
+            div.faq-body {
+                padding: 17px 24px 19px 24px;
+
+                font-weight: 500;
+                font-size: 1.6rem;
+                letter-spacing: -0.256px;
+                line-height: 1.5;
+
+                &.isOpen {
+                    margin-top: 10px;
+                }
+            }
+        }
+    }
+}
+
+@media (min-width: 1280px) {
+    section.fap-list {
+        width: 735px;
+
+        div.title {
+            font-size: 3.2rem;
+            letter-spacing: -1.024px;
+        }
+
+        div.l-faq {
+            &:not(:last-of-type) {
+                margin-bottom: 25px;
+            }
+
+            div.faq-header {
+                height: 60px;
+
+                font-size: 1.6rem;
+                letter-spacing: -0.256px;
+                line-height: 1.5;
+
+                .arrow {
+                    width: 27px;
+                    height: 27px;
+                }
+            }
+
+            div.faq-body {
+                width: 100%;
+                height: auto;
+                padding: 18px 24px;
+
+                font-size: 1.6rem;
+                letter-spacing: -0.256px;
+                line-height: 1.5;
+
+                &.isOpen {
+                    margin-top: 10px;
+                }
+            }
+        }
+    }
+}
+
+@media (min-width: 1440px) {}
+
+@media (min-width: 1920px) {}
