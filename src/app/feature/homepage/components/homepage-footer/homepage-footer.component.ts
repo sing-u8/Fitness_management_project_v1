@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core'
+import { Router } from '@angular/router'
 
 @Component({
     selector: 'hp-homepage-footer',
@@ -6,7 +7,11 @@ import { Component, OnInit } from '@angular/core'
     styleUrls: ['./homepage-footer.component.scss'],
 })
 export class HomepageFooterComponent implements OnInit {
-    constructor() {}
+    constructor(private router: Router) {}
 
     ngOnInit(): void {}
+
+    routeTo(url: string) {
+        this.router.navigateByUrl(`/${url}`)
+    }
 }

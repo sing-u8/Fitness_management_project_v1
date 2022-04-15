@@ -12,6 +12,8 @@ import { MainComponent } from './main/main.component'
 import { FareGuideComponent } from './fare-guide/fare-guide.component'
 import { IntroductionInquiryComponent } from './intorduction-inquiry/introduction-inquiry.component'
 import { FrequentlyAskedQuestionsComponent } from './frequently-asked-questions/frequently-asked-questions.component'
+import { TermsPrivacyPageComponent } from './terms-privacy-page/terms-privacy-page.component'
+import { TermsEulaPageComponent } from './terms-eula-page/terms-eula-page.component'
 
 @NgModule({
     declarations: [
@@ -20,6 +22,8 @@ import { FrequentlyAskedQuestionsComponent } from './frequently-asked-questions/
         FareGuideComponent,
         IntroductionInquiryComponent,
         FrequentlyAskedQuestionsComponent,
+        TermsPrivacyPageComponent,
+        TermsEulaPageComponent,
     ],
     imports: [CommonModule, HomepageRoutingModule, SharedModule, ComponentsModule, FormsModule, ReactiveFormsModule],
     exports: [],

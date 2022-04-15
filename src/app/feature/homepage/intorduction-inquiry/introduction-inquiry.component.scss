@@ -211,6 +211,7 @@ article.l-intro-inquiry {
     @media (min-width: 768px) {
         .intro-inquiry-body {
             width: 460px;
+            margin: 73px 0 150px 0;
             p.body-title {
                 font-size: 3rem;
                 line-height: 1.43;
@@ -272,6 +273,7 @@ article.l-intro-inquiry {
     @media (min-width: 1280px) {
         .intro-inquiry-body {
             width: 500px;
+            margin: 113px 0 200px 0;
             p.body-title {
                 font-size: 3.2rem;
                 line-height: 1.53;
@@ -404,8 +406,8 @@ div.l-privacy-table {
                 background-color: #f9f9f9;
 
             }
-            &:nth-child(2) {
-            }
+            // &:nth-child(2) {
+            // }
         }
     }
 }
