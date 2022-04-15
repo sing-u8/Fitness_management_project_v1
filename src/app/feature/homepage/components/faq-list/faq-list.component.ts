@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core'
+import { Router } from '@angular/router'
 
 export type FaqListType = {
     title: string
@@ -40,11 +41,15 @@ export class FAQListComponent implements OnInit {
             isOpen: false,
         },
     ]
-    constructor() {}
+    constructor(private router: Router) {}
 
     ngOnInit(): void {}
 
     toggleFAQ(idx: number) {
         this.faqList[idx].isOpen = !this.faqList[idx].isOpen
+    }
+
+    routerTo(url: string) {
+        this.router.navigateByUrl(`/${url}`)
     }
 }

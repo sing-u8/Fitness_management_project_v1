@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core'
+import { Router } from '@angular/router'
+import { DeviceDetectorService } from 'ngx-device-detector'
+import _ from 'lodash'
 
 import { InputType } from '../components/fare-guide-box/fare-guide-box.component'
 import { TableInputType } from '../components/fare-guide-option-table/fare-guide-option-table.component'
@@ -35,7 +38,14 @@ export class FareGuideComponent implements OnInit {
         },
     ]
 
-    public fareGuideClickFuncs: Array<() => void> = [() => {}, () => {}]
+    public fareGuideClickFuncs: Array<() => void> = [
+        () => {
+            this.toggleFreeStartModalVisible()
+        },
+        () => {
+            this.router.navigateByUrl('/introduction-inquiry')
+        },
+    ]
 
     public optionTables: TableInputType[] = [
         {
@@ -197,7 +207,25 @@ export class FareGuideComponent implements OnInit {
         },
     ]
 
-    constructor() {}
+    constructor(private deviceDetector: DeviceDetectorService, private router: Router) {}
 
     ngOnInit(): void {}
+
+    // ----------  free start modal ---------------//
+    public isFreeStartModalVisible = false
+    toggleFreeStartModalVisible() {
+        if (this.deviceDetector.isDesktop()) {
+            this.router.navigateByUrl('/auth/login')
+        } else {
+            this.isFreeStartModalVisible = !this.isFreeStartModalVisible
+        }
+    }
+    onFreeStartCancel() {
+        this.isFreeStartModalVisible = false
+    }
+
+    //
+    routerTo(url: string) {
+        this.router.navigateByUrl(`/${url}`)
+    }
 }

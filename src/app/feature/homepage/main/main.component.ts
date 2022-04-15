@@ -20,12 +20,14 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit {
         this.scrollListener = this.renderer.listen(document.getElementById('l-homepage'), 'scroll', () => {
             this.onScroll()
         })
+        const h = document.getElementById('l-homepage')
+        h.scrollTo({ top: 0 })
+        h.scrollTo({ top: 1 })
     }
 
     // ----------  free start modal ---------------//
     public isFreeStartModalVisible = false
     toggleFreeStartModalVisible() {
-        console.log('this.deviceDetector.isDesktop() : ', this.deviceDetector.isDesktop())
         if (this.deviceDetector.isDesktop()) {
             this.router.navigateByUrl('/auth/login')
         } else {
@@ -37,9 +39,9 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     // ----------  scroll func ---------------//
-    scrollTop() {
+    scrollTop(height = 0) {
         window.scrollTo({
-            top: 0,
+            top: height,
             behavior: 'smooth',
         })
     }

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core'
+import { Router } from '@angular/router'
 
 @Component({
     selector: 'rw-frequently-asked-questions',
@@ -6,7 +7,11 @@ import { Component, OnInit } from '@angular/core'
     styleUrls: ['./frequently-asked-questions.component.scss'],
 })
 export class FrequentlyAskedQuestionsComponent implements OnInit {
-    constructor() {}
+    constructor(private router: Router) {}
 
     ngOnInit(): void {}
+
+    routerTo(url: string) {
+        this.router.navigateByUrl(`/${url}`)
+    }
 }

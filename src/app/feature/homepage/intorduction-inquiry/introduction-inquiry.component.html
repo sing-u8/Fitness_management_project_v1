@@ -162,8 +162,16 @@
     </div>
 
     <div class="intro-inquiry-bottom">
-        <hp-free-start-footer></hp-free-start-footer>
+        <hp-free-start-footer
+            (onFreeStartClick)="toggleFreeStartModalVisible()"
+        ></hp-free-start-footer>
         <hp-homepage-footer></hp-homepage-footer>
     </div>
 
 </article>
+
+<hp-free-start-modal
+    [(visible)]="isFreeStartModalVisible"
+    (cancel)="onFreeStartCancel()"
+    (confirm)="onFreeStartCancel()"
+></hp-free-start-modal>

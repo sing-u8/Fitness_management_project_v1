@@ -42,7 +42,7 @@
                 [text]="'도입 문의하기'"
                 [maxWidth]="'120px'"
                 [whiteMode]="true"
-                (onClick)="false"
+                (onClick)="routerTo('introduction-inquiry')"
             ></hp-find-more-button>
             <div class="gift-image"></div>
         </div>
@@ -54,3 +54,10 @@
         <hp-homepage-footer></hp-homepage-footer>
     </div>
 </article>
+
+
+<hp-free-start-modal
+    [(visible)]="isFreeStartModalVisible"
+    (cancel)="onFreeStartCancel()"
+    (confirm)="onFreeStartCancel()"
+></hp-free-start-modal>

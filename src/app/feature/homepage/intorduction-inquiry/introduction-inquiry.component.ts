@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core'
+import { Router } from '@angular/router'
+import { DeviceDetectorService } from 'ngx-device-detector'
+import _ from 'lodash'
 import { FormBuilder, FormGroup, Validators, ValidationErrors, ValidatorFn, AbstractControl } from '@angular/forms'
 
 @Component({
@@ -42,7 +45,7 @@ export class IntroductionInquiryComponent implements OnInit {
         this.showPrivacy = !this.showPrivacy
     }
 
-    constructor(private fb: FormBuilder) {
+    constructor(private fb: FormBuilder, private deviceDetector: DeviceDetectorService, private router: Router) {
         this.inquiryForm = this.fb.group({
             centerName: ['', [this.centerNameValidator()]],
             contactName: ['', [this.contactNameValidator()]],
@@ -124,6 +127,19 @@ export class IntroductionInquiryComponent implements OnInit {
             }
             return null
         }
+    }
+
+    // ----------  free start modal ---------------//
+    public isFreeStartModalVisible = false
+    toggleFreeStartModalVisible() {
+        if (this.deviceDetector.isDesktop()) {
+            this.router.navigateByUrl('/auth/login')
+        } else {
+            this.isFreeStartModalVisible = !this.isFreeStartModalVisible
+        }
+    }
+    onFreeStartCancel() {
+        this.isFreeStartModalVisible = false
     }
 }
 
