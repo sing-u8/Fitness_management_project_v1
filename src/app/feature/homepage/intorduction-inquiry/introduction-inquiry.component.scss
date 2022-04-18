@@ -68,8 +68,9 @@ article.l-intro-inquiry {
                 display: flex;
                 flex-direction: column;
                 width: 100%;
-                margin-bottom: 12px;
+                margin-bottom: 30px;
                 position: relative;
+
                 label {
                     font-size: 1.4rem;
                     font-weight: 500;
@@ -291,9 +292,6 @@ article.l-intro-inquiry {
             }
 
             form.l-form {
-                .l-input {
-                    margin-bottom: 33px;
-                }
 
                 .input-group {
                     display: flex;
