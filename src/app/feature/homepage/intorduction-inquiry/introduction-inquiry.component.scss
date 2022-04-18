@@ -154,7 +154,7 @@ article.l-intro-inquiry {
 
         .l-radio-text {
             width: 100%;
-            margin-bottom: 42px;
+            margin-bottom: 40px;
             display: flex;
             flex-direction: column;
             .radio-text {
@@ -192,6 +192,10 @@ article.l-intro-inquiry {
                             background-color: var(--white);
                         }
                     }
+                }
+
+                span {
+                    display: flex;
                 }
             }
         }
