@@ -70,9 +70,11 @@
                     class="inquiry-input"
                     [class.input-error] ="phone.invalid && phone.dirty"
                     formControlName="phone"
-                    maxlength="11" required
+                    maxlength="13" required
                     id="phone"  type="text"
                     placeholder="연락 가능한 전화번호"
+                    (keypress) = "phoneCheck($event)"
+                    (keyup)="matchPhoneForm($event)"
                 >
                 <div *ngIf="phone.invalid && phone.dirty" class="error">
                     <div class="error-icon"></div>

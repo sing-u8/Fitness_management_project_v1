@@ -108,7 +108,9 @@ export class IntroductionInquiryComponent implements OnInit {
     }
     phoneValidator(): ValidatorFn {
         return (control: AbstractControl): ValidationErrors | null => {
-            const phoneRegex = /^[0-9]{10,11}$/
+            const phoneRegex = /^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/
+            // console.log('phone control: ', control, control.value)
+
             if (control.value == '') {
                 this.errors.phone = '전화번호를 입력해주세요.'
                 return { phoneNone: true }
@@ -119,6 +121,38 @@ export class IntroductionInquiryComponent implements OnInit {
             return null
         }
     }
+    phoneCheck(event: KeyboardEvent) {
+        const code = event.key
+        if (_.isNaN(Number(code))) {
+            return false
+        }
+        return true
+        // this.matchPhoneForm()
+    }
+    matchPhoneForm(keyup: KeyboardEvent) {
+        if (!this.inquiryForm) return
+        let phone = this.inquiryForm.get('phone').value
+        const phoneSize = phone.length
+        const lastStr = phone[phoneSize - 1]
+        const digitReg = /[\d]/g
+        const dashReg = /[-]/g
+
+        if (phoneSize == 3 || phoneSize == 4) {
+            if (keyup.key != 'Backspace' && digitReg.test(lastStr)) {
+                phone = phone.slice(0, 3) + '-' + phone.slice(3)
+            } else if (keyup.key == 'Backspace' && phoneSize == 4 && dashReg.test(lastStr)) {
+                phone = phone.slice(0, 3)
+            }
+        } else if (phoneSize == 8 || phoneSize == 9) {
+            if (keyup.key != 'Backspace' && digitReg.test(lastStr)) {
+                phone = phone.slice(0, 8) + '-' + phone.slice(8)
+            } else if (keyup.key == 'Backspace' && phoneSize == 9 && dashReg.test(lastStr)) {
+                phone = phone.slice(0, 8)
+            }
+        }
+        this.inquiryForm.patchValue({ phone: phone })
+    }
+
     enquiryValidator(): ValidatorFn {
         return (control: AbstractControl): ValidationErrors | null => {
             if (control.value == '') {
