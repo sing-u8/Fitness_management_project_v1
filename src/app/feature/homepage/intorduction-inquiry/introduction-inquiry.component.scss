@@ -100,11 +100,11 @@ article.l-intro-inquiry {
 
                     &::placeholder {
                         font-size: 1.5rem !important;
-                        font-weight: 500 !important;
+                        font-weight: 400 !important;
                         line-height: 1.93;
                         letter-spacing: -0.23px;
                         text-align: left;
-                        color:#e1e1e1;
+                        color: #e1e1e1;
                     }
 
                     &:focus {
@@ -326,8 +326,7 @@ article.l-intro-inquiry {
 }
 
 input.inquiry-input {
-
-    padding: 0px 19px 0px;
+    padding: 17px 19px 14px;
     font-size: 1.5rem;
     font-weight: 500;
     line-height: 1.93;
@@ -342,7 +341,7 @@ input.inquiry-input {
 
     &::placeholder {
         font-size: 1.5rem !important;
-        font-weight: 500 !important;
+        font-weight: 400 !important;
         line-height: 1.93;
         letter-spacing: -0.23px;
         text-align: left;

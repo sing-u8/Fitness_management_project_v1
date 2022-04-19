@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core'
 import { Router } from '@angular/router'
+import { DomSanitizer } from '@angular/platform-browser'
 import { DeviceDetectorService } from 'ngx-device-detector'
 import _ from 'lodash'
 
@@ -142,7 +143,7 @@ export class FareGuideComponent implements OnInit {
             bodyItems: [
                 {
                     one: '앱 이용',
-                    two: false,
+                    two: true,
                     three: true,
                 },
                 {
@@ -192,12 +193,16 @@ export class FareGuideComponent implements OnInit {
         },
         {
             title: '월별 결제 외에 장기 결제도 있나요?',
-            desc: '죄송하지만 현재 레드웨일은 월별 결제만을 제공하고 있습니다. 장기 결제를 원하실 경우, 도입 문의 또는 페이지 우측 하단의 채팅을 이용해 관련 문의 부탁드립니다.',
+            desc: this.domSanitizer.bypassSecurityTrustHtml(
+                `<div>죄송하지만 현재 레드웨일은 월별 결제만을 제공하고 있습니다. 장기 결제를 원하실 경우, <a href='/introduction-inquiry' style="cursor:pointer; color:var(--red);">도입 문의</a> 또는 페이지 우측 하단의 채팅을 이용해 관련 문의 부탁드립니다.</div>`
+            ),
             isOpen: false,
         },
         {
             title: '다지점 할인은 어떻게 받나요?',
-            desc: '3개 이상의 지점을 보유하고 계실 경우, 월 이용료의 30%를 즉시 할인 받으실 수 있습니다. 다지점 할인이 필요하신 경우, 도입 문의를 이용해 다지점 할인 문의를 남겨주시면 빠르게 상담해드리겠습니다.',
+            desc: this.domSanitizer
+                .bypassSecurityTrustHtml(`<div>3개 이상의 지점을 보유하고 계실 경우, 월 이용료의 30%를 즉시 할인 받으실 수 있습니다. 다지점 할인이 필요하신 경우,
+                <a href='/introduction-inquiry' style="cursor:pointer; color:var(--red);">도입 문의</a>를 이용해 다지점 할인 문의를 남겨주시면 빠르게 상담해드리겠습니다.</div>`),
             isOpen: false,
         },
         {
@@ -207,7 +212,11 @@ export class FareGuideComponent implements OnInit {
         },
     ]
 
-    constructor(private deviceDetector: DeviceDetectorService, private router: Router) {}
+    constructor(
+        private deviceDetector: DeviceDetectorService,
+        private router: Router,
+        private domSanitizer: DomSanitizer
+    ) {}
 
     ngOnInit(): void {}
 

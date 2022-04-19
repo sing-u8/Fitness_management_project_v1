@@ -16,8 +16,7 @@
             <span>{{faq.title}}</span>
             <div class="arrow" [class.isOpen]="faq.isOpen"></div>
         </div>
-        <div class="faq-body" [class.isOpen] ="faq.isOpen">
-            {{faq.desc}}
+        <div [innerHTML]="faq.desc" class="faq-body" [class.isOpen] ="faq.isOpen">
         </div>
     </div>
 

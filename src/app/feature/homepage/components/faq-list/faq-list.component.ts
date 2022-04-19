@@ -1,9 +1,10 @@
 import { Component, OnInit, Input } from '@angular/core'
+import { SafeHtml } from '@angular/platform-browser'
 import { Router } from '@angular/router'
 
 export type FaqListType = {
     title: string
-    desc: string
+    desc: string | SafeHtml
     isOpen: boolean
 }
 

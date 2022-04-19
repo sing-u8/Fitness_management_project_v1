@@ -113,10 +113,14 @@
             display: flex;
             align-items: center;
             box-sizing: border-box;
-            height: 55px;
+            height: 50px;
             padding: 18px 19px;
-            margin-top: 5px;
-            margin-bottom: 5px;
+            &:first-of-type {
+                margin-top: 5px;
+            }
+            &:last-of-type {
+                margin-bottom: 5px;
+            }
             cursor: pointer;
             -webkit-user-select: none;
             -moz-user-select: none;
@@ -126,7 +130,7 @@
 
             &:hover {
                 width: 100%;
-                border-radius: 5px;
+                // border-radius: 5px;
                 background-color: #f6f6f6f6;
             }
 

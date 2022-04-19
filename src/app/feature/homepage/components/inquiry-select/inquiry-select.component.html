@@ -8,7 +8,6 @@
   <div class="items" #itemsElement (click)="$event.stopPropagation()">
     <div
       class="item" *ngFor="let item of items"
-      [class.active]="item.name == value?.name"
       (click)="onSelect(item)"
     >
       <span>{{ item.name }}</span>
