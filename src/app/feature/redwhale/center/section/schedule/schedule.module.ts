@@ -9,6 +9,9 @@ import { ScheduleComponent } from './schedule.component'
 import { SchInstructorDropdownComponent } from './components/sch-instructor-dropdown/sch-instructor-dropdown.component'
 import { SchFilterDropdownComponent } from './components/sch-filter-dropdown/sch-filter-dropdown.component'
 import { SchCenterOpratingModalComponent } from './components/sch-center-operating-modal/sch-center-operating-modal.component'
+import { SchDayRepeatSelectComponent } from './components/sch-day-repeat-select/sch-day-repeat-select.component'
+import { SchDeleteRepeatLessonModalComponent } from './components/sch-delete-repeat-lesson-modal/sch-delete-repeat-lesson-modal.component'
+import { SchGeneralModalComponent } from './components/sch-general-modal/sch-general-modal.component'
 
 // section module
 import { CommonModule as SectionCommonModule } from '../common/common.module'
@@ -23,6 +26,9 @@ import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader'
         SchInstructorDropdownComponent,
         SchFilterDropdownComponent,
         SchCenterOpratingModalComponent,
+        SchDayRepeatSelectComponent,
+        SchDeleteRepeatLessonModalComponent,
+        SchGeneralModalComponent,
     ],
     imports: [
         AngularCommonModule,

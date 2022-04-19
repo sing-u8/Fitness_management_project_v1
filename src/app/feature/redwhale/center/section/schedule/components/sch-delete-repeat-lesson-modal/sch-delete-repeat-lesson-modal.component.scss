@@ -1,0 +1,108 @@
+* {
+    padding: 0px;
+    margin: 0px;
+}
+
+.rw-modal-background {
+    display: none;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: var(--font-color);
+    opacity: 0;
+    transition: opacity 0.3s cubic-bezier(0.25, 0.8, 0.25, 0.8);
+    z-index: 999;
+}
+
+.rw-modal-background-show {
+    opacity: 0.3;
+}
+
+.rw-modal-wrapper {
+    display: none;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1000;
+
+    .rw-modal {
+        width: 335px;
+        // height: 475px;
+        border-radius: 6px;
+        background-color: var(--white);
+        box-shadow: 0 0 10px 0 rgba(181, 181, 181, 0.11);
+        opacity: 0;
+        transition: opacity 0s;
+        position: relative;
+        padding: 0px 10px;
+        display: flex;
+        flex-direction: column;
+
+        .top {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            margin-top: 45px;
+            margin-bottom: 35px;
+
+            .sub-title {
+                width: 100%;
+                margin: 15px 0 20px 0px;
+                text-align: center;
+                & > p {
+                    color: var(--grey);
+                }
+            }
+
+            .reserve-box {
+                flex-direction: column;
+                padding: 15px;
+                width: 285px;
+                border-radius: 5px;
+                border: 1px solid var(--border-color);
+                display: flex;
+                justify-content: center;
+
+                rw-radio-button {
+                    &:not(:last-of-type) {
+                        margin-bottom: 12px;
+                    }
+                }
+            }
+        }
+        .bottom {
+            width: calc(100%);
+            height: 50px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            .cancel,
+            .confirm {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                height: 45px;
+                width: calc(50% - 20px);
+            }
+
+            .divider {
+                height: 30px;
+                width: 1px;
+                border-right: 1px solid var(--border-color);
+            }
+        }
+    }
+}
+
+.rw-modal-wrapper-show {
+    .rw-modal {
+        opacity: 1;
+    }
+}

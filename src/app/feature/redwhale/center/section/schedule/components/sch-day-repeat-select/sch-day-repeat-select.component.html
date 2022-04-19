@@ -1,0 +1,29 @@
+<div class="day-repeat-select user-select-none">
+  <div
+      class="selected rw-typo-bodytext1 d-flex justify-content-center align-items-center"
+      [class.open]="isOpen"
+      (click)="toggle()"
+      (rwClickOutside)="close()"
+  >
+      <span class="rw-typo-bodytext0 text flex-fill">{{headTitle}}</span>
+      <span class="mdi mdi-chevron-down"></span>
+  </div>
+  <div
+    class="items thin-scroll-y-overlay2"
+    [style.display] = "isOpen ? 'block' : 'none'"
+    (click)="$event.stopPropagation()"
+  >
+
+      <div class="day-of-week-items">
+        <div
+          *ngFor = "let item of dayOfWeek; let idx = index"
+          class="day-button"
+          [class.selected] = "item.selected"
+          (click) = "toggleDay(idx)"
+        >
+          {{item.name}}
+        </div>
+      </div>
+
+  </div>
+</div>

@@ -1,0 +1,71 @@
+
+<div class="rw-modal-background" #modalBackgroundElement></div>
+
+<div
+  class="rw-modal-wrapper justify-content-center align-items-center"
+  (mouseup)="!isMouseModalDown && onCancel()"
+  (mousedown) = 'resetMouseModalDown()'
+  #modalWrapperElement
+>
+    <div
+      class="rw-modal user-select-none"
+      (mousedown) ='onMouseModalDown(); $event.stopPropagation()'
+    >
+
+    <div class="modal-header">
+      <div class="header-title">
+        <div class="rw-typo-bodytext0-bold">
+          {{generalData?.name}}
+        </div>
+
+      </div>
+      <div class="close-button" (click)="onCancel()">
+        <img src="assets/icons/etc/close.svg">
+      </div>
+    </div>
+
+    <div class="modal-content">
+      <div class="small-title">일자</div>
+      <div class="rw-typo-bodytext1 ">{{date}}</div>
+    </div>
+    <div class="modal-content">
+      <div class="small-title">시간</div>
+      <div class="rw-typo-bodytext1 ">{{time}}</div>
+    </div>
+    <div class="modal-content">
+      <div class="small-title">담당자</div>
+      <div class="rw-typo-bodytext1 avatar-container">
+        <rw-avatar
+          [image]="curStaff ? curStaff?.picture : null"
+          [text]="curStaff ? curStaff?.name : 'null'"
+          size="22"
+          fontSize="10"
+        ></rw-avatar>
+        <span class="rw-typo-bodytext1">{{assignee?.name}}</span>
+      </div>
+    </div>
+    <div *ngIf="generalData?.memo" class="modal-content">
+      <div class="small-title">상세 정보</div>
+      <div class="rw-typo-bodytext1 ">{{generalData?.memo | trimText}}</div>
+    </div>
+
+    <div class="modal-buttons">
+      <div
+        class="rw-typo-bodytext0-bold holding-button"
+        (click) = "onDelete()"
+      >
+        <img src="assets/icons/etc/trash.svg">
+        {{'삭제'}}
+      </div>
+      <div class="divider"></div>
+      <div
+        class="rw-typo-bodytext0-bold modify-button"
+        (click) = "onModify()"
+      >
+        <img src="assets/icons/etc/edit.svg"> 일정 수정
+      </div>
+    </div>
+
+
+    </div>
+</div>

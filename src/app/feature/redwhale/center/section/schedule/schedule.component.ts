@@ -12,13 +12,14 @@ import koLocale from '@fullcalendar/core/locales/ko'
 
 // services
 import { StorageService } from '@services/storage.service'
-import { CenterCalendarService } from '@services/center-calendar.service'
+import { CenterCalendarService, DeleteMode } from '@services/center-calendar.service'
 import { CenterService } from '@services/center.service'
 import { CenterUsersService } from '@services/center-users.service'
 
 // schemas
 import { Center } from '@schemas/center'
 import { Calendar } from '@schemas/calendar'
+import { CalendarTask } from '@schemas/calendar-task'
 
 // rxjs
 import { Observable, Subject, lastValueFrom } from 'rxjs'
@@ -75,8 +76,8 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
     public calendarTitle: string
 
     // ngrx vars
-    public instructorList$_: FromSchedule.InstructorType[]
-    public lectureFilter$_: FromSchedule.LectureFilter
+    public instructorList$_: FromSchedule.InstructorType[] = []
+    public lectureFilter$_: FromSchedule.LectureFilter = FromSchedule.LectureFilterInit
 
     constructor(
         private nxStore: Store,
@@ -97,6 +98,9 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
             .subscribe((operatingHour) => {
                 this.operatingTime = _.cloneDeep(operatingHour)
             })
+
+        this.initDatePickerData()
+        this.initFullCalendar()
     }
 
     async ngOnInit(): Promise<void> {
@@ -122,29 +126,36 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
                     this.nxStore.dispatch(ScheduleActions.startLoadScheduleState())
                 }
             })
-        this.nxStore
-            .pipe(select(ScheduleSelector.instructorList), takeUntil(this.unsubscriber$))
-            .subscribe((instructorList) => {
-                this.instructorList$_ = _.cloneDeep(instructorList)
-            })
+    }
+    ngAfterViewInit(): void {
+        this.setCalendarTitle('timeGridWeek')
+        const calView = this.fullCalendar.getApi().view
+        this.activeStart = dayjs(calView.activeStart).format('YYYY-MM-DD')
+        this.activeEnd = dayjs(calView.activeEnd).format('YYYY-MM-DD')
+
         this.nxStore
             .pipe(select(ScheduleSelector.lectureFilter), takeUntil(this.unsubscriber$))
             .subscribe((lectureFilter) => {
                 this.lectureFilter$_ = _.cloneDeep(lectureFilter)
+                this.setEventsFiltersChange(this.instructorList$_, this.lectureFilter$_)
             })
-
-        this.initDatePickerData()
-        this.initFullCalendar()
-    }
-    ngAfterViewInit(): void {
-        this.setCalendarTitle('timeGridWeek')
-
-        const calView = this.fullCalendar.getApi().view
-        this.activeStart = dayjs(calView.activeStart).format('YYYY-MM-DD')
-        this.activeEnd = dayjs(calView.activeEnd).format('YYYY-MM-DD')
-        this.getCalendarIds(() => {
-            this.getTaskList(this.selectedDateViewType)
-        })
+        this.nxStore
+            .pipe(select(ScheduleSelector.instructorList), takeUntil(this.unsubscriber$))
+            .subscribe((instructorList) => {
+                this.instructorList$_ = _.cloneDeep(instructorList)
+                this.initViewsOption(this.selectedDateViewType)
+                if (instructorList.length > 0) {
+                    this.getTaskList(this.selectedDateViewType)
+                }
+            })
+        this.nxStore
+            .pipe(select(ScheduleSelector.isScheduleEventChanged), takeUntil(this.unsubscriber$))
+            .subscribe((status) => {
+                if (status == true) {
+                    this.getTaskList(this.selectedDateViewType)
+                    this.nxStore.dispatch(ScheduleActions.setIsScheduleEventChanged({ isScheduleEventChanged: false }))
+                }
+            })
     }
     ngOnDestroy(): void {
         this.closeDrawer()
@@ -202,6 +213,8 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
                         slotMaxTime: Return.operatingTime.end,
                     },
                 }
+
+                // ! 대체용
                 // this.fullCalendar
                 //     .getApi()
                 //     .setOption('hiddenDays', this.getHiddenDays(Return.operatingDayOfWeek.value)))
@@ -239,7 +252,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
         console.log('onDatePickerClick: ', rDate.date)
         const calendarApi = this.fullCalendar.getApi()
         calendarApi.view.calendar.gotoDate(rDate.date)
-        // this.setCalendarTitle(this.selectedDateViewType)
+        this.setCalendarTitle(this.selectedDateViewType)
 
         const calView = this.fullCalendar.getApi().view
         this.activeStart = dayjs(calView.activeStart).format('YYYY-MM-DD')
@@ -250,7 +263,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
         console.log('onWeekPickerClick: ', rDate)
         const calendarApi = this.fullCalendar.getApi()
         calendarApi.view.calendar.gotoDate(rDate.startDate)
-        // this.setCalendarTitle(this.selectedDateViewType)
+        this.setCalendarTitle(this.selectedDateViewType)
 
         const calView = calendarApi.view
         this.activeStart = dayjs(calView.activeStart).format('YYYY-MM-DD')
@@ -281,12 +294,14 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
             case 'resourceTimeGridDay':
                 const resoruces = []
                 _.forEach(_.filter(this.instructorList$_, ['selected', true]), (value) => {
+                    console.log('selected inst : ', value)
                     resoruces.push({
                         id: value.instructor.id,
                         title: value.instructor.name,
                         instructorData: value.instructor,
                     })
                 })
+                console.log('resoruces : ', resoruces)
 
                 this.fullCalendar.options = { ...this.fullCalendar.options, ...{ resources: resoruces } }
 
@@ -323,7 +338,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
         const calendarApi = this.fullCalendar.getApi()
         const activeStart = dayjs(calendarApi.view.activeStart).format('YYYY-MM-DD')
         const activeEnd = dayjs(calendarApi.view.activeEnd).subtract(1, 'day').format('YYYY-MM-DD')
-        console.log("dayjs(calendarApi.view.activeEnd).subtract(1, 'day').format('YYYY-MM-DD') : ", activeEnd)
+        // console.log("dayjs(calendarApi.view.activeEnd).subtract(1, 'day').format('YYYY-MM-DD') : ", activeEnd)
 
         switch (viewType) {
             case 'resourceTimeGridDay':
@@ -357,52 +372,91 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
         }
     }
 
-    // calendar service
-    public calIds: Array<Calendar> = []
-    getCalendarIds(fn?: () => void) {
-        this.CenterCalendarService.getCalendars(this.center.id, {}).subscribe((calIds) => {
-            this.calIds = calIds
-            fn ? fn() : null
+    getTaskList(viewType: ViewType) {
+        const calendars: Calendar[] = this.instructorList$_.filter((v) => v.selected).map((v) => v.instructor)
+        const calendarIds: string[] = calendars.map((v) => v.id)
+        console.log('getTaskList : ', calendars, calendarIds)
+        this.CenterCalendarService.getAllCalendarTask(this.center.id, {
+            calendar_ids: calendarIds,
+            start_date: this.activeStart,
+            end_date: this.activeEnd,
+        }).subscribe((tasks) => {
+            this.eventList = tasks.map((task) => {
+                console.log('getTaskList  one : ', task)
+                if (viewType == 'resourceTimeGridDay') {
+                    return {
+                        title: task.name,
+                        start: task.start,
+                        end: task.end,
+                        resourceId: task.id,
+                        originItem: task,
+                        assginee: calendars.length > 0 ? _.find(calendars, (cal) => cal.id == task.id) : null,
+                        textColor: '#212121',
+                        color: task.type_code == 'calendar_task_type_normal' ? '#F6F6F6' : '#FFFFFF',
+                    }
+                } else {
+                    return {
+                        title: task.name,
+                        start: task.start,
+                        end: task.end,
+                        originItem: task,
+                        assginee: calendars.length > 0 ? _.find(calendars, (cal) => cal.id == task.id) : null,
+                        textColor: '#212121',
+                        color: task.type_code == 'calendar_task_type_normal' ? '#F6F6F6' : '#FFFFFF',
+                    }
+                }
+            })
+            console.log('getTaskList - start, end: ', this.activeStart, ', ', this.activeEnd, '; ', viewType)
+            console.log('getTaskList : ', this.eventList)
+            this.setEventsFiltersChange(this.instructorList$_, this.lectureFilter$_)
         })
     }
+    // filter dropdown functions
+    setEventsFiltersChange(instructors: FromSchedule.InstructorType[], scheduleType: FromSchedule.LectureFilter) {
+        if (!this.fullCalendar) return
 
-    getTaskList(viewType: ViewType, calendarId?: string) {
-        console.log('this.activeStart : ', this.activeStart)
-        // this.CenterCalendarService.getCalendarTasks(
-        //     this.center.id,
-        //     calendarId,
-        //     this.activeStart,
-        //     this.activeEnd
-        // ).subscribe((tasks) => {
-        //     this.eventList = tasks.map((task) => {
-        //         console.log('getTaskList  one : ', task)
-        //         if (viewType == 'resourceTimeGridDay') {
-        //             return {
-        //                 title: task.name,
-        //                 start: task.start,
-        //                 end: task.end,
-        //                 resourceId: task.id,
-        //                 originItem: task,
-        //                 assginee: this.calIds.length > 0 ? _.find(this.calIds, (calId) => calId.id == task.id) : null,
-        //                 textColor: '#212121',
-        //                 color: task.type_code == 'general' ? '#F6F6F6' : '#FFFFFF',
-        //             }
-        //         } else {
-        //             return {
-        //                 title: task.name,
-        //                 start: task.start,
-        //                 end: task.end,
-        //                 originItem: task,
-        //                 assginee: this.calIds.length > 0 ? _.find(this.calIds, (calId) => calId.id == task.id) : null,
-        //                 textColor: '#212121',
-        //                 color: task.type_code == 'general' ? '#F6F6F6' : '#FFFFFF',
-        //             }
-        //         }
-        //     })
-        //     console.log('getTaskList - start, end: ', this.activeStart, ', ', this.activeEnd, '; ', viewType)
-        //     console.log('getTaskList : ', this.eventList)
-        //     // this.setEventsFiltersChange(this.instructorList, this.lectureFilter)
-        // })
+        console.log('setEventsFiltersChange ---------------- ', instructors, scheduleType, this.eventList)
+        const instructorEventList = []
+        const lessonTypeEventList = []
+        // filter instructor
+        if (instructors.length > 0 && this.eventList.length > 0) {
+            _.forEach(this.eventList, (event) => {
+                if (
+                    _.findIndex(instructors, (instructor) => {
+                        return (
+                            instructor.selected &&
+                            instructor.instructor.calendar_user.id == String(event.originItem.responsibility.id)
+                        )
+                    }) != -1
+                ) {
+                }
+                instructorEventList.push(event)
+            })
+        }
+
+        // filter lessonType
+        if (scheduleType && this.eventList.length > 0) {
+            console.log('setEventsFiltersChange --- scheduleType, eventList : ', scheduleType, this.eventList)
+            _.forEach(this.eventList, (event) => {
+                console.log('event : ', event)
+                if (scheduleType[event.originItem.type_code].selected == true) {
+                    lessonTypeEventList.push(event)
+                }
+            })
+        }
+
+        // apply filtered task list
+        if (lessonTypeEventList.length > 0 && instructorEventList.length > 0) {
+            const _intersectList = _.intersectionWith(instructorEventList, lessonTypeEventList, (a, b) => {
+                return a.originItem.id == b.originItem.id
+            })
+
+            console.log('_intersectList: ', _intersectList)
+
+            this.fullCalendar.options = { ...this.fullCalendar.options, ...{ events: _intersectList } }
+        } else {
+            this.fullCalendar.options = { ...this.fullCalendar.options, ...{ events: [] } }
+        }
     }
 
     // ------------------------------------------- schedule dropdown  ------------------------------------------//
@@ -517,18 +571,19 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
 
     // full calendar event functions
     onEventClick(arg: EventClickArg) {
-        // console.log('onEventClick arg: ', arg)
-        // if (arg.event.extendedProps.originItem.type == 'general') {
-        //     this.generalEventData = arg.event.extendedProps.originItem
-        //     this.generalAssignee = _.find(
-        //         this.instructorList,
-        //         (item) => arg.event.extendedProps.originItem.calendar_id == item.instructor.id
-        //     ).instructor
-        //     this.showModifyGeneralEventModal()
-        // } else {
-        //     this.lessonEventData = arg.event.extendedProps.originItem
-        //     this.showModifyLessonEventModal()
-        // }
+        // ! 비교하는 속성값이 대응되는 속성들인지 확인 필요 !!!!!!!
+        console.log('onEventClick arg: ', arg)
+        if (arg.event.extendedProps['originItem'].type_code == 'calendar_task_type_normal') {
+            this.generalEventData = arg.event.extendedProps['originItem']
+            this.generalAssignee = _.find(
+                this.instructorList$_,
+                (item) => arg.event.extendedProps['originItem'].calendar_id == item.instructor.id
+            ).instructor
+            this.showModifyGeneralEventModal()
+        } else {
+            this.lessonEventData = arg.event.extendedProps['originItem']
+            this.showModifyLessonEventModal()
+        }
     }
 
     onDateSelect(arg) {
@@ -594,7 +649,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
             const eventTitleEl: HTMLElement = arg.el.getElementsByClassName('fc-event-title')[0]
             const eventTimeEl: HTMLElement = arg.el.getElementsByClassName('fc-event-time')[0]
 
-            if (arg.event.extendedProps.originItem.type == 'general') {
+            if (arg.event.extendedProps.originItem.type_code == 'calendar_task_type_normal') {
                 eventTitleContainerEl.appendChild(eventTimeEl)
                 eventTitleEl.classList.add('rw-typo-subtext3')
                 eventTitleEl.style.fontSize = '1.1rem'
@@ -657,7 +712,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
             eventTitleEl.classList.add('rw-typo-subtext3')
             eventTitleEl.style.color = '#212121'
             eventTitleEl.style.whiteSpace = 'nowrap'
-            if (arg.event.extendedProps.originItem.type == 'general') {
+            if (arg.event.extendedProps.originItem.type_code == 'calendar_task_type_normal') {
                 eventTitleEl.style.fontWeight = '500'
                 arg.el.style.backgroundColor = 'var(--background-color)'
                 eventTitleEl.innerHTML = arg.event.extendedProps.originItem.memo
@@ -697,7 +752,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
         console.log('eventDrop: ', arg, arg.event.startStr, arg.event.endStr)
         console.log('extendedProps: ', arg.event.extendedProps)
         this.fullCalendar.getApi().render()
-        // if (arg.event.extendedProps.originItem.type == 'general') {
+        // if (arg.event.extendedProps.originItem.type_code == 'calendar_task_type_normal') {
         //     const reqBody: UpdateTaskRequestBody = {
         //         option: 'this',
         //         trainer_id: this.storageService.getUser().id,
@@ -716,7 +771,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
         //             )
         //         })
         // } else {
-        //     const eventData: Task = arg.event.extendedProps.originItem as Task
+        //     const eventData: CalendarTask = arg.event.extendedProps.originItem as CalendarTask
         //     let reqBody: UpdateTaskRequestBody = undefined
         //     if (eventData.repetition_id) {
         //         reqBody = {
@@ -918,4 +973,332 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     // ---------------------------------------------------------------------------------------------------------//
+
+    // ---------------------------------- !!  일정 수정 모달 vars and functions  !! -----------------------------------------------
+
+    public doShowRepeatLessonOptionModal = false
+    public repeatLessonTitle = ''
+    public repeatedLessonTask: CalendarTask = undefined
+    showRepeatLessonOptionModal() {
+        this.doShowRepeatLessonOptionModal = true
+    }
+    hideRepeatLessonOptionModal() {
+        this.doShowRepeatLessonOptionModal = false
+    }
+    onRepeatLessonOptionCancel() {
+        this.hideRepeatLessonOptionModal()
+        this.repeatedLessonTask = undefined
+    }
+    onRepeatLessonOptionConfirm(modifyOption: 'this' | 'from_now_on' | 'all') {
+        this.nxStore.dispatch(ScheduleActions.setModifyLessonOption({ option: modifyOption }))
+        this.nxStore.dispatch(ScheduleActions.setModifyLessonEvent({ event: this.repeatedLessonTask }))
+
+        // !! 아직 예약 부분은 API문제로 구현 불가
+        // this.gymScheduleState.getLessonTaskReservations(this.center.id, String(this.repeatedLessonTask.id))
+        this.hideRepeatLessonOptionModal()
+        this.nxStore.dispatch(openDrawer({ tabName: 'modify-lesson-schedule' }))
+        this.repeatedLessonTask = undefined
+        // this.fullCalendar.getApi().updateSize()
+    }
+    // - //
+
+    public lessonEventData: CalendarTask = undefined
+    public doShowModifyLessonEventModal = false
+    showModifyLessonEventModal() {
+        this.doShowModifyLessonEventModal = true
+    }
+    hideModifyLessonEventModal() {
+        this.doShowModifyLessonEventModal = false
+    }
+    onDeleteLessonEvent(lessonTask: CalendarTask) {
+        this.hideModifyLessonEventModal()
+        // !! repetition id --> calendar_task_group_id 가 맞는지 확인 필요
+        // if (lessonTask.calendar_task_group_id) {
+        //     this.showDelRepeatLessonModal(lessonTask)
+        // } else {
+        //     this.showDeleteEventModal(lessonTask, 'lesson')
+        // }
+    }
+    onModifyLessonEvent(lessonTask: CalendarTask) {
+        // !! repetition id --> calendar_task_group_id 가 맞는지 확인 필요
+        if (!lessonTask.calendar_task_group_id) {
+            this.hideModifyLessonEventModal()
+
+            this.nxStore.dispatch(ScheduleActions.setModifyLessonEvent({ event: lessonTask }))
+            this.nxStore.dispatch(openDrawer({ tabName: 'modify-lesson-schedule' }))
+            // this.fullCalendar.getApi().updateSize()
+        } else {
+            this.hideModifyLessonEventModal()
+            this.repeatedLessonTask = lessonTask
+            this.repeatLessonTitle = lessonTask.name
+            this.showRepeatLessonOptionModal()
+        }
+    }
+    onReserveMember(lessonTask: CalendarTask) {
+        this.showReserveModal(lessonTask)
+    }
+
+    public generalEventData: CalendarTask = undefined
+    public generalAssignee: Calendar = undefined
+    public doShowModifyGeneralEventModal = false
+    showModifyGeneralEventModal() {
+        this.doShowModifyGeneralEventModal = true
+    }
+    hideModifyGeneralEventModal() {
+        this.doShowModifyGeneralEventModal = false
+    }
+    onDeleteGeneralEvent(generalTask: CalendarTask) {
+        this.hideModifyGeneralEventModal()
+        // this.showDeleteEventModal(generalTask, 'general')
+    }
+    onModifyGeneralEvent(generalTask: CalendarTask) {
+        this.hideModifyGeneralEventModal()
+        this.nxStore.dispatch(ScheduleActions.setModifyGeneralEvent({ event: generalTask }))
+        this.nxStore.dispatch(openDrawer({ tabName: 'modify-general-schedule' }))
+        // this.fullCalendar.getApi().updateSize()
+    }
+
+    // - // lesson reserve modal and cancel modal
+    //  reserve modal vars and funcs
+    public reserveLessonData: CalendarTask = undefined
+    public doShowReserveModal = false
+    showReserveModal(reserveLessonData: CalendarTask) {
+        this.reserveLessonData = reserveLessonData
+        this.doShowReserveModal = true
+        this.hideModifyLessonEventModal()
+    }
+    hideReserveModal() {
+        this.doShowReserveModal = false
+    }
+    onReserveModalCancel() {
+        this.hideReserveModal()
+        this.showModifyLessonEventModal()
+        this.reserveLessonData = undefined
+    }
+    onReserveModalConfirm(memTicketIds: { membership_ticket_ids: Array<number> }) {
+        // this.gymCalendarService
+        //     .reserveLesson(this.gymScheduleState.gymId.value, String(this.reserveLessonData.id), {
+        //         membership_ticket_ids: memTicketIds.membership_ticket_ids,
+        //     })
+        //     .subscribe((res) => {
+        //         this.hideReserveModal()
+        //         this.showModifyLessonEventModal()
+        //         this.nxStore.dispatch(showToast({text:`${this.reserveLessonData.name} 일정에 회원이 예약되었습니다.` }))
+        //         this.gymDashboardStateService.reservationIsSet.value = true
+        //         this.gymCalendarService
+        //             .getTask(this.gym.id, String(this.reserveLessonData.id))
+        //             .subscribe((updatedTask) => {
+        //                 this.gymScheduleState.setIsScheduleEventChangedState(true)
+        //                 this.lessonEventData = updatedTask
+        //                 this.reserveLessonData = undefined
+        //             })
+        //     })
+    }
+
+    // cancel reserve modal vars and funcs
+    // public cancelReserveText = {
+    //     text: '회원의 예약을 취소하시겠어요? 😮',
+    //     subText: `회원의 예약을 취소할 경우,
+    //     회원에게 예약 취소 알림이 발송됩니다.`,
+    //     cancelButtonText: '뒤로',
+    //     confirmButtonText: '예약 취소',
+    // }
+    // public beCanceledReservationData: { taskReservation: TaskReservation; lessonData: CalendarTask } = undefined
+    // doShowCancelReserveModal = false
+    // showCancelReserveModal(cancelData: { taskReservation: TaskReservation; lessonData: CalendarTask }) {
+    //     this.beCanceledReservationData = cancelData
+    //     this.doShowCancelReserveModal = true
+    //     this.hideModifyLessonEventModal()
+    // }
+    // hideCancelReserveModal() {
+    //     this.doShowCancelReserveModal = false
+    // }
+    // onCancelReserveModalCancel() {
+    //     this.hideCancelReserveModal()
+    //     this.showModifyLessonEventModal()
+    // }
+    // onCancelReserveModalConfirm() {
+    //     this.gymCalendarService
+    //         .deleteReservedLesson(
+    //             this.gymScheduleState.gymId.value,
+    //             String(this.beCanceledReservationData.lessonData.id),
+    //             this.beCanceledReservationData.taskReservation.id
+    //         )
+    //         .subscribe((res) => {
+    //             this.hideReserveModal()
+    //             this.showModifyLessonEventModal()
+    //             const userName =
+    //                 this.beCanceledReservationData.taskReservation.user.gym_user_name ??
+    //                 this.beCanceledReservationData.taskReservation.user.given_name
+    //             this.globalService.showToast(`${userName}님의 예약이 취소되었습니다.`)
+    //             this.gymCalendarService
+    //                 .getTask(this.gym.id, String(this.beCanceledReservationData.lessonData.id))
+    //                 .subscribe((updatedTask) => {
+    //                     this.lessonEventData = updatedTask
+    //                     this.beCanceledReservationData = undefined
+    //                 })
+    //             this.gymScheduleState.setIsScheduleEventChangedState(true)
+    //         })
+    //     this.hideCancelReserveModal()
+    //     this.showModifyLessonEventModal()
+    // }
+
+    // - // delete event modal -----------------------------------
+    public deleteEventText = {
+        text: '',
+        subText: `일정을 삭제하실 경우,
+            삭제된 일정 정보는 복구하실 수 없어요.`,
+        cancelButtonText: '취소',
+        confirmButtonText: '일정 삭제',
+    }
+    public deletedEvent: CalendarTask = undefined
+    public deleteEventType: 'general' | 'lesson'
+    public doShowDeleteEventModal = false
+    showDeleteEventModal(task: CalendarTask, eventType: 'general' | 'lesson') {
+        this.deletedEvent = task
+        this.deleteEventType = eventType
+        this.deleteEventText.text = `'${task.name}'' 일정을 삭제하시겠어요?`
+        this.doShowDeleteEventModal = true
+    }
+    hideDeleteEventModal() {
+        this.doShowDeleteEventModal = false
+    }
+    onDeleteEventCancel() {
+        this.hideDeleteEventModal()
+    }
+    onDeleteEventConfirm() {
+        if (this.deleteEventType == 'general') {
+            const calId = this.instructorList$_.filter(
+                (v) => v.instructor.calendar_user.id == this.deletedEvent.responsibility.id
+            )[0].instructor.id
+            this.CenterCalendarService.deleteCalendarTask(
+                this.center.id,
+                calId,
+                String(this.deletedEvent.id),
+                'one'
+            ).subscribe((_) => {
+                this.getTaskList(this.selectedDateViewType)
+                this.hideDeleteEventModal()
+                this.nxStore.dispatch(
+                    showToast({ text: `'${this.restrictText(this.deletedEvent.name, 7)}' 기타 일정이 삭제되었습니다.` })
+                )
+                this.deletedEvent = undefined
+            })
+        } else {
+            // !! 예약 API가 구현되야 구현가능
+            // if (this.deletedEvent.lesson.reservation.length > 0) {
+            //     this.reservedLessonType = 'single'
+            //     this.hideDeleteEventModal()
+            //     this.showReservedDelLessonModal()
+            // } else {
+            this.deleteSingleLessonEvent()
+            // }
+        }
+    }
+
+    deleteSingleLessonEvent(fn?: () => void) {
+        const calId = this.instructorList$_.filter(
+            (v) => v.instructor.calendar_user.id == this.deletedEvent.responsibility.id
+        )[0].instructor.id
+        this.CenterCalendarService.deleteCalendarTask(
+            this.center.id,
+            calId,
+            String(this.deletedEvent.id),
+            'one'
+        ).subscribe((_) => {
+            this.getTaskList(this.selectedDateViewType)
+            this.hideDeleteEventModal()
+            this.nxStore.dispatch(
+                showToast({ text: `'${this.restrictText(this.deletedEvent.name, 7)}' 수업 일정이 삭제되었습니다.` })
+            )
+            this.deletedEvent = undefined
+            fn ? fn() : null
+        })
+    }
+    restrictText(title: string, len: number): string {
+        return title.length > len ? title.slice(0, len) + '...' : title
+    }
+
+    // - // 반복 수업 일정 삭제 모달 ------------------------------
+    public doShowDelRepeatLessonModal = false
+    public delRepeatLessonData: CalendarTask = undefined
+    public delRepeatType: DeleteMode = undefined
+    public delRepeatLessonTitle = ''
+    showDelRepeatLessonModal(task: CalendarTask) {
+        this.delRepeatLessonData = task
+        this.delRepeatLessonTitle = task.name
+        this.doShowDelRepeatLessonModal = true
+    }
+    hideDelRepeatLessonModal() {
+        this.doShowDelRepeatLessonModal = false
+    }
+    onDelRepeatLessonConfirm(deleteType: DeleteMode) {
+        this.delRepeatType = deleteType
+        // !! 아직 예약 부분은 API문제로 구현 불가
+        // if (this.delRepeatLessonData.class.reservation.length > 0) {
+        //     this.reservedLessonType = 'repeat'
+        //     this.showReservedDelLessonModal()
+        //     this.hideDelRepeatLessonModal()
+        // } else {
+        this.deleteRepeatLessonEvent()
+        this.hideDelRepeatLessonModal()
+        // }
+    }
+    onDelRepeatLessonCancel() {
+        this.hideDelRepeatLessonModal()
+    }
+    deleteRepeatLessonEvent(fn?: () => void) {
+        const calId = this.instructorList$_.filter(
+            (v) => v.instructor.calendar_user.id == this.delRepeatLessonData.responsibility.id
+        )[0].instructor.id
+        this.CenterCalendarService.deleteCalendarTask(
+            this.center.id,
+            String(this.delRepeatLessonData.id),
+            this.delRepeatType
+        ).subscribe((_) => {
+            this.getTaskList(this.selectedDateViewType)
+            this.hideDelRepeatLessonModal()
+            this.nxStore.dispatch(
+                showToast({
+                    text: `'${this.restrictText(this.delRepeatLessonData.name, 7)}' 수업 일정이 삭제되었습니다.`,
+                })
+            )
+            this.delRepeatLessonData = undefined
+            this.delRepeatType = undefined
+            fn ? fn() : null
+        })
+    }
+
+    // - // 수업 일정 삭제 시 예약 있을 때 알림 모달 ------------------------
+    public deleteLessonEventText = {
+        text: '앗! 해당 일정에 예약된 회원이 있어요.😮',
+        subText: `이미 예약한 회원이 있는 경우,
+            예약이 강제 취소되며 회원에게 알림이 발송됩니다.`,
+        cancelButtonText: '취소',
+        confirmButtonText: '일정 삭제',
+    }
+    public doShowReservedDelLessonModal = false
+
+    // !! 확인 필요
+    public reservedLessonType: 'single' | 'repeat' = undefined
+    showReservedDelLessonModal() {
+        this.doShowReservedDelLessonModal = true
+    }
+    hideReservedDelLessonModal() {
+        this.doShowReservedDelLessonModal = false
+    }
+    onReservedDelLessonConfrim() {
+        if (this.reservedLessonType == 'single') {
+            this.deleteSingleLessonEvent(() => {
+                this.hideReservedDelLessonModal()
+            })
+        } else if (this.reservedLessonType == 'repeat') {
+            this.deleteRepeatLessonEvent(() => {
+                this.hideReservedDelLessonModal()
+            })
+        }
+    }
+    onReservedDelLessonCancel() {
+        this.hideReservedDelLessonModal()
+    }
 }

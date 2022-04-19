@@ -15,14 +15,14 @@ import * as ScheduleActions from '../actions/sec.schedule.actions'
 export type FilterType = 'onetoone' | 'group' | 'general'
 export type FilterTypeName = '1:1 수업' | '그룹 수업' | '기타 일정'
 export type LectureFilter = {
-    onetoone: { selected: boolean; filterName: FilterTypeName }
-    group: { selected: boolean; filterName: FilterTypeName }
-    general: { selected: boolean; filterName: FilterTypeName }
+    calendar_task_type_onetoone: { selected: boolean; filterName: FilterTypeName }
+    calendar_task_type_group: { selected: boolean; filterName: FilterTypeName }
+    calendar_task_type_normal: { selected: boolean; filterName: FilterTypeName }
 }
 export const LectureFilterInit: LectureFilter = {
-    onetoone: { selected: true, filterName: '1:1 수업' },
-    group: { selected: true, filterName: '그룹 수업' },
-    general: { selected: true, filterName: '기타 일정' },
+    calendar_task_type_onetoone: { selected: true, filterName: '1:1 수업' },
+    calendar_task_type_group: { selected: true, filterName: '그룹 수업' },
+    calendar_task_type_normal: { selected: true, filterName: '기타 일정' },
 }
 
 export type InstructorType = {

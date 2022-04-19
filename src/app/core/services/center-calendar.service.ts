@@ -24,6 +24,18 @@ export class CenterCalendarService {
 
     constructor(private http: HttpClient) {}
 
+    // 캘린더 태스크 일괄 조회
+    getAllCalendarTask(centerId: string, reqBody: GetAllCalendarTaskReqBody): Observable<Array<CalendarTask>> {
+        const url = this.SERVER + `/${centerId}/task`
+
+        return this.http.post<Response>(url, reqBody, this.options).pipe(
+            map((res) => {
+                return res.dataset
+            }),
+            catchError(handleError)
+        )
+    }
+
     // 캘린더 생성
     createCalendar(centerId: string, reqBody: CreateCalendarReqBody): Observable<Calendar> {
         const url = this.SERVER + `/${centerId}/calendar`
@@ -40,9 +52,9 @@ export class CenterCalendarService {
     getCalendars(centerId: string, querys: GetCalendarQuery): Observable<Array<Calendar>> {
         const url =
             this.SERVER +
-            `/${centerId}/calendar?typeCode=${querys.typeCode}&page=${querys.page ?? ''}&pageSize=${
-                querys.pageSize ?? ''
-            }`
+            `/${centerId}/calendar?${!querys.typeCode ? '' : 'typeCode=' + querys.typeCode + '&'}page=${
+                querys.page ?? ''
+            }&pageSize=${querys.pageSize ?? ''}`
 
         return this.http.get<Response>(url, this.options).pipe(
             map((res) => {
@@ -125,12 +137,7 @@ export class CenterCalendarService {
     }
 
     // 테스크 삭제
-    deleteCalendarTask(
-        centerId: string,
-        calendarId: string,
-        taskId: string,
-        mode?: 'one' | 'after' | 'all'
-    ): Observable<Response> {
+    deleteCalendarTask(centerId: string, calendarId: string, taskId: string, mode?: DeleteMode): Observable<Response> {
         const url = this.SERVER + `/${centerId}/calendar/${calendarId}/task/${taskId}?mode=${mode}`
 
         return this.http.delete<Response>(url, this.options).pipe(
@@ -142,6 +149,11 @@ export class CenterCalendarService {
     }
 }
 
+export interface GetAllCalendarTaskReqBody {
+    calendar_ids: string[]
+    start_date: string
+    end_date: string
+}
 export interface CreateCalendarReqBody {
     calendar_user_id: string
     type_code: 'calendar_type_user_calendar' | 'calendar_type_center_calendar'
@@ -181,6 +193,7 @@ export interface CreateCalendarTaskReqBody {
         | 'calendar_task_group_repeat_termination_type_date'
     repeat_count?: number
     repeat_end_date?: string
+    responsibility_user_id: string
     class?: ClassForCU
 }
 
@@ -211,13 +224,15 @@ export interface UpdateCalendarTaskReqBody {
 }
 
 export interface ClassForCU {
-    class_item_id: string
-    type_code: string
-    state_code: string
-    duration: string
-    capacity: string
-    start_booking: string
-    end_booking: string
-    cancel_booking: string
+    class_item_id?: string
+    type_code?: string
+    state_code?: string
+    duration?: string
+    capacity?: string
+    start_booking?: string
+    end_booking?: string
+    cancel_booking?: string
     instructor_user_ids: string[]
 }
+
+export type DeleteMode = 'one' | 'after' | 'all'

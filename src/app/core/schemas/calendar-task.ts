@@ -1,4 +1,5 @@
 import { CalendarTaskClass } from '@schemas/calendar-task-class'
+import { CenterUser } from '@schemas/center-user'
 
 export interface CalendarTask {
     id: string
@@ -17,5 +18,6 @@ export interface CalendarTask {
     repeat_termination_type_code: string
     repeat_count: number
     repeat_end_date: string
+    responsibility: CenterUser
     class: CalendarTaskClass
 }

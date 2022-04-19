@@ -167,6 +167,7 @@ export class GeneralScheduleComponent implements OnInit, AfterViewInit, OnDestro
             end_time: this.timepick.endTime.slice(0, 5), // !!확인 필요
             memo: this.planTexts.planDetail,
             repeat: false,
+            responsibility_user_id: selectedStaff.instructor.calendar_user.id,
         }
         this.centerCalendarService.createCalendarTask(this.center.id, selectedStaff.instructor.id, reqBody).subscribe({
             next: (_) => {

@@ -155,3 +155,69 @@
     (cancel)="onEmptyLessonModalCancel()"
     (confirm)="onEmptyLessonModalConfirm()"
 ></rw-modal>
+
+<div #member_schedule_tooltip class="rw-typo-subtext3 member-schedule-tooltip">
+    {{tooltipText}}
+    <div class="member-schedule-tooltip-tail"></div>
+</div>
+
+<!--
+<rw-sch-lesson-modal
+    [(visible)]="doShowModifyLessonEventModal"
+    [lessonData] = "lessonEventData"
+    (cancel)="hideModifyLessonEventModal()"
+    (modify)="onModifyLessonEvent($event)"
+    (delete)="onDeleteLessonEvent($event)"
+    (reserveMember) = "onReserveMember($event)"
+    (cancelReservedMember)= "showCancelReserveModal($event)"
+></rw-sch-lesson-modal> -->
+
+<!-- <rw-modal
+    [(visible)]="doShowCancelReserveModal"
+    [data]="cancelReserveText"
+    (cancel)="onCancelReserveModalCancel()"
+    (confirm)="onCancelReserveModalConfirm()"
+></rw-modal> -->
+<!--
+<rw-sch-reserve-member-modal
+    [(visible)]="doShowReserveModal"
+    [lessonTask]="reserveLessonData"
+    (cancel)="onReserveModalCancel()"
+    (confirm)="onReserveModalConfirm($event)"
+></rw-sch-reserve-member-modal>
+<rw-sch-modify-repeat-lesson-modal
+    [(visible)]="doShowRepeatLessonOptionModal"
+    [title]="repeatLessonTitle"
+    (cancel)="onRepeatLessonOptionCancel()"
+    (confirm)="onRepeatLessonOptionConfirm($event)"
+></rw-sch-modify-repeat-lesson-modal> -->
+
+
+<!-- <rw-sch-general-modal
+    [(visible)]="doShowModifyGeneralEventModal"
+    [generalData]="generalEventData"
+    [assignee] = "generalAssignee"
+    (cancel)="hideModifyGeneralEventModal()"
+    (modify)="onModifyGeneralEvent($event)"
+    (delete)="onDeleteGeneralEvent($event)"
+></rw-sch-general-modal> -->
+
+<rw-modal
+    [(visible)]="doShowDeleteEventModal"
+    [data]="deleteEventText"
+    (cancel)="onDeleteEventCancel()"
+    (confirm)="onDeleteEventConfirm()"
+></rw-modal>
+<!-- <rw-sch-delete-repeat-lesson-modal
+    [(visible)]="doShowDelRepeatLessonModal"
+    [title]="delRepeatLessonTitle"
+    (cancel)="onDelRepeatLessonCancel()"
+    (confirm)="onDelRepeatLessonConfirm($event)"
+></rw-sch-delete-repeat-lesson-modal> -->
+
+<rw-modal
+    [(visible)]="doShowReservedDelLessonModal"
+    [data]="deleteLessonEventText"
+    (cancel)="onReservedDelLessonCancel()"
+    (confirm)="onReservedDelLessonConfrim()"
+></rw-modal>

@@ -204,6 +204,7 @@ export class LessonScheduleComponent implements OnInit, OnDestroy, AfterViewInit
                 memo: this.planDetailInputs.detail,
                 repeat: true,
                 repeat_day_of_the_week: [], // !! 변환 필요 this.repeatOfWeek,
+                responsibility_user_id: selectedStaff.instructor.calendar_user.id,
                 class: {
                     class_item_id: this.selectedLesson.lesson.id,
                     type_code: this.selectedLesson.lesson.type_code,
@@ -229,6 +230,7 @@ export class LessonScheduleComponent implements OnInit, OnDestroy, AfterViewInit
                 color: this.selectedLesson.lesson.color,
                 memo: this.planDetailInputs.detail,
                 repeat: false,
+                responsibility_user_id: selectedStaff.instructor.calendar_user.id,
                 class: {
                     class_item_id: this.selectedLesson.lesson.id,
                     type_code: this.selectedLesson.lesson.type_code,
