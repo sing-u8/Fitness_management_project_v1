@@ -39,9 +39,10 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     // ----------  scroll func ---------------//
-    scrollTop(height = 0) {
-        window.scrollTo({
-            top: height,
+    scrollTop() {
+        const h = document.getElementById('l-homepage')
+        h.scrollTo({
+            top: 0,
             behavior: 'smooth',
         })
     }
