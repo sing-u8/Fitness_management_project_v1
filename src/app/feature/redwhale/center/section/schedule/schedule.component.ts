@@ -12,7 +12,7 @@ import koLocale from '@fullcalendar/core/locales/ko'
 
 // services
 import { StorageService } from '@services/storage.service'
-import { CenterCalendarService, DeleteMode } from '@services/center-calendar.service'
+import { CenterCalendarService, DeleteMode, UpdateCalendarTaskReqBody } from '@services/center-calendar.service'
 import { CenterService } from '@services/center.service'
 import { CenterUsersService } from '@services/center-users.service'
 
@@ -767,25 +767,37 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
         console.log('eventDrop: ', arg, arg.event.startStr, arg.event.endStr)
         console.log('extendedProps: ', arg.event.extendedProps)
         this.fullCalendar.getApi().render()
-        // if (arg.event.extendedProps.originItem.type_code == 'calendar_task_type_normal') {
-        //     const reqBody: UpdateTaskRequestBody = {
-        //         option: 'this',
-        //         trainer_id: this.storageService.getUser().id,
-        //         name: arg.event.extendedProps.originItem.name,
-        //         date: dayjs(arg.event.startStr).format('YYYY-MM-DD'),
-        //         start_time: dayjs(arg.event.startStr).format('HH:mm:ss'),
-        //         end_time: dayjs(arg.event.endStr).format('HH:mm:ss'),
-        //         memo: arg.event.extendedProps.originItem.memo,
-        //     }
-        //     this.gymCalendarService
-        //         .updateTask(this.gym.id, String(arg.event.extendedProps.originItem.id), reqBody)
-        //         .subscribe((__) => {
-        //             this.gymScheduleState.setIsScheduleEventChangedState(true)
-        //             this.globalService.showToast(
-        //                 `${this.restrictText(arg.event.extendedProps.originItem.name, 8)} 기타 일정이 수정 되었습니다.`
-        //             )
-        //         })
-        // } else {
+        if (arg.event.extendedProps['originItem'].type_code == 'calendar_task_type_normal') {
+            const calTask: CalendarTask = arg.event.extendedProps['originItem'] as CalendarTask
+            const calId = this.instructorList$_.find((v) => v.instructor.calendar_user.id == calTask.responsibility.id)
+                .instructor.id
+            const otherInstructor: Calendar = arg.newResource
+                ? (arg.newResource._resource.extendedProps['instructorData'] as Calendar)
+                : null
+            const reqBody: UpdateCalendarTaskReqBody = {
+                responsibility_user_id: otherInstructor ? otherInstructor.calendar_user.id : calTask.responsibility.id,
+                start_date: dayjs(arg.event.startStr).format('YYYY-MM-DD'),
+                start_time: dayjs(arg.event.startStr).format('HH:mm'),
+                end_date: dayjs(arg.event.endStr).format('YYYY-MM-DD'),
+                end_time: dayjs(arg.event.endStr).format('HH:mm'),
+            }
+            const apiCalId = otherInstructor ? otherInstructor.id : calId
+            this.CenterCalendarService.updateCalendarTask(
+                this.center.id,
+                apiCalId,
+                calTask.id,
+                reqBody,
+                'one'
+            ).subscribe((__) => {
+                this.nxStore.dispatch(ScheduleActions.setIsScheduleEventChanged({ isScheduleEventChanged: true }))
+                this.nxStore.dispatch(
+                    showToast({
+                        text: `${this.restrictText(calTask.name, 8)} 기타 일정이 수정 되었습니다.`,
+                    })
+                )
+            })
+        }
+        // else {
         //     const eventData: CalendarTask = arg.event.extendedProps.originItem as CalendarTask
         //     let reqBody: UpdateTaskRequestBody = undefined
         //     if (eventData.repetition_id) {
