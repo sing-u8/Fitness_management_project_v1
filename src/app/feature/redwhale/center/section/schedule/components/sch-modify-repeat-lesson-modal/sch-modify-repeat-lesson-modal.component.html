@@ -1,0 +1,51 @@
+<div class="rw-modal-background" #modalBackgroundElement></div>
+
+<div class="rw-modal-wrapper justify-content-center align-items-center" (click)="onCancel()" #modalWrapperElement>
+    <div class="rw-modal user-select-none" (click)="$event.stopPropagation()">
+
+      <div class="top">
+
+        <div class="rw-typo-title1 title">
+          <span *ngIf="title.length > 7" class="rw-typo-title1 title">'{{title | wordEllipsis:7}}...'</span>
+          <span *ngIf="title.length < 7" class="rw-typo-title1 title">{{title}}</span>
+          일정을 수정하시겠어요?
+        </div>
+        <div class="rw-typo-subtext0-regular sub-title">
+          <p class="rw-typo-subtext0-regular">이미 예약한 회원이 있는 경우,</p>
+          <p class="rw-typo-subtext0-regular">회원에게 일정 수정 알림이 발송됩니다.</p>
+        </div>
+
+        <div class="reserve-box">
+          <rw-radio-button
+            text="이번 일정만 수정"
+            [checked]="reserveOption == 'this'"
+            (click)="clickReserveLesson('this')"
+          ></rw-radio-button>
+          <rw-radio-button
+            text="이번 일정부터 모두 수정"
+            [checked]="reserveOption == 'from_now_on'"
+            (click)="clickReserveLesson('from_now_on')"
+          ></rw-radio-button>
+          <rw-radio-button
+            text="반복 일정 전체 수정"
+            [checked]="reserveOption == 'all'"
+            (click)="clickReserveLesson('all')"
+          ></rw-radio-button>
+        </div>
+
+      </div>
+
+      <div class="bottom">
+        <div class="rw-typo-bodytext2 cancel" [style.color]="'var(--grey)'" (click)="onCancel()">
+          취소
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="rw-typo-bodytext2 confirm" (click)="onConfirm()">
+          일정 수정
+        </div>
+      </div>
+
+    </div>
+</div>

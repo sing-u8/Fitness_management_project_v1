@@ -107,7 +107,6 @@ export class GeneralScheduleComponent implements OnInit, AfterViewInit, OnDestro
     public unsubscribe$ = new Subject<void>()
 
     constructor(
-        private centerUsersService: CenterUsersService,
         private storageService: StorageService,
         private nxStore: Store,
         private centerCalendarService: CenterCalendarService
@@ -125,11 +124,14 @@ export class GeneralScheduleComponent implements OnInit, AfterViewInit, OnDestro
                 takeUntil(this.unsubscribe$)
             )
             .subscribe(([schDrawerIsReset, drawer, instructorList, schedulingInstructor]) => {
+                console.log('schedulingInstructor : ', schedulingInstructor)
+                console.log('instructorList : ', instructorList)
+
                 if (schDrawerIsReset == true && drawer['tabName'] == 'general-schedule') {
                     this.titleTime = dayjs().format('M/D (dd) A hh시 mm분')
                     this.initTimePickAndDatePick()
-                    this.initStaffList(schedulingInstructor)
                     this.instructorList = instructorList
+                    this.initStaffList(instructorList, schedulingInstructor)
                     this.nxStore.dispatch(setScheduleDrawerIsReset({ isReset: false }))
                 }
             })
@@ -187,30 +189,28 @@ export class GeneralScheduleComponent implements OnInit, AfterViewInit, OnDestro
         this.nxStore.dispatch(closeDrawer())
     }
 
-    initStaffList(schedulingInstructor: Calendar) {
+    initStaffList(instructorList: ScheduleReducer.InstructorType[], schedulingInstructor: Calendar) {
         this.center = this.storageService.getCenter()
         this.user = this.storageService.getUser()
         this.staffSelect_list = []
-        this.centerUsersService.getUserList(this.center.id, '', '').subscribe((users) => {
-            const managers = _.filter(users, (user) => user.role_code != 'member')
-            managers.forEach((v) => {
-                this.staffSelect_list.push({
-                    name: v.center_user_name ?? v.name,
-                    value: v,
-                })
-            })
 
-            managers.find((v) => {
-                if (schedulingInstructor != undefined && schedulingInstructor.calendar_user.id == v.id) {
-                    this.StaffSelectValue = { name: v.center_user_name ?? v.name, value: v }
-                    this.nxStore.dispatch(ScheduleActions.setSchedulingInstructor({ schedulingInstructor: undefined }))
-                    return true
-                } else if (schedulingInstructor == undefined && this.user.id == v.id) {
-                    this.StaffSelectValue = { name: v.center_user_name ?? v.name, value: v }
-                    return true
-                }
-                return false
+        const managers = instructorList.map((v) => v.instructor.calendar_user)
+        managers.forEach((v) => {
+            this.staffSelect_list.push({
+                name: v.center_user_name ?? v.name,
+                value: v,
             })
+        })
+        managers.find((v) => {
+            if (schedulingInstructor != undefined && schedulingInstructor.calendar_user.id == v.id) {
+                this.StaffSelectValue = { name: v.center_user_name ?? v.name, value: v }
+                this.nxStore.dispatch(ScheduleActions.setSchedulingInstructor({ schedulingInstructor: undefined }))
+                return true
+            } else if (schedulingInstructor == undefined && this.user.id == v.id) {
+                this.StaffSelectValue = { name: v.center_user_name ?? v.name, value: v }
+                return true
+            }
+            return false
         })
     }
 

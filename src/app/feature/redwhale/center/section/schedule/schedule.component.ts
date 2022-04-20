@@ -35,6 +35,7 @@ import * as FromSchedule from '@centerStore/reducers/sec.schedule.reducer'
 import * as ScheduleSelector from '@centerStore/selectors/sec.schedule.selector'
 import * as ScheduleActions from '@centerStore/actions/sec.schedule.actions'
 import { CenterUser } from '@schemas/center-user'
+import { User } from '@schemas/user'
 
 // temp
 export type GymOperatingTime = { start: string; end: string }
@@ -47,7 +48,7 @@ export type ViewType = 'resourceTimeGridDay' | 'timeGridWeek' | 'dayGridMonth'
 })
 export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
     public center: Center
-    public user: CenterUser
+    public user: User
     public unsubscriber$ = new Subject<void>()
 
     public dateViewTypes = {
@@ -104,12 +105,8 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     async ngOnInit(): Promise<void> {
-        const userData = this.storageService.getUser()
-        // console.log('before get user using api')
-        // this.user = (await lastValueFrom(this.centerUsersService.getUserList(this.center.id))).find(
-        //     (centerUser) => centerUser.id == userData.id
-        // )
-        // console.log('after get user using api : ', this.user)
+        this.user = this.storageService.getUser()
+
         this.nxStore
             .pipe(select(ScheduleSelector.doLessonsExist), takeUntil(this.unsubscriber$))
             .subscribe((doExist) => {
@@ -294,9 +291,8 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
             case 'resourceTimeGridDay':
                 const resoruces = []
                 _.forEach(_.filter(this.instructorList$_, ['selected', true]), (value) => {
-                    console.log('selected inst : ', value)
                     resoruces.push({
-                        id: value.instructor.id,
+                        id: value.instructor.calendar_user.id,
                         title: value.instructor.name,
                         instructorData: value.instructor,
                     })
@@ -375,22 +371,23 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
     getTaskList(viewType: ViewType) {
         const calendars: Calendar[] = this.instructorList$_.filter((v) => v.selected).map((v) => v.instructor)
         const calendarIds: string[] = calendars.map((v) => v.id)
-        console.log('getTaskList : ', calendars, calendarIds)
         this.CenterCalendarService.getAllCalendarTask(this.center.id, {
             calendar_ids: calendarIds,
             start_date: this.activeStart,
             end_date: this.activeEnd,
         }).subscribe((tasks) => {
             this.eventList = tasks.map((task) => {
-                console.log('getTaskList  one : ', task)
                 if (viewType == 'resourceTimeGridDay') {
                     return {
                         title: task.name,
                         start: task.start,
                         end: task.end,
-                        resourceId: task.id,
+                        resourceId: task.responsibility.id,
                         originItem: task,
-                        assginee: calendars.length > 0 ? _.find(calendars, (cal) => cal.id == task.id) : null,
+                        assginee:
+                            calendars.length > 0
+                                ? _.find(calendars, (cal) => cal.calendar_user.id == task.responsibility.id)
+                                : null,
                         textColor: '#212121',
                         color: task.type_code == 'calendar_task_type_normal' ? '#F6F6F6' : '#FFFFFF',
                     }
@@ -400,7 +397,10 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
                         start: task.start,
                         end: task.end,
                         originItem: task,
-                        assginee: calendars.length > 0 ? _.find(calendars, (cal) => cal.id == task.id) : null,
+                        assginee:
+                            calendars.length > 0
+                                ? _.find(calendars, (cal) => cal.calendar_user.id == task.responsibility.id)
+                                : null,
                         textColor: '#212121',
                         color: task.type_code == 'calendar_task_type_normal' ? '#F6F6F6' : '#FFFFFF',
                     }
@@ -575,10 +575,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
         console.log('onEventClick arg: ', arg)
         if (arg.event.extendedProps['originItem'].type_code == 'calendar_task_type_normal') {
             this.generalEventData = arg.event.extendedProps['originItem']
-            this.generalAssignee = _.find(
-                this.instructorList$_,
-                (item) => arg.event.extendedProps['originItem'].calendar_id == item.instructor.id
-            ).instructor
+            this.generalAssignee = arg.event.extendedProps['assginee']
             this.showModifyGeneralEventModal()
         } else {
             this.lessonEventData = arg.event.extendedProps['originItem']
@@ -628,12 +625,30 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     public setSchedulingInstructor(arg) {
+        console.log('setSchedulingInstructor func arg  : ', arg)
         if (arg.view.type == 'resourceTimeGridDay') {
+            console.log(
+                "arg.view.type == 'resourceTimeGridDay' -- ",
+                arg.view.type == 'resourceTimeGridDay',
+                arg.resource.extendedProps.instructorData
+            )
+
             this.nxStore.dispatch(
                 ScheduleActions.setSchedulingInstructor({
                     schedulingInstructor: arg.resource.extendedProps.instructorData as Calendar,
                 })
             )
+        } else {
+            const curUserCalendar = this.instructorList$_.find(
+                (v) => v.instructor.calendar_user.id == this.user.id
+            ).instructor
+            if (curUserCalendar) {
+                this.nxStore.dispatch(
+                    ScheduleActions.setSchedulingInstructor({
+                        schedulingInstructor: curUserCalendar,
+                    })
+                )
+            }
         }
     }
 
@@ -1049,7 +1064,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
     }
     onDeleteGeneralEvent(generalTask: CalendarTask) {
         this.hideModifyGeneralEventModal()
-        // this.showDeleteEventModal(generalTask, 'general')
+        this.showDeleteEventModal(generalTask, 'general')
     }
     onModifyGeneralEvent(generalTask: CalendarTask) {
         this.hideModifyGeneralEventModal()

@@ -124,7 +124,7 @@ export class CenterCalendarService {
         calendarId: string,
         taskId: string,
         reqBody: UpdateCalendarTaskReqBody,
-        mode?: 'one' | 'after' | 'all'
+        mode: 'one' | 'after' | 'all'
     ): Observable<Response> {
         const url = this.SERVER + `/${centerId}/calendar/${calendarId}/task/${taskId}?mode=${mode}`
 
@@ -220,6 +220,7 @@ export interface UpdateCalendarTaskReqBody {
         | 'calendar_task_group_repeat_termination_type_date'
     repeat_count?: number
     repeat_end_date?: string
+    responsibility_user_id?: string
     class?: ClassForCU // !일반 일정일 때는 추가해야하나 ?
 }
 

@@ -13,10 +13,6 @@ import {
 import dayjs from 'dayjs'
 import _ from 'lodash'
 
-import { CenterCalendarService } from '@services/center-calendar.service'
-import { StorageService } from '@services/storage.service'
-import { CenterUsersService } from '@services/center-users.service'
-
 import { CalendarTask } from '@schemas/calendar-task'
 import { Calendar } from '@schemas/calendar'
 import { CenterUser } from '@schemas/center-user'
@@ -31,13 +27,13 @@ export class SchGeneralModalComponent implements AfterViewChecked, OnChanges {
     @Input() generalData: CalendarTask
     @Input() assignee: Calendar
 
-    @ViewChild('modalBackgroundElement') modalBackgroundElement
-    @ViewChild('modalWrapperElement') modalWrapperElement
+    @ViewChild('modalBackgroundElement') modalBackgroundElement: ElementRef
+    @ViewChild('modalWrapperElement') modalWrapperElement: ElementRef
 
     @Output() visibleChange = new EventEmitter<boolean>()
-    @Output() cancel = new EventEmitter<any>()
-    @Output() delete = new EventEmitter<any>()
-    @Output() modify = new EventEmitter<any>()
+    @Output() cancel = new EventEmitter<void>()
+    @Output() delete = new EventEmitter<CalendarTask>()
+    @Output() modify = new EventEmitter<CalendarTask>()
 
     public date: string
     public time: string
@@ -46,13 +42,9 @@ export class SchGeneralModalComponent implements AfterViewChecked, OnChanges {
 
     public isMouseModalDown: boolean
 
-    constructor(
-        private el: ElementRef,
-        private renderer: Renderer2,
-        private centerCalendarService: CenterCalendarService,
-        private centerUsersService: CenterUsersService,
-        private storageService: StorageService
-    ) {
+    public curStaff: CenterUser = undefined
+
+    constructor(private el: ElementRef, private renderer: Renderer2) {
         this.isMouseModalDown = false
     }
 
@@ -65,9 +57,8 @@ export class SchGeneralModalComponent implements AfterViewChecked, OnChanges {
         if (this.generalData) {
             this.initDate()
             this.initTime()
-            this.setSelectedStaff(this.generalData)
+            this.curStaff = this.assignee.calendar_user
         }
-        console.log('generalData in g modal: ', this.generalData)
     }
 
     ngAfterViewChecked() {
@@ -93,7 +84,7 @@ export class SchGeneralModalComponent implements AfterViewChecked, OnChanges {
     }
 
     onCancel(): void {
-        this.cancel.emit({})
+        this.cancel.emit()
     }
     onDelete() {
         this.delete.emit(this.generalData)
@@ -125,25 +116,6 @@ export class SchGeneralModalComponent implements AfterViewChecked, OnChanges {
     }
     getTimeDiff() {
         const timeDiff = dayjs(this.generalData.end).diff(dayjs(this.generalData.start), 'minute')
-        console.log('timeDiff in g modal: ', timeDiff)
         return `(${timeDiff}분)`
-    }
-
-    // staff func
-    public curStaff: CenterUser = undefined
-    setSelectedStaff(calTask: CalendarTask) {
-        const instructorId = calTask.responsibility.id
-        const center = this.storageService.getCenter()
-        this.centerCalendarService.getCalendars(center.id, {}).subscribe((calendarList) => {
-            const calendar = _.find(calendarList, (calendar) => {
-                return calendar.calendar_user.id == instructorId
-            })
-            this.centerUsersService.getUserList(center.id, '', '').subscribe((users) => {
-                const managers = _.filter(users, (user) => user.role_code != 'member')
-                managers.forEach((v) => {
-                    calendar.calendar_user.id == v.id ? (this.curStaff = v) : null
-                })
-            })
-        })
     }
 }

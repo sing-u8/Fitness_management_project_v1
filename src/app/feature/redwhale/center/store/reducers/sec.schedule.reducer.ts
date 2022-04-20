@@ -156,6 +156,10 @@ export const scheduleReducer = createImmerReducer(
         state.isScheduleEventChanged = isScheduleEventChanged
         return state
     }),
+    on(ScheduleActions.setSchedulingInstructor, (state, { schedulingInstructor }) => {
+        state.schedulingInstructor = schedulingInstructor
+        return state
+    }),
 
     on(ScheduleActions.setModifyGeneralEvent, (state, { event }) => {
         state.modifyGeneralEvent = event

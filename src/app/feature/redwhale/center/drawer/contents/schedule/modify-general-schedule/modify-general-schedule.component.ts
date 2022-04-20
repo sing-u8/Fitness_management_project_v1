@@ -5,7 +5,6 @@ import dayjs from 'dayjs'
 import _ from 'lodash'
 
 import { StorageService } from '@services/storage.service'
-import { CenterUsersService } from '@services/center-users.service'
 import { CenterCalendarService, UpdateCalendarTaskReqBody } from '@services/center-calendar.service'
 
 import { CenterUser } from '@schemas/center-user'
@@ -65,17 +64,44 @@ export class ModifyGeneralScheduleComponent implements OnInit, AfterViewInit, On
     public unsubscribe$ = new Subject<void>()
 
     constructor(
-        private centerUsersService: CenterUsersService,
         private storageService: StorageService,
         private centerCalendarService: CenterCalendarService,
         private nxStore: Store
     ) {}
 
     ngOnInit(): void {
+        this.center = this.storageService.getCenter()
         this.titleTime = dayjs().format('M/D (dd) A hh시 mm분')
-        this.selectGeneralEvent()
+        this.nxStore
+            .pipe(
+                select(ScheduleSelector.modifyGeneralEvent),
+                concatLatestFrom(() => [this.nxStore.select(ScheduleSelector.instructorList)]),
+                takeUntil(this.unsubscribe$)
+            )
+            .subscribe(([event, instructors]) => {
+                this.instructorList = instructors
+                this.generalEvent = event
+                this.planTexts = {
+                    planTitle: event.name,
+                    planDetail: event.memo,
+                }
+                // !! 날짜 확인하기
+                this.timepick.startTime = dayjs(event.start).format('HH:mm:ss')
+                this.timepick.endTime = dayjs(event.end).format('HH:mm:ss')
+                this.datepick.date = dayjs(event.start).format('YYYY-MM-DD')
 
-        this.selectInstructors()
+                this.staffSelect_list = instructors
+                    .map((v) => v.instructor.calendar_user)
+                    .map((v) => ({
+                        name: v.center_user_name ?? v.name,
+                        value: v,
+                    }))
+
+                this.StaffSelectValue = {
+                    name: event.responsibility.center_user_name ?? event.responsibility.name,
+                    value: event.responsibility,
+                }
+            })
 
         this.nxStore
             .pipe(select(ScheduleSelector.operatingHour), takeUntil(this.unsubscribe$))
@@ -98,22 +124,16 @@ export class ModifyGeneralScheduleComponent implements OnInit, AfterViewInit, On
     }
 
     modifyPlan(fn?: () => void) {
-        const selectedStaff = _.find(this.instructorList, (item) => {
-            return this.StaffSelectValue.value.id == item.instructor.calendar_user.id
-        })
         const reqBody: UpdateCalendarTaskReqBody = {
-            // option: 'this',
-            // trainer_id: selectedStaff.instructor.user_id,
+            responsibility_user_id: this.StaffSelectValue.value.id,
             name: this.planTexts.planTitle,
             start_date: dayjs(this.datepick.date).format('YYYY-MM-DD'),
-            // end_date: dayjs(this.datepick.date).format('YYYY-MM-DD'),
-            start_time: this.timepick.startTime,
-            end_time: this.timepick.endTime,
+            start_time: this.timepick.startTime.slice(0, 5),
+            end_time: this.timepick.endTime.slice(0, 5),
             memo: this.planTexts.planDetail,
         }
-        // console.log('modify schedule reqbody: ', reqBody, this.generalEvent)
         this.centerCalendarService
-            .updateCalendarTask(this.center.id, this.generalEvent.id, String(this.generalEvent.id), reqBody)
+            .updateCalendarTask(this.center.id, this.generalEvent.id, String(this.generalEvent.id), reqBody, 'one')
             .subscribe({
                 next: (_) => {
                     fn ? fn() : null
@@ -131,53 +151,5 @@ export class ModifyGeneralScheduleComponent implements OnInit, AfterViewInit, On
 
     closeDrawer() {
         this.nxStore.dispatch(closeDrawer())
-    }
-
-    // ---------------------------------- select funcs -----------------------------------------------------
-
-    selectInstructors() {
-        this.nxStore
-            .pipe(select(ScheduleSelector.instructorList), takeUntil(this.unsubscribe$))
-            .subscribe((instructors) => {
-                this.instructorList = instructors
-            })
-    }
-
-    selectGeneralEvent() {
-        this.nxStore
-            .pipe(select(ScheduleSelector.modifyGeneralEvent), takeUntil(this.unsubscribe$))
-            .subscribe((event) => {
-                this.generalEvent = event
-                this.planTexts = {
-                    planTitle: event.name,
-                    planDetail: event.memo,
-                }
-                // !! 날짜 확인하기
-                this.timepick.startTime = dayjs(event.start).format('HH:mm:ss')
-                this.timepick.endTime = dayjs(event.end).format('HH:mm:ss')
-                this.datepick.date = dayjs(event.start).format('YYYY-MM-DD')
-                this.setSelectedStaff(event.id)
-            })
-    }
-
-    setSelectedStaff(calId: string) {
-        this.center = this.storageService.getCenter()
-        // this.centerCalendarService.getCalendarList(this.center.id).subscribe((calendarList) => {
-        //     const calendar_user = _.find(calendarList, (calendar) => {
-        //         return calendar.id == String(calId)
-        //     })
-        this.centerUsersService.getUserList(this.center.id, '', '').subscribe((users) => {
-            const managers = _.filter(users, (user) => user.role_code != 'member')
-            managers.forEach((v) => {
-                this.staffSelect_list.push({
-                    name: v.center_user_name ?? v.name,
-                    value: v,
-                })
-                // calendar_user.user_id == v.id
-                //     ? (this.StaffSelectValue = { name:  v.center_user_name ?? v.name, value: v })
-                //     : null
-            })
-        })
-        // })
     }
 }

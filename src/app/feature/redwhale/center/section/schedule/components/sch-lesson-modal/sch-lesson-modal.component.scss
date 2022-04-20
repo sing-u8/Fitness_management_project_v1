@@ -1,0 +1,410 @@
+* {
+    padding: 0px;
+    margin: 0px;
+}
+
+.rw-modal-background {
+    display: none;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: var(--font-color);
+    opacity: 0;
+    transition: opacity 0.3s cubic-bezier(0.25, 0.8, 0.25, 0.8);
+    z-index: 999;
+}
+
+.rw-modal-background-show {
+    opacity: 0.3;
+}
+
+.rw-modal-wrapper {
+    display: none;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1000;
+
+    .rw-modal {
+        width: 368px;
+        height: 520px;
+        border-radius: 6px;
+        background-color: var(--white);
+        box-shadow: 0 0 10px 0 rgba(181, 181, 181, 0.11);
+        opacity: 0;
+        transition: opacity 0s;
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+
+        .modal-header {
+            width: calc(100% - 28px);
+            height: 35px;
+            margin: 15px 0px;
+            padding: 0 5px;
+            display: flex;
+            // align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border-color);
+            position: relative;
+            .header-title {
+                width: 100%;
+                display: flex;
+                align-items: flex-start;
+                & > div {
+                    margin-top: 2px;
+                }
+                .color-icon {
+                    width: 18px;
+                    height: 18px;
+                    margin-right: 7px;
+                    border-radius: 50%;
+                }
+            }
+            .close-button {
+                width: 24px;
+                height: 24px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                border-radius: 5px;
+                &:hover {
+                    background-color: var(--background-color);
+                }
+                & > img {
+                    width: 21px;
+                    height: 21px;
+                }
+            }
+        }
+
+        .modal-navigation {
+            width: calc(100% - 40px);
+            height: 40px;
+            border-radius: 5px;
+            overflow: hidden;
+            position: relative;
+            margin: 0px 0px 15px 0px;
+
+            display: flex;
+
+            .lesson-button {
+                border-color: var(--border-color);
+                border-style: solid;
+                border-width: 1px 0px 1px 1px;
+            }
+            .reservation-button {
+                border-color: var(--border-color);
+                border-style: solid;
+                border-width: 1px 1px 1px 0px;
+            }
+
+            .lesson-button,
+            .reservation-button {
+                width: 50%;
+                height: 40px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+
+                &.selected {
+                    color: var(--white);
+                    background-color: var(--font-color);
+                    border-width: 0px;
+                }
+            }
+        }
+
+        .content-container {
+            width: calc(100%);
+            height: calc(100% - 170px);
+            padding: 0 20px;
+            display: flex;
+            flex-direction: column;
+            .modal-content {
+                display: flex;
+                flex-direction: column;
+                margin-bottom: 20px;
+                width: 100%;
+                .small-title {
+                    color: var(--grey);
+                    margin-bottom: 5px;
+                }
+                .avatar-container {
+                    display: flex;
+                    align-items: center;
+                    rw-avatar {
+                        margin-right: 5px;
+                    }
+                }
+                .lesson-tag {
+                    display: flex;
+                    flex-wrap: wrap;
+                    .tag-item {
+                        display: flex;
+                        height: 27px;
+                        align-items: center;
+                        justify-content: center;
+                        padding: 5px 10px;
+                        border-radius: 5px;
+                        border: 1px solid var(--border-color);
+                        margin: 0px 10px 10px 0px;
+                    }
+                }
+            }
+
+            .lesson-card {
+                width: calc(100%);
+                height: 84px;
+                border: 1px solid var(--border-color);
+                border-radius: 5px;
+                padding: 12px;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                margin: 0 0 15px 0;
+
+                &.select-mode {
+                    cursor: pointer;
+                    &:hover {
+                        box-shadow: 0 0 6px 0 rgba(172, 172, 172, 0.2);
+                    }
+                }
+
+                .card-top {
+                    display: flex;
+                    align-items: center;
+                    .icon {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        width: 34px;
+                        height: 34px;
+                        border-radius: 50%;
+                        margin-right: 5px;
+                        img {
+                            width: 24px;
+                            height: 24px;
+                        }
+                    }
+
+                    .card-desc {
+                        display: flex;
+                        flex-direction: column;
+                        height: 37px;
+                        justify-content: space-between;
+
+                        .card-category {
+                            color: var(--grey);
+                        }
+                    }
+                }
+                .card-bottom {
+                    .card-desc2 {
+                        text-align: end;
+                        width: 100%;
+                        align-self: flex-end;
+                        text-overflow: ellipsis;
+                        overflow: hidden;
+                        margin-top: 8px;
+                    }
+                }
+            }
+
+            .empty-guide {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+
+                height: 100%;
+                width: 100%;
+
+                & > img {
+                    margin-bottom: 15px;
+                }
+
+                .find-text {
+                    margin-top: 8px;
+                }
+                .grey {
+                    color: var(--grey);
+                }
+                .top-image {
+                    margin-bottom: 20px;
+                }
+
+                & > .empty-guide-button {
+                    margin-top: 20px;
+                }
+            }
+
+            .reservation-list {
+                width: 100%;
+                position: relative;
+                .reservation-header {
+                    width: calc(100%);
+                    padding: 0 5px;
+                    margin-bottom: 10px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+
+                    .rh-left {
+                        & span {
+                            text-decoration: underline;
+                        }
+                    }
+                    .rh-right {
+                        .reserve-member-button {
+                            width: 85px;
+                            height: 30px;
+                            border: 1px solid var(--red);
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            font-weight: 700;
+                            color: var(--red) !important;
+                            cursor: pointer;
+                            border-radius: 5px;
+
+                            &:hover {
+                                opacity: 0.8;
+                            }
+
+                            & > img {
+                                width: 15px;
+                                height: 15px;
+                            }
+                        }
+                    }
+                }
+
+                .reservation-item {
+                    width: 100%;
+                    height: 40px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    padding: 0px 10px;
+                    position: relative;
+
+                    &:not(:last-of-type) {
+                        margin-bottom: 3px;
+                    }
+                    .item-left {
+                        display: flex;
+                        align-items: center;
+                        rw-avatar {
+                            margin-right: 5px;
+                        }
+                    }
+                    .item-right {
+                        display: flex;
+                        align-items: center;
+                        .close-button {
+                            width: 24px;
+                            height: 24px;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            cursor: pointer;
+                            border-radius: 5px;
+                            &:hover {
+                                background-color: var(--background-color);
+                            }
+                            & > img {
+                                width: 21px;
+                                height: 21px;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        .modal-buttons {
+            width: calc(100% - 24px);
+            height: 50px;
+            display: flex;
+
+            margin: 0 12px;
+            align-items: center;
+            justify-content: center;
+            border-top: 1px solid var(--border-color);
+
+            .holding-button,
+            .modify-button {
+                width: 50%;
+                height: 40px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 5px;
+                cursor: pointer;
+                &:hover {
+                    background-color: var(--background-color);
+                }
+                img {
+                    width: 20px;
+                    height: 20px;
+                    margin-right: 5px;
+                }
+            }
+            .divider {
+                width: 1px;
+                height: 30px;
+                border-right: 1px solid var(--border-color);
+                margin: 0px 10px;
+            }
+        }
+    }
+}
+
+.rw-modal-wrapper-show {
+    .rw-modal {
+        opacity: 1;
+    }
+}
+
+.bar {
+    margin: 0px 10px;
+    color: var(--border-color);
+}
+
+.empty-button {
+    width: 170px;
+    height: 35px;
+    background-color: var(--white);
+    border: 1px solid #e9e9e9;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 1.2rem;
+    line-height: 1.42;
+    letter-spacing: -0.14px;
+    color: var(--grey);
+    margin-top: 20px;
+
+    &:hover {
+        background-color: #e9e9e9;
+    }
+
+    & > img {
+        width: 15px;
+        height: 15px;
+        margin-top: 3.5px;
+    }
+}
