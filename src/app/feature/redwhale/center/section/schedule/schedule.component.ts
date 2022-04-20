@@ -141,7 +141,12 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
             .subscribe((instructorList) => {
                 this.instructorList$_ = _.cloneDeep(instructorList)
                 this.initViewsOption(this.selectedDateViewType)
-                if (instructorList.length > 0) {
+                this.setEventsFiltersChange(this.instructorList$_, this.lectureFilter$_)
+                const checkedInstructorLength =
+                    instructorList.length == 0
+                        ? 0
+                        : instructorList.reduce((checkedLen, val) => checkedLen + (val.selected ? 1 : 0), 0)
+                if (checkedInstructorLength > 0) {
                     this.getTaskList(this.selectedDateViewType)
                 }
             })
@@ -369,7 +374,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     getTaskList(viewType: ViewType) {
-        const calendars: Calendar[] = this.instructorList$_.filter((v) => v.selected).map((v) => v.instructor)
+        const calendars: Calendar[] = this.instructorList$_.map((v) => v.instructor) // .filter((v) => v.selected)
         const calendarIds: string[] = calendars.map((v) => v.id)
         this.CenterCalendarService.getAllCalendarTask(this.center.id, {
             calendar_ids: calendarIds,
@@ -415,7 +420,6 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
     setEventsFiltersChange(instructors: FromSchedule.InstructorType[], scheduleType: FromSchedule.LectureFilter) {
         if (!this.fullCalendar) return
 
-        console.log('setEventsFiltersChange ---------------- ', instructors, scheduleType, this.eventList)
         const instructorEventList = []
         const lessonTypeEventList = []
         // filter instructor
@@ -425,18 +429,17 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
                     _.findIndex(instructors, (instructor) => {
                         return (
                             instructor.selected &&
-                            instructor.instructor.calendar_user.id == String(event.originItem.responsibility.id)
+                            instructor.instructor.calendar_user.id == event.originItem.responsibility.id
                         )
                     }) != -1
                 ) {
+                    instructorEventList.push(event)
                 }
-                instructorEventList.push(event)
             })
         }
 
         // filter lessonType
         if (scheduleType && this.eventList.length > 0) {
-            console.log('setEventsFiltersChange --- scheduleType, eventList : ', scheduleType, this.eventList)
             _.forEach(this.eventList, (event) => {
                 console.log('event : ', event)
                 if (scheduleType[event.originItem.type_code].selected == true) {
@@ -444,6 +447,16 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
                 }
             })
         }
+
+        console.log(
+            'setEventsFiltersChange ---------------- ',
+            instructors,
+            'scheduleType: ',
+            scheduleType,
+            'eventList : ',
+            this.eventList
+        )
+        console.log('lessonTypeEventList : ', lessonTypeEventList, ',  instructorEventList : ', instructorEventList)
 
         // apply filtered task list
         if (lessonTypeEventList.length > 0 && instructorEventList.length > 0) {
