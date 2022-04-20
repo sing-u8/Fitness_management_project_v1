@@ -1,0 +1,157 @@
+.rw-modal-background {
+    display: none;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: var(--font-color);
+    opacity: 0;
+    transition: opacity 0.3s cubic-bezier(0.25, 0.8, 0.25, 0.8);
+    z-index: 999;
+}
+
+.rw-modal-background-show {
+    opacity: 0.3;
+}
+
+.rw-modal-wrapper {
+    display: none;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1000;
+
+    .rw-modal {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+        width: 585px;
+        height: 475px;
+        border-radius: 6px;
+        background-color: var(--white);
+        box-shadow: 0 0 10px 0 rgba(181, 181, 181, 0.11);
+        opacity: 0;
+        transition: opacity 0s;
+        padding: 15px 0 20px 0px;
+
+        .title {
+            width: calc(100% - 15px);
+            height: 35px;
+            // margin: 15px 0px;
+            margin-bottom: 15px;
+            padding: 0 5px;
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border-color);
+
+            .close-button {
+                width: 24px;
+                height: 24px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                border-radius: 5px;
+                &:hover {
+                    background-color: var(--background-color);
+                }
+                & > img {
+                    width: 21px;
+                    height: 21px;
+                }
+            }
+        }
+        .list {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: calc(100%);
+            height: 390px;
+
+            .membership-card {
+                width: 545px;
+                height: 70px;
+                border-radius: 5px;
+                border: 1px solid var(--border-color);
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 15px;
+                position: relative;
+
+                &:not(:last-of-type) {
+                    margin-bottom: 10px;
+                }
+                .left {
+                    height: 38px;
+                    display: flex;
+                    .icon {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        width: 36px;
+                        height: 36px;
+                        border-radius: 50%;
+                        margin-right: 12px;
+                        img {
+                            width: 24px;
+                            height: 24px;
+                        }
+                    }
+
+                    .content {
+                        height: 38px;
+                        display: flex;
+                        flex-direction: column;
+                        align-items: space-between;
+                    }
+                }
+                .right {
+                    height: 38px;
+                    display: flex;
+                    align-items: flex-end;
+                }
+            }
+        }
+
+        .non-list {
+            width: calc(100%);
+            height: 390px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+
+            height: 100%;
+
+            img {
+                margin-bottom: 10px;
+            }
+
+            .find-text {
+                margin-top: 8px;
+            }
+            .grey {
+                color: var(--grey);
+            }
+            .top-image {
+                margin-bottom: 20px;
+            }
+        }
+    }
+}
+
+.bar {
+    margin: 0px 10px;
+    color: var(--border-color);
+}
+
+.rw-modal-wrapper-show {
+    .rw-modal {
+        opacity: 1;
+    }
+}

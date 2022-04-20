@@ -1,0 +1,60 @@
+* {
+    padding: 0px;
+    margin: 0px;
+}
+
+.flip-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    position: relative;
+    margin-bottom: 15px;
+
+    .flip-header {
+        display: flex;
+        align-items: flex-end;
+        width: calc(100%);
+        height: 30px;
+        margin-bottom: 8px;
+        cursor: pointer;
+
+        .lesson-length {
+            margin-left: 10px;
+            color: var(--grey);
+        }
+
+        .mdi {
+            transform: rotateX(0deg);
+            transition: transform 0.2s linear;
+            -moz-transition: transform 0.2s linear;
+            -webkit-transition: transform 0.2s linear;
+            -o-transition: transform 0.2s linear;
+            font-size: 1.8rem;
+            margin-right: 5px;
+        }
+
+        &.open {
+            .mdi {
+                transform: rotateX(180deg);
+                transition: transform 0.2s linear;
+                -moz-transition: transform 0.2s linear;
+                -webkit-transition: transform 0.2s linear;
+                -o-transition: transform 0.2s linear;
+            }
+        }
+    }
+
+    .contents {
+        display: none;
+        width: 100%;
+
+        transition: transform 0.2s linear;
+        -moz-transition: transform 0.2s linear;
+        -webkit-transition: transform 0.2s linear;
+        -o-transition: transform 0.2s linear;
+        &.open {
+            display: block;
+        }
+    }
+}

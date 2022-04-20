@@ -123,8 +123,8 @@
             <p class="small-title">수업 시작 시간</p>
             <rw-time-picker2
               [time] = "timepick"
-              [startTime]= "gymOperatingTime.start"
-              [endTime]= "gymOperatingTime.end"
+              [startTime]= "centerOperatingTime.start"
+              [endTime]= "centerOperatingTime.end"
               width="135"
               [dropUp]="true"
               (onTimeClick)="onTimeClick($event)"
@@ -183,7 +183,7 @@
           <div class="repeat-day-of-week">
             <p class="small-title">반복 요일</p>
             <rw-sch-day-repeat-select
-              [dayList]="repeatOfWeek"
+              [dayList]=""
               (onDayChange)="onDayRepeatChange($event)"
             ></rw-sch-day-repeat-select>
 
@@ -192,8 +192,8 @@
             <p class="small-title">수업 시작 시간</p>
             <rw-time-picker2
               [time] = "timepick"
-              [startTime]= "gymOperatingTime.start"
-              [endTime]= "gymOperatingTime.end"
+              [startTime]= "centerOperatingTime.start"
+              [endTime]= "centerOperatingTime.end"
               width="285"
               [dropUp]="true"
               (onTimeClick)="onTimeClick($event)"

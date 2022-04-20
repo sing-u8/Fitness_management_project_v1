@@ -1,0 +1,78 @@
+* {
+    padding: 0px;
+    margin: 0px;
+}
+
+section.drawer-lesson-card {
+    width: 285px;
+    height: 84px;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    position: relative;
+
+    &.select-mode {
+        cursor: pointer;
+        &:hover {
+            box-shadow: 0 0 6px 0 rgba(172, 172, 172, 0.2);
+        }
+    }
+
+    .card-top {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        .icon {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            margin-right: 8px;
+            img {
+                width: 24px;
+                height: 24px;
+            }
+        }
+
+        .card-desc {
+            display: flex;
+            flex-direction: column;
+            height: 37px;
+            width: calc(100% - 42px);
+            justify-content: space-between;
+
+            .card-category {
+                color: var(--grey);
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+            .card-title {
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+        }
+    }
+    .card-bottom {
+        .card-desc2 {
+            text-align: end;
+            width: 100%;
+            align-self: flex-end;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+    }
+}
+
+.bar {
+    margin: 0px 10px;
+    color: var(--border-color);
+}
