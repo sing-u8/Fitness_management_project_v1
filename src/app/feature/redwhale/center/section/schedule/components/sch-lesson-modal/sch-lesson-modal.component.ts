@@ -81,6 +81,8 @@ export class SchLessonModalComponent implements AfterViewChecked, OnChanges {
             this.initReservationCancelEndTime()
             // ! 나중에 맞는 속성인지 확인 필요
             this.setRepeatDayOfWeek(this.lessonData.repeat_cycle_unit_code)
+
+            this.initLessonCardData()
         }
         console.log('lessonData in g modal: ', this.lessonData)
     }
@@ -165,21 +167,15 @@ export class SchLessonModalComponent implements AfterViewChecked, OnChanges {
     }
 
     initReservationEnableTime() {
-        // this.reservationEnableTime =
-        //     dayjs(this.lessonData.date + ' ' + this.lessonData.start_time)
-        //         .subtract(this.lessonData.lesson.reservation_start_day, 'day')
-        //         .format('MM.DD a hh:mm') +
-        //     ' - ' +
-        //     dayjs(this.lessonData.date + ' ' + this.lessonData.start_time)
-        //         .subtract(this.lessonData.lesson.reservation_end_hour, 'hour')
-        //         .format('MM.DD a hh:mm') +
-        //     ' 예약 가능'
+        this.reservationEnableTime =
+            dayjs(this.lessonData.class.start_booking).format('MM.DD A hh:mm') +
+            ' - ' +
+            dayjs(this.lessonData.class.end_booking).format('MM.DD A hh:mm') +
+            ' 예약 가능'
     }
     initReservationCancelEndTime() {
-        // this.reservationCancelEndTime =
-        //     dayjs(this.lessonData.date + ' ' + this.lessonData.start_time)
-        //         .subtract(this.lessonData.lesson.reservation_cancel_end_hour, 'hour')
-        //         .format('YYYY.MM.DD a hh:mm') + ' 까지 예약 취소 가능'
+        this.reservationCancelEndTime =
+            dayjs(this.lessonData.class.cancel_booking).format('YYYY.MM.DD A hh:mm') + ' 까지 예약 취소 가능'
     }
 
     public repeatMather = {
@@ -206,5 +202,22 @@ export class SchLessonModalComponent implements AfterViewChecked, OnChanges {
                 .slice(0, -2)
         }
         console.log('setRepeatDayOfWeek: ', this.repeatText)
+    }
+
+    public lessonCardData = {
+        categName: '',
+        lessonName: '',
+        duration: 0,
+        lessonType: '',
+        instructor: undefined,
+    }
+    initLessonCardData() {
+        this.lessonCardData = {
+            categName: this.lessonData.class.category_name,
+            lessonName: this.lessonData.class.name,
+            duration: this.lessonData.class.duration,
+            lessonType: this.lessonData.class.type_code == 'class_item_type_onetoone' ? '1:1 수업' : '그룹 수업',
+            instructor: this.lessonData.responsibility.center_user_name,
+        }
     }
 }

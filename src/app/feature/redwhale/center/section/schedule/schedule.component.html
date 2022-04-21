@@ -161,7 +161,7 @@
     <div class="member-schedule-tooltip-tail"></div>
 </div>
 
-<!--
+
 <rw-sch-lesson-modal
     [(visible)]="doShowModifyLessonEventModal"
     [lessonData] = "lessonEventData"
@@ -170,7 +170,7 @@
     (delete)="onDeleteLessonEvent($event)"
     (reserveMember) = "onReserveMember($event)"
     (cancelReservedMember)= "showCancelReserveModal($event)"
-></rw-sch-lesson-modal> -->
+></rw-sch-lesson-modal>
 
 <!-- <rw-modal
     [(visible)]="doShowCancelReserveModal"
@@ -178,19 +178,19 @@
     (cancel)="onCancelReserveModalCancel()"
     (confirm)="onCancelReserveModalConfirm()"
 ></rw-modal> -->
-<!--
-<rw-sch-reserve-member-modal
+
+<!-- <rw-sch-reserve-member-modal
     [(visible)]="doShowReserveModal"
     [lessonTask]="reserveLessonData"
     (cancel)="onReserveModalCancel()"
     (confirm)="onReserveModalConfirm($event)"
-></rw-sch-reserve-member-modal>
+></rw-sch-reserve-member-modal> -->
 <rw-sch-modify-repeat-lesson-modal
     [(visible)]="doShowRepeatLessonOptionModal"
     [title]="repeatLessonTitle"
     (cancel)="onRepeatLessonOptionCancel()"
     (confirm)="onRepeatLessonOptionConfirm($event)"
-></rw-sch-modify-repeat-lesson-modal> -->
+></rw-sch-modify-repeat-lesson-modal>
 
 
 <rw-sch-general-modal
@@ -208,12 +208,12 @@
     (cancel)="onDeleteEventCancel()"
     (confirm)="onDeleteEventConfirm()"
 ></rw-modal>
-<!-- <rw-sch-delete-repeat-lesson-modal
+<rw-sch-delete-repeat-lesson-modal
     [(visible)]="doShowDelRepeatLessonModal"
     [title]="delRepeatLessonTitle"
     (cancel)="onDelRepeatLessonCancel()"
     (confirm)="onDelRepeatLessonConfirm($event)"
-></rw-sch-delete-repeat-lesson-modal> -->
+></rw-sch-delete-repeat-lesson-modal>
 
 <rw-modal
     [(visible)]="doShowReservedDelLessonModal"

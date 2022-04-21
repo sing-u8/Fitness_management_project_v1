@@ -20,6 +20,7 @@ import { CenterUsersService } from '@services/center-users.service'
 import { Center } from '@schemas/center'
 import { Calendar } from '@schemas/calendar'
 import { CalendarTask } from '@schemas/calendar-task'
+import { Loading } from '@schemas/store/loading'
 
 // rxjs
 import { Observable, Subject, lastValueFrom } from 'rxjs'
@@ -79,6 +80,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
     // ngrx vars
     public instructorList$_: FromSchedule.InstructorType[] = []
     public lectureFilter$_: FromSchedule.LectureFilter = FromSchedule.LectureFilterInit
+    public isLoading$_: Loading = 'idle'
 
     constructor(
         private nxStore: Store,
@@ -106,6 +108,10 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
 
     async ngOnInit(): Promise<void> {
         this.user = this.storageService.getUser()
+
+        this.nxStore.pipe(select(ScheduleSelector.isLoading), takeUntil(this.unsubscriber$)).subscribe((loading) => {
+            this.isLoading$_ = loading
+        })
 
         this.nxStore
             .pipe(select(ScheduleSelector.doLessonsExist), takeUntil(this.unsubscriber$))
@@ -441,8 +447,16 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
         // filter lessonType
         if (scheduleType && this.eventList.length > 0) {
             _.forEach(this.eventList, (event) => {
-                console.log('event : ', event)
-                if (scheduleType[event.originItem.type_code].selected == true) {
+                const isNormalType =
+                    scheduleType['calendar_task_type_normal'].selected == true && event.originItem.class == null
+                const isOneToOneType =
+                    scheduleType['calendar_task_type_onetoone'].selected == true &&
+                    event.originItem.class?.type_code == 'class_item_type_onetoone'
+                const isGroupType =
+                    scheduleType['calendar_task_type_group'].selected == true &&
+                    event.originItem.class?.type_code == 'class_item_type_group'
+
+                if (isNormalType || isOneToOneType || isGroupType) {
                     lessonTypeEventList.push(event)
                 }
             })
@@ -584,8 +598,8 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
 
     // full calendar event functions
     onEventClick(arg: EventClickArg) {
-        // ! 비교하는 속성값이 대응되는 속성들인지 확인 필요 !!!!!!!
         console.log('onEventClick arg: ', arg)
+
         if (arg.event.extendedProps['originItem'].type_code == 'calendar_task_type_normal') {
             this.generalEventData = arg.event.extendedProps['originItem']
             this.generalAssignee = arg.event.extendedProps['assginee']
@@ -598,6 +612,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
 
     onDateSelect(arg) {
         console.log('onDateSelect: ', arg)
+        if (this.isLoading$_ != 'done') return
         if (arg.view.type == 'dayGridMonth') {
             if (this.dayCellLeave) {
                 this.hideScheduleDropdown()
@@ -617,6 +632,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
         this.showScheduleDropdown()
     }
     onDateClick(arg) {
+        if (this.isLoading$_ != 'done') return
         if (arg.view.type == 'dayGridMonth') {
             if (this.dayCellLeave) {
                 this.hideScheduleDropdown()
@@ -707,7 +723,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
                 eventTimeEl.classList.add('rw-typo-subtext4')
                 eventTimeEl.style.color = '#C9C9C9'
                 eventTimeEl.style.fontSize = '1.1rem'
-                eventTimeEl.innerHTML = `${arg.event.extendedProps.assginee.name} ㆍ ${arg.event.extendedProps.originItem.lesson.reservation.length}/${arg.event.extendedProps.originItem.lesson.people}명`
+                eventTimeEl.innerHTML = `${arg.event.extendedProps.assginee.name} ㆍ 0/10명` // ${arg.event.extendedProps.originItem.lesson.reservation.length}/${arg.event.extendedProps.originItem.lesson.people}명`
                 // event color tag
                 eventMainFrame_el.insertAdjacentHTML(
                     'afterbegin',
@@ -1145,11 +1161,12 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
     // }
     // public beCanceledReservationData: { taskReservation: TaskReservation; lessonData: CalendarTask } = undefined
     // doShowCancelReserveModal = false
-    // showCancelReserveModal(cancelData: { taskReservation: TaskReservation; lessonData: CalendarTask }) {
-    //     this.beCanceledReservationData = cancelData
-    //     this.doShowCancelReserveModal = true
-    //     this.hideModifyLessonEventModal()
-    // }
+    showCancelReserveModal(cancelData: { taskReservation: any; lessonData: CalendarTask }) {
+        // TaskReservation --> type
+        // this.beCanceledReservationData = cancelData
+        // this.doShowCancelReserveModal = true
+        // this.hideModifyLessonEventModal()
+    }
     // hideCancelReserveModal() {
     //     this.doShowCancelReserveModal = false
     // }

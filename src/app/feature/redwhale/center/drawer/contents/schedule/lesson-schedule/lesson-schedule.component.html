@@ -11,7 +11,14 @@
   </div>
   <div class="content thin-scroll-y-overlay2">
 
-    <div *ngIf="!isLessonCategInit; else lesson_list" class="lesson-skeleton"></div>
+    <div *ngIf="!isLessonCategInit; else lesson_list" class="lesson-skeleton">
+      <ngx-skeleton-loader
+        *ngFor="let _ of [1,2,3,4,5,6]"
+        count = 1
+        appearance="circle"
+        [theme]="{width: '285px', height: '84px', 'border-radius': '5px', 'margin-bottom': '8px'}"
+      ></ngx-skeleton-loader>
+    </div>
 
     <ng-template #lesson_list  >
       <div
@@ -183,7 +190,7 @@
           <div class="repeat-day-of-week">
             <p class="small-title">반복 요일</p>
             <rw-sch-day-repeat-select
-              [dayList]=""
+              [dayList]="repeatOfWeek"
               (onDayChange)="onDayRepeatChange($event)"
             ></rw-sch-day-repeat-select>
 

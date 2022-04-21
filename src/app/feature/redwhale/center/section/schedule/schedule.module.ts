@@ -11,6 +11,7 @@ import { SchFilterDropdownComponent } from './components/sch-filter-dropdown/sch
 import { SchCenterOpratingModalComponent } from './components/sch-center-operating-modal/sch-center-operating-modal.component'
 import { SchDeleteRepeatLessonModalComponent } from './components/sch-delete-repeat-lesson-modal/sch-delete-repeat-lesson-modal.component'
 import { SchGeneralModalComponent } from './components/sch-general-modal/sch-general-modal.component'
+import { SchLessonModalComponent } from './components/sch-lesson-modal/sch-lesson-modal.component'
 import { SchModifyRepeatLessonModalComponent } from './components/sch-modify-repeat-lesson-modal/sch-modify-repeat-lesson-modal.component'
 
 // section module
@@ -29,6 +30,7 @@ import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader'
         SchDeleteRepeatLessonModalComponent,
         SchGeneralModalComponent,
         SchModifyRepeatLessonModalComponent,
+        SchLessonModalComponent,
     ],
     imports: [
         AngularCommonModule,

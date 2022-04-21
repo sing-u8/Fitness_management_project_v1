@@ -4,7 +4,7 @@ import { MembershipItem } from './membership-item'
 export interface ClassItem {
     id: string
     category_name: string
-    type_code: string // class_item_type_onetoone, class_item_type_group
+    type_code: 'class_item_type_onetoone' | 'class_item_type_group'
     type_code_name: string
     name: string
     duration: number

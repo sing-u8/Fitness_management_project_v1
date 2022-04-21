@@ -78,8 +78,8 @@ export class LessonScheduleComponent implements OnInit, OnDestroy, AfterViewInit
     public timepick = ''
 
     // day repeat var
-    public repeatOfWeek = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']
-    onDayRepeatChange(dayList) {
+    public repeatOfWeek = [0, 1, 2, 3, 4, 5, 6]
+    onDayRepeatChange(dayList: number[]) {
         this.repeatOfWeek = dayList
     }
 
@@ -165,6 +165,19 @@ export class LessonScheduleComponent implements OnInit, OnDestroy, AfterViewInit
 
     onTimeClick(time: { key: string; name: string }) {
         this.timepick = time.key
+        console.log('onTimeClick : ', time, this.timepick)
+        console.log('selectedLesson: ', this.selectedLesson)
+        console.log('endTime : ', this.getLessonEndTime(this.timepick))
+    }
+
+    getLessonEndTime(startTime: string) {
+        // startTime = xx:xx:xx
+        const startTimeList = _.split(startTime, ':', 2)
+        const minute = Number(startTimeList[1]) + Number(this.selectedLesson.lesson.duration)
+        const quotient = parseInt(`${minute / 60}`, 10)
+        const remainder = Number(minute) % 60
+        const endTime = `${Number(startTimeList[0]) + quotient}:${Number(startTimeList[1]) + remainder}`
+        return endTime // xx:xx
     }
 
     // ------------------------------------------ 직원 셀렉트 데이터 초기화 -------------------------------------------
@@ -196,24 +209,28 @@ export class LessonScheduleComponent implements OnInit, OnDestroy, AfterViewInit
                 type_code: 'calendar_task_type_class',
                 name: this.planDetailInputs.plan,
                 start_date: dayjs(this.repeatDatepick.startDate).format('YYYY-MM-DD'),
-                end_date: dayjs(this.repeatDatepick.endDate).format('YYYY-MM-DD'),
+                end_date: dayjs(this.repeatDatepick.startDate).format('YYYY-MM-DD'),
                 all_day: false,
-                start_time: this.timepick,
-                end_time: this.timepick, // !!확인 필요
+                start_time: this.timepick.slice(0, 5),
+                end_time: this.getLessonEndTime(this.timepick),
                 color: this.selectedLesson.lesson.color,
                 memo: this.planDetailInputs.detail,
                 repeat: true,
-                repeat_day_of_the_week: [], // !! 변환 필요 this.repeatOfWeek,
+                repeat_day_of_the_week: this.repeatOfWeek,
+                repeat_cycle_unit_code: 'calendar_task_group_repeat_cycle_unit_week',
+                repeat_cycle: 1,
+                repeat_termination_type_code: 'calendar_task_group_repeat_termination_type_date',
+                repeat_end_date: dayjs(this.repeatDatepick.endDate).format('YYYY-MM-DD'),
                 responsibility_user_id: selectedStaff.instructor.calendar_user.id,
                 class: {
                     class_item_id: this.selectedLesson.lesson.id,
                     type_code: this.selectedLesson.lesson.type_code,
-                    state_code: '',
-                    duration: '',
+                    state_code: 'calendar_task_class_state_active',
+                    duration: String(this.selectedLesson.lesson.duration),
                     capacity: this.people,
-                    start_booking: this.reserveSettingInputs.reservation_start,
-                    end_booking: this.reserveSettingInputs.reservation_end,
-                    cancel_booking: this.reserveSettingInputs.reservation_cancel_end,
+                    start_booking_until: this.reserveSettingInputs.reservation_start,
+                    end_booking_before: this.reserveSettingInputs.reservation_end,
+                    cancel_booking_before: this.reserveSettingInputs.reservation_cancel_end,
                     instructor_user_ids: [selectedStaff.instructor.calendar_user.id],
                 },
             }
@@ -224,9 +241,10 @@ export class LessonScheduleComponent implements OnInit, OnDestroy, AfterViewInit
                 type_code: 'calendar_task_type_class',
                 name: this.planDetailInputs.plan,
                 start_date: dayjs(this.dayPick.date).format('YYYY-MM-DD'),
-                end_date: dayjs(this.dayPick.date).format('YYYY-MM-DD'), // ! 확인 필요
+                end_date: dayjs(this.dayPick.date).format('YYYY-MM-DD'),
                 all_day: false,
-                start_time: this.timepick,
+                start_time: this.timepick.slice(0, 5),
+                end_time: this.getLessonEndTime(this.timepick),
                 color: this.selectedLesson.lesson.color,
                 memo: this.planDetailInputs.detail,
                 repeat: false,
@@ -234,12 +252,12 @@ export class LessonScheduleComponent implements OnInit, OnDestroy, AfterViewInit
                 class: {
                     class_item_id: this.selectedLesson.lesson.id,
                     type_code: this.selectedLesson.lesson.type_code,
-                    state_code: '',
-                    duration: '',
+                    state_code: 'calendar_task_class_state_active',
+                    duration: String(this.selectedLesson.lesson.duration),
                     capacity: this.people,
-                    start_booking: this.reserveSettingInputs.reservation_start,
-                    end_booking: this.reserveSettingInputs.reservation_end,
-                    cancel_booking: this.reserveSettingInputs.reservation_cancel_end,
+                    start_booking_until: this.reserveSettingInputs.reservation_start,
+                    end_booking_before: this.reserveSettingInputs.reservation_end,
+                    cancel_booking_before: this.reserveSettingInputs.reservation_cancel_end,
                     instructor_user_ids: [selectedStaff.instructor.calendar_user.id],
                 },
             }
@@ -259,14 +277,6 @@ export class LessonScheduleComponent implements OnInit, OnDestroy, AfterViewInit
             },
         })
     }
-
-    // onSaveClick() {
-    //     if (this.dayRepeatSwitch) {
-    //         this.showRepeatSaveLessonModal()
-    //     } else {
-    //         this.showSaveLessonModal()
-    //     }
-    // }
 
     // -----------------------------  일정 생성 취소 모달 ------------------------------------
     public cancelModalText = {

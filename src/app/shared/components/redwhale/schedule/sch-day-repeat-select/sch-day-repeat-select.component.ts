@@ -29,7 +29,7 @@ const dayOfWeekInit = [
 export class SchDayRepeatSelectComponent implements OnInit, AfterViewInit, OnChanges {
     @Input() dayList: Array<number>
 
-    @Output() onDayChange = new EventEmitter<Array<string>>()
+    @Output() onDayChange = new EventEmitter<Array<number>>()
 
     public dayOfWeek = dayOfWeekInit
     public headTitle = ''
@@ -68,7 +68,7 @@ export class SchDayRepeatSelectComponent implements OnInit, AfterViewInit, OnCha
     }
 
     emitDays() {
-        const dayList = []
+        const dayList: number[] = []
         _.forEach(this.dayOfWeek, (dayObj, idx) => {
             dayObj.selected ? dayList.push(dayObj.key) : null
         })

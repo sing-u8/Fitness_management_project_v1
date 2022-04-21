@@ -221,18 +221,18 @@ export interface UpdateCalendarTaskReqBody {
     repeat_count?: number
     repeat_end_date?: string
     responsibility_user_id?: string
-    class?: ClassForCU // !일반 일정일 때는 추가해야하나 ?
+    class?: ClassForCU
 }
 
 export interface ClassForCU {
     class_item_id?: string
     type_code?: string
-    state_code?: string
+    state_code?: 'calendar_task_class_state_active' | 'calendar_task_class_state_inactive'
     duration?: string
     capacity?: string
-    start_booking?: string
-    end_booking?: string
-    cancel_booking?: string
+    start_booking_until?: string
+    end_booking_before?: string
+    cancel_booking_before?: string
     instructor_user_ids: string[]
 }
 

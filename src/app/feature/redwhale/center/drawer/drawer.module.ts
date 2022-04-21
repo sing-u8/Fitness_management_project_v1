@@ -13,6 +13,9 @@ import { LessonScheduleComponent } from './contents/schedule/lesson-schedule/les
 import { ModifyGeneralScheduleComponent } from './contents/schedule/modify-general-schedule/modify-general-schedule.component'
 // import { ModifyLessonScheduleComponent } from './contents/schedule/modify-lesson-schedule/modify-lesson-schedule.component'
 
+// ngxSkeletonLoader module
+import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader'
+
 @NgModule({
     declarations: [
         DrawerComponent,
@@ -24,7 +27,7 @@ import { ModifyGeneralScheduleComponent } from './contents/schedule/modify-gener
         ModifyGeneralScheduleComponent,
         // ModifyLessonScheduleComponent,
     ],
-    imports: [CommonModule, SharedModule, FormsModule, ReactiveFormsModule],
+    imports: [CommonModule, SharedModule, FormsModule, ReactiveFormsModule, NgxSkeletonLoaderModule],
     exports: [DrawerComponent, FormsModule],
     providers: [],
 })
