@@ -137,7 +137,7 @@ export class CenterCalendarService {
     }
 
     // 테스크 삭제
-    deleteCalendarTask(centerId: string, calendarId: string, taskId: string, mode?: DeleteMode): Observable<Response> {
+    deleteCalendarTask(centerId: string, calendarId: string, taskId: string, mode?: UpdateMode): Observable<Response> {
         const url = this.SERVER + `/${centerId}/calendar/${calendarId}/task/${taskId}?mode=${mode}`
 
         return this.http.delete<Response>(url, this.options).pipe(
@@ -237,3 +237,4 @@ export interface ClassForCU {
 }
 
 export type DeleteMode = 'one' | 'after' | 'all'
+export type UpdateMode = DeleteMode

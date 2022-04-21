@@ -1,31 +1,39 @@
 import { Component, OnInit, OnDestroy, AfterViewInit, ViewChild, ElementRef } from '@angular/core'
-import { Subject } from 'rxjs'
-import { takeUntil } from 'rxjs/operators'
-import * as dayjs from 'dayjs'
+
+import _ from 'lodash'
+import dayjs from 'dayjs'
 import isSameOrBefor from 'dayjs/plugin/isSameOrBefore'
 dayjs.extend(isSameOrBefor)
 
 import { GlobalService } from '@services/global.service'
 import { StorageService } from '@services/storage.service'
-import { GymUserService } from '@services/gym-user.service'
-import { GymLessonService } from '@services/gym-lesson.service'
-
-import {
-    GymScheduleStateService,
-    Instructor,
-    ModifyLessonOption,
-    GymOperatingTime,
-} from '@services/etc/gym-schedule-state.service'
-import { GymCalendarService, UpdateTaskRequestBody } from '@services/gym-calendar.service'
+import { CenterUsersService } from '@services/center-users.service'
+import { CenterLessonService } from '@services/center-lesson.service'
+import { CenterCalendarService, UpdateCalendarTaskReqBody, UpdateMode } from '@services/center-calendar.service'
 
 import { User } from '@schemas/user'
-import { GymUser } from '@schemas/gym-user'
-import { Gym } from '@schemas/gym'
-import { LessonCategory } from '@schemas/lesson-category'
-import { LessonItem } from '@schemas/lesson-item'
+import { CenterUser } from '@schemas/center-user'
+import { Center } from '@schemas/center'
+import { ClassCategory } from '@schemas/class-category'
+import { ClassItem } from '@schemas/class-item'
 import { MembershipItem } from '@schemas/membership-item'
-import { Task } from '@schemas/task'
-import _ from 'lodash'
+import { Calendar } from '@schemas/calendar'
+import { CalendarTask } from '@schemas/calendar-task'
+
+// rxjs
+import { Subject } from 'rxjs'
+import { takeUntil } from 'rxjs/operators'
+
+// ngrx
+import { Store, select } from '@ngrx/store'
+import { concatLatestFrom } from '@ngrx/effects'
+import * as ScheduleActions from '@centerStore/actions/sec.schedule.actions'
+import * as ScheduleReducer from '@centerStore/reducers/sec.schedule.reducer'
+import * as ScheduleSelector from '@centerStore/selectors/sec.schedule.selector'
+
+import { scheduleIsResetSelector, drawerSelector } from '@appStore/selectors'
+import { setScheduleDrawerIsReset, closeDrawer } from '@appStore/actions/drawer.action'
+import { showToast } from '@appStore/actions/toast.action'
 
 @Component({
     selector: 'modify-lesson-schedule',
@@ -33,12 +41,12 @@ import _ from 'lodash'
     styleUrls: ['./modify-lesson-schedule.component.scss'],
 })
 export class ModifyLessonScheduleComponent implements OnInit, OnDestroy, AfterViewInit {
-    public gymOperatingTime: GymOperatingTime = { start: null, end: null }
+    public gymOperatingTime: ScheduleReducer.CenterOperatingHour = { start: null, end: null }
 
     public titleTime: string
 
     public lessonEvent: Task = undefined
-    public lessonRepeatOption: ModifyLessonOption
+    public lessonRepeatOption: UpdateMode
 
     // save confirm modal var
     public doShowConfirmSaveModal = false
@@ -107,25 +115,24 @@ export class ModifyLessonScheduleComponent implements OnInit, OnDestroy, AfterVi
         this.color = color
     }
     // - // assignee var
-    public staffSelect_list: Array<{ name: string; value: GymUser }> = []
-    public StaffSelectValue: { name: string; value: GymUser } = { name: 'test', value: undefined }
+    public staffSelect_list: Array<{ name: string; value: CenterUser }> = []
+    public StaffSelectValue: { name: string; value: CenterUser } = { name: 'test', value: undefined }
 
-    public instructorList: Array<Instructor> = []
+    public instructorList: Array<ScheduleReducer.InstructorType> = []
 
-    public gym: Gym
+    public center: Center
     public user: User
 
     public unsubscribe$ = new Subject<void>()
 
     constructor(
-        private globalService: GlobalService,
         private storageService: StorageService,
-        private gymLessonService: GymLessonService,
-        private gymUserService: GymUserService,
-        private gymScheduleState: GymScheduleStateService,
-        private gymCalendarService: GymCalendarService
+        private centerLessonService: CenterLessonService,
+        private centerUsersService: CenterUsersService,
+        private centerCalendarService: CenterCalendarService,
+        private nxStore: Store
     ) {
-        this.gym = this.storageService.getGym()
+        this.center = this.storageService.getCenter()
         this.selectLessonOptions()
         this.selectInstructors()
         this.selectLessonEvent()
@@ -135,9 +142,8 @@ export class ModifyLessonScheduleComponent implements OnInit, OnDestroy, AfterVi
     ngOnInit(): void {
         this.titleTime = dayjs().format('M/D (dd) A hh시 mm분')
 
-        this.gymScheduleState
-            .selectGymOperationTime()
-            .pipe(takeUntil(this.unsubscribe$))
+        this.nxStore
+            .pipe(select(ScheduleSelector.operatingHour), takeUntil(this.unsubscribe$))
             .subscribe((operatingTime) => {
                 this.gymOperatingTime = operatingTime
             })
@@ -149,7 +155,7 @@ export class ModifyLessonScheduleComponent implements OnInit, OnDestroy, AfterVi
     ngAfterViewInit(): void {}
 
     closeDrawer() {
-        this.globalService.closeDrawer()
+        this.nxStore.dispatch(closeDrawer())
     }
 
     onTimeClick(time: { key: string; name: string }) {
@@ -160,7 +166,7 @@ export class ModifyLessonScheduleComponent implements OnInit, OnDestroy, AfterVi
 
     // ------------------------------------------register lesson task------------------------------------------------
     modifyLessonTask(fn?: () => void) {
-        let reqBody: UpdateTaskRequestBody = undefined
+        let reqBody: UpdateCalendarTaskReqBody = undefined
         const selectedStaff = _.find(this.instructorList, (item) => {
             return this.StaffSelectValue.value.id == item.instructor.user_id
         })
@@ -210,7 +216,7 @@ export class ModifyLessonScheduleComponent implements OnInit, OnDestroy, AfterVi
         }
 
         this.gymCalendarService
-            .updateTask(this.gym.id, String(this.lessonEvent.id), reqBody as UpdateTaskRequestBody)
+            .updateTask(this.center.id, String(this.lessonEvent.id), reqBody as UpdateCalendarTaskReqBody)
             .subscribe(
                 (res) => {
                     fn ? fn() : null
@@ -229,8 +235,8 @@ export class ModifyLessonScheduleComponent implements OnInit, OnDestroy, AfterVi
     // -----------------------------  일정 생성 수정 모달 ------------------------------------
 
     onSaveButtonClick() {
-        const isLessonReserved: boolean =
-            this.lessonEvent.lesson.reservation.length > 0 || this.reservationExistInOtherTasks ? true : false
+        const isLessonReserved = false
+        // this.lessonEvent.lesson.reservation.length > 0 || this.reservationExistInOtherTasks ? true : false
 
         const isTimePickConsistent = this.initTimepick == this.timepick
         const isRepeatDateConsistent =
@@ -346,22 +352,24 @@ export class ModifyLessonScheduleComponent implements OnInit, OnDestroy, AfterVi
     }
 
     setSelectedStaff(calId: number) {
-        this.gym = this.storageService.getGym()
-        this.gymCalendarService.getCalendarList(this.gym.id).subscribe((calendarList) => {
+        this.center = this.storageService.getCenter()
+        this.gymCalendarService.getCalendarList(this.center.id).subscribe((calendarList) => {
             const calendar_user = _.find(calendarList, (calendar) => {
                 return calendar.id == String(calId)
             })
-            this.gymUserService.getUserList(this.gym.id, '', 'administrator, manager, staff').subscribe((managers) => {
-                managers.forEach((v) => {
-                    this.staffSelect_list.push({
-                        name: v.gym_user_name ?? v.given_name,
-                        value: v,
+            this.gymUserService
+                .getUserList(this.center.id, '', 'administrator, manager, staff')
+                .subscribe((managers) => {
+                    managers.forEach((v) => {
+                        this.staffSelect_list.push({
+                            name: v.gym_user_name ?? v.given_name,
+                            value: v,
+                        })
+                        calendar_user.user_id == v.id
+                            ? (this.StaffSelectValue = { name: v.gym_user_name ?? v.given_name, value: v })
+                            : null
                     })
-                    calendar_user.user_id == v.id
-                        ? (this.StaffSelectValue = { name: v.gym_user_name ?? v.given_name, value: v })
-                        : null
                 })
-            })
         })
     }
 

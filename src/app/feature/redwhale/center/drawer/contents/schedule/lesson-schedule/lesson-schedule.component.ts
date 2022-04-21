@@ -9,7 +9,6 @@ import { CenterUsersService } from '@services/center-users.service'
 import { CenterLessonService } from '@services/center-lesson.service'
 import { CenterCalendarService, CreateCalendarTaskReqBody } from '@services/center-calendar.service'
 
-import { User } from '@schemas/user'
 import { CenterUser } from '@schemas/center-user'
 import { Center } from '@schemas/center'
 import { ClassCategory } from '@schemas/class-category'
@@ -176,7 +175,9 @@ export class LessonScheduleComponent implements OnInit, OnDestroy, AfterViewInit
         const minute = Number(startTimeList[1]) + Number(this.selectedLesson.lesson.duration)
         const quotient = parseInt(`${minute / 60}`, 10)
         const remainder = Number(minute) % 60
-        const endTime = `${Number(startTimeList[0]) + quotient}:${Number(startTimeList[1]) + remainder}`
+        const endTime = `${Number(startTimeList[0]) + quotient}:${remainder}`
+
+        console.log('getLessonEndTime --- : ', startTimeList, minute, quotient, remainder)
         return endTime // xx:xx
     }
 

@@ -16,4 +16,7 @@ export interface CalendarTaskClass {
     cancel_booking: string
     membership_items: Array<MembershipItem>
     instructors: Array<CenterUser>
+    cancel_booking_before: number
+    end_booking_before: number
+    start_booking_until: number
 }

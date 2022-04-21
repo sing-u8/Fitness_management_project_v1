@@ -1069,11 +1069,11 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
     onDeleteLessonEvent(lessonTask: CalendarTask) {
         this.hideModifyLessonEventModal()
         // !! repetition id --> calendar_task_group_id 가 맞는지 확인 필요
-        // if (lessonTask.calendar_task_group_id) {
-        //     this.showDelRepeatLessonModal(lessonTask)
-        // } else {
-        //     this.showDeleteEventModal(lessonTask, 'lesson')
-        // }
+        if (lessonTask.calendar_task_group_id) {
+            this.showDelRepeatLessonModal(lessonTask)
+        } else {
+            this.showDeleteEventModal(lessonTask, 'lesson')
+        }
     }
     onModifyLessonEvent(lessonTask: CalendarTask) {
         // !! repetition id --> calendar_task_group_id 가 맞는지 확인 필요
@@ -1310,6 +1310,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
         )[0].instructor.id
         this.CenterCalendarService.deleteCalendarTask(
             this.center.id,
+            calId,
             String(this.delRepeatLessonData.id),
             this.delRepeatType
         ).subscribe((_) => {

@@ -11,7 +11,7 @@ import {
     ViewChild,
 } from '@angular/core'
 
-// import {} from '@services/center-calendar.service'
+import { DeleteMode } from '@services/center-calendar.service'
 
 @Component({
     selector: 'rw-sch-delete-repeat-lesson-modal',
@@ -21,7 +21,7 @@ import {
 export class SchDeleteRepeatLessonModalComponent implements OnChanges {
     @Input() visible: boolean
     @Input() title: string
-    @Input() reserveOption: 'this' | 'from_now_on' | 'all' = 'this'
+    @Input() reserveOption: DeleteMode = 'one'
 
     @ViewChild('modalBackgroundElement') modalBackgroundElement
     @ViewChild('modalWrapperElement') modalWrapperElement
@@ -66,15 +66,15 @@ export class SchDeleteRepeatLessonModalComponent implements OnChanges {
 
     onCancel(): void {
         this.cancel.emit({})
-        this.reserveOption = 'this'
+        this.reserveOption = 'one'
     }
 
     onConfirm(): void {
         this.confirm.emit(this.reserveOption)
-        this.reserveOption = 'this'
+        this.reserveOption = 'one'
     }
 
-    clickReserveLesson(option: 'this' | 'from_now_on' | 'all') {
+    clickReserveLesson(option: DeleteMode) {
         this.reserveOption = option
     }
 }
