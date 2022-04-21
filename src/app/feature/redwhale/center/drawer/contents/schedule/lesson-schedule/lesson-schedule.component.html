@@ -18,7 +18,7 @@
         *ngIf="!selectedLesson; else lesson_schedule_container"
         class="lesson-container"
       >
-        <rw-lesson-flip-list
+        <dw-lesson-flip-list
           *ngFor="let categ of lessonCategList"
           [lessonCateg]="categ"
         >
@@ -28,7 +28,7 @@
             [lesson]="lesson"
             [categId]="categ.id"
           ></rw-drawer-lesson-card>
-        </rw-lesson-flip-list>
+        </dw-lesson-flip-list>
       </div>
     </ng-template>
 

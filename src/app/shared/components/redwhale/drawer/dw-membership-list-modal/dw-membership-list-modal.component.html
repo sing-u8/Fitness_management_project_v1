@@ -48,12 +48,12 @@
 
             <div class="right">
               <span
-                *ngIf="item.infinity_yn == 0" class="rw-typo-subtext1"
+                *ngIf="item.unlimited == false" class="rw-typo-subtext1"
               >
                 {{item.days}}일<span class="bar">|</span>{{item.count}}회<span class="bar">|</span>￦{{item.price | numberWithCommas}}
               </span>
               <span
-                *ngIf="item.infinity_yn == 1" class="rw-typo-subtext1"
+                *ngIf="item.unlimited == true" class="rw-typo-subtext1"
               >
                 {{item.days}}일<span class="bar">|</span> 무제한<span class="bar">|</span>￦{{item.price | numberWithCommas}}
               </span>
