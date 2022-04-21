@@ -78,6 +78,7 @@ export class GymListSectionComponent implements OnInit, AfterViewInit, OnDestroy
 
     setCenterItemDropUp() {
         this.centers$.pipe(takeUntil(this.unsubscriber$)).subscribe((centerList) => {
+            //
             if (window.innerWidth <= 587) {
                 if (this.gridCols !== 1 && centerList.length > 1) {
                     this.gridCols = 1
