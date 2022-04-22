@@ -1,6 +1,7 @@
 * {
     padding: 0px;
     margin: 0px;
+    text-align: initial;
 }
 .lesson-schedule {
     height: 100%;
@@ -176,7 +177,7 @@
             .time-select {
                 display: flex;
                 justify-content: space-between;
-                width: calc(100%);
+                width: calc(100% - 38px);
                 position: relative;
                 margin-bottom: 20px;
                 .date,

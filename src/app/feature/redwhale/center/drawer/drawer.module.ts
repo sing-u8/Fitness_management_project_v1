@@ -11,7 +11,7 @@ import { NotificationComponent } from './contents/notification/notification.comp
 import { GeneralScheduleComponent } from './contents/schedule/general-schedule/general-schedule.component'
 import { LessonScheduleComponent } from './contents/schedule/lesson-schedule/lesson-schedule.component'
 import { ModifyGeneralScheduleComponent } from './contents/schedule/modify-general-schedule/modify-general-schedule.component'
-// import { ModifyLessonScheduleComponent } from './contents/schedule/modify-lesson-schedule/modify-lesson-schedule.component'
+import { ModifyLessonScheduleComponent } from './contents/schedule/modify-lesson-schedule/modify-lesson-schedule.component'
 
 // ngxSkeletonLoader module
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader'
@@ -25,7 +25,7 @@ import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader'
         GeneralScheduleComponent,
         LessonScheduleComponent,
         ModifyGeneralScheduleComponent,
-        // ModifyLessonScheduleComponent,
+        ModifyLessonScheduleComponent,
     ],
     imports: [CommonModule, SharedModule, FormsModule, ReactiveFormsModule, NgxSkeletonLoaderModule],
     exports: [DrawerComponent, FormsModule],

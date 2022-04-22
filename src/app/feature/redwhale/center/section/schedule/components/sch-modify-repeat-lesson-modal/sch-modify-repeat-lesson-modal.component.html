@@ -18,13 +18,13 @@
         <div class="reserve-box">
           <rw-radio-button
             text="이번 일정만 수정"
-            [checked]="reserveOption == 'this'"
-            (click)="clickReserveLesson('this')"
+            [checked]="reserveOption == 'one'"
+            (click)="clickReserveLesson('one')"
           ></rw-radio-button>
           <rw-radio-button
             text="이번 일정부터 모두 수정"
-            [checked]="reserveOption == 'from_now_on'"
-            (click)="clickReserveLesson('from_now_on')"
+            [checked]="reserveOption == 'after'"
+            (click)="clickReserveLesson('after')"
           ></rw-radio-button>
           <rw-radio-button
             text="반복 일정 전체 수정"

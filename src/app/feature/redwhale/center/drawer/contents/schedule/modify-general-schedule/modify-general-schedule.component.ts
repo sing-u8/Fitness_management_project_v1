@@ -132,8 +132,10 @@ export class ModifyGeneralScheduleComponent implements OnInit, AfterViewInit, On
             end_time: this.timepick.endTime.slice(0, 5),
             memo: this.planTexts.planDetail,
         }
+        const calId = this.instructorList.find((v) => v.instructor.calendar_user.id == this.StaffSelectValue.value.id)
+            .instructor.id
         this.centerCalendarService
-            .updateCalendarTask(this.center.id, this.generalEvent.id, String(this.generalEvent.id), reqBody, 'one')
+            .updateCalendarTask(this.center.id, calId, this.generalEvent.id, reqBody, 'one')
             .subscribe({
                 next: (_) => {
                     fn ? fn() : null

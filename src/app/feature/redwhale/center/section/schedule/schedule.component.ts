@@ -599,6 +599,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
     // full calendar event functions
     onEventClick(arg: EventClickArg) {
         console.log('onEventClick arg: ', arg)
+        console.log('onEventClick event: ', arg.event.extendedProps['originItem'])
 
         if (arg.event.extendedProps['originItem'].type_code == 'calendar_task_type_normal') {
             this.generalEventData = arg.event.extendedProps['originItem']
@@ -796,13 +797,13 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
         console.log('eventDrop: ', arg, arg.event.startStr, arg.event.endStr)
         console.log('extendedProps: ', arg.event.extendedProps)
         this.fullCalendar.getApi().render()
+        const calTask: CalendarTask = arg.event.extendedProps['originItem'] as CalendarTask
+        const calId = this.instructorList$_.find((v) => v.instructor.calendar_user.id == calTask.responsibility.id)
+            .instructor.id
+        const otherInstructor: Calendar = arg.newResource
+            ? (arg.newResource._resource.extendedProps['instructorData'] as Calendar)
+            : null
         if (arg.event.extendedProps['originItem'].type_code == 'calendar_task_type_normal') {
-            const calTask: CalendarTask = arg.event.extendedProps['originItem'] as CalendarTask
-            const calId = this.instructorList$_.find((v) => v.instructor.calendar_user.id == calTask.responsibility.id)
-                .instructor.id
-            const otherInstructor: Calendar = arg.newResource
-                ? (arg.newResource._resource.extendedProps['instructorData'] as Calendar)
-                : null
             const reqBody: UpdateCalendarTaskReqBody = {
                 responsibility_user_id: otherInstructor ? otherInstructor.calendar_user.id : calTask.responsibility.id,
                 start_date: dayjs(arg.event.startStr).format('YYYY-MM-DD'),
@@ -825,70 +826,74 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
                     })
                 )
             })
+        } else {
+            const eventData: CalendarTask = arg.event.extendedProps['originItem'] as CalendarTask
+            let reqBody: UpdateCalendarTaskReqBody = undefined
+            if (eventData.calendar_task_group_id) {
+                reqBody = {
+                    responsibility_user_id: otherInstructor
+                        ? otherInstructor.calendar_user.id
+                        : calTask.responsibility.id,
+                    start_date: dayjs(arg.event.startStr).format('YYYY-MM-DD'),
+                    start_time: dayjs(arg.event.startStr).format('HH:mm'),
+                    end_date: dayjs(arg.event.endStr).format('YYYY-MM-DD'),
+                    end_time: dayjs(arg.event.endStr).format('HH:mm'),
+                    class: {
+                        class_item_id: eventData.class.class_item_id,
+                        type_code: eventData.class.type_code,
+                        state_code: 'calendar_task_class_state_active',
+                        duration: String(eventData.class.duration),
+                        capacity: String(eventData.class.capacity),
+                        start_booking_until: String(eventData.class.start_booking_until),
+                        end_booking_before: String(eventData.class.end_booking_before),
+                        cancel_booking_before: String(eventData.class.cancel_booking_before),
+                        instructor_user_ids: [
+                            otherInstructor ? otherInstructor.calendar_user.id : calTask.responsibility.id,
+                        ],
+                    },
+                }
+            } else {
+                reqBody = {
+                    responsibility_user_id: otherInstructor
+                        ? otherInstructor.calendar_user.id
+                        : calTask.responsibility.id,
+                    start_date: dayjs(arg.event.startStr).format('YYYY-MM-DD'),
+                    start_time: dayjs(arg.event.startStr).format('HH:mm'),
+                    end_date: dayjs(arg.event.endStr).format('YYYY-MM-DD'),
+                    end_time: dayjs(arg.event.endStr).format('HH:mm'),
+                    class: {
+                        class_item_id: eventData.class.class_item_id,
+                        type_code: eventData.class.type_code,
+                        state_code: 'calendar_task_class_state_active',
+                        duration: String(eventData.class.duration),
+                        capacity: String(eventData.class.capacity),
+                        start_booking_until: String(eventData.class.start_booking_until),
+                        end_booking_before: String(eventData.class.end_booking_before),
+                        cancel_booking_before: String(eventData.class.cancel_booking_before),
+                        instructor_user_ids: [
+                            otherInstructor ? otherInstructor.calendar_user.id : calTask.responsibility.id,
+                        ],
+                    },
+                }
+            }
+            console.log('drop event: ', reqBody)
+            const apiCalId = otherInstructor ? otherInstructor.id : calId
+            this.CenterCalendarService.updateCalendarTask(
+                this.center.id,
+                apiCalId,
+                calTask.id,
+                reqBody,
+                'one'
+            ).subscribe((res) => {
+                this.nxStore.dispatch(ScheduleActions.setIsScheduleEventChanged({ isScheduleEventChanged: true }))
+                this.nxStore.dispatch(
+                    showToast({
+                        text: `${this.restrictText(calTask.name, 8)} 수업 일정이 수정 되었습니다.`,
+                    })
+                )
+            })
         }
-        // else {
-        //     const eventData: CalendarTask = arg.event.extendedProps.originItem as CalendarTask
-        //     let reqBody: UpdateTaskRequestBody = undefined
-        //     if (eventData.repetition_id) {
-        //         reqBody = {
-        //             option: 'this',
-        //             trainer_id: eventData.lesson.trainers[0].id,
-        //             lesson_item_id: Number(eventData.lesson.lesson_item_id),
-        //             name: eventData.name,
-        //             color: eventData.lesson.color,
-        //             date: dayjs(arg.event.startStr).format('YYYY-MM-DD'),
-        //             start_time: dayjs(arg.event.startStr).format('HH:mm:ss'),
-        //             new_repetition_yn: 0,
-        //             repetition_start_date: dayjs(eventData.repetition_start_date).format('YYYY-MM-DD'),
-        //             repetition_end_date: dayjs(eventData.repetition_end_date).format('YYYY-MM-DD'),
-        //             people: eventData.lesson.people,
-        //             memo: eventData.memo,
-        //             repetition_days: this.getRepeatDayOfWeek(eventData.repetition_code),
-        //             reservation_start_day: eventData.lesson.reservation_start_day,
-        //             reservation_end_hour: eventData.lesson.reservation_end_hour,
-        //             reservation_cancel_end_hour: eventData.lesson.reservation_cancel_end_hour,
-        //         }
-        //     } else {
-        //         reqBody = {
-        //             option: 'this',
-        //             new_repetition_yn: 0,
-        //             trainer_id: eventData.lesson.trainers[0].id,
-        //             lesson_item_id: Number(eventData.lesson.lesson_item_id),
-        //             name: eventData.name,
-        //             color: eventData.lesson.color,
-        //             date: dayjs(arg.event.startStr).format('YYYY-MM-DD'),
-        //             start_time: dayjs(arg.event.startStr).format('HH:mm:ss'),
-        //             people: eventData.lesson.people,
-        //             memo: eventData.memo,
-        //             reservation_start_day: eventData.lesson.reservation_start_day,
-        //             reservation_end_hour: eventData.lesson.reservation_end_hour,
-        //             reservation_cancel_end_hour: eventData.lesson.reservation_cancel_end_hour,
-        //         }
-        //     }
-        //     console.log('drop event: ', reqBody)
-        //     this.gymCalendarService
-        //         .updateTask(this.gym.id, String(eventData.id), reqBody as UpdateTaskRequestBody)
-        //         .subscribe((res) => {
-        //             this.gymScheduleState.setIsScheduleEventChangedState(true)
-        //             this.globalService.showToast(
-        //                 `'${this.restrictText(eventData.name, 8)}'' 수업 일정이 수정되었습니다.`
-        //             )
-        //         })
-        // }
     }
-
-    // getRepeatDayOfWeek(repeatCode: string) {
-    //     if (!repeatCode) return ''
-    //     if (repeatCode == 'all') {
-    //         return ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']
-    //     } else if (repeatCode == 'weekdays') {
-    //         return ['mon', 'tue', 'wed', 'thu', 'fri']
-    //     } else if (repeatCode == 'weekend') {
-    //         return ['sun', 'sat']
-    //     } else {
-    //         return _.split(repeatCode, '_')
-    //     }
-    // }
 
     public dayCellLeave = true
     dayCellDidMount(arg) {
@@ -1045,7 +1050,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
         this.hideRepeatLessonOptionModal()
         this.repeatedLessonTask = undefined
     }
-    onRepeatLessonOptionConfirm(modifyOption: 'this' | 'from_now_on' | 'all') {
+    onRepeatLessonOptionConfirm(modifyOption: FromSchedule.ModifyLessonOption) {
         this.nxStore.dispatch(ScheduleActions.setModifyLessonOption({ option: modifyOption }))
         this.nxStore.dispatch(ScheduleActions.setModifyLessonEvent({ event: this.repeatedLessonTask }))
 

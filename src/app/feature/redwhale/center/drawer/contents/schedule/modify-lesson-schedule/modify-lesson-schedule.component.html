@@ -62,7 +62,7 @@
         </div>
 
       </div>
-      <div class="day-repeat" *ngIf="lessonEvent?.escape_repetition_yn != 1 && lessonRepeatOption != 'this'">
+      <div class="day-repeat" *ngIf="lessonRepeatOption != 'one'">
         <p class="small-title">반복 여부</p>
         <div class="day-repeat-button" [style.backgroundColor]="isAlreadyRepeat ? '#f6f6f6' : '#ffffff'">
           <rw-switch
@@ -73,7 +73,7 @@
         </div>
       </div>
 
-      <div *ngIf="!dayRepeatSwitch || lessonRepeatOption == 'this'; else repeat_container" class="time-select">
+      <div *ngIf="!dayRepeatSwitch || lessonRepeatOption == 'one'; else repeat_container" class="time-select">
         <div class="date">
           <p class="small-title">일자</p>
           <div class="rw-typo-bodytext0 date-button" (click)="checkClickDayPickOutside($event) ; $event.stopPropagation()">
@@ -109,7 +109,7 @@
 
       <ng-template #repeat_container>
 
-        <div *ngIf="lessonEvent?.escape_repetition_yn != 1 && lessonRepeatOption != 'this'" class="repeat-application-period">
+        <div *ngIf=" lessonRepeatOption != 'one'" class="repeat-application-period">
           <p class="small-title">반복 적용 기간</p>
 
           <div
@@ -149,7 +149,7 @@
                 (dataChange) = "onRepeatDatePickRangeChange()"
               ></rw-datepicker>
               <rw-datepicker
-                *ngIf="lessonRepeatOption == 'from_now_on'"
+                *ngIf="lessonRepeatOption == 'after'"
                 mode="multiline"
                 [option]="'extend'"
                 [(data)]="repeatDatepick"
@@ -246,7 +246,7 @@
         [rwButtonDisabled]="!(
                                 plan_input.valid &&
                                 (
-                                  (!dayRepeatSwitch || lessonRepeatOption == 'this') ||
+                                  (!dayRepeatSwitch || lessonRepeatOption == 'one') ||
                                   (
                                     dayRepeatSwitch && repeatDatepick.startDate && repeatDatepick.endDate
                                   )
@@ -255,7 +255,7 @@
         (click) = " (
                       plan_input.valid &&
                       (
-                        (!dayRepeatSwitch || lessonRepeatOption == 'this') ||
+                        (!dayRepeatSwitch || lessonRepeatOption == 'one') ||
                         (
                           dayRepeatSwitch && repeatDatepick.startDate && repeatDatepick.endDate
                         )

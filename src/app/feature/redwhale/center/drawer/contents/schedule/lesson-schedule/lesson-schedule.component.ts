@@ -8,6 +8,7 @@ import { StorageService } from '@services/storage.service'
 import { CenterUsersService } from '@services/center-users.service'
 import { CenterLessonService } from '@services/center-lesson.service'
 import { CenterCalendarService, CreateCalendarTaskReqBody } from '@services/center-calendar.service'
+import { ScheduleHelperService } from '@services/center/schedule-helper.service'
 
 import { CenterUser } from '@schemas/center-user'
 import { Center } from '@schemas/center'
@@ -118,7 +119,8 @@ export class LessonScheduleComponent implements OnInit, OnDestroy, AfterViewInit
         private centerLessonService: CenterLessonService,
         private centerUsersService: CenterUsersService,
         private centerCalendarService: CenterCalendarService,
-        private nxStore: Store
+        private nxStore: Store,
+        private scheduleHelperService: ScheduleHelperService
     ) {
         this.center = this.storageService.getCenter()
         this.selectLessonCategories()
@@ -164,21 +166,6 @@ export class LessonScheduleComponent implements OnInit, OnDestroy, AfterViewInit
 
     onTimeClick(time: { key: string; name: string }) {
         this.timepick = time.key
-        console.log('onTimeClick : ', time, this.timepick)
-        console.log('selectedLesson: ', this.selectedLesson)
-        console.log('endTime : ', this.getLessonEndTime(this.timepick))
-    }
-
-    getLessonEndTime(startTime: string) {
-        // startTime = xx:xx:xx
-        const startTimeList = _.split(startTime, ':', 2)
-        const minute = Number(startTimeList[1]) + Number(this.selectedLesson.lesson.duration)
-        const quotient = parseInt(`${minute / 60}`, 10)
-        const remainder = Number(minute) % 60
-        const endTime = `${Number(startTimeList[0]) + quotient}:${remainder}`
-
-        console.log('getLessonEndTime --- : ', startTimeList, minute, quotient, remainder)
-        return endTime // xx:xx
     }
 
     // ------------------------------------------ 직원 셀렉트 데이터 초기화 -------------------------------------------
@@ -213,8 +200,11 @@ export class LessonScheduleComponent implements OnInit, OnDestroy, AfterViewInit
                 end_date: dayjs(this.repeatDatepick.startDate).format('YYYY-MM-DD'),
                 all_day: false,
                 start_time: this.timepick.slice(0, 5),
-                end_time: this.getLessonEndTime(this.timepick),
-                color: this.selectedLesson.lesson.color,
+                end_time: this.scheduleHelperService.getLessonEndTime(
+                    this.timepick,
+                    this.selectedLesson.lesson.duration
+                ),
+                color: this.color,
                 memo: this.planDetailInputs.detail,
                 repeat: true,
                 repeat_day_of_the_week: this.repeatOfWeek,
@@ -245,8 +235,11 @@ export class LessonScheduleComponent implements OnInit, OnDestroy, AfterViewInit
                 end_date: dayjs(this.dayPick.date).format('YYYY-MM-DD'),
                 all_day: false,
                 start_time: this.timepick.slice(0, 5),
-                end_time: this.getLessonEndTime(this.timepick),
-                color: this.selectedLesson.lesson.color,
+                end_time: this.scheduleHelperService.getLessonEndTime(
+                    this.timepick,
+                    this.selectedLesson.lesson.duration
+                ),
+                color: this.color,
                 memo: this.planDetailInputs.detail,
                 repeat: false,
                 responsibility_user_id: selectedStaff.instructor.calendar_user.id,

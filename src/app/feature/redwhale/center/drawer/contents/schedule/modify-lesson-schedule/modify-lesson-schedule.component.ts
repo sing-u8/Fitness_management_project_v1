@@ -10,6 +10,7 @@ import { StorageService } from '@services/storage.service'
 import { CenterUsersService } from '@services/center-users.service'
 import { CenterLessonService } from '@services/center-lesson.service'
 import { CenterCalendarService, UpdateCalendarTaskReqBody, UpdateMode } from '@services/center-calendar.service'
+import { ScheduleHelperService } from '@services/center/schedule-helper.service'
 
 import { User } from '@schemas/user'
 import { CenterUser } from '@schemas/center-user'
@@ -45,7 +46,7 @@ export class ModifyLessonScheduleComponent implements OnInit, OnDestroy, AfterVi
 
     public titleTime: string
 
-    public lessonEvent: Task = undefined
+    public lessonEvent: CalendarTask = undefined
     public lessonRepeatOption: UpdateMode
 
     // save confirm modal var
@@ -91,7 +92,7 @@ export class ModifyLessonScheduleComponent implements OnInit, OnDestroy, AfterVi
     public timepick = ''
 
     // day repeat var
-    public repeatOfWeek = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']
+    public repeatOfWeek = [0, 1, 2, 3, 4, 5, 6]
     onDayRepeatChange(dayList) {
         this.repeatOfWeek = dayList
     }
@@ -130,11 +131,11 @@ export class ModifyLessonScheduleComponent implements OnInit, OnDestroy, AfterVi
         private centerLessonService: CenterLessonService,
         private centerUsersService: CenterUsersService,
         private centerCalendarService: CenterCalendarService,
-        private nxStore: Store
+        private nxStore: Store,
+        private scheduleHelperService: ScheduleHelperService
     ) {
         this.center = this.storageService.getCenter()
         this.selectLessonOptions()
-        this.selectInstructors()
         this.selectLessonEvent()
         this.selectTaskReservations()
     }
@@ -168,68 +169,92 @@ export class ModifyLessonScheduleComponent implements OnInit, OnDestroy, AfterVi
     modifyLessonTask(fn?: () => void) {
         let reqBody: UpdateCalendarTaskReqBody = undefined
         const selectedStaff = _.find(this.instructorList, (item) => {
-            return this.StaffSelectValue.value.id == item.instructor.user_id
+            return this.StaffSelectValue.value.id == item.instructor.calendar_user.id
         })
-        if (this.dayRepeatSwitch) {
+        console.log(
+            'dayRepeatSwitch: ',
+            this.dayRepeatSwitch,
+            'modifyLessonTask  -- this.lessonEvent : ',
+            this.lessonEvent,
+            'dayPick: ',
+            this.dayPick,
+            dayjs(this.dayPick.date).format('YYYY-MM-DD')
+        )
+        if (this.dayRepeatSwitch && this.lessonRepeatOption != 'one') {
             reqBody = {
-                option: this.lessonRepeatOption,
-                trainer_id: selectedStaff.instructor.user_id,
-                lesson_item_id: Number(this.lessonEvent.lesson.lesson_item_id),
+                type_code: 'calendar_task_type_class',
                 name: this.planDetailInputs.plan,
-                color: this.lessonEvent.lesson.color,
-                date: dayjs(this.dayPick.date).format('YYYY-MM-DD'),
-                start_time: this.timepick,
-                repetition_start_date: dayjs(this.repeatDatepick.startDate).format('YYYY-MM-DD'),
-                repetition_end_date: dayjs(this.repeatDatepick.endDate).format('YYYY-MM-DD'),
-                people: Number(this.people),
+                start_date: dayjs(this.repeatDatepick.startDate).format('YYYY-MM-DD'),
+                end_date: dayjs(this.repeatDatepick.startDate).format('YYYY-MM-DD'),
+                start_time: this.timepick.slice(0, 5),
+                end_time: this.scheduleHelperService.getLessonEndTime(this.timepick, this.lessonEvent.class.duration),
+                color: this.lessonEvent.color,
                 memo: this.planDetailInputs.detail,
-                repetition_days: this.repeatOfWeek,
-                reservation_start_day: Number(this.reserveSettingInputs.reservation_start),
-                reservation_end_hour: Number(this.reserveSettingInputs.reservation_end),
-                reservation_cancel_end_hour: Number(this.reserveSettingInputs.reservation_cancel_end),
-            }
-            if (this.lessonRepeatOption == 'this' && this.isAlreadyRepeat == true) {
-                // 반복 수업의 이번 일정만 수정할 때
-                reqBody = { ...reqBody, ...{ new_repetition_yn: 0 } }
-            } else if (this.isAlreadyRepeat == false) {
-                // 반복 수업이 아닌 일정이 반복 수업 설정을 할 때
-                _.omit(reqBody, ['option'])
-                reqBody = { ...reqBody, ...{ new_repetition_yn: 1 } }
+                repeat: true,
+                repeat_day_of_the_week: this.repeatOfWeek,
+                repeat_cycle_unit_code: 'calendar_task_group_repeat_cycle_unit_week',
+                repeat_cycle: 1,
+                repeat_termination_type_code: 'calendar_task_group_repeat_termination_type_date',
+                repeat_end_date: dayjs(this.repeatDatepick.endDate).format('YYYY-MM-DD'),
+                responsibility_user_id: selectedStaff.instructor.calendar_user.id,
+                class: {
+                    class_item_id: this.lessonEvent.class.class_item_id,
+                    type_code: this.lessonEvent.class.type_code,
+                    state_code: 'calendar_task_class_state_active',
+                    duration: String(this.lessonEvent.class.duration),
+                    capacity: this.people,
+                    start_booking_until: this.reserveSettingInputs.reservation_start,
+                    end_booking_before: this.reserveSettingInputs.reservation_end,
+                    cancel_booking_before: this.reserveSettingInputs.reservation_cancel_end,
+                    instructor_user_ids: [selectedStaff.instructor.calendar_user.id],
+                },
             }
         } else {
             reqBody = {
-                new_repetition_yn: 0,
-                trainer_id: selectedStaff.instructor.user_id,
-                lesson_item_id: Number(this.lessonEvent.lesson.lesson_item_id),
+                type_code: 'calendar_task_type_class',
                 name: this.planDetailInputs.plan,
-                color: this.lessonEvent.lesson.color,
-                date: dayjs(this.dayPick.date).format('YYYY-MM-DD'),
-                start_time: this.timepick,
-                people: Number(this.people),
+                start_date: this.dayPick.date,
+                end_date: this.dayPick.date,
+                start_time: this.timepick.slice(0, 5),
+                end_time: this.scheduleHelperService.getLessonEndTime(this.timepick, this.lessonEvent.class.duration),
+                color: this.lessonEvent.color,
                 memo: this.planDetailInputs.detail,
-                reservation_start_day: Number(this.reserveSettingInputs.reservation_start),
-                reservation_end_hour: Number(this.reserveSettingInputs.reservation_end),
-                reservation_cancel_end_hour: Number(this.reserveSettingInputs.reservation_cancel_end),
+                responsibility_user_id: selectedStaff.instructor.calendar_user.id,
+                class: {
+                    class_item_id: this.lessonEvent.class.class_item_id,
+                    type_code: this.lessonEvent.class.type_code,
+                    state_code: 'calendar_task_class_state_active',
+                    duration: String(this.lessonEvent.class.duration),
+                    capacity: this.people,
+                    start_booking_until: this.reserveSettingInputs.reservation_start,
+                    end_booking_before: this.reserveSettingInputs.reservation_end,
+                    cancel_booking_before: this.reserveSettingInputs.reservation_cancel_end,
+                    instructor_user_ids: [selectedStaff.instructor.calendar_user.id],
+                },
             }
-
-            console.log('none dayRepeatSwitch req body: ', reqBody)
         }
 
-        this.gymCalendarService
-            .updateTask(this.center.id, String(this.lessonEvent.id), reqBody as UpdateCalendarTaskReqBody)
-            .subscribe(
-                (res) => {
+        const calId = this.instructorList.find((v) => v.instructor.calendar_user.id == this.StaffSelectValue.value.id)
+            .instructor.id
+
+        this.centerCalendarService
+            .updateCalendarTask(this.center.id, calId, this.lessonEvent.id, reqBody, this.lessonRepeatOption)
+            .subscribe({
+                next: (res) => {
                     fn ? fn() : null
-                    this.gymScheduleState.setIsScheduleEventChangedState(true)
+                    this.nxStore.dispatch(ScheduleActions.setIsScheduleEventChanged({ isScheduleEventChanged: true }))
                     this.closeDrawer()
-                    this.globalService.showToast(
-                        `'${this.restrictText(this.planDetailInputs.plan, 8)}' 기타 일정이 수정되었습니다.`
+                    this.nxStore.dispatch(
+                        showToast({
+                            text: `'${this.restrictText(this.planDetailInputs.plan, 8)}' 수업 일정이 수정되었습니다.`,
+                        })
                     )
                 },
-                (err) => {
+
+                error: (err) => {
                     console.log('gymCalendarService.createTask err: ', err)
-                }
-            )
+                },
+            })
     }
 
     // -----------------------------  일정 생성 수정 모달 ------------------------------------
@@ -243,6 +268,7 @@ export class ModifyLessonScheduleComponent implements OnInit, OnDestroy, AfterVi
             this.dayRepeatSwitch &&
             this.initRepeatDatepick.startDate == this.repeatDatepick.startDate &&
             this.initRepeatDatepick.endDate == this.repeatDatepick.endDate
+        console.log('this.initRepeatOfWeek : ', this.initRepeatOfWeek, this.repeatOfWeek)
         const isRepeatDaysConsistent = this.arraysMatch(this.initRepeatOfWeek, this.repeatOfWeek)
         const isDayPickConsistent = this.initDayPick.date == this.dayPick.date
         const isNonRepeatDayPickConsistent = !this.dayRepeatSwitch && isDayPickConsistent
@@ -330,6 +356,7 @@ export class ModifyLessonScheduleComponent implements OnInit, OnDestroy, AfterVi
         if (code < 48 || code > 57) {
             return false
         }
+        return true
     }
     onPeopleKeyUp(event) {
         if (event.code == 'Enter') return
@@ -341,80 +368,57 @@ export class ModifyLessonScheduleComponent implements OnInit, OnDestroy, AfterVi
     }
 
     // ----- select functions ----------------------------------------------------------------------------
-    selectInstructors() {
-        this.gymScheduleState
-            .selectInstructorsState()
-            .pipe(takeUntil(this.unsubscribe$))
-            .subscribe((instructors) => {
-                this.instructorList = instructors
-                console.log('this.instructorList: ', this.instructorList)
-            })
-    }
 
-    setSelectedStaff(calId: number) {
-        this.center = this.storageService.getCenter()
-        this.gymCalendarService.getCalendarList(this.center.id).subscribe((calendarList) => {
-            const calendar_user = _.find(calendarList, (calendar) => {
-                return calendar.id == String(calId)
-            })
-            this.gymUserService
-                .getUserList(this.center.id, '', 'administrator, manager, staff')
-                .subscribe((managers) => {
-                    managers.forEach((v) => {
-                        this.staffSelect_list.push({
-                            name: v.gym_user_name ?? v.given_name,
-                            value: v,
-                        })
-                        calendar_user.user_id == v.id
-                            ? (this.StaffSelectValue = { name: v.gym_user_name ?? v.given_name, value: v })
-                            : null
-                    })
-                })
-        })
+    initStaffList(instructorList: ScheduleReducer.InstructorType[]) {
+        this.staffSelect_list = instructorList
+            .map((v) => v.instructor.calendar_user)
+            .map((v) => ({
+                name: v.center_user_name ?? v.name,
+                value: v,
+            }))
     }
 
     public reservationExistInOtherTasks = false
     selectTaskReservations() {
-        const curLessonEvent = this.gymScheduleState.modifyLessonEvent
-        const modifyOption = this.gymScheduleState.modifyLessonOption
-        this.gymScheduleState
-            .selectLessonTaskReservState()
-            .pipe(takeUntil(this.unsubscribe$))
-            .subscribe((reservations) => {
-                let reservationCount = 0
-                switch (modifyOption) {
-                    case 'this':
-                        this.reservationExistInOtherTasks = false
-                        break
-                    case 'from_now_on':
-                        reservationCount = _.reduce(
-                            _.filter(reservations, (reservation) =>
-                                dayjs(curLessonEvent.date).isSameOrBefore(reservation.date)
-                            ),
-                            (acc, val) => acc + val.reservation_count,
-                            0
-                        )
-                        this.reservationExistInOtherTasks = reservationCount > 0 ? true : false
-                        break
-                    case 'all':
-                        reservationCount = _.reduce(reservations, (acc, val) => acc + val.reservation_count, 0)
-                        this.reservationExistInOtherTasks = reservationCount > 0 ? true : false
-                        break
-                }
-            })
+        // const curLessonEvent = this.gymScheduleState.modifyLessonEvent
+        // const modifyOption = this.gymScheduleState.modifyLessonOption
+        // this.gymScheduleState
+        //     .selectLessonTaskReservState()
+        //     .pipe(takeUntil(this.unsubscribe$))
+        //     .subscribe((reservations) => {
+        //         let reservationCount = 0
+        //         switch (modifyOption) {
+        //             case 'this':
+        //                 this.reservationExistInOtherTasks = false
+        //                 break
+        //             case 'from_now_on':
+        //                 reservationCount = _.reduce(
+        //                     _.filter(reservations, (reservation) =>
+        //                         dayjs(curLessonEvent.date).isSameOrBefore(reservation.date)
+        //                     ),
+        //                     (acc, val) => acc + val.reservation_count,
+        //                     0
+        //                 )
+        //                 this.reservationExistInOtherTasks = reservationCount > 0 ? true : false
+        //                 break
+        //             case 'all':
+        //                 reservationCount = _.reduce(reservations, (acc, val) => acc + val.reservation_count, 0)
+        //                 this.reservationExistInOtherTasks = reservationCount > 0 ? true : false
+        //                 break
+        //         }
+        //     })
     }
 
     selectLessonOptions() {
-        this.gymScheduleState
-            .selectModifyLessonOptionState()
-            .pipe(takeUntil(this.unsubscribe$))
+        this.nxStore
+            .pipe(select(ScheduleSelector.modifyLessonOption), takeUntil(this.unsubscribe$))
             .subscribe((option) => {
                 this.lessonRepeatOption = option
-                console.log('selectModifyLessonOptionState: ', this.lessonRepeatOption)
+                console.log('this.lessonRepeatOption : ', this.lessonRepeatOption)
             })
     }
 
-    public initRepeatOfWeek = []
+    public initRepeatOfWeek: number[] = []
 
     public initTimepick = ''
     public initDayPick = { date: '' }
@@ -433,63 +437,59 @@ export class ModifyLessonScheduleComponent implements OnInit, OnDestroy, AfterVi
 
     public isAlreadyRepeat = false
     selectLessonEvent() {
-        this.gymScheduleState
-            .selectModifyLessonEventState()
-            .pipe(takeUntil(this.unsubscribe$))
-            .subscribe((lessonEvent) => {
-                console.log('selectModifyLessonEventState: ', lessonEvent)
+        this.nxStore
+            .pipe(
+                select(ScheduleSelector.modifyLessonEvent),
+                concatLatestFrom(() => [this.nxStore.select(ScheduleSelector.instructorList)]),
+                takeUntil(this.unsubscribe$)
+            )
+            .subscribe(([lessonEvent, instructors]) => {
+                this.instructorList = instructors
                 this.isAlreadyRepeat = false
-
                 this.lessonEvent = lessonEvent
-                this.setSelectedStaff(lessonEvent.calendar_id)
+
+                this.StaffSelectValue = {
+                    name: lessonEvent.responsibility.center_user_name,
+                    value: lessonEvent.responsibility,
+                }
+                this.initStaffList(instructors)
 
                 this.planDetailInputs = {
                     plan: lessonEvent.name,
                     detail: lessonEvent.memo,
                 }
                 this.color = lessonEvent.color
-                this.lesMembershipList = lessonEvent.membership_item
+                this.lesMembershipList = lessonEvent.class.membership_items
 
-                this.people = String(lessonEvent.lesson.people)
-                this.timepick = dayjs(lessonEvent.date + ' ' + lessonEvent.start_time).format('HH:mm:ss')
-                this.dayPick.date = dayjs(lessonEvent.date).format('YYYY-MM-DD')
+                this.people = String(lessonEvent.class.capacity)
+                lessonEvent.start
+                this.timepick = dayjs(lessonEvent.start).format('HH:mm:ss')
+                this.dayPick.date = dayjs(lessonEvent.start).format('YYYY-MM-DD')
 
                 this.repeatDatepick = { startDate: '', endDate: '' }
-                this.setRepeatDayOfWeek(lessonEvent.repetition_code)
-                if (lessonEvent.repetition_id) {
+                this.repeatOfWeek = lessonEvent.repeat_day_of_the_week ?? []
+
+                if (lessonEvent.calendar_task_group_id) {
                     this.dayRepeatSwitch = true
                     this.isAlreadyRepeat = true
 
+                    // !! repeat start 속성 필요
                     this.repeatDatepick.startDate =
                         this.lessonRepeatOption == 'all'
-                            ? dayjs(lessonEvent.repetition_start_date).format('YYYY-MM-DD')
-                            : dayjs(lessonEvent.date).format('YYYY-MM-DD')
-                    this.repeatDatepick.endDate = dayjs(lessonEvent.repetition_end_date).format('YYYY-MM-DD')
+                            ? dayjs(lessonEvent.start).format('YYYY-MM-DD')
+                            : dayjs(lessonEvent.start).format('YYYY-MM-DD')
+                    this.repeatDatepick.endDate = dayjs(lessonEvent.repeat_end_date).format('YYYY-MM-DD')
                     this.dayDiff = String(this.getDayDiff(this.repeatDatepick))
                 } else {
-                    this.repeatDatepick.startDate = dayjs(lessonEvent.date).format('YYYY-MM-DD')
+                    this.repeatDatepick.startDate = dayjs(lessonEvent.start).format('YYYY-MM-DD')
                     this.dayRepeatSwitch = false
                 }
                 this.setInitDateVars()
             })
     }
 
-    setRepeatDayOfWeek(repeatCode: string) {
-        if (!repeatCode) return
-        if (repeatCode == 'all') {
-            this.repeatOfWeek = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']
-        } else if (repeatCode == 'weekdays') {
-            this.repeatOfWeek = ['mon', 'tue', 'wed', 'thu', 'fri']
-        } else if (repeatCode == 'weekend') {
-            this.repeatOfWeek = ['sun', 'sat']
-        } else {
-            this.repeatOfWeek = _.split(repeatCode, '_')
-        }
-        console.log('setRepeatDayOfWeek: ', this.repeatOfWeek)
-    }
-
     // helper function
-    arraysMatch(arr1, arr2) {
+    arraysMatch(arr1: any[], arr2: any[]) {
         if (arr1.length !== arr2.length) return false
         for (let i = 0; i < arr1.length; i++) {
             if (arr1[i] !== arr2[i]) return false

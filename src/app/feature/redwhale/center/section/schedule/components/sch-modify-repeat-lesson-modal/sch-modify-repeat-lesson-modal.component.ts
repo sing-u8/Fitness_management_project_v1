@@ -11,6 +11,8 @@ import {
     ViewChild,
 } from '@angular/core'
 
+import { UpdateMode } from '@services/center-calendar.service'
+
 @Component({
     selector: 'rw-sch-modify-repeat-lesson-modal',
     templateUrl: './sch-modify-repeat-lesson-modal.component.html',
@@ -19,7 +21,7 @@ import {
 export class SchModifyRepeatLessonModalComponent implements OnChanges {
     @Input() visible: boolean
     @Input() title: string
-    @Input() reserveOption: 'this' | 'from_now_on' | 'all' = 'this'
+    @Input() reserveOption: UpdateMode = 'one'
 
     @ViewChild('modalBackgroundElement') modalBackgroundElement
     @ViewChild('modalWrapperElement') modalWrapperElement
@@ -64,15 +66,15 @@ export class SchModifyRepeatLessonModalComponent implements OnChanges {
 
     onCancel(): void {
         this.cancel.emit({})
-        this.reserveOption = 'this'
+        this.reserveOption = 'one'
     }
 
     onConfirm(): void {
         this.confirm.emit(this.reserveOption)
-        this.reserveOption = 'this'
+        this.reserveOption = 'one'
     }
 
-    clickReserveLesson(option: 'this' | 'from_now_on' | 'all') {
+    clickReserveLesson(option: UpdateMode) {
         this.reserveOption = option
     }
 }

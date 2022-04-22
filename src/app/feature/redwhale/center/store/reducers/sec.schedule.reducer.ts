@@ -2,6 +2,7 @@ import { on } from '@ngrx/store'
 import { createImmerReducer } from 'ngrx-immer/store'
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity'
 import _ from 'lodash'
+import { UpdateMode } from '@services/center-calendar.service'
 
 // schemas
 import { Loading } from '@schemas/store/loading'
@@ -53,7 +54,7 @@ const SelectedDateInit = {
     viewType: undefined,
 }
 
-export type ModifyLessonOption = 'this' | 'from_now_on' | 'all'
+export type ModifyLessonOption = UpdateMode
 
 // init states
 export const InstructorListInit: InstructorType[] = []
@@ -101,7 +102,7 @@ export const initialState: State = {
 
     modifyGeneralEvent: undefined,
     modifyLessonEvent: undefined,
-    modifyLessonOption: 'this',
+    modifyLessonOption: 'one',
 }
 
 export const scheduleReducer = createImmerReducer(

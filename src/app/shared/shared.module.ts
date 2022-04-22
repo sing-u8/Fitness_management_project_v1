@@ -29,6 +29,7 @@ import { MemberListModalComponent } from './components/common/member-list-modal/
 import { LessonFlipListComponent } from './components/redwhale/drawer/lesson-flip-list/lesson-flip-list.component'
 import { DrawerLessonCardComponent } from './components/redwhale/drawer/drawer-lesson-card/drawer-lesson-card.component'
 import { DwMembershipListModalComponent } from './components/redwhale/drawer/dw-membership-list-modal/dw-membership-list-modal.component'
+import { DrawerModifyLessonCardComponent } from './components/redwhale/drawer/drawer-modify-lesson-card/drawer-modify-lesson-card.component'
 
 // - //
 import { SchDayRepeatSelectComponent } from './components/redwhale/schedule/sch-day-repeat-select/sch-day-repeat-select.component'
@@ -118,6 +119,7 @@ FullCalendarModule.registerPlugins([
         DrawerLessonCardComponent,
         SchDayRepeatSelectComponent,
         DwMembershipListModalComponent,
+        DrawerModifyLessonCardComponent,
         // Directives
         // AutoScrollDirective,
         ButtonDirective,
@@ -180,6 +182,7 @@ FullCalendarModule.registerPlugins([
         DrawerLessonCardComponent,
         SchDayRepeatSelectComponent,
         DwMembershipListModalComponent,
+        DrawerModifyLessonCardComponent,
         // Directives
         // AutoScrollDirective,
         ButtonDirective,

@@ -1,0 +1,23 @@
+<section
+  class="drawer-lesson-card"
+>
+
+  <div class="card-top">
+    <div
+      class="icon"
+      [style.backgroundColor] = "cardInfo.color ? cardInfo.color : 'var(--border-color)'"
+    >
+      <img src="assets/icons/etc/workout_white.svg">
+    </div>
+    <div class="card-desc">
+      <p class="rw-typo-subtext0-regular card-category">{{cardInfo.category_name}}</p>
+      <p class="rw-typo-bodytext0-bold">{{cardInfo.name}}</p>
+    </div>
+  </div>
+  <div class="card-bottom">
+    <p class="card-desc2 rw-typo-subtext1">
+      {{cardInfo.minutes}}분<span class="bar">|</span>{{cardInfo.type_name}}
+    </p>
+  </div>
+
+</section>

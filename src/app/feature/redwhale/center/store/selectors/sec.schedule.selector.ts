@@ -25,4 +25,4 @@ export const schedulingInstructor = createSelector(GymScheduleFeature, FromSched
 export const isScheduleEventChanged = createSelector(GymScheduleFeature, FromSchedule.selectIsScheduleEventChanged)
 export const modifyGeneralEvent = createSelector(GymScheduleFeature, FromSchedule.selectModifyGeneralEvent)
 export const modifyLessonEvent = createSelector(GymScheduleFeature, FromSchedule.selectModifyLessonEvent)
-export const setModifyLessonOption = createSelector(GymScheduleFeature, FromSchedule.selectModifyLessonOption)
+export const modifyLessonOption = createSelector(GymScheduleFeature, FromSchedule.selectModifyLessonOption)
