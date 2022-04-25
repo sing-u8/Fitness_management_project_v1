@@ -27,8 +27,8 @@ export type CurUseData = {
     reservations: any[] // !! user reservation
 }
 
-const MemberManageCategoryInit = 'membershipLocker'
-const UsersSelectCategInit: UsersSelectCateg = {
+export const MemberManageCategoryInit = 'membershipLocker'
+export const UsersSelectCategInit: UsersSelectCateg = {
     member: { name: '전체 회원', userSize: 0 },
     attendance: { name: '오늘 출석한 회원', userSize: 0 },
     valid: { name: '유효한 회원', userSize: 0 },
@@ -37,7 +37,7 @@ const UsersSelectCategInit: UsersSelectCateg = {
     expired: { name: '만료된 회원', userSize: 0 },
     employee: { name: '센터 직원', userSize: 0 },
 }
-const UserListSelectInit: UserListSelect = {
+export const UserListSelectInit: UserListSelect = {
     key: 'member',
     value: { name: '전체 회원', userSize: 0 },
 }
@@ -92,6 +92,15 @@ export const initialState: State = {
 export const dashboardReducer = createImmerReducer(
     initialState,
     // async
+    on(DashboardActions.startLoadMemberList, (state, { centerId }) => {
+        state = { ...state, ...initialState }
+        state.isLoading = 'pending'
+        return state
+    }),
+    on(DashboardActions.finishLoadMemberList, (state) => {
+        state.isLoading = 'done'
+        return state
+    }),
     // on()
     // sync
     on(DashboardActions.setUserSearchInput, (state, { searchInput }) => {
@@ -112,6 +121,24 @@ export const dashboardReducer = createImmerReducer(
     }),
     on(DashboardActions.setCurUesrData, (state, { curUserData }) => {
         // state.curUserData =
+        return state
+    }),
+    // - //curCenterId
+    on(DashboardActions.setCurCenterId, (state, { centerId }) => {
+        state.curCenterId = centerId
+        return state
+    }),
+    on(DashboardActions.resetCurCenterId, (state) => {
+        state.curCenterId = undefined
+        return state
+    }),
+    // common
+    on(DashboardActions.error, (state, { error }) => {
+        state.error = error
+        return state
+    }),
+    on(DashboardActions.resetAll, (state) => {
+        state = { ...state, ...initialState }
         return state
     })
 )

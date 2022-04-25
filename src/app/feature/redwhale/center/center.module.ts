@@ -19,6 +19,7 @@ import { LessonModule } from './section/lesson/lesson.module'
 import { MembershipModule } from './section/membership/membership.module'
 import { LockerModule } from './section/locker/locker.module'
 import { ScheduleModule } from './section/schedule/schedule.module'
+import { DashboardModule } from './section/dashboard/dashboard.module'
 
 // ngrx
 import { StoreModule } from '@ngrx/store'
@@ -43,6 +44,7 @@ import { lockerReducer } from '@centerStore/reducers/sec.locker.reducer'
 import { LockerEffect } from '@centerStore/effects/sec.locker.effect'
 
 import { dashboardReducer } from '@centerStore/reducers/sec.dashboard.reducer'
+import { DashboardEffect } from '@centerStore/effects/sec.dashboard.effect'
 
 import { scheduleReducer } from '@centerStore/reducers/sec.schedule.reducer'
 import { ScheduleEffect } from '@centerStore/effects/sec.schedule.effect'
@@ -69,6 +71,7 @@ import { ScheduleEffect } from '@centerStore/effects/sec.schedule.effect'
         MembershipModule,
         LockerModule,
         ScheduleModule,
+        DashboardModule,
         // <-- ngrx     //
         StoreModule.forFeature(GymFeatureKey, {
             [LessonFeatureKey]: lessonReducer,
@@ -77,7 +80,7 @@ import { ScheduleEffect } from '@centerStore/effects/sec.schedule.effect'
             [DashboardFeatureKey]: dashboardReducer,
             [ScheduleFeatureKey]: scheduleReducer,
         }),
-        EffectsModule.forFeature([LessongEffect, MembershipEffect, LockerEffect, ScheduleEffect]),
+        EffectsModule.forFeature([LessongEffect, MembershipEffect, LockerEffect, ScheduleEffect, DashboardEffect]),
         // ngrx     --> //
     ],
     exports: [],
