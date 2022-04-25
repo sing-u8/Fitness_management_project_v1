@@ -59,7 +59,30 @@
             </div>
 
         </section>
-        <section class="l-member-detail-left"></section>
-        <section class="l-member-detail-right"></section>
+        <section class="l-member-detail">
+            <div class="member-detail__header rw-typo-title1">
+                회원 상세 정보
+            </div>
+            <div class="member-detail__body">
+                <div class="l-member-detail__top">
+
+                    <div class="member-infomation"></div>
+                    <div class="member-memo"></div>
+
+                </div>
+                <div class="l-member-detail__bottom">
+
+                    <div class="l-member-detail-tag">
+                        <div class="member-detail-tag" [class.selected] = "true">회원권</div>
+                        <div class="member-detail-tag" [class.selected] = "false">락커</div>
+                        <div class="member-detail-tag" [class.selected] = "false">예약 내역</div>
+                        <div class="member-detail-tag" [class.selected] = "false">결제 내역</div>
+                    </div>
+                    <div class="member-detail-information">
+
+                    </div>
+                </div>
+            </div>
+        </section>
     </main>
 </article>
