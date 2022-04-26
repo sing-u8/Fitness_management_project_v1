@@ -8,17 +8,20 @@ import { DashboardComponent } from './dashboard.component'
 
 // components
 import { MemberListComponent } from './components/member-list/member-list.component'
+import { MembershipListComponent } from './components/membership-list/membership-list.component'
+import { LockerLiistComponent } from './components/locker-liist/locker-liist.component'
+import { ReservationListComponent } from './components/reservation-list/reservation-list.component'
+import { PaymentListComponent } from './components/payment-list/payment-list.component'
+import { MemberDetailComponent } from './components/member-detail/member-detail.component'
+import { UserListSelectComponent } from './components/user-list-select/user-list-select.component'
+import { UserListCardComponent } from './components/user-list-card/user-list-card.component'
+import { UserFlipListComponent } from './components/user-flip-list/user-flip-list.component'
 
 // section module
 import { CommonModule as SectionCommonModule } from '../common/common.module'
 
 // ngxSkeletonLoader module
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader'
-import { MembershipListComponent } from './components/membership-list/membership-list.component'
-import { LockerLiistComponent } from './components/locker-liist/locker-liist.component'
-import { ReservationListComponent } from './components/reservation-list/reservation-list.component'
-import { PaymentListComponent } from './components/payment-list/payment-list.component'
-import { MemberDetailComponent } from './components/member-detail/member-detail.component'
 
 @NgModule({
     declarations: [
@@ -29,6 +32,9 @@ import { MemberDetailComponent } from './components/member-detail/member-detail.
         ReservationListComponent,
         PaymentListComponent,
         MemberDetailComponent,
+        UserListSelectComponent,
+        UserListCardComponent,
+        UserFlipListComponent,
     ],
     imports: [
         AngularCommonModule,

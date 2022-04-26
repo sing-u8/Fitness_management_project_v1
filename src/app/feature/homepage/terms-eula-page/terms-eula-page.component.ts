@@ -6,7 +6,10 @@ import { Component, OnInit } from '@angular/core'
     styleUrls: ['./terms-eula-page.component.scss'],
 })
 export class TermsEulaPageComponent implements OnInit {
-    constructor() {}
+    constructor() {
+        const h = document.getElementById('l-homepage')
+        h.scrollTo({ top: 0 })
+    }
 
     ngOnInit(): void {}
 }

@@ -97,7 +97,16 @@ export const dashboardReducer = createImmerReducer(
         state.isLoading = 'pending'
         return state
     }),
-    on(DashboardActions.finishLoadMemberList, (state) => {
+    on(DashboardActions.finishLoadMemberList, (state, { usersList, usersSelectCateg }) => {
+        state.usersLists = usersList
+        state.usersSelectCategs = usersSelectCateg
+        state.curUserListSelect = {
+            key: state.curUserListSelect.key,
+            value: {
+                name: usersSelectCateg[state.curUserListSelect.key].name,
+                userSize: usersSelectCateg[state.curUserListSelect.key].userSize,
+            },
+        }
         state.isLoading = 'done'
         return state
     }),
@@ -155,3 +164,16 @@ export const selectUsersLists = (state: State) => state.usersLists
 export const selectCurMemberManageCateg = (state: State) => state.curMemberManageCateg
 export const selectCurUserListSelect = (state: State) => state.curUserListSelect
 export const selectCurUserData = (state: State) => state.curUserData
+
+// additional
+export const selectSearchedUsersLists = (state: State) => {
+    const searchUserList: UsersLists = _.cloneDeep(UsersListInit)
+    const searchInput = state.curSearchInput
+    const usersLists = state.usersLists
+    _.forEach(_.keys(usersLists), (typeKey) => {
+        searchUserList[typeKey] = _.filter(usersLists[typeKey], (item) => {
+            return item.user.center_user_name.includes(searchInput) || item.user.phone_number.includes(searchInput)
+        })
+    })
+    return searchUserList
+}

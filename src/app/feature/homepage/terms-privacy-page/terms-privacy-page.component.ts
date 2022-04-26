@@ -6,7 +6,10 @@ import { Component, OnInit } from '@angular/core'
     styleUrls: ['./terms-privacy-page.component.scss'],
 })
 export class TermsPrivacyPageComponent implements OnInit {
-    constructor() {}
+    constructor() {
+        const h = document.getElementById('l-homepage')
+        h.scrollTo({ top: 0 })
+    }
 
     ngOnInit(): void {}
 

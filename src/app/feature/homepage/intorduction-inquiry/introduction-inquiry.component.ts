@@ -46,6 +46,9 @@ export class IntroductionInquiryComponent implements OnInit {
     }
 
     constructor(private fb: FormBuilder, private deviceDetector: DeviceDetectorService, private router: Router) {
+        const h = document.getElementById('l-homepage')
+        h.scrollTo({ top: 0 })
+
         this.inquiryForm = this.fb.group({
             centerName: ['', [this.centerNameValidator()]],
             contactName: ['', [this.contactNameValidator()]],

@@ -216,7 +216,10 @@ export class FareGuideComponent implements OnInit {
         private deviceDetector: DeviceDetectorService,
         private router: Router,
         private domSanitizer: DomSanitizer
-    ) {}
+    ) {
+        const h = document.getElementById('l-homepage')
+        h.scrollTo({ top: 0 })
+    }
 
     ngOnInit(): void {}
 

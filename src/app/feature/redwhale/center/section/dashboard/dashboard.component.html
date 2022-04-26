@@ -12,9 +12,18 @@
     </header>
 
     <main class="l-main thin-scroll-y">
+
         <section class="l-entire-member">
+
+            <db-member-list
+                [usersLists]="(usersLists$ | async)"
+                [usersSelectCateg]="(usersSelectCateg$ | async)"
+                [selectedUserList]="(selectedUserList$ | async)"
+                [searchedUsersLists]="(searchedUsersLists$ | async)"
+            ></db-member-list>
+<!--
             <div class="entire-member__header">
-                <!-- <rw-user-list-select
+                <rw-user-list-select
                     [items]="(usersSelectCateg$ | async)"
                     [holdMode]="holdModeFlags.partial"
                     [(ngModel)]="selectedUserList$_"
@@ -50,26 +59,28 @@
                             전체 회원 홀딩
                         </div>
                     </div>
-                </div> -->
+                </div>
             </div>
 
             <div class="entile-member__body">
                 <ng-template #member_list_x [ngIf]=""></ng-template>
-
-            </div>
-
+            </div> -->
         </section>
+
+
         <section class="l-member-detail">
             <div class="member-detail__header rw-typo-title1">
                 회원 상세 정보
             </div>
             <div class="member-detail__body">
+
                 <div class="l-member-detail__top">
 
                     <div class="member-infomation"></div>
                     <div class="member-memo"></div>
 
                 </div>
+
                 <div class="l-member-detail__bottom">
 
                     <div class="l-member-detail-tag">
@@ -81,8 +92,11 @@
                     <div class="member-detail-information">
 
                     </div>
+
                 </div>
             </div>
         </section>
+
+
     </main>
 </article>

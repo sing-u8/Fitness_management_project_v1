@@ -20,7 +20,7 @@ import { UserLocker } from '@schemas/user-locker'
 
 // rxjs
 import { Observable, Subject } from 'rxjs'
-import { debounceTime, distinctUntilChanged, map, takeUntil } from 'rxjs/operators'
+import { takeUntil } from 'rxjs/operators'
 
 // ngrx
 import { Store, select } from '@ngrx/store'
@@ -144,11 +144,11 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     // public managerLists: Record<Manager, Array<{ user: GetUserReturn; holdSelected: boolean }>>
 
     public userSearchInput: FormControl
-    public userSearchInput$_: string
     public usersSelectCateg$: Observable<FromDashboard.UsersSelectCateg>
     public curUserData$: Observable<FromDashboard.CurUseData>
     public usersLists$: Observable<FromDashboard.UsersLists>
-    public selectedUserList$_: FromDashboard.UserListSelect // Observable<FromDashboard.UserListSelect>
+    public searchedUsersLists$: Observable<FromDashboard.UsersLists>
+    public selectedUserList$: Observable<FromDashboard.UserListSelect>
 
     public unsubscribe$ = new Subject<void>()
     constructor(
@@ -181,6 +181,11 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
             })
 
         this.nxStore.dispatch(DashboardActions.setCurCenterId({ centerId: this.center.id }))
+
+        this.usersLists$ = this.nxStore.select(DashboardSelector.usersLists)
+        this.searchedUsersLists$ = this.nxStore.select(DashboardSelector.searchedUsersLists)
+        this.usersSelectCateg$ = this.nxStore.select(DashboardSelector.usersSelectCategs)
+        this.selectedUserList$ = this.nxStore.select(DashboardSelector.curUserListSelect)
     }
 
     ngOnInit(): void {}

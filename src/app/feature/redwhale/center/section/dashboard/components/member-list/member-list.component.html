@@ -1,1 +1,141 @@
-<p>member-list works!</p>
+<section class="l-member-list">
+
+    <div class="member-list-header">
+        <rw-user-list-select
+            [items]="usersSelectCateg"
+            [holdMode]="holdModeFlags.partial"
+            [(ngModel)]="selectedUserList"
+            (onTypeChange)="onSelectedUserListChange($event)"
+        ></rw-user-list-select>
+
+        <div class="holding-all-button"></div>
+    </div>
+
+    <div class="member-list-body">
+        <div
+            #member_list_x
+            class="empty-member-list"
+            *ngIf="usersSelectCateg[selectedUserList.key].userSize == 0; else member_list_o"
+        >
+            <img src="assets/icons/etc/empty_screen.svg">
+            <div class="empty-guide">
+                <p
+                    *ngIf="emptyGuideText[this.selectedUserList.key].today != undefined"
+                    class="rw-typo-subtext0-regular"
+                >
+                    {{emptyGuideText[this.selectedUserList.key].today}}
+                </p>
+                <p
+                    *ngIf="emptyGuideText[this.selectedUserList.key].title != undefined"
+                    class="rw-typo-subtext0-regular"
+                >
+                    {{emptyGuideText[this.selectedUserList.key].title}}
+                </p>
+                <ng-template *ngIf="emptyGuideText[this.selectedUserList.key].desc != undefined">
+                    <p
+                        *ngFor="let d of emptyGuideText[this.selectedUserList.key].desc"
+                        class="rw-typo-subtext0-regular"
+                    >{{d}}</p>
+                </ng-template>
+                <div
+                    *ngIf="emptyGuideText[this.selectedUserList.key].emptyButton != undefined"
+                    class="empty-button" (click)="emptyGuideText[this.selectedUserList.key].emptyButton.func()"
+                >
+                    <p>{{emptyGuideText[this.selectedUserList.key].emptyButton.text}}</p>
+                    <img src="assets/icons/etc/short_right_arrow_grey.svg">
+                </div>
+            </div>
+
+        </div>
+
+        <ng-template #member_list_o>
+            <div class="presence-member-list">
+                <form class="l-input">
+                    <input
+                        class="rw-input"
+                        type="text" placeholder="회원명 / 전화번호 검색"
+                        [formControl]="userSearchInput"
+                    >
+                    <img src="assets/icons/etc/search_grey.svg">
+                </form>
+            </div>
+
+            <div *ngIf="holdModeFlags.partial" class="hold-mode-menu">
+                <span class="rw-typo-bodytext2-regular">
+                    {{holdingNumber}}명 선택됨
+                </span>
+                <span
+                    *ngIf="holdingNumber > 0"
+                    (click)="openPartialHoldModal()"
+                    class="rw-typo-bodytext2-bold"
+                >선택 완료</span>
+            </div>
+
+            <div
+                class="l-member-card thin-scroll-y-overlay2"
+                [class.l-hold-mode-card]="holdModeFlags.partial"
+            >
+                <ng-container *ngIf="usersLists[selectedUserList.key].length > 0">
+                    <!-- 퍼미션 추가 후에 더 추가해야함 -->
+                    <db-user-list-card
+                        *ngFor = "let item of usersLists[selectedUserList.key]"
+                        [cardItem] = "item"
+                        [type] = "selectedUserList.key"
+                        [holdMode] = "holdModeFlags.partial"
+                        [search] = "userSearchInput.value"
+                        [holdNumber] = "holdingNumber"
+                        (onCardClick) = "onCardClick($event)"
+                        (onHoldClick) = 'onPartialHoldClick($event)'
+                    ></db-user-list-card>
+                </ng-container>
+
+                <ng-container
+                    *ngIf="searchedUsersLists[selectedUserList.key].length == 0
+                            && userSearchInput$_"
+                >
+                    <img
+                        *ngIf="emptySearchText[this.selectedUserList.key].showTopImage"
+                        src="assets/icons/etc/empty_screen.svg" class="top-image"
+                    >
+                    <p
+                        *ngFor="let text of emptySearchText[this.selectedUserList.key].texts"
+                        class="rw-typo-subtext0-regular grey"
+                    >
+                        {{text}}
+                    </p>
+                    <div
+                        *ngIf="!this.holdModeFlags.partial && emptySearchText[this.selectedUserList.key].button != undefined "
+                        class="empty-button"
+                        (click)="emptySearchText[this.selectedUserList.key].button.func()"
+                    >
+                        <p>{{emptySearchText[this.selectedUserList.key].button.text}}</p>
+                        <img src="assets/icons/etc/short_right_arrow_grey.svg">
+                    </div>
+
+                    <ng-container *ngIf="!holdModeFlags.partial && selectedUserList.key != 'employee' && selectedUserList.key != 'member'">
+                        <ng-container *ngFor="let item of usersLists | keyvalue">
+                            <db-user-flip-list
+                                *ngIf="selectedUserList[item.key] != 0"
+                                [type]="usersSelectCateg[item.key].name"
+                            >
+                                <db-user-list-card
+                                    *ngFor="let card of selectedUserList[item.key]"
+                                    [cardItem]="card"
+                                    [type]="usersSelectCateg[item.key].name"
+                                    [search]="userSearchInput.value"
+                                    (onCardClick)="onCardClick($event)"
+                                ></db-user-list-card>
+                            </db-user-flip-list>
+                        </ng-container>
+                    </ng-container>
+
+                </ng-container>
+
+
+            </div>
+
+        </ng-template>
+
+    </div>
+
+</section>

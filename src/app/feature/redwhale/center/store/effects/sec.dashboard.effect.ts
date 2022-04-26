@@ -24,8 +24,8 @@ export class DashboardEffect {
             switchMap(({ centerId }) =>
                 this.centerUsersApi.getUserList(centerId).pipe(
                     map((memberlist) => {
-                        const usersSelectCateg = DashboardReducer.UsersSelectCategInit
-                        const usersList = DashboardReducer.UsersListInit
+                        const usersSelectCateg = _.cloneDeep(DashboardReducer.UsersSelectCategInit)
+                        const usersList = _.cloneDeep(DashboardReducer.UsersListInit)
                         usersList['member'] = memberlist.map((v) => ({
                             user: v,
                             holdSelected: false,
