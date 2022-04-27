@@ -4,19 +4,25 @@ import { Store } from '@ngrx/store'
 import { of, EMPTY, iif } from 'rxjs'
 import { catchError, switchMap, tap, map, exhaustMap, mapTo } from 'rxjs/operators'
 
-import _ from 'lodash'
+import _, { xor } from 'lodash'
 
 import * as DashboardActions from '../actions/sec.dashboard.actions'
 import * as DashboardSelector from '../selectors/sec.dashoboard.selector'
 import * as DashboardReducer from '../reducers/sec.dashboard.reducer'
 
-import { CenterUsersService } from '@services/center-users.service' // !! 나중에 멤버 데이터 API를 바꿀 수 있음
+import { CenterUsersService } from '@services/center-users.service'
+import { FileService } from '@services/file.service'
 
 import { CenterUser } from '@schemas/center-user'
 
 @Injectable()
 export class DashboardEffect {
-    constructor(private centerUsersApi: CenterUsersService, private store: Store, private actions$: Actions) {}
+    constructor(
+        private centerUsersApi: CenterUsersService,
+        private fileApi: FileService,
+        private store: Store,
+        private actions$: Actions
+    ) {}
 
     public loadMemberList$ = createEffect(() =>
         this.actions$.pipe(
@@ -36,6 +42,32 @@ export class DashboardEffect {
                             usersSelectCateg,
                         })
                     }),
+                    catchError((err: string) => of(DashboardActions.error({ error: err })))
+                )
+            )
+        )
+    )
+
+    public directRegisterMember = createEffect(() =>
+        this.actions$.pipe(
+            ofType(DashboardActions.startDirectRegisterMember),
+            switchMap(({ centerId, reqBody, imageFile, callback }) =>
+                this.centerUsersApi.createUser(centerId, reqBody).pipe(
+                    map(
+                        (createdUser) => {
+                            // if (imageFile) {
+                            // return this.fileApi.createFile({
+                            //     type_code: 'file_type_center_user_picture',
+                            //     center_id: centerId,
+                            //     center_user_id: createdUser.id,
+                            // }, imageFile)
+                            // } else {
+                            return DashboardActions.finishDirectRegisterMember({
+                                createdUser,
+                            })
+                        }
+                        // }
+                    ),
                     catchError((err: string) => of(DashboardActions.error({ error: err })))
                 )
             )

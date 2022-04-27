@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core'
 
+export type ImageFile = any
 export interface LocalFileData {
     src: string
-    file: any
+    file: ImageFile
 }
 
 @Injectable({

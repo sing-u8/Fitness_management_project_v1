@@ -238,7 +238,7 @@ export class DirectRegisterMemberFullmodalComponent implements OnInit, OnDestroy
         this.localFileData = { src: undefined, file: undefined }
     }
 
-    registerAvatar(userid, afterFn?: () => void) {
+    registerAvatar(userid: string, afterFn?: () => void) {
         if (this.localFileData.file) {
             this.fileService
                 .createFile(

@@ -8,6 +8,11 @@ import {
     CurUseData,
 } from '../reducers/sec.dashboard.reducer'
 
+import { CreateUserRequestBody } from '@services/center-users.service'
+import { ImageFile } from '@services/helper/picture-management.service'
+
+import { CenterUser } from '@schemas/center-user'
+
 const FeatureKey = 'Center/Dashboard'
 
 // async
@@ -19,6 +24,15 @@ export const startLoadMemberList = createAction(
 export const finishLoadMemberList = createAction(
     `[${FeatureKey}] Finish Loading Member List`,
     props<{ usersList: UsersLists; usersSelectCateg: UsersSelectCateg }>()
+)
+
+export const startDirectRegisterMember = createAction(
+    `[${FeatureKey}] Start Direct Register Member`,
+    props<{ centerId: string; reqBody: CreateUserRequestBody; imageFile: ImageFile; callback: () => void }>()
+)
+export const finishDirectRegisterMember = createAction(
+    `[${FeatureKey}] Finish Direct Register Member`,
+    props<{ createdUser: CenterUser }>()
 )
 
 // sync
