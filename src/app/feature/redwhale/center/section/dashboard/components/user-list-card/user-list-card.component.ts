@@ -37,7 +37,7 @@ export class UserListCardComponent implements OnInit, AfterViewInit, OnChanges, 
         if (this.holdNumber >= 500 && !this.cardItem.holdSelected) {
             this.globalService.showToast('일부 회원 홀딩 시, 최대 500명까지 선택하실 수 있어요.')
         } else {
-            this.cardItem.holdSelected = !this.cardItem.holdSelected
+            // this.cardItem.holdSelected = !this.cardItem.holdSelected
             this.onHoldClick.emit(this.cardItem.holdSelected)
         }
     }

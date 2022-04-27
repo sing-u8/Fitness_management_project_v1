@@ -5,8 +5,12 @@
             <span class="header-text__title-desc rw-typo-subtext1">한 화면에서 쉽고 간편하게 회원을 관리해보세요.</span>
         </div>
 
-        <div class="register-member-button" rw-button rwButtonWidth="130" rwButtonHeight="43" rwButtonColor="var(--red)"
-            rwButtonFontColor="var(--white)" (click)="goToRegisterNewMember()">
+        <div
+            class="register-member-button"
+            rw-button rwButtonWidth="130" rwButtonHeight="43" rwButtonColor="var(--red)"
+            rwButtonFontColor="var(--white)"
+            (click)="toggleRegisterMemberModal()"
+        >
             신규 회원 등록
         </div>
     </header>
@@ -100,3 +104,15 @@
 
     </main>
 </article>
+
+<db-register-member-modal
+    [(visible)]="doShowRegisterMemberModal"
+    (cancel)="toggleRegisterMemberModal()"
+    (onDirectRegister)="toggleDirectRegisterMemberFullModal()"
+></db-register-member-modal>
+
+<db-direct-register-member-fullmodal
+    [(visible)]="doShowDirectRegisterMemberFullModal"
+    (close)="toggleDirectRegisterMemberFullModal()"
+    (finishRegister)="whenFinishRegisterMember()"
+></db-direct-register-member-fullmodal>

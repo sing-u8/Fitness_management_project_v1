@@ -16,6 +16,8 @@ import { MemberDetailComponent } from './components/member-detail/member-detail.
 import { UserListSelectComponent } from './components/user-list-select/user-list-select.component'
 import { UserListCardComponent } from './components/user-list-card/user-list-card.component'
 import { UserFlipListComponent } from './components/user-flip-list/user-flip-list.component'
+import { RegisterMemberModalComponent } from './components/register-member-modal/register-member-modal.component'
+import { DirectRegisterMemberFullmodalComponent } from './components/direct-register-member-fullmodal/direct-register-member-fullmodal.component'
 
 // section module
 import { CommonModule as SectionCommonModule } from '../common/common.module'
@@ -35,6 +37,8 @@ import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader'
         UserListSelectComponent,
         UserListCardComponent,
         UserFlipListComponent,
+        RegisterMemberModalComponent,
+        DirectRegisterMemberFullmodalComponent,
     ],
     imports: [
         AngularCommonModule,

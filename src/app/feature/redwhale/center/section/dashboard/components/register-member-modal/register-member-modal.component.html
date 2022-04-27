@@ -1,0 +1,60 @@
+<div class="rw-modal-background" #modalBackgroundElement></div>
+<div class="rw-modal-wrapper justify-content-center align-items-center"
+    (mouseup)="!isMouseModalDown && onCancel()" (mousedown)='resetMouseModalDown()'
+    #modalWrapperElement
+>
+    <div class="rw-modal user-select-none" (mousedown)='onMouseModalDown(); $event.stopPropagation()'>
+
+        <div class="modal-header">
+            <div class="title rw-typo-title2">
+                신규 회원 등록
+                <div class="help">
+                    <img src="assets/icons/etc/help.svg">
+                    <div class="help-text-container">
+                        <div class="help-text">
+                            <div class="help-text-title">신규 회원 등록 방법</div>
+                            <div class="help-text-content">
+                                <div class="rw-typo-bodytext2">
+                                    <p>01</p> 회원님의 폰을 준비해주세요.
+                                </div>
+                                <div class="rw-typo-bodytext2">
+                                    <p>02</p> 회원님 폰의 카메라 어플을 켜 QR코드를 스캔해주세요.
+                                </div>
+                                <div class="rw-typo-bodytext2">
+                                    <p>03</p> 연결된 링크에서 회원가입 또는 로그인해주세요.
+                                </div>
+                                <div class="rw-typo-bodytext2">
+                                    <p>04</p>회원 등록이 완료되었어요!
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="close-button" (click)="onCancel()">
+                <img src="assets/icons/etc/close.svg">
+            </div>
+        </div>
+        <div class="modal-body">
+            <div class="qrcode-box">
+                <img src="assets/icons/etc/qrcode_edge.svg" class='left-top '>
+                <img src="assets/icons/etc/qrcode_edge.svg" class='right-top rotate-90'>
+                <img src="assets/icons/etc/qrcode_edge.svg" class='right-bottom rotate-180'>
+                <img src="assets/icons/etc/qrcode_edge.svg" class='left-bottom rotate-270'>
+
+                <canvas class="qrcode" #qrcode_canvas></canvas>
+            </div>
+            <a (click)="downloadGymQRcode($event)" class="download-button rw-typo-bodytext2">
+                <img src="assets/icons/etc/download.svg">
+                <canvas class="qrcode-for-download" #qrcode_canvas_download hidden></canvas>
+                QR 다운로드
+            </a>
+            <div class="direct-registration rw-typo-bodytext2">
+                <p>QR코드 스캔이 어려운 회원이세요?</p>
+                <p (click)="onDirectRegister.emit()" class="direct-registration-link">센터에서 직접 등록하기</p>
+            </div>
+        </div>
+
+    </div>
+</div>

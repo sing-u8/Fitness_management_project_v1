@@ -121,6 +121,22 @@ export class CenterLockerService {
         )
     }
 
+    getItem(centerId: string, categoryId: string, itemId: string): Observable<LockerItem> {
+        const url = this.SERVER + `/${centerId}/locker/${categoryId}/item/${itemId}`
+
+        const options = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json',
+            }),
+        }
+        return this.http.get<Response>(url, options).pipe(
+            map((res) => {
+                return res.dataset[0]
+            }),
+            catchError(handleError)
+        )
+    }
+
     updateItem(
         centerId: string,
         categoryId: string,

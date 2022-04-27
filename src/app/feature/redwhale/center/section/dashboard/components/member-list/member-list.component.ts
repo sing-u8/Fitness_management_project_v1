@@ -46,6 +46,23 @@ export class MemberListComponent implements OnInit, OnDestroy {
         this.closePartialHoldModal()
     }
     onHoldPartialConfirm(event: { date: { startDate: string; endDate: string }; holdWithLocker: boolean }) {}
+    toggleHodlingMode() {
+        this.holdingNumber = 0
+        this.holdModeFlags.partial = !this.holdModeFlags.partial
+        this.resetSelectedCategListHold()
+    }
+    resetSelectedCategListHold() {
+        this.nxStore.dispatch(
+            DashboardActions.resetUsersListsHoldSelected({ memberSelectCateg: this.selectedUserList.key })
+        )
+    }
+    toggleHoldDropDown() {
+        this.showHoldDropdown = !this.showHoldDropdown
+    }
+    closeHoldDropDown() {
+        // this.getSerachUserList(this.userSearchInput.value)
+        this.showHoldDropdown = false
+    }
 
     public today: string = dayjs().format('YYYY.MM.DD (ddd)')
 
@@ -95,6 +112,38 @@ export class MemberListComponent implements OnInit, OnDestroy {
         })
     }
 
+    // holding modal vars & method
+    openAllHoldModal() {
+        this.doShowHoldAllModal = true
+    }
+    closeAllHoldModal() {
+        this.doShowHoldAllModal = false
+    }
+    onHoldAllCancel() {
+        this.closeAllHoldModal()
+    }
+    onHoldAllConfirm(event: { date: { startDate: string; endDate: string }; holdWithLocker: boolean }) {
+        // this.GymDashboardService.holdAllMember(this.gym.id, {
+        //     start_date: event.date.startDate,
+        //     end_date: event.date.endDate,
+        //     including_locker_ticket_yn: event.holdWithLocker,
+        // }).subscribe((__) => {
+        //     this.getUserList(this.selectedUserList.key, '', '', false, () => {
+        //         this.getAllUserDetail()
+        //         this.closeAllHoldModal()
+        //         if (event.holdWithLocker) {
+        //             this.globalService.showToast(
+        //                 `${this.userLists.member.length}명 회원의 회원권 / 락커 홀딩이 예약되었습니다.`
+        //             )
+        //         } else {
+        //             this.globalService.showToast(
+        //                 `${this.userLists.member.length}명 회원의 회원권 홀딩이 예약되었습니다.`
+        //             )
+        //         }
+        //     })
+        // })
+    }
+
     // user-list-card method
     onCardClick(cardInfo: CenterUser) {
         // this.userData = cardInfo
@@ -105,9 +154,16 @@ export class MemberListComponent implements OnInit, OnDestroy {
         // })
         // this.getAllUserDetail(() => {})
     }
-    onPartialHoldClick(holdFlag: boolean) {
+    onPartialHoldClick(holdFlag: boolean, index: number) {
         // !! 500명으로 제한 해야함
-        this.holdingNumber += holdFlag ? 1 : -1
+        this.nxStore.dispatch(
+            DashboardActions.setUsersListsHoldSelected({
+                memberSelectCateg: this.selectedUserList.key,
+                index: index,
+                holdFlag: !holdFlag,
+            })
+        )
+        this.holdingNumber += !holdFlag ? 1 : -1
     }
 
     // -------------------------------------- selectedUserList method --------------------------------------

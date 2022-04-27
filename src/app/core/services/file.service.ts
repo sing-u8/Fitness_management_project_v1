@@ -137,7 +137,7 @@ export class FileService {
 export interface CreateFileRequestBody {
     type_code: FileTypeCode
     center_id?: string
-    cneter_user_id?: string
+    center_user_id?: string
     chat_room_id?: string
     // files  : FileList   -- is already in other param
 }

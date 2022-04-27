@@ -128,6 +128,18 @@ export const dashboardReducer = createImmerReducer(
         state.usersLists = usersLists
         return state
     }),
+    on(DashboardActions.setUsersListsHoldSelected, (state, { memberSelectCateg, index, holdFlag }) => {
+        state.usersLists[memberSelectCateg][index].holdSelected = holdFlag
+        return state
+    }),
+    on(DashboardActions.resetUsersListsHoldSelected, (state, { memberSelectCateg }) => {
+        const usersLists = state.usersLists
+        usersLists[memberSelectCateg].forEach((item, index) => {
+            state.usersLists[memberSelectCateg][index].holdSelected = false
+        })
+
+        return state
+    }),
     on(DashboardActions.setCurUesrData, (state, { curUserData }) => {
         // state.curUserData =
         return state

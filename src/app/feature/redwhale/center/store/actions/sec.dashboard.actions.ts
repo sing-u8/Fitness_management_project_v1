@@ -36,6 +36,14 @@ export const setUserListSelect = createAction(
 
 // userLists
 export const setUsersLists = createAction(`[${FeatureKey}] Set Users Lists`, props<{ usersLists: UsersLists }>())
+export const setUsersListsHoldSelected = createAction(
+    `[${FeatureKey}] Set UsersLists HoldSelected`,
+    props<{ memberSelectCateg: MemberSelectCateg; index: number; holdFlag: boolean }>()
+)
+export const resetUsersListsHoldSelected = createAction(
+    `[${FeatureKey}] Reset UsersLists HoldSelected`,
+    props<{ memberSelectCateg: MemberSelectCateg }>()
+)
 
 // managerLists
 //

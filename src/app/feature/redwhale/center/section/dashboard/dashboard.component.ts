@@ -90,6 +90,20 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
         confirmButtonText: '확인',
     }
 
+    // register modal vars
+    public doShowRegisterMemberModal = false
+    toggleRegisterMemberModal() {
+        this.doShowRegisterMemberModal = !this.doShowRegisterMemberModal
+    }
+
+    public doShowDirectRegisterMemberFullModal = false
+    toggleDirectRegisterMemberFullModal() {
+        this.doShowDirectRegisterMemberFullModal = !this.doShowDirectRegisterMemberFullModal
+    }
+    whenFinishRegisterMember() {
+        this.toggleDirectRegisterMemberFullModal()
+    }
+
     // public userDetail: {
     //     membershipLocker: { membership: Array<MembershipTicket>; locker: Array<LockerTicket> }
     //     reservation: ReservationList

@@ -1,4 +1,16 @@
-import { Component, OnInit, OnDestroy } from '@angular/core'
+import {
+    Component,
+    OnInit,
+    OnDestroy,
+    SimpleChanges,
+    AfterViewChecked,
+    ElementRef,
+    Input,
+    Output,
+    EventEmitter,
+    ViewChild,
+    Renderer2,
+} from '@angular/core'
 import { Router, ActivatedRoute } from '@angular/router'
 import { FormBuilder, Validators, ValidationErrors, AbstractControl, FormGroup, AsyncValidatorFn } from '@angular/forms'
 
@@ -12,18 +24,31 @@ import { CenterUsersService, CreateUserRequestBody } from '@services/center-user
 import { PictureManagementService, LocalFileData } from '@services/helper/picture-management.service'
 
 import { Center } from '@schemas/center'
+// components
+import { ClickEmitterType } from '@shared/components/common/button/button.component'
 
 // ngrx
 import { Store } from '@ngrx/store'
 import { showToast } from '@appStore/actions/toast.action'
 
 type Gender = 'male' | 'female' | ''
+
 @Component({
-    selector: 'app-direct-registration',
-    templateUrl: './direct-registration.component.html',
-    styleUrls: ['./direct-registration.component.scss'],
+    selector: 'db-direct-register-member-fullmodal',
+    templateUrl: './direct-register-member-fullmodal.component.html',
+    styleUrls: ['./direct-register-member-fullmodal.component.scss'],
 })
-export class DirectRegistrationComponent implements OnInit, OnDestroy {
+export class DirectRegisterMemberFullmodalComponent implements OnInit, OnDestroy {
+    // modal vars and funcs
+    @Input() visible: boolean
+    @Output() visibleChange = new EventEmitter<boolean>()
+    @Output() close = new EventEmitter<any>()
+    @Output() finishRegister = new EventEmitter<any>()
+
+    @ViewChild('modalWrapperElement') modalWrapperElement: ElementRef
+    public changed: boolean
+    //
+
     public center: Center
 
     public gender: Gender
@@ -51,7 +76,8 @@ export class DirectRegistrationComponent implements OnInit, OnDestroy {
         private fb: FormBuilder,
         private authService: AuthService,
         private centerUsersService: CenterUsersService,
-        private nxStore: Store
+        private nxStore: Store,
+        private renderer: Renderer2
     ) {
         this.gender = ''
         this.localFileData = { src: undefined, file: undefined }
@@ -89,6 +115,38 @@ export class DirectRegistrationComponent implements OnInit, OnDestroy {
         })
     }
 
+    ngOnChanges(changes: SimpleChanges) {
+        if (changes['visible'] && !changes['visible'].firstChange) {
+            if (changes['visible'].previousValue != changes['visible'].currentValue) {
+                this.changed = true
+            }
+        }
+    }
+
+    ngAfterViewChecked() {
+        if (this.changed) {
+            this.changed = false
+
+            if (this.visible) {
+                this.renderer.addClass(this.modalWrapperElement.nativeElement, 'display-flex')
+                setTimeout(() => {
+                    this.renderer
+                    this.renderer.addClass(this.modalWrapperElement.nativeElement, 'rw-modal-wrapper-show')
+                }, 0)
+            } else {
+                this.renderer.removeClass(this.modalWrapperElement.nativeElement, 'rw-modal-wrapper-show')
+                setTimeout(() => {
+                    this.renderer.removeClass(this.modalWrapperElement.nativeElement, 'display-flex')
+                }, 200)
+
+                this.pictureService.resetLocalPicData()
+                this.localFileData = { src: undefined, file: undefined }
+                this.gender = ''
+                this.registerForm.reset()
+            }
+        }
+    }
+
     ngOnDestroy(): void {
         this.pictureService.resetLocalPicData()
     }
@@ -110,11 +168,10 @@ export class DirectRegistrationComponent implements OnInit, OnDestroy {
         return (control: AbstractControl): Observable<ValidationErrors | null> => {
             return this.authService.checkDuplicateMail({ email: control.value }).pipe(
                 map((v) => {
-                    console.log('v: ', v, this.registerForm)
                     return null
                 }),
                 catchError((e) => {
-                    return e.code == 'FUNCTION:AUTH:007' ? of({ isExisted: true }) : of({ isNonEmailForm: true })
+                    return e.code == 'FUNCTION_AUTH_005' ? of({ isExisted: true }) : of({ isNonEmailForm: true })
                 })
             )
 
@@ -183,21 +240,24 @@ export class DirectRegistrationComponent implements OnInit, OnDestroy {
 
     registerAvatar(userid, afterFn?: () => void) {
         if (this.localFileData.file) {
-            // !! 수정 필요
-            // this.fileService
-            //     .createFile({ type_code: 'file_type_user_picture' }, this.localFileData.file)
-            //     .subscribe((fl) => {
-            //         const location = fl[0]['location']
-            //         this.centerUsersService.updateUser(this.center.id, userid, { picture: location }).subscribe(
-            //             (user) => {
-            //                 this.globalService.showToast('회원 등록이 완료되었습니다.')
-            //                 afterFn ? afterFn() : null
-            //             },
-            //             (err) => {
-            //                 console.log('create account avatar file err: ', err)
-            //             }
-            //         )
-            //     })
+            this.fileService
+                .createFile(
+                    { type_code: 'file_type_center_user_picture', center_id: this.center.id, center_user_id: userid },
+                    this.localFileData.file
+                )
+                .subscribe((fl) => {
+                    this.nxStore.dispatch(showToast({ text: '회원 등록이 완료되었습니다.' }))
+                    afterFn ? afterFn() : null
+                    // this.centerUsersService.updateUser(this.center.id, userid, { picture: location }).subscribe(
+                    //     (user) => {
+                    //         this.nxStore.dispatch(showToast({ text: '회원 등록이 완료되었습니다.' }))
+                    //         afterFn ? afterFn() : null
+                    //     },
+                    //     (err) => {
+                    //         console.log('create account avatar file err: ', err)
+                    //     }
+                    // )
+                })
         } else {
             this.nxStore.dispatch(showToast({ text: '회원 등록이 완료되었습니다.' }))
             afterFn ? afterFn() : null
@@ -208,9 +268,6 @@ export class DirectRegistrationComponent implements OnInit, OnDestroy {
     goRouterLink(uri: string) {
         this.router.navigateByUrl(uri)
     }
-    backMainRegistraion() {
-        this.router.navigate(['../main-registration'], { relativeTo: this.activatedRoute })
-    }
 
     // gender method
     onSelectGender(Gender: Gender) {
@@ -218,8 +275,9 @@ export class DirectRegistrationComponent implements OnInit, OnDestroy {
     }
 
     // register method
-    registerNewMember() {
-        console.log('register new member: ', this.registerForm)
+    registerNewMember(btLoadingFns: ClickEmitterType) {
+        btLoadingFns.showLoading()
+
         const registerBody: CreateUserRequestBody = {
             name: this.name.value as string,
             sex: this.gender as string,
@@ -227,15 +285,18 @@ export class DirectRegistrationComponent implements OnInit, OnDestroy {
             email: this.email.value as string,
             phone_number: this.phone_number.value as string,
         }
+        console.log('registerNewMember  : ', this.center)
         this.centerUsersService.createUser(this.center.id, registerBody).subscribe({
             next: (createdUser) => {
                 this.registerAvatar(createdUser.id, () => {
-                    this.backMainRegistraion()
+                    this.finishRegister.emit()
+                    btLoadingFns.hideLoading()
                 })
             },
 
             error: (err) => {
                 console.log('err in registeration by email: ', err)
+                btLoadingFns.hideLoading()
             },
         })
     }

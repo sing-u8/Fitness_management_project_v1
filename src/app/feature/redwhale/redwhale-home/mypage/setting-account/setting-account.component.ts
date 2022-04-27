@@ -127,7 +127,6 @@ export class SettingAccountComponent implements OnInit {
 
     onInputClick(type: string) {
         const modalType = type.toUpperCase()
-        console.log('onINputClick -- : ', type, modalType)
         if (modalType == 'DELAVATAR') {
             this.delAvatarFlag = true
             this.delModalTextData = this.settingAcountModalService.initModal(modalType as modalType)
