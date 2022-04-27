@@ -9,6 +9,8 @@ import { environment } from '@environments/environment'
 import { Response } from '@schemas/response'
 import { ClassCategory } from '@schemas/class-category'
 import { ClassItem } from '@schemas/class-item'
+import { MembershipItem } from '@schemas/membership-item'
+import { CenterUser } from '@schemas/center-user'
 
 @Injectable({
     providedIn: 'root',
@@ -198,25 +200,143 @@ export class CenterLessonService {
         )
     }
 
-    // linkMembership(
+    linkMembership(
+        centerId: string,
+        categoryId: string,
+        ItemId: string,
+        reqBdoy: LinkMembershipRequestBody
+    ): Observable<MembershipItem> {
+        const url = this.SERVER + `/${centerId}/class/${categoryId}/item/${ItemId}/membership`
 
-    // )
+        const options = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json',
+            }),
+        }
+
+        return this.http.post<Response>(url, reqBdoy, options).pipe(
+            map((res) => {
+                return res.dataset[0]
+            }),
+            catchError(handleError)
+        )
+    }
+
+    getLinkedMemberships(centerId: string, categoryId: string, ItemId: string): Observable<Array<MembershipItem>> {
+        const url = this.SERVER + `/${centerId}/class/${categoryId}/item/${ItemId}/membership`
+
+        const options = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json',
+            }),
+        }
+
+        return this.http.get<Response>(url, options).pipe(
+            map((res) => {
+                return res.dataset
+            }),
+            catchError(handleError)
+        )
+    }
+
+    removeLinkedMembership(
+        centerId: string,
+        categoryId: string,
+        ItemId: string,
+        membershipItemId: string
+    ): Observable<Response> {
+        const url = this.SERVER + `/${centerId}/class/${categoryId}/item/${ItemId}/membership/${membershipItemId}`
+
+        const options = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json',
+            }),
+        }
+
+        return this.http.delete<Response>(url, options).pipe(
+            map((res) => {
+                return res.dataset[0]
+            }),
+            catchError(handleError)
+        )
+    }
+
+    addInstructor(
+        centerId: string,
+        categoryId: string,
+        ItemId: string,
+        reqBody: AddInstructorRequestBody
+    ): Observable<CenterUser> {
+        const url = this.SERVER + `/${centerId}/class/${categoryId}/item/${ItemId}/instructor`
+
+        const options = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json',
+            }),
+        }
+
+        return this.http.post<Response>(url, reqBody, options).pipe(
+            map((res) => {
+                return res.dataset[0]
+            }),
+            catchError(handleError)
+        )
+    }
+
+    getInstructors(centerId: string, categoryId: string, ItemId: string): Observable<Array<CenterUser>> {
+        const url = this.SERVER + `/${centerId}/class/${categoryId}/item/${ItemId}/instructor`
+
+        const options = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json',
+            }),
+        }
+
+        return this.http.get<Response>(url, options).pipe(
+            map((res) => {
+                return res.dataset
+            }),
+            catchError(handleError)
+        )
+    }
+
+    removeInstructor(
+        centerId: string,
+        categoryId: string,
+        ItemId: string,
+        instructorUserId: string
+    ): Observable<Response> {
+        const url = this.SERVER + `/${centerId}/class/${categoryId}/item/${ItemId}/instructor/${instructorUserId}`
+
+        const options = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json',
+            }),
+        }
+
+        return this.http.delete<Response>(url, options).pipe(
+            map((res) => {
+                return res.dataset[0]
+            }),
+            catchError(handleError)
+        )
+    }
 }
 
-class CreateCategoryRequestBody {
+export interface CreateCategoryRequestBody {
     name: string
 }
 
-class UpdateCategoryRequestBody {
+export interface UpdateCategoryRequestBody {
     name: string
 }
 
-class CreateItemRequestBody {
+export interface CreateItemRequestBody {
     name: string
     sequence_number: number
 }
 
-export class UpdateItemRequestBody {
+export interface UpdateItemRequestBody {
     type_code?: string
     name?: string
     minutes?: number
@@ -230,7 +350,15 @@ export class UpdateItemRequestBody {
     membership_item_ids?: Array<string>
 }
 
-class MoveItemRequestBody {
+export interface MoveItemRequestBody {
     target_category_id: string
     target_item_sequence_number: number
+}
+
+export interface LinkMembershipRequestBody {
+    membership_item_id: string
+}
+
+export interface AddInstructorRequestBody {
+    instructor_user_id: string
 }

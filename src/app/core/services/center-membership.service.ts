@@ -9,6 +9,7 @@ import { environment } from '@environments/environment'
 import { Response } from '@schemas/response'
 import { MembershipCategory } from '@schemas/membership-category'
 import { MembershipItem } from '@schemas/membership-item'
+import { ClassItem } from '@schemas/class-item'
 
 @Injectable({
     providedIn: 'root',
@@ -197,22 +198,78 @@ export class CenterMembershipService {
             catchError(handleError)
         )
     }
+
+    linkClass(
+        centerId: string,
+        categoryId: string,
+        ItemId: string,
+        reqBody: LinkClassRequestBody
+    ): Observable<ClassItem> {
+        const url = this.SERVER + `/${centerId}/membership/${categoryId}/item/${ItemId}/class`
+
+        const options = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json',
+            }),
+        }
+
+        return this.http.post<Response>(url, reqBody, options).pipe(
+            map((res) => {
+                return res.dataset[0]
+            }),
+            catchError(handleError)
+        )
+    }
+
+    getLinkedClass(centerId: string, categoryId: string, ItemId: string): Observable<Array<ClassItem>> {
+        const url = this.SERVER + `/${centerId}/membership/${categoryId}/item/${ItemId}/class`
+
+        const options = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json',
+            }),
+        }
+
+        return this.http.get<Response>(url, options).pipe(
+            map((res) => {
+                return res.dataset
+            }),
+            catchError(handleError)
+        )
+    }
+
+    removeLinkedClass(centerId: string, categoryId: string, ItemId: string, classItemId: string): Observable<Response> {
+        const url = this.SERVER + `/${centerId}/membership/${categoryId}/item/${ItemId}/class/${classItemId}`
+
+        const options = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json',
+            }),
+        }
+
+        return this.http.delete<Response>(url, options).pipe(
+            map((res) => {
+                return res.dataset[0]
+            }),
+            catchError(handleError)
+        )
+    }
 }
 
-class CreateCategoryRequestBody {
+export interface CreateCategoryRequestBody {
     name: string
 }
 
-class UpdateCategoryRequestBody {
+export interface UpdateCategoryRequestBody {
     name: string
 }
 
-class CreateItemRequestBody {
+export interface CreateItemRequestBody {
     name: string
     sequence_number: number
 }
 
-export class UpdateItemRequestBody {
+export interface UpdateItemRequestBody {
     name?: string
     days?: number
     count?: number
@@ -223,7 +280,11 @@ export class UpdateItemRequestBody {
     class_item_ids?: Array<string>
 }
 
-class MoveItemRequestBody {
+export interface MoveItemRequestBody {
     target_category_id: string
     target_item_sequence_number: number
+}
+
+export interface LinkClassRequestBody {
+    class_item_id: string
 }
