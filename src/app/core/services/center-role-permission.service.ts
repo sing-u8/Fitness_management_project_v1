@@ -9,6 +9,10 @@ import { StorageService } from '@services/storage.service'
 
 import { Response } from '@schemas/response'
 
+import { Role } from '@schemas/role'
+import { PermissionCategory } from '@schemas/permission-category'
+import { PermissionItem } from '@schemas/permission-item'
+
 @Injectable({
     providedIn: 'root',
 })
@@ -23,18 +27,18 @@ export class CenterRolePermission {
     constructor(private http: HttpClient, private storageService: StorageService) {}
 
     // get
-    getCenterRole(centerId: string): Observable<GetCetnerRoleResponse> {
+    getCenterRoles(centerId: string): Observable<Array<Role>> {
         const url = this.SERVER + `${centerId}/role`
 
         return this.http.get<Response>(url, this.options).pipe(
             map((res) => {
-                return res.dataset[0]
+                return res.dataset
             }),
             catchError(handleError)
         )
     }
 
-    getCenterRolePermission(centerId: string, roleCode: string): Observable<GetCetnerRoleResponse> {
+    getCenterRolePermission(centerId: string, roleCode: string): Observable<PermissionCategory> {
         const url = this.SERVER + `${centerId}/role/${roleCode}/permission`
 
         return this.http.get<Response>(url, this.options).pipe(
@@ -46,7 +50,7 @@ export class CenterRolePermission {
     }
 
     // post
-    setCenterRole(centerId: string, reqBody: SetCenterRoleReqBody): Observable<GetCetnerRoleResponse> {
+    createCenterRole(centerId: string, reqBody: CreateCenterRoleReqBody): Observable<Role> {
         const url = this.SERVER + `${centerId}/role`
 
         return this.http.post<Response>(url, reqBody, this.options).pipe(
@@ -58,11 +62,7 @@ export class CenterRolePermission {
     }
 
     // put
-    modifyCenterRole(
-        centerId: string,
-        roleCode: string,
-        reqBody: SetCenterRoleReqBody
-    ): Observable<GetCetnerRoleResponse> {
+    modifyCenterRole(centerId: string, roleCode: string, reqBody: ModifyCenterRoleReqBody): Observable<Role> {
         const url = this.SERVER + `${centerId}/role/${roleCode}`
 
         return this.http.put<Response>(url, reqBody, this.options).pipe(
@@ -78,7 +78,7 @@ export class CenterRolePermission {
         roleCode: string,
         permissionCode: string,
         reqBody: ModifyCenterRolePermissionReqBody
-    ): Observable<GetCetnerRoleResponse> {
+    ): Observable<PermissionItem> {
         const url = this.SERVER + `${centerId}/role/${roleCode}/permission/${permissionCode}`
 
         return this.http.put<Response>(url, reqBody, this.options).pipe(
@@ -102,15 +102,12 @@ export class CenterRolePermission {
     }
 }
 
-// get
-export interface GetCetnerRoleResponse {
+// post
+export interface CreateCenterRoleReqBody {
     code: string
     name: string
-    sequence_number: number
 }
-
-// post
-export interface SetCenterRoleReqBody {
+export interface ModifyCenterRoleReqBody {
     code: string
     name: string
 }
