@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core'
+import _ from 'lodash'
 
-export type ImageFile = any
+export type ImageFile = FileList
 export interface LocalFileData {
     src: string
     file: ImageFile

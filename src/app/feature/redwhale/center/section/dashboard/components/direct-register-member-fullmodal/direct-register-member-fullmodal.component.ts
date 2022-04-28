@@ -28,8 +28,11 @@ import { Center } from '@schemas/center'
 import { ClickEmitterType } from '@shared/components/common/button/button.component'
 
 // ngrx
+import * as DashboardActions from '@centerStore/actions/sec.dashboard.actions'
+
 import { Store } from '@ngrx/store'
 import { showToast } from '@appStore/actions/toast.action'
+import _ from 'lodash'
 
 type Gender = 'male' | 'female' | ''
 
@@ -142,7 +145,14 @@ export class DirectRegisterMemberFullmodalComponent implements OnInit, OnDestroy
                 this.pictureService.resetLocalPicData()
                 this.localFileData = { src: undefined, file: undefined }
                 this.gender = ''
-                this.registerForm.reset()
+                this.email.setValue('')
+                this.name.setValue('')
+                this.phone_number.setValue('')
+                this.birth_date.setValue('')
+                this.email.markAsPristine()
+                this.name.markAsPristine()
+                this.phone_number.markAsPristine()
+                this.birth_date.markAsPristine()
             }
         }
     }
@@ -230,8 +240,13 @@ export class DirectRegisterMemberFullmodalComponent implements OnInit, OnDestroy
         this.pictureService.onInputFileChange(photoFile, this.saveLocalFile.bind(this))
     }
     saveLocalFile(localFileData: LocalFileData) {
-        this.localFileData = localFileData
-        console.log('localfiledata: ', this.localFileData)
+        this.localFileData = _.cloneDeep(localFileData)
+        console.log(
+            'localfiledata: ',
+            this.localFileData,
+            this.localFileData.file,
+            _.assign({}, this.localFileData.file)
+        )
     }
     deletePreviewAvatar() {
         this.pictureService.resetLocalPicData()
@@ -285,19 +300,17 @@ export class DirectRegisterMemberFullmodalComponent implements OnInit, OnDestroy
             email: this.email.value as string,
             phone_number: this.phone_number.value as string,
         }
-        console.log('registerNewMember  : ', this.center)
-        this.centerUsersService.createUser(this.center.id, registerBody).subscribe({
-            next: (createdUser) => {
-                this.registerAvatar(createdUser.id, () => {
+
+        this.nxStore.dispatch(
+            DashboardActions.startDirectRegisterMember({
+                centerId: this.center.id,
+                reqBody: registerBody,
+                imageFile: _.assign({ length: 1 }, this.localFileData.file),
+                callback: () => {
                     this.finishRegister.emit()
                     btLoadingFns.hideLoading()
-                })
-            },
-
-            error: (err) => {
-                console.log('err in registeration by email: ', err)
-                btLoadingFns.hideLoading()
-            },
-        })
+                },
+            })
+        )
     }
 }

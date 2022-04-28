@@ -110,7 +110,10 @@ export const dashboardReducer = createImmerReducer(
         state.isLoading = 'done'
         return state
     }),
-    // on()
+    on(DashboardActions.finishDirectRegisterMember, (state, { createdUser }) => {
+        state.usersLists.member.unshift({ user: createdUser, holdSelected: false })
+        return state
+    }),
     // sync
     on(DashboardActions.setUserSearchInput, (state, { searchInput }) => {
         state.curSearchInput = searchInput

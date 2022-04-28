@@ -28,7 +28,7 @@ export const finishLoadMemberList = createAction(
 
 export const startDirectRegisterMember = createAction(
     `[${FeatureKey}] Start Direct Register Member`,
-    props<{ centerId: string; reqBody: CreateUserRequestBody; imageFile: ImageFile; callback: () => void }>()
+    props<{ centerId: string; reqBody: CreateUserRequestBody; imageFile: ImageFile; callback?: () => void }>()
 )
 export const finishDirectRegisterMember = createAction(
     `[${FeatureKey}] Finish Direct Register Member`,
