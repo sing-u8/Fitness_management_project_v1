@@ -125,12 +125,12 @@ export const dashboardReducer = createImmerReducer(
         }
         return state
     }),
-    on(DashboardActions.finishGetUserData, (state, { lockers, memberships }) => {
+    on(DashboardActions.finishGetUserData, (state, { memberships }) => {
         state.curUserData = {
             ...state.curUserData,
             reservations: [],
             payments: [],
-            lockers,
+            lockers: [],
             memberships,
         }
         return state

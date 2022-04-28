@@ -2,8 +2,112 @@
 
     <div class="l-member-detail__top">
 
-        <div class="member-infomation"></div>
-        <div class="member-memo"></div>
+        <div class="member-infomation">
+            <div class="member-information__top">
+                <div class="member-information__top-left">
+                    <div class="l-avater">
+                        <ng-template
+                            #user_exist
+                            [ngIf]="curUserData.user != undefined"
+                            [ngIfElse] ="user_absence"
+                        >
+                            <rw-avatar
+                                size="83"
+                                fontSize="16"
+                                [image]="curUserData.user.center_user_picture"
+                                [backgroundColor]="curUserData.user.color"
+                                [text]="curUserData.user.center_user_name"
+                            ></rw-avatar>
+                            <span class="user-name rw-typo-title1">
+                                {{curUserData.user.center_user_name}}
+                            </span>
+                        </ng-template>
+                        <ng-template #user_absence>
+                            <div class="init-avatar">
+                                <div class="empty-user-icon"></div>
+                            </div>
+                        </ng-template>
+
+
+                    </div>
+                </div>
+                <div class="member-information__top-right">
+                    <div class="l-info">
+                        <div class="title">회원번호</div>
+                        <div class="content">{{!curUserData.user ? '-' : curUserData.user.membership_number}}</div>
+                    </div>
+                    <div class="l-info">
+                        <div class="title">이메일</div>
+                        <div class="content">{{!curUserData.user ? '-' : curUserData.user.email}}</div>
+                    </div>
+                    <div class="l-info">
+                        <div class="title">전화번호</div>
+                        <div class="content">{{!curUserData.user ? '-' : curUserData.user.phone_number}}</div>
+                    </div>
+                    <div class="l-info">
+                        <div class="title">생년월일</div>
+                        <div class="content">{{!curUserData.user ? '-' : curUserData.user.birth_date}}</div>
+                    </div>
+                    <div class="l-info">
+                        <div class="title">권한</div>
+                        <div class="content">{{!curUserData.user ? '-' : curUserData.user.role_name}}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="member-information__bottom">
+                <div
+                    class="info-button"
+                    rw-button
+                    rwButtonHeight="35"
+                    rwButtonWidth="142"
+                    [rwButtonDisabled]="false"
+                    (click)="false"
+                >
+                    <div class="plus-icon"></div>
+                    <span class="rw-typo-bodytext0-bold red">회원권 / 락커 등록</span>
+                </div>
+                <div class="vertical-divider"></div>
+                <div
+                    class="info-button"
+                    rw-button
+                    rwButtonHeight="35"
+                    rwButtonWidth="142"
+                    [rwButtonDisabled]="false"
+                    (click)="false"
+                >
+                    <img src="assets/icons/main/chat.svg">
+                    <span class="rw-typo-bodytext0-bold">1:1 채팅</span>
+                </div>
+                <div class="vertical-divider"></div>
+                <div
+                    class="info-button"
+                    rw-button
+                    rwButtonHeight="35"
+                    rwButtonWidth="142"
+                    [rwButtonDisabled]="false"
+                    (click)="false"
+                >
+                    <img src="assets/icons/etc/attend.svg">
+                    <span class="rw-typo-bodytext0-bold">수동 출석</span>
+                </div>
+
+            </div>
+        </div>
+        <div class="member-memo">
+            <ng-template
+                #user_textarea
+                [ngIf]="curUserData.user != undefined"
+                [ngIfElse] ="user_none_text"
+            >
+                <textarea></textarea>
+            </ng-template>
+            <ng-template #user_none_text>
+                <div class="user_none_text">
+                    회원 등록 후, 이곳에서 해당 회원에 대한 기록을 남길 수 있어요.
+                </div>
+            </ng-template>
+
+        </div>
 
     </div>
 

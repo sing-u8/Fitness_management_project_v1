@@ -104,13 +104,13 @@ export class DashboardEffect {
             ofType(DashboardActions.startGetUserData),
             switchMap(({ centerId, centerUser }) =>
                 forkJoin({
-                    lockers: this.centerUsersLockerApi.getLockerTickets(centerId, centerUser.id),
+                    // lockers: this.centerUsersLockerApi.getLockerTickets(centerId, centerUser.id),
                     memberships: this.centerUsersMembershipApi.getMembershipTickets(centerId, centerUser.id),
                     // payments: this.centerUsersPaymentApi.getPayments(centerId, centerUser.id),
                     // reservations: []
                 }).pipe(
-                    switchMap(({ lockers, memberships }) => {
-                        return [DashboardActions.finishGetUserData({ lockers, memberships })]
+                    switchMap(({ memberships }) => {
+                        return [DashboardActions.finishGetUserData({ memberships })]
                     })
                 )
             ),

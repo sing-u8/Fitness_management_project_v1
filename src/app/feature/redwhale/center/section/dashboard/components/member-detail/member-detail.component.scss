@@ -35,16 +35,156 @@ section.member-detail__body {
             width: 485px;
             min-width: 485px;
             margin-right: 20px;
+            position: relative;
+            padding: 0px 16px;
+
+            .member-information__top {
+                height: calc(100% - 50px);
+                width: 100%;
+                position: relative;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+
+                .member-information__top-left {
+                    padding: 25px 0px 0px;
+                    width: 139px;
+                    height: 100%;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: flex-start;
+                    justify-content:flex-start;
+                    .l-avater {
+                        margin-left: 20px;
+                        position: relative;
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+
+                        .user-name {
+                            margin-top: 10px;
+                        }
+
+                        .init-avatar {
+                            width: 83px;
+                            height: 83px;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            background-color: var(--border-color);
+                            border-radius: 50%;
+
+                            .empty-user-icon {
+                                background-image: url('/assets/icons/etc/user.svg');
+                                background-size: contain;
+                                background-repeat: no-repeat;
+                                width:35px;
+                                height: 35px;
+                            }
+                        }
+                    }
+                }
+                .member-information__top-right {
+                    padding: 25px 0px 0px;
+                    width: calc(100% - 139px);
+                    height: 100%;
+                    .l-info{
+                        display: flex;
+                        justify-content: flex-start;
+                        &:not(:first-of-type) {
+                            margin-top: 14px;
+                        }
+                        .title {
+                            width:51px;
+                            height: 20px;
+                            text-align:left;
+                            font-size: 1.4rem;
+                            font-weight: 400;
+                            line-height: 1.43;
+                            letter-spacing: -0.2px;
+                            color: var(--grey);
+                            margin-right: 25px;
+                        }
+                        .content {
+                            font-weight: 400;
+                            font-size: 14px;
+                            line-height: 20px;
+                            letter-spacing: -0.196px;
+                            width: calc(100% - 76px);
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            white-space: nowrap;
+                        }
+                    }
+                }
+
+            }
+            .member-information__bottom{
+                height: 50px;
+                width: 100%;
+                border-top: 1px solid var(--border-color);
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+
+                .vertical-divider {
+                    height: 20px;
+                    width: 1px;
+                    margin: 0 5px;
+                    border-right: 1px solid var(--border-color);
+                }
+
+                .info-button {
+                    display: flex;
+                    align-items: center;
+
+                    &:hover {
+
+                    }
+
+                    .red {
+                        color: var(--red) !important;
+                    }
+
+                    .plus-icon {
+                        background-image: url('/assets/icons/etc/plus-red.svg');
+                        background-size: contain;
+                        background-repeat: no-repeat;
+                        width: 21px;
+                        height: 21px;
+                        margin-right: 3px;
+                    }
+
+                    img {
+                        width: 21px;
+                        height: 21px;
+                        margin-right: 3px;
+                    }
+                }
+            }
         }
 
         div.member-memo {
             background: var(--white);
             box-shadow: 0px 0px 10px rgba(181, 181, 181, 0.109804);
             border-radius: 5px;
+            padding: 23px 25px;
+            position: relative;
 
             height: 100%;
             width: calc(100% - 505px);
             min-width: 300px;
+            textarea {
+                width: 100%;
+                height: 100%;
+            }
+            .user_none_text {
+                font-weight: 400;
+                font-size: 1.4rem;
+                line-height: 20px;
+                letter-spacing: -0.196px;
+                color: var(--grey);
+            }
         }
     }
 

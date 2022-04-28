@@ -32,7 +32,7 @@
                 회원 상세 정보
             </div>
             <db-member-detail
-
+                [curUserData]="(curUserData$ | async)"
             ></db-member-detail>
         </section>
 
