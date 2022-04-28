@@ -56,7 +56,6 @@ export class DashboardEffect {
             switchMap(({ centerId, reqBody, imageFile, callback }) =>
                 this.centerUsersApi.createUser(centerId, reqBody).pipe(
                     switchMap((createdUser) => {
-                        console.log('before createfile : ', imageFile)
                         if (imageFile != undefined) {
                             return this.fileApi
                                 .createFile(
@@ -69,7 +68,6 @@ export class DashboardEffect {
                                 )
                                 .pipe(
                                     switchMap((file) => {
-                                        console.log('after create file : ', file)
                                         createdUser.center_user_picture = file[0].url
                                         callback ? callback() : null
                                         return [
