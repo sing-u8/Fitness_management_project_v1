@@ -1,5 +1,6 @@
 import { UserInfo } from '@schemas/user-info'
 import { CenterInfo } from '@schemas/center-info'
+import { ClassItem } from '@schemas/class-item'
 import { Payment } from '@schemas/payment'
 import { Unpaid } from '@schemas/unpaid'
 import { Refund } from '@schemas/refund'
@@ -23,11 +24,8 @@ export interface UserMembership {
     updated_at: string
     user: UserInfo
     center: CenterInfo
-    class: UserMembershipClass
-    reservation: any
-    used: UserMembershipUsed
-    payment: Payment
-    unpaid: Unpaid
+    class: Array<ClassItem>
+    payment: Array<Payment>
     refund: Refund
-    history: UserLockerHistory
+    history: Array<UserLockerHistory>
 }
