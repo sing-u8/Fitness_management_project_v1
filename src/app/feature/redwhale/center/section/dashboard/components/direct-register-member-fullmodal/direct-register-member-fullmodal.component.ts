@@ -3,7 +3,6 @@ import {
     OnInit,
     OnDestroy,
     SimpleChanges,
-    AfterViewChecked,
     ElementRef,
     Input,
     Output,
@@ -11,16 +10,15 @@ import {
     ViewChild,
     Renderer2,
 } from '@angular/core'
-import { Router, ActivatedRoute } from '@angular/router'
+import { Router } from '@angular/router'
 import { FormBuilder, Validators, ValidationErrors, AbstractControl, FormGroup, AsyncValidatorFn } from '@angular/forms'
 
 import { Observable, of } from 'rxjs'
 import { map, catchError } from 'rxjs/operators'
 
 import { StorageService } from '@services/storage.service'
-import { FileService } from '@services/file.service'
 import { AuthService } from '@services/auth.service'
-import { CenterUsersService, CreateUserRequestBody } from '@services/center-users.service'
+import { CreateUserRequestBody } from '@services/center-users.service'
 import { PictureManagementService, LocalFileData } from '@services/helper/picture-management.service'
 
 import { Center } from '@schemas/center'
@@ -72,13 +70,10 @@ export class DirectRegisterMemberFullmodalComponent implements OnInit, OnDestroy
 
     constructor(
         private router: Router,
-        private activatedRoute: ActivatedRoute,
         private pictureService: PictureManagementService,
-        private fileService: FileService,
         private storageService: StorageService,
         private fb: FormBuilder,
         private authService: AuthService,
-        private centerUsersService: CenterUsersService,
         private nxStore: Store,
         private renderer: Renderer2
     ) {
@@ -251,32 +246,6 @@ export class DirectRegisterMemberFullmodalComponent implements OnInit, OnDestroy
     deletePreviewAvatar() {
         this.pictureService.resetLocalPicData()
         this.localFileData = { src: undefined, file: undefined }
-    }
-
-    registerAvatar(userid: string, afterFn?: () => void) {
-        if (this.localFileData.file) {
-            this.fileService
-                .createFile(
-                    { type_code: 'file_type_center_user_picture', center_id: this.center.id, center_user_id: userid },
-                    this.localFileData.file
-                )
-                .subscribe((fl) => {
-                    this.nxStore.dispatch(showToast({ text: '회원 등록이 완료되었습니다.' }))
-                    afterFn ? afterFn() : null
-                    // this.centerUsersService.updateUser(this.center.id, userid, { picture: location }).subscribe(
-                    //     (user) => {
-                    //         this.nxStore.dispatch(showToast({ text: '회원 등록이 완료되었습니다.' }))
-                    //         afterFn ? afterFn() : null
-                    //     },
-                    //     (err) => {
-                    //         console.log('create account avatar file err: ', err)
-                    //     }
-                    // )
-                })
-        } else {
-            this.nxStore.dispatch(showToast({ text: '회원 등록이 완료되었습니다.' }))
-            afterFn ? afterFn() : null
-        }
     }
 
     // router method

@@ -1,0 +1,114 @@
+* {
+    padding: 0px;
+    margin: 0px;
+    text-align: initial;
+}
+
+$innerHeight: calc(100vh - (55px + 60px + 73px + 63px));
+
+section.member-detail__body {
+    display: flex;
+    flex-direction: column;
+
+    min-height: 560px;
+    height: $innerHeight;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+
+    div.l-member-detail__top {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+
+        width: 100%;
+        height: 254px;
+        margin-bottom: 20px;
+        position: relative;
+
+        div.member-infomation {
+            background: var(--white);
+            box-shadow: 0px 0px 10px rgba(181, 181, 181, 0.109804);
+            border-radius: 5px;
+
+            height: 100%;
+            width: 485px;
+            min-width: 485px;
+            margin-right: 20px;
+        }
+
+        div.member-memo {
+            background: var(--white);
+            box-shadow: 0px 0px 10px rgba(181, 181, 181, 0.109804);
+            border-radius: 5px;
+
+            height: 100%;
+            width: calc(100% - 505px);
+            min-width: 300px;
+        }
+    }
+
+    div.l-member-detail__bottom {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        align-items: flex-start;
+        width: 100%;
+        min-width: 805px;
+        height: calc(100% - 274px);
+
+        div.l-member-detail-tag {
+            display: flex;
+            justify-content: flex-start;
+
+            div.member-detail-tag {
+                width: 90px;
+                height: 40px;
+                background-color: var(--border-color);
+                border-radius: 5px 5px 0px 0px;
+                color: var(--grey);
+                font-size: 1.4rem;
+                line-height: 19px;
+                letter-spacing: -0.2px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                cursor: pointer;
+
+                &:not(:last-of-type) {
+                    margin-right: 5px;
+                }
+
+                &.selected {
+                    background: #FFFFFF;
+                    color: var(--font-color);
+                    z-index: 20;
+                }
+            }
+        }
+
+        div.member-detail-information {
+            width: 100%;
+            height: calc(100% - 40px);
+            background: var(--white);
+            box-shadow: 0px 0px 10px rgba(181, 181, 181, 0.1);
+            border-radius: 0px 5px 5px 5px;
+        }
+    }
+
+    @media (min-width: 1920px) {
+        div.l-member-detail__top {
+            div.member-infomation {
+                width: 550px;
+                min-width: 550px;
+            }
+
+            div.member-memo {
+                width: calc(100% - 570px);
+            }
+        }
+
+        div.l-member-detail__bottom {}
+    }
+
+}

@@ -15,60 +15,15 @@
         </div>
     </header>
 
-    <main class="l-main thin-scroll-y">
+    <main class="l-main thin-scroll-y-overlay2 thin-scroll-x-overlay2">
 
         <section class="l-entire-member">
-
             <db-member-list
                 [usersLists]="(usersLists$ | async)"
                 [usersSelectCateg]="(usersSelectCateg$ | async)"
                 [selectedUserList]="(selectedUserList$ | async)"
                 [searchedUsersLists]="(searchedUsersLists$ | async)"
             ></db-member-list>
-<!--
-            <div class="entire-member__header">
-                <rw-user-list-select
-                    [items]="(usersSelectCateg$ | async)"
-                    [holdMode]="holdModeFlags.partial"
-                    [(ngModel)]="selectedUserList$_"
-                    (onTypeChange)="onSelectedUserListChange($event)"
-                ></rw-user-list-select>
-
-                <div
-                    class="holding-all-button"
-                    *ngIf="(usersLists$ | async)[selectedUserList$_.key].length > 0
-                            && selectedUserList$_.key != 'expired'
-                            && selectedUserList$_.key != 'employee'"
-                    rw-button
-                    [rwButtonFontColor]="'var(--darkgrey)'"
-                    [rwButtonColor]="'var(--white)'"
-                    (click)="holdModeFlags.partial
-                            ? toggleHodlingMode()
-                            : toggleHoldDropDown()"
-                    (rwClickOutside)="closeHoldDropDown()"
-                >
-                    {{holdModeFlags.partial ? '일괄 홀딩 취소' : '일괄 홀딩' }}
-
-                    <div *ngIf="showHoldDropdown" class="hold-dropdown">
-                        <div
-                            class="rw-typo-subtext0 holding-button"
-                            (click)="toggleHodlingMode();closeHoldDropDown(); $event.stopPropagation()"
-                        >
-                            일부 회원 홀딩
-                        </div>
-                        <div
-                            class="rw-typo-subtext0 holding-button"
-                            (click)="openAllHoldModal();closeHoldDropDown(); $event.stopPropagation()"
-                        >
-                            전체 회원 홀딩
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="entile-member__body">
-                <ng-template #member_list_x [ngIf]=""></ng-template>
-            </div> -->
         </section>
 
 
@@ -76,29 +31,9 @@
             <div class="member-detail__header rw-typo-title1">
                 회원 상세 정보
             </div>
-            <div class="member-detail__body">
+            <db-member-detail
 
-                <div class="l-member-detail__top">
-
-                    <div class="member-infomation"></div>
-                    <div class="member-memo"></div>
-
-                </div>
-
-                <div class="l-member-detail__bottom">
-
-                    <div class="l-member-detail-tag">
-                        <div class="member-detail-tag" [class.selected] = "true">회원권</div>
-                        <div class="member-detail-tag" [class.selected] = "false">락커</div>
-                        <div class="member-detail-tag" [class.selected] = "false">예약 내역</div>
-                        <div class="member-detail-tag" [class.selected] = "false">결제 내역</div>
-                    </div>
-                    <div class="member-detail-information">
-
-                    </div>
-
-                </div>
-            </div>
+            ></db-member-detail>
         </section>
 
 

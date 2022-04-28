@@ -12,6 +12,9 @@ import { CreateUserRequestBody } from '@services/center-users.service'
 import { ImageFile } from '@services/helper/picture-management.service'
 
 import { CenterUser } from '@schemas/center-user'
+import { UserLocker } from '@schemas/user-locker'
+import { UserMembership } from '@schemas/user-membership'
+import { Payment } from '@schemas/payment'
 
 const FeatureKey = 'Center/Dashboard'
 
@@ -33,6 +36,15 @@ export const startDirectRegisterMember = createAction(
 export const finishDirectRegisterMember = createAction(
     `[${FeatureKey}] Finish Direct Register Member`,
     props<{ createdUser: CenterUser }>()
+)
+
+export const startGetUserData = createAction(
+    `[${FeatureKey}] Start Get User Data`,
+    props<{ centerId: string; centerUser: CenterUser }>()
+)
+export const finishGetUserData = createAction(
+    `[${FeatureKey}] Finish Get User Data`,
+    props<{ lockers: UserLocker[]; memberships: UserMembership[]; payments?: Payment[]; reservations?: any[] }>()
 )
 
 // sync

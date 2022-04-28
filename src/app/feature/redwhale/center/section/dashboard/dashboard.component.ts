@@ -200,6 +200,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
         this.searchedUsersLists$ = this.nxStore.select(DashboardSelector.searchedUsersLists)
         this.usersSelectCateg$ = this.nxStore.select(DashboardSelector.usersSelectCategs)
         this.selectedUserList$ = this.nxStore.select(DashboardSelector.curUserListSelect)
+        this.curUserData$ = this.nxStore.select(DashboardSelector.curUserData)
     }
 
     ngOnInit(): void {}

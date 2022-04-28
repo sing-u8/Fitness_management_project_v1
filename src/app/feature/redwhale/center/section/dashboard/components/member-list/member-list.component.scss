@@ -10,6 +10,7 @@ $innerHeight: calc(100vh - (55px + 60px + 73px + 63px));
 // 이 컴포넌트의 부모 태그는 position : relative로 설정되어야함.
 section.l-member-list {
     width: 100%;
+    min-width: 290px;
     height: 100%;
     display: flex;
     flex-direction: column;

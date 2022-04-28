@@ -8,6 +8,9 @@ import 'dayjs/locale/ko'
 dayjs.locale('ko')
 
 import { CenterUser } from '@schemas/center-user'
+import { Center } from '@schemas/center'
+
+import { StorageService } from '@services/storage.service'
 
 // rxjs
 import { Subject, Observable } from 'rxjs'
@@ -30,6 +33,8 @@ export class MemberListComponent implements OnInit, OnDestroy {
     @Input() searchedUsersLists: FromDashboard.UsersLists = _.cloneDeep(FromDashboard.UsersListInit)
     @Input() usersSelectCateg: FromDashboard.UsersSelectCateg = _.cloneDeep(FromDashboard.UsersSelectCategInit)
     @Input() selectedUserList: FromDashboard.UserListSelect = _.cloneDeep(FromDashboard.UserListSelectInit)
+
+    public center: Center
 
     public showHoldDropdown = false
     public doShowHoldAllModal = false
@@ -89,8 +94,10 @@ export class MemberListComponent implements OnInit, OnDestroy {
         private nxStore: Store,
         private router: Router,
         private activatedRoute: ActivatedRoute,
-        private fb: FormBuilder
+        private fb: FormBuilder,
+        private storageService: StorageService
     ) {
+        this.center = this.storageService.getCenter()
         this.nxStore
             .pipe(select(DashboardSelector.searchInput), takeUntil(this.unsubscribe$))
             .subscribe((searchInput) => {
@@ -153,6 +160,7 @@ export class MemberListComponent implements OnInit, OnDestroy {
         //     this.userRole[key] = key == this.userData?.role_code ? true : false
         // })
         // this.getAllUserDetail(() => {})
+        this.nxStore.dispatch(DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: cardInfo }))
     }
     onPartialHoldClick(holdFlag: boolean, index: number) {
         // !! 500명으로 제한 해야함

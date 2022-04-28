@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core'
 import { createEffect, Actions, ofType, concatLatestFrom } from '@ngrx/effects'
 import { Store } from '@ngrx/store'
-import { of, EMPTY, iif } from 'rxjs'
+import { of, EMPTY, iif, forkJoin } from 'rxjs'
 import { catchError, switchMap, tap, map, exhaustMap, mapTo } from 'rxjs/operators'
 
-import _, { xor } from 'lodash'
+import _ from 'lodash'
 
 import * as DashboardActions from '../actions/sec.dashboard.actions'
 import * as DashboardSelector from '../selectors/sec.dashoboard.selector'
@@ -14,6 +14,9 @@ import { showToast } from '@appStore/actions/toast.action'
 
 import { CenterUsersService } from '@services/center-users.service'
 import { FileService } from '@services/file.service'
+import { CenterUsersLockerService } from '@services/center-users-locker.service.service'
+import { CenterUsersMembershipService } from '@services/center-users-membership.service'
+import { CenterUsersPaymentService } from '@services/center-users-payment.service'
 
 import { CenterUser } from '@schemas/center-user'
 
@@ -23,7 +26,10 @@ export class DashboardEffect {
         private centerUsersApi: CenterUsersService,
         private fileApi: FileService,
         private store: Store,
-        private actions$: Actions
+        private actions$: Actions,
+        private centerUsersLockerApi: CenterUsersLockerService,
+        private centerUsersMembershipApi: CenterUsersMembershipService,
+        private centerUsersPaymentApi: CenterUsersPaymentService
     ) {}
 
     public loadMemberList$ = createEffect(() =>
@@ -90,6 +96,25 @@ export class DashboardEffect {
                     })
                 )
             )
+        )
+    )
+
+    public getUserData = createEffect(() =>
+        this.actions$.pipe(
+            ofType(DashboardActions.startGetUserData),
+            switchMap(({ centerId, centerUser }) =>
+                forkJoin({
+                    lockers: this.centerUsersLockerApi.getLockerTickets(centerId, centerUser.id),
+                    memberships: this.centerUsersMembershipApi.getMembershipTickets(centerId, centerUser.id),
+                    // payments: this.centerUsersPaymentApi.getPayments(centerId, centerUser.id),
+                    // reservations: []
+                }).pipe(
+                    switchMap(({ lockers, memberships }) => {
+                        return [DashboardActions.finishGetUserData({ lockers, memberships })]
+                    })
+                )
+            ),
+            catchError((err: string) => of(DashboardActions.error({ error: err })))
         )
     )
 }

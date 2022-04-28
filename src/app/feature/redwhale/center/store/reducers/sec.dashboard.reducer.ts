@@ -7,10 +7,11 @@ import _ from 'lodash'
 import { CenterUser } from '@schemas/center-user'
 import { UserLocker } from '@schemas/user-locker'
 import { UserMembership } from '@schemas/user-membership'
-import { Loading } from '@schemas/store/loading'
 import { Payment } from '@schemas/payment'
+import { Loading } from '@schemas/store/loading'
 
 import * as DashboardActions from '../actions/sec.dashboard.actions'
+import { curUserData } from '../selectors/sec.dashoboard.selector'
 
 export type MemberSelectCateg = 'member' | 'attendance' | 'valid' | 'unpaid' | 'imminent' | 'expired' | 'employee'
 export type MemberManageCategory = 'membershipLocker' | 'reservation' | 'payment'
@@ -23,7 +24,7 @@ export type CurUseData = {
     user: CenterUser
     lockers: UserLocker[]
     memberships: UserMembership[]
-    payments: any[] // !! user paymnet
+    payments: Payment[] // !! user paymnet
     reservations: any[] // !! user reservation
 }
 
@@ -114,6 +115,26 @@ export const dashboardReducer = createImmerReducer(
         state.usersLists.member.unshift({ user: createdUser, holdSelected: false })
         return state
     }),
+    on(DashboardActions.startGetUserData, (state, { centerUser }) => {
+        state.curUserData = {
+            user: centerUser,
+            lockers: [],
+            memberships: [],
+            reservations: [],
+            payments: [],
+        }
+        return state
+    }),
+    on(DashboardActions.finishGetUserData, (state, { lockers, memberships }) => {
+        state.curUserData = {
+            ...state.curUserData,
+            reservations: [],
+            payments: [],
+            lockers,
+            memberships,
+        }
+        return state
+    }),
     // sync
     on(DashboardActions.setUserSearchInput, (state, { searchInput }) => {
         state.curSearchInput = searchInput
@@ -144,7 +165,7 @@ export const dashboardReducer = createImmerReducer(
         return state
     }),
     on(DashboardActions.setCurUesrData, (state, { curUserData }) => {
-        // state.curUserData =
+        state.curUserData = _.assign(state.curUserData, curUserData)
         return state
     }),
     // - //curCenterId
