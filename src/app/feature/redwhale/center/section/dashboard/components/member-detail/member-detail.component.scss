@@ -61,8 +61,92 @@ section.member-detail__body {
                         flex-direction: column;
                         align-items: center;
 
+                        .avatar-wrapper {
+                            border-radius: 50%;
+                            // overflow: hidden;
+                            position: relative;
+                            cursor: pointer;
+
+                            &:hover {
+                                .l-photo-icon {
+                                    display: flex;
+                                }
+                            }
+
+                            .l-photo-icon {
+                                display:  none;
+                                flex-direction: column;
+                                position: absolute;
+                                width: 83px;
+                                height: 83px;
+                                top: 0;
+                                border-radius: 50%;
+                                // overflow: hidden;
+                                justify-content: center;
+                                align-items: center;
+                                background-color: rgba(96, 96, 96, .6);
+
+                                .photo-icon {
+                                    background-image: url('/assets/icons/etc/camera_white.svg');
+                                    background-size: contain;
+                                    background-repeat: no-repeat;
+                                    width: 24px;
+                                    height: 22px;
+                                }
+                                .photo-text {
+                                    font-weight: 500;
+                                    font-size: 11px;
+                                    line-height: 16px;
+                                    letter-spacing: -0.121px;
+                                    color: var(--white);
+                                }
+
+                                .l-remove-icon {
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                    border: 1px solid #C9C9C9;
+                                    box-sizing: border-box;
+                                    width: 21px;
+                                    height: 21px;
+                                    border-radius: 50%;
+                                    position: absolute;
+                                    background-color: white;
+                                    left: 0;
+                                    top: 0;
+
+                                    .remove-icon {
+                                        background-image: url('/assets/icons/etc/trash_darkgrey.svg');
+                                        background-size: contain;
+                                        background-repeat: no-repeat;
+                                        width: 14px;
+                                        height: 14px;
+                                        z-index: 5;
+                                    }
+                                }
+                            }
+
+                        }
+
                         .user-name {
                             margin-top: 10px;
+                            cursor: pointer;
+                            position: relative;
+
+                            &:hover {
+                                img {
+                                    display: initial;
+                                }
+                            }
+
+                            img {
+                                position: absolute;
+                                right: -22px;
+                                top: 1.5px;
+                                width: 21px;
+                                height: 21px;
+                                display: none;
+                            }
                         }
 
                         .init-avatar {
@@ -138,8 +222,12 @@ section.member-detail__body {
                     display: flex;
                     align-items: center;
 
-                    &:hover {
-
+                    &.disabled {
+                        opacity: 0.5;
+                        cursor: not-allowed;
+                        &:hover {
+                            background-color: transparent !important;
+                        }
                     }
 
                     .red {
@@ -175,8 +263,28 @@ section.member-detail__body {
             width: calc(100% - 505px);
             min-width: 300px;
             textarea {
+                resize: none;
+                border: none;
                 width: 100%;
                 height: 100%;
+                font-weight: 400;
+                font-size: 1.4rem;
+                line-height: 20px;
+                letter-spacing: -0.196px;
+                color: var(--font-color);
+                &::placeholder {
+                    font-weight: 400;
+                    font-size: 1.4rem;
+                    line-height: 20px;
+                    letter-spacing: -0.196px;
+                    text-align: left;
+                    color: var(--grey);
+                }
+                &:focus {
+                    font-weight: 700;
+                    border: none;
+                    outline: none;
+                }
             }
             .user_none_text {
                 font-weight: 400;
@@ -184,6 +292,7 @@ section.member-detail__body {
                 line-height: 20px;
                 letter-spacing: -0.196px;
                 color: var(--grey);
+
             }
         }
     }

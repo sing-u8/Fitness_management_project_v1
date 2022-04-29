@@ -12,7 +12,7 @@ import { GlobalSettingAccountService } from '@services/home/global-setting-accou
 import { User } from '@schemas/user'
 import { modalType, modalData } from '@schemas/home/setting-account-modal'
 
-import * as _ from 'lodash'
+import _ from 'lodash'
 
 // helper
 import { originalOrder } from '@helpers/pipe/keyvalue'

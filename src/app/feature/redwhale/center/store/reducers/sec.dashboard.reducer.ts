@@ -135,6 +135,56 @@ export const dashboardReducer = createImmerReducer(
         }
         return state
     }),
+    on(DashboardActions.startSetCurUserData, (state, { userId, reqBody }) => {
+        const { role_code, center_user_name, center_user_memo } = reqBody
+
+        // ! role_code가 포함되었을 때, role_name도 바꿔줘야함
+        state.curUserData.user = _.assign(state.curUserData.user, reqBody)
+
+        const userListsKeys = _.keys(state.usersLists) as MemberSelectCateg[]
+        userListsKeys.forEach((key) => {
+            state.usersLists[key].find((v, i) => {
+                if (v.user.id == userId) {
+                    state.usersLists[key][i].user = _.assign(state.usersLists[key][i].user, reqBody)
+                    return true
+                }
+                return false
+            })
+        })
+
+        return state
+    }),
+    on(DashboardActions.finishRemoveCurUserProfile, (state, { userId, profileUrl }) => {
+        state.curUserData.user.center_user_picture = profileUrl
+
+        const userListsKeys = _.keys(state.usersLists) as MemberSelectCateg[]
+        userListsKeys.forEach((key) => {
+            state.usersLists[key].find((v, i) => {
+                if (v.user.id == userId) {
+                    state.usersLists[key][i].user.center_user_picture = profileUrl
+                    return true
+                }
+                return false
+            })
+        })
+        return state
+    }),
+    on(DashboardActions.finishRegisterCurUserProfile, (state, { userId, profileUrl }) => {
+        state.curUserData.user.center_user_picture = profileUrl
+
+        const userListsKeys = _.keys(state.usersLists) as MemberSelectCateg[]
+        userListsKeys.forEach((key) => {
+            state.usersLists[key].find((v, i) => {
+                if (v.user.id == userId) {
+                    state.usersLists[key][i].user.center_user_picture = profileUrl
+                    return true
+                }
+                return false
+            })
+        })
+        return state
+    }),
+
     // sync
     on(DashboardActions.setUserSearchInput, (state, { searchInput }) => {
         state.curSearchInput = searchInput

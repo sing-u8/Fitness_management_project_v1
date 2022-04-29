@@ -28,15 +28,20 @@ export class FileService {
 
     getFile(
         type_code: FileTypeCode,
-        center_id = '',
-        cneter_user_id = '',
-        chat_room_id = '',
-        page = '',
-        pageSize = ''
+        center_id = undefined,
+        center_user_id = undefined,
+        chat_room_id = undefined,
+        page = undefined,
+        pageSize = undefined
     ): Observable<Array<File>> {
         const url =
             this.SERVER +
-            `/files?type_code=${type_code}&center_id=${center_id}&cneter_user_id=${cneter_user_id}&chat_room_id=${chat_room_id}&page=${page}&pageSize=${pageSize}`
+            `/files?type_code=${type_code}` +
+            (center_id ? `&center_id=${center_id}` : ``) +
+            (center_user_id ? `&center_user_id=${center_user_id}` : ``) +
+            (chat_room_id ? `&chat_room_id=${chat_room_id}` : ``) +
+            (page ? `&page=${page}` : ``) +
+            (pageSize ? `&pageSize=${pageSize}` : ``)
 
         const options = {
             headers: new HttpHeaders({

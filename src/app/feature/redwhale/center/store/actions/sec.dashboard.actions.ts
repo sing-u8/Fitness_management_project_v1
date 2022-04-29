@@ -8,7 +8,9 @@ import {
     CurUseData,
 } from '../reducers/sec.dashboard.reducer'
 
-import { CreateUserRequestBody } from '@services/center-users.service'
+import { CreateUserRequestBody, UpdateUserRequestBody } from '@services/center-users.service'
+import { CreateFileRequestBody } from '@services/file.service'
+
 import { ImageFile } from '@services/helper/picture-management.service'
 
 import { CenterUser } from '@schemas/center-user'
@@ -45,6 +47,29 @@ export const startGetUserData = createAction(
 export const finishGetUserData = createAction(
     `[${FeatureKey}] Finish Get User Data`,
     props<{ lockers?: UserLocker[]; memberships: UserMembership[]; payments?: Payment[]; reservations?: any[] }>()
+)
+
+export const startSetCurUserData = createAction(
+    `[${FeatureKey}] Start Set Current User Data Memo`,
+    props<{ centerId: string; userId: string; reqBody: UpdateUserRequestBody; callback?: () => void }>()
+)
+
+export const startRemoveCurUserProfile = createAction(
+    `[${FeatureKey}] Start Remove Current User Profile`,
+    props<{ centerId: string; userId: string; profileUrl: string; callback?: () => void }>()
+)
+export const finishRemoveCurUserProfile = createAction(
+    `[${FeatureKey}] Finish Remove Current User Profile`,
+    props<{ userId: string; profileUrl: string }>()
+)
+
+export const startRegisterCurUserProfile = createAction(
+    `[${FeatureKey}] Start Register Current User Profile`,
+    props<{ userId: string; profile: FileList; reqBody: CreateFileRequestBody; callback?: () => void }>()
+)
+export const finishRegisterCurUserProfile = createAction(
+    `[${FeatureKey}] Finish Register Current User Profile`,
+    props<{ userId: string; profileUrl: string }>()
 )
 
 // sync

@@ -117,4 +117,60 @@ export class DashboardEffect {
             catchError((err: string) => of(DashboardActions.error({ error: err })))
         )
     )
+
+    public setCurUserMemo = createEffect(
+        () =>
+            this.actions$.pipe(
+                ofType(DashboardActions.startSetCurUserData),
+                switchMap(({ centerId, reqBody, userId, callback }) =>
+                    this.centerUsersApi.updateUser(centerId, userId, reqBody).pipe(
+                        tap(() => {
+                            callback ? callback() : null
+                        })
+                    )
+                ),
+                catchError((err: string) => of(DashboardActions.error({ error: err })))
+            ),
+        { dispatch: false }
+    )
+
+    public removeCurUserProfile = createEffect(() =>
+        this.actions$.pipe(
+            ofType(DashboardActions.startRemoveCurUserProfile),
+            switchMap(({ profileUrl, centerId, userId, callback }) =>
+                this.fileApi.deleteFile(profileUrl).pipe(
+                    switchMap(() =>
+                        this.fileApi.getFile('file_type_center_user_picture', centerId, userId).pipe(
+                            switchMap((profiles) => {
+                                const profileUrl = profiles.length == 0 ? null : profiles[0].url
+                                callback ? callback() : null
+                                return [DashboardActions.finishRemoveCurUserProfile({ userId, profileUrl })]
+                            })
+                        )
+                    )
+                )
+            ),
+            catchError((err: string) => of(DashboardActions.error({ error: err })))
+        )
+    )
+
+    public registerUserProfile = createEffect(() =>
+        this.actions$.pipe(
+            ofType(DashboardActions.startRegisterCurUserProfile),
+            switchMap(({ reqBody, profile, userId, callback }) =>
+                this.fileApi.createFile(reqBody, profile).pipe(
+                    switchMap((profile) => {
+                        callback ? callback() : null
+                        return [
+                            DashboardActions.finishRegisterCurUserProfile({
+                                userId: userId,
+                                profileUrl: profile[0].url,
+                            }),
+                        ]
+                    })
+                )
+            ),
+            catchError((err: string) => of(DashboardActions.error({ error: err })))
+        )
+    )
 }

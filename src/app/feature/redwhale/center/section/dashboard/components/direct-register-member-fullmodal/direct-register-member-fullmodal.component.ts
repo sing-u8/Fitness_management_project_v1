@@ -29,7 +29,6 @@ import { ClickEmitterType } from '@shared/components/common/button/button.compon
 import * as DashboardActions from '@centerStore/actions/sec.dashboard.actions'
 
 import { Store } from '@ngrx/store'
-import { showToast } from '@appStore/actions/toast.action'
 import _ from 'lodash'
 
 type Gender = 'male' | 'female' | ''

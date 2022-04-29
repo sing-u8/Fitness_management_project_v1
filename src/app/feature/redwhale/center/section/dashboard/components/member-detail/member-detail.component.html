@@ -11,16 +11,37 @@
                             [ngIf]="curUserData.user != undefined"
                             [ngIfElse] ="user_absence"
                         >
-                            <rw-avatar
-                                size="83"
-                                fontSize="16"
-                                [image]="curUserData.user.center_user_picture"
-                                [backgroundColor]="curUserData.user.color"
-                                [text]="curUserData.user.center_user_name"
-                            ></rw-avatar>
-                            <span class="user-name rw-typo-title1">
+                            <div class="avatar-wrapper">
+                                <rw-avatar
+                                    size="83"
+                                    fontSize="16"
+                                    [image]="curUserData.user.center_user_picture"
+                                    [backgroundColor]="curUserData.user.color"
+                                    [text]="curUserData.user.center_user_name"
+                                ></rw-avatar>
+                                <div class="l-photo-icon" (click)="userProfile.click()">
+                                    <div class="photo-icon"></div>
+                                    <span class="photo-text">
+                                        {{curUserData.user.center_user_picture
+                                            ? '사진 변경'
+                                            : '사진 추가'
+                                        }}
+                                        <input type="file"  accept="image/*" #userProfile (change)="registerUserProfile(userProfile)" hidden>
+                                    </span>
+
+                                    <div
+                                        *ngIf="curUserData.user.center_user_picture"
+                                        class="l-remove-icon"
+                                        (click) = "toggleRemoveUserProfile(); $event.stopPropagation();"
+                                    >
+                                        <div class="remove-icon"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="user-name rw-typo-title1" (click) = "toggleShowChangeNameModal()">
                                 {{curUserData.user.center_user_name}}
-                            </span>
+                                <img src="assets/icons/etc/edit.svg">
+                            </div>
                         </ng-template>
                         <ng-template #user_absence>
                             <div class="init-avatar">
@@ -57,11 +78,11 @@
             <div class="member-information__bottom">
                 <div
                     class="info-button"
+                    [class.disabled]="!curUserData.user"
                     rw-button
                     rwButtonHeight="35"
                     rwButtonWidth="142"
-                    [rwButtonDisabled]="false"
-                    (click)="false"
+                    (click)="curUserData.user && false"
                 >
                     <div class="plus-icon"></div>
                     <span class="rw-typo-bodytext0-bold red">회원권 / 락커 등록</span>
@@ -69,11 +90,11 @@
                 <div class="vertical-divider"></div>
                 <div
                     class="info-button"
+                    [class.disabled]="!curUserData.user"
                     rw-button
                     rwButtonHeight="35"
                     rwButtonWidth="142"
-                    [rwButtonDisabled]="false"
-                    (click)="false"
+                    (click)="curUserData.user && false"
                 >
                     <img src="assets/icons/main/chat.svg">
                     <span class="rw-typo-bodytext0-bold">1:1 채팅</span>
@@ -81,11 +102,11 @@
                 <div class="vertical-divider"></div>
                 <div
                     class="info-button"
+                    [class.disabled]="!curUserData.user"
                     rw-button
                     rwButtonHeight="35"
                     rwButtonWidth="142"
-                    [rwButtonDisabled]="false"
-                    (click)="false"
+                    (click)="curUserData.user && false"
                 >
                     <img src="assets/icons/etc/attend.svg">
                     <span class="rw-typo-bodytext0-bold">수동 출석</span>
@@ -99,7 +120,12 @@
                 [ngIf]="curUserData.user != undefined"
                 [ngIfElse] ="user_none_text"
             >
-                <textarea></textarea>
+                <textarea
+                    placeholder = "회원에 대한 기록을 남겨주세요."
+                    class="thin-scroll-y"
+                    (blur)="updateUserMemo(memoForm.value)"
+                    [formControl]="memoForm"
+                ></textarea>
             </ng-template>
             <ng-template #user_none_text>
                 <div class="user_none_text">
@@ -125,3 +151,18 @@
 
     </div>
 </section>
+
+
+<db-change-user-name-modal
+    [(visible)]="doShowChangeNameModal"
+    [userName] = "userNameForModal"
+    (cancel)="toggleShowChangeNameModal()"
+    (confirm)="onChangeNameConfirm($event)"
+></db-change-user-name-modal>
+
+<rw-modal
+    [(visible)]="doShowRemoveUserProfile"
+    [data]="removeUserProfileData"
+    (cancel)="toggleRemoveUserProfile()"
+    (confirm)="removeUserProfile()"
+></rw-modal>
