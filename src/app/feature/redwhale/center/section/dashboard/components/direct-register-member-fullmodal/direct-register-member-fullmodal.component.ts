@@ -9,6 +9,8 @@ import {
     EventEmitter,
     ViewChild,
     Renderer2,
+    OnChanges,
+    AfterViewChecked,
 } from '@angular/core'
 import { Router } from '@angular/router'
 import { FormBuilder, Validators, ValidationErrors, AbstractControl, FormGroup, AsyncValidatorFn } from '@angular/forms'
@@ -38,7 +40,7 @@ type Gender = 'male' | 'female' | ''
     templateUrl: './direct-register-member-fullmodal.component.html',
     styleUrls: ['./direct-register-member-fullmodal.component.scss'],
 })
-export class DirectRegisterMemberFullmodalComponent implements OnInit, OnDestroy {
+export class DirectRegisterMemberFullmodalComponent implements OnInit, OnChanges, AfterViewChecked, OnDestroy {
     // modal vars and funcs
     @Input() visible: boolean
     @Output() visibleChange = new EventEmitter<boolean>()

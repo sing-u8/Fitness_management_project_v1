@@ -352,7 +352,7 @@ export class LockerDetailBoxComponent implements OnInit, OnChanges, OnDestroy {
         this.lockerDateDiff = dayjs(this.lockerDate.endDate).diff(dayjs(this.lockerDate.startDate), 'day') + 1
     }
 
-    // !! 추가 수정 필요 03/25
+    // !! 추가 수정 필요 03/25 --> 05/02
     registerMember(modalReturn: LockerChargeType) {
         const createLockerTicketReqBody: CreateLockerTicketReqBody = {
             locker_item_id: this.lockerItem.id,
@@ -364,6 +364,9 @@ export class LockerDetailBoxComponent implements OnInit, OnChanges, OnDestroy {
                 vbank: 0,
                 phone: 0,
                 cash: modalReturn.pay_cash,
+                unpaid: modalReturn.unpaid,
+                memo: '',
+                responsibility_user_id: modalReturn.assignee_id,
             },
         }
         const createLockerTicketUnpaidReqBody: CreateLockerTicketUnpaidReqBody = {

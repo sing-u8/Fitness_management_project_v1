@@ -50,14 +50,14 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     public today: string = dayjs().format('YYYY.MM.DD (ddd)')
 
     // member toast
-    public attendedUser: CenterUser = undefined
-    public doShowMemberToast = false
-    showMemToast() {
-        this.doShowMemberToast = true
-    }
-    hideMemToast() {
-        this.doShowMemberToast = false
-    }
+    // public attendedUser: CenterUser = undefined
+    // public doShowMemberToast = false
+    // showMemToast() {
+    //     this.doShowMemberToast = true
+    // }
+    // hideMemToast() {
+    //     this.doShowMemberToast = false
+    // }
 
     // user detail info var
     // public userData: GetUserReturn
@@ -103,6 +103,8 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     whenFinishRegisterMember() {
         this.toggleDirectRegisterMemberFullModal()
     }
+
+    //
 
     // public userDetail: {
     //     membershipLocker: { membership: Array<MembershipTicket>; locker: Array<LockerTicket> }

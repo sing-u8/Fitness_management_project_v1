@@ -82,7 +82,7 @@
                     rw-button
                     rwButtonHeight="35"
                     rwButtonWidth="142"
-                    (click)="curUserData.user && false"
+                    (click)="curUserData.user && toggleRegisterMLFullModal()"
                 >
                     <div class="plus-icon"></div>
                     <span class="rw-typo-bodytext0-bold red">회원권 / 락커 등록</span>
@@ -166,3 +166,10 @@
     (cancel)="toggleRemoveUserProfile()"
     (confirm)="removeUserProfile()"
 ></rw-modal>
+
+<db-register-membership-locker-fullmodal
+    [(visible)]="doShowRegisterMLFullModal"
+    (close)="toggleRegisterMLFullModal()"
+    (finishRegister)="onFinishRegisterML()"
+    [curUser]="curUserData.user"
+></db-register-membership-locker-fullmodal>

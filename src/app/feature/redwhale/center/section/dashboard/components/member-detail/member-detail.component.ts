@@ -26,6 +26,16 @@ export class MemberDetailComponent implements OnInit {
         this.center = this.storageService.getCenter()
     }
 
+    // register membership locker full modal vars and funcs
+    public doShowRegisterMLFullModal = false
+    toggleRegisterMLFullModal() {
+        this.doShowRegisterMLFullModal = !this.doShowRegisterMLFullModal
+    }
+    onFinishRegisterML() {
+        this.toggleRegisterMLFullModal()
+    }
+    //
+
     ngOnInit(): void {}
 
     ngOnChanges(changes: SimpleChanges): void {

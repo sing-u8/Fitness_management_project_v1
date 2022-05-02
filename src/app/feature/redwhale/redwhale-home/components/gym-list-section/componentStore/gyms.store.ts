@@ -11,7 +11,7 @@ import { Center } from '@schemas/center'
 import { Loading } from '@schemas/componentStore/loading'
 import { User } from '@schemas/user'
 
-import * as _ from 'lodash'
+import _ from 'lodash'
 
 export interface CentersState {
     centers: Array<Center>

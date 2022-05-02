@@ -341,6 +341,9 @@ export interface CreateLockerTicketReqBody {
         vbank: number
         phone: number
         cash: number
+        unpaid: number
+        memo: string
+        responsibility_user_id: string
     }
 }
 

@@ -19,6 +19,7 @@ import { UserFlipListComponent } from './components/user-flip-list/user-flip-lis
 import { RegisterMemberModalComponent } from './components/register-member-modal/register-member-modal.component'
 import { DirectRegisterMemberFullmodalComponent } from './components/direct-register-member-fullmodal/direct-register-member-fullmodal.component'
 import { ChangeUserNameModalComponent } from './components/change-user-name-modal/change-user-name-modal.component'
+import { RegisterMembershipLockerFullmodalComponent } from './components/register-membership-locker-fullmodal/register-membership-locker-fullmodal.component'
 
 // section module
 import { CommonModule as SectionCommonModule } from '../common/common.module'
@@ -41,6 +42,7 @@ import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader'
         RegisterMemberModalComponent,
         DirectRegisterMemberFullmodalComponent,
         ChangeUserNameModalComponent,
+        RegisterMembershipLockerFullmodalComponent,
     ],
     imports: [
         AngularCommonModule,
