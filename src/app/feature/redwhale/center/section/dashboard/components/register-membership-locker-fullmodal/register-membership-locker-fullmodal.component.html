@@ -24,7 +24,7 @@
 
                     <ng-template
                         #none_membership_locker
-                        [ngIf] = "mlItemList.length == 0"
+                        [ngIf] = "(mlItems$ | async)['length'] == 0"
                         [ngIfElse] = "presence_membership_locker"
                     >
                         <div class="empty-memberhip-card">
@@ -74,13 +74,19 @@
                                 </div>
                             </div>
 
-                            <div class="window-item" *ngFor="let item of mlItemList; let idx = index">
+                            <div class="window-item" *ngFor="let item of (mlItems$ | async); let idx = index">
                                 <!-- <ng-container class="window-item" *ngIf="item.type == 'membership'">
                                     <rw-membership-ticket-window [membershipState]=item [index]="idx"></rw-membership-ticket-window>
                                 </ng-container> -->
-                                <!-- <ng-container class="window-item" *ngIf="item.type == 'locker'">
-                                    <rw-locker-window [lockerState]="item" [index]="idx"></rw-locker-window>
-                                </ng-container> -->
+                                <ng-container class="window-item" *ngIf="item.type == 'locker'">
+                                    <rw-locker-window
+                                        [lockerState]="item"
+                                        [index]="idx"
+                                        (onRemoveMlItem) = "onMLItemRemove($event)"
+                                        (onSaveMlItem) = "onLockerItemSave($event)"
+                                        (onModifyMlItem) = "onLockerItemModify($event)"
+                                    ></rw-locker-window>
+                                </ng-container>
                             </div>
 
                         </div>
@@ -141,3 +147,16 @@
     </section>
 
 </section>
+
+<db-lockerSelectModal
+    [(visible)] = "doShowLockerSelectModal"
+    (confirm) = "onLockerSelected($event)"
+    (cancel) = "closeLockerSelectModal()"
+    (onItemClick)="onLockerItemClick($event)"
+></db-lockerSelectModal>
+
+<db-membershipTicketListModal
+    [(visible)] = "doShowMembershipListModal"
+    (confirm) = "onMembershipTicketSelected($event)"
+    (cancel) = "closeMembershipListModal()"
+></db-membershipTicketListModal>

@@ -20,17 +20,30 @@ import { originalOrder } from '@helpers/pipe/keyvalue'
 
 import { StorageService } from '@services/storage.service'
 
+// component Store
+import { RegisterMembershipLockerFullmodalStore, stateInit } from './componentStore/register-ml-fullmodal.store'
+import { Observable } from 'rxjs'
+//
+
 import { CenterUser } from '@schemas/center-user'
+import { Center } from '@schemas/center'
 import { MembershipItem } from '@schemas/membership-item'
 import { LockerItem } from '@schemas/locker-item'
 import { LockerCategory } from '@schemas/locker-category'
-
-export type MembershipLockerItem = MembershipItem | LockerItem
+import {
+    MembershipLockerItem,
+    ChoseLockers,
+    Instructor,
+    Locker,
+    MembershipTicket,
+    UpdateChoseLocker,
+} from '@schemas/center/dashboard/register-ml-fullmodal'
 
 @Component({
     selector: 'db-register-membership-locker-fullmodal',
     templateUrl: './register-membership-locker-fullmodal.component.html',
     styleUrls: ['./register-membership-locker-fullmodal.component.scss'],
+    providers: [RegisterMembershipLockerFullmodalStore],
 })
 export class RegisterMembershipLockerFullmodalComponent implements OnInit, OnChanges, AfterViewChecked, OnDestroy {
     // modal vars and funcs
@@ -47,6 +60,8 @@ export class RegisterMembershipLockerFullmodalComponent implements OnInit, OnCha
 
     public today = dayjs().format('YYYY.MM.DD')
 
+    public center: Center
+
     public totalPriceInput = {
         cash: { price: '', name: '현금' },
         card: { price: '', name: '카드' },
@@ -58,9 +73,20 @@ export class RegisterMembershipLockerFullmodalComponent implements OnInit, OnCha
     // registration membership locker vars
     public mlItemList: Array<MembershipLockerItem> = []
 
-    constructor(private renderer: Renderer2) {}
+    public mlItems$: Observable<Array<MembershipLockerItem>> = this.cmpStore.mlItems$
+    public instructors$: Observable<Array<CenterUser>> = this.cmpStore.instructors$
 
-    ngOnInit(): void {}
+    constructor(
+        private renderer: Renderer2,
+        private cmpStore: RegisterMembershipLockerFullmodalStore,
+        private storageService: StorageService
+    ) {}
+
+    ngOnInit(): void {
+        this.center = this.storageService.getCenter()
+        this.cmpStore.setState(stateInit)
+        this.cmpStore.getInstructorsEffect(this.center.id)
+    }
     ngOnDestroy(): void {}
     ngOnChanges(changes: SimpleChanges): void {
         if (changes['visible'] && !changes['visible'].firstChange) {
@@ -89,6 +115,27 @@ export class RegisterMembershipLockerFullmodalComponent implements OnInit, OnCha
             }
         }
     }
+    // ml list method
+    onMLItemRemove(idx: number) {
+        this.cmpStore.removeMlItem(idx)
+    }
+    onLockerItemSave(data: { index: number; item: Locker }) {
+        this.cmpStore.modifyMlItem(data)
+    }
+    onLockerItemModify(data: { index: number; item: Locker }) {
+        this.cmpStore.modifyMlItem(data)
+    }
+
+    onMemberhispTicketItemSave(data: { index: number; item: MembershipTicket }) {
+        this.cmpStore.modifyMlItem(data)
+    }
+    onMemberhispTicketItemModify(data: { index: number; item: MembershipTicket }) {
+        this.cmpStore.modifyMlItem(data)
+    }
+
+    onLockerItemClick(data: UpdateChoseLocker) {
+        this.cmpStore.updateChoseLockers(data)
+    }
 
     // fullmodal vars and funcs
     closeModal() {
@@ -107,6 +154,7 @@ export class RegisterMembershipLockerFullmodalComponent implements OnInit, OnCha
     }
     onLockerSelected(item: { locker: LockerItem; category: LockerCategory }) {
         // this.gymRegisterMlState.create(this.gymRegisterMlState.initLockerItem(item.locker, item.category))
+        this.cmpStore.addMlItem(this.cmpStore.initLockerItem(item.locker, item.category))
         this.closeLockerSelectModal()
         // console.log('onLockerSelected: ', item, this.gymRegisterMlState.itemList, this.itemList)
     }
@@ -119,6 +167,7 @@ export class RegisterMembershipLockerFullmodalComponent implements OnInit, OnCha
     }
     onMembershipTicketSelected(item: MembershipItem) {
         // this.gymRegisterMlState.create(this.gymRegisterMlState.initMembershipItem(item))
+        this.cmpStore.addMlItem(this.cmpStore.initMembershipItem(item))
         this.closeMembershipListModal()
         // console.log('onMembershipTicketSelected: ', item, this.gymRegisterMlState.itemList, this.itemList)
     }

@@ -139,6 +139,38 @@ section.register-ml-fullmodal-wrapper {
                             height: 24px;
                         }
                     }
+
+                    .presence-membership-locker {
+                        .membership-locker-buttons {
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                            margin-bottom: 20px;
+
+                            .add-membership-ticket-button,
+                            .add-locker-button {
+                                display: flex;
+                                justify-content: space-between;
+                                width: 283px;
+                                height: 55px;
+                                box-shadow: 0px 0px 10px #b5b5b51c;
+                                border-radius: 7px;
+                                // background-color: var(--white);
+                                padding: 18px 22px;
+
+                                & img {
+                                    width: 20px;
+                                    height: 20px;
+                                }
+                            }
+                        }
+
+                        .window-item {
+                            &:not(:last-of-type) {
+                                margin-bottom: 20px;
+                            }
+                        }
+                    }
                 }
 
                 & aside.l-payment-information{

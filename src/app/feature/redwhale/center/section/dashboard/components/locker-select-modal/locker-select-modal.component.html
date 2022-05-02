@@ -1,0 +1,39 @@
+
+<div class="rw-modal-background" #modalBackgroundElement></div>
+
+<div
+  class="rw-modal-wrapper justify-content-center align-items-center"
+  (mouseup)="!isMouseModalDown && onCancel()"
+  (mousedown) = 'resetMouseModalDown()'
+  #modalWrapperElement
+>
+    <div
+      class="rw-modal user-select-none"
+      (mousedown) ='onMouseModalDown(); $event.stopPropagation()'
+    >
+      <div class="header">
+        <span class="rw-typo-bodytext0">등록하실 락커를 클릭해주세요.</span>
+        <img src="assets/icons/etc/close.svg" (click)="onCancel()">
+      </div>
+
+      <db-ml-locker-select
+        [items] = "categList"
+        [(ngModel)] = "selectedCateg"
+        (change)="onSelectChange($event)"
+      ></db-ml-locker-select>
+
+      <div class="locker-grid">
+        <gridster
+          class="thin-scroll-x thin-scroll-y "
+          [options] = "gridsterOptions"
+        >
+          <db-ml-locker-item
+            *ngFor = "let item of itemList; let idx = index"
+            [lockerItem] = "item"
+            (onLockerItemClick) = "onLockerItemClick($event, idx)"
+          ></db-ml-locker-item>
+        </gridster>
+      </div>
+
+    </div>
+</div>

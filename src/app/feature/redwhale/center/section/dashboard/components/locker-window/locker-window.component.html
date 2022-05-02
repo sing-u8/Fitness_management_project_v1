@@ -1,0 +1,115 @@
+<section *ngIf="lockerState.status == 'modify'" class="locker-window">
+  <div class="rw-typo-title2 window-header">락커</div>
+  <div class="locker-info">
+    <span class="rw-typo-subtext0-regular small-title">락커 기본 정보</span>
+    <div class="locker-card">
+      <div class="icon">
+        <img src="assets/icons/etc/locker-white.svg">
+      </div>
+      <div class="locker-text">
+        <span class="rw-typo-subtext0-regular small-title">{{lockerState.lockerCategory?.name}}</span>
+        <span class="rw-typo-title2">락커 {{lockerState.locker?.name}}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="datepick-container">
+    <div class="date-picker">
+      <span class="rw-typo-subtext0-regular small-title">시작일 (변경 불가)</span>
+      <div
+        class="date-pick-button disabled"
+      >
+        {{lockerState.date.startDate | dateFormat:'YYYY.MM.DD'}}
+      </div>
+    </div>
+    <div class="date-picker">
+      <span class="rw-typo-subtext0-regular small-title">만료일</span>
+      <div
+        class="date-pick-button"
+        rw-button rwButtonColor="var(--white)"
+        rwButtonFontColor="var(--font-color)"
+        (click) ="datepickFlag.end = !datepickFlag.end; $event.stopPropagation()"
+      >
+        <span *ngIf="!lockerState.date.endDate; else showEndDate">날짜를 선택해주세요. {{lockerState.date.endDate}}</span>
+        <ng-template #showEndDate>
+          <span >{{lockerState.date.endDate | dateFormat:'YYYY-MM-DD'}} ({{dayDiff}}일)</span>
+        </ng-template>
+
+      </div>
+      <rw-datepicker
+        *ngIf = "datepickFlag.end"
+        (rwClickOutside) = "datepickFlag.end = false; $event.stopPropagation()"
+        mode="reg-ml" [option]="'onlyEnd'" [data]="lockerState.date" (dataChange) = "onDatePickRangeChange($event)"
+      ></rw-datepicker>
+    </div>
+  </div>
+
+  <div class="payment-container">
+    <div class="payment-item">
+      <span class="rw-typo-subtext0-regular small-title">결제 금액</span>
+      <div class="input-container">
+        <input type="text" placeholder="0" [(ngModel)]="lockerState.price" (keyup)="onPriceKeyup($event, 'cash')" class="rw-input">
+        <div class="input-count">￦</div>
+      </div>
+    </div>
+    <div class="payment-item">
+      <span class="rw-typo-subtext0-regular small-title">결제 담당자</span>
+      <db-ml-staff-selector
+        [width] = "'255'"
+        [items] = "staffSelect_list"
+        [(ngModel)] = "StaffSelectValue"
+      ></db-ml-staff-selector>
+    </div>
+  </div>
+
+  <div class="delete-save-button">
+    <div class="delete-button"
+      rw-button
+      rwButtonColor="var(--white)"
+      rwButtonFontColor="var(--lightgrey)"
+      (click) = "onRemoveItem()"
+    >
+      삭제
+    </div>
+    <div
+      class="save-button"
+      rw-button rwButtonColor="var(--font-color)"
+      rwButtonFontColor="var(--white)"
+      [rwButtonDisabled] = '!lockerState.date.startDate || !lockerState.date.endDate'
+      (click)= "statusToDone()"
+    >
+      저장
+    </div>
+  </div>
+</section>
+
+
+<section  *ngIf="lockerState.status == 'done'" class="locker-done-card">
+  <div class="top">
+    <div class="locker-name">
+      <div class="icon">
+        <img src="assets/icons/etc/locker-white.svg">
+      </div>
+      <span class="rw-typo-title2">[{{lockerState.lockerCategory.name}}] {{lockerState.locker.name}}</span>
+    </div>
+    <div
+      class="modify-button" rw-button
+      rwButtonColor="var(--white)"
+      rwButtonFontColor="var(--darkgrey)"
+      (click) = "statusToModify()"
+    >
+      <img src="assets/icons/etc/edit.svg">
+      <span class="rw-typo-bodytext2">정보 수정</span>
+    </div>
+  </div>
+  <div class="bottom">
+    <div class="date">
+      <span class="rw-typo-subtext0-regular small-title">기간</span>
+      <span class="rw-typo-bodytext1">{{lockerState.date.startDate}} - {{lockerState.date.endDate}} ({{lockerState.date | dayDiff}}일)</span>
+    </div>
+    <div class="pay">
+      <span class="rw-typo-subtext0-regular small-title">결제 금액 / 담당자</span>
+      <span class="rw-typo-bodytext1">￦{{lockerState.price ? lockerState.price : 0}} / {{lockerState.assignee.name}}</span>
+    </div>
+  </div>
+</section>

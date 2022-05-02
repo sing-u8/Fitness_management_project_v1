@@ -1,0 +1,28 @@
+
+<div class="rw-modal-background" #modalBackgroundElement></div>
+
+<div
+  class="rw-modal-wrapper justify-content-center align-items-center"
+  (mouseup)="!isMouseModalDown && onCancel()"
+  (mousedown) = 'resetMouseModalDown()'
+  #modalWrapperElement
+>
+    <div
+      class="rw-modal user-select-none"
+      (mousedown) ='onMouseModalDown(); $event.stopPropagation()'
+    >
+      <div class="header">
+        <span class="rw-typo-bodytext0">등록하실 회원권을 클릭해주세요.</span>
+        <img src="assets/icons/etc/close.svg" (click)="onCancel()">
+      </div>
+
+      <div class="membership-item-list thin-scroll-y-overlay2">
+        <db-membership-ticket-card
+          *ngFor = "let item of membershipItemList"
+          [cardInfo] = "item"
+          (onCardClick) = "onConfirm($event)"
+        ></db-membership-ticket-card>
+      </div>
+
+    </div>
+</div>
