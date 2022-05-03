@@ -12,11 +12,11 @@ import { Center } from '@schemas/center'
 import { CenterUser } from '@schemas/center-user'
 
 @Component({
-    selector: 'rw-membership-ticket-window',
+    selector: 'db-membership-ticket-window',
     templateUrl: './membership-ticket-window.component.html',
     styleUrls: ['./membership-ticket-window.component.scss'],
 })
-export class MembershipTicketWindowComponent implements OnInit, AfterViewInit {
+export class MembershipTicketWindowComponent implements OnInit, AfterViewInit, OnChanges {
     @Input() index: number
     @Input() membershipState: MembershipTicket
     @Input() instructors: Array<CenterUser>
@@ -25,7 +25,6 @@ export class MembershipTicketWindowComponent implements OnInit, AfterViewInit {
     @Output() onSaveMlItem = new EventEmitter<{ index: number; item: MembershipTicket }>()
     @Output() onModifyMlItem = new EventEmitter<{ index: number; item: MembershipTicket }>()
 
-    public lessonItemList: Array<{ selected: boolean; item: ClassItem }>
     public selectedLessons: Array<ClassItem> = []
     public selectedLessonText = ''
 
@@ -33,7 +32,6 @@ export class MembershipTicketWindowComponent implements OnInit, AfterViewInit {
     public dayDiff = ''
 
     public staffSelect_list: Array<{ name: string; value: CenterUser }> = []
-    public StaffSelectValue: { name: string; value: CenterUser } = { name: '', value: undefined }
 
     public center: Center
     public user: User
@@ -46,14 +44,29 @@ export class MembershipTicketWindowComponent implements OnInit, AfterViewInit {
         this.user = this.storageService.getUser()
     }
     ngAfterViewInit(): void {
-        this.StaffSelectValue = this.membershipState.assignee
         // _.forEach(this.selectedMembershipTicket.lesson_item_list, (value) => {
         //     this.lessonItemList.push({ selected: false, item: value })
         // })
         this.dayDiff = String(this.getDayDiff(this.membershipState.date))
-        this.lessonItemList = this.membershipState.lessonList
         this.getSelectedLessonList()
-        console.log('this.lessonItemList: ', this.lessonItemList)
+        console.log('this.membershipState.lessonList: ', this.membershipState.lessonList)
+    }
+
+    ngOnChanges(changes: SimpleChanges): void {
+        if (changes['Instructors']) {
+            this.center = this.storageService.getCenter()
+            this.user = this.storageService.getUser()
+            this.instructors.forEach((v) => {
+                this.staffSelect_list.push({
+                    name: v.center_user_name,
+                    value: v,
+                })
+
+                if (!this.membershipState.assignee) {
+                    if (this.user.id == v.id) this.membershipState.assignee = { name: v.center_user_name, value: v }
+                }
+            })
+        }
     }
 
     // datepicker method
@@ -120,24 +133,14 @@ export class MembershipTicketWindowComponent implements OnInit, AfterViewInit {
     }
 
     // status method
-    statusToDone() {
-        if (
-            this.membershipState.date.startDate &&
-            this.membershipState.date.endDate &&
-            this.isLessonSelected() &&
-            this.checkCount()
-        ) {
-            this.membershipState.price = this.membershipState.price ?? '0'
-            // this.getSelectedLessonList()
-            this.onSaveItem()
-        }
+    checkMatchTotalPrice(): boolean {
+        return this.membershipState.amount.normalAmount == this.membershipState.amount.paymentAmount ? true : false
     }
-    statusToModify() {
-        this.onModify()
+    checkDateIsSet(): boolean {
+        return this.membershipState.date.startDate && this.membershipState.date.endDate ? true : false
     }
-
     isLessonSelected() {
-        return _.some(this.lessonItemList, ['selected', true])
+        return _.some(this.membershipState.lessonList, ['selected', true])
     }
 
     checkCount() {
@@ -148,10 +151,21 @@ export class MembershipTicketWindowComponent implements OnInit, AfterViewInit {
             return false
         return true
     }
+    statusToDone() {
+        if (this.checkMatchTotalPrice() && this.checkDateIsSet() && this.isLessonSelected() && this.checkCount()) {
+            this.onSaveItem()
+        }
+    }
+    statusToModify() {
+        this.onModify()
+    }
 
     // selected lesson item method
     getSelectedLessonList() {
-        this.selectedLessons = _.map(_.filter(this.lessonItemList, ['selected', true]), (lessonObj) => lessonObj.item)
+        this.selectedLessons = _.map(
+            _.filter(this.membershipState.lessonList, ['selected', true]),
+            (lessonObj) => lessonObj.item
+        )
         if (this.selectedLessons.length == 0) return
         this.selectedLessonText =
             this.selectedLessons.length == 1

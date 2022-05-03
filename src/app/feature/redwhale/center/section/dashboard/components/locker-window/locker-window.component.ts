@@ -10,7 +10,7 @@ import { Center } from '@schemas/center'
 import { CenterUser } from '@schemas/center-user'
 
 @Component({
-    selector: 'rw-locker-window',
+    selector: 'db-locker-window',
     templateUrl: './locker-window.component.html',
     styleUrls: ['./locker-window.component.scss'],
 })
@@ -41,7 +41,6 @@ export class LockerWindowComponent implements OnInit, AfterViewInit, OnChanges {
         this.dayDiff = String(this.getDayDiff(this.lockerState.date))
     }
     ngOnChanges(changes: SimpleChanges): void {
-        console.log('locker-window on chagnes : ', changes)
         if (changes['Instructors']) {
             this.gym = this.storageService.getCenter()
             this.user = this.storageService.getUser()
@@ -52,10 +51,7 @@ export class LockerWindowComponent implements OnInit, AfterViewInit, OnChanges {
                 })
 
                 if (!this.lockerState.assignee) {
-                    console.log('this.this.lockerState.assignee : ', this.lockerState.assignee, this.user.id == v.id)
                     if (this.user.id == v.id) this.lockerState.assignee = { name: v.center_user_name, value: v }
-
-                    console.log('this.lockerState.assignee  after if: ', this.lockerState.assignee)
                 }
             })
         }

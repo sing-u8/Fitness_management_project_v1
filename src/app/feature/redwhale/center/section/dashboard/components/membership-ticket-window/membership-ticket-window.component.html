@@ -2,15 +2,15 @@
   <div class="rw-typo-title2 window-header">회원권</div>
   <div class="membership-info">
     <span class="rw-typo-subtext0-regular small-title">회원권 기본 정보</span>
-    <rw-membership-ticket-card
+    <db-membership-ticket-card
       [cardInfo] = "membershipState.membershipItem"
       [isInWindow] = "true"
-    ></rw-membership-ticket-card>
+    ></db-membership-ticket-card>
   </div>
   <div class="reservable-lessons">
     <span class="rw-typo-subtext0-regular small-title">예약 가능한 수업</span>
     <rw-lesson-selector
-      [(ngModel)] = "lessonItemList"
+      [(ngModel)] = "membershipState.lessonList"
     ></rw-lesson-selector>
   </div>
   <div class="datepick-container">
@@ -65,17 +65,17 @@
     <div class="payment-item">
       <span class="rw-typo-subtext0-regular small-title">결제 금액</span>
       <div class="input-container">
-        <input type="text" placeholder="0" [(ngModel)]="membershipState.price" (keyup)="onPriceKeyup($event)" class="rw-input">
+        <input type="text" placeholder="0" [(ngModel)]="membershipState.price" (keyup)="false" class="rw-input">
         <div class="input-count">￦</div>
       </div>
     </div>
     <div class="payment-item">
       <span class="rw-typo-subtext0-regular small-title">결제 담당자</span>
-      <rw-ml-staff-selector
+      <db-ml-staff-selector
         [width] = "'255'"
         [items] = "staffSelect_list"
-        [(ngModel)] = "StaffSelectValue"
-      ></rw-ml-staff-selector>
+        [(ngModel)] = "membershipState.lessonList"
+      ></db-ml-staff-selector>
     </div>
   </div>
 

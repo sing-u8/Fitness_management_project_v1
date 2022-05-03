@@ -75,18 +75,25 @@
                             </div>
 
                             <div class="window-item" *ngFor="let item of (mlItems$ | async); let idx = index">
-                                <!-- <ng-container class="window-item" *ngIf="item.type == 'membership'">
-                                    <rw-membership-ticket-window [membershipState]=item [index]="idx"></rw-membership-ticket-window>
-                                </ng-container> -->
+                                <ng-container class="window-item" *ngIf="item.type == 'membership'">
+                                    <db-membership-ticket-window
+                                        [membershipState]=item
+                                        [index]="idx"
+                                        [instructors]="(instructors$ | async)"
+                                        (onRemoveMlItem) = "onMLItemRemove($event)"
+                                        (onSaveMlItem) = "onMemberhispTicketItemSave($event)"
+                                        (onModifyMlItem) = "onMemberhispTicketItemModify($event)"
+                                    ></db-membership-ticket-window>
+                                </ng-container>
                                 <ng-container class="window-item" *ngIf="item.type == 'locker'">
-                                    <rw-locker-window
+                                    <db-locker-window
                                         [lockerState]="item"
                                         [index]="idx"
                                         [Instructors]="(instructors$ | async)"
                                         (onRemoveMlItem) = "onMLItemRemove($event)"
                                         (onSaveMlItem) = "onLockerItemSave($event)"
                                         (onModifyMlItem) = "onLockerItemModify($event)"
-                                    ></rw-locker-window>
+                                    ></db-locker-window>
                                 </ng-container>
                             </div>
 

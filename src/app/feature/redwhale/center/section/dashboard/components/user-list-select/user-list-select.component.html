@@ -7,6 +7,7 @@
         (click)="!holdMode && toggle()"
         (rwClickOutside)="close()"
     >
+
         <span class="text flex-fill active">{{ value?.value.name}} <span class="grey">{{value?.value.userSize}}</span></span>
         <span *ngIf="!holdMode" class="mdi mdi-menu-down"></span>
     </div>
