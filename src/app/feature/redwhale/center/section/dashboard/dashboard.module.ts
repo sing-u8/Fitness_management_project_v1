@@ -28,6 +28,7 @@ import { MembershipTicketListModalComponent } from './components/membership-tick
 import { MlLockerItemComponent } from './components/ml-locker-item/ml-locker-item.component'
 import { MlLockerSelectComponent } from './components/ml-locker-select/ml-locker-select.component'
 import { LockerSelectModalComponent } from './components/locker-select-modal/locker-select-modal.component'
+// import { MembershipTicketWindowComponent } from './components/membership-ticket-window/membership-ticket-window.component'
 
 // section module
 import { CommonModule as SectionCommonModule } from '../common/common.module'

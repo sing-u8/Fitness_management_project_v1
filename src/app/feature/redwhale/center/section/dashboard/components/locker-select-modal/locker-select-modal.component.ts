@@ -36,6 +36,7 @@ import { Center } from '@schemas/center'
 })
 export class LockerSelectModalComponent implements AfterViewChecked, OnChanges, OnInit, OnDestroy {
     @Input() visible: boolean
+    @Input() choseLockers: ChoseLockers
 
     @ViewChild('modalBackgroundElement') modalBackgroundElement
     @ViewChild('modalWrapperElement') modalWrapperElement
@@ -59,22 +60,16 @@ export class LockerSelectModalComponent implements AfterViewChecked, OnChanges, 
     public selectedCateg: LockerCategory
     public itemList: Array<LockerItem>
 
-    public choseLockers: ChoseLockers
+    // public choseLockers: ChoseLockers
     public choseLockersSubscription: Subscription
 
     constructor(
         private el: ElementRef,
         private renderer: Renderer2,
         private storageService: StorageService,
-        private CenterLockerService: CenterLockerService // private gymRegisterMLState: GymRegisterMembershipLockerStateService
+        private CenterLockerService: CenterLockerService
     ) {
         this.isMouseModalDown = false
-
-        // this.choseLockersSubscription = this.gymRegisterMLState.selectChoseLockers().subscribe((choseLockers) => {
-        //     this.choseLockers = choseLockers
-        //     this.getLockerCategoryOnStateSelect()
-        //     console.log('gymRegisterMLState.selectChoseLockers ----- this.choseLockers: ', this.choseLockers)
-        // })
     }
 
     ngOnInit() {
@@ -98,7 +93,7 @@ export class LockerSelectModalComponent implements AfterViewChecked, OnChanges, 
         this.choseLockersSubscription.unsubscribe()
     }
     ngOnChanges(changes: SimpleChanges) {
-        if (!changes['visible'].firstChange) {
+        if (changes['visible'] && !changes['visible'].firstChange) {
             if (changes['visible'].previousValue != changes['visible'].currentValue) {
                 this.changed = true
             }

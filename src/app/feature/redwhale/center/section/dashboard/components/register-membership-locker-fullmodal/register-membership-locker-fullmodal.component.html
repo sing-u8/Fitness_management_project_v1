@@ -82,6 +82,7 @@
                                     <rw-locker-window
                                         [lockerState]="item"
                                         [index]="idx"
+                                        [Instructors]="(instructors$ | async)"
                                         (onRemoveMlItem) = "onMLItemRemove($event)"
                                         (onSaveMlItem) = "onLockerItemSave($event)"
                                         (onModifyMlItem) = "onLockerItemModify($event)"
@@ -150,6 +151,7 @@
 
 <db-lockerSelectModal
     [(visible)] = "doShowLockerSelectModal"
+    [choseLockers]="(choseLocker$ | async)"
     (confirm) = "onLockerSelected($event)"
     (cancel) = "closeLockerSelectModal()"
     (onItemClick)="onLockerItemClick($event)"

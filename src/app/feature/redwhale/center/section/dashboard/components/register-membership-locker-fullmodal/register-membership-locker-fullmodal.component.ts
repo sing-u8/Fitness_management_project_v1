@@ -71,24 +71,25 @@ export class RegisterMembershipLockerFullmodalComponent implements OnInit, OnCha
     public originalOrder = originalOrder
 
     // registration membership locker vars
-    public mlItemList: Array<MembershipLockerItem> = []
 
     public mlItems$: Observable<Array<MembershipLockerItem>> = this.cmpStore.mlItems$
     public instructors$: Observable<Array<CenterUser>> = this.cmpStore.instructors$
+    public choseLocker$: Observable<ChoseLockers> = this.cmpStore.choseLockers$
 
     constructor(
         private renderer: Renderer2,
-        private cmpStore: RegisterMembershipLockerFullmodalStore,
+        private readonly cmpStore: RegisterMembershipLockerFullmodalStore,
         private storageService: StorageService
     ) {}
 
     ngOnInit(): void {
         this.center = this.storageService.getCenter()
-        this.cmpStore.setState(stateInit)
+        // this.cmpStore.setState(stateInit)
         this.cmpStore.getInstructorsEffect(this.center.id)
     }
     ngOnDestroy(): void {}
     ngOnChanges(changes: SimpleChanges): void {
+        console.log('ngOnChanges ;;; ', changes)
         if (changes['visible'] && !changes['visible'].firstChange) {
             if (changes['visible'].previousValue != changes['visible'].currentValue) {
                 this.changed = true
@@ -105,13 +106,14 @@ export class RegisterMembershipLockerFullmodalComponent implements OnInit, OnCha
                     this.renderer
                     this.renderer.addClass(this.modalWrapperElement.nativeElement, 'rw-modal-wrapper-show')
                 }, 0)
+                // this.cmpStore.getInstructorsEffect(this.center.id)
             } else {
                 this.renderer.removeClass(this.modalWrapperElement.nativeElement, 'rw-modal-wrapper-show')
                 setTimeout(() => {
                     this.renderer.removeClass(this.modalWrapperElement.nativeElement, 'display-flex')
                 }, 200)
 
-                // !! add init methods
+                this.cmpStore.setState(_.cloneDeep(stateInit))
             }
         }
     }

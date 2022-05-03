@@ -271,11 +271,17 @@ export class DirectRegisterMemberFullmodalComponent implements OnInit, OnChanges
             phone_number: this.phone_number.value as string,
         }
 
+        console.log(
+            'this.localFileData ? _.assign({ length: 1 }, this.localFileData.file) : undefined : ',
+            this.localFileData,
+            this.localFileData ? _.assign({ length: 1 }, this.localFileData.file) : undefined
+        )
+
         this.nxStore.dispatch(
             DashboardActions.startDirectRegisterMember({
                 centerId: this.center.id,
                 reqBody: registerBody,
-                imageFile: _.assign({ length: 1 }, this.localFileData.file),
+                imageFile: this.localFileData.file ? _.assign({ length: 1 }, this.localFileData.file) : undefined,
                 callback: () => {
                     this.finishRegister.emit()
                     btLoadingFns.hideLoading()

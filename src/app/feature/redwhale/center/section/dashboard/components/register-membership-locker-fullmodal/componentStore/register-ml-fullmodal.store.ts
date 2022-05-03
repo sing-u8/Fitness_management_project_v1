@@ -36,12 +36,19 @@ export const stateInit: State = {
 
 @Injectable()
 export class RegisterMembershipLockerFullmodalStore extends ComponentStore<State> {
-    public readonly mlItems$ = this.select((s) => s.mlItems)
+    public readonly mlItems$ = this.select((s) => {
+        console.log('mlItems$ select : ', s, s.mlItems)
+        return s.mlItems
+    })
     public readonly choseLockers$ = this.select((s) => s.choseLockers)
     public readonly instructors$ = this.select((s) => s.instructors)
 
     constructor(private centerUserListService: CenterUserListService) {
-        super(stateInit)
+        super(_.cloneDeep(stateInit))
+    }
+
+    resetAll() {
+        this.setState((state) => _.cloneDeep(stateInit))
     }
 
     // choseLocker$ methods
@@ -69,9 +76,7 @@ export class RegisterMembershipLockerFullmodalStore extends ComponentStore<State
 
     // mlItemList$ methods
     addMlItem = this.updater((state, mlItem: MembershipLockerItem) => {
-        console.log('addMlItem in rml cmpStore  1: ', mlItem, state)
         state.mlItems.unshift(mlItem)
-        console.log('addMlItem in rml cmpStore  2 : ', mlItem, state)
         return {
             ...state,
         }
@@ -112,6 +117,10 @@ export class RegisterMembershipLockerFullmodalStore extends ComponentStore<State
     // instructors methods
     setInstructors(instructors: CenterUser[]) {
         this.setState((state) => {
+            console.log('setInstructor : ', {
+                ...state,
+                instructors: instructors,
+            })
             return {
                 ...state,
                 instructors: instructors,
@@ -148,6 +157,10 @@ export class RegisterMembershipLockerFullmodalStore extends ComponentStore<State
             type: 'locker',
             assignee: undefined,
             date: { startDate: dayjs().format('YYYY-MM-DD'), endDate: '' },
+            amount: {
+                normalAmount: '0',
+                paymentAmount: '0',
+            },
             price: {
                 card: '',
                 cash: '',
@@ -168,6 +181,10 @@ export class RegisterMembershipLockerFullmodalStore extends ComponentStore<State
             date: {
                 startDate: dayjs().format('YYYY-MM-DD'),
                 endDate: dayjs().add(membership.days, 'day').format('YYYY-MM-DD'),
+            },
+            amount: {
+                normalAmount: '0',
+                paymentAmount: '0',
             },
             price: {
                 card: '',

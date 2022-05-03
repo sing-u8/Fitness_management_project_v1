@@ -4,7 +4,7 @@ import dayjs from 'dayjs'
 
 import { StorageService } from '@services/storage.service'
 
-import { Locker, PriceType, MembershipLockerItem } from '@schemas/center/dashboard/register-ml-fullmodal'
+import { Locker, PriceType } from '@schemas/center/dashboard/register-ml-fullmodal'
 import { User } from '@schemas/user'
 import { Center } from '@schemas/center'
 import { CenterUser } from '@schemas/center-user'
@@ -25,7 +25,6 @@ export class LockerWindowComponent implements OnInit, AfterViewInit, OnChanges {
 
     public datepickFlag: { end: boolean } = { end: false }
     public staffSelect_list: Array<{ name: string; value: CenterUser }> = []
-    public StaffSelectValue: { name: string; value: CenterUser }
 
     public dayDiff = ''
 
@@ -34,26 +33,29 @@ export class LockerWindowComponent implements OnInit, AfterViewInit, OnChanges {
 
     constructor(private storageService: StorageService) {}
 
-    ngOnInit(): void {}
+    ngOnInit(): void {
+        this.gym = this.storageService.getCenter()
+        this.user = this.storageService.getUser()
+    }
     ngAfterViewInit(): void {
-        this.StaffSelectValue = this.lockerState.assignee
         this.dayDiff = String(this.getDayDiff(this.lockerState.date))
-        if (this.lockerState.status == 'modify') {
-            this.gym = this.storageService.getCenter()
-            this.user = this.storageService.getUser()
-        }
     }
     ngOnChanges(changes: SimpleChanges): void {
         console.log('locker-window on chagnes : ', changes)
         if (changes['Instructors']) {
+            this.gym = this.storageService.getCenter()
+            this.user = this.storageService.getUser()
             this.Instructors.forEach((v) => {
                 this.staffSelect_list.push({
                     name: v.center_user_name,
                     value: v,
                 })
 
-                if (!this.StaffSelectValue) {
-                    this.user.id == v.id ? (this.StaffSelectValue = { name: v.center_user_name, value: v }) : null
+                if (!this.lockerState.assignee) {
+                    console.log('this.this.lockerState.assignee : ', this.lockerState.assignee, this.user.id == v.id)
+                    if (this.user.id == v.id) this.lockerState.assignee = { name: v.center_user_name, value: v }
+
+                    console.log('this.lockerState.assignee  after if: ', this.lockerState.assignee)
                 }
             })
         }
@@ -75,7 +77,24 @@ export class LockerWindowComponent implements OnInit, AfterViewInit, OnChanges {
     // input medthod
     onPriceKeyup(event, type: PriceType) {
         if (event.code == 'Enter') return
-        this.lockerState.price[type] = this.lockerState.price[type]
+        if (type != undefined) {
+            this.lockerState.price[type] = this.lockerState.price[type]
+                .replace(/[^0-9]/gi, '')
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+        } else {
+            this.lockerState.amount.normalAmount = this.lockerState.amount.normalAmount
+                .replace(/[^0-9]/gi, '')
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+        }
+
+        this.lockerState.amount.paymentAmount = '0'
+        let _total = 0
+        const priceKeys = _.keys(this.lockerState.price)
+        priceKeys.forEach((key) => {
+            _total += Number(this.lockerState.price[key].replace(/[^0-9]/gi, ''))
+        })
+        this.lockerState.amount.paymentAmount = String(_total)
+        this.lockerState.amount.paymentAmount = this.lockerState.amount.paymentAmount
             .replace(/[^0-9]/gi, '')
             .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
     }
@@ -85,35 +104,23 @@ export class LockerWindowComponent implements OnInit, AfterViewInit, OnChanges {
         this.onRemoveMlItem.emit(this.index)
     }
     onSaveItem() {
-        const itemObj: Locker = {
-            type: 'locker',
-            date: this.lockerState.date,
-            price: this.lockerState.price,
-            assignee: _.cloneDeep(this.StaffSelectValue),
-            locker: _.cloneDeep(this.lockerState.locker),
-            lockerCategory: _.cloneDeep(this.lockerState.lockerCategory),
-            status: 'done',
-        }
-
+        const itemObj: Locker = _.cloneDeep({ ...this.lockerState, ...{ status: 'done' } })
         this.onSaveMlItem.emit({ index: this.index, item: itemObj })
     }
     onModify() {
-        const itemObj: Locker = {
-            type: 'locker',
-            locker: _.cloneDeep(this.lockerState.locker),
-            lockerCategory: _.cloneDeep(this.lockerState.lockerCategory),
-            assignee: _.cloneDeep(this.StaffSelectValue),
-            status: 'modify',
-        }
-
+        const itemObj: Locker = _.cloneDeep({ ...this.lockerState, ...{ status: 'modify' } })
         this.onModifyMlItem.emit({ index: this.index, item: itemObj })
     }
 
     // status method
+    checkMatchTotalPrice(): boolean {
+        return this.lockerState.amount.normalAmount == this.lockerState.amount.paymentAmount ? true : false
+    }
+    checkDateIsSet(): boolean {
+        return this.lockerState.date.startDate && this.lockerState.date.endDate ? true : false
+    }
     statusToDone() {
-        if (this.lockerState.date.startDate && this.lockerState.date.endDate) {
-            // !! need to be modified
-            // this.lockerState.price = this.lockerState.price ?? '0'
+        if (this.checkDateIsSet() && this.checkMatchTotalPrice()) {
             this.onSaveItem()
         }
     }
