@@ -236,6 +236,11 @@ export const lockerReducer = createImmerReducer(
     on(LockerActions.error, (state, { error }) => {
         console.log('Center/Locker error: ', error)
         return state
+    }),
+
+    // reducer called outside
+    on(LockerActions.startUpdateStateAfterRegisterLockerInDashboard, (state) => {
+        return state
     })
 )
 

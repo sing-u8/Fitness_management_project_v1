@@ -10,6 +10,7 @@ import { MembershipTicket, PriceType, MembershipLockerItem } from '@schemas/cent
 import { User } from '@schemas/user'
 import { Center } from '@schemas/center'
 import { CenterUser } from '@schemas/center-user'
+import { MembershipItem } from '@schemas/membership-item'
 
 @Component({
     selector: 'db-membership-ticket-window',
@@ -20,6 +21,7 @@ export class MembershipTicketWindowComponent implements OnInit, AfterViewInit, O
     @Input() index: number
     @Input() membershipState: MembershipTicket
     @Input() instructors: Array<CenterUser>
+    @Input() membershipItems: Array<MembershipItem>
 
     @Output() onRemoveMlItem = new EventEmitter<number>()
     @Output() onSaveMlItem = new EventEmitter<{ index: number; item: MembershipTicket }>()
@@ -53,7 +55,7 @@ export class MembershipTicketWindowComponent implements OnInit, AfterViewInit, O
     }
 
     ngOnChanges(changes: SimpleChanges): void {
-        if (changes['Instructors']) {
+        if (changes['instructors']) {
             this.center = this.storageService.getCenter()
             this.user = this.storageService.getUser()
             this.instructors.forEach((v) => {

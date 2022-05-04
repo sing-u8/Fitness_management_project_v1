@@ -173,6 +173,10 @@ export const finishMoveLockerTicket = createAction(
     `[${FeatureKey}] Finish Refund Locker Ticket`,
     props<{ lockerItems: LockerItem[]; movedLockerItem: LockerItem }>()
 )
+
+export const startUpdateStateAfterRegisterLockerInDashboard = createAction(
+    `[${FeatureKey}] Start Update State After Register Locker In Dashboard`
+)
 // -------------------------------------------------------------------------------------------------------------- //
 // cur Locker Categ
 export const setCurLockerCateg = createAction(

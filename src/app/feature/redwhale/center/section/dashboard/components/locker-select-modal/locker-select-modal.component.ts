@@ -37,6 +37,7 @@ import { Center } from '@schemas/center'
 export class LockerSelectModalComponent implements AfterViewChecked, OnChanges, OnInit, OnDestroy {
     @Input() visible: boolean
     @Input() choseLockers: ChoseLockers
+    @Input() lockerListInit: boolean
 
     @ViewChild('modalBackgroundElement') modalBackgroundElement
     @ViewChild('modalWrapperElement') modalWrapperElement
@@ -59,9 +60,6 @@ export class LockerSelectModalComponent implements AfterViewChecked, OnChanges, 
     public categList: LockerCategory[]
     public selectedCateg: LockerCategory
     public itemList: Array<LockerItem>
-
-    // public choseLockers: ChoseLockers
-    public choseLockersSubscription: Subscription
 
     constructor(
         private el: ElementRef,
@@ -89,14 +87,17 @@ export class LockerSelectModalComponent implements AfterViewChecked, OnChanges, 
 
         this.initGridster()
     }
-    ngOnDestroy() {
-        this.choseLockersSubscription.unsubscribe()
-    }
+    ngOnDestroy() {}
     ngOnChanges(changes: SimpleChanges) {
         if (changes['visible'] && !changes['visible'].firstChange) {
             if (changes['visible'].previousValue != changes['visible'].currentValue) {
                 this.changed = true
             }
+        }
+        if (changes['lockerListInit'] && changes['lockerListInit'].currentValue == true) {
+            this.CenterLockerService.getItemList(this.center.id, this.selectedCateg.id).subscribe((items) => {
+                this.itemList = items
+            })
         }
     }
 

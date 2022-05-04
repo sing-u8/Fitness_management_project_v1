@@ -15,6 +15,7 @@ import { LockerItem } from '@schemas/locker-item'
 import { CenterLockerService } from '@services/center-locker.service'
 import { UsersLockerService } from '@services/users-locker.service'
 import { CenterUsersLockerService } from '@services/center-users-locker.service.service'
+import { StorageService } from '@services/storage.service'
 
 import _ from 'lodash'
 
@@ -25,7 +26,8 @@ export class LockerEffect {
         private store: Store,
         private centerLokcerApi: CenterLockerService,
         private usersLockerApi: UsersLockerService,
-        private centerUsersLockerApi: CenterUsersLockerService
+        private centerUsersLockerApi: CenterUsersLockerService,
+        private storageService: StorageService
     ) {}
 
     // locker state entity
@@ -309,4 +311,42 @@ export class LockerEffect {
             )
         )
     )
+
+    public afterRegisterLockerInDashboard = createEffect(() =>
+        this.actions$.pipe(
+            ofType(LockerActions.startUpdateStateAfterRegisterLockerInDashboard),
+            switchMap(() => {
+                const center = this.storageService.getCenter()
+                return [LockerActions.resetAll(), LockerActions.startLoadLockerCategs({ centerId: center.id })]
+            })
+        )
+    )
+    // createEffect(() =>
+    //     this.actions$.pipe(
+    //         ofType(LockerActions.startUpdateStateAfterRegisterLockerInDashboard),
+    //         concatLatestFrom(() => [
+    //             this.store.select(LockerSelector.curLockerCateg),
+    //             this.store.select(LockerSelector.curLockerItem),
+    //             this.store.select(LockerSelector.curCenterId),
+    //         ]),
+    //         switchMap(([curLocerCateg,  curLockerItem, curCenterId]) =>
+    //             iif(
+    //                 () => createLockerTicketUnpaidReqBody.amount > 0,
+    //                 this.centerUsersLockerApi
+    //                     .createLockerTicketUnpaid(
+    //                         centerId,
+    //                         registerMemberId,
+    //                         resUserLocker.id,
+    //                         createLockerTicketUnpaidReqBody
+    //                     )
+    //                     .pipe(map(() => 'nothing')),
+    //                 of('nothing')
+    //             ).pipe(
+    //                 switchMap((__) => {
+    //                 }),
+    //                 catchError((err: string) => of(LockerActions.error({ error: err })))
+    //             )
+    //         )
+    //     )
+    // )
 }

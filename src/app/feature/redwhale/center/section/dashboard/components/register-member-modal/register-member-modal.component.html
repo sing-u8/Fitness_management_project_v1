@@ -3,6 +3,7 @@
     (mouseup)="!isMouseModalDown && onCancel()" (mousedown)='resetMouseModalDown()'
     #modalWrapperElement
 >
+
     <div class="rw-modal user-select-none" (mousedown)='onMouseModalDown(); $event.stopPropagation()'>
 
         <div class="modal-header">

@@ -13,6 +13,7 @@ export type UpdateChoseLocker = {
     lockerCategId: string
 }
 export type Instructor = { name: string; value: CenterUser }
+export type TotlaPrice = Record<PriceType, { price: number; name: string }>
 
 export type MembershipTicket = {
     type: 'membership'

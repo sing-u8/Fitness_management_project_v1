@@ -229,12 +229,15 @@ export class CenterUsersMembershipService {
 }
 
 export interface CreateMembershipTicketReqBody {
+    membership_item_id: string
+    category_name: string
+    name: string
     start_date: string
     end_date: string
     count: number
     unlimited: boolean
+    color: string
     class_item_ids: string[]
-    membership_item_id: string
     payment: {
         card: number
         trans: number

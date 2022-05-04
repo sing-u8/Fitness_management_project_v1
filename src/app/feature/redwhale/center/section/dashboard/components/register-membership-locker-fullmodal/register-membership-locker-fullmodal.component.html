@@ -2,6 +2,7 @@
     class="register-ml-fullmodal-wrapper user-select-none"
     #modalWrapperElement
 >
+
     <section class="register-membership-locker user-select-none thin-scroll-x-overlay thin-scroll-y">
 
         <header>
@@ -109,17 +110,17 @@
 
                             <div class="total-price">
                                 <span class="rw-typo-subtext0-regular total-price-title">총 결제 금액</span>
-                                <span class="rw-typo-headline1">{{'0'}}원</span>
+                                <span class="rw-typo-headline1">{{totalSum | numberWithCommas}}원</span>
                             </div>
 
                             <div class="input-list">
 
-                                <div *ngFor="let item of totalPriceInput | keyvalue : originalOrder" class="rw-typo-subtext0-regular input-title">
+                                <div *ngFor="let item of (totalPrice$ | async) | keyvalue : originalOrder" class="rw-typo-subtext0-regular input-title">
                                         <span class="rw-typo-bodytext1_darkgrey">
                                             {{item.value.name}}
                                         </span>
                                         <span class="rw-typo-bodytext0-darkgrey-bold">
-                                            {{'0'}}원
+                                            {{item.value.price | numberWithCommas}}원
                                         </span>
 
                                 </div>
@@ -131,22 +132,23 @@
                             </div>
 
                         </div>
+
+                        <rw-button
+                            #register_ml_bt
+                            [width]="'228'"
+                            [height]="'50'"
+                            [color]="'var(--red)'"
+                            [loadingName]="'register_ml'"
+                            [borderRadius]="'5'"
+                            [disabled]="!isAllMlItemDone"
+                            (onClick)="isAllMlItemDone && registerMLs($event)"
+                        >
+                            <span class="register-ml-button">
+                                모두 등록하기
+                            </span>
+                        </rw-button>
                     </div>
 
-                    <rw-button
-                        #register_ml_bt
-                        [width]="'228'"
-                        [height]="'50'"
-                        [color]="'var(--red)'"
-                        [loadingName]="'register_ml'"
-                        [borderRadius]="'5'"
-                        [disabled]="true"
-                        (onClick)="false"
-                    >
-                        <span class="register-ml-button">
-                            모두 등록하기
-                        </span>
-                    </rw-button>
                 </aside>
 
             </div>
@@ -158,6 +160,7 @@
 
 <db-lockerSelectModal
     [(visible)] = "doShowLockerSelectModal"
+    [lockerListInit] = "visible"
     [choseLockers]="(choseLocker$ | async)"
     (confirm) = "onLockerSelected($event)"
     (cancel) = "closeLockerSelectModal()"
@@ -166,6 +169,7 @@
 
 <db-membershipTicketListModal
     [(visible)] = "doShowMembershipListModal"
+    [membershipItems]="(membershipItems$ | async)"
     (confirm) = "onMembershipTicketSelected($event)"
     (cancel) = "closeMembershipListModal()"
 ></db-membershipTicketListModal>

@@ -12,10 +12,8 @@ import {
 } from '@angular/core'
 import _ from 'lodash'
 
-import { CenterMembershipService } from '@services/center-membership.service'
 import { StorageService } from '@services/storage.service'
 
-import { Center } from '@schemas/center'
 import { MembershipItem } from '@schemas/membership-item'
 
 @Component({
@@ -25,6 +23,7 @@ import { MembershipItem } from '@schemas/membership-item'
 })
 export class MembershipTicketListModalComponent implements AfterViewChecked, OnChanges {
     @Input() visible: boolean
+    @Input() membershipItems: MembershipItem[]
 
     @ViewChild('modalBackgroundElement') modalBackgroundElement
     @ViewChild('modalWrapperElement') modalWrapperElement
@@ -37,38 +36,12 @@ export class MembershipTicketListModalComponent implements AfterViewChecked, OnC
 
     public isMouseModalDown: boolean
 
-    public center: Center
-    public membershipItemList = []
-
-    constructor(
-        private el: ElementRef,
-        private renderer: Renderer2,
-        private centerMembershipService: CenterMembershipService,
-        private storageService: StorageService
-    ) {
+    constructor(private el: ElementRef, private renderer: Renderer2, private storageService: StorageService) {
         this.isMouseModalDown = false
-
-        this.center = this.storageService.getCenter()
-        this.centerMembershipService.getCategoryList(this.center.id).subscribe((membershipCategList) => {
-            this.membershipItemList = _.reduce(
-                membershipCategList,
-                (result, value) => {
-                    _.forEach(value.items, (membershipitem) => [result.push(membershipitem)])
-                    return result
-                },
-                []
-            )
-            console.log(
-                'RegisterMembershipLockerComponent membershipCategList: ',
-                membershipCategList,
-                ';',
-                this.membershipItemList
-            )
-        })
     }
 
     ngOnChanges(changes: SimpleChanges) {
-        if (!changes['visible'].firstChange) {
+        if (changes['visible'] && !changes['visible'].firstChange) {
             if (changes['visible'].previousValue != changes['visible'].currentValue) {
                 this.changed = true
             }

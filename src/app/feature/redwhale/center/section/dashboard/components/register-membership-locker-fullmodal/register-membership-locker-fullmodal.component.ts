@@ -20,6 +20,9 @@ import { originalOrder } from '@helpers/pipe/keyvalue'
 
 import { StorageService } from '@services/storage.service'
 
+// components
+import { ClickEmitterType } from '@shared/components/common/button/button.component'
+
 // component Store
 import { RegisterMembershipLockerFullmodalStore, stateInit } from './componentStore/register-ml-fullmodal.store'
 import { Observable } from 'rxjs'
@@ -37,6 +40,7 @@ import {
     Locker,
     MembershipTicket,
     UpdateChoseLocker,
+    TotlaPrice,
 } from '@schemas/center/dashboard/register-ml-fullmodal'
 
 @Component({
@@ -62,12 +66,6 @@ export class RegisterMembershipLockerFullmodalComponent implements OnInit, OnCha
 
     public center: Center
 
-    public totalPriceInput = {
-        cash: { price: '', name: '현금' },
-        card: { price: '', name: '카드' },
-        trans: { price: '', name: '계좌이체' },
-        unpaid: { price: '', name: '미수금' },
-    }
     public originalOrder = originalOrder
 
     // registration membership locker vars
@@ -75,6 +73,21 @@ export class RegisterMembershipLockerFullmodalComponent implements OnInit, OnCha
     public mlItems$: Observable<Array<MembershipLockerItem>> = this.cmpStore.mlItems$
     public instructors$: Observable<Array<CenterUser>> = this.cmpStore.instructors$
     public choseLocker$: Observable<ChoseLockers> = this.cmpStore.choseLockers$
+    public membershipItems$: Observable<Array<MembershipItem>> = this.cmpStore.membershipItems$
+
+    public isAllMlItemDone = false
+    public isAllMlItemDoneSubscriber = this.cmpStore.isAllMlItemDone$.subscribe((isDone) => {
+        this.isAllMlItemDone = isDone
+    })
+
+    public totalPrice$: Observable<TotlaPrice> = this.cmpStore.totalPrice$
+    public totalSum = 0
+    public totlaPriceSumSubscriber = this.cmpStore.totalPrice$.subscribe((total) => {
+        this.totalSum = 0
+        _.forIn(total, (v) => {
+            this.totalSum += v.price
+        })
+    })
 
     constructor(
         private renderer: Renderer2,
@@ -86,8 +99,12 @@ export class RegisterMembershipLockerFullmodalComponent implements OnInit, OnCha
         this.center = this.storageService.getCenter()
         // this.cmpStore.setState(stateInit)
         this.cmpStore.getInstructorsEffect(this.center.id)
+        this.cmpStore.getmembershipItemsEffect(this.center.id)
     }
-    ngOnDestroy(): void {}
+    ngOnDestroy(): void {
+        this.totlaPriceSumSubscriber.unsubscribe()
+        this.isAllMlItemDoneSubscriber.unsubscribe()
+    }
     ngOnChanges(changes: SimpleChanges): void {
         console.log('ngOnChanges ;;; ', changes)
         if (changes['visible'] && !changes['visible'].firstChange) {
@@ -107,6 +124,8 @@ export class RegisterMembershipLockerFullmodalComponent implements OnInit, OnCha
                     this.renderer.addClass(this.modalWrapperElement.nativeElement, 'rw-modal-wrapper-show')
                 }, 0)
                 // this.cmpStore.getInstructorsEffect(this.center.id)
+                this.cmpStore.getInstructorsEffect(this.center.id)
+                this.cmpStore.getmembershipItemsEffect(this.center.id)
             } else {
                 this.renderer.removeClass(this.modalWrapperElement.nativeElement, 'rw-modal-wrapper-show')
                 setTimeout(() => {
@@ -172,5 +191,19 @@ export class RegisterMembershipLockerFullmodalComponent implements OnInit, OnCha
         this.cmpStore.addMlItem(this.cmpStore.initMembershipItem(item))
         this.closeMembershipListModal()
         // console.log('onMembershipTicketSelected: ', item, this.gymRegisterMlState.itemList, this.itemList)
+    }
+
+    // register ml items func
+    registerMLs(btLoadingFns: ClickEmitterType) {
+        console.log('start register MLs')
+        btLoadingFns.showLoading()
+        this.cmpStore.registerMlItems({
+            centerId: this.center.id,
+            user: this.curUser,
+            callback: () => {
+                btLoadingFns.hideLoading()
+                this.closeModal()
+            },
+        })
     }
 }

@@ -10,6 +10,7 @@
 
         <span class="text flex-fill active">{{ value?.value.name}} <span class="grey">{{value?.value.userSize}}</span></span>
         <span *ngIf="!holdMode" class="mdi mdi-menu-down"></span>
+
     </div>
     <div class="items" #itemsElement (click)="$event.stopPropagation()">
         <div

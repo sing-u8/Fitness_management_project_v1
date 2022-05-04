@@ -146,10 +146,14 @@
                 width: 255px;
                 height: 48px;
                 position: relative;
-                padding: 13px 15px;
+                padding: 13px 38px 13px 15px;
                 cursor: not-allowed;
                 background-color: var(--background-color);
                 color: var(--grey);
+
+                &.text-right {
+                    justify-content: flex-end;
+                }
             }
 
             .input-container {
@@ -169,6 +173,10 @@
                     position: absolute;
                     top: 13.5px;
                     right: 15px;
+
+                    &.disabled {
+                        color: var(--grey) !important;
+                    }
                 }
             }
         }

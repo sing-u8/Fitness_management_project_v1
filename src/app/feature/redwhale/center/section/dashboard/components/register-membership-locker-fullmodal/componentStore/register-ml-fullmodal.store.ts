@@ -1,13 +1,16 @@
 import { Injectable } from '@angular/core'
 import { ComponentStore } from '@ngrx/component-store'
 
-import { EMPTY, Observable } from 'rxjs'
-import { filter, switchMap, tap, catchError } from 'rxjs/operators'
+import { EMPTY, Observable, forkJoin } from 'rxjs'
+import { filter, switchMap, tap, catchError, map, withLatestFrom } from 'rxjs/operators'
 
 import _ from 'lodash'
 import dayjs from 'dayjs'
 
 import { CenterUserListService } from '@services/helper/center-user-list.service'
+import { CenterMembershipService } from '@services/center-membership.service'
+import { CreateLockerTicketReqBody, CenterUsersLockerService } from '@services/center-users-locker.service.service'
+import { CreateMembershipTicketReqBody, CenterUsersMembershipService } from '@services/center-users-membership.service'
 
 import {
     MembershipTicket,
@@ -16,6 +19,7 @@ import {
     ChoseLockers,
     Instructor,
     UpdateChoseLocker,
+    TotlaPrice,
 } from '@schemas/center/dashboard/register-ml-fullmodal'
 
 import { MembershipItem } from '@schemas/membership-item'
@@ -23,14 +27,22 @@ import { LockerItem } from '@schemas/locker-item'
 import { LockerCategory } from '@schemas/locker-category'
 import { CenterUser } from '@schemas/center-user'
 
+// ngrx
+import { Store } from '@ngrx/store'
+import * as DashboardActions from '@centerStore/actions/sec.dashboard.actions'
+import * as LockerActions from '@centerStore/actions/sec.locker.actions'
+import { showToast } from '@appStore/actions/toast.action'
+
 export interface State {
     mlItems: MembershipLockerItem[]
     choseLockers: ChoseLockers
+    membershipItems: MembershipItem[]
     instructors: CenterUser[]
 }
 export const stateInit: State = {
     mlItems: [],
     choseLockers: new Map(),
+    membershipItems: [],
     instructors: [],
 }
 
@@ -42,8 +54,37 @@ export class RegisterMembershipLockerFullmodalStore extends ComponentStore<State
     })
     public readonly choseLockers$ = this.select((s) => s.choseLockers)
     public readonly instructors$ = this.select((s) => s.instructors)
+    public readonly membershipItems$ = this.select((s) => s.membershipItems)
 
-    constructor(private centerUserListService: CenterUserListService) {
+    public readonly totalPrice$ = this.select((s) => {
+        const total: TotlaPrice = {
+            cash: { price: 0, name: '현금' },
+            card: { price: 0, name: '카드' },
+            trans: { price: 0, name: '계좌이체' },
+            unpaid: { price: 0, name: '미수금' },
+        }
+        const priceKeys = _.keys(total)
+        s.mlItems.forEach((mlItem) => {
+            if (mlItem.status == 'done') {
+                priceKeys.forEach((key) => {
+                    total[key]['price'] += Number(mlItem.price[key].replace(/[^0-9]/gi, '')) ?? 0
+                })
+            }
+        })
+        return total
+    })
+
+    public readonly isAllMlItemDone$ = this.select(
+        (s) => s.mlItems.length > 0 && _.every(s.mlItems, (mlItem) => mlItem.status == 'done')
+    )
+
+    constructor(
+        private centerUserListService: CenterUserListService,
+        private centerMembershipApi: CenterMembershipService,
+        private centerUsersLockerApi: CenterUsersLockerService,
+        private centerUsersMembershipApi: CenterUsersMembershipService,
+        private nxStore: Store
+    ) {
         super(_.cloneDeep(stateInit))
     }
 
@@ -117,10 +158,6 @@ export class RegisterMembershipLockerFullmodalStore extends ComponentStore<State
     // instructors methods
     setInstructors(instructors: CenterUser[]) {
         this.setState((state) => {
-            console.log('setInstructor : ', {
-                ...state,
-                instructors: instructors,
-            })
             return {
                 ...state,
                 instructors: instructors,
@@ -134,10 +171,6 @@ export class RegisterMembershipLockerFullmodalStore extends ComponentStore<State
                 this.centerUserListService.getCenterInstructorList(centerId).pipe(
                     tap({
                         next: (instructors) => {
-                            // const instList = _.map(instructors, (v) => ({
-                            //     name: v.center_user_name,
-                            //     value: v,
-                            // }))
                             this.setInstructors(instructors)
                         },
                         error: (err) => {
@@ -148,6 +181,147 @@ export class RegisterMembershipLockerFullmodalStore extends ComponentStore<State
                 )
             )
         )
+    )
+
+    setMembershipItems(membershipItems: MembershipItem[]) {
+        this.setState((state) => {
+            return {
+                ...state,
+                membershipItems: membershipItems,
+            }
+        })
+    }
+    readonly getmembershipItemsEffect = this.effect((centerId$: Observable<string>) =>
+        centerId$.pipe(
+            switchMap((centerId) =>
+                this.centerMembershipApi.getCategoryList(centerId).pipe(
+                    tap({
+                        next: (membershipCateg) => {
+                            const membershipItemList = _.reduce(
+                                membershipCateg,
+                                (result, value) => {
+                                    _.forEach(value.items, (membershipitem) => [result.push(membershipitem)])
+                                    return result
+                                },
+                                []
+                            )
+
+                            this.setMembershipItems(membershipItemList)
+                        },
+                        error: (err) => {
+                            console.log('register-ml-fullmodal store - getmembershipItemsEffect err: ', err)
+                        },
+                    }),
+                    catchError(() => EMPTY)
+                )
+            )
+        )
+    )
+
+    registerMlItems = this.effect(
+        (reqBody$: Observable<{ centerId: string; user: CenterUser; callback: () => void }>) =>
+            reqBody$.pipe(
+                withLatestFrom(this.mlItems$),
+                map(([reqBody, mlItems]) => {
+                    console.log('start  registerMlItems : ', reqBody, mlItems)
+                    const lockerItems = mlItems.filter((item) => item.type == 'locker')
+                    const membershipItems = mlItems.filter((item) => item.type == 'membership')
+
+                    const createLockerTicketReqs: CreateLockerTicketReqBody[] = lockerItems.map((v) => {
+                        return {
+                            locker_item_id: v['locker'].id as string,
+                            start_date: v.date.startDate,
+                            end_date: v.date.endDate,
+                            payment: {
+                                card: Number(v.price.card.replace(/[^0-9]/gi, '')),
+                                trans: Number(v.price.trans.replace(/[^0-9]/gi, '')),
+                                cash: Number(v.price.cash.replace(/[^0-9]/gi, '')),
+                                unpaid: Number(v.price.unpaid.replace(/[^0-9]/gi, '')),
+                                vbank: 0,
+                                phone: 0,
+                                memo: '',
+                                responsibility_user_id: v.assignee.value.id,
+                            },
+                        }
+                    })
+                    const createMembershipTicketsReqs: CreateMembershipTicketReqBody[] = membershipItems.map((v) => {
+                        return {
+                            membership_item_id: v['membershipItem'].id,
+                            category_name: v['membershipItem'].category_name,
+                            name: v['membershipItem'].name,
+                            start_date: v.date.startDate,
+                            end_date: v.date.endDate,
+                            count: Number(v['count'].count),
+                            unlimited: v['count'].infinite,
+                            color: v['membershipItem'].color,
+                            class_item_ids: _.map(
+                                _.filter(v['lessonList'], (v) => v.selected == true),
+                                (v) => v.item.id
+                            ),
+                            payment: {
+                                card: Number(v.price.card.replace(/[^0-9]/gi, '')),
+                                trans: Number(v.price.trans.replace(/[^0-9]/gi, '')),
+                                cash: Number(v.price.cash.replace(/[^0-9]/gi, '')),
+                                unpaid: Number(v.price.unpaid.replace(/[^0-9]/gi, '')),
+                                vbank: 0,
+                                phone: 0,
+                                memo: '',
+                                responsibility_user_id: v.assignee.value.id,
+                            },
+                        }
+                    })
+                    console.log('middle  registerMlItems : ', createLockerTicketReqs, createMembershipTicketsReqs)
+
+                    const lockerApis = createLockerTicketReqs.map((v) =>
+                        this.centerUsersLockerApi.createLockerTicket(reqBody.centerId, reqBody.user.id, v)
+                    )
+                    const membershipApis = createMembershipTicketsReqs.map((v) =>
+                        this.centerUsersMembershipApi.createMembershipTicket(reqBody.centerId, reqBody.user.id, v)
+                    )
+
+                    // return {
+                    //     lockerApis,
+                    //     memberhipApis,
+                    // }
+                    forkJoin([...lockerApis, ...membershipApis])
+                        .pipe(
+                            tap(() => {
+                                if (lockerApis.length > 0 && membershipApis.length > 0) {
+                                    this.nxStore.dispatch(
+                                        LockerActions.startUpdateStateAfterRegisterLockerInDashboard()
+                                    )
+                                    this.nxStore.dispatch(
+                                        showToast({
+                                            text: `${reqBody.user.center_user_name}님의 회원권 / 락커 등록이 완료되었습니다. `,
+                                        })
+                                    )
+                                } else if (lockerApis.length > 0) {
+                                    this.nxStore.dispatch(
+                                        LockerActions.startUpdateStateAfterRegisterLockerInDashboard()
+                                    )
+                                    this.nxStore.dispatch(
+                                        showToast({
+                                            text: `${reqBody.user.center_user_name}님의 락커 등록이 완료되었습니다. `,
+                                        })
+                                    )
+                                } else if (membershipApis.length > 0) {
+                                    this.nxStore.dispatch(
+                                        showToast({
+                                            text: `${reqBody.user.center_user_name}님의 회원권 등록이 완료되었습니다. `,
+                                        })
+                                    )
+                                }
+
+                                reqBody.callback()
+                            })
+                        )
+                        .subscribe()
+                }),
+                catchError((err) => {
+                    console.log('registerMlItems err : ', err)
+                    return EMPTY
+                })
+            )
     )
 
     // helperFunction
@@ -175,15 +349,15 @@ export class RegisterMembershipLockerFullmodalStore extends ComponentStore<State
 
     initMembershipItem(membership: MembershipItem): MembershipTicket {
         const price = membership.price ? membership.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') : '0'
+        console.log('initMembershipItem : ', membership)
         return {
             type: 'membership',
-            assignee: undefined,
             date: {
                 startDate: dayjs().format('YYYY-MM-DD'),
                 endDate: dayjs().add(membership.days, 'day').format('YYYY-MM-DD'),
             },
             amount: {
-                normalAmount: '0',
+                normalAmount: String(membership.price).replace(/\B(?=(\d{3})+(?!\d))/g, ','),
                 paymentAmount: '0',
             },
             price: {
@@ -193,6 +367,7 @@ export class RegisterMembershipLockerFullmodalStore extends ComponentStore<State
                 unpaid: '',
             },
             count: { count: String(membership.count), infinite: membership.unlimited },
+            assignee: undefined,
             membershipItem: membership,
             lessonList: _.map(membership.class_items, (value) => {
                 return { selected: true, item: value }

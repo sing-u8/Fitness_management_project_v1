@@ -11,12 +11,15 @@
     >
       <img src="assets/icons/etc/ticket-white.svg">
     </div>
+
     <div class="card-desc-container">
+
       <p class="categ rw-typo-subtext2 ">{{cardInfo.category_name}}</p>
       <div class="card-title-container rw-typo-title2">
         <p class="card-title">{{cardInfo.name}}</p>
         <p *ngIf="!cardInfo.unlimited" class="card-desc1 rw-typo-subtext1">{{cardInfo.days}}일<span class="bar">|</span>{{cardInfo.count}}회<span class="bar">|</span>￦{{cardInfo.price | numberWithCommas}}</p>
         <p *ngIf="cardInfo.unlimited" class="card-desc1 rw-typo-subtext1">{{cardInfo.days}}일<span class="bar">|</span>무제한<span class="bar">|</span>￦{{cardInfo.price | numberWithCommas}}</p>
+
       </div>
     </div>
   </div>
