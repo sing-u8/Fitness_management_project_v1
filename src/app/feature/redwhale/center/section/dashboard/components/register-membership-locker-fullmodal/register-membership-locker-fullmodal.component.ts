@@ -43,6 +43,10 @@ import {
     TotlaPrice,
 } from '@schemas/center/dashboard/register-ml-fullmodal'
 
+// ngrx
+import { Store } from '@ngrx/store'
+import * as DashboardActions from '@centerStore/actions/sec.dashboard.actions'
+
 @Component({
     selector: 'db-register-membership-locker-fullmodal',
     templateUrl: './register-membership-locker-fullmodal.component.html',
@@ -92,7 +96,8 @@ export class RegisterMembershipLockerFullmodalComponent implements OnInit, OnCha
     constructor(
         private renderer: Renderer2,
         private readonly cmpStore: RegisterMembershipLockerFullmodalStore,
-        private storageService: StorageService
+        private storageService: StorageService,
+        private nxStore: Store
     ) {}
 
     ngOnInit(): void {
@@ -202,6 +207,12 @@ export class RegisterMembershipLockerFullmodalComponent implements OnInit, OnCha
             user: this.curUser,
             callback: () => {
                 btLoadingFns.hideLoading()
+                this.nxStore.dispatch(
+                    DashboardActions.startGetUserData({
+                        centerId: this.center.id,
+                        centerUser: this.curUser,
+                    })
+                )
                 this.closeModal()
             },
         })

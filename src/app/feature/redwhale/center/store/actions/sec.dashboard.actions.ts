@@ -46,7 +46,7 @@ export const startGetUserData = createAction(
 )
 export const finishGetUserData = createAction(
     `[${FeatureKey}] Finish Get User Data`,
-    props<{ lockers?: UserLocker[]; memberships: UserMembership[]; payments?: Payment[]; reservations?: any[] }>()
+    props<{ lockers: UserLocker[]; memberships: UserMembership[]; payments: Payment[]; reservations?: any[] }>()
 )
 
 export const startSetCurUserData = createAction(
