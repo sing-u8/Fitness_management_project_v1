@@ -139,10 +139,34 @@
     <div class="l-member-detail__bottom">
 
         <div class="l-member-detail-tag">
-            <div class="member-detail-tag" [class.selected]="true">회원권</div>
-            <div class="member-detail-tag" [class.selected]="false">락커</div>
-            <div class="member-detail-tag" [class.selected]="false">예약 내역</div>
-            <div class="member-detail-tag" [class.selected]="false">결제 내역</div>
+            <div
+                class="member-detail-tag"
+                [class.selected]="(userDetailTag$ | async) == 'membership'"
+                (click)="setUserDetailTag('membership')"
+            >
+                회원권
+            </div>
+            <div
+                class="member-detail-tag"
+                [class.selected]="(userDetailTag$ | async) == 'locker'"
+                (click)="setUserDetailTag('locker')"
+            >
+                락커
+            </div>
+            <div
+                class="member-detail-tag"
+                [class.selected]="(userDetailTag$ | async) == 'reservation'"
+                (click)="setUserDetailTag('reservation')"
+            >
+                예약 내역
+            </div>
+            <div
+                class="member-detail-tag"
+                [class.selected]="(userDetailTag$ | async) == 'payment'"
+                (click)="setUserDetailTag('payment')"
+            >
+                결제 내역
+            </div>
         </div>
         <div class="member-detail-information">
 

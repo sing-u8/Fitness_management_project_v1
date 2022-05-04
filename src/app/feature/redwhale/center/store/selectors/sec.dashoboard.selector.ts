@@ -11,6 +11,7 @@ export const curCenterId = createSelector(DashboardFeature, FromDashboard.select
 export const isLoading = createSelector(DashboardFeature, FromDashboard.selectIsLoading)
 export const error = createSelector(DashboardFeature, FromDashboard.selectError)
 export const searchInput = createSelector(DashboardFeature, FromDashboard.selectSearchInput)
+export const userDeatilTag = createSelector(DashboardFeature, FromDashboard.selectUserDetailTag)
 
 // main
 export const usersSelectCategs = createSelector(DashboardFeature, FromDashboard.selectUsersSelectCategs)

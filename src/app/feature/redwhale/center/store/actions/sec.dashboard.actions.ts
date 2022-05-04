@@ -6,6 +6,7 @@ import {
     UserListSelect,
     UsersLists,
     CurUseData,
+    UserDetailTag,
 } from '../reducers/sec.dashboard.reducer'
 
 import { CreateUserRequestBody, UpdateUserRequestBody } from '@services/center-users.service'
@@ -116,5 +117,6 @@ export const setCurCenterId = createAction(`[${FeatureKey}] Set Current Center I
 export const resetCurCenterId = createAction(`[${FeatureKey}] Reset Current Center Id`)
 
 // common
+export const setUserDetailTag = createAction(`[${FeatureKey}] Set User Detail Tag`, props<{ tag: UserDetailTag }>())
 export const resetAll = createAction(`[${FeatureKey}] Reset Dashboard All State`)
 export const error = createAction(`[${FeatureKey}] Dashboard State Error`, props<{ error: string }>())

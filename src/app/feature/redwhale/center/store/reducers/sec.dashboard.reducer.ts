@@ -28,6 +28,9 @@ export type CurUseData = {
     reservations: any[] // !! user reservation
 }
 
+export type UserDetailTag = 'membership' | 'locker' | 'reservation' | 'payment'
+export const UserDetailTagInit: UserDetailTag = 'membership'
+
 export const MemberManageCategoryInit = 'membershipLocker'
 export const UsersSelectCategInit: UsersSelectCateg = {
     member: { name: '전체 회원', userSize: 0 },
@@ -64,6 +67,7 @@ export interface State {
     // common
     curCenterId: string
     curSearchInput: string
+    userDetailTag: UserDetailTag
     isLoading: Loading
     error: string
 
@@ -80,6 +84,7 @@ export const initialState: State = {
     // main
     curCenterId: undefined,
     curSearchInput: CurSearchInputInit,
+    userDetailTag: UserDetailTagInit,
     isLoading: 'idle',
     error: '',
     // main
@@ -228,6 +233,10 @@ export const dashboardReducer = createImmerReducer(
         return state
     }),
     // common
+    on(DashboardActions.setUserDetailTag, (state, { tag }) => {
+        state.userDetailTag = tag
+        return state
+    }),
     on(DashboardActions.error, (state, { error }) => {
         state.error = error
         return state
@@ -243,6 +252,7 @@ export const selectCurCenterId = (state: State) => state.curCenterId
 export const selectIsLoading = (state: State) => state.isLoading
 export const selectError = (state: State) => state.error
 export const selectSearchInput = (state: State) => state.curSearchInput
+export const selectUserDetailTag = (state: State) => state.userDetailTag
 
 // main
 export const selectUsersSelectCategs = (state: State) => state.usersSelectCategs

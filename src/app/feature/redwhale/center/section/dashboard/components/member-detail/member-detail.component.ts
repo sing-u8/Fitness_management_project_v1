@@ -10,6 +10,7 @@ import { Center } from '@schemas/center'
 import { Store } from '@ngrx/store'
 import * as DashboardReducer from '@centerStore/reducers/sec.dashboard.reducer'
 import * as DashboardActions from '@centerStore/actions/sec.dashboard.actions'
+import * as DashboardSelector from '@centerStore/selectors/sec.dashoboard.selector'
 import { showToast } from '@appStore/actions/toast.action'
 
 @Component({
@@ -22,6 +23,12 @@ export class MemberDetailComponent implements OnInit {
 
     public memoForm: FormControl = this.fb.control('')
     public center: Center
+
+    public userDetailTag$ = this.nxStore.select(DashboardSelector.userDeatilTag)
+    setUserDetailTag(tag: DashboardReducer.UserDetailTag) {
+        this.nxStore.dispatch(DashboardActions.setUserDetailTag({ tag }))
+    }
+
     constructor(private fb: FormBuilder, private storageService: StorageService, private nxStore: Store) {
         this.center = this.storageService.getCenter()
     }
