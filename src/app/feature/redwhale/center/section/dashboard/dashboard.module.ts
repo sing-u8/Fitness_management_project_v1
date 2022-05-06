@@ -19,6 +19,10 @@ import { UserFlipListComponent } from './components/user-flip-list/user-flip-lis
 import { RegisterMemberModalComponent } from './components/register-member-modal/register-member-modal.component'
 import { DirectRegisterMemberFullmodalComponent } from './components/direct-register-member-fullmodal/direct-register-member-fullmodal.component'
 import { ChangeUserNameModalComponent } from './components/change-user-name-modal/change-user-name-modal.component'
+import { UserDetailMembershipComponent } from './components/user-detail-membership/user-detail-membership.component'
+import { UserDetailLockerComponent } from './components/user-detail-locker/user-detail-locker.component'
+import { UserDetailReservationComponent } from './components/user-detail-reservation/user-detail-reservation.component'
+import { UserDetailPaymentComponent } from './components/user-detail-payment/user-detail-payment.component'
 
 import { RegisterMembershipLockerFullmodalComponent } from './components/register-membership-locker-fullmodal/register-membership-locker-fullmodal.component'
 import { LockerWindowComponent } from './components/locker-window/locker-window.component'
@@ -62,6 +66,10 @@ import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader'
         LockerSelectModalComponent,
         MembershipTicketWindowComponent,
         LessonSelectorComponent,
+        UserDetailMembershipComponent,
+        UserDetailLockerComponent,
+        UserDetailReservationComponent,
+        UserDetailPaymentComponent,
     ],
     imports: [
         AngularCommonModule,

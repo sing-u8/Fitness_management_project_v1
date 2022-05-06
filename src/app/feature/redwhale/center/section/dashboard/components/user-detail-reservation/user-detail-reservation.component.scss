@@ -1,0 +1,120 @@
+* {
+    padding: 0px;
+    margin: 0px;
+    text-align: initial;
+}
+
+section.user-detail-reservation {
+    width: 100%;
+    height: calc(100% - 43px);
+    position: relative;
+
+    $layout_padding: 0 18px 0 25px;
+
+    header {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        height: 43px;
+        position: relative;
+        padding: $layout_padding;
+        border-bottom: 1px solid var(--border-color);
+
+    }
+
+    main {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        padding: 0px 12px;
+
+        .item {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            height: 70px;
+            padding: 0px 13px;
+            position: relative;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+    }
+
+    .col1 {
+        min-width: 200px;
+        padding-right: 25px;
+        width: 26.5957%;
+    }
+
+    .col2 {
+        min-width: 230px;
+        padding-right: 37px;
+        width: 30.5851%;
+    }
+
+    .col3 {
+        min-width: 76px;
+        padding-right: 37px;
+        width: 10.1063%;
+    }
+
+    .col4 {
+        min-width: calc(100% - 200px - 230px - 76px);
+        width: calc(100% - 26.5957% - 30.5851% - 10.1063%);
+    }
+
+    @media (min-width: 1440px) {
+        .col1 {
+            min-width: 205px;
+            padding-right: 30px;
+            width: 23.7268%;
+        }
+
+        .col2 {
+            min-width: 315px;
+            padding-right: 68px;
+            width: 36.4583%;
+        }
+
+        .col3 {
+            min-width: 76px;
+            padding-right: 37px;
+            width: 8.7962%;
+        }
+
+        .col4 {
+            min-width: calc(100% - 205px - 315px - 76px);
+            width: calc(100% - 23.7268% - 36.4583% - 8.7962%);
+        }
+
+    }
+
+    @media (min-width: 1920px) {
+        .col1 {
+            min-width: 265px;
+            padding-right: 90px;
+            width: 20.8825%;
+        }
+
+        .col2 {
+            min-width: 377px;
+            padding-right: 130px;
+            width: 29.7084%;
+        }
+
+        .col3 {
+            min-width: 129px;
+            padding-right: 90px;
+            width: 10.1654%;
+        }
+
+        .col4 {
+            min-width: calc(100% - 265px - 377px - 129px);
+            width: calc(100% - 20.8825% - 29.7084% - 10.1654%);
+        }
+
+    }
+
+}

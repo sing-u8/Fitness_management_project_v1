@@ -169,7 +169,18 @@
             </div>
         </div>
         <div class="member-detail-information">
-
+            <db-user-detail-membership
+                *ngIf="(userDetailTag$ | async) == 'membership'"
+            ></db-user-detail-membership>
+            <db-user-detail-locker
+                *ngIf="(userDetailTag$ | async) == 'locker'"
+            ></db-user-detail-locker>
+            <db-user-detail-reservation
+                *ngIf="(userDetailTag$ | async) == 'reservation'"
+            ></db-user-detail-reservation>
+            <db-user-detail-payment
+                *ngIf="(userDetailTag$ | async) == 'payment'"
+            ></db-user-detail-payment>
         </div>
 
     </div>
