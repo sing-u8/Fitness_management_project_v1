@@ -12,12 +12,15 @@ export interface UserMembership {
     id: string
     state_code: string
     state_code_name: string
+    category_name: string
+    name: string
     start_date: string
     end_date: string
     pause_start_date: string
     pause_end_date: string
     count: number
     unlimited: boolean
+    color: string
     created_by: string
     created_at: string
     updated_by: string
@@ -26,6 +29,6 @@ export interface UserMembership {
     center: CenterInfo
     class: Array<ClassItem>
     payment: Array<Payment>
-    refund: Refund
     history: Array<UserLockerHistory>
+    // refund: Refund
 }

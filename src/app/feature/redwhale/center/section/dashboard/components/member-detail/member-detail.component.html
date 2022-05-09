@@ -169,18 +169,42 @@
             </div>
         </div>
         <div class="member-detail-information">
-            <db-user-detail-membership
-                *ngIf="(userDetailTag$ | async) == 'membership'"
-            ></db-user-detail-membership>
-            <db-user-detail-locker
-                *ngIf="(userDetailTag$ | async) == 'locker'"
-            ></db-user-detail-locker>
-            <db-user-detail-reservation
-                *ngIf="(userDetailTag$ | async) == 'reservation'"
-            ></db-user-detail-reservation>
-            <db-user-detail-payment
-                *ngIf="(userDetailTag$ | async) == 'payment'"
-            ></db-user-detail-payment>
+
+            <ng-template
+                #cur_user_empty
+                [ngIf] = "!curUserData.user"
+                [ngIfElse]="cur_user_exist"
+            >
+                <div class="center-empty-guide">
+                    <img src="assets/icons/etc/empty_screen.svg">
+                    <p>회원을 등록하시면,</p>
+                    <p>회원 정보를 조회하실 수 있어요.</p>
+                </div>
+            </ng-template>
+            <ng-template #cur_user_exist>
+                <db-user-detail-membership
+                    *ngIf="(userDetailTag$ | async) == 'membership'"
+                    [memberships]="curUserData.memberships"
+                    (onRegisterML)="onRegisterML.emit()"
+                ></db-user-detail-membership>
+                <db-user-detail-locker
+                    *ngIf="(userDetailTag$ | async) == 'locker'"
+                    [lockers]="curUserData.lockers"
+                    (onRegisterML)="onRegisterML.emit()"
+                ></db-user-detail-locker>
+                <db-user-detail-reservation
+                    *ngIf="(userDetailTag$ | async) == 'reservation'"
+                    [reservations]="curUserData.reservations"
+                    (onRegisterML)="onRegisterML.emit()"
+                ></db-user-detail-reservation>
+                <db-user-detail-payment
+                    *ngIf="(userDetailTag$ | async) == 'payment'"
+                    [payments]="curUserData.payments"
+                    (onRegisterML)="onRegisterML.emit()"
+                ></db-user-detail-payment>
+            </ng-template>
+
+
         </div>
 
     </div>

@@ -11,7 +11,6 @@ import { Payment } from '@schemas/payment'
 import { Loading } from '@schemas/store/loading'
 
 import * as DashboardActions from '../actions/sec.dashboard.actions'
-import { curUserData } from '../selectors/sec.dashoboard.selector'
 
 export type MemberSelectCateg = 'member' | 'attendance' | 'valid' | 'unpaid' | 'imminent' | 'expired' | 'employee'
 export type MemberManageCategory = 'membershipLocker' | 'reservation' | 'payment'
@@ -260,6 +259,11 @@ export const selectUsersLists = (state: State) => state.usersLists
 export const selectCurMemberManageCateg = (state: State) => state.curMemberManageCateg
 export const selectCurUserListSelect = (state: State) => state.curUserListSelect
 export const selectCurUserData = (state: State) => state.curUserData
+
+export const selectCurUserMemberhsipData = (state: State) => state.curUserData.memberships
+export const selectCurUserLockerData = (state: State) => state.curUserData.lockers
+export const selectCurUserPaymentData = (state: State) => state.curUserData.payments
+export const selectCurUserReservationData = (state: State) => state.curUserData.reservations
 
 // additional
 export const selectSearchedUsersLists = (state: State) => {

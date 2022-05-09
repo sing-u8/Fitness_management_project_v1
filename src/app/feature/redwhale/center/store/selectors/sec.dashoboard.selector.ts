@@ -20,3 +20,8 @@ export const searchedUsersLists = createSelector(DashboardFeature, FromDashboard
 export const curMemberManageCateg = createSelector(DashboardFeature, FromDashboard.selectCurMemberManageCateg)
 export const curUserListSelect = createSelector(DashboardFeature, FromDashboard.selectCurUserListSelect)
 export const curUserData = createSelector(DashboardFeature, FromDashboard.selectCurUserData)
+
+export const curUserMembershipData = createSelector(DashboardFeature, FromDashboard.selectCurUserMemberhsipData)
+export const curUserLockerData = createSelector(DashboardFeature, FromDashboard.selectCurUserLockerData)
+export const curUserReservationData = createSelector(DashboardFeature, FromDashboard.selectCurUserReservationData)
+export const curUserPaymentData = createSelector(DashboardFeature, FromDashboard.selectCurUserPaymentData)

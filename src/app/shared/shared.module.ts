@@ -62,6 +62,8 @@ import { BirthDatePipe } from './pipes/birth-date.pipe'
 import { WordEllipsisPipe } from './pipes/word-ellipsis.pipe'
 import { TrimTextPipe } from './pipes/trim-text.pipe'
 import { FilesizePipe } from './pipes/filesize.pipe'
+import { PeriodPipe } from './pipes/period.pipe'
+import { RestPeriodPipe } from './pipes/rest-period.pipe'
 
 // Dragula
 // import { DragulaModule } from 'ng2-dragula'
@@ -147,6 +149,8 @@ FullCalendarModule.registerPlugins([
         WordEllipsisPipe,
         TrimTextPipe,
         FilesizePipe,
+        PeriodPipe,
+        RestPeriodPipe,
     ],
     imports: [
         CommonModule,
@@ -210,6 +214,8 @@ FullCalendarModule.registerPlugins([
         WordEllipsisPipe,
         TrimTextPipe,
         FilesizePipe,
+        PeriodPipe,
+        RestPeriodPipe,
 
         // FullCalendar
         FullCalendarModule,

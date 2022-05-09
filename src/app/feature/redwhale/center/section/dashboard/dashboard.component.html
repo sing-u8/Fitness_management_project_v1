@@ -33,6 +33,7 @@
             </div>
             <db-member-detail
                 [curUserData]="(curUserData$ | async)"
+                (onRegisterML)="toggleDirectRegisterMemberFullModal()"
             ></db-member-detail>
         </section>
     </main>

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, OnChanges, SimpleChanges } from '@angular/core'
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core'
 import { FormBuilder, FormControl, Validators } from '@angular/forms'
 import _ from 'lodash'
 
@@ -20,6 +20,8 @@ import { showToast } from '@appStore/actions/toast.action'
 })
 export class MemberDetailComponent implements OnInit {
     @Input() curUserData: DashboardReducer.CurUseData = _.cloneDeep(DashboardReducer.CurUseDataInit)
+
+    @Output() onRegisterML = new EventEmitter<void>()
 
     public memoForm: FormControl = this.fb.control('')
     public center: Center
