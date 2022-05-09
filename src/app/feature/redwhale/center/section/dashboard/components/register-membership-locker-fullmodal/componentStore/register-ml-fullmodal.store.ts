@@ -49,7 +49,6 @@ export const stateInit: State = {
 @Injectable()
 export class RegisterMembershipLockerFullmodalStore extends ComponentStore<State> {
     public readonly mlItems$ = this.select((s) => {
-        console.log('mlItems$ select : ', s, s.mlItems)
         return s.mlItems
     })
     public readonly choseLockers$ = this.select((s) => s.choseLockers)
@@ -223,7 +222,6 @@ export class RegisterMembershipLockerFullmodalStore extends ComponentStore<State
             reqBody$.pipe(
                 withLatestFrom(this.mlItems$),
                 map(([reqBody, mlItems]) => {
-                    console.log('start  registerMlItems : ', reqBody, mlItems)
                     const lockerItems = mlItems.filter((item) => item.type == 'locker')
                     const membershipItems = mlItems.filter((item) => item.type == 'membership')
 
@@ -270,7 +268,6 @@ export class RegisterMembershipLockerFullmodalStore extends ComponentStore<State
                             },
                         }
                     })
-                    console.log('middle  registerMlItems : ', createLockerTicketReqs, createMembershipTicketsReqs)
 
                     const lockerApis = createLockerTicketReqs.map((v) =>
                         this.centerUsersLockerApi.createLockerTicket(reqBody.centerId, reqBody.user.id, v)
@@ -279,10 +276,6 @@ export class RegisterMembershipLockerFullmodalStore extends ComponentStore<State
                         this.centerUsersMembershipApi.createMembershipTicket(reqBody.centerId, reqBody.user.id, v)
                     )
 
-                    // return {
-                    //     lockerApis,
-                    //     memberhipApis,
-                    // }
                     forkJoin([...lockerApis, ...membershipApis])
                         .pipe(
                             tap(() => {
@@ -349,7 +342,6 @@ export class RegisterMembershipLockerFullmodalStore extends ComponentStore<State
 
     initMembershipItem(membership: MembershipItem): MembershipTicket {
         const price = membership.price ? membership.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') : '0'
-        console.log('initMembershipItem : ', membership)
         return {
             type: 'membership',
             date: {

@@ -38,6 +38,8 @@ import { MlLockerSelectComponent } from './components/ml-locker-select/ml-locker
 import { LockerSelectModalComponent } from './components/locker-select-modal/locker-select-modal.component'
 import { MembershipTicketWindowComponent } from './components/membership-ticket-window/membership-ticket-window.component'
 import { LessonSelectorComponent } from './components/lesson-selector/lesson-selector.component'
+import { ModifyMembershipFullmodalComponent } from './components/modify-membership-fullmodal/modify-membership-fullmodal.component'
+import { ModifyLockerFullmodalComponent } from './components/modify-locker-fullmodal/modify-locker-fullmodal.component'
 
 // section module
 import { CommonModule as SectionCommonModule } from '../common/common.module'
@@ -78,6 +80,8 @@ import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader'
         UserDetailLockerItemComponent,
         UserDetailReservationItemComponent,
         UserDetailPaymentItemComponent,
+        ModifyMembershipFullmodalComponent,
+        ModifyLockerFullmodalComponent,
     ],
     imports: [
         AngularCommonModule,

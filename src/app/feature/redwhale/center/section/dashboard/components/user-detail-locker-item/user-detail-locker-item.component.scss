@@ -89,6 +89,7 @@
             right: 0px;
             top: 22px;
             z-index: 1;
+            opacity: 1 !important;
 
             font-weight: 500;
             font-size: 1.2rem;
@@ -135,6 +136,15 @@
 .col4 {
     &.notification {
         padding-bottom: calc(26px + 2px);
+    }
+}
+
+.isExpired {
+    .col1,
+    .col2,
+    .col3,
+    .col4__content {
+        opacity: 0.5;
     }
 }
 

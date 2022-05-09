@@ -128,7 +128,6 @@ export class RegisterMembershipLockerFullmodalComponent implements OnInit, OnCha
                     this.renderer
                     this.renderer.addClass(this.modalWrapperElement.nativeElement, 'rw-modal-wrapper-show')
                 }, 0)
-                // this.cmpStore.getInstructorsEffect(this.center.id)
                 this.cmpStore.getInstructorsEffect(this.center.id)
                 this.cmpStore.getmembershipItemsEffect(this.center.id)
             } else {

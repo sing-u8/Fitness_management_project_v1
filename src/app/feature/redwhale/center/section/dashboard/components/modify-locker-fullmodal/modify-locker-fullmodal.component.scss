@@ -1,0 +1,27 @@
+* {
+    padding: 0px;
+    margin: 0px;
+    text-align: initial;
+}
+
+.rw-modal-wrapper-show {
+    opacity: 1 !important;
+}
+
+
+section.modify-locker-fullmodal-wrapper {
+    display: none;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: var(--white);
+    opacity: 0;
+    // transition: opacity 0.3s cubic-bezier(0.25, 0.8, 0.25, 0.8);
+    // -moz-transition: opacity 0.3s cubic-bezier(0.25, 0.8, 0.25, 0.8);
+    // -webkit-transition: opacity 0.3s cubic-bezier(0.25, 0.8, 0.25, 0.8);
+    // -o-transition: opacity 0.3s cubic-bezier(0.25, 0.8, 0.25, 0.8);
+    z-index: 1010;
+
+}
