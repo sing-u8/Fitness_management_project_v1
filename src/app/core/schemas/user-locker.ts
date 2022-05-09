@@ -10,8 +10,12 @@ export interface UserLocker {
     locker_item_id: string
     state_code: string
     state_code_name: string
+    category_name: string
+    name: string
     start_date: string
     end_date: string
+    pause_start_date: string
+    pause_end_date: string
     created_by: string
     created_at: string
     updated_by: string
@@ -19,7 +23,5 @@ export interface UserLocker {
     user: UserInfo
     center: CenterInfo
     payment: Payment
-    unpaid: Unpaid
-    refund: Refund
     history: UserLockerHistory
 }

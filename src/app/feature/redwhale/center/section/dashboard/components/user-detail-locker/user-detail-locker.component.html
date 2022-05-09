@@ -6,7 +6,7 @@
         <div class="col4">잔여일</div>
     </header>
     <main class="thin-scroll-y-overlay2">
-        <ng-template #membership_emtpy [ngIf]="lockers.length == 0" [ngIfElse]="membership_exist">
+        <ng-template #membership_emtpy [ngIf]="curUserData.lockers.length == 0" [ngIfElse]="membership_exist">
             <div class="center-empty-guide">
                 <img src="assets/icons/etc/empty_screen.svg">
                 <p>예약을 신청한 회원이 없어요.</p>
@@ -19,26 +19,16 @@
         </ng-template>
         <ng-template #membership_exist>
             <db-user-detail-locker-item
-                *ngFor="let item of lockers" [locker]="item"
+                *ngFor="let item of curUserData.lockers" [locker]="item"
+                (onUpdateInfo) = 'false'
+                (onExtendPeriod) = 'false'
+                (onMovePlace) = 'false'
+                (onHold) = 'false'
+                (onTransfer) = 'false'
+                (onRefund) = 'false'
+                (onRemoveRecord) = 'false'
             ></db-user-detail-locker-item>
         </ng-template>
-        <!-- <div class="item">
-            <div class="col1">회원권 이름 회원권 이름</div>
-            <div class="col2" [class.notification]="false">2021.08.10 - 2021.09.10 (30일)</div>
-            <div class="col3" [class.notification]="false">999일 / 무제한 남음</div>
-            <div class="col4" [class.notification]="false">필라테스 오전 초급반... 외 5개</div>
-            <div class="col-notification" [class.show-notification]="false">2021.00.00 - 2021.00.00 (00일) 홀딩중</div>
-            <div class="border-bottom"></div>
-        </div>
-        <div class="item">
-            <div class="col1">회원권 이름 회원권 이름</div>
-            <div class="col2" [class.notification]="true">2021.08.10 - 2021.09.10 (30일)</div>
-            <div class="col3" [class.notification]="true">999일 / 무제한 남음</div>
-            <div class="col4" [class.notification]="true">필라테스 오전 초급반... 외 5개</div>
-            <div class="col-notification" [class.show-notification]="true">2021.00.00 - 2021.00.00 (00일) 홀딩중</div>
-            <div class="border-bottom"></div>
-        </div> -->
-
 
     </main>
 </section>

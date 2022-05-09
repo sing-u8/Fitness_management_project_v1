@@ -1,7 +1,6 @@
-import { Component, OnInit, Input, Output, AfterViewInit } from '@angular/core'
+import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit } from '@angular/core'
 
 import _ from 'lodash'
-
 import { originalOrder } from '@helpers/pipe/keyvalue'
 
 import { UserMembership } from '@schemas/user-membership'
@@ -14,45 +13,71 @@ import { UserMembership } from '@schemas/user-membership'
 export class UserDetailMembershipItemComponent implements OnInit, AfterViewInit {
     @Input() membership: UserMembership
 
+    @Output() onUpdateInfo = new EventEmitter<UserMembership>()
+    @Output() onExtendPeriodCount = new EventEmitter<UserMembership>()
+    @Output() onHold = new EventEmitter<UserMembership>()
+    @Output() onTransfer = new EventEmitter<UserMembership>()
+    @Output() onRefund = new EventEmitter<UserMembership>()
+    @Output() onRemoveRecord = new EventEmitter<UserMembership>()
+
     public originalOrder = originalOrder
 
-    public ShowMenuDropDown = false
+    public showMenuDropDown = false
+    toggleMenuDropDown() {
+        this.showMenuDropDown = !this.showMenuDropDown
+    }
+    hideMenuDropDown() {
+        this.showMenuDropDown = false
+    }
+
     public menuDropDownItemObj = {
         updateInfo: {
             name: '기본 정보 수정',
             color: 'var(--font-color)',
             visible: true,
-            func: () => {},
+            func: () => {
+                this.onUpdateInfo.emit(this.membership)
+            },
         },
         extendPeriodCount: {
             name: '기간 / 횟수 연장',
             color: 'var(--font-color)',
             visible: true,
-            func: () => {},
+            func: () => {
+                this.onExtendPeriodCount.emit(this.membership)
+            },
         },
         hold: {
             name: '홀딩',
             color: 'var(--font-color)',
             visible: true,
-            func: () => {},
+            func: () => {
+                this.onHold.emit(this.membership)
+            },
         },
         transfer: {
             name: '양도',
             color: 'var(--font-color)',
             visible: true,
-            func: () => {},
+            func: () => {
+                this.onTransfer.emit(this.membership)
+            },
         },
         refund: {
             name: '환불',
             color: 'var(--font-color)',
             visible: true,
-            func: () => {},
+            func: () => {
+                this.onRefund.emit(this.membership)
+            },
         },
         removeRecord: {
             name: '기록 삭제',
             color: 'var(--red)',
             visible: true,
-            func: () => {},
+            func: () => {
+                this.onRemoveRecord.emit(this.membership)
+            },
         },
     }
 

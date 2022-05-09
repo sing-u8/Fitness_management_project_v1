@@ -63,7 +63,7 @@
         }
     }
     div.col4__menu {
-        background-image: url('/assets/icons/etc/menu-vertical-grey.svg');
+        background-image: url('/assets/icons/etc/menu-vertical.svg');
         background-size: contain;
         background-repeat: no-repeat;
         width: 20px;
@@ -73,8 +73,12 @@
         cursor:pointer;
         position: relative;
 
+        &:hover {
+            background-image: url('/assets/icons/etc/menu-vertical-grey.svg');
+        }
+
         .l-menu-items {
-            display: flex;
+            display: none;
             flex-direction: column;
             padding : 5px 0px;
             background-color: var(--white);
@@ -89,6 +93,9 @@
             font-size: 1.2rem;
             line-height: 17px;
             letter-spacing: -0.144px;
+            &.show-items {
+                display: flex;
+            }
 
             .menu-item {
                 padding: 8px 0px 8px 17px;

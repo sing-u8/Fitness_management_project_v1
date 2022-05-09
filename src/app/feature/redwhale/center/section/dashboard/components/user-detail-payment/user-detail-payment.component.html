@@ -10,7 +10,7 @@
 
         <ng-template
             #payment_emtpy
-            [ngIf] = "payments.length == 0"
+            [ngIf] = "curUserData.payments.length == 0"
             [ngIfElse]="payment_exist"
         >
             <div class="center-empty-guide">
@@ -25,7 +25,7 @@
         </ng-template>
         <ng-template #payment_exist>
             <db-user-detail-payment-item
-                *ngFor = "let item of payments"
+                *ngFor = "let item of curUserData.payments"
                 [payment]="item"
             ></db-user-detail-payment-item>
         </ng-template>

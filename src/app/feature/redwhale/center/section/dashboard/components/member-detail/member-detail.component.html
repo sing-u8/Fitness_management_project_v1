@@ -184,22 +184,22 @@
             <ng-template #cur_user_exist>
                 <db-user-detail-membership
                     *ngIf="(userDetailTag$ | async) == 'membership'"
-                    [memberships]="curUserData.memberships"
+                    [curUserData]="curUserData"
                     (onRegisterML)="onRegisterML.emit()"
                 ></db-user-detail-membership>
                 <db-user-detail-locker
                     *ngIf="(userDetailTag$ | async) == 'locker'"
-                    [lockers]="curUserData.lockers"
+                    [curUserData]="curUserData"
                     (onRegisterML)="onRegisterML.emit()"
                 ></db-user-detail-locker>
                 <db-user-detail-reservation
                     *ngIf="(userDetailTag$ | async) == 'reservation'"
-                    [reservations]="curUserData.reservations"
+                    [curUserData]="curUserData"
                     (onRegisterML)="onRegisterML.emit()"
                 ></db-user-detail-reservation>
                 <db-user-detail-payment
                     *ngIf="(userDetailTag$ | async) == 'payment'"
-                    [payments]="curUserData.payments"
+                    [curUserData]="curUserData"
                     (onRegisterML)="onRegisterML.emit()"
                 ></db-user-detail-payment>
             </ng-template>

@@ -8,7 +8,7 @@
     <main class="thin-scroll-y-overlay2">
         <ng-template
             #reservation_emtpy
-            [ngIf] = "reservations.length == 0"
+            [ngIf] = "curUserData.reservations.length == 0"
             [ngIfElse]="reservation_exist"
         >
             <div class="center-empty-guide">
@@ -23,7 +23,7 @@
         </ng-template>
         <ng-template #reservation_exist>
             <db-user-detail-reservation-item
-                *ngFor = "let item of reservations"
+                *ngFor = "let item of curUserData.reservations"
                 [reservation]="item"
             ></db-user-detail-reservation-item>
         </ng-template>
