@@ -26,7 +26,7 @@
                 *ngFor = "let item of curUserData.memberships"
                 [membership]="item"
                 (onUpdateInfo) = 'false'
-                (onExtendPeriodCount) = 'false'
+                (onExtendPeriodCount) = 'toggleExtensionModal();setSelectedUserMembership(item)'
                 (onHold) = 'false'
                 (onTransfer) = 'false'
                 (onRefund) = 'false'
@@ -36,3 +36,17 @@
 
     </main>
 </section>
+
+<db-membership-extension-modal
+    [(visible)] = "showExtensionModal"
+    [userMembership] = "selectedUserMembership"
+    (cancel) = "toggleExtensionModal()"
+    (confirm) = "onExtensionConfirm($event)"
+></db-membership-extension-modal>
+
+<rw-charge-modal
+    [(visible)] = "showChargeModal"
+    [chargeMode] = "chargeMode"
+    (cancel) = "toggleChargeModal()"
+    (confirm) = "onChargeConfirm($event)"
+></rw-charge-modal>

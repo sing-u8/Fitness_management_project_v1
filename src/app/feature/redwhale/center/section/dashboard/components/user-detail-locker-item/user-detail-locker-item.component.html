@@ -16,8 +16,12 @@
         </div>
         <div class="col4__menu" (click)="toggleMenuDropDown(); $event.stopPropagation()" (rwClickOutside)="hideMenuDropDown()">
             <div class="l-menu-items" [class.show-items]="showMenuDropDown">
-                <div class="menu-item" *ngFor="let item of menuDropDownItemObj | keyvalue : originalOrder"
-                    [ngStyle]="{color: item.value.color}">
+                <div
+                    class="menu-item"
+                    *ngFor="let item of menuDropDownItemObj | keyvalue : originalOrder"
+                    [ngStyle]="{color: item.value.color}"
+                    (click) = "item.value.func()"
+                >
                     {{item.value.name}}
                 </div>
             </div>

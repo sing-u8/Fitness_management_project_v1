@@ -1,6 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
 
 import { UserMembership } from '@schemas/user-membership'
+import { ExtensionOutput } from '../membership-extension-modal/membership-extension-modal.component'
+import { ChargeType, ChargeMode, ConfirmOuput } from '@shared/components/common/charge-modal/charge-modal.component'
 
 import _ from 'lodash'
 // ngrx
@@ -23,4 +25,52 @@ export class UserDetailMembershipComponent implements OnInit {
     constructor(private nxStore: Store) {}
     // //
     ngOnInit(): void {}
+
+    public chargeMode: ChargeMode = undefined
+
+    public selectedUserMembership: UserMembership = undefined
+    setSelectedUserMembership(userMembership: UserMembership) {
+        this.selectedUserMembership = userMembership
+    }
+    public showExtensionModal = false
+    toggleExtensionModal() {
+        this.showExtensionModal = !this.showExtensionModal
+    }
+    public extensionModalData: ExtensionOutput = {
+        datepick: {
+            startDate: '',
+            endDate: '',
+        },
+        countObj: {
+            count: '0',
+            unlimited: false,
+        },
+    }
+    onExtensionConfirm(output: ExtensionOutput) {
+        console.log('onExtensionConfirm - output : ', output)
+        this.extensionModalData = output
+        this.chargeMode = 'extend'
+        this.toggleExtensionModal()
+        this.toggleChargeModal()
+    }
+
+    public showChargeModal = false
+    public chargeData: ChargeType = {
+        pay_card: 0,
+        pay_cash: 0,
+        pay_trans: 0,
+        unpaid: 0,
+        pay_date: '',
+        assignee_id: '',
+    }
+    toggleChargeModal() {
+        this.showChargeModal = !this.showChargeModal
+    }
+    onChargeConfirm(output: ConfirmOuput) {
+        console.log('onChargeConfirm : ', output)
+        this.toggleChargeModal()
+        this.chargeData = output.chargeType
+
+        output.loadingFns.hideLoading()
+    }
 }

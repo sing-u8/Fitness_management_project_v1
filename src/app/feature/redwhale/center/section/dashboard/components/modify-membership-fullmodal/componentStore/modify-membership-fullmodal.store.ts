@@ -20,26 +20,21 @@ export interface State {
     date: { startDate: string; endDate: string }
     dayDiff: string
     lessonItemList: Array<ClassItem>
-    selectedLessonText: string
-    price: string
     count: {
         count: string
         infinite: boolean
     }
-    assignee: {
-        name: string
-        value: CenterUser
-    }
+    // selectedLessonText: string
+    // price: string
 }
 export const stateInit: State = {
     datepickFlag: { start: false, end: false },
     date: { startDate: '', endDate: '' },
     dayDiff: '',
     lessonItemList: [],
-    selectedLessonText: '',
-    price: '',
     count: { count: '0', infinite: false },
-    assignee: { name: '', value: undefined },
+    // selectedLessonText: '',
+    // price: '',
 }
 
 @Injectable()
@@ -47,4 +42,38 @@ export class ModifyMembershipFullmodalStore extends ComponentStore<State> {
     constructor(private nxStore: Store) {
         super(_.cloneDeep(stateInit))
     }
+
+    resetAll() {
+        this.setState((state) => _.cloneDeep(stateInit))
+    }
+
+    updateDateFlag = this.updater((state, update: { start: boolean; end: boolean }) => {
+        state.datepickFlag = update
+        return {
+            ...state,
+        }
+    })
+
+    updateDate = this.updater((state, update: { startDate: string; endDate: string }) => {
+        state.date = update
+        return {
+            ...state,
+        }
+    })
+
+    updateDayDiff = this.updater((state, update: string) => {
+        state.dayDiff = update
+        return {
+            ...state,
+        }
+    })
+
+    // updateLessonItemList = this.updater((state, update))
+
+    updateCount = this.updater((state, update: { count: string; infinite: boolean }) => {
+        state.count = update
+        return {
+            ...state,
+        }
+    })
 }

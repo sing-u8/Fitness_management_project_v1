@@ -27,6 +27,8 @@ import { UserDetailMembershipItemComponent } from './components/user-detail-memb
 import { UserDetailLockerItemComponent } from './components/user-detail-locker-item/user-detail-locker-item.component'
 import { UserDetailReservationItemComponent } from './components/user-detail-reservation-item/user-detail-reservation-item.component'
 import { UserDetailPaymentItemComponent } from './components/user-detail-payment-item/user-detail-payment-item.component'
+import { MembershipExtensionModalComponent } from './components/membership-extension-modal/membership-extension-modal.component'
+import { LockerExtensionModalComponent } from './components/locker-extension-modal/locker-extension-modal.component'
 
 import { RegisterMembershipLockerFullmodalComponent } from './components/register-membership-locker-fullmodal/register-membership-locker-fullmodal.component'
 import { LockerWindowComponent } from './components/locker-window/locker-window.component'
@@ -82,6 +84,8 @@ import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader'
         UserDetailPaymentItemComponent,
         ModifyMembershipFullmodalComponent,
         ModifyLockerFullmodalComponent,
+        MembershipExtensionModalComponent,
+        LockerExtensionModalComponent,
     ],
     imports: [
         AngularCommonModule,

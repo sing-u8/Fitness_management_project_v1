@@ -14,13 +14,16 @@ import dayjs from 'dayjs'
 import _ from 'lodash'
 
 import { CenterUsersService } from '@services/center-users.service'
+import { CenterUserListService } from '@services/helper/center-user-list.service'
 import { StorageService } from '@services/storage.service'
 
 import { User } from '@schemas/user'
 import { CenterUser } from '@schemas/center-user'
 import { Center } from '@schemas/center'
 
-export interface LockerChargeType {
+import { ClickEmitterType } from '@shared/components/common/button/button.component'
+
+export interface ChargeType {
     pay_card: number
     pay_cash: number
     pay_trans: number
@@ -28,28 +31,34 @@ export interface LockerChargeType {
     pay_date: string
     assignee_id: string
 }
+export type ModalInput = 'pay_card' | 'pay_cash' | 'pay_trans' | 'unpaid'
+export type ChargeMode = 'extend' | 'transfer' | 'refund'
+export interface ConfirmOuput {
+    chargeType: ChargeType
+    loadingFns: ClickEmitterType
+}
 
 @Component({
-    selector: 'rw-locker-charge-modal',
-    templateUrl: './locker-charge-modal.component.html',
-    styleUrls: ['./locker-charge-modal.component.scss'],
+    selector: 'rw-charge-modal',
+    templateUrl: './charge-modal.component.html',
+    styleUrls: ['./charge-modal.component.scss'],
 })
-export class LockerChargeModalComponent implements OnChanges, AfterViewChecked {
+export class ChargeModalComponent implements OnChanges, AfterViewChecked {
     @Input() visible: boolean
-    @Input() type: 'register' | 'modify'
+    @Input() chargeMode: ChargeMode = 'extend'
 
-    @ViewChild('modalBackgroundElement') modalBackgroundElement
-    @ViewChild('modalWrapperElement') modalWrapperElement
+    @ViewChild('modalBackgroundElement') modalBackgroundElement: ElementRef
+    @ViewChild('modalWrapperElement') modalWrapperElement: ElementRef
 
     @Output() visibleChange = new EventEmitter<boolean>()
     @Output() cancel = new EventEmitter<any>()
-    @Output() confirm = new EventEmitter<LockerChargeType>()
+    @Output() confirm = new EventEmitter<ConfirmOuput>()
 
     public changed: boolean
 
     public paid_date: string
     public inputs = { pay_card: '', pay_cash: '', pay_trans: '', unpaid: '' }
-    public total = ''
+    public total = '0'
 
     public isMouseModalDown: boolean
 
@@ -63,23 +72,26 @@ export class LockerChargeModalComponent implements OnChanges, AfterViewChecked {
         private el: ElementRef,
         private renderer: Renderer2,
         private centerUsersService: CenterUsersService,
+        private centerUserListService: CenterUserListService,
         private storageService: StorageService
     ) {
         this.isMouseModalDown = false
         this.paid_date = dayjs().format('YYYY.MM.DD')
         this.center = this.storageService.getCenter()
         this.user = this.storageService.getUser()
-        this.centerUsersService.getUserList(this.center.id, '', 'owner').subscribe((managers) => {
-            this.staffList = managers
-            managers.forEach((v) => {
-                this.staffSelect_list.push({
-                    name: v.center_user_name ?? v.name,
-                    value: v,
+        this.centerUserListService.getCenterInstructorList(this.center.id).subscribe({
+            next: (instructors) => {
+                this.staffList = instructors
+                instructors.forEach((v) => {
+                    this.staffSelect_list.push({
+                        name: v.center_user_name ?? v.name,
+                        value: v,
+                    })
+                    this.user.id == v.id
+                        ? (this.lockerStaffSelectValue = { name: v.center_user_name ?? v.name, value: v })
+                        : null
                 })
-                this.user.id == v.id
-                    ? (this.lockerStaffSelectValue = { name: v.center_user_name ?? v.name, value: v })
-                    : null
-            })
+            },
         })
     }
 
@@ -118,8 +130,10 @@ export class LockerChargeModalComponent implements OnChanges, AfterViewChecked {
         this.cancel.emit({})
     }
 
-    onConfirm(): void {
-        const emitData = {
+    onConfirm(loadingFns: ClickEmitterType): void {
+        loadingFns.showLoading()
+
+        const emitData: ChargeType = {
             pay_card: Number(this.inputs.pay_card.replace(/[^0-9]/gi, '')) ?? 0,
             pay_cash: Number(this.inputs.pay_cash.replace(/[^0-9]/gi, '')) ?? 0,
             pay_trans: Number(this.inputs.pay_trans.replace(/[^0-9]/gi, '')) ?? 0,
@@ -128,12 +142,15 @@ export class LockerChargeModalComponent implements OnChanges, AfterViewChecked {
             assignee_id: this.lockerStaffSelectValue.value.id,
         }
         this.initModal()
-        this.confirm.emit(emitData)
+        this.confirm.emit({
+            chargeType: emitData,
+            loadingFns: loadingFns,
+        })
     }
 
     initModal() {
         this.inputs = { pay_card: '', pay_cash: '', pay_trans: '', unpaid: '' }
-        this.total = ''
+        this.total = '0'
         this.staffList.forEach((v) => {
             this.user.id == v.id
                 ? (this.lockerStaffSelectValue = { name: v.center_user_name ?? v.name, value: v })
@@ -169,5 +186,3 @@ export class LockerChargeModalComponent implements OnChanges, AfterViewChecked {
         this.total = String(_total).replace(/\B(?=(\d{3})+(?!\d))/g, ',')
     }
 }
-
-type ModalInput = 'pay_card' | 'pay_cash' | 'pay_trans' | 'unpaid'

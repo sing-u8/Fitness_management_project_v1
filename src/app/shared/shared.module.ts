@@ -24,6 +24,7 @@ import { TermsEULAComponent } from './components/terms/terms-eula/terms-eula.com
 import { TermsPrivacyComponent } from './components/terms/terms-privacy/terms-privacy.component'
 import { SmallModalComponent } from './components/common/small-modal/small-modal.component'
 import { MemberListModalComponent } from './components/common/member-list-modal/member-list-modal.component'
+import { ChargeModalComponent } from './components/common/charge-modal/charge-modal.component'
 
 // - //
 import { LessonFlipListComponent } from './components/redwhale/drawer/lesson-flip-list/lesson-flip-list.component'
@@ -82,6 +83,7 @@ import { GridsterModule } from 'angular-gridster2'
 // // ngx libraries
 // import { NgxGaugeModule } from 'ngx-gauge'
 import { NgxSpinnerModule } from 'ngx-spinner'
+
 // import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader'
 
 // module for each feature
@@ -122,6 +124,7 @@ FullCalendarModule.registerPlugins([
         SchDayRepeatSelectComponent,
         DwMembershipListModalComponent,
         DrawerModifyLessonCardComponent,
+        ChargeModalComponent,
         // Directives
         // AutoScrollDirective,
         ButtonDirective,
@@ -187,6 +190,7 @@ FullCalendarModule.registerPlugins([
         SchDayRepeatSelectComponent,
         DwMembershipListModalComponent,
         DrawerModifyLessonCardComponent,
+        ChargeModalComponent,
         // Directives
         // AutoScrollDirective,
         ButtonDirective,

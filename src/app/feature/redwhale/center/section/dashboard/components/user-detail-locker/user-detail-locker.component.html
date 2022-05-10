@@ -19,9 +19,10 @@
         </ng-template>
         <ng-template #membership_exist>
             <db-user-detail-locker-item
-                *ngFor="let item of curUserData.lockers" [locker]="item"
+                *ngFor="let item of curUserData.lockers"
+                [locker]="item"
                 (onUpdateInfo) = 'false'
-                (onExtendPeriod) = 'false'
+                (onExtendPeriod) = 'toggleExtensionModal(); setSelectedUserLocker(item)'
                 (onMovePlace) = 'false'
                 (onHold) = 'false'
                 (onTransfer) = 'false'
@@ -32,3 +33,17 @@
 
     </main>
 </section>
+
+<db-locker-extension-modal
+    [(visible)] = "showExtensionModal"
+    [userLocker] = "selectedUserLocker"
+    (cancel) = "toggleExtensionModal()"
+    (confirm) = "onExtensionConfirm($event)"
+></db-locker-extension-modal>
+
+<rw-charge-modal
+    [(visible)] = "showChargeModal"
+    [chargeMode] = "chargeMode"
+    (cancel) = "toggleChargeModal()"
+    (confirm) = "onChargeConfirm($event)"
+></rw-charge-modal>

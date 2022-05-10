@@ -30,6 +30,7 @@
                     class="menu-item"
                     *ngFor="let item of menuDropDownItemObj | keyvalue : originalOrder"
                     [ngStyle]="{color: item.value.color}"
+                    (click) = "item.value.func()"
                 >
                     {{item.value.name}}
                 </div>
