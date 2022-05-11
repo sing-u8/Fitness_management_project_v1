@@ -13,59 +13,85 @@ import {
 } from '@angular/core'
 
 import _ from 'lodash'
-import dayjs from 'dayjs'
 
+import { UserMembership } from '@schemas/user-membership'
 import { UserLocker } from '@schemas/user-locker'
+import { ClickEmitterType } from '@shared/components/common/button/button.component'
 
-export interface ExtensionOutput {
+export interface HoldingOutput {
+    startDate: string
+    endDate: string
+}
+
+export interface HoldingConfirmOutput {
     datepick: {
         startDate: string
         endDate: string
     }
+    loadingFns: ClickEmitterType
 }
 
 @Component({
-    selector: 'db-locker-extension-modal',
-    templateUrl: './locker-extension-modal.component.html',
-    styleUrls: ['./locker-extension-modal.component.scss'],
+    selector: 'db-hold-modal',
+    templateUrl: './hold-modal.component.html',
+    styleUrls: ['./hold-modal.component.scss'],
 })
-export class LockerExtensionModalComponent implements AfterViewChecked, OnChanges, AfterViewInit {
+export class HoldModalComponent implements AfterViewChecked, OnChanges, AfterViewInit {
     @Input() visible: boolean
-    @Input() userLocker: UserLocker
+    @Input() userLocker: UserLocker = undefined
+    @Input() userMembership: UserMembership = undefined
 
     @Output() visibleChange = new EventEmitter<boolean>()
     @Output() cancel = new EventEmitter<any>()
-    @Output() confirm = new EventEmitter<ExtensionOutput>()
+    @Output() confirm = new EventEmitter<HoldingConfirmOutput>()
 
     @ViewChild('modalBackgroundElement') modalBackgroundElement: ElementRef
     @ViewChild('modalWrapperElement') modalWrapperElement: ElementRef
-    @ViewChild('rw_datepicker') rw_datepicker: ElementRef
 
     public changed: boolean
     public isMouseModalDown: boolean
 
-    public doShowDatePick = false
-    openShowDatePicker() {
-        this.doShowDatePick = true
+    public doShowDatePick = {
+        start: false,
+        end: false,
     }
-    closeShowDatePicker() {
-        this.doShowDatePick = false
+    openShowDatePicker(which: 'start' | 'end') {
+        this.doShowDatePick[which] = true
+    }
+    closeShowDatePicker(which: 'start' | 'end') {
+        this.doShowDatePick[which] = false
     }
     public datepick = {
         startDate: '',
         endDate: '',
     }
-
+    onDatePickerChange(position: 'start' | 'end', date: { startDate: string; endDate: string }) {
+        if (position == 'start') {
+            this.datepick = {
+                startDate: date.startDate,
+                endDate: '',
+            }
+        } else {
+            this.datepick = {
+                startDate: date.startDate,
+                endDate: date.endDate,
+            }
+        }
+        console.log('onDatePickerChange : ', date, this.datepick)
+    }
     constructor(private el: ElementRef, private renderer: Renderer2) {
         this.isMouseModalDown = false
     }
 
     setCompVars() {
-        this.doShowDatePick = false
-        this.datepick = _.cloneDeep({
-            startDate: this.userLocker.start_date,
-            endDate: this.userLocker.end_date,
-        })
+        this.doShowDatePick = {
+            start: false,
+            end: false,
+        }
+        this.datepick = {
+            startDate: '',
+            endDate: '',
+        }
     }
 
     ngOnInit(): void {}
@@ -103,19 +129,11 @@ export class LockerExtensionModalComponent implements AfterViewChecked, OnChange
 
     onCancel(): void {
         this.cancel.emit({})
-        this.initComponentVars()
     }
-    onConfirm(): void {
+    onConfirm(loadingFns: ClickEmitterType): void {
         this.confirm.emit({
-            datepick: this.datepick,
-        })
-        this.initComponentVars()
-    }
-
-    initComponentVars() {
-        this.datepick = _.cloneDeep({
-            startDate: '',
-            endDate: '',
+            datepick: _.cloneDeep(this.datepick),
+            loadingFns: loadingFns,
         })
     }
 

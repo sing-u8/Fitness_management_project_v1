@@ -8,10 +8,9 @@
         (mousedown) ='onMouseModalDown(); $event.stopPropagation()'
     >
         <div class="l-title">
-            <div class="title rw-typo-title1 ">‘{{userMembership?.name}}’ 기간 / 횟수를 연장하시겠어요?</div>
+            <div class="title rw-typo-title1 ">‘{{userMembership?.name | wordEllipsis:16}}’ 기간 / 횟수를 연장하시겠어요?</div>
             <div class="sub-title rw-typo-subtext1">기간 / 횟수 변경 후, 다음 단계에서 추가 결제 정보를 입력해주세요.</div>
         </div>
-
 
         <div class="l-datepicker">
             <div class="rw-typo-subtext0-regular small-title">

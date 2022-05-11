@@ -131,8 +131,9 @@ export class MembershipExtensionModalComponent implements AfterViewChecked, OnCh
         this.initComponentVars()
     }
     onConfirm(): void {
+        console.log('membership extension modal confirm : ', this.datepick, this.countObj)
         this.confirm.emit({
-            datepick: this.datepick,
+            datepick: _.cloneDeep(this.datepick),
             countObj: {
                 count: this.countObj.count ?? '0',
                 unlimited: this.countObj.unlimited,

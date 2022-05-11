@@ -2,6 +2,7 @@
     class="item"
     [class.isExpired] = "false"
 >
+
     <div class="col1">{{locker.category_name}}</div>
     <div class="col2" [class.notification]="isHolding">
         {{locker.name}}
@@ -32,4 +33,5 @@
         locker.pause_end_date}}) 홀딩중
     </div>
     <div class="border-bottom"></div>
+
 </div>

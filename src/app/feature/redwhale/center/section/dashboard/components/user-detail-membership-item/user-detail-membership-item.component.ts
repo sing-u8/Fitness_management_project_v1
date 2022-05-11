@@ -20,6 +20,9 @@ export class UserDetailMembershipItemComponent implements OnInit, AfterViewInit 
     @Output() onRefund = new EventEmitter<UserMembership>()
     @Output() onRemoveRecord = new EventEmitter<UserMembership>()
 
+    @Output() onUpdateHolding = new EventEmitter<UserMembership>()
+    @Output() onRemoveHolding = new EventEmitter<UserMembership>()
+
     public originalOrder = originalOrder
 
     public showMenuDropDown = false
@@ -77,6 +80,32 @@ export class UserDetailMembershipItemComponent implements OnInit, AfterViewInit 
             visible: true,
             func: () => {
                 this.onRemoveRecord.emit(this.membership)
+            },
+        },
+    }
+
+    public showNotificationDropDown = false
+    toggleNotificationDropDown() {
+        this.showNotificationDropDown = !this.showNotificationDropDown
+    }
+    hideNotificationDropDown() {
+        this.showNotificationDropDown = false
+    }
+    public holdingMenuDropDownItemObj = {
+        updateHoding: {
+            name: '홀딩 기간 수정',
+            color: 'var(--font-color)',
+            visible: true,
+            func: () => {
+                this.onUpdateHolding.emit(this.membership)
+            },
+        },
+        removeHoding: {
+            name: '홀딩 삭제',
+            color: 'var(--red)',
+            visible: true,
+            func: () => {
+                this.onRemoveHolding.emit(this.membership)
             },
         },
     }

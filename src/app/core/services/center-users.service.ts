@@ -45,7 +45,16 @@ export class CenterUsersService {
         // created_date ==> YYYY-MM-DD
         const url =
             this.SERVER +
-            `/${centerId}/users?search=${search}&role_code=${role_code}&created_date=${created_date}&page=${page}&pageSize=${pageSize}`
+            `/${centerId}/users` +
+            `?` +
+            (search ? `search=${search}&` : '') +
+            (role_code ? `role_code=${role_code}` : '') +
+            (created_date ? `created_date=${created_date}&` : '') +
+            (page ? `page=${page}&` : '') +
+            (role_code ? `role_code=${role_code}&` : '') +
+            (pageSize ? `pageSize=${pageSize}` : '')
+        // `search=${search}&role_code=${role_code}&created_date=${created_date}&page=${page}&pageSize=${pageSize}`
+        // `/${centerId}/users?search=${search}&role_code=${role_code}&created_date=${created_date}&page=${page}&pageSize=${pageSize}`
 
         const options = {
             headers: new HttpHeaders({

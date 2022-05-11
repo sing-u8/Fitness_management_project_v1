@@ -2,8 +2,9 @@
 <div class="rw-modal-wrapper justify-content-center align-items-center" (mouseup)="!isMouseModalDown && onCancel()"
     (mousedown)='resetMouseModalDown()' #modalWrapperElement>
     <div class="rw-modal user-select-none" (mousedown)='onMouseModalDown(); $event.stopPropagation()'>
+
         <div class="l-title">
-            <div class="title rw-typo-title1 ">‘{{userLocker?.name}}’ 기간을 연장하시겠어요?</div>
+            <div class="title rw-typo-title1 ">‘{{userLocker?.name | wordEllipsis:16}}’ 기간을 연장하시겠어요?</div>
             <div class="sub-title rw-typo-subtext1">
                 기간 변경 후, 다음 단계에서 추가 결제 정보를 입력해주세요.
             </div>

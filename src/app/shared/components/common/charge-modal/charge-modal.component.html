@@ -50,7 +50,7 @@
                 <div class="currency">￦</div>
             </div>
 
-            <div class="input-container">
+            <div *ngIf="chargeMode != 'refund'" class="input-container">
                 <span class="rw-typo-subtext0-regular">미수금</span>
                 <input rw-input placeholder="0" [(ngModel)]="inputs.unpaid" (keyup)="onInputKeyup($event, 'unpaid')" />
                 <div class="currency">￦</div>

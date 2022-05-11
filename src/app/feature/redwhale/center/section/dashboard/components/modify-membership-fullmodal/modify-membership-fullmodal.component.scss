@@ -266,18 +266,13 @@ section.modify-membership-fullmodal-wrapper {
                         width: 530px;
                         margin-top: 20px;
 
-                        .delete-button {
-                            border: 1px solid var(--border-color);
-                            margin-right: 10px;
-                        }
-
-                        .delete-button,
                         .save-button {
                             display: flex;
                             align-items: center;
                             justify-content: center;
                             width: 96px;
                             height: 45px;
+                            color: var(--white);
                         }
                     }
                 }

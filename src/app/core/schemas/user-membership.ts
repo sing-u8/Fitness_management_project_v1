@@ -13,6 +13,8 @@ export interface UserMembership {
     state_code: string
     state_code_name: string
     category_name: string
+    membership_category_id: string
+    membership_item_id: string
     name: string
     start_date: string
     end_date: string

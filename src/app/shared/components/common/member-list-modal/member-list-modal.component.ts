@@ -63,7 +63,8 @@ export class MemberListModalComponent implements AfterViewChecked, OnChanges, Af
 
     ngAfterViewInit(): void {
         this.center = this.storageService.getCenter()
-        this.centerUsersService.getUserList(this.center.id, '', '', '').subscribe((memberList) => {
+        this.centerUsersService.getUserList(this.center.id, '').subscribe((memberList) => {
+            console.log('member list modal get user list !!!')
             this.centerUsers = memberList.reverse()
         })
     }

@@ -12,7 +12,6 @@ export class HttpInterceptorService implements HttpInterceptor {
     constructor(private storageService: StorageService) {}
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-      environment
         const url = `${environment.protocol}${environment.subDomain}${environment.domain}${environment.port}`
         if (req.url.indexOf(url) == 0) {
             let accessToken = 'none'

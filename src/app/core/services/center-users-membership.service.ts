@@ -251,11 +251,14 @@ export interface CreateMembershipTicketReqBody {
 }
 
 export interface UpdateMembershipTicketReqBody {
-    start_date: string
-    end_date: string
-    count: number
-    unlimited: true
-    class_item_ids: string[]
+    category_name?: string
+    name?: string
+    start_date?: string
+    end_date?: string
+    count?: number
+    unlimited?: boolean
+    color?: string
+    class_item_ids?: string[]
 }
 
 export interface StopMembershipTicketReqBody {
@@ -268,7 +271,7 @@ export interface StopMembershipTicketReqBody {
 export interface ExtendMembershipTicketReqBody {
     end_date: string
     count: number
-    unlimited: true
+    unlimited: boolean
     payment: {
         card: number
         trans: number
@@ -288,7 +291,6 @@ export interface RefundMembershipTicketReqBody {
         vbank: number
         phone: number
         cash: number
-        unpaid: number
         memo: string
         responsibility_user_id: string
     }

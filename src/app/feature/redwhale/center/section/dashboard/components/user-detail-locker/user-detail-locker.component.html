@@ -1,4 +1,5 @@
 <section class="user-detail-locker">
+
     <header class='rw-typo-subtext1'>
         <div class="col1">카테고리</div>
         <div class="col2">락커</div>
@@ -24,10 +25,10 @@
                 (onUpdateInfo) = 'false'
                 (onExtendPeriod) = 'toggleExtensionModal(); setSelectedUserLocker(item)'
                 (onMovePlace) = 'false'
-                (onHold) = 'false'
-                (onTransfer) = 'false'
-                (onRefund) = 'false'
-                (onRemoveRecord) = 'false'
+                (onHold) = 'toggleHoldModal();setSelectedUserLocker(item) '
+                (onTransfer) = 'setSelectedUserLocker(item);toggleShowTransferModal()'
+                (onRefund) = 'setSelectedUserLocker(item); toggleShowRefundModal()'
+                (onRemoveRecord) = 'setSelectedUserLocker(item); toggleRemoveModal()'
             ></db-user-detail-locker-item>
         </ng-template>
 
@@ -47,3 +48,39 @@
     (cancel) = "toggleChargeModal()"
     (confirm) = "onChargeConfirm($event)"
 ></rw-charge-modal>
+
+
+<db-hold-modal
+    [(visible)]="showHoldModal"
+    [userLocker]="selectedUserLocker"
+    (confirm)="onHoldConfirm($event)"
+    (cancel)="toggleHoldModal()"
+></db-hold-modal>
+
+<rw-member-list-modal
+    [visible]="showTransferModal"
+    [title]="'회원권을 양도받을 회원을 선택해주세요.'"
+    [searchPlaceholder]="'회원의 이름 또는 전화번호를 검색해주세요.'"
+    (cancel)="toggleShowTransferModal()"
+    (confirm)="onTransferMemberConfirm($event)"
+></rw-member-list-modal>
+<rw-modal
+    [(visible)]="showTransferCheckModal"
+    [data]="showTransferCheckModalText"
+    (cancel)="toggleTransferCheckModal()"
+    (confirm)="onConfirmTransferCheck()"
+></rw-modal>
+
+<rw-modal
+    [(visible)]="showRefundModal"
+    [data]="refundModalData"
+    (cancel)="toggleShowRefundModal()"
+    (confirm)="onConfirmRefund()"
+></rw-modal>
+
+<rw-modal
+    [(visible)]="showRemoveModal"
+    [data]="removeModalData"
+    (cancel)="toggleRemoveModal()"
+    (confirm)="onConfirmRemove()"
+></rw-modal>

@@ -1,5 +1,110 @@
 <section class="modify-membership-fullmodal-wrapper user-select-none" #modalWrapperElement>
     <section class="modify-membership user-select-none thin-scroll-x-overlay thin-scroll-y">
+        <div class="header">
+            <div class="header-text-container">
+                <p class="rw-typo-headline1 membership-title">{{userMembership?.name}}</p>
+                <p class="rw-typo-headline2">회원권 정보를 수정해보세요.</p>
+            </div>
 
+            <div class="cg-typo-subtext close-button" rw-button rwButtonWidth="85" rwButtonHeight="40"
+                rwButtonBorderColor="var(--font-color)" (click)="close.emit()">
+                <span class="mdi mdi-close"></span>
+                <span>닫기</span>
+            </div>
+        </div>
+
+        <main>
+            <div class="main-inner-container">
+
+                <section class="membership-ticket-window">
+                    <div class="rw-typo-title2 window-header">회원권</div>
+                    <div class="membership-info">
+                        <span class="rw-typo-subtext0-regular small-title">회원권 기본 정보</span>
+                        <div class="membership-card">
+                            <div class="icon">
+                                <img src="assets/icons/etc/ticket-white.svg">
+                            </div>
+                            <div class="card-text">
+                                <span class="rw-typo-subtext0-regular"
+                                    [style.color]="'var(--grey)'">{{userMembership?.category_name}}</span>
+                                <span class="rw-typo-bodytext0-bold">{{userMembership?.name}}</span>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="reservable-lessons">
+                        <span class="rw-typo-subtext0-regular small-title">예약 가능한 수업</span>
+                        <db-lesson-selector [(ngModel)]="classItemList"></db-lesson-selector>
+                    </div>
+                    <div class="datepick-container">
+
+                        <div class="date-picker">
+                            <span class="rw-typo-subtext0-regular small-title">시작일</span>
+                            <div class="date-pick-button" rw-button rwButtonColor="var(--white)"
+                                rwButtonFontColor="var(--font-color)"
+                                (click)="onStartDateBtClick($event)">
+                                {{date.startDate | dateFormat:'YYYY.MM.DD'}}
+                            </div>
+                            <rw-datepicker
+                                *ngIf="datepickFlag.start"
+                                (rwClickOutside)="startDatepickClickOutside($event)"
+                                mode="reg-ml"
+                                [option]="'looseOnlyStart'"
+                                [(data)]="date"
+                            > </rw-datepicker>
+                        </div>
+
+                        <div class="date-picker">
+                            <span class="rw-typo-subtext0-regular small-title">만료일</span>
+                            <div class="date-pick-button" rw-button rwButtonColor="var(--white)"
+                                rwButtonFontColor="var(--font-color)"
+                                (click)="onSEndDateBtClick($event)">
+                                <span *ngIf="!date.endDate || datepickFlag.start; else showEndDate">만료일을 선택해주세요.</span>
+                                <ng-template #showEndDate>
+                                    <span>{{date.endDate | dateFormat:'YYYY.MM.DD'}} ({{date | dayDiff}}일)</span>
+                                </ng-template>
+
+                            </div>
+                            <rw-datepicker
+                                *ngIf="datepickFlag.end"
+                                (rwClickOutside)="endDatepickClickOutside($event)"
+                                mode="reg-ml"
+                                [option]="'looseOnlyEnd'"
+                                [(data)]="date"
+                            ></rw-datepicker>
+                        </div>
+
+                    </div>
+                    <div class="count-container">
+                        <span class="rw-typo-subtext0-regular small-title">횟수</span>
+                        <div class="count">
+                            <div class="input-container">
+                                <input type="text" placeholder="0" [(ngModel)]="count.count" (keyup)="onCountKeyup($event)"
+                                    class="rw-input" [disabled]="count.infinite">
+                                <div class="input-count" [class.disabled]=count.infinite>회</div>
+                            </div>
+                            <rw-checkbox [checked]="count.infinite" (click)="count.infinite = !count.infinite" text="무제한">
+                            </rw-checkbox>
+                        </div>
+                    </div>
+
+
+                    <div class="delete-save-button">
+                        <rw-button
+                            [width]="'96'"
+                            [height]="'45'"
+                            [color] ="'var(--font-color)'"
+                            [fontColor]="'var(--white)'"
+                            [disabled]="!date.startDate || !date.endDate || !isClassSelected() || !checkCount()"
+                            (onClick)="confirmModify($event)"
+                        >
+                            <div class="rw-typo-bodytext0-bold save-button">저장</div>
+                        </rw-button>
+
+                    </div>
+                </section>
+
+            </div>
+        </main>
     </section>
 </section>

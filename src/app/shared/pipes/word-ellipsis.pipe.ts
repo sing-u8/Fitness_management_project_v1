@@ -5,9 +5,10 @@ import { Pipe, PipeTransform } from '@angular/core'
 })
 export class WordEllipsisPipe implements PipeTransform {
     transform(value: string, ellipsisTo: number): unknown {
-        if (value) {
+        if (value && value.length > ellipsisTo) {
             return value.slice(0, ellipsisTo)
+        } else {
+            return value
         }
-        return null
     }
 }

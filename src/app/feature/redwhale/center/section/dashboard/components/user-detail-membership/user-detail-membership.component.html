@@ -1,4 +1,5 @@
 <section class="user-detail-membership">
+
     <header class='rw-typo-subtext1'>
         <div class="col1">회원권</div>
         <div class="col2">기간</div>
@@ -25,16 +26,19 @@
             <db-user-detail-membership-item
                 *ngFor = "let item of curUserData.memberships"
                 [membership]="item"
-                (onUpdateInfo) = 'false'
+                (onUpdateInfo) = 'setSelectedUserMembership(item);toggleModifyMembershipFullModal()'
                 (onExtendPeriodCount) = 'toggleExtensionModal();setSelectedUserMembership(item)'
-                (onHold) = 'false'
-                (onTransfer) = 'false'
-                (onRefund) = 'false'
-                (onRemoveRecord) = 'false'
+                (onHold) = 'toggleHoldModal();setSelectedUserMembership(item) '
+                (onTransfer) = 'setSelectedUserMembership(item);toggleShowTransferModal()'
+                (onRefund) = 'setSelectedUserMembership(item); toggleShowRefundModal()'
+                (onRemoveRecord) = 'setSelectedUserMembership(item); toggleRemoveModal()'
+                (onUpdateHolding)="setSelectedUserMembership(item);"
+                (onRemoveHolding)="setSelectedUserMembership(item); toggleRemoveHoldingModal()"
             ></db-user-detail-membership-item>
         </ng-template>
 
     </main>
+
 </section>
 
 <db-membership-extension-modal
@@ -50,3 +54,53 @@
     (cancel) = "toggleChargeModal()"
     (confirm) = "onChargeConfirm($event)"
 ></rw-charge-modal>
+
+<db-hold-modal
+    [(visible)]="showHoldModal"
+    [userMembership]="selectedUserMembership"
+    (confirm)="onHoldConfirm($event)"
+    (cancel)="toggleHoldModal()"
+></db-hold-modal>
+
+<rw-member-list-modal
+    [visible]="showTransferModal"
+    [title]="'회원권을 양도받을 회원을 선택해주세요.'"
+    [searchPlaceholder]="'회원의 이름 또는 전화번호를 검색해주세요.'"
+    (cancel)="toggleShowTransferModal()"
+    (confirm)="onTransferMemberConfirm($event)"
+></rw-member-list-modal>
+<rw-modal
+    [(visible)]="showTransferCheckModal"
+    [data]="showTransferCheckModalText"
+    (cancel)="toggleTransferCheckModal()"
+    (confirm)="onConfirmTransferCheck()"
+></rw-modal>
+
+<rw-modal
+    [(visible)]="showRefundModal"
+    [data]="refundModalData"
+    (cancel)="toggleShowRefundModal()"
+    (confirm)="onConfirmRefund()"
+></rw-modal>
+
+<rw-modal
+    [(visible)]="showRemoveModal"
+    [data]="removeModalData"
+    (cancel)="toggleRemoveModal()"
+    (confirm)="onConfirmRemove()"
+></rw-modal>
+
+<db-modify-membership-fullmodal
+    [(visible)]="showModifyMembershipFullModal"
+    [userMembership]="selectedUserMembership"
+    [centerUser] = "curUserData?.user"
+    (close)="toggleModifyMembershipFullModal()"
+    (confirm) = "confirmModifyMembership()"
+></db-modify-membership-fullmodal>
+
+<rw-modal
+    [(visible)]="showRemoveHoldModal"
+    [data]="removeHoldingModalData"
+    (cancel)="toggleRemoveHoldingModal()"
+    (confirm)="onConfirmRemoveHolding()"
+></rw-modal>

@@ -73,8 +73,7 @@ export class DatepickerComponent implements OnInit, OnChanges, AfterViewChecked,
         this.lineSelectedDateObj = { startDate: '', endDate: '' }
     }
 
-    ngOnInit(): void {
-        this.option = this.option ?? 'normal'
+    setDatePick() {
         this.today = moment()
         if (this.mode == 'date' && this.data.date) {
             this.currentDate = moment(this.data.date)
@@ -100,10 +99,38 @@ export class DatepickerComponent implements OnInit, OnChanges, AfterViewChecked,
         this.getDays(this.currentDate)
     }
 
+    checkDifference(changes: SimpleChanges) {
+        if (
+            changes['data']['currentValue']?.date &&
+            changes['data']['currentValue']['date'] != changes['data']['previousValue']['date']
+        ) {
+            return true
+        } else if (
+            changes['data']['currentValue']?.startDate != changes['data']['previousValue']?.startDate &&
+            changes['data']['currentValue']?.startDate != changes['data']['previousValue']?.startDate
+        ) {
+            return true
+        } else {
+            return false
+        }
+    }
+
+    ngOnInit(): void {
+        this.option = this.option ?? 'normal'
+        this.setDatePick()
+    }
+
     ngOnChanges(changes: SimpleChanges) {
         if (changes.hasOwnProperty('data') && !changes['data']['firstChange']) {
             this.changed = true
             this.getDays(this.currentDate)
+        }
+
+        if (changes.hasOwnProperty('data')) {
+            // console.log('datepicker ngOnChanges -- changes : ', changes)
+            if (this.checkDifference(changes)) {
+                this.setDatePick()
+            }
         }
     }
     ngAfterViewInit() {
