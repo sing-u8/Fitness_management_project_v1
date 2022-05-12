@@ -15,6 +15,7 @@ import { UserMembership } from '@schemas/user-membership'
 import { ExtensionOutput } from '../membership-extension-modal/membership-extension-modal.component'
 import { ChargeType, ChargeMode, ConfirmOuput } from '@shared/components/common/charge-modal/charge-modal.component'
 import { HoldingOutput, HoldingConfirmOutput } from '../hold-modal/hold-modal.component'
+import { DatePickConfirmOutput } from '@shared/components/common/datepick-modal/datepick-modal.component'
 import { CenterUser } from '@schemas/center-user'
 
 import _ from 'lodash'
@@ -209,16 +210,39 @@ export class UserDetailMembershipComponent implements OnInit {
 
     // update, remove hoding funcs
     public showUpdateHoldModal = false
+    public updateHoldModalText = {
+        text: '',
+        subText: '홀딩 기간을 선택하신 후, [수정하기] 버튼을 클릭해주세요.',
+        cancelButtonText: '취소',
+        confirmButtonText: '홀딩 기간 수정하기',
+        startDateText: '홀딩 시작일',
+        endDateText: '홀딩 종료일',
+    }
     public updateHoldData: HoldingOutput = undefined
+    public updateHoldDateInput: HoldingOutput = {
+        startDate: '',
+        endDate: '',
+    }
     toggleUpdateHoldModal() {
+        this.updateHoldModalText.text = `'${this.wordService.ellipsis(
+            this.selectedUserMembership.name,
+            15
+        )}' 홀딩 기간을 수정하시겠어요?`
+        this.updateHoldDateInput = _.cloneDeep({
+            startDate: this.selectedUserMembership.pause_start_date,
+            endDate: this.selectedUserMembership.pause_end_date,
+        })
         this.showUpdateHoldModal = !this.showUpdateHoldModal
     }
-    onUpdateHoldConfirm(output: HoldingConfirmOutput) {
+    hideUpdateHoldModal() {
+        this.showUpdateHoldModal = false
+    }
+    onUpdateHoldConfirm(output: DatePickConfirmOutput) {
         this.updateHoldData = output.datepick
         output.loadingFns.showLoading()
         this.callUpdateHoldingApi(() => {
             output.loadingFns.hideLoading()
-            this.toggleUpdateHoldModal()
+            this.showUpdateHoldModal = false
         })
     }
 
@@ -264,7 +288,12 @@ export class UserDetailMembershipComponent implements OnInit {
             .extendMembershipTicket(this.center.id, this.curUserData.user.id, this.selectedUserMembership.id, reqBody)
             .subscribe((userMembership) => {
                 this.nxStore.dispatch(
-                    showToast({ text: `'${this.selectedUserMembership.name}' 회원권 기간/횟수가 연장되었습니다.` })
+                    showToast({
+                        text: `'${this.wordService.ellipsis(
+                            this.selectedUserMembership.name,
+                            6
+                        )}' 회원권 기간/횟수가 연장되었습니다.`,
+                    })
                 )
                 this.nxStore.dispatch(
                     DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.curUserData.user })
@@ -281,8 +310,11 @@ export class UserDetailMembershipComponent implements OnInit {
             .stopMembershipTicket(this.center.id, this.curUserData.user.id, this.selectedUserMembership.id, reqBody)
             .subscribe((_) => {
                 const toastText = dayjs().isSameOrBefore(this.holdData.startDate)
-                    ? `'${this.selectedUserMembership.name}' 회원권이 홀딩되었습니다.`
-                    : `'${this.selectedUserMembership.name}' 회원권이 홀딩이 예약되었습니다.`
+                    ? `'${this.wordService.ellipsis(this.selectedUserMembership.name, 6)}' 회원권이 홀딩되었습니다.`
+                    : `'${this.wordService.ellipsis(
+                          this.selectedUserMembership.name,
+                          6
+                      )}' 회원권이 홀딩이 예약되었습니다.`
                 this.nxStore.dispatch(showToast({ text: toastText }))
                 this.nxStore.dispatch(
                     DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.curUserData.user })
@@ -309,7 +341,12 @@ export class UserDetailMembershipComponent implements OnInit {
             .transferMembershipTicket(this.center.id, this.curUserData.user.id, this.selectedUserMembership.id, reqBody)
             .subscribe((_) => {
                 this.nxStore.dispatch(
-                    showToast({ text: `'${this.selectedUserMembership.name}' 회원권이 양도되었습니다.` })
+                    showToast({
+                        text: `'${this.wordService.ellipsis(
+                            this.selectedUserMembership.name,
+                            6
+                        )}' 회원권이 양도되었습니다.`,
+                    })
                 )
                 this.nxStore.dispatch(
                     DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.curUserData.user })
@@ -333,7 +370,12 @@ export class UserDetailMembershipComponent implements OnInit {
             .refundMembershipTicket(this.center.id, this.curUserData.user.id, this.selectedUserMembership.id, reqBody)
             .subscribe((_) => {
                 this.nxStore.dispatch(
-                    showToast({ text: `'${this.selectedUserMembership.name}' 회원권이 환불되었습니다.` })
+                    showToast({
+                        text: `'${this.wordService.ellipsis(
+                            this.selectedUserMembership.name,
+                            6
+                        )}' 회원권이 환불되었습니다.`,
+                    })
                 )
                 this.nxStore.dispatch(
                     DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.curUserData.user })
@@ -346,7 +388,12 @@ export class UserDetailMembershipComponent implements OnInit {
             .deletteMembershipTicket(this.center.id, this.curUserData.user.id, this.selectedUserMembership.id)
             .subscribe((_) => {
                 this.nxStore.dispatch(
-                    showToast({ text: `'${this.selectedUserMembership.name}' 회원권이 삭제되었습니다.` })
+                    showToast({
+                        text: `'${this.wordService.ellipsis(
+                            this.selectedUserMembership.name,
+                            6
+                        )}' 회원권이 삭제되었습니다.`,
+                    })
                 )
                 this.nxStore.dispatch(
                     DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.curUserData.user })
@@ -355,6 +402,40 @@ export class UserDetailMembershipComponent implements OnInit {
             })
     }
 
-    callUpdateHoldingApi(cb?: () => void) {}
-    callRemoveHoldingApi(cb?: () => void) {}
+    callUpdateHoldingApi(cb?: () => void) {
+        const reqBody: StopMembershipTicketReqBody = {
+            pause_start_date: this.updateHoldData.startDate,
+            pause_end_date: this.updateHoldData.endDate,
+        }
+        this.centerUsersMembershipService
+            .stopMembershipTicket(this.center.id, this.curUserData.user.id, this.selectedUserMembership.id, reqBody)
+            .subscribe((_) => {
+                const toastText = `'${this.wordService.ellipsis(
+                    this.selectedUserMembership.name,
+                    6
+                )}' 홀딩 기간이 수정되었습니다.`
+
+                this.nxStore.dispatch(showToast({ text: toastText }))
+                this.nxStore.dispatch(
+                    DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.curUserData.user })
+                )
+                cb ? cb() : null
+            })
+    }
+    callRemoveHoldingApi(cb?: () => void) {
+        this.centerUsersMembershipService
+            .resumeMembershipTicket(this.center.id, this.curUserData.user.id, this.selectedUserMembership.id)
+            .subscribe((_) => {
+                const toastText = `'${this.wordService.ellipsis(
+                    this.selectedUserMembership.name,
+                    6
+                )}' 홀딩 정보가 삭제되었습니다.`
+
+                this.nxStore.dispatch(showToast({ text: toastText }))
+                this.nxStore.dispatch(
+                    DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.curUserData.user })
+                )
+                cb ? cb() : null
+            })
+    }
 }

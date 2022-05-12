@@ -1,0 +1,180 @@
+.rw-modal-background {
+    display: none;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: var(--font-color);
+    opacity: 0;
+    transition: opacity 0.3s cubic-bezier(0.25, 0.8, 0.25, 0.8);
+    -moz-transition: opacity 0.3s cubic-bezier(0.25, 0.8, 0.25, 0.8);
+    -webkit-transition: opacity 0.3s cubic-bezier(0.25, 0.8, 0.25, 0.8);
+    -o-transition: opacity 0.3s cubic-bezier(0.25, 0.8, 0.25, 0.8);
+    z-index: 1010;
+}
+
+.rw-modal-background-show {
+    opacity: 0.3;
+}
+
+.rw-modal-wrapper {
+    display: none;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1011;
+
+    .rw-modal {
+        display: flex;
+        flex-direction: column;
+        // justify-content: space-between;
+
+        width: 457px;
+        height: 273px;
+        border-radius: 6px;
+        background-color: var(--white);
+        box-shadow: 0 0 10px 0 rgba(181, 181, 181, 0.11);
+        opacity: 0;
+        transition: opacity 0s;
+        -moz-transition: opacity 0s;
+        -webkit-transition: opacity 0s;
+        -o-transition: opacity 0s;
+        position: relative;
+
+        .l-title {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 40px;
+
+            .title {
+                display: flex;
+                justify-content: center;
+            }
+
+            .sub-title {
+                margin-top: 2px;
+                white-space: pre-line;
+                display: flex;
+                justify-content: center;
+                text-align: center;
+            }
+        }
+
+        .small-title {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            margin-bottom: 5px;
+
+            .title-text {
+                color: var(--grey);
+                width: 170px;
+            }
+        }
+
+        .l-datepicker {
+            width: 100%;
+            padding: 0px 45px;
+            display: flex;
+            flex-direction: column;
+            margin: 25px 0px 0px;
+
+            .datepicker__wrapper {
+                display: flex;
+                align-items: center;
+
+                span {
+                    margin: 0px 10px;
+                }
+
+                .datepicker__button {
+                    display: flex;
+                    justify-content: flex-start;
+                    padding: 15px 16px;
+                    width: 170px;
+                    height: 50px;
+                    position: relative;
+
+                    font-weight: 400 !important;
+                    font-size: 1.4rem !important;
+                    line-height: 20px !important;
+                    letter-spacing: -0.196px !important;
+
+                    background: var(--white) !important;
+                    border: 1px solid var(--border-color) !important;
+                    border-radius: 5px !important;
+
+                    span {
+                        margin: 0px;
+                    }
+
+                    &.disabled {
+                        cursor: not-allowed;
+                        color: var(--grey) !important;
+                        background: var(--background-color) !important;
+                    }
+
+                    .l-datepicker-show {
+                        position: absolute;
+                        top: 55px;
+                        left: 0px;
+                        z-index: 3;
+
+                        &.display-none {
+                            display: none;
+                        }
+                    }
+                }
+            }
+        }
+
+        .l-button {
+            display: flex;
+            height: 50px;
+            width: 100%;
+
+            display: flex;
+            align-items: center;
+
+            position: absolute;
+            bottom: 0px;
+
+            .cancel {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                cursor: pointer;
+
+                height: 100%;
+                width: 95px;
+                border-radius: 0 !important;
+
+                border-right: 1px solid var(--border-color);
+                border-top: 1px solid var(--border-color);
+                color: var(--grey) !important;
+
+                font-size: 1.4rem;
+                font-weight: 700;
+                line-height: 1.43;
+                letter-spacing: -0.2px;
+                color: var(--grey);
+            }
+
+            .confirm {
+                .confirm__text {
+                    color: var(--white);
+                }
+            }
+        }
+    }
+}
+
+.rw-modal-wrapper-show {
+    .rw-modal {
+        opacity: 1;
+    }
+}

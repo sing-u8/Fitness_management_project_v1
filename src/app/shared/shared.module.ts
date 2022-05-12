@@ -25,7 +25,7 @@ import { TermsPrivacyComponent } from './components/terms/terms-privacy/terms-pr
 import { SmallModalComponent } from './components/common/small-modal/small-modal.component'
 import { MemberListModalComponent } from './components/common/member-list-modal/member-list-modal.component'
 import { ChargeModalComponent } from './components/common/charge-modal/charge-modal.component'
-// import { Datepicker3Component } from './components/common/datepicker3/datepicker3.component'
+import { DatepickModalComponent } from './components/common/datepick-modal/datepick-modal.component'
 
 // - //
 import { LessonFlipListComponent } from './components/redwhale/drawer/lesson-flip-list/lesson-flip-list.component'
@@ -126,7 +126,7 @@ FullCalendarModule.registerPlugins([
         DwMembershipListModalComponent,
         DrawerModifyLessonCardComponent,
         ChargeModalComponent,
-        // Datepicker3Component,
+        DatepickModalComponent,
         // Directives
         // AutoScrollDirective,
         ButtonDirective,
@@ -193,7 +193,7 @@ FullCalendarModule.registerPlugins([
         DwMembershipListModalComponent,
         DrawerModifyLessonCardComponent,
         ChargeModalComponent,
-        // Datepicker3Component,
+        DatepickModalComponent,
         // Directives
         // AutoScrollDirective,
         ButtonDirective,

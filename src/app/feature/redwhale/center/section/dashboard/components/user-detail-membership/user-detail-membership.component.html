@@ -32,7 +32,7 @@
                 (onTransfer) = 'setSelectedUserMembership(item);toggleShowTransferModal()'
                 (onRefund) = 'setSelectedUserMembership(item); toggleShowRefundModal()'
                 (onRemoveRecord) = 'setSelectedUserMembership(item); toggleRemoveModal()'
-                (onUpdateHolding)="setSelectedUserMembership(item);"
+                (onUpdateHolding)="setSelectedUserMembership(item);toggleUpdateHoldModal()"
                 (onRemoveHolding)="setSelectedUserMembership(item); toggleRemoveHoldingModal()"
             ></db-user-detail-membership-item>
         </ng-template>
@@ -104,3 +104,11 @@
     (cancel)="toggleRemoveHoldingModal()"
     (confirm)="onConfirmRemoveHolding()"
 ></rw-modal>
+
+<rw-datepick-modal
+    [(visible)]="showUpdateHoldModal"
+    [datepickInput]="updateHoldDateInput"
+    [textData]="updateHoldModalText"
+    (cancel)="hideUpdateHoldModal()"
+    (confirm)="onUpdateHoldConfirm($event)"
+></rw-datepick-modal>

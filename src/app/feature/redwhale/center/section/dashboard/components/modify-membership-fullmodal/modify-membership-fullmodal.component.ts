@@ -154,7 +154,6 @@ export class ModifyMembershipFullmodalComponent implements OnInit, OnChanges, Af
         // this.isAllMlItemDoneSubscriber.unsubscribe()
     }
     ngOnChanges(changes: SimpleChanges): void {
-        console.log('ngOnChanges ;;; ', changes)
         if (changes['visible'] && !changes['visible'].firstChange) {
             if (changes['visible'].previousValue != changes['visible'].currentValue) {
                 this.changed = true

@@ -14,16 +14,14 @@ import {
 
 import _ from 'lodash'
 
-import { UserMembership } from '@schemas/user-membership'
-import { UserLocker } from '@schemas/user-locker'
 import { ClickEmitterType } from '@shared/components/common/button/button.component'
 
-export interface HoldingOutput {
+export interface DatePickOutput {
     startDate: string
     endDate: string
 }
 
-export interface HoldingConfirmOutput {
+export interface DatePickConfirmOutput {
     datepick: {
         startDate: string
         endDate: string
@@ -32,19 +30,25 @@ export interface HoldingConfirmOutput {
 }
 
 @Component({
-    selector: 'db-hold-modal',
-    templateUrl: './hold-modal.component.html',
-    styleUrls: ['./hold-modal.component.scss'],
+    selector: 'rw-datepick-modal',
+    templateUrl: './datepick-modal.component.html',
+    styleUrls: ['./datepick-modal.component.scss'],
 })
-export class HoldModalComponent implements AfterViewChecked, OnChanges, AfterViewInit {
+export class DatepickModalComponent implements AfterViewChecked, OnChanges, AfterViewInit {
     @Input() visible: boolean
-    @Input() userLocker: UserLocker = undefined
-    @Input() userMembership: UserMembership = undefined
+    @Input() textData: {
+        text?: string
+        subText?: string
+        cancelButtonText?: string
+        confirmButtonText?: string
+        startDateText?: string
+        endDateText?: string
+    }
+    @Input() datepickInput: DatePickOutput
 
     @Output() visibleChange = new EventEmitter<boolean>()
     @Output() cancel = new EventEmitter<any>()
-    @Output() confirm = new EventEmitter<HoldingConfirmOutput>()
-
+    @Output() confirm = new EventEmitter<DatePickConfirmOutput>()
     @ViewChild('modalBackgroundElement') modalBackgroundElement: ElementRef
     @ViewChild('modalWrapperElement') modalWrapperElement: ElementRef
 
@@ -78,6 +82,7 @@ export class HoldModalComponent implements AfterViewChecked, OnChanges, AfterVie
             }
         }
     }
+
     constructor(private el: ElementRef, private renderer: Renderer2) {
         this.isMouseModalDown = false
     }
@@ -88,9 +93,12 @@ export class HoldModalComponent implements AfterViewChecked, OnChanges, AfterVie
             end: false,
         }
         this.datepick = {
-            startDate: '',
-            endDate: '',
+            startDate: this.datepickInput.startDate ?? '',
+            endDate: this.datepickInput.endDate ?? '',
         }
+        setTimeout(() => {
+            this.datepick.endDate = this.datepickInput.endDate
+        }, 50)
     }
 
     ngOnInit(): void {}
