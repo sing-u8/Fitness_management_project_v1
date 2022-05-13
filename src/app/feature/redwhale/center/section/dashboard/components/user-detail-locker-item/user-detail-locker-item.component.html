@@ -31,6 +31,16 @@
     <div class="col-notification" [class.show-notification]="isHolding">
         {{locker.pause_start_date}} - {{locker.pause_end_date}} ({{locker.pause_start_date | period :
         locker.pause_end_date}}) 홀딩중
+
+        <div class="notification-menu" (click)="toggleNotificationDropDown(); $event.stopPropagation()"
+            (rwClickOutside)="hideNotificationDropDown()">
+            <div class="l-menu-items" [class.show-items]="showNotificationDropDown">
+                <div class="menu-item" *ngFor="let item of holdingMenuDropDownItemObj | keyvalue : originalOrder"
+                    [ngStyle]="{color: item.value.color}" (click)="item.value.func()">
+                    {{item.value.name}}
+                </div>
+            </div>
+        </div>
     </div>
     <div class="border-bottom"></div>
 

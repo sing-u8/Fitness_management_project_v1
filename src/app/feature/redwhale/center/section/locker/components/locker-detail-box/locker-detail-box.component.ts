@@ -5,11 +5,7 @@ import _ from 'lodash'
 import dayjs from 'dayjs'
 
 import { StorageService } from '@services/storage.service'
-import {
-    CenterUsersLockerService,
-    CreateLockerTicketReqBody,
-    CreateLockerTicketUnpaidReqBody,
-} from '@services/center-users-locker.service.service'
+import { CenterUsersLockerService, CreateLockerTicketReqBody } from '@services/center-users-locker.service.service'
 import { CenterLockerService } from '@services/center-locker.service'
 
 // schema
@@ -369,15 +365,12 @@ export class LockerDetailBoxComponent implements OnInit, OnChanges, OnDestroy {
                 responsibility_user_id: modalReturn.assignee_id,
             },
         }
-        const createLockerTicketUnpaidReqBody: CreateLockerTicketUnpaidReqBody = {
-            amount: modalReturn.unpaid,
-        }
+
         this.nxStore.dispatch(
             LockerActions.startCreateLockerTicket({
                 centerId: this.center.id,
                 registerMemberId: this.willRegisteredMember.id,
                 createLockerTicketReqBody,
-                createLockerTicketUnpaidReqBody,
             })
         )
         this.closeShowChargeModal()
@@ -393,18 +386,19 @@ export class LockerDetailBoxComponent implements OnInit, OnChanges, OnDestroy {
 
     // // buttonBox2 method
     emptyLocker(refund: string) {
+        // !! API  변경으로  재수정 필요
         if (Number(refund) > 0) {
-            this.nxStore.dispatch(
-                LockerActions.startRefundLockerTicket({
-                    centerId: this.center.id,
-                    userId: this.lockerItem.user_locker.user.id,
-                    lockerTicketId: this.lockerItem.user_locker.id,
-                    reqBody: {
-                        amount: refund,
-                    },
-                    curLockerItems: this.curLockerItems,
-                })
-            )
+            // this.nxStore.dispatch(
+            //     LockerActions.startRefundLockerTicket({
+            //         centerId: this.center.id,
+            //         userId: this.lockerItem.user_locker.user.id,
+            //         lockerTicketId: this.lockerItem.user_locker.id,
+            //         reqBody: {
+            //             amount: refund,
+            //         },
+            //         curLockerItems: this.curLockerItems,
+            //     })
+            // )
         } else {
             // this.nxStore.dispatch(
             //     LockerActions.startExpireLockerTicket({

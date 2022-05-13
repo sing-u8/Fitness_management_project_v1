@@ -16,9 +16,12 @@ export class UserDetailLockerItemComponent implements OnInit, AfterViewInit {
     @Output() onExtendPeriod = new EventEmitter<UserLocker>()
     @Output() onMovePlace = new EventEmitter<UserLocker>()
     @Output() onHold = new EventEmitter<UserLocker>()
-    @Output() onTransfer = new EventEmitter<UserLocker>()
+    @Output() onEmpty = new EventEmitter<UserLocker>()
     @Output() onRefund = new EventEmitter<UserLocker>()
     @Output() onRemoveRecord = new EventEmitter<UserLocker>()
+
+    @Output() onUpdateHolding = new EventEmitter<UserLocker>()
+    @Output() onRemoveHolding = new EventEmitter<UserLocker>()
 
     public originalOrder = originalOrder
 
@@ -64,11 +67,11 @@ export class UserDetailLockerItemComponent implements OnInit, AfterViewInit {
             },
         },
         transfer: {
-            name: '양도',
+            name: '비우기',
             color: 'var(--font-color)',
             visible: true,
             func: () => {
-                this.onTransfer.emit(this.locker)
+                this.onEmpty.emit(this.locker)
             },
         },
         refund: {
@@ -85,6 +88,32 @@ export class UserDetailLockerItemComponent implements OnInit, AfterViewInit {
             visible: true,
             func: () => {
                 this.onRemoveRecord.emit(this.locker)
+            },
+        },
+    }
+
+    public showNotificationDropDown = false
+    toggleNotificationDropDown() {
+        this.showNotificationDropDown = !this.showNotificationDropDown
+    }
+    hideNotificationDropDown() {
+        this.showNotificationDropDown = false
+    }
+    public holdingMenuDropDownItemObj = {
+        updateHoding: {
+            name: '홀딩 기간 수정',
+            color: 'var(--font-color)',
+            visible: true,
+            func: () => {
+                this.onUpdateHolding.emit(this.locker)
+            },
+        },
+        removeHoding: {
+            name: '홀딩 삭제',
+            color: 'var(--red)',
+            visible: true,
+            func: () => {
+                this.onRemoveHolding.emit(this.locker)
             },
         },
     }

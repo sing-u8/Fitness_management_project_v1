@@ -1,0 +1,588 @@
+<div class="components">
+  <div class="title">> Typography</div>
+  <div class="rw-typo-headline1">Headline 1</div>
+  <div class="rw-typo-headline2">Headline 2</div>
+  <div class="rw-typo-title1">Title 1</div>
+  <div class="rw-typo-title2">Title 2</div>
+  <div class="rw-typo-bodytext1">Body text 1</div>
+  <div class="rw-typo-bodytext2">Body text 2</div>
+  <div class="rw-typo-subtext1">Sub text 1</div>
+  <div class="rw-typo-subtext2">Sub text 2</div>
+  <div class="rw-typo-subtext3">Sub text 3</div>
+  <div class="rw-typo-subtext4">Sub text 4</div>
+
+  <div class="title">> Tooltip</div>
+  <div class="d-flex">
+      <div rw-tooltip rwTooltipTitle="TOP" rwTooltipPlacement="top">TOP</div>
+      <div rw-tooltip rwTooltipTitle="RIGHT" rwTooltipPlacement="right">RIGHT</div>
+      <div rw-tooltip rwTooltipTitle="BOTTOM" rwTooltipPlacement="bottom">BOTTOM</div>
+      <div rw-tooltip rwTooltipTitle="LEFT" rwTooltipPlacement="left">LEFT</div>
+  </div>
+
+  <div class="title">> Input</div>
+  <div class="d-flex">
+      <input rw-input placeholder="Placeholder" />
+      <input rw-input placeholder="Placeholder" disabled />
+  </div>
+
+  <div class="title">> Checkbox</div>
+  <div class="d-flex">
+      <rw-checkbox [checked]="checkbox" (click)="clickCheckbox()"></rw-checkbox>
+      <rw-checkbox text="Action Text" [checked]="checkbox" (click)="clickCheckbox()"></rw-checkbox>
+      <rw-checkbox text="Action Text" [checked]="true" [disabled]="true"></rw-checkbox>
+      <rw-checkbox text="Action Text" [checked]="false" [disabled]="true"></rw-checkbox>
+  </div>
+
+  <div class="title">> Radio Button</div>
+  <div class="d-flex">
+      <rw-radio-button [checked]="radio" (click)="clickRadio()"></rw-radio-button>
+      <rw-radio-button text="Action Text" [checked]="radio" (click)="clickRadio()"></rw-radio-button>
+      <rw-radio-button text="Action Text" [checked]="true" [disabled]="true"></rw-radio-button>
+      <rw-radio-button text="Action Text" [checked]="false" [disabled]="true"></rw-radio-button>
+  </div>
+
+  <div class="title">> Switch</div>
+  <!-- <div class="d-flex">
+      <rw-switch [disabled]="false" [(ngModel)]="switch1"></rw-switch>
+      <rw-switch text="Switch 1" [disabled]="false" [(ngModel)]="switch1"></rw-switch>
+      <rw-switch text="Switch 2" [disabled]="true" [(ngModel)]="switch2"></rw-switch>
+      <rw-switch text="Switch 3" [disabled]="true" [(ngModel)]="switch3"></rw-switch>
+  </div> -->
+
+  <div class="title">> Select</div>
+  <!-- <div class="d-flex">
+      <rw-select [items]="dropboxItems" [(ngModel)]="selectedDropboxItem"></rw-select>
+      <rw-select [items]="dropboxItems" [(ngModel)]="selectedDropboxItem" disabled></rw-select>
+      <rw-select [items]="dropboxItems" [(ngModel)]="selectedDropboxItem" width="200"></rw-select>
+  </div> -->
+
+  <div class="title">> Avatar</div>
+  <div class="d-flex">
+      <rw-avatar [image]="picture" size="30" fontSize="18"></rw-avatar>
+      <!-- <rw-avatar [image]="404" text="AVATAR" size="30" fontSize="18" backgroundColor="skyblue"></rw-avatar> -->
+      <rw-avatar [image]="" text="AVATAR" size="30" fontSize="18" backgroundColor="skyblue"></rw-avatar>
+  </div>
+
+  <div class="title">> Datepicker</div>
+  <div class="d-flex">
+      <rw-datepicker mode="date" [(data)]="data1"></rw-datepicker>
+      <span>{{ data1.date }}</span>
+      <rw-datepicker mode="week" [(data)]="data2"></rw-datepicker>
+      <span>{{ data2.startDate }}~{{ data2.endDate }}</span>
+      <rw-datepicker mode="multi" [(data)]="data3"></rw-datepicker>
+      <span>{{ data3 }}</span>
+    </div>
+    <!--
+  <div class="d-flex" style="margin-top: 30px">
+      <rw-datepicker mode="multiline-component" [(data)]="data4"></rw-datepicker>
+      <span>{{ data4.startDate }}~{{ data4.endDate }}</span>
+      <rw-datepicker mode="multiline" [(data)]="data5" [option]="'register'" ></rw-datepicker>
+      <span>{{ data5.startDate }}~{{ data5.endDate }}</span>
+      <rw-datepicker mode="multiline" [(data)]="data6" [option]="'extend'" ></rw-datepicker>
+      <span>{{ data6.startDate }}~{{ data6.endDate }}</span>
+  </div>
+
+  <div class="d-flex" style="margin-top: 30px">
+    <rw-datepicker mode="reg-ml" [option]="'onlyStart'" [(data)]="data7"></rw-datepicker>
+    <span>{{ data7.startDate }}~{{ data7.endDate }}</span>
+    <rw-datepicker mode="reg-ml" [option]="'onlyEnd'" [(data)]="data8" ></rw-datepicker>
+    <span>{{ data8.startDate }}~{{ data8.endDate }}</span>
+  </div>
+
+  <div class="d-flex" style="margin-top: 30px">
+    <rw-datepicker2 mode="date" [(data)]="data9"></rw-datepicker2>
+    <span>{{ data9.date }}</span>
+    <rw-datepicker2 mode="week" [(data)]="data10"></rw-datepicker2>
+    <span>{{ data10.startDate }}~{{ data10.endDate }}</span>
+    <rw-datepicker2 mode="multi" [(data)]="data11"></rw-datepicker2>
+    <span>{{ data11 }}</span>
+</div> -->
+
+
+
+  <div class="title">> Timepicker</div>
+  <div class="d-flex">
+      <rw-timepicker [(data)]="timeData"></rw-timepicker>
+      <span>{{ timeData }}</span>
+
+      <rw-time-picker2
+        (onTimeClick)="time2Obj = $event"
+      ></rw-time-picker2>
+      <rw-time-picker2
+        width="135"
+        (onTimeClick)="time2Obj = $event"
+      ></rw-time-picker2>
+
+  </div>
+
+  <div class="title">> Button</div>
+  <div class="d-flex">
+      <div class="rw-typo-bodytext1" rw-button>
+          <span>일반 텍스트 버튼</span>
+      </div>
+      <div class="rw-typo-title2" rw-button rwButtonWidth="250" rwButtonHeight="60" rwButtonColor="var(--red)">
+          <span class="mdi mdi-plus"></span>
+          <span>센터 생성</span>
+      </div>
+      <div
+          class="rw-typo-bodytext1"
+          rw-button
+          rwButtonWidth="164"
+          rwButtonHeight="51"
+          rwButtonColor="var(--darkgrey)"
+      >
+          <span class="mdi mdi-plus"></span>
+          <span>등록하기</span>
+      </div>
+      <div
+          class="rw-typo-bodytext1"
+          rw-button
+          rwButtonWidth="105"
+          rwButtonHeight="50"
+          rwButtonBorderColor="var(--font-color)"
+      >
+          <span class="mdi mdi-close"></span>
+          <span>닫기</span>
+      </div>
+      <div
+          class="rw-typo-bodytext1"
+          rw-button
+          rwButtonWidth="118"
+          rwButtonHeight="43"
+          rwButtonBorderColor="var(--lightgrey)"
+          rwButtonFontColor="var(--darkgrey)"
+      >
+          <span class="mdi mdi-trash-can-outline"></span>
+          <span>사진 제거</span>
+      </div>
+      <div class="rw-typo-bodytext1" rw-button [rwButtonDisabled]="buttonDisabled">
+          <span>일반 텍스트 버튼</span>
+      </div>
+      <div
+          class="rw-typo-bodytext1"
+          rw-button
+          rwButtonWidth="164"
+          rwButtonHeight="51"
+          rwButtonColor="var(--darkgrey)"
+          [rwButtonDisabled]="buttonDisabled"
+      >
+          <span class="mdi mdi-plus"></span>
+          <span>등록하기</span>
+      </div>
+      <div
+          class="rw-typo-bodytext1"
+          rw-button
+          rwButtonWidth="118"
+          rwButtonHeight="43"
+          rwButtonBorderColor="var(--lightgrey)"
+          rwButtonFontColor="var(--darkgrey)"
+          [rwButtonDisabled]="buttonDisabled"
+      >
+          <span class="mdi mdi-trash-can-outline"></span>
+          <span>사진 제거</span>
+      </div>
+      <div rw-button (click)="toggleButtonDisabled()">ToggleButtonDisabled</div>
+  </div>
+
+  <div class="title">> Modal</div>
+  <div class="d-flex">
+      <div rw-button (click)="showModal()">Open Modal - Type1</div>
+      <rw-modal
+          [(visible)]="isVisible"
+          [data]="visibleData"
+          (cancel)="handleCancel()"
+          (confirm)="handleOk()"
+      ></rw-modal>
+      <div rw-button (click)="showModal2()">Open Modal - Type2</div>
+      <rw-modal
+          [(visible)]="isVisible2"
+          [data]="visibleData2"
+          type="type2"
+          (cancel)="handleCancel2()"
+          (confirm)="handleOk2()"
+      ></rw-modal>
+  </div>
+
+  <div class="title">> Toast</div>
+  <div class="d-flex">
+      <div rw-button (click)="showToast()">Show Toast</div>
+      <rw-toast [(visible)]="toastVisible" [text]="toastText" (cancel)="hideToast()"></rw-toast>
+  </div>
+
+
+
+  <!--  -->
+
+  <div
+      style="
+          min-height: 400px;
+          background-color: #f6f6f6;
+          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans',
+              'Helvetica Neue', sans-serif;
+          color: #212121;
+          text-align: center;
+      "
+  >
+      <div style="width: 504px; height: 81px; margin: 0 auto">
+          <img
+              style="margin-top: 50px"
+              src="https://dev.redwhale.xyz:3000/images/logo/redwhale-wording-logo-red-small.png"
+          />
+      </div>
+      <div
+          style="
+              box-sizing: border-box;
+              width: 504px;
+              height: 134px;
+              margin: 0 auto;
+              padding-top: 40px;
+              padding-left: 47px;
+              background-color: white;
+              border-top-left-radius: 10px;
+              border-top-right-radius: 10px;
+              text-align: left;
+          "
+      >
+          <div style="font-size: 22px; font-weight: bold">이메일 인증을 위한</div>
+          <div style="margin-top: 1px; font-size: 22px; font-weight: bold">인증번호를 보내드려요. 👇</div>
+      </div>
+      <div style="width: 504px; height: 132px; margin: 0 auto; background-color: white; text-align: left">
+          <div
+              style="
+                  display: inline-block;
+                  width: 95px;
+                  height: 132px;
+                  padding-top: 39px;
+                  margin-left: 47px;
+                  border-radius: 4px;
+                  border: 1px solid #f1f1f1;
+                  background-color: #f6f6f6;
+                  font-size: 37px;
+                  font-weight: bold;
+                  text-align: center;
+                  box-sizing: border-box;
+              "
+          >
+              1
+          </div>
+          <div
+              style="
+                  display: inline-block;
+                  width: 95px;
+                  height: 132px;
+                  padding-top: 39px;
+                  margin-left: 10px;
+                  border-radius: 4px;
+                  border: 1px solid #f1f1f1;
+                  background-color: #f6f6f6;
+                  font-size: 37px;
+                  font-weight: bold;
+                  text-align: center;
+                  box-sizing: border-box;
+              "
+          >
+              2
+          </div>
+          <div
+              style="
+                  display: inline-block;
+                  width: 95px;
+                  height: 132px;
+                  padding-top: 39px;
+                  margin-left: 10px;
+                  border-radius: 4px;
+                  border: 1px solid #f1f1f1;
+                  background-color: #f6f6f6;
+                  font-size: 37px;
+                  font-weight: bold;
+                  text-align: center;
+                  box-sizing: border-box;
+              "
+          >
+              3
+          </div>
+          <div
+              style="
+                  display: inline-block;
+                  width: 95px;
+                  height: 132px;
+                  padding-top: 39px;
+                  margin-left: 10px;
+                  border-radius: 4px;
+                  border: 1px solid #f1f1f1;
+                  background-color: #f6f6f6;
+                  font-size: 37px;
+                  font-weight: bold;
+                  text-align: center;
+                  box-sizing: border-box;
+              "
+          >
+              4
+          </div>
+      </div>
+      <div style="width: 504px; height: 57px; margin: 0 auto; padding-top: 14px; background-color: white">
+          <div style="font-size: 15px">이메일 인증 페이지에서 위 인증번호를 입력해주세요.</div>
+          <div style="margin-top: 2px; font-size: 15px">
+              보내드린 인증 번호의 유효 시간은
+              <span style="font-weight: bold; color: red; text-decoration: underline">3분</span>이에요.
+          </div>
+      </div>
+      <div
+          style="
+              width: 504px;
+              height: 80px;
+              margin: 0 auto;
+              padding-top: 40px;
+              background-color: white;
+              text-align: left;
+              box-sizing: border-box;
+          "
+      >
+          <div style="width: 410px; margin-left: 47px; border-bottom: 1px solid #e9e9e9"></div>
+      </div>
+      <div
+          style="
+              width: 504px;
+              height: 162px;
+              margin: 0 auto;
+              padding-left: 47px;
+              background-color: white;
+              text-align: left;
+              box-sizing: border-box;
+          "
+      >
+          <div style="font-size: 15px">레드웨일은 회원님의 소중한 개인 정보를</div>
+          <div style="margin-top: 2px; font-size: 15px">안전하게 보호하기 위해 본인 인증 절차를 거치고 있어요.</div>
+          <div style="margin-top: 2px; font-size: 15px">번거로우시겠지만 양해 부탁드립니다. 🙏</div>
+          <div style="margin-top: 15px; font-size: 15px">편리하고, 유익한 서비스로</div>
+          <div style="margin-top: 2px; font-size: 15px">보답하는 레드웨일이 되겠습니다.</div>
+          <div style="margin-top: 15px; font-size: 15px">감사합니다!</div>
+      </div>
+      <div
+          style="
+              width: 504px;
+              height: 80px;
+              margin: 0 auto;
+              padding-top: 40px;
+              background-color: white;
+              text-align: left;
+              box-sizing: border-box;
+          "
+      >
+          <div style="width: 410px; margin-left: 47px; border-bottom: 1px solid #e9e9e9"></div>
+      </div>
+      <div
+          style="
+              width: 504px;
+              height: 59px;
+              margin: 0 auto;
+              padding-left: 47px;
+              background-color: white;
+              text-align: left;
+              box-sizing: border-box;
+          "
+      >
+          <div style="font-size: 15px">모바일 앱을 사용하시면,</div>
+          <div style="margin-top: 2px; font-size: 15px">더 쉽고 편리하게 레드웨일을 이용하실 수 있어요!</div>
+      </div>
+      <div
+          style="
+              width: 504px;
+              height: 85px;
+              margin: 0 auto;
+              background-color: white;
+              border-bottom-left-radius: 10px;
+              border-bottom-right-radius: 10px;
+          "
+      >
+          <a href="https://play.google.com/store/apps/details?id=xyz.redwhale.m" target="_blank">
+              <img src="https://dev.redwhale.xyz:3000/images/etc/google_play.png" />
+          </a>
+          <a href="https://apps.apple.com/us/app/%EB%A0%88%EB%93%9C%EC%9B%A8%EC%9D%BC/id1532693624" target="_blank">
+              <img style="margin-left: 10px" src="https://dev.redwhale.xyz:3000/images/etc/app_store.png" />
+          </a>
+      </div>
+      <div style="width: 504px; height: 260px; margin: 0 auto">
+          <div style="padding-top: 20px; font-size: 13px; color: #c9c9c9">
+              본 메일은 발신 전용 메일로 회신을 할 수 없습니다.
+          </div>
+          <div style="margin-top: 2px; font-size: 13px; color: #c9c9c9">
+              문의사항이 있으시다면, 고객센터와 홈페이지 내
+              <span style="text-decoration: underline">[문의하기]</span>를 이용해주세요.
+          </div>
+          <div
+              style="
+                  width: 174px;
+                  height: 34px;
+                  padding-top: 7px;
+                  margin-top: 10px;
+                  margin-left: auto;
+                  margin-right: auto;
+                  border: 1px solid #e9e9e9;
+                  border-radius: 4px;
+                  font-size: 13px;
+                  color: #c9c9c9;
+                  box-sizing: border-box;
+              "
+          >
+              고객센터 : 070-8065-1066
+          </div>
+          <div style="width: 504px; margin-top: 20px; margin-bottom: 20px; border-bottom: 1px solid #e9e9e9"></div>
+          <div style="font-size: 13px; color: #c9c9c9">
+              상호 : 텐엑스 ㅣ 주소 : 부산광역시 남구 전포대로 133, 13층 106호
+          </div>
+          <div style="padding-top: 2px; font-size: 13px; color: #c9c9c9">
+              ㅣ 대표 : 강신호 ㅣ 사업자 등록번호 : 171-02-01571
+          </div>
+          <div style="padding-top: 10px; font-size: 13px; color: #c9c9c9">TENX, All rights reserved.</div>
+      </div>
+  </div>
+
+  <!--  -->
+  <br /><br />
+
+  <div
+      style="
+          min-height: 400px;
+          background-color: #f6f6f6;
+          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans',
+              'Helvetica Neue', sans-serif;
+          color: #212121;
+          text-align: center;
+      "
+  >
+      <div style="width: 504px; height: 81px; margin: 0 auto">
+          <img
+              style="margin-top: 50px"
+              src="https://dev.redwhale.xyz:3000/images/logo/redwhale-wording-logo-red-small.png"
+          />
+      </div>
+      <div
+          style="
+              box-sizing: border-box;
+              width: 504px;
+              height: 134px;
+              margin: 0 auto;
+              padding-top: 40px;
+              padding-left: 47px;
+              background-color: white;
+              border-top-left-radius: 10px;
+              border-top-right-radius: 10px;
+              text-align: left;
+          "
+      >
+          <div style="font-size: 22px; font-weight: bold">요청하신 비밀번호 재설정</div>
+          <div style="margin-top: 1px; font-size: 22px; font-weight: bold">링크를 보내드려요. 👇</div>
+      </div>
+      <div style="width: 504px; height: 55px; margin: 0 auto; background-color: white">
+          <a style="text-decoration: none" href="https://www.naver.com" target="_blank">
+              <div
+                  style="
+                      width: 410px;
+                      height: 55px;
+                      padding-top: 17px;
+                      margin-left: auto;
+                      margin-right: auto;
+                      border-radius: 5px;
+                      background-color: #e34a5e;
+                      font-size: 15px;
+                      font-weight: bold;
+                      color: white;
+                      box-sizing: border-box;
+                      cursor: pointer;
+                      user-select: none;
+                  "
+                  onMouseOver="this.style.opacity=0.8"
+                  onMouseOut="this.style.opacity=1"
+              >
+                  비밀번호 재설정하기
+              </div>
+          </a>
+      </div>
+      <div style="width: 504px; height: 33px; margin: 0 auto; padding-top: 14px; background-color: white">
+          <div style="font-size: 15px">
+              비밀번호 재설정 링크의 유효 시간은
+              <span style="font-weight: bold; color: red; text-decoration: underline">3분</span>이에요.
+          </div>
+      </div>
+      <div
+          style="
+              width: 504px;
+              height: 80px;
+              margin: 0 auto;
+              padding-top: 40px;
+              background-color: white;
+              text-align: left;
+              box-sizing: border-box;
+          "
+      >
+          <div style="width: 410px; margin-left: 47px; border-bottom: 1px solid #e9e9e9"></div>
+      </div>
+      <div
+          style="
+              width: 504px;
+              height: 251px;
+              margin: 0 auto;
+              padding-left: 47px;
+              background-color: white;
+              text-align: left;
+              box-sizing: border-box;
+              border-bottom-left-radius: 10px;
+              border-bottom-right-radius: 10px;
+          "
+      >
+          <div style="font-size: 15px">비밀번호를 잊으셔서 걱정하셨나요?</div>
+          <div style="margin-top: 2px; font-size: 15px">괜찮아요. 누구나 그럴 수 있는 일이니까요.</div>
+          <div style="margin-top: 15px; font-size: 15px">위 버튼을 누르시면,</div>
+          <div style="margin-top: 2px; font-size: 15px">새로운 비밀번호를 바로 설정하실 수 있답니다!</div>
+          <div style="margin-top: 15px; font-size: 15px">단, 더욱 안전한 레드웨일이 되기 위해</div>
+          <div style="margin-top: 2px; font-size: 15px">비밀번호 재설정 링크의 유효 시간을 3분으로 제한했어요.</div>
+          <div style="margin-top: 15px; font-size: 13px; color: #c9c9c9">
+              * 유효 시간이 빠르게 지나버렸다면, 비밀번호 찾기 페이지에서
+          </div>
+          <div style="padding-left: 9px; margin-top: 2px; font-size: 13px; color: #c9c9c9">
+              [비밀번호 재설정 링크 보내기] 버튼을 다시 클릭해주세요.
+          </div>
+      </div>
+
+      <div style="width: 504px; height: 260px; margin: 0 auto">
+          <div style="padding-top: 20px; font-size: 13px; color: #c9c9c9">
+              본 메일은 발신 전용 메일로 회신을 할 수 없습니다.
+          </div>
+          <div style="margin-top: 2px; font-size: 13px; color: #c9c9c9">
+              문의사항이 있으시다면, 고객센터와 홈페이지 내
+              <span style="text-decoration: underline">[문의하기]</span>를 이용해주세요.
+          </div>
+          <div
+              style="
+                  width: 174px;
+                  height: 34px;
+                  padding-top: 7px;
+                  margin-top: 10px;
+                  margin-left: auto;
+                  margin-right: auto;
+                  border: 1px solid #e9e9e9;
+                  border-radius: 4px;
+                  font-size: 13px;
+                  color: #c9c9c9;
+                  box-sizing: border-box;
+              "
+          >
+              고객센터 : 070-8065-1066
+          </div>
+          <div style="width: 504px; margin-top: 20px; margin-bottom: 20px; border-bottom: 1px solid #e9e9e9"></div>
+          <div style="font-size: 13px; color: #c9c9c9">
+              상호 : 텐엑스 ㅣ 주소 : 부산광역시 남구 전포대로 133, 13층 106호
+          </div>
+          <div style="padding-top: 2px; font-size: 13px; color: #c9c9c9">
+              ㅣ 대표 : 강신호 ㅣ 사업자 등록번호 : 171-02-01571
+          </div>
+          <div style="padding-top: 10px; font-size: 13px; color: #c9c9c9">TENX, All rights reserved.</div>
+      </div>
+  </div>
+
+  <!--  -->
+
+
+
+</div>

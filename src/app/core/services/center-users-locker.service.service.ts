@@ -195,7 +195,7 @@ export class CenterUsersLockerService {
         centerId: string,
         userId: string,
         lockerId: string,
-        reqBody: ExpireLockerTicketReqBody
+        reqBody: CreateLockerTicketPaymentReqBody
     ): Observable<Payment> {
         const url = this.SERVER + `/${centerId}/users/${userId}/locker/${lockerId}/payment`
 
@@ -254,70 +254,6 @@ export class CenterUsersLockerService {
         )
     }
 
-    // 락커 이용권 미납금 생성
-    createLockerTicketUnpaid(
-        centerId: string,
-        userId: string,
-        lockerId: string,
-        reqBody: CreateLockerTicketUnpaidReqBody
-    ): Observable<Unpaid> {
-        const url = this.SERVER + `/${centerId}/users/${userId}/locker/${lockerId}/unpaid`
-
-        return this.http.post<Response>(url, reqBody, this.options).pipe(
-            map((res) => {
-                return res.dataset[0]
-            }),
-            catchError(handleError)
-        )
-    }
-
-    // 락커 이용권 미납금 조회
-    getLockerTicketUnpaids(centerId: string, userId: string, lockerId: string): Observable<Array<Unpaid>> {
-        const url = this.SERVER + `/${centerId}/users/${userId}/locker/${lockerId}/unpaid`
-
-        return this.http.get<Response>(url, this.options).pipe(
-            map((res) => {
-                return res.dataset
-            }),
-            catchError(handleError)
-        )
-    }
-
-    // 락커 이용권 미납금 정보수정
-    updateLockerTicketUnpaid(
-        centerId: string,
-        userId: string,
-        lockerId: string,
-        unpaidId: string,
-        reqBody: UpdateLockerTicketUnpaidReqBody
-    ): Observable<Response> {
-        const url = this.SERVER + `/${centerId}/users/${userId}/locker/${lockerId}/unpaid/${unpaidId}`
-
-        return this.http.put<Response>(url, reqBody, this.options).pipe(
-            map((res) => {
-                return res
-            }),
-            catchError(handleError)
-        )
-    }
-
-    // 락커 이용권 미납금 삭제
-    deleteLockerTicketUnpaid(
-        centerId: string,
-        userId: string,
-        lockerId: string,
-        unpaidId: string
-    ): Observable<Response> {
-        const url = this.SERVER + `/${centerId}/users/${userId}/locker/${lockerId}/unpaid/${unpaidId}`
-
-        return this.http.delete<Response>(url, this.options).pipe(
-            map((res) => {
-                return res
-            }),
-            catchError(handleError)
-        )
-    }
-
     // 락커 이용권 사용내역 조회
     getLockerHistory(centerId: string, userId: string, lockerId: string): Observable<Array<UserLockerHistory>> {
         const url = this.SERVER + `/${centerId}/users/${userId}/locker/${lockerId}/history`
@@ -362,22 +298,29 @@ export interface PauseLockerTicketReqBody {
 }
 
 export interface ExtendLockerTicketReqBody {
-    start_date: string
     end_date: string
     payment: {
-        pay_method_code:
-            | 'payment_item_pay_method_card'
-            | 'payment_item_pay_method_trans'
-            | 'payment_item_pay_method_vbank'
-            | 'payment_item_pay_method_phone'
-            | 'payment_item_pay_method_cash'
-        amount: number
+        card: number
+        trans: number
+        vbank: number
+        phone: number
+        cash: number
+        unpaid: number
+        memo: string
+        responsibility_user_id: string
     }
 }
 
 export interface RefundLockerTicketReqBody {
-    memo?: string
-    amount: string
+    payment: {
+        card: number
+        trans: number
+        vbank: number
+        phone: number
+        cash: number
+        memo: string
+        responsibility_user_id: string
+    }
 }
 
 export interface ExpireLockerTicketReqBody {
@@ -387,6 +330,8 @@ export interface ExpireLockerTicketReqBody {
         vbank: number
         phone: number
         cash: number
+        memo: string
+        responsibility_user_id: string
     }
 }
 
@@ -397,6 +342,8 @@ export interface CreateLockerTicketPaymentReqBody {
         vbank: number
         phone: number
         cash: number
+        memo: string
+        responsibility_user_id: string
     }
 }
 
@@ -407,15 +354,7 @@ export interface UpdateLockerTicektPaymentReqBody {
         vbank: number
         phone: number
         cash: number
+        memo: string
+        responsibility_user_id: string
     }
-}
-
-export interface CreateLockerTicketUnpaidReqBody {
-    memo?: string
-    amount: number
-}
-
-export interface UpdateLockerTicketUnpaidReqBody {
-    memo?: string
-    amount?: number
 }

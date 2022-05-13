@@ -13,7 +13,12 @@
     >
         <div class="header">
             <span class="rw-typo-bodytext0">
-                {{chargeMode == 'extend' ? '추가 결제 정보' : chargeMode == 'refund' ? '환불 금액': '양도비 입력'}}
+                {{chargeMode == 'extend' || chargeMode == 'empty_payment'
+                    ? '추가 결제 정보'
+                    : chargeMode == 'refund' || chargeMode == 'empty_refund'
+                    ? '환불 금액'
+                    : '양도비 입력'
+                }}
             </span>
             <div class="l-close" (click)="onCancel()">
                 <img src="assets/icons/etc/close.svg">

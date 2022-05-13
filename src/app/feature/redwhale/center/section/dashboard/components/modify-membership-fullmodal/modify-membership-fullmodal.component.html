@@ -46,7 +46,7 @@
                                 {{date.startDate | dateFormat:'YYYY.MM.DD'}}
                             </div>
                             <rw-datepicker
-                                *ngIf="datepickFlag.start"
+                                [class.display-none]="!datepickFlag.start"
                                 (rwClickOutside)="startDatepickClickOutside($event)"
                                 mode="reg-ml"
                                 [option]="'looseOnlyStart'"
@@ -58,7 +58,7 @@
                             <span class="rw-typo-subtext0-regular small-title">만료일</span>
                             <div class="date-pick-button" rw-button rwButtonColor="var(--white)"
                                 rwButtonFontColor="var(--font-color)"
-                                (click)="onSEndDateBtClick($event)">
+                                (click)="onEndDateBtClick($event)">
                                 <span *ngIf="!date.endDate || datepickFlag.start; else showEndDate">만료일을 선택해주세요.</span>
                                 <ng-template #showEndDate>
                                     <span>{{date.endDate | dateFormat:'YYYY.MM.DD'}} ({{date | dayDiff}}일)</span>
@@ -66,7 +66,7 @@
 
                             </div>
                             <rw-datepicker
-                                *ngIf="datepickFlag.end"
+                                [class.display-none]="!datepickFlag.end"
                                 (rwClickOutside)="endDatepickClickOutside($event)"
                                 mode="reg-ml"
                                 [option]="'looseOnlyEnd'"
@@ -100,7 +100,6 @@
                         >
                             <div class="rw-typo-bodytext0-bold save-button">저장</div>
                         </rw-button>
-
                     </div>
                 </section>
 

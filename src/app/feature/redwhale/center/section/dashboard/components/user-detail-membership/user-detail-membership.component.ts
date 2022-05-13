@@ -283,7 +283,6 @@ export class UserDetailMembershipComponent implements OnInit {
             },
         }
 
-        console.log('callExpendApi  -- reqBody : ', reqBody)
         this.centerUsersMembershipService
             .extendMembershipTicket(this.center.id, this.curUserData.user.id, this.selectedUserMembership.id, reqBody)
             .subscribe((userMembership) => {

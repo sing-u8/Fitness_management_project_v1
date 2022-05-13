@@ -27,13 +27,11 @@ import { CenterUser } from '@schemas/center-user'
 import { Center } from '@schemas/center'
 import { UserMembership } from '@schemas/user-membership'
 import { ClassItem } from '@schemas/class-item'
-import { MembershipItem } from '@schemas/membership-item'
 
 // ngrx
 import { Store } from '@ngrx/store'
 import { showToast } from '@appStore/actions/toast.action'
 import * as DashboardActions from '@centerStore/actions/sec.dashboard.actions'
-import * as DashboardReducers from '@centerStore/reducers/sec.dashboard.reducer'
 
 @Component({
     selector: 'db-modify-membership-fullmodal',
@@ -60,7 +58,7 @@ export class ModifyMembershipFullmodalComponent implements OnInit, OnChanges, Af
         this.datepickFlag.end = false
         event.stopPropagation()
     }
-    onSEndDateBtClick(event) {
+    onEndDateBtClick(event) {
         this.datepickFlag.end = !this.datepickFlag.end
         this.datepickFlag.start = false
         event.stopPropagation()
@@ -145,14 +143,8 @@ export class ModifyMembershipFullmodalComponent implements OnInit, OnChanges, Af
 
     ngOnInit(): void {
         this.center = this.storageService.getCenter()
-        // this.cmpStore.setState(stateInit)
-        // this.cmpStore.getInstructorsEffect(this.center.id)
-        // this.cmpStore.getmembershipItemsEffect(this.center.id)
     }
-    ngOnDestroy(): void {
-        // this.totlaPriceSumSubscriber.unsubscribe()
-        // this.isAllMlItemDoneSubscriber.unsubscribe()
-    }
+    ngOnDestroy(): void {}
     ngOnChanges(changes: SimpleChanges): void {
         if (changes['visible'] && !changes['visible'].firstChange) {
             if (changes['visible'].previousValue != changes['visible'].currentValue) {

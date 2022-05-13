@@ -22,13 +22,15 @@
             <db-user-detail-locker-item
                 *ngFor="let item of curUserData.lockers"
                 [locker]="item"
-                (onUpdateInfo) = 'false'
+                (onUpdateInfo) = 'setSelectedUserLocker(item); toggleModifyLockerFullModal()'
                 (onExtendPeriod) = 'toggleExtensionModal(); setSelectedUserLocker(item)'
-                (onMovePlace) = 'false'
+                (onMovePlace) = 'setSelectedUserLocker(item); openMovePlaceModal()'
                 (onHold) = 'toggleHoldModal();setSelectedUserLocker(item) '
-                (onTransfer) = 'setSelectedUserLocker(item);toggleShowTransferModal()'
+                (onEmpty) = 'setSelectedUserLocker(item);openEmptyModal()'
                 (onRefund) = 'setSelectedUserLocker(item); toggleShowRefundModal()'
                 (onRemoveRecord) = 'setSelectedUserLocker(item); toggleRemoveModal()'
+                (onUpdateHolding)="setSelectedUserLocker(item);toggleUpdateHoldModal()"
+                (onRemoveHolding)="setSelectedUserLocker(item); toggleRemoveHoldingModal()"
             ></db-user-detail-locker-item>
         </ng-template>
 
@@ -57,19 +59,14 @@
     (cancel)="toggleHoldModal()"
 ></db-hold-modal>
 
-<rw-member-list-modal
-    [visible]="showTransferModal"
-    [title]="'회원권을 양도받을 회원을 선택해주세요.'"
-    [searchPlaceholder]="'회원의 이름 또는 전화번호를 검색해주세요.'"
-    (cancel)="toggleShowTransferModal()"
-    (confirm)="onTransferMemberConfirm($event)"
-></rw-member-list-modal>
+
 <rw-modal
-    [(visible)]="showTransferCheckModal"
-    [data]="showTransferCheckModalText"
-    (cancel)="toggleTransferCheckModal()"
-    (confirm)="onConfirmTransferCheck()"
+    [(visible)]="showEmptyModal"
+    [data]="EmptyModalTextData"
+    (cancel)="hideEmptyModal()"
+    (confirm)="onConfirmEmptyModal()"
 ></rw-modal>
+
 
 <rw-modal
     [(visible)]="showRefundModal"
@@ -84,3 +81,34 @@
     (cancel)="toggleRemoveModal()"
     (confirm)="onConfirmRemove()"
 ></rw-modal>
+
+
+<db-modify-locker-fullmodal
+    [(visible)]="showModifyLockerFullModal"
+    [userLocker]="selectedUserLocker"
+    [centerUser] = "curUserData?.user"
+    (close)="toggleModifyLockerFullModal()"
+    (confirm) = "confirmModifyLocker()"
+></db-modify-locker-fullmodal>
+
+<rw-modal
+    [(visible)]="showRemoveHoldModal"
+    [data]="removeHoldingModalData"
+    (cancel)="toggleRemoveHoldingModal()"
+    (confirm)="onConfirmRemoveHolding()"
+></rw-modal>
+
+<rw-datepick-modal
+    [(visible)]="showUpdateHoldModal"
+    [datepickInput]="updateHoldDateInput"
+    [textData]="updateHoldModalText"
+    (cancel)="hideUpdateHoldModal()"
+    (confirm)="onUpdateHoldConfirm($event)"
+></rw-datepick-modal>
+
+<db-locker-shift-modal
+    [(visible)]="showMovePlaceModal"
+    [userLocker]="selectedUserLocker"
+    (cancel)="openMovePlaceModal()"
+    (confirm)="onConfirmMoveLocker()"
+></db-locker-shift-modal>

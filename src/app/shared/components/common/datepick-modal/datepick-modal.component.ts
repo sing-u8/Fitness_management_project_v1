@@ -65,21 +65,38 @@ export class DatepickModalComponent implements AfterViewChecked, OnChanges, Afte
     closeShowDatePicker(which: 'start' | 'end') {
         this.doShowDatePick[which] = false
     }
-    public datepick = {
+
+    public startDatepick = {
         startDate: '',
         endDate: '',
     }
+    public endDatePick = {
+        startDate: '',
+        endDate: '',
+    }
+    public isDatepickReset = false
+    setDateReset(flag: boolean) {
+        this.isDatepickReset = flag
+    }
+
     onDatePickerChange(position: 'start' | 'end', date: { startDate: string; endDate: string }) {
         if (position == 'start') {
-            this.datepick = {
-                startDate: date.startDate,
+            this.endDatePick = _.cloneDeep({
+                startDate: '',
                 endDate: '',
-            }
-        } else {
-            this.datepick = {
+            })
+            setTimeout(() => {
+                this.endDatePick = _.cloneDeep({
+                    startDate: date.startDate,
+                    endDate: this.datepickInput.endDate,
+                })
+            }, 10)
+        } else if (position == 'end') {
+            this.endDatePick = _.cloneDeep({
                 startDate: date.startDate,
                 endDate: date.endDate,
-            }
+            })
+            this.datepickInput.endDate = date.endDate ?? this.datepickInput.endDate
         }
     }
 
@@ -92,13 +109,11 @@ export class DatepickModalComponent implements AfterViewChecked, OnChanges, Afte
             start: false,
             end: false,
         }
-        this.datepick = {
-            startDate: this.datepickInput.startDate ?? '',
-            endDate: this.datepickInput.endDate ?? '',
-        }
-        setTimeout(() => {
-            this.datepick.endDate = this.datepickInput.endDate
-        }, 50)
+        console.log('setComVars datepickInput : ', this.datepickInput)
+        this.startDatepick = _.cloneDeep({
+            startDate: this.datepickInput.startDate,
+            endDate: '',
+        })
     }
 
     ngOnInit(): void {}
@@ -123,6 +138,7 @@ export class DatepickModalComponent implements AfterViewChecked, OnChanges, Afte
                 }, 0)
 
                 this.setCompVars()
+                this.setDateReset(false)
             } else {
                 this.renderer.removeClass(this.modalBackgroundElement.nativeElement, 'rw-modal-background-show')
                 this.renderer.removeClass(this.modalWrapperElement.nativeElement, 'rw-modal-wrapper-show')
@@ -130,6 +146,8 @@ export class DatepickModalComponent implements AfterViewChecked, OnChanges, Afte
                     this.renderer.removeClass(this.modalBackgroundElement.nativeElement, 'display-block')
                     this.renderer.removeClass(this.modalWrapperElement.nativeElement, 'display-flex')
                 }, 200)
+
+                this.setDateReset(true)
             }
         }
     }
@@ -139,7 +157,7 @@ export class DatepickModalComponent implements AfterViewChecked, OnChanges, Afte
     }
     onConfirm(loadingFns: ClickEmitterType): void {
         this.confirm.emit({
-            datepick: _.cloneDeep(this.datepick),
+            datepick: _.cloneDeep(this.endDatePick),
             loadingFns: loadingFns,
         })
     }

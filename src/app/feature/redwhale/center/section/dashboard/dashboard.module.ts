@@ -30,6 +30,7 @@ import { UserDetailPaymentItemComponent } from './components/user-detail-payment
 import { MembershipExtensionModalComponent } from './components/membership-extension-modal/membership-extension-modal.component'
 import { LockerExtensionModalComponent } from './components/locker-extension-modal/locker-extension-modal.component'
 import { HoldModalComponent } from './components/hold-modal/hold-modal.component'
+import { DashboardLockerItemComponent } from './components/dashboard-locker-item/dashboard-locker-item.component'
 
 import { RegisterMembershipLockerFullmodalComponent } from './components/register-membership-locker-fullmodal/register-membership-locker-fullmodal.component'
 import { LockerWindowComponent } from './components/locker-window/locker-window.component'
@@ -49,6 +50,7 @@ import { CommonModule as SectionCommonModule } from '../common/common.module'
 
 // ngxSkeletonLoader module
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader'
+import { LockerShiftModalComponent } from './components/locker-shift-modal/locker-shift-modal.component'
 @NgModule({
     declarations: [
         DashboardComponent,
@@ -87,6 +89,8 @@ import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader'
         MembershipExtensionModalComponent,
         LockerExtensionModalComponent,
         HoldModalComponent,
+        LockerShiftModalComponent,
+        DashboardLockerItemComponent,
     ],
     imports: [
         AngularCommonModule,

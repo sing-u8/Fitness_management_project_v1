@@ -34,6 +34,10 @@ export class DatepickerComponent implements OnInit, OnChanges, AfterViewChecked,
         | 'looseOnlyStart'
         | 'looseOnlyEnd' /* only reg-ml until this line*/
     @Input() width: string
+
+    @Input() resetFlag: boolean
+    @Output() resetFlagChange = new EventEmitter<boolean>()
+
     @Output() dataChange = new EventEmitter<any>()
 
     @ViewChild('multiline_datepicker') multiline_datepicker: ElementRef
@@ -86,10 +90,10 @@ export class DatepickerComponent implements OnInit, OnChanges, AfterViewChecked,
             this.currentDate = moment()
         } else if (this.mode == 'reg-ml') {
             if (this.option == 'onlyStart' || this.option == 'looseOnlyStart') {
-                this.regMLSelectDate({ date: this.data?.startDate })
+                this.regMLSelectDate({ date: this.data.startDate })
             } else if (this.option == 'onlyEnd' || this.option == 'looseOnlyEnd') {
-                this.regMLSelectDate({ date: this.data?.startDate })
-                this.regMLSelectDate({ date: this.data?.endDate })
+                this.regMLSelectDate({ date: this.data.startDate })
+                this.regMLSelectDate({ date: this.data.endDate })
             }
             this.currentDate = moment()
         } else {
@@ -106,7 +110,7 @@ export class DatepickerComponent implements OnInit, OnChanges, AfterViewChecked,
         ) {
             return true
         } else if (
-            changes['data']['currentValue']?.startDate != changes['data']['previousValue']?.startDate &&
+            changes['data']['currentValue']?.startDate != changes['data']['previousValue']?.startDate ||
             changes['data']['currentValue']?.startDate != changes['data']['previousValue']?.startDate
         ) {
             return true
@@ -127,9 +131,18 @@ export class DatepickerComponent implements OnInit, OnChanges, AfterViewChecked,
         }
 
         if (changes.hasOwnProperty('data')) {
-            // console.log('datepicker ngOnChanges -- changes : ', changes)
             if (this.checkDifference(changes)) {
                 this.setDatePick()
+            }
+        }
+
+        if (changes['resetFlag'] && !changes['resetFlag'].firstChange) {
+            if (
+                changes['resetFlag'].previousValue != changes['resetFlag'].currentValue &&
+                changes['resetFlag'].currentValue == true
+            ) {
+                this.resetDateVars()
+                this.dataChange.emit(false)
             }
         }
     }
@@ -174,6 +187,12 @@ export class DatepickerComponent implements OnInit, OnChanges, AfterViewChecked,
                 })
             }
         }
+    }
+
+    resetDateVars() {
+        this.selectedDate = ''
+        this.selectedDateObj = {}
+        this.lineSelectedDateObj = { startDate: '', endDate: '' }
     }
 
     getDays(currentDate: moment.Moment) {

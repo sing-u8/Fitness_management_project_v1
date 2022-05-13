@@ -107,7 +107,7 @@ export class LockerExtensionModalComponent implements AfterViewChecked, OnChange
     }
     onConfirm(): void {
         this.confirm.emit({
-            datepick: this.datepick,
+            datepick: _.cloneDeep(this.datepick),
         })
         this.initComponentVars()
     }

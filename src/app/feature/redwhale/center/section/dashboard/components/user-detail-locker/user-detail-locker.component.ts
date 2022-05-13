@@ -1,7 +1,12 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
 
 import { WordService } from '@services/helper/word.service'
-import { CenterUsersLockerService } from '@services/center-users-locker.service.service'
+import {
+    CenterUsersLockerService,
+    ExtendLockerTicketReqBody,
+    RefundLockerTicketReqBody,
+    PauseLockerTicketReqBody,
+} from '@services/center-users-locker.service.service'
 import { StorageService } from '@services/storage.service'
 
 import { Center } from '@schemas/center'
@@ -9,9 +14,12 @@ import { UserLocker } from '@schemas/user-locker'
 import { ExtensionOutput } from '../locker-extension-modal/locker-extension-modal.component'
 import { ChargeType, ChargeMode, ConfirmOuput } from '@shared/components/common/charge-modal/charge-modal.component'
 import { HoldingOutput, HoldingConfirmOutput } from '../hold-modal/hold-modal.component'
+import { DatePickConfirmOutput } from '@shared/components/common/datepick-modal/datepick-modal.component'
 import { CenterUser } from '@schemas/center-user'
 
 import _ from 'lodash'
+import dayjs from 'dayjs'
+
 // ngrx
 import { Store } from '@ngrx/store'
 import * as DashboardReducer from '@centerStore/reducers/sec.dashboard.reducer'
@@ -81,9 +89,32 @@ export class UserDetailLockerComponent implements OnInit {
         this.toggleChargeModal()
         this.chargeData = output.chargeType
 
-        output.loadingFns.hideLoading()
+        if (this.chargeMode == 'extend') {
+            this.callExpendApi(() => {
+                output.loadingFns.hideLoading()
+            })
+        } else if (this.chargeMode == 'refund') {
+            this.callRefundApi(() => {
+                output.loadingFns.hideLoading()
+            })
+        } else if (this.chargeMode == 'transfer') {
+        } else if (this.chargeMode == 'empty_payment' || this.chargeMode == 'empty_refund') {
+            this.callEmptyApi(() => {
+                output.loadingFns.hideLoading()
+            })
+        }
+    }
 
-        // !! 타입별로 호출할 함수 나누기
+    // movePlace function
+    public showMovePlaceModal = false
+    openMovePlaceModal() {
+        this.showMovePlaceModal = !this.showMovePlaceModal
+    }
+    onConfirmMoveLocker() {
+        this.showMovePlaceModal = false
+        this.nxStore.dispatch(
+            DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.curUserData.user })
+        )
     }
 
     // hoding function
@@ -93,41 +124,35 @@ export class UserDetailLockerComponent implements OnInit {
         this.showHoldModal = !this.showHoldModal
     }
     onHoldConfirm(output: HoldingConfirmOutput) {
-        this.toggleHoldModal()
         this.holdData = output.datepick
+        output.loadingFns.showLoading()
+        this.callHodingApi(() => {
+            output.loadingFns.hideLoading()
+            this.toggleHoldModal()
+        })
     }
 
-    // transter function
-    public showTransferModal = false
-    public transferMember: CenterUser = undefined
-    toggleShowTransferModal() {
-        this.showTransferModal = !this.showTransferModal
-    }
-    onTransferMemberConfirm(centerUser: CenterUser) {
-        this.toggleShowTransferModal()
-        this.transferMember = centerUser
-        this.showTransferCheckModalText.text = `'${this.wordService.ellipsis(
-            this.selectedUserLocker.name,
-            15
-        )}' 회원권을
-            ${this.transferMember.center_user_name}님에게 양도하시겠어요?`
-        this.toggleTransferCheckModal()
-    }
-
-    public showTransferCheckModal = false
-    public showTransferCheckModalText = {
+    // Empty function
+    public showEmptyModal = false
+    public EmptyModalTextData = {
         text: '',
-        subText: `양도 시, 예약 내역 및 결제 내역을
-                제외한 모든 정보가 양도돼요.`,
+        subText: `추가 결제 또는 환불이 발생한 경우,
+            다음 단계에서 금액을 입력해주세요.`,
         cancelButtonText: '취소',
-        confirmButtonText: '회원권 양도',
+        confirmButtonText: '락커 환불',
     }
-    toggleTransferCheckModal() {
-        this.showTransferCheckModal = !this.showTransferCheckModal
+    openEmptyModal() {
+        this.EmptyModalTextData.text = `'${this.wordService.ellipsis(this.selectedUserLocker.name, 13)}'
+            락커를 비우시겠어요?`
+        this.showEmptyModal = true
     }
-    onConfirmTransferCheck() {
-        this.chargeMode = 'transfer'
-        this.toggleTransferCheckModal()
+    hideEmptyModal() {
+        this.showEmptyModal = false
+    }
+    onConfirmEmptyModal() {
+        // !!  추가로 결제 해야할 지 환불해야할 지 상태를 확인하는 코드가 필요
+        this.chargeMode = 'extend'
+        this.hideEmptyModal()
         this.toggleChargeModal()
     }
 
@@ -138,11 +163,11 @@ export class UserDetailLockerComponent implements OnInit {
         subText: `정확한 매출 집계를 위해
             다음 단계에서 환불 금액을 입력해주세요.`,
         cancelButtonText: '취소',
-        confirmButtonText: '회원권 환불',
+        confirmButtonText: '락커 환불',
     }
     toggleShowRefundModal() {
         this.refundModalData.text = this.selectedUserLocker
-            ? `'${this.wordService.ellipsis(this.selectedUserLocker.name, 6)}' 회원권을 환불하시겠어요?`
+            ? `'${this.wordService.ellipsis(this.selectedUserLocker.name, 6)}' 락커를 환불하시겠어요?`
             : ''
         this.showRefundModal = !this.showRefundModal
     }
@@ -156,25 +181,212 @@ export class UserDetailLockerComponent implements OnInit {
     public showRemoveModal = false
     public removeModalData = {
         text: '',
-        subText: `해당 회원권에 대한 모든 정보가 삭제되며,
+        subText: `해당 락커에 대한 모든 정보가 삭제되며,
                 다시 복구하실 수 없어요.`,
         cancelButtonText: '취소',
-        confirmButtonText: '회원권 삭제',
+        confirmButtonText: '락커 삭제',
     }
     toggleRemoveModal() {
         this.removeModalData.text = this.selectedUserLocker
-            ? `'${this.wordService.ellipsis(this.selectedUserLocker.name, 6)}' 회원권을 삭제하시겠어요?`
+            ? `'${this.wordService.ellipsis(this.selectedUserLocker.name, 6)}' 락커를 삭제하시겠어요?`
             : ''
         this.showRemoveModal = !this.showRemoveModal
     }
     onConfirmRemove() {
+        this.callRemoveApi()
         this.showRemoveModal = false
     }
 
+    // modify Locker fullmodal
+    public showModifyLockerFullModal = false
+    toggleModifyLockerFullModal() {
+        this.showModifyLockerFullModal = !this.showModifyLockerFullModal
+    }
+    confirmModifyLocker() {
+        this.showModifyLockerFullModal = false
+    }
+
+    // update, remove hoding funcs
+    public showUpdateHoldModal = false
+    public updateHoldModalText = {
+        text: '',
+        subText: '홀딩 기간을 선택하신 후, [수정하기] 버튼을 클릭해주세요.',
+        cancelButtonText: '취소',
+        confirmButtonText: '홀딩 기간 수정하기',
+        startDateText: '홀딩 시작일',
+        endDateText: '홀딩 종료일',
+    }
+    public updateHoldData: HoldingOutput = undefined
+    public updateHoldDateInput: HoldingOutput = {
+        startDate: '',
+        endDate: '',
+    }
+    toggleUpdateHoldModal() {
+        this.updateHoldModalText.text = `'${this.wordService.ellipsis(
+            this.selectedUserLocker.name,
+            15
+        )}' 홀딩 기간을 수정하시겠어요?`
+        this.updateHoldDateInput = _.cloneDeep({
+            startDate: this.selectedUserLocker.pause_start_date,
+            endDate: this.selectedUserLocker.pause_end_date,
+        })
+        this.showUpdateHoldModal = !this.showUpdateHoldModal
+    }
+    hideUpdateHoldModal() {
+        this.showUpdateHoldModal = false
+    }
+    onUpdateHoldConfirm(output: DatePickConfirmOutput) {
+        this.updateHoldData = output.datepick
+        output.loadingFns.showLoading()
+        this.callUpdateHoldingApi(() => {
+            output.loadingFns.hideLoading()
+            this.showUpdateHoldModal = false
+        })
+    }
+
+    public showRemoveHoldModal = false
+    public removeHoldingModalData = {
+        text: '',
+        subText: `홀딩 정보를 삭제하실 경우,
+                홀딩중이거나 홀딩 예약된 정보가 모두 삭제돼요.`,
+        cancelButtonText: '취소',
+        confirmButtonText: '홀딩 정보 삭제',
+    }
+    toggleRemoveHoldingModal() {
+        this.removeHoldingModalData.text = this.selectedUserLocker
+            ? `'${this.wordService.ellipsis(this.selectedUserLocker.name, 6)}' 홀딩 정보를 삭제하시겠어요?`
+            : ''
+        this.showRemoveHoldModal = !this.showRemoveHoldModal
+    }
+    onConfirmRemoveHolding() {
+        this.callRemoveHoldingApi()
+        this.showRemoveHoldModal = false
+    }
+
     // api funcs
-    callExpendApi(cb?: () => void) {}
-    callHodingApi(cb?: () => void) {}
-    callTransferApi(cb?: () => void) {}
-    callRefundApi(cb?: () => void) {}
-    callRemoveApi(cb?: () => void) {}
+    callExpendApi(cb?: () => void) {
+        const reqBody: ExtendLockerTicketReqBody = {
+            end_date: this.extensionModalData.datepick.endDate,
+            payment: {
+                card: this.chargeData.pay_card,
+                trans: this.chargeData.pay_trans,
+                cash: this.chargeData.pay_cash,
+                unpaid: this.chargeData.unpaid,
+                vbank: 0,
+                phone: 0,
+                memo: '',
+                responsibility_user_id: this.chargeData.assignee_id,
+            },
+        }
+
+        this.centerUsersLockerService
+            .extendLockerTicket(this.center.id, this.curUserData.user.id, this.selectedUserLocker.id, reqBody)
+            .subscribe((userMembership) => {
+                this.nxStore.dispatch(
+                    showToast({
+                        text: `'${this.wordService.ellipsis(this.selectedUserLocker.name, 6)}' 기간이 연장되었습니다.`,
+                    })
+                )
+                this.nxStore.dispatch(
+                    DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.curUserData.user })
+                )
+                cb ? cb() : null
+            })
+    }
+    callHodingApi(cb?: () => void) {
+        const reqBody: PauseLockerTicketReqBody = {
+            pause_start_date: this.holdData.startDate,
+            pause_end_date: this.holdData.endDate,
+        }
+        this.centerUsersLockerService
+            .pauseLockerTicket(this.center.id, this.curUserData.user.id, this.selectedUserLocker.id, reqBody)
+            .subscribe((_) => {
+                const toastText = dayjs().isSameOrBefore(this.holdData.startDate)
+                    ? `'${this.wordService.ellipsis(this.selectedUserLocker.name, 6)}' 락커 홀딩되었습니다.`
+                    : `'${this.wordService.ellipsis(this.selectedUserLocker.name, 6)}' 락커 홀딩이 예약되었습니다.`
+                this.nxStore.dispatch(showToast({ text: toastText }))
+                this.nxStore.dispatch(
+                    DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.curUserData.user })
+                )
+                cb ? cb() : null
+            })
+    }
+    callEmptyApi(cb?: () => void) {}
+    callRefundApi(cb?: () => void) {
+        const reqBody: RefundLockerTicketReqBody = {
+            payment: {
+                card: this.chargeData.pay_card,
+                trans: this.chargeData.pay_trans,
+                cash: this.chargeData.pay_cash,
+                vbank: 0,
+                phone: 0,
+                memo: '',
+                responsibility_user_id: this.chargeData.assignee_id,
+            },
+        }
+        this.centerUsersLockerService
+            .refundLockerTicket(this.center.id, this.curUserData.user.id, this.selectedUserLocker.id, reqBody)
+            .subscribe((_) => {
+                this.nxStore.dispatch(
+                    showToast({
+                        text: `'${this.wordService.ellipsis(this.selectedUserLocker.name, 6)}' 락커가 환불되었습니다.`,
+                    })
+                )
+                this.nxStore.dispatch(
+                    DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.curUserData.user })
+                )
+                cb ? cb() : null
+            })
+    }
+    callRemoveApi(cb?: () => void) {
+        this.centerUsersLockerService
+            .deleteLockerTicket(this.center.id, this.curUserData.user.id, this.selectedUserLocker.id)
+            .subscribe((_) => {
+                this.nxStore.dispatch(
+                    showToast({
+                        text: `'${this.wordService.ellipsis(this.selectedUserLocker.name, 6)}' 락커가 삭제되었습니다.`,
+                    })
+                )
+                this.nxStore.dispatch(
+                    DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.curUserData.user })
+                )
+                cb ? cb() : null
+            })
+    }
+    callUpdateHoldingApi(cb?: () => void) {
+        const reqBody: PauseLockerTicketReqBody = {
+            pause_start_date: this.updateHoldData.startDate,
+            pause_end_date: this.updateHoldData.endDate,
+        }
+        this.centerUsersLockerService
+            .pauseLockerTicket(this.center.id, this.curUserData.user.id, this.selectedUserLocker.id, reqBody)
+            .subscribe((_) => {
+                const toastText = `'${this.wordService.ellipsis(
+                    this.selectedUserLocker.name,
+                    6
+                )}' 홀딩 기간이 수정되었습니다.`
+
+                this.nxStore.dispatch(showToast({ text: toastText }))
+                this.nxStore.dispatch(
+                    DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.curUserData.user })
+                )
+                cb ? cb() : null
+            })
+    }
+    callRemoveHoldingApi(cb?: () => void) {
+        this.centerUsersLockerService
+            .resumeLockerTicket(this.center.id, this.curUserData.user.id, this.selectedUserLocker.id)
+            .subscribe((_) => {
+                const toastText = `'${this.wordService.ellipsis(
+                    this.selectedUserLocker.name,
+                    6
+                )}' 홀딩 정보가 삭제되었습니다.`
+
+                this.nxStore.dispatch(showToast({ text: toastText }))
+                this.nxStore.dispatch(
+                    DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.curUserData.user })
+                )
+                cb ? cb() : null
+            })
+    }
 }

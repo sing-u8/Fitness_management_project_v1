@@ -1,0 +1,112 @@
+* {
+    padding: 0px;
+    margin: 0px;
+}
+
+.grid-locker-item {
+    background-color: var(--white) !important;
+    border: 1px solid rgba(207, 207, 207, 0.5) !important;
+    border-radius: 5px;
+    // overflow: visible;
+
+    &:hover {
+        border: 1px solid rgba(207, 207, 207, 1) !important;
+    }
+
+    &.selected {
+        border: 1px solid var(--font-color) !important;
+    }
+
+    &.is-using {
+        background-color: var(--background-color) !important;
+        .grid-locker-item-inner-container {
+            cursor: auto;
+        }
+    }
+    // move locker ticket css
+    &.move-locker-ticket-X {
+        box-shadow: 0px 0px 10px #b5b5b526;
+        background-color: #cfcfcf !important;
+        opacity: 0.3;
+        .grid-locker-item-inner-container {
+            cursor: not-allowed;
+        }
+    }
+    &.move-locker-ticket-O {
+        opacity: 1;
+        &:hover {
+            box-shadow: 0px 0px 10px #e34a5e26;
+            border: 2px solid var(--red) !important;
+            background-color: #e34a5e0d !important ;
+
+            .locker-name {
+                span {
+                    color: var(--red) !important;
+                }
+            }
+            .user-name {
+                color: var(--red) !important;
+            }
+        }
+    }
+
+    .move-locker-ticket-unavailable-mark {
+        position: absolute;
+        opacity: 0;
+
+        &.show {
+            opacity: 1;
+        }
+        .ur-dl {
+            position: absolute;
+            width: 1px;
+            height: 66px;
+            background-color: var(--darkgrey);
+            transform: rotate(45deg);
+            left: 16px;
+            top: -17px;
+            border-radius: 3px;
+        }
+        .ul-dr {
+            position: absolute;
+            width: 1px;
+            height: 68px;
+            background-color: var(--darkgrey);
+            transform: rotate(135deg);
+            left: 17px;
+            top: -16px;
+            border-radius: 3px;
+        }
+    }
+    // move locker ticket css
+
+    .grid-locker-item-inner-container {
+        width: 100%;
+        height: 100%;
+        padding: 8px 8px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        cursor: pointer;
+        position: relative;
+
+        .grid-locker-item-header,
+        .user-name {
+            height: 15px;
+        }
+        .user-name {
+            width: 100%;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        &:hover {
+            &.hide-warning-icon-container {
+                .warning-icon-container {
+                    display: none !important;
+                }
+            }
+        }
+    }
+}

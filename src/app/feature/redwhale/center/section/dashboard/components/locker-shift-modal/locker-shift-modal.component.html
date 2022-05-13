@@ -1,0 +1,38 @@
+<div class="rw-modal-background" #modalBackgroundElement></div>
+
+<div class="rw-modal-wrapper justify-content-center align-items-center" (mouseup)="!isMouseModalDown && onCancel()"
+    (mousedown)='resetMouseModalDown()' #modalWrapperElement>
+    <div class="rw-modal user-select-none" (mousedown)='onMouseModalDown(); $event.stopPropagation()'>
+        <div class="header">
+            <span class="rw-typo-bodytext0">락커 | 이동할 자리를 선택해주세요.</span>
+            <img src="assets/icons/etc/close.svg" (click)="onCancel()">
+        </div>
+
+        <db-ml-locker-select
+            [items]="categList"
+            [(ngModel)]="selectedCateg"
+            (change)="onSelectChange($event)">
+        </db-ml-locker-select>
+
+        <div class="locker-grid">
+            <gridster class="thin-scroll-x thin-scroll-y " [options]="gridsterOptions">
+                <db-move-locker-item
+                    *ngFor="let item of itemList; let idx = index"
+                    [lockerItem]="item"
+                    [userLocker]="userLocker"
+                    [isSameCategWithSelectedTicket]="isSameCategWithSelectedTicket"
+                    (onLockerItemClick)="onLockerItemClick($event, idx)"
+                ></db-move-locker-item>
+            </gridster>
+        </div>
+
+    </div>
+</div>
+
+
+<rw-modal
+    [(visible)]="shiftConfirmModal"
+    [data]="shiftConfirmText"
+    (cancel)="onShiftCancel()"
+    (confirm)="onShiftConfirm()"
+></rw-modal>

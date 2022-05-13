@@ -8,6 +8,10 @@ import { NotFoundComponent } from './core/not-found/not-found.component'
 const routes: Routes = [
     { path: '', loadChildren: () => import('./feature/homepage/homepage.module').then((m) => m.HomepageModule) },
     {
+        path: 'components',
+        loadChildren: () => import('./feature/component/components.module').then((m) => m.ComponentsModule),
+    },
+    {
         path: 'auth',
         loadChildren: () => import('./feature/redwhale/auth/auth.module').then((m) => m.AuthModule),
     },

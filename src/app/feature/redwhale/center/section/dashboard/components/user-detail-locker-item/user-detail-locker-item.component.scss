@@ -6,7 +6,7 @@
     position: relative;
     padding: 0px 25px;
     position: relative;
-
+    cursor: pointer;
 
     .border-bottom {
         width: calc(100% - 24px);
@@ -151,6 +151,7 @@
 .col-notification {
     display: none;
     align-items: center;
+    justify-content: space-between;
     min-width: calc(100% - 120px - 25px - 13px);
     width: calc(100% - 15.9574% - 25px - 13px);
     height: 26px;
@@ -162,6 +163,54 @@
 
     &.show-notification {
         display: flex;
+    }
+
+    .notification-menu {
+        background-image: url('/assets/icons/etc/menu-vertical.svg');
+        background-size: contain;
+        background-repeat: no-repeat;
+        width: 17px;
+        height: 17px;
+        margin-top: 2px;
+        margin-right: 12px;
+        border-radius: 5px;
+        cursor: pointer;
+        position: relative;
+        &:hover {
+            background-image: url('/assets/icons/etc/menu-vertical-grey.svg');
+        }
+
+        .l-menu-items {
+            display: none;
+            flex-direction: column;
+            padding: 5px 0px;
+            background-color: var(--white);
+            border-radius: 5px;
+            width: 116px;
+            position: absolute;
+            right: 0px;
+            top: 22px;
+            z-index: 1;
+            opacity: 1 !important;
+
+            font-weight: 500;
+            font-size: 1.2rem;
+            line-height: 17px;
+            letter-spacing: -0.144px;
+
+            &.show-items {
+                display: flex;
+            }
+
+            .menu-item {
+                padding: 8px 0px 8px 17px;
+                cursor: pointer;
+
+                &:hover {
+                    background-color: var(--background-color);
+                }
+            }
+        }
     }
 }
 

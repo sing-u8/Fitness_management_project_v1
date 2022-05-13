@@ -8,6 +8,7 @@ import { Refund } from '@schemas/refund'
 export interface UserLocker {
     id: string
     locker_item_id: string
+    locker_category_id: string
     state_code: string
     state_code_name: string
     category_name: string
