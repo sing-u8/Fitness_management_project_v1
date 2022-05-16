@@ -44,6 +44,29 @@
 .col4 {
     min-width: calc(100% - 200px - 230px - 76px);
     width: calc(100% - 26.5957% - 30.5851% - 10.1063%);
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .col4__left {
+        width: calc(100% - 78px);
+        display: flex;
+        flex-direction: column;
+        .status {
+
+        }
+        .status_desc {}
+    }
+    .col4__right {
+        width: 78px;
+
+        .cancel_button {
+
+        }
+    }
+
 }
 
 .col2 {

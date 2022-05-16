@@ -10,12 +10,12 @@
         {{membership.start_date}} - {{membership.end_date}} ({{membership.start_date | period : membership.end_date}})
     </div>
     <div class="col3" [class.notification]="isHolding">
-        {{membership.end_date | restPeriod}}일 / {{membership.unlimited ? '무제한' : membership.count }} 남음
+        {{membership.end_date | restPeriod}}일 / {{membership.unlimited ? '무제한' : membership.count + '회' }} 남음
     </div>
     <div class="col4" [class.notification]="isHolding">
         <div class="col4__content">
             필라테스 오전 초급반... 외 5개(test)
-
+회
             <div class="fill-down-icon"></div>
         </div>
         <div
@@ -38,8 +38,13 @@
             </div>
         </div>
     </div>
-    <div *ngIf="isHolding" class="col-notification" [class.show-notification]="isHolding">
-        {{membership.pause_start_date}} - {{membership.pause_end_date}} ({{membership.pause_start_date | period : membership.pause_end_date}}) 홀딩중
+    <div *ngIf="isHolding" class="rw-typo-subtext0-regular col-notification" [class.show-notification]="isHolding">
+
+        <div class="d-flex align-items-center">
+            <div class="alert-icon"></div>
+            {{membership.pause_start_date}} - {{membership.pause_end_date}} ({{membership.pause_start_date | period :
+            membership.pause_end_date}}일) 홀딩중
+        </div>
 
         <div
             class="notification-menu"
@@ -54,6 +59,7 @@
                     class="menu-item"
                     *ngFor="let item of holdingMenuDropDownItemObj | keyvalue : originalOrder"
                     [ngStyle]="{color: item.value.color}"
+                    [class.none] = "!item.value.visible"
                     (click) = "item.value.func()"
                 >
                     {{item.value.name}}

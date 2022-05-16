@@ -28,6 +28,9 @@
             <db-user-detail-payment-item
                 *ngFor = "let item of curUserData.payments"
                 [payment]="item"
+                (onUpdatePayment)="setSelectedPayment(item);"
+                (onUpdateTransfer)="setSelectedPayment(item);"
+                (onUpdateRefund)="setSelectedPayment(item);"
             ></db-user-detail-payment-item>
         </ng-template>
 

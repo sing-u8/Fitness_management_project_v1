@@ -141,6 +141,50 @@
     }
 }
 
+.rw-datepicker-multiline {
+    .week-row {
+        .week-col {
+            cursor: not-allowed !important;
+
+            &.start-date {
+                border-radius: 4px 0px 0px 4px;
+            }
+
+            &.end-date {
+                border-radius: 0px 4px 4px 0px;
+            }
+        }
+
+        .avaliable-date {
+            cursor: pointer !important;
+
+            &:hover {
+                // background-color: var(--background-color);
+                color: var(--red) !important;
+            }
+        }
+
+        .selected {
+            color: var(--white) !important;
+            background-color: var(--red);
+
+            &:hover {
+                background-color: var(--red);
+                color: var(--white) !important;
+            }
+        }
+
+        .between {
+            color: var(--white) !important;
+            background-color: var(--lighterred);
+
+            &:hover {
+                background-color: var(--lighterred);
+                color: var(--white) !important;
+            }
+        }
+    }
+}
 
 .isShadow {
     box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16) !important;

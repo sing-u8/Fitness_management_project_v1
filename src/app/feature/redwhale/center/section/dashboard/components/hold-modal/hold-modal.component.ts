@@ -70,23 +70,35 @@ export class HoldModalComponent implements AfterViewChecked, OnChanges, AfterVie
         startDate: '',
         endDate: '',
     }
-    public isDatepickReset = false
-    setDateReset(flag: boolean) {
-        this.isDatepickReset = flag
+    public isStartDatepicReset = false
+    setStartDatepickReset(flag: boolean) {
+        this.isStartDatepicReset = flag
+    }
+    public isEndDatepickReset = false
+    setEndDatepickReset(flag: boolean) {
+        this.isEndDatepickReset = flag
+    }
+    setDatepickReset(flag: boolean) {
+        this.isStartDatepicReset = flag
+        this.isEndDatepickReset = flag
     }
     onDatePickerChange(position: 'start' | 'end', date: { startDate: string; endDate: string }) {
         if (position == 'start') {
-            this.endDatePick = _.cloneDeep({
-                startDate: '',
-                endDate: '',
-            })
+            this.setEndDatepickReset(true)
+
             setTimeout(() => {
                 this.endDatePick = _.cloneDeep({
                     startDate: date.startDate,
                     endDate: '',
                 })
-            }, 10)
+
+                this.setEndDatepickReset(false)
+            }, 100)
         }
+    }
+    clickDatePick(event) {
+        console.log('click date pick : ', event)
+        event.stopPropagation()
     }
     constructor(private el: ElementRef, private renderer: Renderer2) {
         this.isMouseModalDown = false
@@ -129,8 +141,7 @@ export class HoldModalComponent implements AfterViewChecked, OnChanges, AfterVie
                     this.renderer.addClass(this.modalWrapperElement.nativeElement, 'rw-modal-wrapper-show')
                 }, 0)
 
-                this.setCompVars()
-                this.setDateReset(false)
+                this.setDatepickReset(false)
             } else {
                 this.renderer.removeClass(this.modalBackgroundElement.nativeElement, 'rw-modal-background-show')
                 this.renderer.removeClass(this.modalWrapperElement.nativeElement, 'rw-modal-wrapper-show')
@@ -138,8 +149,8 @@ export class HoldModalComponent implements AfterViewChecked, OnChanges, AfterVie
                     this.renderer.removeClass(this.modalBackgroundElement.nativeElement, 'display-block')
                     this.renderer.removeClass(this.modalWrapperElement.nativeElement, 'display-flex')
                 }, 200)
-
-                this.setDateReset(true)
+                this.setCompVars()
+                this.setDatepickReset(true)
             }
         }
     }

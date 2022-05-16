@@ -232,6 +232,7 @@ export class UserDetailMembershipComponent implements OnInit {
             startDate: this.selectedUserMembership.pause_start_date,
             endDate: this.selectedUserMembership.pause_end_date,
         })
+        console.log('toggleUpdateHoldModal : ', this.updateHoldDateInput)
         this.showUpdateHoldModal = !this.showUpdateHoldModal
     }
     hideUpdateHoldModal() {

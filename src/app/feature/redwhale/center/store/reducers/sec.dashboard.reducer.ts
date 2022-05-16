@@ -9,6 +9,7 @@ import { UserLocker } from '@schemas/user-locker'
 import { UserMembership } from '@schemas/user-membership'
 import { Payment } from '@schemas/payment'
 import { Loading } from '@schemas/store/loading'
+import { Booking } from '@schemas/booking'
 
 import * as DashboardActions from '../actions/sec.dashboard.actions'
 
@@ -23,8 +24,8 @@ export type CurUseData = {
     user: CenterUser
     lockers: UserLocker[]
     memberships: UserMembership[]
-    payments: Payment[] // !! user paymnet
-    reservations: any[] // !! user reservation
+    payments: Payment[]
+    reservations: Booking[]
 }
 
 export type UserDetailTag = 'membership' | 'locker' | 'reservation' | 'payment'

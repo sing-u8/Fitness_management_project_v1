@@ -7,7 +7,7 @@ export interface Payment {
     user_locker_id: string
     user_locker_category_name: string
     user_locker_name: string
-    type_code: string
+    type_code: 'payment_type_payment' | 'payment_type_refund' | 'payment_type_transfer'
     type_code_name: string
     card: number
     trans: number

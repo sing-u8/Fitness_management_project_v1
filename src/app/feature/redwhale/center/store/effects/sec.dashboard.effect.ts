@@ -17,6 +17,7 @@ import { FileService } from '@services/file.service'
 import { CenterUsersLockerService } from '@services/center-users-locker.service.service'
 import { CenterUsersMembershipService } from '@services/center-users-membership.service'
 import { CenterUsersPaymentService } from '@services/center-users-payment.service'
+import { CenterUsersBookingService } from '@services/center-users-booking.service'
 
 import { CenterUser } from '@schemas/center-user'
 
@@ -29,7 +30,8 @@ export class DashboardEffect {
         private actions$: Actions,
         private centerUsersLockerApi: CenterUsersLockerService,
         private centerUsersMembershipApi: CenterUsersMembershipService,
-        private centerUsersPaymentApi: CenterUsersPaymentService
+        private centerUsersPaymentApi: CenterUsersPaymentService,
+        private centerUsersBookingService: CenterUsersBookingService
     ) {}
 
     public loadMemberList$ = createEffect(() =>
@@ -107,7 +109,7 @@ export class DashboardEffect {
                     lockers: this.centerUsersLockerApi.getLockerTickets(centerId, centerUser.id),
                     memberships: this.centerUsersMembershipApi.getMembershipTickets(centerId, centerUser.id),
                     payments: this.centerUsersPaymentApi.getPayments(centerId, centerUser.id),
-                    reservations: of([]),
+                    reservations: this.centerUsersBookingService.getBookings(centerId, centerUser.id),
                 }).pipe(
                     switchMap(({ memberships, lockers, payments, reservations }) => {
                         return [DashboardActions.finishGetUserData({ memberships, lockers, payments, reservations })]

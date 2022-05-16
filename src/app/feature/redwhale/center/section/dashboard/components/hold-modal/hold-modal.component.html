@@ -41,7 +41,8 @@
                             [option]="'onlyStart'"
                             [(data)]="startDatepick"
                             (dataChange)="onDatePickerChange('start', $event)"
-                            [(resetFlag)]="isDatepickReset"
+                            [(resetFlag)]="isStartDatepicReset"
+                            (click) = 'clickDatePick($event)'
                         ></rw-datepicker>
                     </div>
                 </div>
@@ -66,7 +67,8 @@
                             [option]="'onlyEnd'"
                             [(data)]="endDatePick"
                             (dataChange)="onDatePickerChange('end', $event)"
-                            [(resetFlag)]="isDatepickReset"
+                            [(resetFlag)]="isEndDatepickReset"
+                            (click) = 'clickDatePick($event)'
                         ></rw-datepicker>
                     </div>
                 </div>

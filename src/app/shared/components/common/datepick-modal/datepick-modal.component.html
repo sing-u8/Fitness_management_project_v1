@@ -30,7 +30,8 @@
                         <rw-datepicker
                             mode="reg-ml" [option]="'onlyStart'" [(data)]="startDatepick"
                             (dataChange)="onDatePickerChange('start', $event)"
-                            [(resetFlag)]="isDatepickReset"
+                            [(resetFlag)]="isStartDatepicReset"
+                            (click)="$event.stopPropagation()"
                         ></rw-datepicker>
                     </div>
                 </div>
@@ -49,7 +50,8 @@
                         <rw-datepicker
                             mode="reg-ml" [option]="'onlyEnd'" [(data)]="endDatePick"
                             (dataChange)="onDatePickerChange('end', $event)"
-                            [(resetFlag)]="isDatepickReset"
+                            [(resetFlag)]="isEndDatepickReset"
+                            (click)="$event.stopPropagation()"
                         ></rw-datepicker>
                     </div>
                 </div>

@@ -47,8 +47,98 @@
 }
 
 .col5 {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
     min-width: calc(100% - 89px - 46px - 156px - 83px);
     width: calc(100% - 11.8351% - 6.1170% - 20.7446% - 11.0372%);
+
+    .total-price {
+        width: 100%;
+    }
+
+    .l-prices {
+        display: flex;
+        margin-top: 7px;
+        .price {
+            display: flex;
+            align-items: center;
+            .price-icon {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 26px;
+                height: 17px;
+                background: #FFFFFF;
+                border: 1px solid #C9C9C9;
+                border-radius: 4px;
+            }
+            .price-text {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                width: 53px;
+                display: flex;
+                justify-content: flex-start;
+                margin: 0 10px 0 5px;
+            }
+        }
+    }
+
+    div.col5__menu {
+        background-image: url('/assets/icons/etc/menu-vertical.svg');
+        background-size: contain;
+        background-repeat: no-repeat;
+        width: 20px;
+        height: 20px;
+        margin-top: 2px;
+        border-radius: 5px;
+        cursor: pointer;
+        position: absolute;
+        right: 0px;
+
+        &:hover {
+            background-image: url('/assets/icons/etc/menu-vertical-grey.svg');
+        }
+
+        .l-menu-items {
+            display: none;
+            flex-direction: column;
+            padding: 5px 0px;
+            background-color: var(--white);
+            border-radius: 5px;
+            width: 116px;
+            position: absolute;
+            right: 0px;
+            top: 22px;
+            z-index: 1;
+            opacity: 1 !important;
+
+            font-weight: 500;
+            font-size: 1.2rem;
+            line-height: 17px;
+            letter-spacing: -0.144px;
+
+            &.show-items {
+                display: flex;
+            }
+
+            .menu-item {
+                padding: 8px 0px 8px 17px;
+                cursor: pointer;
+
+                &:hover {
+                    background-color: var(--background-color);
+                }
+
+                &.none {
+                    display: none;
+                }
+            }
+        }
+    }
 }
 
 .col1,
@@ -69,6 +159,17 @@
     line-height: 19px;
     letter-spacing: -0.2px;
     color: #212121;
+}
+
+.isExpired {
+
+    .col1,
+    .col2,
+    .col3,
+    .col4,
+    .col5 {
+        opacity: 0.5;
+    }
 }
 
 @media (min-width: 1440px) {

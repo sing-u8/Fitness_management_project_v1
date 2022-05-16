@@ -161,23 +161,34 @@
     right: 13px;
     bottom: 8px;
 
+    color: #C96B12 !important;
+
     &.show-notification {
         display: flex;
     }
 
+    .alert-icon {
+        background-image: url('/assets/icons/etc/exceed_period_orange.svg');
+        background-size: contain;
+        background-repeat: no-repeat;
+        width: 21px;
+        height: 21px;
+        margin: 3px 2px 0 5px;
+    }
+
     .notification-menu {
-        background-image: url('/assets/icons/etc/menu-vertical.svg');
+        background-image: url('/assets/icons/etc/menu-vertical-orange.svg');
         background-size: contain;
         background-repeat: no-repeat;
         width: 17px;
         height: 17px;
         margin-top: 2px;
-        margin-right: 12px;
+        margin-right: 15px;
         border-radius: 5px;
         cursor: pointer;
         position: relative;
         &:hover {
-            background-image: url('/assets/icons/etc/menu-vertical-grey.svg');
+            background-image: url('/assets/icons/etc/menu-vertical-lightorange.svg');
         }
 
         .l-menu-items {
@@ -208,6 +219,10 @@
 
                 &:hover {
                     background-color: var(--background-color);
+                }
+
+                &.none {
+                    display: none;
                 }
             }
         }

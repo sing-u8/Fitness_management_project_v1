@@ -32,7 +32,14 @@ export interface ChargeType {
     assignee_id: string
 }
 export type ModalInput = 'pay_card' | 'pay_cash' | 'pay_trans' | 'unpaid'
-export type ChargeMode = 'extend' | 'transfer' | 'refund' | 'empty_payment' | 'empty_refund'
+export type ChargeMode =
+    | 'extend'
+    | 'transfer'
+    | 'refund'
+    | 'empty_payment'
+    | 'empty_refund'
+    | 'transfer_payment'
+    | 'refund_payment'
 export interface ConfirmOuput {
     chargeType: ChargeType
     loadingFns: ClickEmitterType

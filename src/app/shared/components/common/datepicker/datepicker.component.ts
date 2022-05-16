@@ -111,7 +111,7 @@ export class DatepickerComponent implements OnInit, OnChanges, AfterViewChecked,
             return true
         } else if (
             changes['data']['currentValue']?.startDate != changes['data']['previousValue']?.startDate ||
-            changes['data']['currentValue']?.startDate != changes['data']['previousValue']?.startDate
+            changes['data']['currentValue']?.endDate != changes['data']['previousValue']?.endDate
         ) {
             return true
         } else {
@@ -136,13 +136,13 @@ export class DatepickerComponent implements OnInit, OnChanges, AfterViewChecked,
             }
         }
 
-        if (changes['resetFlag'] && !changes['resetFlag'].firstChange) {
+        if (changes['resetFlag']) {
             if (
                 changes['resetFlag'].previousValue != changes['resetFlag'].currentValue &&
                 changes['resetFlag'].currentValue == true
             ) {
                 this.resetDateVars()
-                this.dataChange.emit(false)
+                this.resetFlagChange.emit(false)
             }
         }
     }
@@ -376,7 +376,6 @@ export class DatepickerComponent implements OnInit, OnChanges, AfterViewChecked,
     // ------------------ multi line methods -----------------------------------------------------------------------------------
     multiLineSelectDate(weekCol) {
         this.toggleEdge(weekCol) == false ? this.setInitialLineDate(weekCol) : null
-        this.dataChange.emit(this.lineSelectedDateObj)
     }
     // helper
     setInitialLineDate(weekCol) {
@@ -396,11 +395,14 @@ export class DatepickerComponent implements OnInit, OnChanges, AfterViewChecked,
     initNormalDateweekCol(weekCol) {
         if (!this.lineSelectedDateObj.startDate) {
             this.lineSelectedDateObj.startDate = weekCol.date
+            this.dataChange.emit(this.lineSelectedDateObj)
         } else if (!this.lineSelectedDateObj.endDate) {
             if (moment(weekCol.date).isSameOrBefore(this.lineSelectedDateObj.startDate, 'day')) {
                 this.lineSelectedDateObj.startDate = weekCol.date
+                this.dataChange.emit(this.lineSelectedDateObj)
             } else {
                 this.lineSelectedDateObj.endDate = weekCol.date
+                this.dataChange.emit(this.lineSelectedDateObj)
             }
         } else if (this.lineSelectedDateObj.startDate && this.lineSelectedDateObj.endDate) {
             this.lineSelectedDateObj.startDate = moment(weekCol.date).isBefore(
@@ -413,6 +415,7 @@ export class DatepickerComponent implements OnInit, OnChanges, AfterViewChecked,
                 moment(weekCol.date).isAfter(this.lineSelectedDateObj.endDate, 'day') || this.isBetween(weekCol)
                     ? weekCol.date
                     : this.lineSelectedDateObj.endDate
+            this.dataChange.emit(this.lineSelectedDateObj)
         }
     }
     initRegisterDate(weekCol) {
@@ -424,8 +427,10 @@ export class DatepickerComponent implements OnInit, OnChanges, AfterViewChecked,
             return
         if (!this.lineSelectedDateObj.startDate) {
             this.lineSelectedDateObj.startDate = moment().format('YYYY-MM-DD')
+            this.dataChange.emit(this.lineSelectedDateObj)
         } else {
             this.lineSelectedDateObj.endDate = weekCol.date
+            this.dataChange.emit(this.lineSelectedDateObj)
         }
 
         // this.initNormalDateweekCol(weekCol)
@@ -438,8 +443,10 @@ export class DatepickerComponent implements OnInit, OnChanges, AfterViewChecked,
             return
         if (!this.lineSelectedDateObj.startDate) {
             this.lineSelectedDateObj.startDate = weekCol.date
+            this.dataChange.emit(this.lineSelectedDateObj)
         } else {
             this.lineSelectedDateObj.endDate = weekCol.date
+            this.dataChange.emit(this.lineSelectedDateObj)
         }
     }
 
@@ -514,7 +521,6 @@ export class DatepickerComponent implements OnInit, OnChanges, AfterViewChecked,
     // --------- reg ml method --------------------------------------------------------------------------------------------------
     regMLSelectDate(weekCol) {
         this.toggleEdge(weekCol) == false ? this.setInitRegML(weekCol) : null
-        this.dataChange.emit(this.lineSelectedDateObj)
     }
 
     setInitRegML(weekCol) {
@@ -537,27 +543,43 @@ export class DatepickerComponent implements OnInit, OnChanges, AfterViewChecked,
     initOnlyStartDateWeekCol(weekCol) {
         if (moment(weekCol.date).isBefore(moment().format('YYYY-MM-DD'), 'day')) return
         this.lineSelectedDateObj.startDate = weekCol.date
+
+        this.dataChange.emit({
+            startDate: weekCol.date,
+            endDate: this.data?.endDate ?? '',
+        })
+        // this.dataChange.emit(this.lineSelectedDateObj)
     }
+
     initOnlyEndDateWeekCol(weekCol) {
         if (moment(weekCol.date).isBefore(moment().format('YYYY-MM-DD'), 'day')) return
         if (!this.lineSelectedDateObj.startDate) {
             this.lineSelectedDateObj.startDate = weekCol.date
+            this.dataChange.emit(this.lineSelectedDateObj)
         } else if (
             !moment(weekCol.date).isSameOrBefore(moment(this.lineSelectedDateObj.startDate).format('YYYY-MM-DD'), 'day')
         ) {
             this.lineSelectedDateObj.endDate = weekCol.date
+            this.dataChange.emit(this.lineSelectedDateObj)
         }
     }
     initLooseOnlyStartDateWeekCol(weekCol) {
         this.lineSelectedDateObj.startDate = weekCol.date
+        // this.dataChange.emit(this.lineSelectedDateObj)
+        this.dataChange.emit({
+            startDate: weekCol.date,
+            endDate: this.data?.endDate ?? '',
+        })
     }
     initLooseOnlyEndDateWeekCol(weekCol) {
         if (!this.lineSelectedDateObj.startDate) {
             this.lineSelectedDateObj.startDate = weekCol.date
+            this.dataChange.emit(this.lineSelectedDateObj)
         } else if (
             !moment(weekCol.date).isSameOrBefore(moment(this.lineSelectedDateObj.startDate).format('YYYY-MM-DD'), 'day')
         ) {
             this.lineSelectedDateObj.endDate = weekCol.date
+            this.dataChange.emit(this.lineSelectedDateObj)
         }
     }
 

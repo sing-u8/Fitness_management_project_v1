@@ -20,14 +20,21 @@ dayjs.extend(weekOfYear)
 dayjs.extend(isBetween)
 
 @Component({
-    selector: 'rw-datepicker2',
-    templateUrl: './datepicker2.component.html',
-    styleUrls: ['./datepicker2.component.scss'],
+    selector: 'rw-datepicker3',
+    templateUrl: './datepicker3.component.html',
+    styleUrls: ['./datepicker3.component.scss'],
 })
-export class Datepicker2Component implements OnInit, OnChanges, AfterViewChecked, AfterViewInit {
+export class Datepicker3Component implements OnInit, OnChanges, AfterViewChecked, AfterViewInit {
     @Input() isShadow = true
     @Input() mode: 'date' | 'week' | 'multi' | 'modify-range'
-
+    @Input() option:
+        | 'normal'
+        | 'register'
+        | 'extend'
+        | 'onlyStart' // -- modify-range
+        | 'onlyEnd'
+        | 'looseOnlyStart'
+        | 'looseOnlyEnd' = 'normal' // modify-range --
     @Input() data: any
     @Input() shadowOn: boolean
 
@@ -299,5 +306,146 @@ export class Datepicker2Component implements OnInit, OnChanges, AfterViewChecked
         })
 
         this.dataChange.emit(selectedDateList)
+    }
+
+    toggleEdge(weekCol): boolean {
+        let isToggled = false
+        if (
+            this.lineSelectedDateObj.startDate &&
+            dayjs(weekCol.date).isSame(this.lineSelectedDateObj.startDate, 'day') &&
+            this.option == 'normal'
+        ) {
+            this.lineSelectedDateObj.startDate = ''
+            isToggled = true
+        } else if (
+            this.lineSelectedDateObj.endDate &&
+            dayjs(weekCol.date).isSame(this.lineSelectedDateObj.endDate, 'day')
+        ) {
+            this.lineSelectedDateObj.endDate = ''
+            isToggled = true
+        }
+        return isToggled
+    }
+
+    // deprecated 메세지가 나타났음 - 나중에 수정하기 !
+    isEdgeDate(weekCol) {
+        return this.lineSelectedDateObj.startDate == weekCol.date || this.lineSelectedDateObj.endDate == weekCol.date
+            ? true
+            : false
+    }
+    isStartDate(weekCol) {
+        return this.lineSelectedDateObj.startDate == weekCol.date ? true : false
+    }
+    isEndDate(weekCol) {
+        return this.lineSelectedDateObj.endDate == weekCol.date ? true : false
+    }
+    isBetween(weekCol) {
+        return dayjs(weekCol.date).isBetween(this.lineSelectedDateObj.startDate, this.lineSelectedDateObj.endDate)
+            ? true
+            : false
+    }
+    getDayFromStartDate(weekCol) {
+        if (this.lineSelectedDateObj.startDate) {
+            const startDate = dayjs(this.lineSelectedDateObj.startDate)
+            const targetDate = dayjs(weekCol.date)
+            return targetDate.diff(startDate, 'days') + 1
+        }
+        return 0
+    }
+    pastDisable(weekCol) {
+        return !this.lineSelectedDateObj.startDate ||
+            dayjs(weekCol.date).isSameOrBefore(this.lineSelectedDateObj.startDate)
+            ? true
+            : false
+    }
+    isAvailableDate(weekCol) {
+        switch (this.option) {
+            case 'normal':
+                return true
+            case 'register':
+                return !dayjs(weekCol.date).isBefore(dayjs().format('YYYY-MM-DD'), 'day')
+            case 'extend':
+                return !dayjs(weekCol.date).isBefore(dayjs().format(this.lineSelectedDateObj.startDate), 'day')
+            default:
+                return false
+        }
+    }
+
+    // --------- modify-range method --------------------------------------------------------------------------------------------------
+    regMLSelectDate(weekCol) {
+        this.toggleEdge(weekCol) == false ? this.setInitRegML(weekCol) : null
+    }
+
+    setInitRegML(weekCol) {
+        switch (this.option) {
+            case 'onlyStart':
+                this.initOnlyStartDateWeekCol(weekCol)
+                break
+            case 'onlyEnd':
+                this.initOnlyEndDateWeekCol(weekCol)
+                break
+            case 'looseOnlyStart':
+                this.initLooseOnlyStartDateWeekCol(weekCol)
+                break
+            case 'looseOnlyEnd':
+                this.initLooseOnlyEndDateWeekCol(weekCol)
+                break
+        }
+    }
+
+    initOnlyStartDateWeekCol(weekCol) {
+        if (dayjs(weekCol.date).isBefore(dayjs().format('YYYY-MM-DD'), 'day')) return
+        this.lineSelectedDateObj.startDate = weekCol.date
+
+        this.dataChange.emit({
+            startDate: weekCol.date,
+            endDate: this.data?.endDate ?? '',
+        })
+    }
+
+    initOnlyEndDateWeekCol(weekCol) {
+        if (dayjs(weekCol.date).isBefore(dayjs().format('YYYY-MM-DD'), 'day')) return
+        if (!this.lineSelectedDateObj.startDate) {
+            this.lineSelectedDateObj.startDate = weekCol.date
+            this.dataChange.emit(this.lineSelectedDateObj)
+        } else if (
+            !dayjs(weekCol.date).isSameOrBefore(dayjs(this.lineSelectedDateObj.startDate).format('YYYY-MM-DD'), 'day')
+        ) {
+            this.lineSelectedDateObj.endDate = weekCol.date
+            this.dataChange.emit(this.lineSelectedDateObj)
+        }
+    }
+    initLooseOnlyStartDateWeekCol(weekCol) {
+        this.lineSelectedDateObj.startDate = weekCol.date
+        this.dataChange.emit({
+            startDate: weekCol.date,
+            endDate: this.data?.endDate ?? '',
+        })
+    }
+    initLooseOnlyEndDateWeekCol(weekCol) {
+        if (!this.lineSelectedDateObj.startDate) {
+            this.lineSelectedDateObj.startDate = weekCol.date
+            this.dataChange.emit(this.lineSelectedDateObj)
+        } else if (
+            !dayjs(weekCol.date).isSameOrBefore(dayjs(this.lineSelectedDateObj.startDate).format('YYYY-MM-DD'), 'day')
+        ) {
+            this.lineSelectedDateObj.endDate = weekCol.date
+            this.dataChange.emit(this.lineSelectedDateObj)
+        }
+    }
+
+    regML_IsAvailableDate(weekCol) {
+        switch (this.option) {
+            case 'onlyStart':
+                return !dayjs(weekCol.date).isBefore(dayjs().format('YYYY-MM-DD'), 'day')
+            case 'onlyEnd':
+                return !dayjs(weekCol.date).isBefore(dayjs().format(this.lineSelectedDateObj.startDate), 'day')
+            case 'looseOnlyStart':
+                return true
+            case 'looseOnlyEnd':
+                return !dayjs(weekCol.date).isBefore(dayjs().format(this.lineSelectedDateObj.startDate), 'day')
+            default:
+                return false
+        }
     }
 }
