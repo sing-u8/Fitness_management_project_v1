@@ -13,52 +13,50 @@ import {
     ElementRef,
     Renderer2,
 } from '@angular/core'
-import dayjs from 'dayjs'
-import weekOfYear from 'dayjs/plugin/weekOfYear'
-import isBetween from 'dayjs/plugin/isBetween'
-dayjs.extend(weekOfYear)
-dayjs.extend(isBetween)
+import moment from 'moment-timezone'
 
+// 멀티 라인일 떄 현재 날짜 이전은 선택 불가 기능 추가하기
 @Component({
-    selector: 'rw-datepicker3',
-    templateUrl: './datepicker3.component.html',
-    styleUrls: ['./datepicker3.component.scss'],
+    selector: 'db-datepicker',
+    templateUrl: './db-datepicker.component.html',
+    styleUrls: ['./db-datepicker.component.scss'],
 })
-export class Datepicker3Component implements OnInit, OnChanges, AfterViewChecked, AfterViewInit {
+export class DbDatepickerComponent implements OnInit, OnChanges, AfterViewChecked, AfterViewInit {
     @Input() isShadow = true
-    @Input() mode: 'date' | 'week' | 'multi' | 'modify-range'
+    @Input() mode: string // date, week, multi, multiline, multiline-component, reg-ml, holding
     @Input() option:
         | 'normal'
         | 'register'
-        | 'extend'
-        | 'onlyStart' // -- modify-range
+        | 'extend' /* only multiline until this line*/
+        | 'onlyStart'
         | 'onlyEnd'
         | 'looseOnlyStart'
-        | 'looseOnlyEnd' = 'normal' // modify-range --
-    @Input() data: any
-    @Input() shadowOn: boolean
+        | 'looseOnlyEnd' /* only reg-ml until this line*/
+    @Input() width: string
 
+    @Input() data: any
     @Output() dataChange = new EventEmitter<any>()
 
-    public month: string
-    public today: dayjs.Dayjs
-    public currentDate: dayjs.Dayjs
-    public weekRows: any
+    @ViewChild('multiline_datepicker') multiline_datepicker: ElementRef
+
+    month: string
+    today: moment.Moment
+    currentDate: moment.Moment
+    weekRows: any
 
     // date
-    public selectedDate: string
-    public selectedDateIndex: any
+    selectedDate: string
+    selectedDateIndex: any
 
     // week
-    public weekNumbers
-    public selectedWeek
-    public selectedWeekIndex: number
+    weekNumbers
+    selectedWeek
+    selectedWeekIndex: number
 
     // multi
-    public selectedDateObj: any
-
-    // lineselect
-    public lineSelectedDateObj: { startDate: string; endDate: string } = { startDate: '', endDate: '' }
+    selectedDateObj: any
+    // multiline and   reg-ml : register-membership-locker datepicker
+    lineSelectedDateObj: { startDate: string; endDate: string }
 
     changed
     afterViewCheckedDate
@@ -71,32 +69,80 @@ export class Datepicker3Component implements OnInit, OnChanges, AfterViewChecked
             i: -1,
             j: -1,
         }
+
         this.selectedDateObj = {}
+        this.lineSelectedDateObj = { startDate: '', endDate: '' }
     }
 
     setDatePick() {
-        this.today = dayjs()
+        this.today = moment()
         if (this.mode == 'date' && this.data.date) {
-            this.currentDate = dayjs(this.data.date)
+            this.currentDate = moment(this.data.date)
         } else if (this.mode == 'week' && this.data.startDate) {
-            this.currentDate = dayjs(this.data.startDate)
+            this.currentDate = moment(this.data.startDate)
+        } else if (false) {
+        } else if ((this.mode == 'multiline' || this.mode == 'multiline-component') && this.data.startDate) {
+            this.multiLineSelectDate({ date: this.data?.startDate })
+            this.multiLineSelectDate({ date: this.data?.endDate })
+            this.currentDate = moment()
+        } else if (this.mode == 'reg-ml') {
+            if (this.option == 'onlyStart' || this.option == 'looseOnlyStart') {
+                this.regMLSelectDate({ date: this.data.startDate })
+            } else if (this.option == 'onlyEnd' || this.option == 'looseOnlyEnd') {
+                this.regMLSelectDate({ date: this.data.startDate })
+                this.regMLSelectDate({ date: this.data.endDate })
+            }
+            this.currentDate = moment()
         } else {
-            this.currentDate = dayjs()
+            this.currentDate = moment()
         }
         this.month = this.currentDate.clone().format('YYYY년 MM월')
         this.getDays(this.currentDate)
     }
 
-    ngOnInit(): void {
-        this.setDatePick()
-    }
-    ngOnChanges(changes: SimpleChanges): void {
-        if (changes.hasOwnProperty('data') && !changes['data']['firstChange']) {
-            this.changed = true
-            this.setDatePick()
+    checkDifference(changes: SimpleChanges) {
+        if (
+            changes['data']['currentValue']?.date &&
+            changes['data']['currentValue']['date'] != changes['data']['previousValue']['date']
+        ) {
+            return true
+        } else if (
+            changes['data']['currentValue']?.startDate != changes['data']['previousValue']?.startDate ||
+            changes['data']['currentValue']?.endDate != changes['data']['previousValue']?.endDate
+        ) {
+            return true
+        } else {
+            return false
         }
     }
-    ngAfterViewInit(): void {}
+
+    ngOnInit(): void {
+        this.option = this.option ?? 'normal'
+        this.setDatePick()
+    }
+
+    ngOnChanges(changes: SimpleChanges) {
+        if (changes.hasOwnProperty('data') && !changes['data']['firstChange']) {
+            this.changed = true
+            this.getDays(this.currentDate)
+        }
+
+        if (changes.hasOwnProperty('data')) {
+            if (this.checkDifference(changes)) {
+                this.setDatePick()
+            }
+        }
+    }
+    ngAfterViewInit() {
+        if (this.width) {
+            const paddingSide = (Number(this.width) - 255) / 2 + 10
+            this.renderer.setStyle(this.multiline_datepicker.nativeElement, 'width', `${this.width}px`)
+            this.renderer.setStyle(this.multiline_datepicker.nativeElement, 'padding', `10px ${paddingSide}px`)
+        }
+        if (this.mode == 'multiline-component') {
+            this.renderer.setStyle(this.multiline_datepicker.nativeElement, 'boxShadow', `none`)
+        }
+    }
     ngAfterViewChecked() {
         if (this.mode == 'date' && this.afterViewCheckedDate != this.data.date) {
             this.afterViewCheckedDate = this.data.date
@@ -107,7 +153,7 @@ export class Datepicker3Component implements OnInit, OnChanges, AfterViewChecked
                 this.selectedDate = ''
                 this.zone.runOutsideAngular(() => {
                     setTimeout(() => {
-                        this.currentDate = dayjs(this.data.date)
+                        this.currentDate = moment(this.data.date)
                         this.month = this.currentDate.clone().format('YYYY년 MM월')
                         this.getDays(this.currentDate)
                     }, 1)
@@ -121,7 +167,7 @@ export class Datepicker3Component implements OnInit, OnChanges, AfterViewChecked
                 this.changed = false
                 this.zone.runOutsideAngular(() => {
                     setTimeout(() => {
-                        this.currentDate = dayjs(this.data.startDate)
+                        this.currentDate = moment(this.data.startDate)
                         this.month = this.currentDate.clone().format('YYYY년 MM월')
                         this.getDays(this.currentDate)
                     }, 1)
@@ -130,7 +176,13 @@ export class Datepicker3Component implements OnInit, OnChanges, AfterViewChecked
         }
     }
 
-    getDays(currentDate: dayjs.Dayjs) {
+    resetDateVars() {
+        this.selectedDate = ''
+        this.selectedDateObj = {}
+        this.lineSelectedDateObj = { startDate: '', endDate: '' }
+    }
+
+    getDays(currentDate: moment.Moment) {
         const firstWeek = currentDate.clone().startOf('month').week()
         const lastWeek =
             currentDate.clone().endOf('month').week() === 1 ? 53 : currentDate.clone().endOf('month').week()
@@ -156,11 +208,11 @@ export class Datepicker3Component implements OnInit, OnChanges, AfterViewChecked
                 }
 
                 if (date.format('YYYYMMDD') == this.today.format('YYYYMMDD')) {
-                    weekCol['color'] = 'rgb(227, 74, 94)'
+                    weekCol['color'] = 'rgb(51, 102, 255)'
                 } else if (date.format('MM') != currentDate.format('MM')) {
                     weekCol['color'] = 'rgb(228, 233, 242)'
                 } else {
-                    weekCol['color'] = 'rgb(96, 96, 96)'
+                    weekCol['color'] = 'rgb(143, 155, 179)'
                 }
 
                 if (this.mode == 'date') {
@@ -253,7 +305,7 @@ export class Datepicker3Component implements OnInit, OnChanges, AfterViewChecked
 
         this.dataChange.emit({ date: this.selectedDate })
 
-        const selectedYearMonth = dayjs(this.selectedDate).format('YYYY-MM')
+        const selectedYearMonth = moment(this.selectedDate).format('YYYY-MM')
         if (selectedYearMonth < this.currentDate.format('YYYY-MM')) {
             this.previousMonth()
         } else if (this.currentDate.format('YYYY-MM') < selectedYearMonth) {
@@ -286,7 +338,7 @@ export class Datepicker3Component implements OnInit, OnChanges, AfterViewChecked
         const startDate = this.weekRows[i][0]['date']
         const endDate = this.weekRows[i][6]['date']
 
-        const week = dayjs(startDate).week()
+        const week = moment(startDate).week()
         this.selectedWeek = week
 
         this.dataChange.emit({ startDate: startDate, endDate: endDate })
@@ -294,7 +346,7 @@ export class Datepicker3Component implements OnInit, OnChanges, AfterViewChecked
 
     checkSelectedWeek() {
         if (this.data.startDate) {
-            const week = dayjs(this.data.startDate).week()
+            const week = moment(this.data.startDate).week()
             this.selectedWeek = week
         }
     }
@@ -308,18 +360,97 @@ export class Datepicker3Component implements OnInit, OnChanges, AfterViewChecked
         this.dataChange.emit(selectedDateList)
     }
 
+    // ------------------ multi line methods -----------------------------------------------------------------------------------
+    multiLineSelectDate(weekCol) {
+        this.toggleEdge(weekCol) == false ? this.setInitialLineDate(weekCol) : null
+    }
+    // helper
+    setInitialLineDate(weekCol) {
+        switch (this.option) {
+            case 'normal':
+                this.initNormalDateweekCol(weekCol)
+                break
+            case 'register':
+                this.initRegisterDate(weekCol)
+                break
+            case 'extend':
+                this.initExtendDate(weekCol)
+                break
+        }
+    }
+    // initlineDate methods for each type -->
+    initNormalDateweekCol(weekCol) {
+        if (!this.lineSelectedDateObj.startDate) {
+            this.lineSelectedDateObj.startDate = weekCol.date
+            this.dataChange.emit(this.lineSelectedDateObj)
+        } else if (!this.lineSelectedDateObj.endDate) {
+            if (moment(weekCol.date).isSameOrBefore(this.lineSelectedDateObj.startDate, 'day')) {
+                this.lineSelectedDateObj.startDate = weekCol.date
+                this.dataChange.emit(this.lineSelectedDateObj)
+            } else {
+                this.lineSelectedDateObj.endDate = weekCol.date
+                this.dataChange.emit(this.lineSelectedDateObj)
+            }
+        } else if (this.lineSelectedDateObj.startDate && this.lineSelectedDateObj.endDate) {
+            this.lineSelectedDateObj.startDate = moment(weekCol.date).isBefore(
+                this.lineSelectedDateObj.startDate,
+                'day'
+            )
+                ? weekCol.date
+                : this.lineSelectedDateObj.startDate
+            this.lineSelectedDateObj.endDate =
+                moment(weekCol.date).isAfter(this.lineSelectedDateObj.endDate, 'day') || this.isBetween(weekCol)
+                    ? weekCol.date
+                    : this.lineSelectedDateObj.endDate
+            this.dataChange.emit(this.lineSelectedDateObj)
+        }
+    }
+    initRegisterDate(weekCol) {
+        // 초기 시작일 설정을 수정해야할 수도 있음
+        if (
+            this.lineSelectedDateObj.startDate &&
+            moment(weekCol.date).isSameOrBefore(moment().format('YYYY-MM-DD'), 'day')
+        )
+            return
+        if (!this.lineSelectedDateObj.startDate) {
+            this.lineSelectedDateObj.startDate = moment().format('YYYY-MM-DD')
+            this.dataChange.emit(this.lineSelectedDateObj)
+        } else {
+            this.lineSelectedDateObj.endDate = weekCol.date
+            this.dataChange.emit(this.lineSelectedDateObj)
+        }
+
+        // this.initNormalDateweekCol(weekCol)
+    }
+    initExtendDate(weekCol) {
+        if (
+            this.lineSelectedDateObj.startDate &&
+            moment(weekCol.date).isSameOrBefore(moment().format(this.lineSelectedDateObj.startDate), 'day')
+        )
+            return
+        if (!this.lineSelectedDateObj.startDate) {
+            this.lineSelectedDateObj.startDate = weekCol.date
+            this.dataChange.emit(this.lineSelectedDateObj)
+        } else {
+            this.lineSelectedDateObj.endDate = weekCol.date
+            this.dataChange.emit(this.lineSelectedDateObj)
+        }
+    }
+
+    // <-- initlineDate methods for each type
+
     toggleEdge(weekCol): boolean {
         let isToggled = false
         if (
             this.lineSelectedDateObj.startDate &&
-            dayjs(weekCol.date).isSame(this.lineSelectedDateObj.startDate, 'day') &&
+            moment(weekCol.date).isSame(this.lineSelectedDateObj.startDate, 'day') &&
             this.option == 'normal'
         ) {
             this.lineSelectedDateObj.startDate = ''
             isToggled = true
         } else if (
             this.lineSelectedDateObj.endDate &&
-            dayjs(weekCol.date).isSame(this.lineSelectedDateObj.endDate, 'day')
+            moment(weekCol.date).isSame(this.lineSelectedDateObj.endDate, 'day')
         ) {
             this.lineSelectedDateObj.endDate = ''
             isToggled = true
@@ -340,21 +471,22 @@ export class Datepicker3Component implements OnInit, OnChanges, AfterViewChecked
         return this.lineSelectedDateObj.endDate == weekCol.date ? true : false
     }
     isBetween(weekCol) {
-        return dayjs(weekCol.date).isBetween(this.lineSelectedDateObj.startDate, this.lineSelectedDateObj.endDate)
+        return moment(weekCol.date).isBetween(this.lineSelectedDateObj.startDate, this.lineSelectedDateObj.endDate)
             ? true
             : false
     }
     getDayFromStartDate(weekCol) {
         if (this.lineSelectedDateObj.startDate) {
-            const startDate = dayjs(this.lineSelectedDateObj.startDate)
-            const targetDate = dayjs(weekCol.date)
+            const startDate = moment(this.lineSelectedDateObj.startDate)
+            const targetDate = moment(weekCol.date)
+            // return targetDate.diff(startDate, 'days')
             return targetDate.diff(startDate, 'days') + 1
         }
         return 0
     }
     pastDisable(weekCol) {
         return !this.lineSelectedDateObj.startDate ||
-            dayjs(weekCol.date).isSameOrBefore(this.lineSelectedDateObj.startDate)
+            moment(weekCol.date).isSameOrBefore(this.lineSelectedDateObj.startDate)
             ? true
             : false
     }
@@ -363,15 +495,17 @@ export class Datepicker3Component implements OnInit, OnChanges, AfterViewChecked
             case 'normal':
                 return true
             case 'register':
-                return !dayjs(weekCol.date).isBefore(dayjs().format('YYYY-MM-DD'), 'day')
+                return !moment(weekCol.date).isBefore(moment().format('YYYY-MM-DD'), 'day')
             case 'extend':
-                return !dayjs(weekCol.date).isBefore(dayjs().format(this.lineSelectedDateObj.startDate), 'day')
+                return !moment(weekCol.date).isBefore(moment().format(this.lineSelectedDateObj.startDate), 'day')
             default:
                 return false
         }
     }
 
-    // --------- modify-range method --------------------------------------------------------------------------------------------------
+    // --------- multiline component with mcPastUnAvailalble method --------------------------------------------------------------------------------------------------
+
+    // --------- reg ml method --------------------------------------------------------------------------------------------------
     regMLSelectDate(weekCol) {
         this.toggleEdge(weekCol) == false ? this.setInitRegML(weekCol) : null
     }
@@ -394,22 +528,23 @@ export class Datepicker3Component implements OnInit, OnChanges, AfterViewChecked
     }
 
     initOnlyStartDateWeekCol(weekCol) {
-        if (dayjs(weekCol.date).isBefore(dayjs().format('YYYY-MM-DD'), 'day')) return
+        if (moment(weekCol.date).isBefore(moment().format('YYYY-MM-DD'), 'day')) return
         this.lineSelectedDateObj.startDate = weekCol.date
 
         this.dataChange.emit({
             startDate: weekCol.date,
             endDate: this.data?.endDate ?? '',
         })
+        // this.dataChange.emit(this.lineSelectedDateObj)
     }
 
     initOnlyEndDateWeekCol(weekCol) {
-        if (dayjs(weekCol.date).isBefore(dayjs().format('YYYY-MM-DD'), 'day')) return
+        if (moment(weekCol.date).isBefore(moment().format('YYYY-MM-DD'), 'day')) return
         if (!this.lineSelectedDateObj.startDate) {
             this.lineSelectedDateObj.startDate = weekCol.date
             this.dataChange.emit(this.lineSelectedDateObj)
         } else if (
-            !dayjs(weekCol.date).isSameOrBefore(dayjs(this.lineSelectedDateObj.startDate).format('YYYY-MM-DD'), 'day')
+            !moment(weekCol.date).isSameOrBefore(moment(this.lineSelectedDateObj.startDate).format('YYYY-MM-DD'), 'day')
         ) {
             this.lineSelectedDateObj.endDate = weekCol.date
             this.dataChange.emit(this.lineSelectedDateObj)
@@ -417,6 +552,7 @@ export class Datepicker3Component implements OnInit, OnChanges, AfterViewChecked
     }
     initLooseOnlyStartDateWeekCol(weekCol) {
         this.lineSelectedDateObj.startDate = weekCol.date
+        // this.dataChange.emit(this.lineSelectedDateObj)
         this.dataChange.emit({
             startDate: weekCol.date,
             endDate: this.data?.endDate ?? '',
@@ -427,7 +563,7 @@ export class Datepicker3Component implements OnInit, OnChanges, AfterViewChecked
             this.lineSelectedDateObj.startDate = weekCol.date
             this.dataChange.emit(this.lineSelectedDateObj)
         } else if (
-            !dayjs(weekCol.date).isSameOrBefore(dayjs(this.lineSelectedDateObj.startDate).format('YYYY-MM-DD'), 'day')
+            !moment(weekCol.date).isSameOrBefore(moment(this.lineSelectedDateObj.startDate).format('YYYY-MM-DD'), 'day')
         ) {
             this.lineSelectedDateObj.endDate = weekCol.date
             this.dataChange.emit(this.lineSelectedDateObj)
@@ -437,13 +573,13 @@ export class Datepicker3Component implements OnInit, OnChanges, AfterViewChecked
     regML_IsAvailableDate(weekCol) {
         switch (this.option) {
             case 'onlyStart':
-                return !dayjs(weekCol.date).isBefore(dayjs().format('YYYY-MM-DD'), 'day')
+                return !moment(weekCol.date).isBefore(moment().format('YYYY-MM-DD'), 'day')
             case 'onlyEnd':
-                return !dayjs(weekCol.date).isBefore(dayjs().format(this.lineSelectedDateObj.startDate), 'day')
+                return !moment(weekCol.date).isBefore(moment().format(this.lineSelectedDateObj.startDate), 'day')
             case 'looseOnlyStart':
                 return true
             case 'looseOnlyEnd':
-                return !dayjs(weekCol.date).isBefore(dayjs().format(this.lineSelectedDateObj.startDate), 'day')
+                return !moment(weekCol.date).isBefore(moment().format(this.lineSelectedDateObj.startDate), 'day')
             default:
                 return false
         }

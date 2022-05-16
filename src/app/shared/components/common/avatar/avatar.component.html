@@ -5,6 +5,7 @@
         *ngIf="image"
         onerror="onerror=null; src='assets/images/default-profile.png'"
     />
+
     <div #textElement class="text d-flex justify-content-center align-items-center" *ngIf="!image">
         {{ nameInitial | uppercase }}
     </div>

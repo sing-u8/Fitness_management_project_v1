@@ -1,13 +1,9 @@
 .rw-datepicker {
-    width: 250px;
-    height: 260px;
-    padding: 15px;
+    width: 255px;
+    height: 251px;
+    padding: 10px;
     border-radius: 5px;
     background-color: var(--white);
-
-    &.shadow {
-        box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
-    }
 
     .col,
     [class*='col-'] {
@@ -16,6 +12,7 @@
     }
 
     .month {
+
         .start,
         .end {
             .mdi {
@@ -40,18 +37,17 @@
         font-size: 1.3rem;
         color: var(--font-color);
 
-        & > div {
-            width: 29px;
-            height: 29px;
+        &>div {
+            width: 26px;
+            height: 26px;
         }
     }
 
-    // date picker
     .week-row {
         .week-col {
-            width: 29px;
-            height: 29px;
-            border-radius: 5px;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
             font-size: 1.1rem;
         }
     }
@@ -61,16 +57,16 @@
             font-size: 1.3rem;
             color: var(--font-color);
 
-            & > div {
+            &>div {
                 width: 34px;
-                height: 29px;
+                height: 26px;
             }
         }
 
         .week-row {
             .week-col {
                 width: 34px;
-                height: 29px;
+                height: 26px;
                 border-radius: unset;
                 font-size: 1.1rem;
             }
@@ -107,37 +103,18 @@
         &:hover {
             background-color: var(--background-color);
         }
-
-        .week-col {
-            &.edge {
-                color: var(--white) !important;
-                background-color: var(--red);
-
-                &:hover {
-                    background-color: var(--red);
-                    color: var(--white) !important;
-                }
-            }
-            &.first {
-                border-radius: 5px 0px 0px 5px;
-            }
-            &.last {
-                border-radius: 0px 5px 5px 0px;
-            }
-        }
     }
 
     .selected {
-        background-color: #fef6f7;
-        // background-color: rgba(227, 74, 94, 0.05);
+        background-color: var(--red);
 
         &:hover {
-            background-color: #fef6f7;
+            background-color: var(--red);
         }
 
-        // .week-col {
-        //     color: var(--white) !important;
-        // }
+        .week-col {
+            color: var(--white) !important;
+        }
     }
 }
 
