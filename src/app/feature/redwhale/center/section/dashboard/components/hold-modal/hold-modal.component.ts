@@ -59,6 +59,7 @@ export class HoldModalComponent implements AfterViewChecked, OnChanges, AfterVie
         this.doShowDatePick[which] = true
     }
     closeShowDatePicker(which: 'start' | 'end') {
+        console.log('closeShowDatePicker !!! - which : ', which)
         this.doShowDatePick[which] = false
     }
 
@@ -70,30 +71,35 @@ export class HoldModalComponent implements AfterViewChecked, OnChanges, AfterVie
         startDate: '',
         endDate: '',
     }
-    public isStartDatepicReset = false
-    setStartDatepickReset(flag: boolean) {
-        this.isStartDatepicReset = flag
-    }
-    public isEndDatepickReset = false
-    setEndDatepickReset(flag: boolean) {
-        this.isEndDatepickReset = flag
-    }
-    setDatepickReset(flag: boolean) {
-        this.isStartDatepicReset = flag
-        this.isEndDatepickReset = flag
-    }
+    // public isStartDatepicReset = false
+    // setStartDatepickReset(flag: boolean) {
+    //     this.isStartDatepicReset = flag
+    // }
+    // public isEndDatepickReset = false
+    // setEndDatepickReset(flag: boolean) {
+    //     this.isEndDatepickReset = flag
+    // }
+    // setDatepickReset(flag: boolean) {
+    //     this.isStartDatepicReset = flag
+    //     this.isEndDatepickReset = flag
+    // }
     onDatePickerChange(position: 'start' | 'end', date: { startDate: string; endDate: string }) {
         if (position == 'start') {
-            this.setEndDatepickReset(true)
+            // this.setEndDatepickReset(true)
 
-            setTimeout(() => {
-                this.endDatePick = _.cloneDeep({
-                    startDate: date.startDate,
-                    endDate: '',
-                })
-
-                this.setEndDatepickReset(false)
-            }, 100)
+            this.startDatepick = _.cloneDeep({
+                startDate: date.startDate,
+                endDate: '',
+            })
+            this.endDatePick = _.cloneDeep({
+                startDate: date.startDate,
+                endDate: '',
+            })
+        } else if (position == 'end') {
+            this.endDatePick = _.cloneDeep({
+                startDate: date.startDate,
+                endDate: date.endDate,
+            })
         }
     }
     clickDatePick(event) {
@@ -114,7 +120,7 @@ export class HoldModalComponent implements AfterViewChecked, OnChanges, AfterVie
             endDate: '',
         })
 
-        this.startDatepick = _.cloneDeep({
+        this.endDatePick = _.cloneDeep({
             startDate: '',
             endDate: '',
         })
@@ -141,7 +147,7 @@ export class HoldModalComponent implements AfterViewChecked, OnChanges, AfterVie
                     this.renderer.addClass(this.modalWrapperElement.nativeElement, 'rw-modal-wrapper-show')
                 }, 0)
 
-                this.setDatepickReset(false)
+                // this.setDatepickReset(false)
             } else {
                 this.renderer.removeClass(this.modalBackgroundElement.nativeElement, 'rw-modal-background-show')
                 this.renderer.removeClass(this.modalWrapperElement.nativeElement, 'rw-modal-wrapper-show')
@@ -150,7 +156,7 @@ export class HoldModalComponent implements AfterViewChecked, OnChanges, AfterVie
                     this.renderer.removeClass(this.modalWrapperElement.nativeElement, 'display-flex')
                 }, 200)
                 this.setCompVars()
-                this.setDatepickReset(true)
+                // this.setDatepickReset(true)
             }
         }
     }

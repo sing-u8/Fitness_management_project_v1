@@ -127,11 +127,11 @@ export class DbDatepickerComponent implements OnInit, OnChanges, AfterViewChecke
             this.getDays(this.currentDate)
         }
 
-        if (changes.hasOwnProperty('data')) {
-            if (this.checkDifference(changes)) {
-                this.setDatePick()
-            }
-        }
+        // if (changes.hasOwnProperty('data')) {
+        //     if (this.checkDifference(changes)) {
+        //         this.setDatePick()
+        //     }
+        // }
     }
     ngAfterViewInit() {
         if (this.width) {

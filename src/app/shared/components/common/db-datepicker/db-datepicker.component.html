@@ -120,12 +120,19 @@
     <div class="week-row col d-flex justify-content-between align-items-center"
         *ngFor="let weekRow of weekRows; let i = index">
         <div class="week-col d-flex justify-content-center align-items-center"
-            *ngFor="let weekCol of weekRow; let j = index" [style.color]="weekCol.color"
-            [class.start-date]="isStartDate(weekCol)" [class.end-date]="isEndDate(weekCol)"
-            [class.selected]="isEdgeDate(weekCol)" [class.between]="isBetween(weekCol)"
-            [class.avaliable-date]="isAvailableDate(weekCol)" (click)="multiLineSelectDate(weekCol)" rw-tooltip
+            *ngFor="let weekCol of weekRow; let j = index"
+            [style.color]="weekCol.color"
+            [class.start-date]="isStartDate(weekCol)"
+            [class.end-date]="isEndDate(weekCol)"
+            [class.selected]="isEdgeDate(weekCol)"
+            [class.between]="isBetween(weekCol)"
+            [class.avaliable-date]="isAvailableDate(weekCol)"
+            (click)="multiLineSelectDate(weekCol); $event.stopPropagation()"
+            rw-tooltip
             [rwTooltipDisabled]="pastDisable(weekCol) || mode=='multiline-component'"
-            [rwTooltipTitle]="getDayFromStartDate(weekCol)+'일 사용'" rwTooltipPlacement="bottom">
+            [rwTooltipTitle]="getDayFromStartDate(weekCol)+'일 사용'"
+            rwTooltipPlacement="bottom"
+        >
             {{ weekCol.day }}
         </div>
     </div>
@@ -159,12 +166,19 @@
     <div class="week-row col d-flex justify-content-between align-items-center"
         *ngFor="let weekRow of weekRows; let i = index">
         <div class="week-col d-flex justify-content-center align-items-center"
-            *ngFor="let weekCol of weekRow; let j = index" [style.color]="weekCol.color"
-            [class.start-date]="isStartDate(weekCol)" [class.end-date]="isEndDate(weekCol)"
-            [class.selected]="isEdgeDate(weekCol)" [class.between]="isBetween(weekCol)"
-            [class.avaliable-date]="regML_IsAvailableDate(weekCol)" (click)="regMLSelectDate(weekCol)" rw-tooltip
+            *ngFor="let weekCol of weekRow; let j = index"
+            [style.color]="weekCol.color"
+            [class.start-date]="isStartDate(weekCol)"
+            [class.end-date]="isEndDate(weekCol)"
+            [class.selected]="isEdgeDate(weekCol)"
+            [class.between]="isBetween(weekCol)"
+            [class.avaliable-date]="regML_IsAvailableDate(weekCol)"
+            (click)="regMLSelectDate(weekCol); $event.stopPropagation()"
+            rw-tooltip
             [rwTooltipDisabled]="pastDisable(weekCol) || option=='onlyStart' || option=='looseOnlyStart'"
-            [rwTooltipTitle]="getDayFromStartDate(weekCol)+'일 사용'" rwTooltipPlacement="bottom">
+            [rwTooltipTitle]="getDayFromStartDate(weekCol)+'일 사용'"
+            rwTooltipPlacement="bottom"
+        >
             {{ weekCol.day }}
         </div>
     </div>
