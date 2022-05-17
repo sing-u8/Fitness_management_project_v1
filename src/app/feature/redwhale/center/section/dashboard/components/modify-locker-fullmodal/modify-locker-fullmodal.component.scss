@@ -172,15 +172,11 @@ section.modify-locker-fullmodal-wrapper {
                                 }
                             }
 
-                            rw-datepicker {
+                            db-datepicker {
                                 position: absolute;
                                 top: 75px;
                                 left: 0px;
                                 z-index: 3;
-
-                                & .display-none {
-                                    display: none;
-                                }
                             }
                         }
                     }

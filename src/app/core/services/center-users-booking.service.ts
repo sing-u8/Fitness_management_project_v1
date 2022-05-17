@@ -27,7 +27,7 @@ export class CenterUsersBookingService {
 
         return this.http.get<Response>(url, this.options).pipe(
             map((res) => {
-                return res.dataset[0]
+                return res.dataset
             }),
             catchError(handleError)
         )

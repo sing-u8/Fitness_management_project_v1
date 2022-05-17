@@ -13,8 +13,9 @@ import {
     AfterViewChecked,
 } from '@angular/core'
 
+import dayjs from 'dayjs'
+
 import { StorageService } from '@services/storage.service'
-import { CenterLockerService } from '@services/center-locker.service'
 import { CenterUsersLockerService, UpdateLockerTicketReqBody } from '@services/center-users-locker.service.service'
 
 // components
@@ -75,6 +76,18 @@ export class ModifyLockerFullmodalComponent implements OnInit, OnChanges, AfterV
             startDate: this.userLocker.start_date,
             endDate: this.userLocker.end_date,
         }
+    }
+
+    public dayDiff = ''
+    onDatePickRangeChange(event: { startDate: string; endDate: string }) {
+        this.date = event
+        this.dayDiff = String(this.getDayDiff(this.date))
+    }
+    getDayDiff(date: { startDate: string; endDate: string }) {
+        const date1 = dayjs(date.startDate)
+        const date2 = dayjs(date.endDate)
+
+        return date2.diff(date1, 'day') + 1
     }
 
     ngOnInit(): void {

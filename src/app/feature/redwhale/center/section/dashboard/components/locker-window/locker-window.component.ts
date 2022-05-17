@@ -59,7 +59,6 @@ export class LockerWindowComponent implements OnInit, AfterViewInit, OnChanges {
 
     // datepicker method
     onDatePickRangeChange(event: { startDate: string; endDate: string }) {
-        console.log('onDateChange: ', event)
         this.lockerState.date = event
         this.dayDiff = String(this.getDayDiff(this.lockerState.date))
     }

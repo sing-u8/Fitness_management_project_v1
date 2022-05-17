@@ -25,11 +25,11 @@
       >
         {{membershipState.date.startDate | dateFormat:'YYYY.MM.DD'}}
       </div>
-      <rw-datepicker
+      <db-datepicker
         *ngIf = "datepickFlag.start"
         (rwClickOutside) = "datepickFlag.start = false; $event.stopPropagation()"
         mode="reg-ml" [option]="'onlyStart'" [data]="membershipState.date" (dataChange) = "onDatePickRangeChange($event, 'start')"
-      ></rw-datepicker>
+      ></db-datepicker>
     </div>
     <div class="date-picker">
       <span class="rw-typo-subtext0-regular small-title">만료일</span>
@@ -45,11 +45,11 @@
         </ng-template>
 
       </div>
-      <rw-datepicker
+      <db-datepicker
         *ngIf = "datepickFlag.end"
         (rwClickOutside) = "(!isStartDateClicked && datepickFlag.end = false); $event.stopPropagation()"
         mode="reg-ml" [option]="'onlyEnd'" [data]="membershipState.date" (dataChange) = "onDatePickRangeChange($event, 'end')"
-      ></rw-datepicker>
+      ></db-datepicker>
     </div>
   </div>
   <div class="count-container">

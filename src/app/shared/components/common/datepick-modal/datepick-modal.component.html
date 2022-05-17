@@ -26,14 +26,14 @@
                         홀딩 시작일 선택
                     </span>
 
-                    <div class="l-datepicker-show" [class.display-none]="!doShowDatePick.start">
-                        <rw-datepicker
-                            mode="reg-ml" [option]="'onlyStart'" [(data)]="startDatepick"
-                            (dataChange)="onDatePickerChange('start', $event)"
-                            [(resetFlag)]="isStartDatepicReset"
-                            (click)="$event.stopPropagation()"
-                        ></rw-datepicker>
-                    </div>
+                    <db-datepicker
+                        *ngIf="doShowDatePick.start"
+                        mode="reg-ml"
+                        [option]="'onlyStart'"
+                        [(data)]="startDatepick"
+                        (dataChange)="onDatePickerChange('start', $event)"
+                    ></db-datepicker>
+
                 </div>
                 <span class="rw-typo-bodytext1">~</span>
                 <div class="datepicker__button" rw-button rwButtonFontColor="var(--font-color)"
@@ -46,14 +46,14 @@
                         홀딩 종료일 선택
                     </span>
 
-                    <div class="l-datepicker-show" [class.display-none]="!doShowDatePick.end">
-                        <rw-datepicker
-                            mode="reg-ml" [option]="'onlyEnd'" [(data)]="endDatePick"
-                            (dataChange)="onDatePickerChange('end', $event)"
-                            [(resetFlag)]="isEndDatepickReset"
-                            (click)="$event.stopPropagation()"
-                        ></rw-datepicker>
-                    </div>
+                    <db-datepicker
+                        *ngIf="doShowDatePick.end"
+                        mode="reg-ml"
+                        [option]="'onlyEnd'"
+                        [(data)]="endDatePick"
+                        (dataChange)="onDatePickerChange('end', $event)"
+                    ></db-datepicker>
+
                 </div>
             </div>
         </div>

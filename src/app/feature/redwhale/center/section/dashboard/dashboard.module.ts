@@ -44,13 +44,17 @@ import { MembershipTicketWindowComponent } from './components/membership-ticket-
 import { LessonSelectorComponent } from './components/lesson-selector/lesson-selector.component'
 import { ModifyMembershipFullmodalComponent } from './components/modify-membership-fullmodal/modify-membership-fullmodal.component'
 import { ModifyLockerFullmodalComponent } from './components/modify-locker-fullmodal/modify-locker-fullmodal.component'
+import { LockerShiftModalComponent } from './components/locker-shift-modal/locker-shift-modal.component'
+import { ModifyPaymentFullmodalComponent } from './components/modify-payment-fullmodal/modify-payment-fullmodal.component'
+import { PaymentLockerWindowComponent } from './components/payment-locker-window/payment-locker-window.component'
+import { PaymentMembershipWindowComponent } from './components/payment-membership-window/payment-membership-window.component'
 
 // section module
 import { CommonModule as SectionCommonModule } from '../common/common.module'
 
 // ngxSkeletonLoader module
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader'
-import { LockerShiftModalComponent } from './components/locker-shift-modal/locker-shift-modal.component'
+
 @NgModule({
     declarations: [
         DashboardComponent,
@@ -91,6 +95,9 @@ import { LockerShiftModalComponent } from './components/locker-shift-modal/locke
         HoldModalComponent,
         LockerShiftModalComponent,
         DashboardLockerItemComponent,
+        ModifyPaymentFullmodalComponent,
+        PaymentLockerWindowComponent,
+        PaymentMembershipWindowComponent,
     ],
     imports: [
         AngularCommonModule,

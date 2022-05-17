@@ -111,15 +111,11 @@
                         background: var(--background-color) !important;
                     }
 
-                    .l-datepicker-show {
+                    db-datepicker {
                         position: absolute;
                         top: 55px;
                         left: 0px;
-                        z-index: 3;
-
-                        &.display-none {
-                            display: none;
-                        }
+                        z-index: 1200;
                     }
                 }
             }

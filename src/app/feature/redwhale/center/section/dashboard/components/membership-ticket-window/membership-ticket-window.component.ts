@@ -51,7 +51,6 @@ export class MembershipTicketWindowComponent implements OnInit, AfterViewInit, O
         // })
         this.dayDiff = String(this.getDayDiff(this.membershipState.date))
         this.getSelectedLessonList()
-        console.log('this.membershipState.lessonList: ', this.membershipState.lessonList)
     }
 
     ngOnChanges(changes: SimpleChanges): void {
@@ -78,8 +77,6 @@ export class MembershipTicketWindowComponent implements OnInit, AfterViewInit, O
         this.dayDiff = String(this.getDayDiff(this.membershipState.date))
         if (type == 'start') {
             this.isStartDateClicked = true
-            this.datepickFlag.start = false
-            this.datepickFlag.end = true
         } else {
             this.isStartDateClicked = false
         }

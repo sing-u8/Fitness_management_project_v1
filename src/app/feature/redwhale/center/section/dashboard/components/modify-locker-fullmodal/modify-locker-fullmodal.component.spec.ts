@@ -1,25 +1,24 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing'
 
-import { ModifyLockerFullmodalComponent } from './modify-locker-fullmodal.component';
+import { ModifyLockerFullmodalComponent } from './modify-locker-fullmodal.component'
 
 describe('ModifyLockerFullmodalComponent', () => {
-  let component: ModifyLockerFullmodalComponent;
-  let fixture: ComponentFixture<ModifyLockerFullmodalComponent>;
+    let component: ModifyLockerFullmodalComponent
+    let fixture: ComponentFixture<ModifyLockerFullmodalComponent>
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [ ModifyLockerFullmodalComponent ]
+    beforeEach(async () => {
+        await TestBed.configureTestingModule({
+            declarations: [ModifyLockerFullmodalComponent],
+        }).compileComponents()
     })
-    .compileComponents();
-  });
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(ModifyLockerFullmodalComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+    beforeEach(() => {
+        fixture = TestBed.createComponent(ModifyLockerFullmodalComponent)
+        component = fixture.componentInstance
+        fixture.detectChanges()
+    })
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-});
+    it('should create', () => {
+        expect(component).toBeTruthy()
+    })
+})

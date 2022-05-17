@@ -112,6 +112,7 @@ export class DashboardEffect {
                     reservations: this.centerUsersBookingService.getBookings(centerId, centerUser.id),
                 }).pipe(
                     switchMap(({ memberships, lockers, payments, reservations }) => {
+                        console.log('getUserData -- reservations : ', reservations)
                         return [DashboardActions.finishGetUserData({ memberships, lockers, payments, reservations })]
                     })
                 )

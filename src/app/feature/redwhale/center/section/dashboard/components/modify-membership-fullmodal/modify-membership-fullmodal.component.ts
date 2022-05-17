@@ -73,17 +73,19 @@ export class ModifyMembershipFullmodalComponent implements OnInit, OnChanges, Af
     }
 
     public date = { startDate: '', endDate: '' }
-    public isStartDateClicked = false
-    // onDatePickRangeChange(event: { startDate: string; endDate: string }, type: 'start' | 'end') {
-    //     this.date = event
-    //     if (type == 'start') {
-    //         this.isStartDateClicked = true
-    //         this.datepickFlag.start = false
-    //         this.datepickFlag.end = true
-    //     } else {
-    //         this.isStartDateClicked = false
-    //     }
-    // }
+    public dayDiff = ''
+    onDatePickRangeChange(event: { startDate: string; endDate: string }, type: 'start' | 'end') {
+        this.date = event
+        if (type == 'end') {
+            this.dayDiff = String(this.getDayDiff(this.date))
+        }
+    }
+    getDayDiff(date: { startDate: string; endDate: string }) {
+        const date1 = dayjs(date.startDate)
+        const date2 = dayjs(date.endDate)
+
+        return date2.diff(date1, 'day') + 1
+    }
 
     public classItemList: Array<{ selected: boolean; item: ClassItem }> = []
     resetClssItemList() {
@@ -109,7 +111,6 @@ export class ModifyMembershipFullmodalComponent implements OnInit, OnChanges, Af
 
     setUserMembershipData() {
         this.datepickFlag = { start: false, end: false }
-        this.isStartDateClicked = false
         this.date = {
             startDate: this.userMembership.start_date,
             endDate: this.userMembership.end_date,

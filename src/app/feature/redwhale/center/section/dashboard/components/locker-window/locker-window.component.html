@@ -38,11 +38,11 @@
         </ng-template>
 
       </div>
-      <rw-datepicker
+      <db-datepicker
         *ngIf = "datepickFlag.end"
         (rwClickOutside) = "datepickFlag.end = false; $event.stopPropagation()"
         mode="reg-ml" [option]="'onlyEnd'" [data]="lockerState.date" (dataChange) = "onDatePickRangeChange($event)"
-      ></rw-datepicker>
+      ></db-datepicker>
     </div>
   </div>
 

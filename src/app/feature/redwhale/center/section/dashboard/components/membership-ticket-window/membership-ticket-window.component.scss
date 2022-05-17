@@ -59,15 +59,11 @@
                 height: 48px;
                 position: relative;
             }
-            rw-datepicker {
+            db-datepicker {
                 position: absolute;
                 top: 75px;
                 left: 0px;
                 z-index: 3;
-
-                & .display-none {
-                    display: none;
-                }
             }
         }
     }

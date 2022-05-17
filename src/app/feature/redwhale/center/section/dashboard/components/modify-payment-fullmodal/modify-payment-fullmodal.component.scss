@@ -1,0 +1,63 @@
+* {
+    padding: 0px;
+    margin: 0px;
+    text-align: initial;
+}
+
+.rw-modal-wrapper-show {
+    opacity: 1 !important;
+}
+
+.register-ml-fullmodal-show {
+    opacity: 1 !important;
+}
+
+section.register-ml-fullmodal-wrapper {
+    display: none;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: var(--white);
+    opacity: 0;
+    // transition: opacity 0.3s cubic-bezier(0.25, 0.8, 0.25, 0.8);
+    // -moz-transition: opacity 0.3s cubic-bezier(0.25, 0.8, 0.25, 0.8);
+    // -webkit-transition: opacity 0.3s cubic-bezier(0.25, 0.8, 0.25, 0.8);
+    // -o-transition: opacity 0.3s cubic-bezier(0.25, 0.8, 0.25, 0.8);
+    z-index: 1010;
+
+    section.register-membership-locker {
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: var(--background-color);
+        $containerWidth: 844px;
+        $header_height: 170px;
+
+        header {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            width: 100%;
+            height: $header_height;
+            background-color: var(--white);
+            position: relative;
+            padding: 0px 20px;
+
+            .header-text-container {
+                width: $containerWidth;
+                margin-bottom: 30px;
+            }
+
+            .close-button {
+                position: absolute;
+                top: 36px;
+                right: 36px;
+            }
+        }
+
+
+    }
+}

@@ -74,34 +74,16 @@ export class DatepickModalComponent implements AfterViewChecked, OnChanges, Afte
         startDate: '',
         endDate: '',
     }
-    public isStartDatepicReset = false
-    setStartDatepickReset(flag: boolean) {
-        this.isStartDatepicReset = flag
-    }
-    public isEndDatepickReset = false
-    setEndDatepickReset(flag: boolean) {
-        this.isEndDatepickReset = flag
-    }
-    setDatepickReset(flag: boolean) {
-        this.isStartDatepicReset = flag
-        this.isEndDatepickReset = flag
-    }
 
     onDatePickerChange(position: 'start' | 'end', date: { startDate: string; endDate: string }) {
-        console.log('datepick modal -- onDatePickerChange : ', position, date)
         if (position == 'start') {
             this.startDatepick = {
                 startDate: date.startDate,
                 endDate: '',
             }
-            if (date.endDate == '') {
-                this.setEndDatepickReset(true)
-                setTimeout(() => {
-                    this.endDatePick = {
-                        startDate: date.startDate,
-                        endDate: '',
-                    }
-                }, 10)
+            this.endDatePick = {
+                startDate: date.startDate,
+                endDate: '',
             }
         } else {
             this.endDatePick = {
@@ -151,11 +133,14 @@ export class DatepickModalComponent implements AfterViewChecked, OnChanges, Afte
                     this.renderer.addClass(this.modalWrapperElement.nativeElement, 'rw-modal-wrapper-show')
                 }, 0)
 
-                this.setDatepickReset(true)
-                setTimeout(() => {
-                    this.onDatePickerChange('start', _.cloneDeep(this.datepickInput))
-                    this.onDatePickerChange('end', _.cloneDeep(this.datepickInput))
-                }, 10)
+                this.startDatepick = {
+                    startDate: this.datepickInput.startDate,
+                    endDate: '',
+                }
+                this.endDatePick = {
+                    startDate: this.datepickInput.startDate,
+                    endDate: this.datepickInput.endDate,
+                }
             } else {
                 this.renderer.removeClass(this.modalBackgroundElement.nativeElement, 'rw-modal-background-show')
                 this.renderer.removeClass(this.modalWrapperElement.nativeElement, 'rw-modal-wrapper-show')
@@ -163,10 +148,7 @@ export class DatepickModalComponent implements AfterViewChecked, OnChanges, Afte
                     this.renderer.removeClass(this.modalBackgroundElement.nativeElement, 'display-block')
                     this.renderer.removeClass(this.modalWrapperElement.nativeElement, 'display-flex')
                 }, 200)
-                this.setDatepickReset(true)
-                setTimeout(() => {
-                    this.setCompVars()
-                }, 10)
+                this.setCompVars()
             }
         }
     }

@@ -51,6 +51,7 @@
                                 mode="reg-ml"
                                 [option]="'looseOnlyStart'"
                                 [(data)]="date"
+                                (dataChange)="onDatePickRangeChange($event, 'start')"
                             > </rw-datepicker>
                         </div>
 
@@ -61,17 +62,18 @@
                                 (click)="onEndDateBtClick($event)">
                                 <span *ngIf="!date.endDate || datepickFlag.start; else showEndDate">만료일을 선택해주세요.</span>
                                 <ng-template #showEndDate>
-                                    <span>{{date.endDate | dateFormat:'YYYY.MM.DD'}} ({{date | dayDiff}}일)</span>
+                                    <span>{{date.endDate | dateFormat:'YYYY.MM.DD'}} ({{dayDiff}}일)</span>
                                 </ng-template>
 
                             </div>
-                            <rw-datepicker
-                                [class.display-none]="!datepickFlag.end"
+                            <db-datepicker
+                                *ngIf="datepickFlag.end"
                                 (rwClickOutside)="endDatepickClickOutside($event)"
                                 mode="reg-ml"
                                 [option]="'looseOnlyEnd'"
                                 [(data)]="date"
-                            ></rw-datepicker>
+                                (dataChange)="onDatePickRangeChange($event, 'end')"
+                            ></db-datepicker>
                         </div>
 
                     </div>
