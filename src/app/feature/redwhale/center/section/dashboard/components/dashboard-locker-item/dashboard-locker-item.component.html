@@ -7,6 +7,7 @@
   [item]="lockerItem"
   (click) = "onItemClick()"
 >
+
   <div
     class="grid-locker-item-inner-container"
   >
@@ -25,4 +26,5 @@
     </div>
     <p *ngIf="lockerItem.user_locker != null" class="rw-typo-subtext3 user-name">{{lockerItem.user_locker.user.name}}</p>
   </div>
+
 </gridster-item>
