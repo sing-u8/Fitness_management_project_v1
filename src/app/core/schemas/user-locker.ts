@@ -23,6 +23,6 @@ export interface UserLocker {
     updated_at: string
     user: UserInfo
     center: CenterInfo
-    payment: Payment
-    history: UserLockerHistory
+    payment: Array<Payment>
+    history: Array<UserLockerHistory>
 }

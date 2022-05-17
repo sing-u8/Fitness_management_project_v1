@@ -40,7 +40,7 @@ import {
     Locker,
     MembershipTicket,
     UpdateChoseLocker,
-    TotlaPrice,
+    TotalPrice,
 } from '@schemas/center/dashboard/register-ml-fullmodal'
 
 // ngrx
@@ -84,9 +84,9 @@ export class RegisterMembershipLockerFullmodalComponent implements OnInit, OnCha
         this.isAllMlItemDone = isDone
     })
 
-    public totalPrice$: Observable<TotlaPrice> = this.cmpStore.totalPrice$
+    public totalPrice$: Observable<TotalPrice> = this.cmpStore.totalPrice$
     public totalSum = 0
-    public totlaPriceSumSubscriber = this.cmpStore.totalPrice$.subscribe((total) => {
+    public TotalPriceSumSubscriber = this.cmpStore.totalPrice$.subscribe((total) => {
         this.totalSum = 0
         _.forIn(total, (v) => {
             this.totalSum += v.price
@@ -107,7 +107,7 @@ export class RegisterMembershipLockerFullmodalComponent implements OnInit, OnCha
         this.cmpStore.getmembershipItemsEffect(this.center.id)
     }
     ngOnDestroy(): void {
-        this.totlaPriceSumSubscriber.unsubscribe()
+        this.TotalPriceSumSubscriber.unsubscribe()
         this.isAllMlItemDoneSubscriber.unsubscribe()
     }
     ngOnChanges(changes: SimpleChanges): void {

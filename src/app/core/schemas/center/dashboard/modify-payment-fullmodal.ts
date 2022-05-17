@@ -3,37 +3,30 @@ import { ClassItem } from '@schemas/class-item'
 import { LockerItem } from '@schemas/locker-item'
 import { LockerCategory } from '@schemas/locker-category'
 import { CenterUser } from '@schemas/center-user'
+import { UserLocker } from '@schemas/user-locker'
 
 export type ItemType = 'locker' | 'membership'
 export type PriceType = 'cash' | 'card' | 'trans' | 'unpaid'
-export type MembershipLockerItem = MembershipTicket | Locker
-export type ChoseLockers = Map<string, { [lockerId: string]: LockerItem }>
-export type UpdateChoseLocker = {
-    locker: LockerItem
-    lockerCategId: string
-}
+
 export type Instructor = { name: string; value: CenterUser }
 export type TotalPrice = Record<PriceType, { price: number; name: string }>
+export type Price = Record<PriceType, string>
 
 export type MembershipTicket = {
-    type: 'membership'
     date?: { startDate: string; endDate: string }
     amount?: { normalAmount: string; paymentAmount: string }
-    price?: Record<PriceType, string>
+    price?: Price
     count?: { count: string; infinite: boolean }
     assignee?: { name: string; value: CenterUser }
     membershipItem: MembershipItem
-    lessonList: Array<{ selected: boolean; item: ClassItem }>
-    status?: 'done' | 'modify'
+    status?: 'idle' | 'done'
 }
 
-export type Locker = {
-    type: 'locker' // membership
+export type LockerTicket = {
     date?: { startDate: string; endDate: string }
     amount?: { normalAmount: string; paymentAmount: string }
-    price?: Record<PriceType, string>
+    price?: Price
     assignee?: { name: string; value: CenterUser }
-    locker: LockerItem
-    lockerCategory: LockerCategory
-    status?: 'done' | 'modify'
+    userLocker: UserLocker
+    status?: 'idle' | 'done'
 }

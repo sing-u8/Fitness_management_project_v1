@@ -133,7 +133,8 @@ export class MembershipTicketWindowComponent implements OnInit, AfterViewInit, O
 
     // status method
     checkMatchTotalPrice(): boolean {
-        return this.membershipState.amount.normalAmount == this.membershipState.amount.paymentAmount ? true : false
+        return true
+        // return this.membershipState.amount.normalAmount == this.membershipState.amount.paymentAmount ? true : false
     }
     checkDateIsSet(): boolean {
         return this.membershipState.date.startDate && this.membershipState.date.endDate ? true : false

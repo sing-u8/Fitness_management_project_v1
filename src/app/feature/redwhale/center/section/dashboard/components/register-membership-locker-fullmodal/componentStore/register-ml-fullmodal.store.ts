@@ -19,7 +19,7 @@ import {
     ChoseLockers,
     Instructor,
     UpdateChoseLocker,
-    TotlaPrice,
+    TotalPrice,
 } from '@schemas/center/dashboard/register-ml-fullmodal'
 
 import { MembershipItem } from '@schemas/membership-item'
@@ -56,7 +56,7 @@ export class RegisterMembershipLockerFullmodalStore extends ComponentStore<State
     public readonly membershipItems$ = this.select((s) => s.membershipItems)
 
     public readonly totalPrice$ = this.select((s) => {
-        const total: TotlaPrice = {
+        const total: TotalPrice = {
             cash: { price: 0, name: '현금' },
             card: { price: 0, name: '카드' },
             trans: { price: 0, name: '계좌이체' },
