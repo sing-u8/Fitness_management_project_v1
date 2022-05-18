@@ -9,6 +9,7 @@ import {
     UpdateLockerTicektPaymentReqBody,
 } from '@services/center-users-locker.service.service'
 import { StorageService } from '@services/storage.service'
+import { WordService } from '@services/helper/word.service'
 
 import { Payment } from '@schemas/payment'
 import { Center } from '@schemas/center'
@@ -36,14 +37,13 @@ export class UserDetailPaymentComponent implements OnInit {
         private nxStore: Store,
         private centerUsersMembershipService: CenterUsersMembershipService,
         private centerUsersLockerService: CenterUsersLockerService,
-        private storageService: StorageService
+        private storageService: StorageService,
+        private wordService: WordService
     ) {}
 
     ngOnInit(): void {}
 
     public center: Center = this.storageService.getCenter()
-
-    public chargeMode: ChargeMode = undefined
 
     public selectedPayment: Payment = undefined
     setSelectedPayment(payment: Payment) {
@@ -79,5 +79,118 @@ export class UserDetailPaymentComponent implements OnInit {
     }
     confirmModifyPayment() {
         this.showModifyPaymentFullModal = false
+    }
+
+    // charge modal
+    public chargeInput = { pay_card: '', pay_cash: '', pay_trans: '', unpaid: '' }
+    public chargeMode: ChargeMode = undefined
+    public showChargeModal = false
+    public chargeData: ChargeType = {
+        pay_card: 0,
+        pay_cash: 0,
+        pay_trans: 0,
+        unpaid: 0,
+        pay_date: '',
+        assignee_id: '',
+    }
+    openChargeModal(chargeMode: ChargeMode) {
+        this.chargeMode = chargeMode
+        this.chargeInput = {
+            pay_card: this.selectedPayment.card.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','),
+            pay_cash: this.selectedPayment.cash.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','),
+            pay_trans: this.selectedPayment.trans.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','),
+            unpaid: this.selectedPayment.unpaid.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','),
+        }
+        this.showChargeModal = true
+    }
+    hideChargeModal() {
+        this.showChargeModal = false
+    }
+    onChargeConfirm(output: ConfirmOuput) {
+        this.showChargeModal = false
+        this.chargeData = output.chargeType
+
+        if (this.chargeMode == 'modify_refund_payment' || this.chargeMode == 'modify_transfer_payment') {
+            this.callModifyPaymentApi(() => {
+                output.loadingFns.hideLoading()
+            })
+        }
+    }
+
+    callModifyPaymentApi(cb?: () => void) {
+        const text = this.chargeMode == 'modify_refund_payment' ? '환불 정보가' : '양도 정보가'
+        if (this.selectedPayment.user_membership_id) {
+            const reqBody: UpdateMembershipTicketPaymentReqBody = {
+                payment: {
+                    card: this.chargeData.pay_card,
+                    trans: this.chargeData.pay_trans,
+                    cash: this.chargeData.pay_cash,
+                    unpaid: this.chargeData.unpaid,
+                    vbank: 0,
+                    phone: 0,
+                    memo: '',
+                    responsibility_user_id: this.chargeData.assignee_id,
+                },
+            }
+            this.centerUsersMembershipService
+                .updateMembershipTicketPayment(
+                    this.center.id,
+                    this.curUserData.user.id,
+                    this.selectedPayment.user_membership_id,
+                    this.selectedPayment.id,
+                    reqBody
+                )
+                .subscribe(() => {
+                    const toastText = `'${this.wordService.ellipsis(
+                        this.selectedPayment.user_membership_name,
+                        6
+                    )}' ${text} 수정되었습니다.`
+
+                    this.nxStore.dispatch(showToast({ text: toastText }))
+                    this.nxStore.dispatch(
+                        DashboardActions.startGetUserData({
+                            centerId: this.center.id,
+                            centerUser: this.curUserData.user,
+                        })
+                    )
+                    cb ? cb() : null
+                })
+        } else {
+            const reqBody: UpdateLockerTicektPaymentReqBody = {
+                payment: {
+                    card: this.chargeData.pay_card,
+                    trans: this.chargeData.pay_trans,
+                    cash: this.chargeData.pay_cash,
+                    unpaid: this.chargeData.unpaid,
+                    vbank: 0,
+                    phone: 0,
+                    memo: '',
+                    responsibility_user_id: this.chargeData.assignee_id,
+                },
+            }
+            this.centerUsersLockerService
+                .updateLockerTicketPayment(
+                    this.center.id,
+                    this.curUserData.user.id,
+                    this.selectedPayment.user_locker_id,
+                    this.selectedPayment.id,
+                    reqBody
+                )
+                .subscribe(() => {
+                    const toastText = `'${this.wordService.ellipsis(
+                        this.selectedPayment.user_locker_name,
+                        6
+                    )}' ${text} 수정되었습니다.`
+
+                    this.nxStore.dispatch(showToast({ text: toastText }))
+                    this.nxStore.dispatch(
+                        DashboardActions.startGetUserData({
+                            centerId: this.center.id,
+                            centerUser: this.curUserData.user,
+                        })
+                    )
+                    cb ? cb() : null
+                })
+        }
     }
 }

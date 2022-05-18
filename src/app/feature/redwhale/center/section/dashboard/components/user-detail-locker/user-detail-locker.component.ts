@@ -98,7 +98,7 @@ export class UserDetailLockerComponent implements OnInit {
                 output.loadingFns.hideLoading()
             })
         } else if (this.chargeMode == 'transfer') {
-        } else if (this.chargeMode == 'empty_payment' || this.chargeMode == 'empty_refund') {
+        } else if (this.chargeMode == 'empty_locker_payment' || this.chargeMode == 'empty_locker_refund') {
             this.callEmptyApi(() => {
                 output.loadingFns.hideLoading()
             })
@@ -136,10 +136,10 @@ export class UserDetailLockerComponent implements OnInit {
     public showEmptyModal = false
     public EmptyModalTextData = {
         text: '',
-        subText: `추가 결제 또는 환불이 발생한 경우,
+        subText: `추가 결제 또는 환불이 발생한 경우기
             다음 단계에서 금액을 입력해주세요.`,
         cancelButtonText: '취소',
-        confirmButtonText: '락커 환불',
+        confirmButtonText: '락커 비우기',
     }
     openEmptyModal() {
         this.EmptyModalTextData.text = `'${this.wordService.ellipsis(this.selectedUserLocker.name, 13)}'

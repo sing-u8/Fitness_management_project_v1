@@ -36,10 +36,10 @@ export type ChargeMode =
     | 'extend'
     | 'transfer'
     | 'refund'
-    | 'empty_payment'
-    | 'empty_refund'
-    | 'transfer_payment'
-    | 'refund_payment'
+    | 'empty_locker_payment' // locker  only
+    | 'empty_locker_refund' // locker  only
+    | 'modify_refund_payment' // payment only
+    | 'modify_transfer_payment' // payment only
 export interface ConfirmOuput {
     chargeType: ChargeType
     loadingFns: ClickEmitterType
@@ -53,6 +53,7 @@ export interface ConfirmOuput {
 export class ChargeModalComponent implements OnChanges, AfterViewChecked {
     @Input() visible: boolean
     @Input() chargeMode: ChargeMode = 'extend'
+    @Input() inputs = { pay_card: '', pay_cash: '', pay_trans: '', unpaid: '' }
 
     @ViewChild('modalBackgroundElement') modalBackgroundElement: ElementRef
     @ViewChild('modalWrapperElement') modalWrapperElement: ElementRef
@@ -64,7 +65,7 @@ export class ChargeModalComponent implements OnChanges, AfterViewChecked {
     public changed: boolean
 
     public paid_date: string
-    public inputs = { pay_card: '', pay_cash: '', pay_trans: '', unpaid: '' }
+    // public inputs = { pay_card: '', pay_cash: '', pay_trans: '', unpaid: '' }
     public total = '0'
 
     public isMouseModalDown: boolean

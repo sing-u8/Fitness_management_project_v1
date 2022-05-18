@@ -8,16 +8,21 @@
 >
     <div
         class="rw-modal user-select-none"
-        [class.refund_height] = "chargeMode == 'refund'"
+        [class.refund_height] = "chargeMode == 'refund' || chargeMode == 'empty_locker_refund' || chargeMode == 'modify_refund_payment'"
         (mousedown)='onMouseModalDown(); $event.stopPropagation()'
     >
         <div class="header">
             <span class="rw-typo-bodytext0">
-                {{chargeMode == 'extend' || chargeMode == 'empty_payment'
+                {{chargeMode == 'extend' || chargeMode == 'empty_locker_payment'
                     ? '추가 결제 정보'
-                    : chargeMode == 'refund' || chargeMode == 'empty_refund'
+                    : chargeMode == 'refund' || chargeMode == 'empty_locker_refund'
                     ? '환불 금액'
-                    : '양도비 입력'
+                    : chargeMode == 'transfer'
+                    ? '양도비 입력'
+                    : chargeMode == 'modify_refund_payment'
+                    ? '환불 정보 수정'
+                    : chargeMode == 'modify_transfer_payment'
+                    ? '양도비 수정' : null
                 }}
             </span>
             <div class="l-close" (click)="onCancel()">
@@ -55,7 +60,7 @@
                 <div class="currency">￦</div>
             </div>
 
-            <div *ngIf="chargeMode != 'refund'" class="input-container">
+            <div *ngIf="chargeMode != 'refund' && chargeMode != 'modify_refund_payment'" class="input-container">
                 <span class="rw-typo-subtext0-regular">미수금</span>
                 <input rw-input placeholder="0" [(ngModel)]="inputs.unpaid" (keyup)="onInputKeyup($event, 'unpaid')" />
                 <div class="currency">￦</div>
@@ -70,11 +75,12 @@
             [loadingName] = "'chargeModal'"
             (onClick) = onConfirm($event)
         >
-            <div>
-                ￦ {{total}} 저장하기
+            <div *ngIf="chargeMode != 'modify_refund_payment' && chargeMode != 'modify_transfer_payment'">
+                ￦ {{total}} {{chargeMode == 'refund' || chargeMode == 'empty_locker_refund' ? '환불하기' : '저장하기'}}
             </div>
+            <div *ngIf="chargeMode == 'modify_refund_payment'">환불 금액 수정하기</div>
+            <div *ngIf="chargeMode == 'modify_transfer_payment'">양도비 수정하기</div>
         </rw-button>
-
 
         <div class="rw-typo-subtext0-regular  pay-day">
             결제일 : {{paid_date}}

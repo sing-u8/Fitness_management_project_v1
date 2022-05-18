@@ -28,8 +28,8 @@
                 *ngFor = "let item of curUserData.payments"
                 [payment]="item"
                 (onUpdatePayment)="setSelectedPayment(item); getPaymentLockerOrMembership(); toggleModifyPaymentFullModal()"
-                (onUpdateTransfer)="setSelectedPayment(item);"
-                (onUpdateRefund)="setSelectedPayment(item);"
+                (onUpdateTransfer)="setSelectedPayment(item);openChargeModal('modify_transfer_payment')"
+                (onUpdateRefund)="setSelectedPayment(item); openChargeModal('modify_refund_payment')"
             ></db-user-detail-payment-item>
         </ng-template>
 
@@ -45,3 +45,11 @@
     (close)="toggleModifyPaymentFullModal()"
     (confirm) = "confirmModifyPayment()"
 ></db-modify-payment-fullmodal>
+
+<rw-charge-modal
+    [(visible)] = "showChargeModal"
+    [chargeMode] = "chargeMode"
+    [inputs]="chargeInput"
+    (cancel) = "hideChargeModal()"
+    (confirm) = "onChargeConfirm($event)"
+></rw-charge-modal>
