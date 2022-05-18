@@ -15,6 +15,21 @@
         background-color: var(--white);
         cursor: pointer;
 
+        &.disabled {
+            background-color: #F1F1F1;
+            border: 1px solid #F1F1F1;
+            border-radius: 5px;
+            cursor:not-allowed;
+
+            .text {
+                color: var(--grey) !important;
+            }
+            .mdi {
+                color: var(--grey) !important;
+            }
+
+        }
+
         .text {
             font-weight: 500;
             overflow: hidden;

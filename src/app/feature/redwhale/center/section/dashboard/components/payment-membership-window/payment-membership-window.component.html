@@ -1,1 +1,123 @@
-<p>payment-membership-window works!</p>
+<section class="membership-ticket-window">
+
+    <div class="rw-typo-title2 window-header">회원권</div>
+    <div class="membership-info">
+        <span class="rw-typo-subtext0-regular small-title">회원권 기본 정보</span>
+        <db-membership-ticket-card
+            [cardInfo]="membershipTicket.membershipItem"
+            [isInWindow]="true"
+        ></db-membership-ticket-card>
+    </div>
+    <div class="reservable-lessons">
+        <span class="rw-typo-subtext0-regular small-title">예약 가능한 수업</span>
+        <db-lesson-selector
+            [(ngModel)]="membershipTicket.lessonList"
+            [disabled]="true"
+        ></db-lesson-selector>
+    </div>
+    <div class="datepick-container">
+        <div class="date-picker">
+            <span class="rw-typo-subtext0-regular small-title">시작일</span>
+            <div class="date-pick-button-disabled">
+                {{membershipTicket.date.startDate | dateFormat:'YYYY.MM.DD'}}
+            </div>
+        </div>
+        <div class="date-picker">
+            <span class="rw-typo-subtext0-regular small-title">만료일</span>
+            <div class="date-pick-button-disabled">
+                <span>{{membershipTicket.date.endDate | dateFormat:'YYYY.MM.DD'}} ({{membershipTicket.date | dayDiff}}일)</span>
+            </div>
+        </div>
+    </div>
+    <div class="count-container">
+        <span class="rw-typo-subtext0-regular small-title">횟수</span>
+        <div class="count">
+            <div class="input-container">
+                <input type="text" placeholder="0" [(ngModel)]="membershipTicket.count.count" class="rw-input" [disabled]="true">
+                <div class="input-count" [class.disabled]="true">회</div>
+            </div>
+            <rw-checkbox
+                [checked]="membershipTicket.count.infinite"
+                [disabled]="true"
+                text="무제한"
+            ></rw-checkbox>
+        </div>
+    </div>
+
+    <div class="payment-divider"></div>
+
+    <div id="pc1" class="payment-container">
+        <div class="payment-item">
+            <span class="rw-typo-subtext0-regular small-title">정상 금액</span>
+            <div class="input-container">
+                <div class="input-disabled text-right">
+                    {{membershipTicket.amount.normalAmount}}
+                </div>
+                <div class="input-count disabled">원</div>
+            </div>
+        </div>
+        <div class="payment-item">
+            <span class="rw-typo-subtext0-regular small-title">결제일</span>
+            <div class="input-disabled">
+                {{membershipTicket.date.startDate | dateFormat:'YYYY.MM.DD'}}
+            </div>
+        </div>
+    </div>
+    <div id="pc2" class="payment-container">
+        <div class="payment-item">
+            <span class="rw-typo-subtext0-regular small-title">현금</span>
+            <div class="input-container">
+                <input type="text" placeholder="0" [(ngModel)]="membershipTicket.price.cash"
+                    (keyup)="onPriceKeyup($event, 'cash')" class="rw-input">
+                <div class="input-count">원</div>
+            </div>
+        </div>
+        <div class="payment-item">
+            <span class="rw-typo-subtext0-regular small-title">카드</span>
+            <div class="input-container">
+                <input type="text" placeholder="0" [(ngModel)]="membershipTicket.price.card"
+                    (keyup)="onPriceKeyup($event, 'card')" class="rw-input">
+                <div class="input-count">원</div>
+            </div>
+        </div>
+    </div>
+    <div id="pc3" class="payment-container">
+        <div class="payment-item">
+            <span class="rw-typo-subtext0-regular small-title">계좌이체</span>
+            <div class="input-container">
+                <input type="text" placeholder="0" [(ngModel)]="membershipTicket.price.trans"
+                    (keyup)="onPriceKeyup($event, 'trans')" class="rw-input">
+                <div class="input-count">원</div>
+            </div>
+        </div>
+        <div class="payment-item">
+            <span class="rw-typo-subtext0-regular small-title">미수금</span>
+            <div class="input-container">
+                <input type="text" placeholder="0" [(ngModel)]="membershipTicket.price.unpaid"
+                    (keyup)="onPriceKeyup($event, 'unpaid')" class="rw-input">
+                <div class="input-count">원</div>
+            </div>
+        </div>
+    </div>
+    <div id="pc4" class="payment-container">
+        <div class="payment-item">
+            <span class="rw-typo-subtext0-regular small-title">결제 담당자</span>
+            <db-ml-staff-selector
+                [height]="'48'" [width]="'255'" [items]="staffSelect_list"
+                [(ngModel)]="membershipTicket.assignee"
+                (onSelectChange)="onStaffSelectChange()"
+            >
+            </db-ml-staff-selector>
+        </div>
+        <div class="payment-item">
+            <span class="rw-typo-subtext0-regular small-title">결제 금액</span>
+            <div class="input-container">
+                <div class="input-disabled text-right">
+                    {{membershipTicket.amount.paymentAmount}}
+                </div>
+                <div class="input-count disabled">원</div>
+            </div>
+        </div>
+    </div>
+
+</section>

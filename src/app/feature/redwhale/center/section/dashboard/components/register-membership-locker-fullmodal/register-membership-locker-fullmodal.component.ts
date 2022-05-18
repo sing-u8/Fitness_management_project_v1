@@ -199,7 +199,6 @@ export class RegisterMembershipLockerFullmodalComponent implements OnInit, OnCha
 
     // register ml items func
     registerMLs(btLoadingFns: ClickEmitterType) {
-        console.log('start register MLs')
         btLoadingFns.showLoading()
         this.cmpStore.registerMlItems({
             centerId: this.center.id,

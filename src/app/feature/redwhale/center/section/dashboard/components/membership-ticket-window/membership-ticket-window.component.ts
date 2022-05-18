@@ -34,7 +34,6 @@ export class MembershipTicketWindowComponent implements OnInit, AfterViewInit, O
     public dayDiff = ''
 
     public staffSelect_list: Array<{ name: string; value: CenterUser }> = []
-
     public center: Center
     public user: User
     // public status: 'modify' | 'done' = 'modify'

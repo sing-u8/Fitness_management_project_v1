@@ -27,7 +27,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
 })
 export class MlStaffSelectorComponent implements AfterViewInit, ControlValueAccessor {
     @Input() items: Array<{ name: string; value: any; disabled?: boolean }>
-    @Input() disabled: boolean
+    @Input() disabled = false
     @Input() width: string
     @Input() height: string
     @Input() closeBgColor: string

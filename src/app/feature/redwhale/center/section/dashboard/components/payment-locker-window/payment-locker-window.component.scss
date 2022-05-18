@@ -1,0 +1,204 @@
+* {
+    padding: 0px;
+    margin: 0px;
+}
+
+.locker-window {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 585px;
+    height: 703px;
+    box-shadow: 0px 0px 10px #b5b5b51c;
+    border-radius: 7px;
+    background-color: var(--white);
+    padding: 0px 27px 27px 27px;
+
+    .window-header {
+        display: flex;
+        width: 585px;
+        height: 58px;
+        padding-left: 27px;
+        padding-top: 20px;
+        align-items: flex-start;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .locker-info {
+        display: flex;
+        flex-direction: column;
+        width: 530px;
+        margin-top: 21px;
+        position: relative;
+
+        .locker-card {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            width: 100%;
+            height: 70px;
+            background-color: var(--white);
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+
+            .icon {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 36px;
+                height: 36px;
+                border-radius: 50%;
+                background-color: var(--border-color);
+
+                img {
+                    width: 24px;
+                    height: 24px;
+                }
+            }
+
+            .locker-text {
+                display: flex;
+                flex-direction: column;
+                margin-left: 12px;
+
+                span {
+                    &:first-of-type {
+                        margin-bottom: 0px;
+                    }
+                }
+
+                // justify-content: space-between;
+            }
+        }
+    }
+
+    .datepick-container {
+        width: 530px;
+        display: flex;
+
+        & .date-picker {
+            margin-top: 20px;
+            width: 255px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+
+            &:first-of-type {
+                margin-right: 20px;
+            }
+
+            & .date-pick-button-disabled {
+                display: flex;
+                align-items: center;
+                justify-content: flex-start;
+                border: 1px solid var(--border-color);
+                border-radius: 5px;
+                width: 255px;
+                height: 48px;
+                position: relative;
+                padding: 13px 38px 13px 15px;
+                cursor: not-allowed;
+                background-color: var(--background-color);
+                color: var(--grey);
+            }
+
+        }
+    }
+
+    .payment-divider {
+        width: 546px;
+        height: 1px;
+        margin: 34px 0px;
+        border-top: 1px solid var(--border-color);
+    }
+
+    .payment-container {
+        display: flex;
+        width: 530px;
+        margin-top: 22px;
+
+        &#pc1 {
+            margin-top: 0px;
+        }
+
+        .payment-item {
+            width: 255px;
+            display: flex;
+            flex-direction: column;
+
+            &:first-of-type {
+                margin-right: 20px;
+            }
+
+            .input-disabled {
+                display: flex;
+                align-items: center;
+                justify-content: flex-start;
+                border: 1px solid var(--border-color);
+                border-radius: 5px;
+                width: 255px;
+                height: 48px;
+                position: relative;
+                padding: 13px 38px 13px 15px;
+                cursor: not-allowed;
+                background-color: var(--background-color);
+                color: var(--grey);
+
+                &.text-right {
+                    justify-content: flex-end;
+                }
+            }
+
+            .input-container {
+                width: 255px;
+                height: 48px;
+                position: relative;
+                margin-right: 20px;
+
+                input {
+                    display: flex;
+                    align-items: center;
+                    width: 100%;
+                    height: 100%;
+                    text-align: right;
+                    padding: 0px 38px 0px 15px;
+                }
+
+                .input-count {
+                    position: absolute;
+                    top: 13.5px;
+                    right: 15px;
+
+                    &.disabled {
+                        color: var(--grey) !important;
+                    }
+                }
+            }
+        }
+    }
+
+    .delete-save-button {
+        display: flex;
+        justify-content: flex-end;
+        width: 530px;
+        margin-top: 45px;
+
+        .delete-button {
+            border: 1px solid var(--border-color);
+            margin-right: 10px;
+        }
+
+        .delete-button,
+        .save-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 96px;
+            height: 45px;
+        }
+    }
+}
+.small-title {
+    color: var(--grey);
+    margin-bottom: 5px;
+}

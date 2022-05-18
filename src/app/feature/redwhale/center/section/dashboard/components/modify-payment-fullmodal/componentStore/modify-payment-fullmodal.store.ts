@@ -10,8 +10,14 @@ import dayjs from 'dayjs'
 import { CenterUserListService } from '@services/helper/center-user-list.service'
 import { CenterMembershipService } from '@services/center-membership.service'
 import { CenterLockerService } from '@services/center-locker.service'
-import { CreateLockerTicketReqBody, CenterUsersLockerService } from '@services/center-users-locker.service.service'
-import { CreateMembershipTicketReqBody, CenterUsersMembershipService } from '@services/center-users-membership.service'
+import {
+    UpdateLockerTicektPaymentReqBody,
+    CenterUsersLockerService,
+} from '@services/center-users-locker.service.service'
+import {
+    UpdateMembershipTicketPaymentReqBody,
+    CenterUsersMembershipService,
+} from '@services/center-users-membership.service'
 
 import {
     MembershipTicket,
@@ -41,8 +47,34 @@ export interface State {
     instructors: CenterUser[]
 }
 export const stateInit: State = {
-    membershipTicket: undefined,
-    lockerTicket: undefined,
+    membershipTicket: {
+        date: { startDate: '', endDate: '' },
+        amount: { normalAmount: '', paymentAmount: '' },
+        price: {
+            card: '',
+            cash: '',
+            trans: '',
+            unpaid: '',
+        },
+        count: { count: '', infinite: false },
+        assignee: { name: '', value: {} as CenterUser },
+        membershipItem: {} as MembershipItem,
+        lessonList: [],
+        status: 'none',
+    },
+    lockerTicket: {
+        date: { startDate: '', endDate: '' },
+        amount: { normalAmount: '', paymentAmount: '' },
+        price: {
+            card: '',
+            cash: '',
+            trans: '',
+            unpaid: '',
+        },
+        assignee: { name: '', value: {} as CenterUser },
+        userLocker: {} as UserLocker,
+        status: 'none',
+    },
     instructors: [],
 }
 
@@ -50,7 +82,9 @@ export const stateInit: State = {
 export class ModifyPaymentFullModalStore extends ComponentStore<State> {
     public readonly membershipTicket$ = this.select((s) => s.membershipTicket)
     public readonly lockerTicket$ = this.select((s) => s.lockerTicket)
-    public readonly instructors$ = this.select((s) => s.instructors)
+    public readonly instructors$ = this.select((s) => {
+        return s.instructors
+    })
     public readonly totalPrice$ = this.select((s) => {
         const total: TotalPrice = {
             cash: { price: 0, name: '현금' },
@@ -59,9 +93,9 @@ export class ModifyPaymentFullModalStore extends ComponentStore<State> {
             unpaid: { price: 0, name: '미수금' },
         }
         const itemPrice: Price =
-            s.membershipTicket != undefined
+            s.membershipTicket.status != 'none'
                 ? s.membershipTicket.price
-                : s.lockerTicket != undefined
+                : s.lockerTicket.status != 'none'
                 ? s.lockerTicket.price
                 : undefined
         if (itemPrice == undefined) return total
@@ -110,6 +144,10 @@ export class ModifyPaymentFullModalStore extends ComponentStore<State> {
     })
     setMembershipTicketMembershipItem = this.updater((state, membershipItem: MembershipItem) => {
         state.membershipTicket.membershipItem = membershipItem
+        state.membershipTicket.lessonList = membershipItem.class_items.map((v) => ({
+            selected: true,
+            item: v,
+        }))
         state.membershipTicket.amount.normalAmount = String(membershipItem.price).replace(/\B(?=(\d{3})+(?!\d))/g, ',')
         return _.cloneDeep(state)
     })
@@ -163,17 +201,123 @@ export class ModifyPaymentFullModalStore extends ComponentStore<State> {
             )
     )
 
+    readonly modifyMembershipPayment = this.effect(
+        (
+            param$: Observable<{
+                centerId: string
+                curUser: CenterUser
+                membershipId: string
+                payment: Payment
+                callback: () => void
+            }>
+        ) =>
+            param$.pipe(
+                withLatestFrom(this.membershipTicket$),
+                switchMap(([param, membershipTicket]) => {
+                    const reqBody: UpdateMembershipTicketPaymentReqBody = {
+                        payment: {
+                            card: Number(membershipTicket.price.card.replace(/[^0-9]/gi, '')),
+                            trans: Number(membershipTicket.price.trans.replace(/[^0-9]/gi, '')),
+                            vbank: 0,
+                            phone: 0,
+                            cash: Number(membershipTicket.price.cash.replace(/[^0-9]/gi, '')),
+                            unpaid: Number(membershipTicket.price.unpaid.replace(/[^0-9]/gi, '')),
+                            memo: '',
+                            responsibility_user_id: membershipTicket.assignee.value.id,
+                        },
+                    }
+                    return this.centerUsersMembershipApi
+                        .updateMembershipTicketPayment(
+                            param.centerId,
+                            param.curUser.id,
+                            param.membershipId,
+                            param.payment.id,
+                            reqBody
+                        )
+                        .pipe(
+                            tap((result) => {
+                                param.callback()
+                                this.nxStore.dispatch(
+                                    DashboardActions.startGetUserData({
+                                        centerId: param.centerId,
+                                        centerUser: param.curUser,
+                                    })
+                                )
+                                this.nxStore.dispatch(
+                                    showToast({
+                                        text: `'${param.payment.user_membership_name}'결제 정보가 수정되었습니다.`,
+                                    })
+                                )
+                            })
+                        )
+                })
+            )
+    )
+
+    readonly modifyLockerPayment = this.effect(
+        (
+            param$: Observable<{
+                centerId: string
+                curUser: CenterUser
+                lockerId: string
+                payment: Payment
+                callback: () => void
+            }>
+        ) =>
+            param$.pipe(
+                withLatestFrom(this.lockerTicket$),
+                switchMap(([param, lockerTicket]) => {
+                    const reqBody: UpdateLockerTicektPaymentReqBody = {
+                        payment: {
+                            card: Number(lockerTicket.price.card.replace(/[^0-9]/gi, '')),
+                            trans: Number(lockerTicket.price.trans.replace(/[^0-9]/gi, '')),
+                            vbank: 0,
+                            phone: 0,
+                            cash: Number(lockerTicket.price.cash.replace(/[^0-9]/gi, '')),
+                            unpaid: Number(lockerTicket.price.unpaid.replace(/[^0-9]/gi, '')),
+                            memo: '',
+                            responsibility_user_id: lockerTicket.assignee.value.id,
+                        },
+                    }
+                    return this.centerUsersLockerApi
+                        .updateLockerTicketPayment(
+                            param.centerId,
+                            param.curUser.id,
+                            param.lockerId,
+                            param.payment.id,
+                            reqBody
+                        )
+                        .pipe(
+                            tap((result) => {
+                                param.callback()
+                                this.nxStore.dispatch(
+                                    DashboardActions.startGetUserData({
+                                        centerId: param.centerId,
+                                        centerUser: param.curUser,
+                                    })
+                                )
+                                this.nxStore.dispatch(
+                                    showToast({
+                                        text: `'${param.payment.user_locker_name}'결제 정보가 수정되었습니다.`,
+                                    })
+                                )
+                            })
+                        )
+                })
+            )
+    )
+
     // helper function
 
     initLockerTicket(paymentItem: Payment, userLocker: UserLocker): LockerTicket {
         const price: Price = {
-            card: String(paymentItem.card),
-            cash: String(paymentItem.cash),
-            trans: String(paymentItem.trans),
-            unpaid: String(paymentItem.unpaid),
+            card: String(paymentItem.card).replace(/\B(?=(\d{3})+(?!\d))/g, ','),
+            cash: String(paymentItem.cash).replace(/\B(?=(\d{3})+(?!\d))/g, ','),
+            trans: String(paymentItem.trans).replace(/\B(?=(\d{3})+(?!\d))/g, ','),
+            unpaid: String(paymentItem.unpaid).replace(/\B(?=(\d{3})+(?!\d))/g, ','),
         }
 
-        const paymentAmount = _.reduce(_.values(price), (acc, val) => acc + Number(val), 0)
+        const paymentAmount = _.reduce(_.values(price), (acc, val) => acc + Number(val.replace(/[^0-9]/gi, '')), 0)
             .toString()
             .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
 
@@ -188,13 +332,13 @@ export class ModifyPaymentFullModalStore extends ComponentStore<State> {
     }
     initMembershipTicket(paymentItem: Payment, userMembership: UserMembership): MembershipTicket {
         const price: Price = {
-            card: String(paymentItem.card),
-            cash: String(paymentItem.cash),
-            trans: String(paymentItem.trans),
-            unpaid: String(paymentItem.unpaid),
+            card: String(paymentItem.card).replace(/\B(?=(\d{3})+(?!\d))/g, ','),
+            cash: String(paymentItem.cash).replace(/\B(?=(\d{3})+(?!\d))/g, ','),
+            trans: String(paymentItem.trans).replace(/\B(?=(\d{3})+(?!\d))/g, ','),
+            unpaid: String(paymentItem.unpaid).replace(/\B(?=(\d{3})+(?!\d))/g, ','),
         }
 
-        const paymentAmount = _.reduce(_.values(price), (acc, val) => acc + Number(val), 0)
+        const paymentAmount = _.reduce(_.values(price), (acc, val) => acc + Number(val.replace(/[^0-9]/gi, '')), 0)
             .toString()
             .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
         return {
@@ -203,7 +347,8 @@ export class ModifyPaymentFullModalStore extends ComponentStore<State> {
             price: price,
             count: { count: String(userMembership.count), infinite: userMembership.unlimited },
             assignee: { name: paymentItem.responsibility.center_user_name, value: paymentItem.responsibility },
-            membershipItem: undefined,
+            membershipItem: {} as MembershipItem,
+            lessonList: [],
             status: 'idle',
         }
     }

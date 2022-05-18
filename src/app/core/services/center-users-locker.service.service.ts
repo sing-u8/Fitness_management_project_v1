@@ -342,6 +342,7 @@ export interface CreateLockerTicketPaymentReqBody {
         vbank: number
         phone: number
         cash: number
+        unpaid: number
         memo: string
         responsibility_user_id: string
     }
@@ -355,6 +356,7 @@ export interface UpdateLockerTicektPaymentReqBody {
         phone: number
         cash: number
         memo: string
+        unpaid: number
         responsibility_user_id: string
     }
 }

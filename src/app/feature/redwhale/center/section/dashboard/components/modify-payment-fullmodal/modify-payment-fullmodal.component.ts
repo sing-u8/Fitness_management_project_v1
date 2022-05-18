@@ -143,9 +143,46 @@ export class ModifyPaymentFullmodalComponent implements OnInit, OnChanges, After
         }
     }
 
+    onMemershipTicketChange(membershipTicket: MembershipTicket) {
+        console.log('onMemershipTicketChange : ', membershipTicket)
+        this.cmpStore.setmembershipTicket(membershipTicket)
+    }
+
+    onLockerTicketChange(lockerTicket: LockerTicket) {
+        this.cmpStore.setLockerTicket(lockerTicket)
+    }
+
     // fullmodal vars and funcs
     closeModal() {
         this.close.emit()
     }
     //
+
+    // modify payment
+    modifyPayment(btLoadingFns: ClickEmitterType) {
+        btLoadingFns.showLoading()
+        if (this.userPayment?.user_membership_id) {
+            this.cmpStore.modifyMembershipPayment({
+                centerId: this.center.id,
+                curUser: this.curUser,
+                membershipId: this.userMembership.id,
+                payment: this.userPayment,
+                callback: () => {
+                    btLoadingFns.hideLoading()
+                    this.closeModal()
+                },
+            })
+        } else {
+            this.cmpStore.modifyLockerPayment({
+                centerId: this.center.id,
+                curUser: this.curUser,
+                lockerId: this.userLocker.id,
+                payment: this.userPayment,
+                callback: () => {
+                    btLoadingFns.hideLoading()
+                    this.closeModal()
+                },
+            })
+        }
+    }
 }

@@ -1,0 +1,193 @@
+.membership-ticket-window {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 585px;
+    height: 891px;
+    box-shadow: 0px 0px 10px #b5b5b51c;
+    border-radius: 7px;
+    background-color: var(--white);
+    padding: 0px 27px 27px 27px;
+
+    .window-header {
+        display: flex;
+        width: 585px;
+        height: 58px;
+        padding-left: 27px;
+        padding-top: 20px;
+        align-items: flex-start;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .membership-info {
+        display: flex;
+        flex-direction: column;
+        width: 530px;
+        margin-top: 18px;
+        position: relative;
+
+        rw-membership-ticket-card {
+            width: 100%;
+        }
+    }
+
+    .reservable-lessons {
+        display: flex;
+        flex-direction: column;
+        width: 530px;
+        margin-top: 20px;
+    }
+
+    .datepick-container {
+        width: 530px;
+        display: flex;
+
+        & .date-picker {
+            margin-top: 20px;
+            width: 255px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+
+            &:first-of-type {
+                margin-right: 20px;
+            }
+
+            & .date-pick-button-disabled {
+                display: flex;
+                align-items: center;
+                justify-content: flex-start;
+                border: 1px solid var(--border-color);
+                border-radius: 5px;
+                width: 255px;
+                height: 48px;
+                position: relative;
+                padding: 13px 38px 13px 15px;
+                cursor: not-allowed;
+                background-color: var(--background-color);
+                color: var(--grey);
+            }
+        }
+    }
+
+    .count-container {
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        width: 530px;
+        margin-top: 20px;
+
+        .count {
+            display: flex;
+            align-items: center;
+
+            &>span {
+                width: 100%;
+            }
+
+            .input-container {
+                width: 255px;
+                height: 48px;
+                position: relative;
+                margin-right: 20px;
+
+                input {
+                    display: flex;
+                    align-items: center;
+                    width: 100%;
+                    height: 100%;
+                    text-align: left;
+                    padding: 0px 45px 0px 15px;
+                }
+
+                .input-count {
+                    position: absolute;
+                    top: 15px;
+                    right: 15px;
+
+                    &.disabled {
+                        color: var(--grey);
+                    }
+                }
+            }
+        }
+    }
+
+    .payment-divider {
+        width: 546px;
+        height: 1px;
+        margin: 34px 0px;
+        border-top: 1px solid var(--border-color);
+    }
+
+    .payment-container {
+        display: flex;
+        width: 530px;
+        margin-top: 22px;
+
+        &#pc1 {
+            margin-top: 0px;
+        }
+
+        .payment-item {
+            width: 255px;
+            display: flex;
+            flex-direction: column;
+
+            &:first-of-type {
+                margin-right: 20px;
+            }
+
+            .input-disabled {
+                display: flex;
+                align-items: center;
+                justify-content: flex-start;
+                border: 1px solid var(--border-color);
+                border-radius: 5px;
+                width: 255px;
+                height: 48px;
+                position: relative;
+                padding: 13px 38px 13px 15px;
+                cursor: not-allowed;
+                background-color: var(--background-color);
+                color: var(--grey);
+
+                &.text-right {
+                    justify-content: flex-end;
+                }
+            }
+
+            .input-container {
+                width: 255px;
+                height: 48px;
+                position: relative;
+                margin-right: 20px;
+
+                input {
+                    display: flex;
+                    align-items: center;
+                    width: 100%;
+                    height: 100%;
+                    text-align: right;
+                    padding: 0px 38px 0px 15px;
+                }
+
+                .input-count {
+                    position: absolute;
+                    top: 13.5px;
+                    right: 15px;
+
+                    &.disabled {
+                        color: var(--grey) !important;
+                    }
+                }
+            }
+        }
+    }
+
+}
+
+.small-title {
+    color: var(--grey);
+    margin-bottom: 5px;
+}

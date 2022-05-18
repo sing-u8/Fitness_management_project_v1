@@ -87,7 +87,9 @@ export class UserDetailPaymentItemComponent implements OnInit, AfterViewInit {
 
         this.total = this.payment.card + this.payment.cash + this.payment.trans + this.payment.unpaid
 
-        this.name = this.payment.user_membership_name + ', ' + this.payment.user_locker_name
+        this.name = this.payment.user_membership_id
+            ? '[회원권] ' + this.payment.user_membership_name
+            : '[락커] ' + this.payment.user_locker_name
 
         this.setMenuDropdownShow()
     }

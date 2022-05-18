@@ -19,7 +19,8 @@ export type MembershipTicket = {
     count?: { count: string; infinite: boolean }
     assignee?: { name: string; value: CenterUser }
     membershipItem: MembershipItem
-    status?: 'idle' | 'done'
+    lessonList: Array<{ selected: boolean; item: ClassItem }>
+    status?: 'none' | 'idle' | 'done'
 }
 
 export type LockerTicket = {
@@ -28,5 +29,5 @@ export type LockerTicket = {
     price?: Price
     assignee?: { name: string; value: CenterUser }
     userLocker: UserLocker
-    status?: 'idle' | 'done'
+    status?: 'none' | 'idle' | 'done'
 }

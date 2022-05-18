@@ -29,13 +29,19 @@
 
                     <ng-template #payment_membership [ngIf]="userPayment?.user_membership_id" [ngIfElse]="payment_locker">
                         <db-payment-membership-window
-
+                            [membershipTicket]="(membershipTicket$ | async)"
+                            [instructors]="(instructors$ | async)"
+                            (onPriceChange)="onMemershipTicketChange($event)"
+                            (onSelectChange)="onMemershipTicketChange($event)"
                         ></db-payment-membership-window>
                     </ng-template>
 
                     <ng-template #payment_locker>
                         <db-payment-locker-window
-
+                            [lockerTicket]="(lockerTicket$ | async)"
+                            [instructors]="(instructors$ | async)"
+                            (onPriceChange)="onLockerTicketChange($event)"
+                            (onSelectChange)="onLockerTicketChange($event)"
                         ></db-payment-locker-window>
                     </ng-template>
 
@@ -71,8 +77,8 @@
 
                         </div>
 
-                        <rw-button #modify_ml_bt [width]="'228'" [height]="'50'" [color]="'var(--red)'" [loadingName]="'modify_ml'"
-                            [borderRadius]="'5'" [disabled]="false" (onClick)="false">
+                        <rw-button #modify_ml_bt [width]="'228'" [height]="'50'" [color]="'var(--red)'" [loadingName]="'modify_ml_payment'"
+                            [borderRadius]="'5'" [disabled]="false" (onClick)="modifyPayment($event)">
                             <span class="modify-ml-button">
                                 수정하기
                             </span>

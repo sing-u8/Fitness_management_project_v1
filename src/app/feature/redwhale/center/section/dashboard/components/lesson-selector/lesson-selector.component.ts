@@ -18,6 +18,7 @@ import _ from 'lodash'
 export class LessonSelectorComponent implements AfterViewInit, ControlValueAccessor {
     @Input() items: Array<any>
     @Input() width: string
+    @Input() disabled = false
 
     @ViewChild('selectElement') selectElement
     @ViewChild('selectedElement') selectedElement
