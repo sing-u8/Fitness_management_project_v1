@@ -14,6 +14,7 @@ import dayjs from 'dayjs'
 import _ from 'lodash'
 
 import { CenterUsersService } from '@services/center-users.service'
+import { CenterUserListService } from '@services/helper/center-user-list.service'
 import { StorageService } from '@services/storage.service'
 
 import { User } from '@schemas/user'
@@ -63,13 +64,14 @@ export class LockerChargeModalComponent implements OnChanges, AfterViewChecked {
         private el: ElementRef,
         private renderer: Renderer2,
         private centerUsersService: CenterUsersService,
-        private storageService: StorageService
+        private storageService: StorageService,
+        private centerUserListService: CenterUserListService
     ) {
         this.isMouseModalDown = false
         this.paid_date = dayjs().format('YYYY.MM.DD')
         this.center = this.storageService.getCenter()
         this.user = this.storageService.getUser()
-        this.centerUsersService.getUserList(this.center.id, '', 'owner').subscribe((managers) => {
+        this.centerUserListService.getCenterInstructorList(this.center.id).subscribe((managers) => {
             this.staffList = managers
             managers.forEach((v) => {
                 this.staffSelect_list.push({

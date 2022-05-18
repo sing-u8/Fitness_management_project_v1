@@ -13,7 +13,6 @@
     <div class="col4" [class.notification]="isHolding">
         <div class="col4__content">
             {{locker.end_date | restPeriod}}일 남음
-            <div class="fill-down-icon"></div>
         </div>
         <div class="col4__menu" (click)="toggleMenuDropDown(); $event.stopPropagation()" (rwClickOutside)="hideMenuDropDown()">
             <div class="l-menu-items" [class.show-items]="showMenuDropDown">
@@ -32,7 +31,7 @@
         <div class="d-flex align-items-center">
             <div class="alert-icon"></div>
             {{locker.pause_start_date}} - {{locker.pause_end_date}} ({{locker.pause_start_date | period :
-            locker.pause_end_date}}일) 홀딩중
+            locker.pause_end_date}}일) {{isHoldingReservaed ? '홀딩 예약' : '홀딩중'}}
         </div>
 
         <div class="notification-menu" (click)="toggleNotificationDropDown(); $event.stopPropagation()"

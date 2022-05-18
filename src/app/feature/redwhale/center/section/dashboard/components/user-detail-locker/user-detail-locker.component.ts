@@ -150,8 +150,9 @@ export class UserDetailLockerComponent implements OnInit {
         this.showEmptyModal = false
     }
     onConfirmEmptyModal() {
-        // !!  추가로 결제 해야할 지 환불해야할 지 상태를 확인하는 코드가 필요
-        this.chargeMode = 'extend'
+        // !!  추가로 결제 해야할 지 환불해야할 지 상태를 확인하는 코드가 필요 ------------  이후에 해야할 듯
+        // if(this.selectedUserLocker.)
+        this.chargeMode = 'empty_locker_payment'
         this.hideEmptyModal()
         this.toggleChargeModal()
     }

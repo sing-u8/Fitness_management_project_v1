@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit } from '@angular/core'
 
 import _ from 'lodash'
+import dayjs from 'dayjs'
 import { originalOrder } from '@helpers/pipe/keyvalue'
 
 import { UserLocker } from '@schemas/user-locker'
@@ -119,11 +120,14 @@ export class UserDetailLockerItemComponent implements OnInit, AfterViewInit {
     }
 
     public isHolding = false
+    public isHoldingReservaed = false
 
     constructor() {}
 
     ngOnInit(): void {}
     ngAfterViewInit(): void {
         this.isHolding = this.locker.pause_start_date && this.locker.pause_end_date ? true : false
+        this.isHoldingReservaed =
+            this.isHolding && dayjs(this.locker.pause_start_date).isAfter(dayjs(), 'day') ? true : false
     }
 }

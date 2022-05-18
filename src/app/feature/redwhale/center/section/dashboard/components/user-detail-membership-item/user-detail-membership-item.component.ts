@@ -1,6 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit } from '@angular/core'
 
 import _ from 'lodash'
+import dayjs from 'dayjs'
+
 import { originalOrder } from '@helpers/pipe/keyvalue'
 
 import { UserMembership } from '@schemas/user-membership'
@@ -112,6 +114,7 @@ export class UserDetailMembershipItemComponent implements OnInit, AfterViewInit 
 
     public reservableClassText = ''
     public isHolding = false
+    public isHoldingReservaed = false
 
     constructor() {}
 
@@ -126,5 +129,7 @@ export class UserDetailMembershipItemComponent implements OnInit, AfterViewInit 
         )
 
         this.isHolding = this.membership.pause_start_date && this.membership.pause_end_date ? true : false
+        this.isHoldingReservaed =
+            this.isHolding && dayjs(this.membership.pause_start_date).isAfter(dayjs(), 'day') ? true : false
     }
 }

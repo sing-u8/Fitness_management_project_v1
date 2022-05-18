@@ -15,7 +15,6 @@
     <div class="col4" [class.notification]="isHolding">
         <div class="col4__content">
             필라테스 오전 초급반... 외 5개(test)
-회
             <div class="fill-down-icon"></div>
         </div>
         <div
@@ -43,7 +42,7 @@
         <div class="d-flex align-items-center">
             <div class="alert-icon"></div>
             {{membership.pause_start_date}} - {{membership.pause_end_date}} ({{membership.pause_start_date | period :
-            membership.pause_end_date}}일) 홀딩중
+            membership.pause_end_date}}일) {{isHoldingReservaed ? '홀딩 예약' : '홀딩중'}}
         </div>
 
         <div
