@@ -107,6 +107,10 @@
                 &:hover {
                     background-color: var(--background-color);
                 }
+
+                &.none {
+                    display: none;
+                }
             }
         }
     }
@@ -140,6 +144,7 @@
 }
 
 .isExpired {
+    cursor: auto !important;
     .col1,
     .col2,
     .col3,

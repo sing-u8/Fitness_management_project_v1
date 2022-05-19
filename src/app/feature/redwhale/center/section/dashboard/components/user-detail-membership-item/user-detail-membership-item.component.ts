@@ -7,6 +7,9 @@ import { originalOrder } from '@helpers/pipe/keyvalue'
 
 import { UserMembership } from '@schemas/user-membership'
 
+import { WordService } from '@services/helper/word.service'
+import { TimeService } from '@services/helper/time.service'
+
 @Component({
     selector: 'db-user-detail-membership-item',
     templateUrl: './user-detail-membership-item.component.html',
@@ -85,6 +88,15 @@ export class UserDetailMembershipItemComponent implements OnInit, AfterViewInit 
             },
         },
     }
+    setMenuDropDownVisible(keys: string[], visible: boolean) {
+        _.forIn(this.menuDropDownItemObj, (v, k) => {
+            if (_.includes(keys, k)) {
+                this.menuDropDownItemObj[k]['visible'] = visible
+            } else {
+                this.menuDropDownItemObj[k]['visible'] = !visible
+            }
+        })
+    }
 
     public showNotificationDropDown = false
     toggleNotificationDropDown() {
@@ -113,21 +125,67 @@ export class UserDetailMembershipItemComponent implements OnInit, AfterViewInit 
     }
 
     public reservableClassText = ''
+    public reservableClassFullText = ''
+    public showFullClassArrow = false
+    public openFullClass = false
+    getReservableClassText() {
+        if (this.membership.class.length > 1) {
+            this.showFullClassArrow = true
+            this.reservableClassText = `${this.wordService.ellipsis(this.membership.class[0].name, 11)} 외 ${
+                this.membership.class.length - 1
+            }개`
+            this.reservableClassFullText = _.reduce(
+                this.membership.class,
+                (acc, cur, idx, list) => {
+                    return acc + cur.name + (idx != list.length - 1 ? ', ' : '')
+                },
+                ''
+            )
+        } else {
+            this.reservableClassText = `${this.wordService.ellipsis(this.membership.class[0].name, 11)}`
+            if (this.membership.class[0].name.length > 11) {
+                this.showFullClassArrow = true
+                this.reservableClassFullText = this.membership.class[0].name
+            }
+        }
+    }
+    toggleShowFullClass() {
+        if (this.showFullClassArrow) {
+            this.openFullClass = !this.openFullClass
+        }
+    }
+    closeShowFullClass() {
+        if (this.showFullClassArrow) {
+            this.openFullClass = false
+        }
+    }
     public isHolding = false
     public isHoldingReservaed = false
 
-    constructor() {}
+    public isExpired = false
+    checkIsExpired() {
+        if (
+            this.membership.state_code == 'user_membership_state_refund' ||
+            this.timeService.getRestPeriod(dayjs().format(), this.membership.end_date) < 1 ||
+            (this.membership.count <= 0 && this.membership.unlimited == false)
+        ) {
+            this.isExpired = true
+            this.setMenuDropDownVisible(['removeRecord'], true)
+        } else {
+            this.isExpired = false
+        }
+    }
+
+    public restDate = 0
+
+    constructor(private wordService: WordService, private timeService: TimeService) {}
 
     ngOnInit(): void {}
     ngAfterViewInit(): void {
-        this.reservableClassText = _.reduce(
-            this.membership.class,
-            (acc, cur, idx, list) => {
-                return acc + cur.name + (idx != list.length - 1 ? ', ' : '')
-            },
-            ''
-        )
-
+        this.checkIsExpired()
+        this.getReservableClassText()
+        this.restDate = this.timeService.getRestPeriod(dayjs().format(), this.membership.end_date)
+        this.restDate = this.restDate < 1 || this.isExpired ? 0 : this.restDate
         this.isHolding = this.membership.pause_start_date && this.membership.pause_end_date ? true : false
         this.isHoldingReservaed =
             this.isHolding && dayjs(this.membership.pause_start_date).isAfter(dayjs(), 'day') ? true : false

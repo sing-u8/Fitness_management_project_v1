@@ -10,7 +10,7 @@ import { UserMembershipUsed } from '@schemas/user-membership-used'
 
 export interface UserMembership {
     id: string
-    state_code: string // user_membership_state_in_use, user_membership_state_paused
+    state_code: 'user_membership_state_in_use' | 'user_membership_state_paused' | 'user_membership_state_refund'
     state_code_name: string
     category_name: string
     membership_category_id: string

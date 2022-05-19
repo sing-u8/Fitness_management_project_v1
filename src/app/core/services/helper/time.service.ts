@@ -78,6 +78,15 @@ export class TimeService {
     getKoreanMemberAge(inputDate: string) {
         return dayjs(inputDate.slice(0, 4)).fromNow().slice(0, 2)
     }
+
+    //
+
+    getRestPeriod(startDate: string, endDate: string) {
+        const date1 = dayjs(startDate).format('YYYY-MM-DD')
+        const date2 = dayjs(endDate).format('YYYY-MM-DD')
+
+        return dayjs(date2).diff(dayjs(date1), 'day') + 1
+    }
 }
 
 const timeStr = {

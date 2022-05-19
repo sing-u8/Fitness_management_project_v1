@@ -9,7 +9,7 @@ export interface UserLocker {
     id: string
     locker_item_id: string
     locker_category_id: string
-    state_code: string
+    state_code: 'user_locker_state_in_use' | 'user_locker_state_paused' | 'user_locker_state_refund'
     state_code_name: string
     category_name: string
     name: string

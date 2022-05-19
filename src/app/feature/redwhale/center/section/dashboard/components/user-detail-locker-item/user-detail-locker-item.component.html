@@ -1,18 +1,18 @@
 <div
     class="item"
-    [class.isExpired] = "false"
+    [class.isExpired] = "isExpired"
 >
 
-    <div class="col1">{{locker.category_name}}</div>
-    <div class="col2" [class.notification]="isHolding">
+    <div rwEllipsisDropdown [lineClamp]="2" class="col1">{{locker.category_name}}</div>
+    <div rwEllipsisDropdown [lineClamp]="2" class="col2" [class.notification]="isHolding">
         {{locker.name}}
     </div>
     <div class="col3" [class.notification]="isHolding">
-        {{locker.start_date}} - {{locker.end_date}} ({{locker.start_date | period : locker.end_date}})
+        {{locker.start_date | dateFormat:'YYYY.MM.DD'}} - {{locker.end_date | dateFormat:'YYYY.MM.DD'}} ({{locker.start_date | period : locker.end_date}}일)
     </div>
     <div class="col4" [class.notification]="isHolding">
         <div class="col4__content">
-            {{locker.end_date | restPeriod}}일 남음
+            {{restDate}}일 남음
         </div>
         <div class="col4__menu" (click)="toggleMenuDropDown(); $event.stopPropagation()" (rwClickOutside)="hideMenuDropDown()">
             <div class="l-menu-items" [class.show-items]="showMenuDropDown">
@@ -20,6 +20,7 @@
                     class="menu-item"
                     *ngFor="let item of menuDropDownItemObj | keyvalue : originalOrder"
                     [ngStyle]="{color: item.value.color}"
+                    [class.none] = "!item.value.visible"
                     (click) = "item.value.func()"
                 >
                     {{item.value.name}}
@@ -27,7 +28,7 @@
             </div>
         </div>
     </div>
-    <div class="rw-typo-subtext0-regular col-notification" [class.show-notification]="isHolding">
+    <div *ngIf="!isExpired && isHolding" class="rw-typo-subtext0-regular col-notification" [class.show-notification]="isHolding">
         <div class="d-flex align-items-center">
             <div class="alert-icon"></div>
             {{locker.pause_start_date}} - {{locker.pause_end_date}} ({{locker.pause_start_date | period :

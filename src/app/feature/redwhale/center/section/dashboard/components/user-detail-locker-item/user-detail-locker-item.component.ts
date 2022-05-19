@@ -5,6 +5,9 @@ import dayjs from 'dayjs'
 import { originalOrder } from '@helpers/pipe/keyvalue'
 
 import { UserLocker } from '@schemas/user-locker'
+
+import { WordService } from '@services/helper/word.service'
+import { TimeService } from '@services/helper/time.service'
 @Component({
     selector: 'db-user-detail-locker-item',
     templateUrl: './user-detail-locker-item.component.html',
@@ -92,6 +95,15 @@ export class UserDetailLockerItemComponent implements OnInit, AfterViewInit {
             },
         },
     }
+    setMenuDropDownVisible(keys: string[], visible: boolean) {
+        _.forIn(this.menuDropDownItemObj, (v, k) => {
+            if (_.includes(keys, k)) {
+                this.menuDropDownItemObj[k]['visible'] = visible
+            } else {
+                this.menuDropDownItemObj[k]['visible'] = !visible
+            }
+        })
+    }
 
     public showNotificationDropDown = false
     toggleNotificationDropDown() {
@@ -122,10 +134,28 @@ export class UserDetailLockerItemComponent implements OnInit, AfterViewInit {
     public isHolding = false
     public isHoldingReservaed = false
 
-    constructor() {}
+    public isExpired = false
+    checkIsExpired() {
+        if (
+            this.locker.state_code == 'user_locker_state_refund' ||
+            this.timeService.getRestPeriod(dayjs().format(), this.locker.end_date) < 1
+        ) {
+            this.isExpired = true
+            this.setMenuDropDownVisible(['removeRecord'], true)
+        } else {
+            this.isExpired = false
+        }
+    }
+
+    public restDate = 0
+
+    constructor(private wordService: WordService, private timeService: TimeService) {}
 
     ngOnInit(): void {}
     ngAfterViewInit(): void {
+        this.checkIsExpired()
+        this.restDate = this.timeService.getRestPeriod(dayjs().format(), this.locker.end_date)
+        this.restDate = this.restDate < 1 || this.isExpired ? 0 : this.restDate
         this.isHolding = this.locker.pause_start_date && this.locker.pause_end_date ? true : false
         this.isHoldingReservaed =
             this.isHolding && dayjs(this.locker.pause_start_date).isAfter(dayjs(), 'day') ? true : false

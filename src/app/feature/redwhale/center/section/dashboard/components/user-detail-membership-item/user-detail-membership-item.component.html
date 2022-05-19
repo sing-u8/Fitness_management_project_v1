@@ -1,21 +1,32 @@
 <div
     class="item"
-    [class.isExpired] = "false"
+    [class.isExpired] = "isExpired"
 >
 
-    <div class="col1">
+    <div rwEllipsisDropdown [lineClamp]="2" class="col1 two-line-ellipsis">
         {{membership.name}}
     </div>
     <div class="col2" [class.notification]="isHolding">
-        {{membership.start_date}} - {{membership.end_date}} ({{membership.start_date | period : membership.end_date}})
+        {{membership.start_date | dateFormat:'YYYY.MM.DD'}} - {{membership.end_date | dateFormat:'YYYY.MM.DD'}} ({{membership.start_date | period : membership.end_date}}일)
     </div>
     <div class="col3" [class.notification]="isHolding">
-        {{membership.end_date | restPeriod}}일 / {{membership.unlimited ? '무제한' : membership.count + '회' }} 남음
+        {{restDate}}일 / {{membership.unlimited ? '무제한' : membership.count < 1 || isExpired ? 0 : membership.count + '회' }} 남음
     </div>
     <div class="col4" [class.notification]="isHolding">
-        <div class="col4__content">
-            필라테스 오전 초급반... 외 5개(test)
-            <div class="fill-down-icon"></div>
+        <div
+            (click)="!isExpired && toggleShowFullClass()"
+            (rwClickOutside)="!isExpired && closeShowFullClass()"
+            class="col4__content"
+            [class.pointer-cursor]="!isExpired && showFullClassArrow"
+        >
+            {{reservableClassText}}
+            <div
+                *ngIf="showFullClassArrow"
+                class="fill-down-icon"
+                [class.open]="openFullClass"
+            ></div>
+
+            <div *ngIf="openFullClass" class="ellipsis-dropdown">{{reservableClassFullText}}</div>
         </div>
         <div
             class="col4__menu"
@@ -30,6 +41,7 @@
                     class="menu-item"
                     *ngFor="let item of menuDropDownItemObj | keyvalue : originalOrder"
                     [ngStyle]="{color: item.value.color}"
+                    [class.none] = "!item.value.visible"
                     (click) = "item.value.func()"
                 >
                     {{item.value.name}}
@@ -37,7 +49,7 @@
             </div>
         </div>
     </div>
-    <div *ngIf="isHolding" class="rw-typo-subtext0-regular col-notification" [class.show-notification]="isHolding">
+    <div *ngIf="!isExpired && isHolding" class="rw-typo-subtext0-regular col-notification" [class.show-notification]="isHolding">
 
         <div class="d-flex align-items-center">
             <div class="alert-icon"></div>

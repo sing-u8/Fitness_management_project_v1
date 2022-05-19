@@ -85,9 +85,9 @@ p {
                 justify-content: space-between;
                 width: 100%;
                 .card-title {
+                    width: 65%;
                     text-overflow: ellipsis;
                     overflow: hidden;
-                    width: 65%;
                     display: -webkit-box;
                     -webkit-box-orient: vertical;
                     -webkit-line-clamp: 2;
