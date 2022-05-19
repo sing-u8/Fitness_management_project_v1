@@ -6,8 +6,10 @@ import {
     ExtendLockerTicketReqBody,
     RefundLockerTicketReqBody,
     PauseLockerTicketReqBody,
+    CreateLockerTicketPaymentReqBody,
 } from '@services/center-users-locker.service.service'
 import { StorageService } from '@services/storage.service'
+import { TimeService } from '@services/helper/time.service'
 
 import { Center } from '@schemas/center'
 import { UserLocker } from '@schemas/user-locker'
@@ -40,7 +42,8 @@ export class UserDetailLockerComponent implements OnInit {
         private nxStore: Store,
         private wordService: WordService,
         private centerUsersLockerService: CenterUsersLockerService,
-        private storageService: StorageService
+        private storageService: StorageService,
+        private timeService: TimeService
     ) {}
 
     ngOnInit(): void {}
@@ -98,8 +101,12 @@ export class UserDetailLockerComponent implements OnInit {
                 output.loadingFns.hideLoading()
             })
         } else if (this.chargeMode == 'transfer') {
-        } else if (this.chargeMode == 'empty_locker_payment' || this.chargeMode == 'empty_locker_refund') {
-            this.callEmptyApi(() => {
+        } else if (this.chargeMode == 'empty_locker_payment') {
+            this.callEmptyPaymentApi(() => {
+                output.loadingFns.hideLoading()
+            })
+        } else if (this.chargeMode == 'empty_locker_refund') {
+            this.callEmptyRefund(() => {
                 output.loadingFns.hideLoading()
             })
         }
@@ -150,11 +157,23 @@ export class UserDetailLockerComponent implements OnInit {
         this.showEmptyModal = false
     }
     onConfirmEmptyModal() {
-        // !!  추가로 결제 해야할 지 환불해야할 지 상태를 확인하는 코드가 필요 ------------  이후에 해야할 듯
-        // if(this.selectedUserLocker.)
-        this.chargeMode = 'empty_locker_payment'
+        this.chargeMode =
+            this.checkIsLockerUnpaidExist() || this.checkIsLockerExpired()
+                ? 'empty_locker_payment'
+                : 'empty_locker_refund'
         this.hideEmptyModal()
         this.toggleChargeModal()
+    }
+
+    checkIsLockerUnpaidExist() {
+        let unpaidTotal = 0
+        this.selectedUserLocker.payment.forEach((v) => {
+            unpaidTotal += v.unpaid
+        })
+        return unpaidTotal != 0 ? true : false
+    }
+    checkIsLockerExpired() {
+        return this.timeService.getRestPeriod(dayjs().format(), this.selectedUserLocker.end_date) < 1
     }
 
     // refund funcs
@@ -312,7 +331,72 @@ export class UserDetailLockerComponent implements OnInit {
                 cb ? cb() : null
             })
     }
-    callEmptyApi(cb?: () => void) {}
+    callEmptyRefund(cb?: () => void) {
+        const reqBody: RefundLockerTicketReqBody = {
+            payment: {
+                card: this.chargeData.pay_card,
+                trans: this.chargeData.pay_trans,
+                cash: this.chargeData.pay_cash,
+                vbank: 0,
+                phone: 0,
+                memo: '',
+                responsibility_user_id: this.chargeData.assignee_id,
+            },
+        }
+        this.centerUsersLockerService
+            .refundLockerTicket(this.center.id, this.curUserData.user.id, this.selectedUserLocker.id, reqBody)
+            .subscribe((_) => {
+                this.nxStore.dispatch(
+                    showToast({
+                        text: `'${this.wordService.ellipsis(
+                            this.selectedUserLocker.name,
+                            6
+                        )}' 비우기가 완료되었습니다.`,
+                    })
+                )
+                this.nxStore.dispatch(
+                    DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.curUserData.user })
+                )
+                cb ? cb() : null
+            })
+    }
+    callEmptyPaymentApi(cb?: () => void) {
+        const reqBody: CreateLockerTicketPaymentReqBody = {
+            payment: {
+                card: this.chargeData.pay_card,
+                trans: this.chargeData.pay_trans,
+                cash: this.chargeData.pay_cash,
+                unpaid: this.chargeData.unpaid,
+                vbank: 0,
+                phone: 0,
+                memo: '',
+                responsibility_user_id: this.chargeData.assignee_id,
+            },
+        }
+        this.centerUsersLockerService
+            .createLockerTicketPayment(this.center.id, this.curUserData.user.id, this.selectedUserLocker.id, reqBody)
+            .subscribe((_) => {
+                this.centerUsersLockerService
+                    .deleteLockerTicket(this.center.id, this.curUserData.user.id, this.selectedUserLocker.id)
+                    .subscribe(() => {
+                        this.nxStore.dispatch(
+                            showToast({
+                                text: `'${this.wordService.ellipsis(
+                                    this.selectedUserLocker.name,
+                                    6
+                                )}' 비우기가 완료되었습니다.`,
+                            })
+                        )
+                        this.nxStore.dispatch(
+                            DashboardActions.startGetUserData({
+                                centerId: this.center.id,
+                                centerUser: this.curUserData.user,
+                            })
+                        )
+                        cb ? cb() : null
+                    })
+            })
+    }
     callRefundApi(cb?: () => void) {
         const reqBody: RefundLockerTicketReqBody = {
             payment: {
