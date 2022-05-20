@@ -6,7 +6,7 @@ import {
     ExtendLockerTicketReqBody,
     RefundLockerTicketReqBody,
     PauseLockerTicketReqBody,
-    CreateLockerTicketPaymentReqBody,
+    ExpireLockerTicketReqBody,
 } from '@services/center-users-locker.service.service'
 import { StorageService } from '@services/storage.service'
 import { TimeService } from '@services/helper/time.service'
@@ -361,12 +361,11 @@ export class UserDetailLockerComponent implements OnInit {
             })
     }
     callEmptyPaymentApi(cb?: () => void) {
-        const reqBody: CreateLockerTicketPaymentReqBody = {
+        const reqBody: ExpireLockerTicketReqBody = {
             payment: {
                 card: this.chargeData.pay_card,
                 trans: this.chargeData.pay_trans,
                 cash: this.chargeData.pay_cash,
-                unpaid: this.chargeData.unpaid,
                 vbank: 0,
                 phone: 0,
                 memo: '',
@@ -374,27 +373,23 @@ export class UserDetailLockerComponent implements OnInit {
             },
         }
         this.centerUsersLockerService
-            .createLockerTicketPayment(this.center.id, this.curUserData.user.id, this.selectedUserLocker.id, reqBody)
+            .expireLockerTicket(this.center.id, this.curUserData.user.id, this.selectedUserLocker.id, reqBody)
             .subscribe((_) => {
-                this.centerUsersLockerService
-                    .deleteLockerTicket(this.center.id, this.curUserData.user.id, this.selectedUserLocker.id)
-                    .subscribe(() => {
-                        this.nxStore.dispatch(
-                            showToast({
-                                text: `'${this.wordService.ellipsis(
-                                    this.selectedUserLocker.name,
-                                    6
-                                )}' 비우기가 완료되었습니다.`,
-                            })
-                        )
-                        this.nxStore.dispatch(
-                            DashboardActions.startGetUserData({
-                                centerId: this.center.id,
-                                centerUser: this.curUserData.user,
-                            })
-                        )
-                        cb ? cb() : null
+                this.nxStore.dispatch(
+                    showToast({
+                        text: `'${this.wordService.ellipsis(
+                            this.selectedUserLocker.name,
+                            6
+                        )}' 비우기가 완료되었습니다.`,
                     })
+                )
+                this.nxStore.dispatch(
+                    DashboardActions.startGetUserData({
+                        centerId: this.center.id,
+                        centerUser: this.curUserData.user,
+                    })
+                )
+                cb ? cb() : null
             })
     }
     callRefundApi(cb?: () => void) {

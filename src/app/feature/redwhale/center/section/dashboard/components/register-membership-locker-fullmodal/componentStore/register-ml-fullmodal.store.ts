@@ -11,6 +11,7 @@ import { CenterUserListService } from '@services/helper/center-user-list.service
 import { CenterMembershipService } from '@services/center-membership.service'
 import { CreateLockerTicketReqBody, CenterUsersLockerService } from '@services/center-users-locker.service.service'
 import { CreateMembershipTicketReqBody, CenterUsersMembershipService } from '@services/center-users-membership.service'
+import { CenterUsersPaymentService, CreateMLPaymentReqBody } from '@services/center-users-payment.service'
 
 import {
     MembershipTicket,
@@ -82,6 +83,7 @@ export class RegisterMembershipLockerFullmodalStore extends ComponentStore<State
         private centerMembershipApi: CenterMembershipService,
         private centerUsersLockerApi: CenterUsersLockerService,
         private centerUsersMembershipApi: CenterUsersMembershipService,
+        private centerUsersPaymentApi: CenterUsersPaymentService,
         private nxStore: Store
     ) {
         super(_.cloneDeep(stateInit))
@@ -225,61 +227,56 @@ export class RegisterMembershipLockerFullmodalStore extends ComponentStore<State
                     const lockerItems = mlItems.filter((item) => item.type == 'locker')
                     const membershipItems = mlItems.filter((item) => item.type == 'membership')
 
-                    const createLockerTicketReqs: CreateLockerTicketReqBody[] = lockerItems.map((v) => {
-                        return {
-                            locker_item_id: v['locker'].id as string,
-                            start_date: v.date.startDate,
-                            end_date: v.date.endDate,
-                            payment: {
-                                card: Number(v.price.card.replace(/[^0-9]/gi, '')),
-                                trans: Number(v.price.trans.replace(/[^0-9]/gi, '')),
-                                cash: Number(v.price.cash.replace(/[^0-9]/gi, '')),
-                                unpaid: Number(v.price.unpaid.replace(/[^0-9]/gi, '')),
-                                vbank: 0,
-                                phone: 0,
-                                memo: '',
-                                responsibility_user_id: v.assignee.value.id,
-                            },
-                        }
-                    })
-                    const createMembershipTicketsReqs: CreateMembershipTicketReqBody[] = membershipItems.map((v) => {
-                        return {
-                            membership_item_id: v['membershipItem'].id,
-                            category_name: v['membershipItem'].category_name,
-                            name: v['membershipItem'].name,
-                            start_date: v.date.startDate,
-                            end_date: v.date.endDate,
-                            count: Number(v['count'].count),
-                            unlimited: v['count'].infinite,
-                            color: v['membershipItem'].color,
-                            class_item_ids: _.map(
-                                _.filter(v['lessonList'], (v) => v.selected == true),
-                                (v) => v.item.id
-                            ),
-                            payment: {
-                                card: Number(v.price.card.replace(/[^0-9]/gi, '')),
-                                trans: Number(v.price.trans.replace(/[^0-9]/gi, '')),
-                                cash: Number(v.price.cash.replace(/[^0-9]/gi, '')),
-                                unpaid: Number(v.price.unpaid.replace(/[^0-9]/gi, '')),
-                                vbank: 0,
-                                phone: 0,
-                                memo: '',
-                                responsibility_user_id: v.assignee.value.id,
-                            },
-                        }
-                    })
-
-                    const lockerApis = createLockerTicketReqs.map((v) =>
-                        this.centerUsersLockerApi.createLockerTicket(reqBody.centerId, reqBody.user.id, v)
-                    )
-                    const membershipApis = createMembershipTicketsReqs.map((v) =>
-                        this.centerUsersMembershipApi.createMembershipTicket(reqBody.centerId, reqBody.user.id, v)
-                    )
-
-                    forkJoin([...lockerApis, ...membershipApis])
+                    const createMLPaymentReqBody: CreateMLPaymentReqBody = {
+                        user_memberships: _.map(membershipItems, (v) => {
+                            return {
+                                membership_item_id: v['membershipItem'].id,
+                                category_name: v['membershipItem'].category_name,
+                                name: v['membershipItem'].name,
+                                start_date: v.date.startDate,
+                                end_date: v.date.endDate,
+                                count: Number(v['count'].count),
+                                unlimited: v['count'].infinite,
+                                color: v['membershipItem'].color,
+                                class_item_ids: _.map(
+                                    _.filter(v['lessonList'], (v) => v.selected == true),
+                                    (v) => v.item.id
+                                ),
+                                payment: {
+                                    card: Number(v.price.card.replace(/[^0-9]/gi, '')),
+                                    trans: Number(v.price.trans.replace(/[^0-9]/gi, '')),
+                                    cash: Number(v.price.cash.replace(/[^0-9]/gi, '')),
+                                    unpaid: Number(v.price.unpaid.replace(/[^0-9]/gi, '')),
+                                    vbank: 0,
+                                    phone: 0,
+                                    memo: '',
+                                    responsibility_user_id: v.assignee.value.id,
+                                },
+                            }
+                        }),
+                        user_lockers: _.map(lockerItems, (v) => {
+                            return {
+                                locker_item_id: v['locker'].id as string,
+                                start_date: v.date.startDate,
+                                end_date: v.date.endDate,
+                                payment: {
+                                    card: Number(v.price.card.replace(/[^0-9]/gi, '')),
+                                    trans: Number(v.price.trans.replace(/[^0-9]/gi, '')),
+                                    cash: Number(v.price.cash.replace(/[^0-9]/gi, '')),
+                                    unpaid: Number(v.price.unpaid.replace(/[^0-9]/gi, '')),
+                                    vbank: 0,
+                                    phone: 0,
+                                    memo: '',
+                                    responsibility_user_id: v.assignee.value.id,
+                                },
+                            }
+                        }),
+                    }
+                    this.centerUsersPaymentApi
+                        .createMembershipAndLockerPayment(reqBody.centerId, reqBody.user.id, createMLPaymentReqBody)
                         .pipe(
                             tap(() => {
-                                if (lockerApis.length > 0 && membershipApis.length > 0) {
+                                if (lockerItems.length > 0 && membershipItems.length > 0) {
                                     this.nxStore.dispatch(
                                         LockerActions.startUpdateStateAfterRegisterLockerInDashboard()
                                     )
@@ -288,7 +285,7 @@ export class RegisterMembershipLockerFullmodalStore extends ComponentStore<State
                                             text: `${reqBody.user.center_user_name}님의 회원권 / 락커 등록이 완료되었습니다. `,
                                         })
                                     )
-                                } else if (lockerApis.length > 0) {
+                                } else if (lockerItems.length > 0) {
                                     this.nxStore.dispatch(
                                         LockerActions.startUpdateStateAfterRegisterLockerInDashboard()
                                     )
@@ -297,14 +294,13 @@ export class RegisterMembershipLockerFullmodalStore extends ComponentStore<State
                                             text: `${reqBody.user.center_user_name}님의 락커 등록이 완료되었습니다. `,
                                         })
                                     )
-                                } else if (membershipApis.length > 0) {
+                                } else if (membershipItems.length > 0) {
                                     this.nxStore.dispatch(
                                         showToast({
                                             text: `${reqBody.user.center_user_name}님의 회원권 등록이 완료되었습니다. `,
                                         })
                                     )
                                 }
-
                                 reqBody.callback()
                             })
                         )

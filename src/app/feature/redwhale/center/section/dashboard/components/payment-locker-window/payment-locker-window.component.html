@@ -35,9 +35,13 @@
     <div id="pc1" class="payment-container">
         <div class="payment-item">
             <span class="rw-typo-subtext0-regular small-title">정상 금액</span>
-            <div class="input-disabled text-right">
-                {{lockerTicket.amount.normalAmount}}
+            <div class="input-container">
+                <div class="input-disabled text-right">
+                    {{lockerTicket.amount.normalAmount}}
+                </div>
+                <div class="input-count disabled">원</div>
             </div>
+
             <!-- <div class="input-container">
                 <input type="text" placeholder="0" [(ngModel)]="lockerTicket.amount.normalAmount"
                     (keyup)="onPriceKeyup($event, undefined)" class="rw-input">

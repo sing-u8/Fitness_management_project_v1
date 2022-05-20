@@ -138,7 +138,7 @@ export class UserDetailLockerItemComponent implements OnInit, AfterViewInit {
     checkIsExpired() {
         if (
             this.locker.state_code == 'user_locker_state_refund' ||
-            this.timeService.getRestPeriod(dayjs().format(), this.locker.end_date) < 1
+            this.locker.state_code == 'user_locker_state_expired'
         ) {
             this.isExpired = true
             this.setMenuDropDownVisible(['removeRecord'], true)
