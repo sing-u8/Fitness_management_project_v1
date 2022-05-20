@@ -9,6 +9,8 @@ import { environment } from '@environments/environment'
 import { Response } from '@schemas/response'
 import { Calendar } from '@schemas/calendar'
 import { CalendarTask } from '@schemas/calendar-task'
+import { UserAbleToBook } from '../schemas/user-able-to-book'
+import { UserBooked } from '../schemas/user-booked'
 
 @Injectable({
     providedIn: 'root',
@@ -147,6 +149,58 @@ export class CenterCalendarService {
             catchError(handleError)
         )
     }
+
+    // 예약 가능한 사용자 조회
+    getReservableUsers(centerId: string, calendarId: string, taskId: string): Observable<Array<UserAbleToBook>> {
+        const url = this.SERVER + `/${centerId}/calendar/${calendarId}/task/${taskId}/users-able-to-book`
+
+        return this.http.get<Response>(url, this.options).pipe(
+            map((res) => {
+                return res.dataset
+            }),
+            catchError(handleError)
+        )
+    }
+
+    // 예약한 사용자 조회
+    getReservedUsers(centerId: string, calendarId: string, taskId: string): Observable<Array<UserBooked>> {
+        const url = this.SERVER + `/${centerId}/calendar/${calendarId}/task/${taskId}/users-booked`
+
+        return this.http.get<Response>(url, this.options).pipe(
+            map((res) => {
+                return res.dataset
+            }),
+            catchError(handleError)
+        )
+    }
+
+    // 예약
+    reserveTask(
+        centerId: string,
+        calendarId: string,
+        taskId: string,
+        reqBody: ReserveTaskReqBody
+    ): Observable<Response> {
+        const url = this.SERVER + `/${centerId}/calendar/${calendarId}/task/${taskId}/booking`
+        return this.http.post<Response>(url, reqBody, this.options).pipe(
+            map((res) => {
+                return res.dataset[0]
+            }),
+            catchError(handleError)
+        )
+    }
+
+    // 예약 취소
+    cancelReservedTask(centerId: string, calendarId: string, taskId: string, bookingId: string): Observable<Response> {
+        const url = this.SERVER + `/${centerId}/calendar/${calendarId}/task/${taskId}/booking/${bookingId}`
+
+        return this.http.delete<Response>(url, this.options).pipe(
+            map((res) => {
+                return res
+            }),
+            catchError(handleError)
+        )
+    }
 }
 
 export interface GetAllCalendarTaskReqBody {
@@ -238,3 +292,7 @@ export interface ClassForCU {
 
 export type DeleteMode = 'one' | 'after' | 'all'
 export type UpdateMode = DeleteMode
+
+export interface ReserveTaskReqBody {
+    user_membership_ids: string[]
+}
