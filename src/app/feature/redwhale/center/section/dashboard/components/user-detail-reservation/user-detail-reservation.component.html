@@ -27,7 +27,16 @@
             <db-user-detail-reservation-item
                 *ngFor = "let item of curUserData.reservations"
                 [reservation]="item"
+                (onCancelBooking)="setSelectedUserBooking(item); openCancelBookModal()"
             ></db-user-detail-reservation-item>
         </ng-template>
     </main>
 </section>
+
+
+<rw-modal
+    [(visible)]="showCancelBookModal"
+    [data]="cancelBookModalData"
+    (cancel)="closeCancelBookModal()"
+    (confirm)="onCancelBookConfirm()"
+></rw-modal>

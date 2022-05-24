@@ -9,7 +9,7 @@ export class WordService {
 
     ellipsis(word: string, to: number) {
         if (word.length > to) {
-            return _.slice(word, 0, to) + '...'
+            return word.slice(0, to) + '...'
         } else {
             return word
         }

@@ -63,7 +63,9 @@
         width: 78px;
 
         .cancel_button {
-
+            &:hover {
+                background-color: var(--background-color) !important;
+            }
         }
     }
 

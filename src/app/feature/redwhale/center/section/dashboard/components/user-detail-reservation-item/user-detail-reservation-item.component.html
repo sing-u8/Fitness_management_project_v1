@@ -1,23 +1,33 @@
 <div class="item">
 
-    <div class="rw-typo-bodytext1 col1">2021.08.11 (수) 13:00 - 14:00</div>
-    <div class="rw-typo-bodytext0-bold col2">{{reservation.name}}</div>
+    <div class="rw-typo-bodytext1 col1">{{reservation.start | dateFormat:'YYYY.MM.DD (dd) HH:mm'}} - {{reservation.end | dateFormat:'HH:mm'}}</div>
+    <div rwEllipsisDropdown [lineClamp]="2" class="rw-typo-bodytext0-bold col2">{{reservation.name}}</div>
     <div class="rw-typo-bodytext1 col3">{{reservation.instructors[0].center_user_name}}</div>
     <div class="col4">
         <div class="col4__left">
-            <div class="rw-typo-bodytext0-bold status">{{reservation.state_code_name}}</div>
-            <div class="rw-typo-bodytext1 status_desc"></div>
+            <div
+                class="rw-typo-bodytext0-bold status"
+                [class.rw-typo-bodytext0-regular] = "!isBooked"
+            >
+                {{reservation.state_code_name}}
+            </div>
+            <div
+                *ngIf="isBooked && !isBookCancelable"
+                class="rw-typo-subtext1 status_desc"
+            >
+                {{isBookCancelUnavailableText}}
+            </div>
         </div>
-        <div class="col4__right">
+        <div *ngIf="isBooked" class="col4__right">
             <div
                 class="cancel_button"
                 rw-button
                 rwButtonWidth="78"
                 rwButtonHeight="33"
+                rwButtonColor="var(--white)"
                 rwButtonBorderColor="var(--border-color)"
                 rwButtonFontColor="var(--darkgrey)"
-                [rwButtonDisabled]="false"
-                (click) = "false"
+                (click) = "isBookCancelable && CancelBooking()"
             >
                 예약 취소
             </div>
