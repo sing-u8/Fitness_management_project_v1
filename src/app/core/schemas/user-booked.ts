@@ -24,4 +24,5 @@ export interface UserBooked {
     center_user_picture: string
     center_user_background: string
     created_at: string
+    booking_id: string
 }

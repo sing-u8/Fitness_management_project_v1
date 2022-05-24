@@ -17,6 +17,7 @@ export interface CalendarTask {
     repeat_day_of_the_week: Array<number>
     repeat_termination_type_code: string
     repeat_count: number
+    repeat_start_date: string
     repeat_end_date: string
     responsibility: CenterUser
     class: CalendarTaskClass

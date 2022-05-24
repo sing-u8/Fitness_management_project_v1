@@ -219,6 +219,14 @@
                 }
             }
 
+            .l-loading-users-booked {
+                display: flex;
+                flex-direction: column;
+                position: relative;
+                height: 100%;
+                width: 100%;
+            }
+
             .empty-guide {
                 display: flex;
                 flex-direction: column;

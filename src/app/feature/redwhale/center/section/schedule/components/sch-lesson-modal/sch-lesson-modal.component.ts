@@ -16,11 +16,23 @@ import _ from 'lodash'
 import { CenterCalendarService } from '@services/center-calendar.service'
 import { CenterLessonService } from '@services/center-lesson.service'
 import { StorageService } from '@services/storage.service'
+import { CalendarTaskService } from '@services/helper/calendar-task.service'
 
 import { CalendarTask } from '@schemas/calendar-task'
 import { ClassCategory } from '@schemas/class-category'
 import { ClassItem } from '@schemas/class-item'
+import { UserBooked } from '@schemas/user-booked'
+import { Center } from '@schemas/center'
 
+const dayOfWeekInit = [
+    { key: 0, name: '일', selected: false },
+    { key: 1, name: '월', selected: false },
+    { key: 2, name: '화', selected: false },
+    { key: 3, name: '수', selected: false },
+    { key: 4, name: '목', selected: false },
+    { key: 5, name: '금', selected: false },
+    { key: 6, name: '토', selected: false },
+]
 @Component({
     selector: 'rw-sch-lesson-modal',
     templateUrl: './sch-lesson-modal.component.html',
@@ -29,6 +41,7 @@ import { ClassItem } from '@schemas/class-item'
 export class SchLessonModalComponent implements AfterViewChecked, OnChanges {
     @Input() visible: boolean
     @Input() lessonData: CalendarTask
+    @Input() responsiblityCalId: string
 
     @ViewChild('modalBackgroundElement') modalBackgroundElement
     @ViewChild('modalWrapperElement') modalWrapperElement
@@ -37,8 +50,10 @@ export class SchLessonModalComponent implements AfterViewChecked, OnChanges {
     @Output() cancel = new EventEmitter<any>()
     @Output() delete = new EventEmitter<any>()
     @Output() modify = new EventEmitter<any>()
-    @Output() reserveMember = new EventEmitter<any>()
+    @Output() reserveMember = new EventEmitter<{ lessonTask: CalendarTask; usersBooked: UserBooked[] }>()
     @Output() cancelReservedMember = new EventEmitter<any>()
+
+    public center: Center
 
     public date: string
     public time: string
@@ -46,9 +61,6 @@ export class SchLessonModalComponent implements AfterViewChecked, OnChanges {
     public reservationCancelEndTime: string
 
     public repeatText: string
-
-    // !! taskReservation type인데 예약 관련 부분이 없어서 any
-    public lessonReservations: Array<any> = []
 
     public screen_status: 'lesson' | 'reservation' = 'lesson'
     onLessonClick() {
@@ -62,8 +74,15 @@ export class SchLessonModalComponent implements AfterViewChecked, OnChanges {
     changed: boolean
     public isMouseModalDown: boolean
 
-    constructor(private el: ElementRef, private renderer: Renderer2) {
+    constructor(
+        private el: ElementRef,
+        private renderer: Renderer2,
+        private centerCalendarService: CenterCalendarService,
+        private storageService: StorageService,
+        private calendarTaskHelperService: CalendarTaskService
+    ) {
         this.isMouseModalDown = false
+        this.center = this.storageService.getCenter()
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -73,16 +92,29 @@ export class SchLessonModalComponent implements AfterViewChecked, OnChanges {
             }
         }
         if (this.lessonData) {
-            this.initDate()
+            let isAnotherLesson = false
+            if (
+                (!changes['lessonData']?.previousValue && changes['lessonData']?.currentValue) ||
+                (changes['lessonData']?.previousValue &&
+                    changes['lessonData'].previousValue?.id != changes['lessonData'].currentValue?.id)
+            ) {
+                isAnotherLesson = true
+            }
+            console.log('sch lesson modal changes : ', changes)
             this.initTime()
             this.getTimeDiff()
             this.getRepeatTimeDiff()
             this.initReservationEnableTime()
             this.initReservationCancelEndTime()
-            // ! 나중에 맞는 속성인지 확인 필요
-            this.setRepeatDayOfWeek(this.lessonData.repeat_cycle_unit_code)
+            this.setRepeatDayOfWeek()
 
             this.initLessonCardData()
+
+            //
+            this.initDate()
+            this.getUsersBooked(isAnotherLesson)
+
+            this.getLessonCalendarTaskStatus()
         }
         console.log('lessonData in g modal: ', this.lessonData)
     }
@@ -122,11 +154,10 @@ export class SchLessonModalComponent implements AfterViewChecked, OnChanges {
         this.modify.emit(this.lessonData)
     }
     onReserveMember() {
-        this.reserveMember.emit(this.lessonData)
+        this.reserveMember.emit({ lessonTask: this.lessonData, usersBooked: this.userBookeds })
     }
 
-    // !! taskReservation type인데 예약 관련 부분이 없어서 any
-    onCancelReservedMember(taskReservation: any) {
+    onCancelReservedMember(taskReservation: UserBooked) {
         this.cancelReservedMember.emit({ taskReservation: taskReservation, lessonData: this.lessonData })
     }
 
@@ -158,12 +189,9 @@ export class SchLessonModalComponent implements AfterViewChecked, OnChanges {
 
     public repeatTimeDiff = ''
     getRepeatTimeDiff() {
-        // if (!this.lessonData.repetition_id) return
-        // const timeDiff = dayjs(this.lessonData.repetition_end_date).diff(
-        //     dayjs(this.lessonData.repetition_start_date),
-        //     'day'
-        // )
-        // this.repeatTimeDiff = `(${timeDiff}일)`
+        if (!this.lessonData.calendar_task_group_id) return
+        const timeDiff = dayjs(this.lessonData.repeat_end_date).diff(dayjs(this.lessonData.repeat_start_date), 'day')
+        this.repeatTimeDiff = `(${timeDiff}일)`
     }
 
     initReservationEnableTime() {
@@ -178,32 +206,56 @@ export class SchLessonModalComponent implements AfterViewChecked, OnChanges {
             dayjs(this.lessonData.class.cancel_booking).format('YYYY.MM.DD A hh:mm') + ' 까지 예약 취소 가능'
     }
 
-    public repeatMather = {
-        sun: '일',
-        mon: '월',
-        tue: '화',
-        wed: '수',
-        thu: '목',
-        fri: '금',
-        sat: '토',
-    }
-    setRepeatDayOfWeek(repeatCode: string) {
-        if (repeatCode == 'all') {
-            this.repeatText = '매일'
-        } else if (repeatCode == 'weekdays') {
-            this.repeatText = '평일'
-        } else if (repeatCode == 'weekend') {
-            this.repeatText = '주말'
-        } else {
-            this.repeatText = _.split(repeatCode, '_')
-                .reduce((acc, cur) => {
-                    return acc + this.repeatMather[cur] + ', '
-                }, '')
-                .slice(0, -2)
-        }
-        console.log('setRepeatDayOfWeek: ', this.repeatText)
+    // 일정 반복 기간 변수 및 함수
+    public dayOfWeek = _.cloneDeep(dayOfWeekInit)
+    initDayOfWeek() {
+        const _dayOfWeek = _.cloneDeep(dayOfWeekInit)
+        _.forEach(this.lessonData.repeat_day_of_the_week, (day) => {
+            _.forEach(_dayOfWeek, (dayObj, idx) => {
+                if (dayObj.key == day) {
+                    _dayOfWeek[idx].selected = true
+                }
+            })
+        })
+        this.dayOfWeek = _dayOfWeek
     }
 
+    setRepeatDayOfWeek() {
+        this.initDayOfWeek()
+        if (_.every(this.dayOfWeek, ['selected', true])) {
+            this.repeatText = '매일'
+        } else if (
+            this.dayOfWeek[0].selected == true &&
+            this.dayOfWeek[1].selected == false &&
+            this.dayOfWeek[2].selected == false &&
+            this.dayOfWeek[3].selected == false &&
+            this.dayOfWeek[4].selected == false &&
+            this.dayOfWeek[5].selected == false &&
+            this.dayOfWeek[6].selected == true
+        ) {
+            this.repeatText = '주말'
+        } else if (
+            this.dayOfWeek[0].selected == false &&
+            this.dayOfWeek[1].selected == true &&
+            this.dayOfWeek[2].selected == true &&
+            this.dayOfWeek[3].selected == true &&
+            this.dayOfWeek[4].selected == true &&
+            this.dayOfWeek[5].selected == true &&
+            this.dayOfWeek[6].selected == false
+        ) {
+            this.repeatText = '평일'
+        } else {
+            const selectedDays = _.filter(this.dayOfWeek, ['selected', true])
+            let text = ''
+            _.forEach(selectedDays, (value, idx, list) => {
+                text += idx == list.length - 1 ? value.name : value.name + ', '
+            })
+            this.repeatText = text
+        }
+        console.log('setRepeatDayOfWeek -- ', this.repeatText)
+    }
+
+    //
     public lessonCardData = {
         categName: '',
         lessonName: '',
@@ -219,5 +271,32 @@ export class SchLessonModalComponent implements AfterViewChecked, OnChanges {
             lessonType: this.lessonData.class.type_code == 'class_item_type_onetoone' ? '1:1 수업' : '그룹 수업',
             instructor: this.lessonData.responsibility.center_user_name,
         }
+    }
+
+    // reservation vars and funcs
+    public userBookeds: Array<UserBooked> = []
+    public isUsersBookedInitialized = false
+
+    getUsersBooked(isAnotherLesson: boolean) {
+        if (isAnotherLesson) this.isUsersBookedInitialized = false
+        this.centerCalendarService
+            .getReservedUsers(this.center.id, this.responsiblityCalId, this.lessonData.id)
+            .subscribe((userBookeds: UserBooked[]) => {
+                console.log('getUsersBooked users : ', userBookeds)
+                this.userBookeds = userBookeds
+                this.isUsersBookedInitialized = true
+            })
+    }
+
+    public isBookingEnd = false
+    public isBookable = false
+    public isCancelBookingEnd = false
+    public isTaskEnd = false
+
+    getLessonCalendarTaskStatus() {
+        this.isBookingEnd = this.calendarTaskHelperService.isBookingEnd(this.lessonData)
+        this.isBookable = this.calendarTaskHelperService.isBookable(this.lessonData)
+        this.isCancelBookingEnd = this.calendarTaskHelperService.isCancelBookingEnd(this.lessonData)
+        this.isTaskEnd = this.calendarTaskHelperService.isTaskEnd(this.lessonData)
     }
 }

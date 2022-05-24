@@ -13,6 +13,7 @@ import { SchDeleteRepeatLessonModalComponent } from './components/sch-delete-rep
 import { SchGeneralModalComponent } from './components/sch-general-modal/sch-general-modal.component'
 import { SchLessonModalComponent } from './components/sch-lesson-modal/sch-lesson-modal.component'
 import { SchModifyRepeatLessonModalComponent } from './components/sch-modify-repeat-lesson-modal/sch-modify-repeat-lesson-modal.component'
+import { SchReserveMemberModalComponent } from './components/sch-reserve-member-modal/sch-reserve-member-modal.component'
 
 // section module
 import { CommonModule as SectionCommonModule } from '../common/common.module'
@@ -31,6 +32,7 @@ import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader'
         SchGeneralModalComponent,
         SchModifyRepeatLessonModalComponent,
         SchLessonModalComponent,
+        SchReserveMemberModalComponent,
     ],
     imports: [
         AngularCommonModule,

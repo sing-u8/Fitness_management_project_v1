@@ -83,15 +83,15 @@
           <div class="small-title">시간</div>
           <div class="rw-typo-bodytext1 ">{{time}}</div>
         </div>
-        <!-- <div *ngIf="lessonData?.repetition_id" class="modal-content">
+        <div *ngIf="lessonData?.calendar_task_group_id" class="modal-content">
           <div class="small-title">일정 반복 기간</div>
           <div class="rw-typo-bodytext1 ">
-            {{lessonData?.repetition_start_date | dateFormat:'YYYY.MM.DD'}} - {{lessonData?.repetition_end_date | dateFormat:'YYYY.MM.DD'}} {{repeatTimeDiff}} / {{repeatText}}
+            {{lessonData?.repeat_start_date | dateFormat:'YYYY.MM.DD'}} - {{lessonData?.repeat_end_date | dateFormat:'YYYY.MM.DD'}} {{repeatTimeDiff}} / {{repeatText}}
           </div>
-        </div> -->
+        </div>
         <div class="modal-content">
           <div class="small-title">예약 인원</div>
-          <div class="rw-typo-bodytext1 ">{{'0-'}} / {{lessonData?.class.capacity}}</div>
+          <div class="rw-typo-bodytext1 ">{{lessonData?.class.booked_count}} / {{lessonData?.class.capacity}}명</div>
         </div>
         <div *ngIf="lessonData?.memo" class="modal-content">
           <div class="small-title">상세 정보</div>
@@ -108,13 +108,12 @@
         <div class="modal-content">
           <div class="small-title">예약 가능한 회원권</div>
           <div class="rw-typo-bodytext1 lesson-tag">
-            <!-- <div
-              *ngFor = "let membership of lessonData?.membership_item"
+            <div
+              *ngFor = "let membership of lessonData?.class?.membership_items"
               class="tag-item"
             >
               {{membership.name}}
-            </div> -->
-            <div class="tag-item">예약 가능한 회원권 태그</div>
+            </div>
           </div>
         </div>
 
@@ -125,71 +124,84 @@
           *ngIf="screen_status == 'reservation';"
           class="content-container thin-scroll-y-overlay2"
         >
-          <!-- <div
-            *ngIf="lessonData?.lesson?.reservation?.length < 1; else reservation_exist"
-            class="empty-guide"
-          >
-            <img src="assets/icons/etc/empty_screen.svg" >
-            <p *ngIf="lessonData?.status == 'task_end'" class="rw-typo-subtext0-regular grey">예약을 신청한 회원이 없어요.</p>
-            <p *ngIf="lessonData?.status != 'task_end'" class="rw-typo-subtext0-regular grey">아직 예약을 신청한 회원이 없어요.</p>
-            <p *ngIf="lessonData?.status != 'task_end'" class="rw-typo-subtext0-regular grey">직접 회원을 예약하시겠어요?</p>
-            <div *ngIf="lessonData?.status != 'task_end'" class="empty-button" (click)="onReserveMember()">
-              <p>회원 예약하기</p>
-              <img src="assets/icons/etc/short_right_arrow_grey.svg">
-            </div>
-          </div> -->
 
-          <ng-template #reservation_exist>
-            <div class="reservation-list thin-scroll-y-overlay2">
-              <div class="reservation-header">
-                <div class="rh-left">
-                  <!-- <p class="rw-typo-bodytext0-bold">{{lessonData?.lesson?.people}}명 정원인 수업에</p>
-                  <p class="rw-typo-bodytext0-bold"><span>{{lessonData?.lesson?.reservation?.length}}명</span>의 회원이 예약했어요.</p> -->
-                </div>
-                <div class="rh-right">
-                  <!-- <div
-                    *ngIf="( lessonData?.status == 'reservation_available' && lessonData?.lesson?.people > lessonData?.lesson?.reservation?.length )"
-                    class="rw-typo-subtext0 reserve-member-button"
-                    (click)="onReserveMember()"
-                  >
-                    <img src="assets/icons/etc/plus-red.svg">
-                    회원 예약
-                  </div> -->
-                </div>
-              </div>
-
-
-              <ng-container *ngIf="lessonData">
-                <!-- <div
-                  class="reservation-item"
-                  *ngFor="let reservation of lessonData?.lesson?.reservation"
-                >
-                  <div class="item-left">
-                    <rw-avatar
-                      [image]="reservation.user.picture"
-                      [text]="reservation.user.gym_user_name ? reservation.user.gym_user_name : reservation.user.given_name"
-                      [backgroundColor]="reservation.user.color"
-                      size="30" fontSize="12"
-                    ></rw-avatar>
-                    <span class="rw-typo-bodytext2">
-                      {{reservation.user.gym_user_name ? reservation.user.gym_user_name : reservation.user.given_name}} ({{reservation.user.membership_number}})
-                    </span>
-                  </div>
-                  <div class="item-right">
-                    <div
-                      *ngIf="lessonData?.status != 'task_end' || lessonData?.cancel_reservation_not_allowed_yn != 1"
-                      class="close-button" (click)="onCancelReservedMember(reservation)">
-                      <img src="assets/icons/etc/close_grey.svg">
-                    </div>
-                  </div>
-                </div> -->
-              </ng-container>
-
-
+          <ng-template #user_booked_loading [ngIf]="!isUsersBookedInitialized" [ngIfElse]="user_booked_done">
+            <div class="l-loading-users-booked">
+              <ngx-skeleton-loader
+                *ngFor="let _ of [1,2,3]"
+                count = 1
+                appearance="circle"
+                [theme]="{width: '100%', height: '60px', 'border-radius': '5px', 'margin': '0px' ,'margin-bottom': '1px'}"
+              ></ngx-skeleton-loader>
             </div>
           </ng-template>
 
+          <ng-template #user_booked_done>
+            <div
+              *ngIf="userBookeds.length < 1; else reservation_exist"
+              class="empty-guide"
+            >
+              <img src="assets/icons/etc/empty_screen.svg" >
+              <p *ngIf="isBookingEnd" class="rw-typo-subtext0-regular grey">예약을 신청한 회원이 없어요.</p>
+              <p *ngIf="!isBookingEnd" class="rw-typo-subtext0-regular grey">아직 예약을 신청한 회원이 없어요.</p>
+              <p *ngIf="!isBookingEnd" class="rw-typo-subtext0-regular grey">직접 회원을 예약하시겠어요?</p>
+              <div *ngIf="!isBookingEnd" class="empty-button" (click)="onReserveMember()">
+                <p>회원 예약하기</p>
+                <img src="assets/icons/etc/short_right_arrow_grey.svg">
+              </div>
+            </div>
 
+            <ng-template #reservation_exist>
+              <div class="reservation-list thin-scroll-y-overlay2">
+                <div class="reservation-header">
+                  <div class="rh-left">
+                    <p class="rw-typo-bodytext0-bold">{{lessonData.class.capacity}}명 정원인 수업에</p>
+                    <p class="rw-typo-bodytext0-bold"><span>{{userBookeds.length}}명</span>의 회원이 예약했어요.</p>
+                  </div>
+                  <div class="rh-right">
+                    <div
+                      *ngIf="( isBookable && lessonData.class.capacity > userBookeds.length )"
+                      class="rw-typo-subtext0 reserve-member-button"
+                      (click)="onReserveMember()"
+                    >
+                      <img src="assets/icons/etc/plus-red.svg">
+                      회원 예약
+                    </div>
+                  </div>
+                </div>
+
+
+                <ng-container *ngIf="lessonData">
+                  <div
+                    class="reservation-item"
+                    *ngFor="let reservation of userBookeds"
+                  >
+                    <div class="item-left">
+                      <rw-avatar
+                        [image]="reservation.center_user_picture"
+                        [text]="reservation.center_user_name"
+                        [backgroundColor]="reservation.color"
+                        size="30" fontSize="12"
+                      ></rw-avatar>
+                      <span class="rw-typo-bodytext2">
+                        {{reservation.center_user_name}} ({{reservation.membership_number}})
+                      </span>
+                    </div>
+                    <div class="item-right">
+                      <div
+                        *ngIf="!isCancelBookingEnd  || !isTaskEnd "
+                        class="close-button" (click)="onCancelReservedMember(reservation)">
+                        <img src="assets/icons/etc/close_grey.svg">
+                      </div>
+                    </div>
+                  </div>
+                </ng-container>
+
+
+              </div>
+            </ng-template>
+
+          </ng-template>
 
         </div>
       </ng-template>

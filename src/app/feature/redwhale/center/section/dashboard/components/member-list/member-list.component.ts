@@ -9,6 +9,7 @@ dayjs.locale('ko')
 
 import { CenterUser } from '@schemas/center-user'
 import { Center } from '@schemas/center'
+import { Loading } from '@schemas/store/loading'
 
 import { StorageService } from '@services/storage.service'
 
@@ -33,6 +34,7 @@ export class MemberListComponent implements OnInit, OnDestroy {
     @Input() searchedUsersLists: FromDashboard.UsersLists = _.cloneDeep(FromDashboard.UsersListInit)
     @Input() usersSelectCateg: FromDashboard.UsersSelectCateg = _.cloneDeep(FromDashboard.UsersSelectCategInit)
     @Input() selectedUserList: FromDashboard.UserListSelect = _.cloneDeep(FromDashboard.UserListSelectInit)
+    @Input() isLoading: Loading = 'idle'
 
     public center: Center
 

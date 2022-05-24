@@ -191,7 +191,6 @@ export class LessonScheduleComponent implements OnInit, OnDestroy, AfterViewInit
             return this.StaffSelectValue.value.id == item.instructor.calendar_user.id
         })
 
-        // !! reqbody 내용 재확인 필요 04/12
         if (this.dayRepeatSwitch) {
             reqBody = {
                 type_code: 'calendar_task_type_class',

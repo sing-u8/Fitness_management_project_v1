@@ -15,12 +15,17 @@ import { StorageService } from '@services/storage.service'
 import { CenterCalendarService, DeleteMode, UpdateCalendarTaskReqBody } from '@services/center-calendar.service'
 import { CenterService } from '@services/center.service'
 import { CenterUsersService } from '@services/center-users.service'
+import { CalendarTaskService } from '@services/helper/calendar-task.service'
 
 // schemas
 import { Center } from '@schemas/center'
 import { Calendar } from '@schemas/calendar'
 import { CalendarTask } from '@schemas/calendar-task'
 import { Loading } from '@schemas/store/loading'
+import { CenterUser } from '@schemas/center-user'
+import { User } from '@schemas/user'
+import { UserBooked } from '@schemas/user-booked'
+import { UserAbleToBook } from '@schemas/user-able-to-book'
 
 // rxjs
 import { Observable, Subject, lastValueFrom } from 'rxjs'
@@ -35,12 +40,20 @@ import { openDrawer, closeDrawer, setScheduleDrawerIsReset } from '@appStore/act
 import * as FromSchedule from '@centerStore/reducers/sec.schedule.reducer'
 import * as ScheduleSelector from '@centerStore/selectors/sec.schedule.selector'
 import * as ScheduleActions from '@centerStore/actions/sec.schedule.actions'
-import { CenterUser } from '@schemas/center-user'
-import { User } from '@schemas/user'
 
 // temp
 export type GymOperatingTime = { start: string; end: string }
 export type ViewType = 'resourceTimeGridDay' | 'timeGridWeek' | 'dayGridMonth'
+export type ScheduleEvent = {
+    title: string
+    start: string
+    end: string
+    resourceId?: string
+    originItem: CalendarTask
+    assginee: Calendar
+    textColor: string
+    color: string
+}
 
 @Component({
     selector: 'schedule',
@@ -58,7 +71,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
         month: { name: '월', type: 'dayGridMonth' },
     }
     public selectedDateViewType: ViewType = 'resourceTimeGridDay' // undefined
-    public eventList = []
+    public eventList: ScheduleEvent[] = []
 
     // datepicker data
     public weekPickerData: { startDate: string; endDate: string } = {
@@ -81,15 +94,15 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
     public instructorList$_: FromSchedule.InstructorType[] = []
     public lectureFilter$_: FromSchedule.LectureFilter = FromSchedule.LectureFilterInit
     public isLoading$_: Loading = 'idle'
+    public curCenterId$: Observable<string>
 
     constructor(
         private nxStore: Store,
         private storageService: StorageService,
         private CenterCalendarService: CenterCalendarService,
-        // private gymDashboardStateService: GymDashboardStateService,
-        // private gymLessonService: GymLessonService,
         private centerService: CenterService,
         private centerUsersService: CenterUsersService,
+        private calendarTaskHelperService: CalendarTaskService,
         private renderer: Renderer2,
         private activatedRoute: ActivatedRoute,
         private router: Router,
@@ -109,6 +122,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
     async ngOnInit(): Promise<void> {
         this.user = this.storageService.getUser()
 
+        this.curCenterId$ = this.nxStore.select(ScheduleSelector.curCenterId)
         this.nxStore.pipe(select(ScheduleSelector.isLoading), takeUntil(this.unsubscriber$)).subscribe((loading) => {
             this.isLoading$_ = loading
         })
@@ -254,10 +268,8 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
         this.weekPickerData.startDate = dayjs().startOf('week').format('YYYY-MM-DD')
         this.weekPickerData.endDate = dayjs().endOf('week').format('YYYY-MM-DD')
         this.datePickerData.date = dayjs().format('YYYY-MM-DD')
-        console.log('initDatePickerData(): ', this.datePickerData)
     }
     onDatePickerClick(rDate: { date: string }) {
-        console.log('onDatePickerClick: ', rDate.date)
         const calendarApi = this.fullCalendar.getApi()
         calendarApi.view.calendar.gotoDate(rDate.date)
         this.setCalendarTitle(this.selectedDateViewType)
@@ -268,7 +280,6 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
         this.getTaskList(this.selectedDateViewType)
     }
     onWeekPickerClick(rDate: { startDate: string; endDate: string }) {
-        console.log('onWeekPickerClick: ', rDate)
         const calendarApi = this.fullCalendar.getApi()
         calendarApi.view.calendar.gotoDate(rDate.startDate)
         this.setCalendarTitle(this.selectedDateViewType)
@@ -379,7 +390,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
         }
     }
 
-    getTaskList(viewType: ViewType) {
+    getTaskList(viewType: ViewType, callback?: (eventList: ScheduleEvent[]) => void) {
         const calendars: Calendar[] = this.instructorList$_.map((v) => v.instructor) // .filter((v) => v.selected)
         const calendarIds: string[] = calendars.map((v) => v.id)
         this.CenterCalendarService.getAllCalendarTask(this.center.id, {
@@ -420,6 +431,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
             console.log('getTaskList - start, end: ', this.activeStart, ', ', this.activeEnd, '; ', viewType)
             console.log('getTaskList : ', this.eventList)
             this.setEventsFiltersChange(this.instructorList$_, this.lectureFilter$_)
+            callback ? callback(this.eventList) : null
         })
     }
     // filter dropdown functions
@@ -607,6 +619,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
             this.showModifyGeneralEventModal()
         } else {
             this.lessonEventData = arg.event.extendedProps['originItem']
+            this.getLessonModalCalId(this.lessonEventData)
             this.showModifyLessonEventModal()
         }
     }
@@ -724,7 +737,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
                 eventTimeEl.classList.add('rw-typo-subtext4')
                 eventTimeEl.style.color = '#C9C9C9'
                 eventTimeEl.style.fontSize = '1.1rem'
-                eventTimeEl.innerHTML = `${arg.event.extendedProps.assginee.name} ㆍ 0/10명` // ${arg.event.extendedProps.originItem.lesson.reservation.length}/${arg.event.extendedProps.originItem.lesson.people}명`
+                eventTimeEl.innerHTML = `${arg.event.extendedProps.assginee.name} ㆍ ${arg.event.extendedProps.originItem.class.booked_count}/${arg.event.extendedProps.originItem.class.capacity}명`
                 // event color tag
                 eventMainFrame_el.insertAdjacentHTML(
                     'afterbegin',
@@ -999,35 +1012,19 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
     public tooltipText: string = undefined
     @ViewChild('member_schedule_tooltip') member_schedule_tooltip: ElementRef
 
-    setTooltipText(
-        status:
-            | 'task_end'
-            | 'full_amount_people'
-            | 'before_reservation_duration'
-            | 'after_reservation_duration'
-            | 'reservation_available'
-    ) {
-        this.tooltipText =
-            status == 'reservation_available'
-                ? '예약을 받고 있어요. 🤗'
-                : status == 'full_amount_people'
-                ? '정원이 다 찼어요. 🎉'
-                : status == 'after_reservation_duration'
-                ? '예약이 마감됐어요. 🚫'
-                : status == 'task_end'
-                ? '종료된 수업이에요. 🚫'
-                : 'null'
-
-        return this.tooltipText == 'null' ? false : true
-    }
     showTooltip(arg: EventHoveringArg) {
-        if (!this.setTooltipText(arg.event.extendedProps['originItem'].status)) return
+        const taskStatus = this.calendarTaskHelperService.getClassCalendarTaskStatus(
+            arg.event.extendedProps['originItem']
+        )
+        this.tooltipText = taskStatus.text
+        if (!taskStatus.status) {
+            return
+        }
         const eventTitle_el = arg.el.getElementsByClassName('fc-event-title')[0]
         const eventTitlePos = eventTitle_el.getBoundingClientRect()
         this.renderer.setStyle(this.member_schedule_tooltip.nativeElement, 'display', 'flex')
         this.renderer.setStyle(this.member_schedule_tooltip.nativeElement, 'left', `${eventTitlePos.left + 5}px`)
         this.renderer.setStyle(this.member_schedule_tooltip.nativeElement, 'top', `${eventTitlePos.top - 32}px`)
-        // this.member_schedule_tooltip.nativeElement
     }
     hideTooltip() {
         this.renderer.setStyle(this.member_schedule_tooltip.nativeElement, 'display', 'none')
@@ -1063,7 +1060,17 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
     }
     // - //
 
+    public lessonModalCalId: string = undefined
+    getLessonModalCalId(calendarTask: CalendarTask) {
+        this.lessonModalCalId = this.instructorList$_.find(
+            (v) => v.selected && v.instructor.calendar_user.id == calendarTask.responsibility.id
+        ).instructor.id
+    }
     public lessonEventData: CalendarTask = undefined
+    updateLessonEventData(calTaskId: string, eventList: ScheduleEvent[]) {
+        this.lessonEventData = eventList.find((v) => v.originItem.id == calTaskId).originItem
+    }
+
     public doShowModifyLessonEventModal = false
     showModifyLessonEventModal() {
         this.doShowModifyLessonEventModal = true
@@ -1095,8 +1102,8 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
             this.showRepeatLessonOptionModal()
         }
     }
-    onReserveMember(lessonTask: CalendarTask) {
-        this.showReserveModal(lessonTask)
+    onReserveMember(cmpReturn: { lessonTask: CalendarTask; usersBooked: UserBooked[] }) {
+        this.showReserveModal(cmpReturn.lessonTask, cmpReturn.usersBooked)
     }
 
     public generalEventData: CalendarTask = undefined
@@ -1122,9 +1129,11 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
     // - // lesson reserve modal and cancel modal
     //  reserve modal vars and funcs
     public reserveLessonData: CalendarTask = undefined
+    public usersBookedLength = 0
     public doShowReserveModal = false
-    showReserveModal(reserveLessonData: CalendarTask) {
+    showReserveModal(reserveLessonData: CalendarTask, usersBooked: UserBooked[]) {
         this.reserveLessonData = reserveLessonData
+        this.usersBookedLength = usersBooked.length
         this.doShowReserveModal = true
         this.hideModifyLessonEventModal()
     }
@@ -1136,74 +1145,88 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
         this.showModifyLessonEventModal()
         this.reserveLessonData = undefined
     }
-    onReserveModalConfirm(memTicketIds: { membership_ticket_ids: Array<number> }) {
-        // this.gymCalendarService
-        //     .reserveLesson(this.gymScheduleState.gymId.value, String(this.reserveLessonData.id), {
-        //         membership_ticket_ids: memTicketIds.membership_ticket_ids,
-        //     })
-        //     .subscribe((res) => {
-        //         this.hideReserveModal()
-        //         this.showModifyLessonEventModal()
-        //         this.nxStore.dispatch(showToast({text:`${this.reserveLessonData.name} 일정에 회원이 예약되었습니다.` }))
-        //         this.gymDashboardStateService.reservationIsSet.value = true
-        //         this.gymCalendarService
-        //             .getTask(this.gym.id, String(this.reserveLessonData.id))
-        //             .subscribe((updatedTask) => {
-        //                 this.gymScheduleState.setIsScheduleEventChangedState(true)
-        //                 this.lessonEventData = updatedTask
-        //                 this.reserveLessonData = undefined
-        //             })
-        //     })
+    onReserveModalConfirm(cmpReturn: { usersAbleToBook: UserAbleToBook[] }) {
+        console.log('onReserveModalConfirm : ', cmpReturn, {
+            centerId: this.center.id,
+            lesCalId: this.lessonModalCalId,
+            reserveLesData: this.reserveLessonData.id,
+        })
+
+        // !! user_membership_ids를 추가하는 방법 다시 생각해야 함.
+        this.CenterCalendarService.reserveTask(this.center.id, this.lessonModalCalId, this.reserveLessonData.id, {
+            user_membership_ids: cmpReturn.usersAbleToBook.map((v) => v.user_memberships[0].id),
+        }).subscribe(() => {
+            this.hideReserveModal()
+            this.showModifyLessonEventModal()
+            this.nxStore.dispatch(showToast({ text: `${this.reserveLessonData.name} 일정에 회원이 예약되었습니다.` }))
+
+            this.getTaskList(this.selectedDateViewType, (eventList) => {
+                this.updateLessonEventData(this.lessonEventData.id, eventList)
+                this.reserveLessonData = undefined
+            })
+            // !! 필요에 따라 수정 필요
+            // this.gymDashboardStateService.reservationIsSet.value = true
+            // this.gymCalendarService.getTask(this.gym.id, String(this.reserveLessonData.id)).subscribe((updatedTask) => {
+            //     this.gymScheduleState.setIsScheduleEventChangedState(true)
+            //     this.lessonEventData = updatedTask
+            //     this.reserveLessonData = undefined
+            // })
+        })
     }
 
     // cancel reserve modal vars and funcs
-    // public cancelReserveText = {
-    //     text: '회원의 예약을 취소하시겠어요? 😮',
-    //     subText: `회원의 예약을 취소할 경우,
-    //     회원에게 예약 취소 알림이 발송됩니다.`,
-    //     cancelButtonText: '뒤로',
-    //     confirmButtonText: '예약 취소',
-    // }
-    // public beCanceledReservationData: { taskReservation: TaskReservation; lessonData: CalendarTask } = undefined
-    // doShowCancelReserveModal = false
-    showCancelReserveModal(cancelData: { taskReservation: any; lessonData: CalendarTask }) {
-        // TaskReservation --> type
-        // this.beCanceledReservationData = cancelData
-        // this.doShowCancelReserveModal = true
-        // this.hideModifyLessonEventModal()
+    public cancelReserveText = {
+        text: '회원의 예약을 취소하시겠어요? 😮',
+        subText: `회원의 예약을 취소할 경우,
+        회원에게 예약 취소 알림이 발송됩니다.`,
+        cancelButtonText: '뒤로',
+        confirmButtonText: '예약 취소',
     }
-    // hideCancelReserveModal() {
-    //     this.doShowCancelReserveModal = false
-    // }
-    // onCancelReserveModalCancel() {
-    //     this.hideCancelReserveModal()
-    //     this.showModifyLessonEventModal()
-    // }
-    // onCancelReserveModalConfirm() {
-    //     this.gymCalendarService
-    //         .deleteReservedLesson(
-    //             this.gymScheduleState.gymId.value,
-    //             String(this.beCanceledReservationData.lessonData.id),
-    //             this.beCanceledReservationData.taskReservation.id
-    //         )
-    //         .subscribe((res) => {
-    //             this.hideReserveModal()
-    //             this.showModifyLessonEventModal()
-    //             const userName =
-    //                 this.beCanceledReservationData.taskReservation.user.gym_user_name ??
-    //                 this.beCanceledReservationData.taskReservation.user.given_name
-    //             this.globalService.showToast(`${userName}님의 예약이 취소되었습니다.`)
-    //             this.gymCalendarService
-    //                 .getTask(this.gym.id, String(this.beCanceledReservationData.lessonData.id))
-    //                 .subscribe((updatedTask) => {
-    //                     this.lessonEventData = updatedTask
-    //                     this.beCanceledReservationData = undefined
-    //                 })
-    //             this.gymScheduleState.setIsScheduleEventChangedState(true)
-    //         })
-    //     this.hideCancelReserveModal()
-    //     this.showModifyLessonEventModal()
-    // }
+    public beCanceledReservationData: { taskReservation: UserBooked; lessonData: CalendarTask } = undefined
+    doShowCancelReserveModal = false
+    showCancelReserveModal(cancelData: { taskReservation: UserBooked; lessonData: CalendarTask }) {
+        this.beCanceledReservationData = cancelData
+        this.doShowCancelReserveModal = true
+        this.hideModifyLessonEventModal()
+    }
+    hideCancelReserveModal() {
+        this.doShowCancelReserveModal = false
+    }
+    onCancelReserveModalCancel() {
+        this.hideCancelReserveModal()
+        this.showModifyLessonEventModal()
+    }
+    onCancelReserveModalConfirm() {
+        this.CenterCalendarService.cancelReservedTask(
+            this.center.id,
+            this.lessonModalCalId,
+            this.beCanceledReservationData.lessonData.id,
+            this.beCanceledReservationData.taskReservation.booking_id
+        ).subscribe((__) => {
+            this.hideReserveModal()
+            this.showModifyLessonEventModal()
+            const userName = this.beCanceledReservationData.taskReservation.center_user_name
+            this.nxStore.dispatch(
+                showToast({
+                    text: `${userName}님의 예약이 취소되었습니다.`,
+                })
+            )
+            this.getTaskList(this.selectedDateViewType, (eventList) => {
+                this.updateLessonEventData(this.lessonEventData.id, eventList)
+                this.beCanceledReservationData = undefined
+            })
+            // !! 필요에 따라 수정 필요
+            // this.gymCalendarService
+            //     .getTask(this.gym.id, String(this.beCanceledReservationData.lessonData.id))
+            //     .subscribe((updatedTask) => {
+            //         this.lessonEventData = updatedTask
+            //         this.beCanceledReservationData = undefined
+            //     })
+            // this.gymScheduleState.setIsScheduleEventChangedState(true)
+        })
+        this.hideCancelReserveModal()
+        this.showModifyLessonEventModal()
+    }
 
     // - // delete event modal -----------------------------------
     public deleteEventText = {
@@ -1247,14 +1270,13 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.deletedEvent = undefined
             })
         } else {
-            // !! 예약 API가 구현되야 구현가능
-            // if (this.deletedEvent.lesson.reservation.length > 0) {
-            //     this.reservedLessonType = 'single'
-            //     this.hideDeleteEventModal()
-            //     this.showReservedDelLessonModal()
-            // } else {
-            this.deleteSingleLessonEvent()
-            // }
+            if (this.deletedEvent.class.booked_count > 0) {
+                this.reservedLessonType = 'single'
+                this.hideDeleteEventModal()
+                this.showReservedDelLessonModal()
+            } else {
+                this.deleteSingleLessonEvent()
+            }
         }
     }
 

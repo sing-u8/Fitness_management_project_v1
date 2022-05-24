@@ -69,6 +69,7 @@ export interface State {
     curSearchInput: string
     userDetailTag: UserDetailTag
     isLoading: Loading
+    isUserDeatilLoading: Loading
     error: string
 
     // main
@@ -86,6 +87,7 @@ export const initialState: State = {
     curSearchInput: CurSearchInputInit,
     userDetailTag: UserDetailTagInit,
     isLoading: 'idle',
+    isUserDeatilLoading: 'idle',
     error: '',
     // main
     usersSelectCategs: UsersSelectCategInit,
@@ -128,6 +130,7 @@ export const dashboardReducer = createImmerReducer(
             reservations: [],
             payments: [],
         }
+        state.isUserDeatilLoading = 'pending'
         return state
     }),
     on(DashboardActions.finishGetUserData, (state, { memberships, lockers, payments, reservations }) => {
@@ -138,6 +141,7 @@ export const dashboardReducer = createImmerReducer(
             lockers,
             memberships,
         }
+        state.isUserDeatilLoading = 'done'
         return state
     }),
     on(DashboardActions.startSetCurUserData, (state, { userId, reqBody }) => {

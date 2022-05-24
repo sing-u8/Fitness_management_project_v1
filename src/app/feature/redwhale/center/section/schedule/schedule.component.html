@@ -124,6 +124,11 @@
 
 </article>
 
+<div #member_schedule_tooltip class="rw-typo-subtext3 member-schedule-tooltip">
+    {{tooltipText}}
+    <div class="member-schedule-tooltip-tail"></div>
+</div>
+
 <div
     [class.show] = "doShowScheduleDropdown"  class="schdule-dropdown" #schdule_dropdown >
     <div
@@ -165,6 +170,7 @@
 <rw-sch-lesson-modal
     [(visible)]="doShowModifyLessonEventModal"
     [lessonData] = "lessonEventData"
+    [responsiblityCalId] = "lessonModalCalId"
     (cancel)="hideModifyLessonEventModal()"
     (modify)="onModifyLessonEvent($event)"
     (delete)="onDeleteLessonEvent($event)"
@@ -172,19 +178,23 @@
     (cancelReservedMember)= "showCancelReserveModal($event)"
 ></rw-sch-lesson-modal>
 
-<!-- <rw-modal
+<rw-modal
     [(visible)]="doShowCancelReserveModal"
     [data]="cancelReserveText"
     (cancel)="onCancelReserveModalCancel()"
     (confirm)="onCancelReserveModalConfirm()"
-></rw-modal> -->
+></rw-modal>
 
-<!-- <rw-sch-reserve-member-modal
+<rw-sch-reserve-member-modal
     [(visible)]="doShowReserveModal"
-    [lessonTask]="reserveLessonData"
+    [classTask]="reserveLessonData"
+    [curCenterId]="(curCenterId$ | async)"
+    [bookedUserCount]="usersBookedLength"
+    [responsiblityCalId]="lessonModalCalId"
     (cancel)="onReserveModalCancel()"
     (confirm)="onReserveModalConfirm($event)"
-></rw-sch-reserve-member-modal> -->
+></rw-sch-reserve-member-modal>
+
 <rw-sch-modify-repeat-lesson-modal
     [(visible)]="doShowRepeatLessonOptionModal"
     [title]="repeatLessonTitle"

@@ -49,7 +49,7 @@ export class CenterUsersPaymentService {
 }
 
 export interface CreateMLPaymentReqBody {
-    user_memberships: Array<{
+    user_memberships?: Array<{
         membership_item_id: string
         category_name: string
         name: string
@@ -70,7 +70,7 @@ export interface CreateMLPaymentReqBody {
             responsibility_user_id: string
         }
     }>
-    user_lockers: Array<{
+    user_lockers?: Array<{
         locker_item_id: string
         start_date: string
         end_date: string

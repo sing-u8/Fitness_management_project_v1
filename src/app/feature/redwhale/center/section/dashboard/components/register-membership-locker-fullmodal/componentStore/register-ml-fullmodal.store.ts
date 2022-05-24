@@ -228,50 +228,64 @@ export class RegisterMembershipLockerFullmodalStore extends ComponentStore<State
                     const membershipItems = mlItems.filter((item) => item.type == 'membership')
 
                     const createMLPaymentReqBody: CreateMLPaymentReqBody = {
-                        user_memberships: _.map(membershipItems, (v) => {
-                            return {
-                                membership_item_id: v['membershipItem'].id,
-                                category_name: v['membershipItem'].category_name,
-                                name: v['membershipItem'].name,
-                                start_date: v.date.startDate,
-                                end_date: v.date.endDate,
-                                count: Number(v['count'].count),
-                                unlimited: v['count'].infinite,
-                                color: v['membershipItem'].color,
-                                class_item_ids: _.map(
-                                    _.filter(v['lessonList'], (v) => v.selected == true),
-                                    (v) => v.item.id
-                                ),
-                                payment: {
-                                    card: Number(v.price.card.replace(/[^0-9]/gi, '')),
-                                    trans: Number(v.price.trans.replace(/[^0-9]/gi, '')),
-                                    cash: Number(v.price.cash.replace(/[^0-9]/gi, '')),
-                                    unpaid: Number(v.price.unpaid.replace(/[^0-9]/gi, '')),
-                                    vbank: 0,
-                                    phone: 0,
-                                    memo: '',
-                                    responsibility_user_id: v.assignee.value.id,
-                                },
-                            }
-                        }),
-                        user_lockers: _.map(lockerItems, (v) => {
-                            return {
-                                locker_item_id: v['locker'].id as string,
-                                start_date: v.date.startDate,
-                                end_date: v.date.endDate,
-                                payment: {
-                                    card: Number(v.price.card.replace(/[^0-9]/gi, '')),
-                                    trans: Number(v.price.trans.replace(/[^0-9]/gi, '')),
-                                    cash: Number(v.price.cash.replace(/[^0-9]/gi, '')),
-                                    unpaid: Number(v.price.unpaid.replace(/[^0-9]/gi, '')),
-                                    vbank: 0,
-                                    phone: 0,
-                                    memo: '',
-                                    responsibility_user_id: v.assignee.value.id,
-                                },
-                            }
-                        }),
+                        user_memberships:
+                            membershipItems.length > 0
+                                ? _.map(membershipItems, (v) => {
+                                      return {
+                                          membership_item_id: v['membershipItem'].id,
+                                          category_name: v['membershipItem'].category_name,
+                                          name: v['membershipItem'].name,
+                                          start_date: v.date.startDate,
+                                          end_date: v.date.endDate,
+                                          count: Number(v['count'].count),
+                                          unlimited: v['count'].infinite,
+                                          color: v['membershipItem'].color,
+                                          class_item_ids: _.map(
+                                              _.filter(v['lessonList'], (v) => v.selected == true),
+                                              (v) => v.item.id
+                                          ),
+                                          payment: {
+                                              card: Number(v.price.card.replace(/[^0-9]/gi, '')),
+                                              trans: Number(v.price.trans.replace(/[^0-9]/gi, '')),
+                                              cash: Number(v.price.cash.replace(/[^0-9]/gi, '')),
+                                              unpaid: Number(v.price.unpaid.replace(/[^0-9]/gi, '')),
+                                              vbank: 0,
+                                              phone: 0,
+                                              memo: '',
+                                              responsibility_user_id: v.assignee.value.id,
+                                          },
+                                      }
+                                  })
+                                : [],
+                        user_lockers:
+                            lockerItems.length > 0
+                                ? _.map(lockerItems, (v) => {
+                                      return {
+                                          locker_item_id: v['locker'].id as string,
+                                          start_date: v.date.startDate,
+                                          end_date: v.date.endDate,
+                                          payment: {
+                                              card: Number(v.price.card.replace(/[^0-9]/gi, '')),
+                                              trans: Number(v.price.trans.replace(/[^0-9]/gi, '')),
+                                              cash: Number(v.price.cash.replace(/[^0-9]/gi, '')),
+                                              unpaid: Number(v.price.unpaid.replace(/[^0-9]/gi, '')),
+                                              vbank: 0,
+                                              phone: 0,
+                                              memo: '',
+                                              responsibility_user_id: v.assignee.value.id,
+                                          },
+                                      }
+                                  })
+                                : [],
                     }
+                    if (createMLPaymentReqBody.user_lockers.length == 0) {
+                        delete createMLPaymentReqBody.user_lockers
+                    }
+                    if (createMLPaymentReqBody.user_memberships.length == 0) {
+                        delete createMLPaymentReqBody.user_memberships
+                    }
+
+                    console.log('createMembershipAndLockerPayment reqbody : ', createMLPaymentReqBody)
                     this.centerUsersPaymentApi
                         .createMembershipAndLockerPayment(reqBody.centerId, reqBody.user.id, createMLPaymentReqBody)
                         .pipe(
