@@ -1,0 +1,326 @@
+<table class="sale-table">
+
+  <thead>
+    <tr class="rw-typo-bodytext0 title">
+      <th></th>
+      <th>결제일</th>
+
+      <th>
+        <div>
+          회원명
+          <img
+            *ngIf="!(showEmptyTableFlag == 'register' && saleData?.length == 0
+                    && !(isFiltered.member || isFiltered.membershipLocker || isFiltered.personInCharge || isFiltered.type && !isFiltered.member))
+                    && !isMemberOpen && !isFiltered.member"
+            (click)="toggleMember($event); restoreInputToApplied('member')"
+            src="assets/icons/etc/filter_white.svg"
+          >
+          <img
+            *ngIf="!(showEmptyTableFlag == 'register' && saleData?.length == 0) && isMemberOpen || isFiltered.member"
+            (click)="toggleMember($event); restoreInputToApplied('member')"
+            src="assets/icons/etc/filter_fill_white.svg"
+          >
+
+          <div *ngIf="isMemberOpen" (rwClickOutside)="closeMember(); restoreInputToApplied('member')" class="member-dropdown">
+            <div class="rw-typo-bodytext2-bold title">회원명</div>
+            <form class="input-container">
+              <input
+                required
+                class="rw-input" type="text"
+                placeholder="회원명 / 전화번호 검색"
+                [rw-autoFocus]
+                [(ngModel)] = inputs.member.cur
+                #member_input = ngModel
+                (keyup.enter) = "applyInput('member'); closeMember()"
+              >
+              <img src="assets/icons/etc/search_grey.svg">
+            </form>
+            <div class="button-container">
+              <div
+                class="rw-typo-bodytext2 reset"
+                rw-button
+                rwButtonColor="var(--white)"
+                rwButtonFontColor="var(--grey)"
+                (click) = "resetInput('member')"
+              >
+                초기화
+              </div>
+              <div
+                class="rw-typo-bodytext2 search"
+                rw-button
+                rwButtonColor="var(--red)"
+                rwButtonFontColor="var(--white)"
+                [rwButtonDisabled]="member_input.invalid"
+                (click) = "applyInput('member'); (!member_input.invalid && closeMember())"
+              >
+                검색하기
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </th>
+
+      <th>
+        <div>
+          구분
+          <img
+            *ngIf="!(showEmptyTableFlag == 'register' && saleData?.length == 0
+                    && !(isFiltered.member || isFiltered.membershipLocker || isFiltered.personInCharge || isFiltered.type && !isFiltered.member))
+                    && !isTypeOpen && !isFiltered.type"
+            (click)="toggleType($event); restoreTypeCheckToApplied()"
+            src="assets/icons/etc/filter_white.svg"
+          >
+          <img
+            *ngIf="!(showEmptyTableFlag == 'register' && saleData?.length == 0) && isTypeOpen || isFiltered.type"
+            (click)="toggleType($event); restoreTypeCheckToApplied()"
+            src="assets/icons/etc/filter_fill_white.svg"
+          >
+
+          <div *ngIf="isTypeOpen" (rwClickOutside)="closeType(); restoreTypeCheckToApplied()" class="type-dropdown">
+            <div class="rw-typo-bodytext2-bold title">구분</div>
+            <div class="checkbox-container">
+              <rw-checkbox text="회원권" [checked]="typeChecks.cur.membership" (click)="toggleTypeCheckBox('membership')"></rw-checkbox>
+              <rw-checkbox text="락커" [checked]="typeChecks.cur.locker" (click)="toggleTypeCheckBox('locker')"></rw-checkbox>
+            </div>
+            <div class="button-container">
+              <div
+                class="rw-typo-bodytext2 reset"
+                rw-button
+                rwButtonColor="var(--white)"
+                rwButtonFontColor="var(--grey)"
+                (click) = "resetTypeChecBox()"
+              >
+                초기화
+              </div>
+              <div
+                class="rw-typo-bodytext2 search"
+                rw-button
+                rwButtonColor="var(--red)"
+                rwButtonFontColor="var(--white)"
+                [rwButtonDisabled]="!typeChecks.cur.membership && !typeChecks.cur.locker"
+                (click) ="applyTypeCheckBox()"
+              >
+                적용하기
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </th>
+
+      <th>
+        <div>
+          회원권/락커명
+          <img
+            *ngIf="!(showEmptyTableFlag == 'register' && saleData?.length == 0
+                    && !(isFiltered.member || isFiltered.membershipLocker || isFiltered.personInCharge || isFiltered.type && !isFiltered.member))
+                    && !isMembershipLockerOpen && !isFiltered.membershipLocker"
+            (click)="toggleMembershipLocker($event); restoreInputToApplied('membershipLocker')"
+            src="assets/icons/etc/filter_white.svg"
+          >
+          <img
+            *ngIf="!(showEmptyTableFlag == 'register' && saleData?.length == 0) && isMembershipLockerOpen || isFiltered.membershipLocker"
+            (click)="toggleMembershipLocker($event); restoreInputToApplied('membershipLocker')"
+            src="assets/icons/etc/filter_fill_white.svg"
+          >
+
+          <div *ngIf="isMembershipLockerOpen" (rwClickOutside)="closeMembershipLocker(); restoreInputToApplied('membershipLocker')" class="membershipLocker-dropdown">
+            <div class="rw-typo-bodytext2-bold title">회원권/락커명</div>
+            <form class="input-container">
+              <input
+                required
+                class="rw-input" type="text"
+                placeholder="회원권/락커명 검색"
+                [rw-autoFocus]
+                [(ngModel)] = inputs.membershipLocker.cur
+                #membershipLocker_input = ngModel
+                (keyup.enter) = "applyInput('membershipLocker'); closeMembershipLocker()"
+              >
+              <img src="assets/icons/etc/search_grey.svg">
+            </form>
+            <div class="button-container">
+              <div
+                class="rw-typo-bodytext2 reset"
+                rw-button
+                rwButtonColor="var(--white)"
+                rwButtonFontColor="var(--grey)"
+                (click) = "resetInput('membershipLocker')"
+              >
+                초기화
+              </div>
+              <div
+                class="rw-typo-bodytext2 search"
+                rw-button
+                rwButtonColor="var(--red)"
+                rwButtonFontColor="var(--white)"
+                [rwButtonDisabled]="membershipLocker_input.invalid"
+                (click) = "applyInput('membershipLocker');
+                          (!membershipLocker_input.invalid && closeMembershipLocker())
+                          "
+              >
+                검색하기
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </th>
+
+      <th>
+        <div>
+          결제 담당자
+          <img
+            *ngIf="!(showEmptyTableFlag == 'register' && saleData?.length == 0
+                    && !(isFiltered.member || isFiltered.membershipLocker || isFiltered.personInCharge || isFiltered.type && !isFiltered.member))
+                    && !isPersonInChargeOpen && !isFiltered.personInCharge"
+            (click)="togglePersonInCharge($event); restoreInputToApplied('personInCharge')"
+            src="assets/icons/etc/filter_white.svg"
+          >
+          <img
+            *ngIf="!(showEmptyTableFlag == 'register' && saleData?.length == 0) && isPersonInChargeOpen || isFiltered.personInCharge"
+            (click)="togglePersonInCharge($event); restoreInputToApplied('personInCharge')"
+            src="assets/icons/etc/filter_fill_white.svg"
+          >
+
+          <div *ngIf="isPersonInChargeOpen" (rwClickOutside)="closePersonInCharge(); restoreInputToApplied('personInCharge')" class="personInCharge-dropdown">
+            <div class="rw-typo-bodytext2-bold title">결제 담당자</div>
+            <form class="input-container">
+              <input
+                required
+                class="rw-input" type="text"
+                placeholder="센터 직원명 검색"
+                [rw-autoFocus]
+                [(ngModel)] = inputs.personInCharge.cur
+                #personInCharge_input = ngModel
+                (keyup.enter) = "applyInput('personInCharge'); closePersonInCharge()"
+              >
+              <img src="assets/icons/etc/search_grey.svg">
+            </form>
+            <div class="button-container">
+              <div
+                class="rw-typo-bodytext2 reset"
+                rw-button
+                rwButtonColor="var(--white)"
+                rwButtonFontColor="var(--grey)"
+                (click) = "resetInput('personInCharge'); closePersonInCharge()"
+              >
+                초기화
+              </div>
+              <div
+                class="rw-typo-bodytext2 search"
+                rw-button
+                rwButtonColor="var(--red)"
+                rwButtonFontColor="var(--white)"
+                [rwButtonDisabled]="personInCharge_input.invalid"
+                (click) = "applyInput('personInCharge');
+                          (!personInCharge_input.invalid && closePersonInCharge())"
+              >
+                검색하기
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </th>
+
+      <th>결제 금액</th>
+      <th></th>
+    </tr>
+  </thead>
+
+
+
+  <tbody
+    *ngIf="!(isFiltered.member || isFiltered.type || isFiltered.membershipLocker || isFiltered.personInCharge)
+            && saleData?.length == 0 && showEmptyTableFlag == 'register'"
+    class="none-data-container"
+  >
+    <img src="assets/icons/etc/empty_screen.svg" >
+    <p class="rw-typo-subtext2-1">회원권 / 락커를 등록하신 후,</p>
+    <p class="rw-typo-subtext2-1">매출 정보를 입력하시면 매출 정보와 통계를</p>
+    <p class="rw-typo-subtext2-1">확인하실 수 있어요!</p>
+    <div class="go-lesson-button" (click)="null">
+      <p>회원권/ 락커 등록하기</p>
+      <img src="assets/icons/etc/short_right_arrow_grey.svg">
+    </div>
+  </tbody>
+
+  <tbody
+    *ngIf="!(isFiltered.member || isFiltered.type || isFiltered.membershipLocker || isFiltered.personInCharge)
+            && saleData?.length == 0 && showEmptyTableFlag == 'reFilter'"
+    class="none-data-container"
+  >
+    <img src="assets/icons/etc/empty_screen.svg" >
+    <p class="rw-typo-subtext2-1">설정하신 기간에 발생한 매출이 없습니다.</p>
+    <p class="rw-typo-subtext2-1">기간을 다시 설정해주세요.</p>
+  </tbody>
+
+  <tbody
+    *ngIf="(isFiltered.member || isFiltered.type || isFiltered.membershipLocker || isFiltered.personInCharge)
+            && saleData?.length == 0"
+    class="none-data-container"
+  >
+    <img src="assets/icons/etc/empty_screen.svg" >
+    <p class="rw-typo-subtext2-1">검색하신 결과를 찾을 수 없습니다.</p>
+    <p class="rw-typo-subtext2-1">설정하신 필터와 기간을 다시 확인해주세요!</p>
+    <div class="go-lesson-button" (click)="resetAllTag()">
+      <p>모든 필터 초기화하기</p>
+      <img src="assets/icons/etc/short_right_arrow_grey.svg">
+    </div>
+  </tbody>
+
+  <tbody *ngIf="saleData?.length > 0 "  class="data-container rw-typo-bodytext1 table-scroll-y">
+    <tr *ngFor="let item of saleData">
+      <td></td>
+      <td>{{item.paid_date | dateFormat:'YY.MM.DD'}}</td>
+      <td>
+        <div class="member-container">
+          <!-- <p class="name">{{item.customer_name ? item.customer_name : item.customer_given_name}}</p> -->
+          <p class="name">{{item.customer_name}}</p>
+          <p class="phone rw-typo-subtext0-regular">{{item.customer_phone_number | phoneNumber}}</p>
+        </div>
+      </td>
+      <td>{{item.category | saleTableType}}</td>
+      <td>{{item.content_name}}</td>
+      <!-- <td>{{item?.assignee?.given_name ? item.assignee.given_name : item.assignee_name}}</td> -->
+      <td>{{item.assignee_name}}</td>
+      <td class="rw-typo-subtext0 price">￦ {{item.price | numberWithCommas}}</td>
+      <td></td>
+    </tr>
+  </tbody>
+
+  <tfoot *ngIf="saleData?.length > 0 " >
+    <div class="foot">
+      <div class="rw-typo-bodytext0 cash-title">매출 총 합계</div>
+      <div class="cash-container">
+        <div class="rw-typo-title1 total">￦ {{saleStatistics?.total | numberWithCommas}}</div>
+
+        <ng-container *ngIf="saleStatistics?.cash && saleStatistics?.card && saleStatistics?.trans && saleStatistics?.unpaid">
+          <div class="rw-typo-subtext0-regular cash">
+            <div class="type-icon">현금</div>
+            {{saleStatistics?.cash| numberWithCommas}}
+          </div>
+          <div class="rw-typo-subtext0-regular card">
+            <div class="type-icon">카드</div>
+            {{saleStatistics?.card| numberWithCommas}}
+          </div>
+          <div class="rw-typo-subtext0-regular trans">
+            <div class="type-icon">계좌</div>
+            {{saleStatistics?.trans | numberWithCommas}}
+          </div>
+          <div class="rw-typo-subtext0-regular unpaid">
+            <div class="type-icon">미수</div>
+            {{saleStatistics?.unpaid| numberWithCommas}}
+          </div>
+        </ng-container>
+
+
+      </div>
+    </div>
+  </tfoot>
+
+
+
+
+</table>

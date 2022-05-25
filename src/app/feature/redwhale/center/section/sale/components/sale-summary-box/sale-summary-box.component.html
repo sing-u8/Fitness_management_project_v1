@@ -1,0 +1,65 @@
+<div class="dropdown-container">
+  <div class="header" [class.open]="isContentOpen" (click)="toggleContent()">
+    <span class="rw-typo-bodytext0-bold">{{title}}</span>
+    <span class="mdi mdi-chevron-down"></span>
+  </div>
+  <div class="content">
+    <p class=" summary-value rw-typo-headline1">￦ {{curTotal | numberWithCommas}}</p>
+    <div class="summary-difference-value">
+      <img class="mdi" *ngIf="curTotal >= prevTotal" src="assets/icons/etc/sale-up-arrow-lightgrey.svg">
+      <img class="mdi" *ngIf="curTotal < prevTotal" src="assets/icons/etc/sale-down-arrow-lightgrey.svg">
+      <p *ngIf="prevTotal != 0" class="rw-typo-subtext0-regular">
+        ￦ {{(curTotal - prevTotal) | absNumber | numberWithCommas}}
+      </p>
+      <p *ngIf="prevTotal == 0" class="rw-typo-subtext0-regular">
+        ￦ 0
+      </p>
+    </div>
+    <div *ngIf="!(curTotal == 0 )" class="summary-desc">
+      <!-- <p *ngIf="curTotal == 0" class="rw-typo-bodytext2-regular">매출을 입력해주세요.</p> -->
+      <p *ngIf="curTotal != 0" class="rw-typo-bodytext2">
+        {{summaryDescText}}
+        <span *ngIf="curTotal - prevTotal > 0" class="plus">{{curTotal | rateOfChange:prevTotal}} 증가</span>
+        <span *ngIf="curTotal != 0 && curTotal - prevTotal < 0" class="minus">{{curTotal | rateOfChange:prevTotal}} 감소</span>
+        <span>했어요.</span>
+      </p>
+    </div>
+  </div>
+  <div [class.show]="isContentOpen" class="detail-content">
+
+    <div *ngFor="let v of SaleSummary?.cur | keyvalue" class="detail-item">
+
+      <div
+        class="rw-typo-bodytext1"
+        [class.line-break] = "detailTitle[v.key].length > 3"
+      >
+        {{detailTitle[v.key]}}
+      </div>
+      <div class="rw-typo-bodytext0 d-flex">
+        <div
+
+          class="rw-typo-subtext3 change-ratio"
+          [class.plus] = "v.value > SaleSummary.prev[v.key]"
+          [class.minus] = "v.value < SaleSummary.prev[v.key]"
+        >
+          {{v.value | rateOfChange:SaleSummary.prev[v.key]:true }}
+        </div>
+
+        <div class="price">
+          <div class="the-price">￦&nbsp;{{v.value | numberWithCommas}}</div>
+
+          <div class="rw-typo-subtext0 price-change">
+            <img class="mdi" *ngIf="curTotal >= prevTotal" src="assets/icons/etc/sale-up-arrow-lightgrey.svg">
+            <img class="mdi" *ngIf="curTotal < prevTotal" src="assets/icons/etc/sale-down-arrow-lightgrey.svg">
+            <p *ngIf="SaleSummary.prev[v.key] != 0">￦&nbsp;{{ (v.value - SaleSummary.prev[v.key]) | absNumber | numberWithCommas}}</p>
+            <p *ngIf="SaleSummary.prev[v.key] == 0">￦&nbsp;0</p>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
