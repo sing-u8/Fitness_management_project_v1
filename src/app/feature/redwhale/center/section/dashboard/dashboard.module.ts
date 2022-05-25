@@ -54,6 +54,7 @@ import { CommonModule as SectionCommonModule } from '../common/common.module'
 
 // ngxSkeletonLoader module
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader'
+import { NgxSpinnerModule } from 'ngx-spinner'
 
 @NgModule({
     declarations: [
@@ -106,6 +107,7 @@ import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader'
         FormsModule,
         NgxSkeletonLoaderModule,
         SectionCommonModule,
+        NgxSpinnerModule,
     ],
 })
 export class DashboardModule {}

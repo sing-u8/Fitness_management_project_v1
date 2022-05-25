@@ -172,8 +172,7 @@
 
             <ng-template
                 #cur_user_empty
-                [ngIf] = "!curUserData.user"
-                [ngIfElse]="cur_user_exist"
+                [ngIf] = "!curUserData.user && isUserDetailLoading != 'pending'"
             >
                 <div class="center-empty-guide">
                     <img src="assets/icons/etc/empty_screen.svg">
@@ -181,7 +180,10 @@
                     <p>회원 정보를 조회하실 수 있어요.</p>
                 </div>
             </ng-template>
-            <ng-template #cur_user_exist>
+            <ng-template
+                #cur_user_exist
+                [ngIf]="curUserData.user && isUserDetailLoading != 'pending'"
+            >
                 <db-user-detail-membership
                     *ngIf="(userDetailTag$ | async) == 'membership'"
                     [curUserData]="curUserData"
@@ -202,6 +204,21 @@
                     [curUserData]="curUserData"
                     (onRegisterML)="onRegisterML.emit()"
                 ></db-user-detail-payment>
+            </ng-template>
+            <ng-template
+                #user_detail_loading
+                [ngIf] = "showUserDetailLoading"
+            >
+                <div class="l-user-detail-loading">
+                    <ngx-spinner
+                        name="ud_loading"
+                        [fullScreen]="false"
+                        bdColor="var(--white)"
+                        color="var(--grey)"
+                        type="ball-spin-clockwise"
+                        size="medium"
+                    ></ngx-spinner>
+                </div>
             </ng-template>
 
         </div>

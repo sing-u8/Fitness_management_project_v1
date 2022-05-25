@@ -257,6 +257,7 @@ export const selectIsLoading = (state: State) => state.isLoading
 export const selectError = (state: State) => state.error
 export const selectSearchInput = (state: State) => state.curSearchInput
 export const selectUserDetailTag = (state: State) => state.userDetailTag
+export const selectIsUserDeatilLoading = (state: State) => state.isUserDeatilLoading
 
 // main
 export const selectUsersSelectCategs = (state: State) => state.usersSelectCategs

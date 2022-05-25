@@ -12,6 +12,7 @@ export const isLoading = createSelector(DashboardFeature, FromDashboard.selectIs
 export const error = createSelector(DashboardFeature, FromDashboard.selectError)
 export const searchInput = createSelector(DashboardFeature, FromDashboard.selectSearchInput)
 export const userDeatilTag = createSelector(DashboardFeature, FromDashboard.selectUserDetailTag)
+export const isUserDetailLoading = createSelector(DashboardFeature, FromDashboard.selectIsUserDeatilLoading)
 
 // main
 export const usersSelectCategs = createSelector(DashboardFeature, FromDashboard.selectUsersSelectCategs)

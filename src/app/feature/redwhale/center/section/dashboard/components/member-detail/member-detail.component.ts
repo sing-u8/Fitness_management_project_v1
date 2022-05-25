@@ -1,13 +1,18 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core'
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges, OnDestroy } from '@angular/core'
 import { FormBuilder, FormControl, Validators } from '@angular/forms'
 import _ from 'lodash'
 
 import { StorageService } from '@services/storage.service'
+import { NgxSpinnerService } from 'ngx-spinner'
 
 import { Center } from '@schemas/center'
+import { Loading } from '@schemas/componentStore/loading'
+
+import { Subject } from 'rxjs'
+import { takeUntil } from 'rxjs/operators'
 
 // ngrx
-import { Store } from '@ngrx/store'
+import { Store, select } from '@ngrx/store'
 import * as DashboardReducer from '@centerStore/reducers/sec.dashboard.reducer'
 import * as DashboardActions from '@centerStore/actions/sec.dashboard.actions'
 import * as DashboardSelector from '@centerStore/selectors/sec.dashoboard.selector'
@@ -18,7 +23,7 @@ import { showToast } from '@appStore/actions/toast.action'
     templateUrl: './member-detail.component.html',
     styleUrls: ['./member-detail.component.scss'],
 })
-export class MemberDetailComponent implements OnInit {
+export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
     @Input() curUserData: DashboardReducer.CurUseData = _.cloneDeep(DashboardReducer.CurUseDataInit)
 
     @Output() onRegisterML = new EventEmitter<void>()
@@ -26,13 +31,42 @@ export class MemberDetailComponent implements OnInit {
     public memoForm: FormControl = this.fb.control('')
     public center: Center
 
+    public unSubscriber$ = new Subject<void>()
     public userDetailTag$ = this.nxStore.select(DashboardSelector.userDeatilTag)
+    public isUserDetailLoading: Loading = undefined
+    public showUserDetailLoading = false
+
     setUserDetailTag(tag: DashboardReducer.UserDetailTag) {
         this.nxStore.dispatch(DashboardActions.setUserDetailTag({ tag }))
     }
 
-    constructor(private fb: FormBuilder, private storageService: StorageService, private nxStore: Store) {
+    constructor(
+        private fb: FormBuilder,
+        private storageService: StorageService,
+        private nxStore: Store,
+        private spinner: NgxSpinnerService
+    ) {
         this.center = this.storageService.getCenter()
+        this.spinner.show('ud_loading')
+        this.nxStore
+            .pipe(select(DashboardSelector.isUserDetailLoading), takeUntil(this.unSubscriber$))
+            .subscribe((isUserDeatilLoading) => {
+                this.isUserDetailLoading = isUserDeatilLoading
+                console.log(
+                    'DashboardSelector.isUserDetailLoading - ',
+                    this.isUserDetailLoading,
+                    isUserDeatilLoading,
+                    ', ',
+                    this.curUserData
+                )
+                if (this.isUserDetailLoading == 'pending') {
+                    this.showUserDetailLoading = true
+                    this.spinner.show('ud_loading')
+                } else {
+                    this.showUserDetailLoading = false
+                    this.spinner.hide('ud_loading')
+                }
+            })
     }
 
     // register membership locker full modal vars and funcs
@@ -46,6 +80,10 @@ export class MemberDetailComponent implements OnInit {
     //
 
     ngOnInit(): void {}
+    ngOnDestroy(): void {
+        this.unSubscriber$.next()
+        this.unSubscriber$.complete()
+    }
 
     ngOnChanges(changes: SimpleChanges): void {
         if (!changes['curUserData'].firstChange) {
