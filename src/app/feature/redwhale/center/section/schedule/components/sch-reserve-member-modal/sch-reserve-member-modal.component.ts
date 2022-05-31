@@ -23,6 +23,7 @@ import { CenterCalendarService } from '@services/center-calendar.service'
 import { CalendarTask } from '@schemas/calendar-task'
 import { UserAbleToBook } from '@schemas/user-able-to-book'
 
+// ! 로딩 화면 추가할 필요가 있음
 @Component({
     selector: 'rw-sch-reserve-member-modal',
     templateUrl: './sch-reserve-member-modal.component.html',

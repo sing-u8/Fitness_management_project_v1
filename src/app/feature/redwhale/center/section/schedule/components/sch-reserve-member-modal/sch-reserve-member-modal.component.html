@@ -19,7 +19,10 @@
         </div>
       </div>
 
-      <form class="input-container">
+      <form
+        *ngIf="userList.length > 0"
+        class="input-container"
+      >
         <input
           class="rw-input" type="text"
           placeholder="회원의 이름 또는 전화번호를 검색해주세요."
@@ -74,7 +77,7 @@
         </div>
       </div>
 
-      <div  *ngIf="selectedNum > 0" class="reserve-guide-text">
+      <div  *ngIf="selectedNum > 0" class="reserve-guide-text rw-typo-subtext1">
         해당 수업은 현재 {{classTask.class.capacity - bookedUserCount}}명까지 예약하실 수 있어요.
       </div>
 

@@ -3,8 +3,8 @@
     <section class="direct-register-member-fullmodal user-select-none thin-scroll-y ">
         <div class="header">
             <div class="header-text-container">
-                <p class="rw-typo-headline1">QR코드 스캔이 어려운 회원님을 위해</p>
-                <p class="rw-typo-headline1">센터에서 직접 회원을 등록할 수 있어요.</p>
+                <p class="rw-typo-headline2">QR코드 스캔이 어려운 회원님을 위해</p>
+                <p class="rw-typo-headline2"><span class="rw-typo-headline1">센터에서 직접 회원을 등록</span>할 수 있어요.</p>
             </div>
 
             <div class="cg-typo-subtext close-button" rw-button rwButtonWidth="85" rwButtonHeight="40"
@@ -123,7 +123,7 @@
 
                         <div class="buttons">
                             <div class="cancel rw-typo-title2" rw-button rwButtonColor="var(--white)"
-                                (click)="false">취소</div>
+                                (click)="close.emit()">취소</div>
 
                             <rw-button
                                 id="direct-register-member"

@@ -6,7 +6,6 @@
     position: relative;
     padding: 0px 25px;
     position: relative;
-    cursor: pointer;
 
     .border-bottom {
         width: calc(100% - 24px);
@@ -95,6 +94,7 @@
             font-size: 1.2rem;
             line-height: 17px;
             letter-spacing: -0.144px;
+            box-shadow: 0px 0px 10px rgba(181, 181, 181, 0.1);
 
             &.show-items {
                 display: flex;
@@ -157,8 +157,8 @@
     display: none;
     align-items: center;
     justify-content: space-between;
-    min-width: calc(100% - 120px - 25px - 13px);
-    width: calc(100% - 15.9574% - 25px - 13px);
+    min-width: calc(100% - 120px - 246px - 25px - 13px);
+    width: calc(100% - 15.9574% - 32.7127% - 25px - 13px);
     height: 26px;
     position: absolute;
     background: rgba(201, 107, 18, 0.05);
@@ -259,8 +259,8 @@
     }
 
     .col-notification {
-        min-width: calc(100% - 131px - 25px - 13px);
-        width: calc(100% - 15.1620% - 25px - 13px);
+        min-width: calc(100% - 131px - 239px - 25px - 13px);
+        width: calc(100% - 15.1620% - 27.6620% - 25px - 13px);
     }
 }
 
@@ -289,7 +289,7 @@
     }
 
     .col-notification {
-        min-width: calc(100% - 170px - 25px - 13px);
-        width: calc(100% - 13.3963% - 25px - 13px);
+        min-width: calc(100% - 170px - 286px - 25px - 13px);
+        width: calc(100% - 13.3963% - 22.5374% - 25px - 13px);
     }
 }

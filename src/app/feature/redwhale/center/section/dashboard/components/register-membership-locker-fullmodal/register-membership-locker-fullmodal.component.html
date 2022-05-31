@@ -30,7 +30,7 @@
                     >
                         <div class="empty-memberhip-card">
                             <div class="rw-typo-title2 title">회원권</div>
-                            <div class="membership-content" (click)="toggleMembershipListModal()">
+                            <div class="membership-content" (click)="checkMembershipItemEmpty()">
                                 <div class="card-icon">
                                     <img src="assets/icons/etc/ticket-white.svg">
                                 </div>
@@ -46,7 +46,7 @@
 
                         <div class="empty-locker-card">
                             <div class="rw-typo-title2 title">락커</div>
-                            <div class="locker-content" (click)="toggleLockerSelectModal()">
+                            <div class="locker-content" (click)="checkLockerItemEmpty()">
                                 <div class="card-icon">
                                     <img src="assets/icons/etc/locker-white.svg">
                                 </div>
@@ -65,11 +65,11 @@
                         <div class="presence-membership-locker">
                             <div class="membership-locker-buttons">
                                 <div class="add-membership-ticket-button" rw-button rwButtonColor="var(--white)"
-                                    (click)="toggleMembershipListModal()">
+                                    (click)="checkMembershipItemEmpty()">
                                     <span class="rw-typo-title2">회원권 추가</span>
                                     <img src="assets/icons/etc/plus.svg">
                                 </div>
-                                <div class="add-locker-button" rw-button rwButtonColor="var(--white)" (click)="toggleLockerSelectModal()">
+                                <div class="add-locker-button" rw-button rwButtonColor="var(--white)" (click)="checkLockerItemEmpty()">
                                     <span class="rw-typo-title2">락커 추가</span>
                                     <img src="assets/icons/etc/plus.svg">
                                 </div>
@@ -172,3 +172,16 @@
     (confirm) = "onMembershipTicketSelected($event)"
     (cancel) = "closeMembershipListModal()"
 ></db-membershipTicketListModal>
+
+<rw-modal
+    [(visible)]="doShowLockerEmpty"
+    [data]="showLockerEmptyData"
+    (cancel)="closeShowLockerEmpty()"
+    (confirm)="onLockerEmtpyConfirm()"
+></rw-modal>
+<rw-modal
+    [(visible)]="doShowMembershipEmpty"
+    [data]="showMembershipEmtpyData"
+    (cancel)="closeShowMembershipEmpty()"
+    (confirm)="onMembershipEmtpyConfirm()"
+></rw-modal>

@@ -9,7 +9,7 @@
                 class="rw-typo-bodytext0-bold status"
                 [class.rw-typo-bodytext0-regular] = "!isBooked"
             >
-                {{reservation.state_code_name}}
+                {{reservation.state_code == 'user_membership_class_booking_state_booked' ? '예약 완료' : reservation.state_code_name}}
             </div>
             <div
                 *ngIf="isBooked && !isBookCancelable"

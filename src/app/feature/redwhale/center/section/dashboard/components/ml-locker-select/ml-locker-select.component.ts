@@ -77,9 +77,7 @@ export class MlLockerSelectComponent implements AfterViewInit, ControlValueAcces
         this.onChanged(item)
     }
 
-    onChange = (_) => {
-        console.log('on change in ml ls : ', _)
-    }
+    onChange = (_) => {}
     onTouched = (_) => {}
 
     writeValue(value: any): void {
@@ -95,7 +93,7 @@ export class MlLockerSelectComponent implements AfterViewInit, ControlValueAcces
     }
 
     onChanged(value: any) {
-        console.log('ml ls -- onchanged : ', value, this.value)
+        console.log('ml select ls -- onchanged : ', value, this.value, this.items)
         if (this.value.id == value.id) return
         this.value = value
         this.onChange(value)

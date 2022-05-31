@@ -142,7 +142,7 @@ export class ModifyGeneralScheduleComponent implements OnInit, AfterViewInit, On
                     this.nxStore.dispatch(ScheduleActions.setIsScheduleEventChanged({ isScheduleEventChanged: true }))
                     this.closeDrawer()
                     this.nxStore.dispatch(
-                        showToast({ text: `${this.planTexts.planTitle} 기타 일정이 수정되었습니다.` })
+                        showToast({ text: `'${this.planTexts.planTitle}' 기타 일정이 수정되었습니다.` })
                     )
                 },
                 error: (err) => {

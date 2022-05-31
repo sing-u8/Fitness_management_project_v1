@@ -26,14 +26,14 @@
 
       <div class="modal-navigation">
         <div
-          class="rw-typo-bodytext2-regular lesson-button"
+          class="rw-typo-bodytext2-normal_darkgrey lesson-button"
           [class.selected]="screen_status == 'lesson'"
           (click)="onLessonClick()"
         >
           수업 정보
         </div>
         <div
-          class="rw-typo-bodytext2-regular reservation-button"
+          class="rw-typo-bodytext2-normal_darkgrey reservation-button"
           [class.selected]="screen_status == 'reservation'"
           (click)="onReservationClick()"
         >
@@ -142,8 +142,8 @@
               class="empty-guide"
             >
               <img src="assets/icons/etc/empty_screen.svg" >
-              <p *ngIf="isBookingEnd" class="rw-typo-subtext0-regular grey">예약을 신청한 회원이 없어요.</p>
-              <p *ngIf="!isBookingEnd" class="rw-typo-subtext0-regular grey">아직 예약을 신청한 회원이 없어요.</p>
+              <p *ngIf="isBookingEnd" class="rw-typo-subtext0-regular grey ">예약을 신청한 회원이 없어요.</p>
+              <p *ngIf="!isBookingEnd" class="rw-typo-subtext0-regular grey empty-guide-text">아직 예약을 신청한 회원이 없어요.</p>
               <p *ngIf="!isBookingEnd" class="rw-typo-subtext0-regular grey">직접 회원을 예약하시겠어요?</p>
               <div *ngIf="!isBookingEnd" class="empty-button" (click)="onReserveMember()">
                 <p>회원 예약하기</p>

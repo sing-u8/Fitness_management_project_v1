@@ -2,16 +2,16 @@
     [class.isShadow]='isShadow'>
     <div class="month col d-flex">
         <div class="start col-3 d-flex justify-content-start align-items-start">
-            <span class="mdi mdi-chevron-double-left" (click)="previousYear()"></span>
-            <span class="mdi mdi-chevron-left" (click)="previousMonth()"></span>
+            <span class="chevron-left" (click)="previousYear()"></span>
+            <span class="chevron-double-left" (click)="previousMonth()"></span>
         </div>
         <div class="center col-6 d-flex justify-content-center align-items-start">{{ month }}</div>
-        <div class="end col-3 d-flex justify-content-end align-items-start">
-            <span class="mdi mdi-chevron-right" (click)="nextMonth()"></span>
-            <span class="mdi mdi-chevron-double-right" (click)="nextYear()"></span>
+        <div class="end col-3 d-flex justify-content-end  align-items-start">
+            <span class="chevron-right" (click)="nextMonth()"></span>
+            <span class="chevron-double-right" (click)="nextYear()"></span>
         </div>
     </div>
-    <div class="week-header col d-flex justify-content-between align-items-center">
+    <!-- <div class="week-header col d-flex justify-content-between align-items-center">
         <div class="d-flex justify-content-center align-items-center">일</div>
         <div class="d-flex justify-content-center align-items-center">월</div>
         <div class="d-flex justify-content-center align-items-center">화</div>
@@ -19,7 +19,7 @@
         <div class="d-flex justify-content-center align-items-center">목</div>
         <div class="d-flex justify-content-center align-items-center">금</div>
         <div class="d-flex justify-content-center align-items-center">토</div>
-    </div>
+    </div> -->
     <div class="week-row col d-flex justify-content-between align-items-center"
         *ngFor="let weekRow of weekRows; let i = index">
         <div class="week-col d-flex justify-content-center align-items-center"
@@ -34,16 +34,16 @@
     [class.isShadow]='isShadow'>
     <div class="month col d-flex">
         <div class="start col-3 d-flex justify-content-start align-items-start">
-            <span class="mdi mdi-chevron-double-left" (click)="previousYear()"></span>
-            <span class="mdi mdi-chevron-left" (click)="previousMonth()"></span>
+            <span class="chevron-left" (click)="previousYear()"></span>
+            <span class="chevron-double-left" (click)="previousMonth()"></span>
         </div>
         <div class="center col-6 d-flex justify-content-center align-items-start">{{ month }}</div>
-        <div class="end col-3 d-flex justify-content-end align-items-start">
-            <span class="mdi mdi-chevron-right" (click)="nextMonth()"></span>
-            <span class="mdi mdi-chevron-double-right" (click)="nextYear()"></span>
+        <div class="end col-3 d-flex justify-content-end  align-items-start">
+            <span class="chevron-right" (click)="nextMonth()"></span>
+            <span class="chevron-double-right" (click)="nextYear()"></span>
         </div>
     </div>
-    <div class="week-header col d-flex justify-content-between align-items-center">
+    <!-- <div class="week-header col d-flex justify-content-between align-items-center">
         <div class="d-flex justify-content-center align-items-center">일</div>
         <div class="d-flex justify-content-center align-items-center">월</div>
         <div class="d-flex justify-content-center align-items-center">화</div>
@@ -51,7 +51,7 @@
         <div class="d-flex justify-content-center align-items-center">목</div>
         <div class="d-flex justify-content-center align-items-center">금</div>
         <div class="d-flex justify-content-center align-items-center">토</div>
-    </div>
+    </div> -->
     <div class="week-row col d-flex justify-content-between align-items-center"
         *ngFor="let weekRow of weekRows; let i = index" [class.selected]="weekNumbers[i] == selectedWeek"
         (click)="selectWeek(i)">
@@ -66,16 +66,16 @@
     [class.isShadow]='isShadow'>
     <div class="month col d-flex">
         <div class="start col-3 d-flex justify-content-start align-items-start">
-            <span class="mdi mdi-chevron-double-left" (click)="previousYear()"></span>
-            <span class="mdi mdi-chevron-left" (click)="previousMonth()"></span>
+            <span class="chevron-left" (click)="previousYear()"></span>
+            <span class="chevron-double-left" (click)="previousMonth()"></span>
         </div>
         <div class="center col-6 d-flex justify-content-center align-items-start">{{ month }}</div>
-        <div class="end col-3 d-flex justify-content-end align-items-start">
-            <span class="mdi mdi-chevron-right" (click)="nextMonth()"></span>
-            <span class="mdi mdi-chevron-double-right" (click)="nextYear()"></span>
+        <div class="end col-3 d-flex justify-content-end  align-items-start">
+            <span class="chevron-right" (click)="nextMonth()"></span>
+            <span class="chevron-double-right" (click)="nextYear()"></span>
         </div>
     </div>
-    <div class="week-header col d-flex justify-content-between align-items-center">
+    <!-- <div class="week-header col d-flex justify-content-between align-items-center">
         <div class="d-flex justify-content-center align-items-center">일</div>
         <div class="d-flex justify-content-center align-items-center">월</div>
         <div class="d-flex justify-content-center align-items-center">화</div>
@@ -83,7 +83,7 @@
         <div class="d-flex justify-content-center align-items-center">목</div>
         <div class="d-flex justify-content-center align-items-center">금</div>
         <div class="d-flex justify-content-center align-items-center">토</div>
-    </div>
+    </div> -->
     <div class="week-row col d-flex justify-content-between align-items-center"
         *ngFor="let weekRow of weekRows; let i = index">
         <div class="week-col d-flex justify-content-center align-items-center"
@@ -99,16 +99,16 @@
     *ngIf="mode == 'multiline' || mode =='multiline-component'" [class.isShadow]='isShadow'>
     <div class="month col d-flex">
         <div class="start col-3 d-flex justify-content-start align-items-start">
-            <span class="mdi mdi-chevron-double-left" (click)="previousYear()"></span>
-            <span class="mdi mdi-chevron-left" (click)="previousMonth()"></span>
+            <span class="chevron-left" (click)="previousYear()"></span>
+            <span class="chevron-double-left" (click)="previousMonth()"></span>
         </div>
         <div class="center col-6 d-flex justify-content-center align-items-start">{{ month }}</div>
-        <div class="end col-3 d-flex justify-content-end align-items-start">
-            <span class="mdi mdi-chevron-right" (click)="nextMonth()"></span>
-            <span class="mdi mdi-chevron-double-right" (click)="nextYear()"></span>
+        <div class="end col-3 d-flex justify-content-end  align-items-start">
+            <span class="chevron-right" (click)="nextMonth()"></span>
+            <span class="chevron-double-right" (click)="nextYear()"></span>
         </div>
     </div>
-    <div class="week-header col d-flex justify-content-between align-items-center">
+    <!-- <div class="week-header col d-flex justify-content-between align-items-center">
         <div class="d-flex justify-content-center align-items-center">일</div>
         <div class="d-flex justify-content-center align-items-center">월</div>
         <div class="d-flex justify-content-center align-items-center">화</div>
@@ -116,7 +116,7 @@
         <div class="d-flex justify-content-center align-items-center">목</div>
         <div class="d-flex justify-content-center align-items-center">금</div>
         <div class="d-flex justify-content-center align-items-center">토</div>
-    </div>
+    </div> -->
     <div class="week-row col d-flex justify-content-between align-items-center"
         *ngFor="let weekRow of weekRows; let i = index">
         <div class="week-col d-flex justify-content-center align-items-center"
@@ -145,16 +145,16 @@
     *ngIf="mode == 'reg-ml'" [class.isShadow]='isShadow'>
     <div class="month col d-flex">
         <div class="start col-3 d-flex justify-content-start align-items-start">
-            <span class="mdi mdi-chevron-double-left" (click)="previousYear()"></span>
-            <span class="mdi mdi-chevron-left" (click)="previousMonth()"></span>
+            <span class="chevron-left" (click)="previousYear()"></span>
+            <span class="chevron-double-left" (click)="previousMonth()"></span>
         </div>
         <div class="center col-6 d-flex justify-content-center align-items-start">{{ month }}</div>
-        <div class="end col-3 d-flex justify-content-end align-items-start">
-            <span class="mdi mdi-chevron-right" (click)="nextMonth()"></span>
-            <span class="mdi mdi-chevron-double-right" (click)="nextYear()"></span>
+        <div class="end col-3 d-flex justify-content-end  align-items-start">
+            <span class="chevron-right" (click)="nextMonth()"></span>
+            <span class="chevron-double-right" (click)="nextYear()"></span>
         </div>
     </div>
-    <div class="week-header col d-flex justify-content-between align-items-center">
+    <!-- <div class="week-header col d-flex justify-content-between align-items-center">
         <div class="d-flex justify-content-center align-items-center">일</div>
         <div class="d-flex justify-content-center align-items-center">월</div>
         <div class="d-flex justify-content-center align-items-center">화</div>
@@ -162,7 +162,7 @@
         <div class="d-flex justify-content-center align-items-center">목</div>
         <div class="d-flex justify-content-center align-items-center">금</div>
         <div class="d-flex justify-content-center align-items-center">토</div>
-    </div>
+    </div> -->
     <div class="week-row col d-flex justify-content-between align-items-center"
         *ngFor="let weekRow of weekRows; let i = index">
         <div class="week-col d-flex justify-content-center align-items-center"

@@ -16,7 +16,12 @@ export class ScheduleHelperService {
         const minute = Number(startTimeList[1]) + minutes
         const quotient = parseInt(`${minute / 60}`, 10)
         const remainder = Number(minute) % 60
-        const endTime = `${Number(startTimeList[0]) + quotient}:${remainder}`
+
+        const hour =
+            String(Number(startTimeList[0]) + quotient).length == 1
+                ? `0${Number(startTimeList[0]) + quotient}`
+                : Number(startTimeList[0]) + quotient
+        const endTime = `${hour}:${remainder}`
         return endTime // xx:xx
     }
 }

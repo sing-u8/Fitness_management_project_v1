@@ -76,6 +76,7 @@ export class ModifyLockerFullmodalComponent implements OnInit, OnChanges, AfterV
             startDate: this.userLocker.start_date,
             endDate: this.userLocker.end_date,
         }
+        this.onDatePickRangeChange(this.date)
     }
 
     public dayDiff = ''
@@ -135,7 +136,11 @@ export class ModifyLockerFullmodalComponent implements OnInit, OnChanges, AfterV
         this.centerUsersLockerService
             .updateLockerTicket(this.center.id, this.centerUser.id, this.userLocker.id, reqBody)
             .subscribe((userMembership) => {
-                this.nxStore.dispatch(showToast({ text: `'${this.userLocker.name}'정보가 수정되었습니다.` }))
+                this.nxStore.dispatch(
+                    showToast({
+                        text: `'[${this.userLocker.category_name}] ${this.userLocker.name}'정보가 수정되었습니다.`,
+                    })
+                )
                 this.nxStore.dispatch(
                     DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.centerUser })
                 )

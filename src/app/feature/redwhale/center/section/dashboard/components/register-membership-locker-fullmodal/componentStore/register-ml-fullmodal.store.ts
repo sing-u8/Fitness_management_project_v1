@@ -12,13 +12,13 @@ import { CenterMembershipService } from '@services/center-membership.service'
 import { CreateLockerTicketReqBody, CenterUsersLockerService } from '@services/center-users-locker.service.service'
 import { CreateMembershipTicketReqBody, CenterUsersMembershipService } from '@services/center-users-membership.service'
 import { CenterUsersPaymentService, CreateMLPaymentReqBody } from '@services/center-users-payment.service'
+import { CenterLockerService } from '@services/center-locker.service'
 
 import {
     MembershipTicket,
     Locker,
     MembershipLockerItem,
     ChoseLockers,
-    Instructor,
     UpdateChoseLocker,
     TotalPrice,
 } from '@schemas/center/dashboard/register-ml-fullmodal'
@@ -39,12 +39,16 @@ export interface State {
     choseLockers: ChoseLockers
     membershipItems: MembershipItem[]
     instructors: CenterUser[]
+    doLockerItemsExist: boolean
+    doMembershipItemsExist: boolean
 }
 export const stateInit: State = {
     mlItems: [],
     choseLockers: new Map(),
     membershipItems: [],
     instructors: [],
+    doLockerItemsExist: false,
+    doMembershipItemsExist: false,
 }
 
 @Injectable()
@@ -55,6 +59,8 @@ export class RegisterMembershipLockerFullmodalStore extends ComponentStore<State
     public readonly choseLockers$ = this.select((s) => s.choseLockers)
     public readonly instructors$ = this.select((s) => s.instructors)
     public readonly membershipItems$ = this.select((s) => s.membershipItems)
+    public readonly doLockerItemsExist$ = this.select((s) => s.doLockerItemsExist)
+    public readonly doMembershipItemsExist$ = this.select((s) => s.doLockerItemsExist)
 
     public readonly totalPrice$ = this.select((s) => {
         const total: TotalPrice = {
@@ -81,8 +87,7 @@ export class RegisterMembershipLockerFullmodalStore extends ComponentStore<State
     constructor(
         private centerUserListService: CenterUserListService,
         private centerMembershipApi: CenterMembershipService,
-        private centerUsersLockerApi: CenterUsersLockerService,
-        private centerUsersMembershipApi: CenterUsersMembershipService,
+        private centerLockerApi: CenterLockerService,
         private centerUsersPaymentApi: CenterUsersPaymentService,
         private nxStore: Store
     ) {
@@ -92,6 +97,20 @@ export class RegisterMembershipLockerFullmodalStore extends ComponentStore<State
     resetAll() {
         this.setState((state) => _.cloneDeep(stateInit))
     }
+    // set check membership locker items
+    setLockerItemsExist = this.updater((state, doExist: boolean) => {
+        state.doLockerItemsExist = doExist
+        return {
+            ...state,
+        }
+    })
+
+    setMembershipItemExist = this.updater((state, doExist: boolean) => {
+        state.doMembershipItemsExist = doExist
+        return {
+            ...state,
+        }
+    })
 
     // choseLocker$ methods
     updateChoseLockers = this.updater((state, data: UpdateChoseLocker) => {
@@ -233,8 +252,8 @@ export class RegisterMembershipLockerFullmodalStore extends ComponentStore<State
                                 ? _.map(membershipItems, (v) => {
                                       return {
                                           membership_item_id: v['membershipItem'].id,
-                                          category_name: v['membershipItem'].category_name,
-                                          name: v['membershipItem'].name,
+                                          //   category_name: v['membershipItem'].category_name,
+                                          //   name: v['membershipItem'].name,
                                           start_date: v.date.startDate,
                                           end_date: v.date.endDate,
                                           count: Number(v['count'].count),
@@ -325,6 +344,42 @@ export class RegisterMembershipLockerFullmodalStore extends ComponentStore<State
                     return EMPTY
                 })
             )
+    )
+
+    // check locker, membership items exist
+    checkLockerItemsExist = this.effect((centerId$: Observable<string>) =>
+        centerId$.pipe(
+            switchMap((centerId) =>
+                this.centerLockerApi.getCategoryList(centerId).pipe(
+                    tap({
+                        next: (lockerCategs) => {
+                            const doExist = _.some(lockerCategs, (v) => v.item_count != 0)
+                            this.setLockerItemsExist(doExist)
+                        },
+                        error: (err) => {
+                            console.log('register-ml-fullmodal store - checkLockerItemsExist err: ', err)
+                        },
+                    })
+                )
+            )
+        )
+    )
+    checkMembershipItemsExist = this.effect((centerId$: Observable<string>) =>
+        centerId$.pipe(
+            switchMap((centerId) =>
+                this.centerMembershipApi.getCategoryList(centerId).pipe(
+                    tap({
+                        next: (membershipCategs) => {
+                            const doExist = _.some(membershipCategs, (v) => v.items.length != 0)
+                            this.setMembershipItemExist(doExist)
+                        },
+                        error: (err) => {
+                            console.log('register-ml-fullmodal store - checkMembershipItemsExist err: ', err)
+                        },
+                    })
+                )
+            )
+        )
     )
 
     // helperFunction

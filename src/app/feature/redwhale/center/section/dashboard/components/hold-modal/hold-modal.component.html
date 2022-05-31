@@ -5,7 +5,7 @@
         <div class="l-title">
             <div class="title rw-typo-title1 ">
                 <span *ngIf="userLocker">
-                    ‘{{userLocker?.name | wordEllipsis:16}}’ 락커를 홀딩하시겠어요?
+                    ‘[{{userLocker?.category_name | wordEllipsis:10}}] {{userLocker?.name | wordEllipsis:16}}’ 락커를 홀딩하시겠어요?
                 </span>
                 <span *ngIf="userMembership">
                     ‘{{userMembership?.name | wordEllipsis:16}}’ 회원권을 홀딩하시겠어요?
@@ -24,6 +24,7 @@
             <div class="datepicker__wrapper">
                 <div
                     class="datepicker__button"
+                    [class.focused] = "doShowDatePick['start']"
                     rw-button rwButtonFontColor="var(--font-color)"
                     (click)="openShowDatePicker('start')"
                     (rwClickOutside)="closeShowDatePicker('start');"
@@ -48,6 +49,7 @@
                 <span class="rw-typo-bodytext1">~</span>
                 <div
                     class="datepicker__button"
+                    [class.focused] = "doShowDatePick['end']"
                     rw-button rwButtonFontColor="var(--font-color)"
                     (click)="openShowDatePicker('end')"
                     (rwClickOutside)="closeShowDatePicker('end');"

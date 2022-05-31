@@ -61,11 +61,16 @@
                     </div>
                     <div class="l-info">
                         <div class="title">전화번호</div>
-                        <div class="content">{{!curUserData.user ? '-' : curUserData.user.phone_number}}</div>
+                        <div class="content">{{!curUserData.user ? '-' : (curUserData.user.phone_number | phoneNumber)}}</div>
                     </div>
                     <div class="l-info">
                         <div class="title">생년월일</div>
-                        <div class="content">{{!curUserData.user ? '-' : curUserData.user.birth_date}}</div>
+                        <div class="content">
+                            <span *ngIf="!curUserData.user">-</span>
+                            <span *ngIf="curUserData.user">
+                                {{(curUserData.user.birth_date | dashToDot)}} ({{(curUserData.user.birth_date | birthDate:'세')}}, {{curUserData.user.sex == 'male' ? '남성' : '여성'}})
+                            </span>
+                        </div>
                     </div>
                     <div class="l-info">
                         <div class="title">권한</div>
@@ -187,22 +192,22 @@
                 <db-user-detail-membership
                     *ngIf="(userDetailTag$ | async) == 'membership'"
                     [curUserData]="curUserData"
-                    (onRegisterML)="onRegisterML.emit()"
+                    (onRegisterML)="toggleRegisterMLFullModal()"
                 ></db-user-detail-membership>
                 <db-user-detail-locker
                     *ngIf="(userDetailTag$ | async) == 'locker'"
                     [curUserData]="curUserData"
-                    (onRegisterML)="onRegisterML.emit()"
+                    (onRegisterML)="toggleRegisterMLFullModal()"
                 ></db-user-detail-locker>
                 <db-user-detail-reservation
                     *ngIf="(userDetailTag$ | async) == 'reservation'"
                     [curUserData]="curUserData"
-                    (onRegisterML)="onRegisterML.emit()"
+                    (onRegisterML)="toggleRegisterMLFullModal()"
                 ></db-user-detail-reservation>
                 <db-user-detail-payment
                     *ngIf="(userDetailTag$ | async) == 'payment'"
                     [curUserData]="curUserData"
-                    (onRegisterML)="onRegisterML.emit()"
+                    (onRegisterML)="toggleRegisterMLFullModal()"
                 ></db-user-detail-payment>
             </ng-template>
             <ng-template

@@ -39,6 +39,10 @@
             -webkit-transition: transform 0.2s linear;
             -o-transition: transform 0.2s linear;
         }
+
+        .text {
+            font-weight: 700;
+        }
     }
 
     .disabled {
@@ -63,6 +67,11 @@
         z-index: 50;
         border-radius: 5px;
         max-height: 190px;
+
+        &.drop-up {
+            top: initial;
+            bottom: 51px;
+        }
 
         .item {
             height: 45px;

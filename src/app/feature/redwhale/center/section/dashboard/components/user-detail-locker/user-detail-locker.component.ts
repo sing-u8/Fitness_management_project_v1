@@ -88,7 +88,6 @@ export class UserDetailLockerComponent implements OnInit {
         this.showChargeModal = !this.showChargeModal
     }
     onChargeConfirm(output: ConfirmOuput) {
-        console.log('onChargeConfirm : ', output)
         this.toggleChargeModal()
         this.chargeData = output.chargeType
 
@@ -143,13 +142,16 @@ export class UserDetailLockerComponent implements OnInit {
     public showEmptyModal = false
     public EmptyModalTextData = {
         text: '',
-        subText: `추가 결제 또는 환불이 발생한 경우기
+        subText: `추가 결제 또는 환불이 발생한 경우,
             다음 단계에서 금액을 입력해주세요.`,
         cancelButtonText: '취소',
         confirmButtonText: '락커 비우기',
     }
     openEmptyModal() {
-        this.EmptyModalTextData.text = `'${this.wordService.ellipsis(this.selectedUserLocker.name, 13)}'
+        this.EmptyModalTextData.text = `'[${this.wordService.ellipsis(
+            this.selectedUserLocker.category_name,
+            10
+        )}] ${this.wordService.ellipsis(this.selectedUserLocker.name, 13)}'
             락커를 비우시겠어요?`
         this.showEmptyModal = true
     }
@@ -187,7 +189,11 @@ export class UserDetailLockerComponent implements OnInit {
     }
     toggleShowRefundModal() {
         this.refundModalData.text = this.selectedUserLocker
-            ? `'${this.wordService.ellipsis(this.selectedUserLocker.name, 6)}' 락커를 환불하시겠어요?`
+            ? `'[${this.wordService.ellipsis(this.selectedUserLocker.category_name, 10)}] ${this.wordService.ellipsis(
+                  this.selectedUserLocker.name,
+                  6
+              )}'
+              락커를 환불하시겠어요?`
             : ''
         this.showRefundModal = !this.showRefundModal
     }
@@ -208,7 +214,10 @@ export class UserDetailLockerComponent implements OnInit {
     }
     toggleRemoveModal() {
         this.removeModalData.text = this.selectedUserLocker
-            ? `'${this.wordService.ellipsis(this.selectedUserLocker.name, 6)}' 락커를 삭제하시겠어요?`
+            ? `'[${this.wordService.ellipsis(this.selectedUserLocker.category_name, 10)}] ${this.wordService.ellipsis(
+                  this.selectedUserLocker.name,
+                  6
+              )}' 락커를 삭제하시겠어요?`
             : ''
         this.showRemoveModal = !this.showRemoveModal
     }
@@ -242,10 +251,10 @@ export class UserDetailLockerComponent implements OnInit {
         endDate: '',
     }
     toggleUpdateHoldModal() {
-        this.updateHoldModalText.text = `'${this.wordService.ellipsis(
-            this.selectedUserLocker.name,
-            15
-        )}' 홀딩 기간을 수정하시겠어요?`
+        this.updateHoldModalText.text = `'[${this.wordService.ellipsis(
+            this.selectedUserLocker.category_name,
+            10
+        )}] ${this.wordService.ellipsis(this.selectedUserLocker.name, 15)}' 홀딩 기간을 수정하시겠어요?`
         this.updateHoldDateInput = _.cloneDeep({
             startDate: this.selectedUserLocker.pause_start_date,
             endDate: this.selectedUserLocker.pause_end_date,
@@ -274,7 +283,11 @@ export class UserDetailLockerComponent implements OnInit {
     }
     toggleRemoveHoldingModal() {
         this.removeHoldingModalData.text = this.selectedUserLocker
-            ? `'${this.wordService.ellipsis(this.selectedUserLocker.name, 6)}' 홀딩 정보를 삭제하시겠어요?`
+            ? `'[${this.wordService.ellipsis(this.selectedUserLocker.category_name, 10)}] ${this.wordService.ellipsis(
+                  this.selectedUserLocker.name,
+                  6
+              )}'
+              홀딩 정보를 삭제하시겠어요?`
             : ''
         this.showRemoveHoldModal = !this.showRemoveHoldModal
     }
@@ -304,7 +317,10 @@ export class UserDetailLockerComponent implements OnInit {
             .subscribe((userMembership) => {
                 this.nxStore.dispatch(
                     showToast({
-                        text: `'${this.wordService.ellipsis(this.selectedUserLocker.name, 6)}' 기간이 연장되었습니다.`,
+                        text: `'[${this.wordService.ellipsis(
+                            this.selectedUserLocker.category_name,
+                            10
+                        )}] ${this.wordService.ellipsis(this.selectedUserLocker.name, 6)}' 기간이 연장되었습니다.`,
                     })
                 )
                 this.nxStore.dispatch(
@@ -321,9 +337,15 @@ export class UserDetailLockerComponent implements OnInit {
         this.centerUsersLockerService
             .pauseLockerTicket(this.center.id, this.curUserData.user.id, this.selectedUserLocker.id, reqBody)
             .subscribe((_) => {
-                const toastText = dayjs().isSameOrBefore(this.holdData.startDate)
-                    ? `'${this.wordService.ellipsis(this.selectedUserLocker.name, 6)}' 락커 홀딩되었습니다.`
-                    : `'${this.wordService.ellipsis(this.selectedUserLocker.name, 6)}' 락커 홀딩이 예약되었습니다.`
+                const toastText = dayjs(this.holdData.startDate).isSameOrBefore(dayjs())
+                    ? `'[${this.wordService.ellipsis(
+                          this.selectedUserLocker.category_name,
+                          10
+                      )}] ${this.wordService.ellipsis(this.selectedUserLocker.name, 6)}' 락커 홀딩되었습니다.`
+                    : `'[${this.wordService.ellipsis(
+                          this.selectedUserLocker.category_name,
+                          10
+                      )}] ${this.wordService.ellipsis(this.selectedUserLocker.name, 6)}' 락커 홀딩이 예약되었습니다.`
                 this.nxStore.dispatch(showToast({ text: toastText }))
                 this.nxStore.dispatch(
                     DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.curUserData.user })
@@ -348,10 +370,10 @@ export class UserDetailLockerComponent implements OnInit {
             .subscribe((_) => {
                 this.nxStore.dispatch(
                     showToast({
-                        text: `'${this.wordService.ellipsis(
-                            this.selectedUserLocker.name,
-                            6
-                        )}' 비우기가 완료되었습니다.`,
+                        text: `'[${this.wordService.ellipsis(
+                            this.selectedUserLocker.category_name,
+                            10
+                        )}] ${this.wordService.ellipsis(this.selectedUserLocker.name, 6)}' 비우기가 완료되었습니다.`,
                     })
                 )
                 this.nxStore.dispatch(
@@ -377,10 +399,10 @@ export class UserDetailLockerComponent implements OnInit {
             .subscribe((_) => {
                 this.nxStore.dispatch(
                     showToast({
-                        text: `'${this.wordService.ellipsis(
-                            this.selectedUserLocker.name,
-                            6
-                        )}' 비우기가 완료되었습니다.`,
+                        text: `'[${this.wordService.ellipsis(
+                            this.selectedUserLocker.category_name,
+                            10
+                        )}] ${this.wordService.ellipsis(this.selectedUserLocker.name, 6)}' 비우기가 완료되었습니다.`,
                     })
                 )
                 this.nxStore.dispatch(
@@ -409,7 +431,10 @@ export class UserDetailLockerComponent implements OnInit {
             .subscribe((_) => {
                 this.nxStore.dispatch(
                     showToast({
-                        text: `'${this.wordService.ellipsis(this.selectedUserLocker.name, 6)}' 락커가 환불되었습니다.`,
+                        text: `'[${this.wordService.ellipsis(
+                            this.selectedUserLocker.category_name,
+                            10
+                        )}] ${this.wordService.ellipsis(this.selectedUserLocker.name, 6)}' 락커가 환불되었습니다.`,
                     })
                 )
                 this.nxStore.dispatch(
@@ -424,7 +449,10 @@ export class UserDetailLockerComponent implements OnInit {
             .subscribe((_) => {
                 this.nxStore.dispatch(
                     showToast({
-                        text: `'${this.wordService.ellipsis(this.selectedUserLocker.name, 6)}' 락커가 삭제되었습니다.`,
+                        text: `'[${this.wordService.ellipsis(
+                            this.selectedUserLocker.category_name,
+                            10
+                        )}] ${this.wordService.ellipsis(this.selectedUserLocker.name, 6)}' 락커가 삭제되었습니다.`,
                     })
                 )
                 this.nxStore.dispatch(
@@ -441,10 +469,10 @@ export class UserDetailLockerComponent implements OnInit {
         this.centerUsersLockerService
             .pauseLockerTicket(this.center.id, this.curUserData.user.id, this.selectedUserLocker.id, reqBody)
             .subscribe((_) => {
-                const toastText = `'${this.wordService.ellipsis(
-                    this.selectedUserLocker.name,
-                    6
-                )}' 홀딩 기간이 수정되었습니다.`
+                const toastText = `'[${this.wordService.ellipsis(
+                    this.selectedUserLocker.category_name,
+                    10
+                )}] ${this.wordService.ellipsis(this.selectedUserLocker.name, 6)}' 홀딩 기간이 수정되었습니다.`
 
                 this.nxStore.dispatch(showToast({ text: toastText }))
                 this.nxStore.dispatch(
@@ -457,10 +485,10 @@ export class UserDetailLockerComponent implements OnInit {
         this.centerUsersLockerService
             .resumeLockerTicket(this.center.id, this.curUserData.user.id, this.selectedUserLocker.id)
             .subscribe((_) => {
-                const toastText = `'${this.wordService.ellipsis(
-                    this.selectedUserLocker.name,
-                    6
-                )}' 홀딩 정보가 삭제되었습니다.`
+                const toastText = `'[${this.wordService.ellipsis(
+                    this.selectedUserLocker.category_name,
+                    10
+                )}] ${this.wordService.ellipsis(this.selectedUserLocker.name, 6)}' 홀딩 정보가 삭제되었습니다.`
 
                 this.nxStore.dispatch(showToast({ text: toastText }))
                 this.nxStore.dispatch(

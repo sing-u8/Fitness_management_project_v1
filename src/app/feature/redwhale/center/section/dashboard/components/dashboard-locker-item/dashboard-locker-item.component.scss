@@ -26,10 +26,17 @@
     // move locker ticket css
     &.move-locker-ticket-X {
         box-shadow: 0px 0px 10px #b5b5b526;
-        background-color: #cfcfcf !important;
-        opacity: 0.3;
+        background-color: var(--background-color) !important;
         .grid-locker-item-inner-container {
             cursor: not-allowed;
+        }
+        .locker-name {
+            span {
+                color: var(--lightgrey) !important;
+            }
+        }
+        .user-name {
+            color: var(--lightgrey) !important;
         }
     }
     &.move-locker-ticket-O {
@@ -61,7 +68,8 @@
             position: absolute;
             width: 1px;
             height: 66px;
-            background-color: var(--darkgrey);
+            background-color: var(--lightgrey);
+            opacity: 0.4;
             transform: rotate(45deg);
             left: 16px;
             top: -17px;
@@ -71,7 +79,8 @@
             position: absolute;
             width: 1px;
             height: 68px;
-            background-color: var(--darkgrey);
+            background-color: var(--lightgrey);
+            opacity: 0.4;
             transform: rotate(135deg);
             left: 17px;
             top: -16px;
@@ -83,7 +92,7 @@
     .grid-locker-item-inner-container {
         width: 100%;
         height: 100%;
-        padding: 8px 8px;
+        padding: 5px 7px 8px 7px;
         display: flex;
         flex-direction: column;
         justify-content: space-between;

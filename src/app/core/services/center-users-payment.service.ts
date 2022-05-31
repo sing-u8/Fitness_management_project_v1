@@ -51,8 +51,8 @@ export class CenterUsersPaymentService {
 export interface CreateMLPaymentReqBody {
     user_memberships?: Array<{
         membership_item_id: string
-        category_name: string
-        name: string
+        // category_name: string
+        // name: string
         start_date: string
         end_date: string
         count: number

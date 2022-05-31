@@ -269,6 +269,7 @@ section.modify-membership-fullmodal-wrapper {
                             width: 96px;
                             height: 45px;
                             color: var(--white);
+                            font-weight: 600;
                         }
                     }
                 }
@@ -281,4 +282,8 @@ section.modify-membership-fullmodal-wrapper {
 .small-title {
     color: var(--grey);
     margin-bottom: 5px;
+}
+
+.item-font {
+    font-size: 1.4rem !important;
 }

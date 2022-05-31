@@ -4,7 +4,7 @@
         <div class="col2">구분</div>
         <div class="col3">회원권/락커명</div>
         <div class="col4">결제 담당자</div>
-        <div class="col5">결제 담당자</div>
+        <div class="col5">결제 금액</div>
     </header>
     <main class="thin-scroll-y-overlay2">
 
@@ -46,10 +46,10 @@
     (confirm) = "confirmModifyPayment()"
 ></db-modify-payment-fullmodal>
 
-<rw-charge-modal
+<rw-dashboard-charge-modal
     [(visible)] = "showChargeModal"
     [chargeMode] = "chargeMode"
     [inputs]="chargeInput"
     (cancel) = "hideChargeModal()"
     (confirm) = "onChargeConfirm($event)"
-></rw-charge-modal>
+></rw-dashboard-charge-modal>

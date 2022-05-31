@@ -10,8 +10,8 @@
         <ng-template #membership_emtpy [ngIf]="curUserData.lockers.length == 0" [ngIfElse]="membership_exist">
             <div class="center-empty-guide">
                 <img src="assets/icons/etc/empty_screen.svg">
-                <p>예약을 신청한 회원이 없어요.</p>
-                <p>아직 예약을 신청한 회원이 없어요.</p>
+                <p>아직 등록된 락커가 없어요.</p>
+                <p>회원님에게 회원권 / 락커를 등록해주세요!</p>
                 <div class="center-empty-button" (click)="onRegisterML.emit()">
                     <p>회원권 / 락커 등록하기</p>
                     <img src="assets/icons/etc/short_right_arrow_grey.svg">
@@ -44,12 +44,12 @@
     (confirm) = "onExtensionConfirm($event)"
 ></db-locker-extension-modal>
 
-<rw-charge-modal
+<rw-dashboard-charge-modal
     [(visible)] = "showChargeModal"
     [chargeMode] = "chargeMode"
     (cancel) = "toggleChargeModal()"
     (confirm) = "onChargeConfirm($event)"
-></rw-charge-modal>
+></rw-dashboard-charge-modal>
 
 
 <db-hold-modal
@@ -109,6 +109,7 @@
 <db-locker-shift-modal
     [(visible)]="showMovePlaceModal"
     [userLocker]="selectedUserLocker"
+    [curUser]="curUserData.user"
     (cancel)="openMovePlaceModal()"
     (confirm)="onConfirmMoveLocker()"
 ></db-locker-shift-modal>

@@ -36,7 +36,7 @@
 
 .col3 {
     min-width: 156px;
-    padding-right: 48px;
+    padding-right: 30px;
     width: 20.7446%;
 }
 
@@ -120,6 +120,7 @@
             font-size: 1.2rem;
             line-height: 17px;
             letter-spacing: -0.144px;
+            box-shadow: 0px 0px 10px rgba(181, 181, 181, 0.1);
 
             &.show-items {
                 display: flex;
@@ -141,9 +142,8 @@
     }
 }
 
-.col1,
-.col2,
-.col4 {
+.col3,
+.col5 {
     font-weight: 700;
     font-size: 1.4rem;
     line-height: 19px;
@@ -152,8 +152,9 @@
 }
 
 
-.col3,
-.col5 {
+.col1,
+.col2,
+.col4 {
     font-weight: 400;
     font-size: 1.4rem;
     line-height: 19px;
@@ -187,7 +188,7 @@
 
     .col3 {
         min-width: 211px;
-        padding-right: 103px;
+        padding-right: 40px;
         width: 24.4212%;
     }
 
@@ -219,7 +220,7 @@
 
     .col3 {
         min-width: 357px;
-        padding-right: 249px;
+        padding-right: 100px;
         width: 28.1323%;
     }
 

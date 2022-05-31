@@ -7,7 +7,6 @@
     position: relative;
     padding: 0px 25px;
     position: relative;
-    cursor: pointer;
 
     .border-bottom {
         width: calc(100% - 24px);
@@ -32,7 +31,7 @@
 
 .col2 {
     min-width: 210px;
-    padding-right: 23px;
+    padding-right: 16px;
     width: 27.9255%;
 }
 
@@ -114,6 +113,8 @@
             font-size: 1.2rem;
             line-height: 17px;
             letter-spacing: -0.144px;
+            box-shadow: 0px 0px 10px rgba(181, 181, 181, 0.1);
+
             &.show-items {
                 display: flex;
             }
@@ -261,7 +262,7 @@
 
     .col2 {
         min-width: 222px;
-        padding-right: 35px;
+        padding-right: 28px;
         width: 25.6944%;
     }
 
@@ -291,7 +292,7 @@
 
     .col2 {
         min-width: 267px;
-        padding-right: 80px;
+        padding-right: 70px;
         width: 21.0401%;
     }
 

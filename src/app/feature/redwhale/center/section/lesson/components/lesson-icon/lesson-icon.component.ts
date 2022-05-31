@@ -1,5 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, Renderer2, OnDestroy } from '@angular/core'
 
+import { originalOrder } from '@helpers/pipe/keyvalue'
+
 @Component({
     selector: 'gl-lesson-icon',
     templateUrl: './lesson-icon.component.html',
@@ -16,6 +18,8 @@ export class LessonIconComponent implements OnInit, OnDestroy {
     }
 
     private clickListener: () => void
+
+    public originalOrder = originalOrder
 
     public iconColors = {
         '#ffe885': false,

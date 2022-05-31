@@ -92,6 +92,10 @@
                 height: 48px;
                 position: relative;
 
+                &.open {
+                    border: 1px solid #C9C9C9;
+                }
+
                 &.disabled {
                     padding: 13px 15px;
                     cursor: not-allowed;
@@ -167,7 +171,7 @@
                 }
                 .input-count {
                     position: absolute;
-                    top: 13.5px;
+                    top: 13px;
                     right: 15px;
 
                     &.disabled {
@@ -194,6 +198,7 @@
             justify-content: center;
             width: 96px;
             height: 45px;
+            font-weight: 600;
         }
     }
 }
@@ -294,6 +299,18 @@
 }
 
 .small-title {
-    color: var(--grey);
+    color: var(--darkgrey);
     margin-bottom: 5px;
+}
+.small-title2 {
+    color: var(--darkgrey);
+    margin-bottom: 3px;
+}
+
+.item-font {
+    font-size: 1.4rem !important;
+}
+
+.chose-date-font {
+    color: var(--grey) !important;
 }

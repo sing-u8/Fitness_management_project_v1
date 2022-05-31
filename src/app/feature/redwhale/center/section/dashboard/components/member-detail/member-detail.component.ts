@@ -26,8 +26,6 @@ import { showToast } from '@appStore/actions/toast.action'
 export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
     @Input() curUserData: DashboardReducer.CurUseData = _.cloneDeep(DashboardReducer.CurUseDataInit)
 
-    @Output() onRegisterML = new EventEmitter<void>()
-
     public memoForm: FormControl = this.fb.control('')
     public center: Center
 

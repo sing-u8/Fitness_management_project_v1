@@ -28,7 +28,11 @@ section.fap-list {
             display: flex;
             align-items: center;
             justify-content: space-between;
+            position: relative;
             cursor: pointer;
+            & > span {
+                width: calc(100% - 21px);
+            }
             .arrow {
                 background-image: url('/assets/icons/etc/short_down_arrow.svg');
                 background-size: cover;

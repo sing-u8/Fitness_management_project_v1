@@ -40,7 +40,7 @@
 
                         <div class="date-picker">
                             <span class="rw-typo-subtext0-regular small-title">시작일</span>
-                            <div class="date-pick-button" rw-button rwButtonColor="var(--white)"
+                            <div class="date-pick-button item-font" rw-button rwButtonColor="var(--white)"
                                 rwButtonFontColor="var(--font-color)"
                                 (click)="onStartDateBtClick($event)">
                                 {{date.startDate | dateFormat:'YYYY.MM.DD'}}
@@ -60,9 +60,9 @@
                             <div class="date-pick-button" rw-button rwButtonColor="var(--white)"
                                 rwButtonFontColor="var(--font-color)"
                                 (click)="onEndDateBtClick($event)">
-                                <span *ngIf="!date.endDate || datepickFlag.start; else showEndDate">만료일을 선택해주세요.</span>
+                                <span class="item-font" *ngIf="!date.endDate || datepickFlag.start; else showEndDate">만료일을 선택해주세요.</span>
                                 <ng-template #showEndDate>
-                                    <span>{{date.endDate | dateFormat:'YYYY.MM.DD'}} ({{dayDiff}}일)</span>
+                                    <span class="item-font">{{date.endDate | dateFormat:'YYYY.MM.DD'}} ({{dayDiff}}일)</span>
                                 </ng-template>
 
                             </div>
@@ -83,7 +83,7 @@
                             <div class="input-container">
                                 <input type="text" placeholder="0" [(ngModel)]="count.count" (keyup)="onCountKeyup($event)"
                                     class="rw-input" [disabled]="count.infinite">
-                                <div class="input-count" [class.disabled]=count.infinite>회</div>
+                                <div class="input-count item-font" [class.disabled]=count.infinite>회</div>
                             </div>
                             <rw-checkbox [checked]="count.infinite" (click)="count.infinite = !count.infinite" text="무제한">
                             </rw-checkbox>
@@ -100,7 +100,7 @@
                             [disabled]="!date.startDate || !date.endDate || !isClassSelected() || !checkCount()"
                             (onClick)="confirmModify($event)"
                         >
-                            <div class="rw-typo-bodytext0-bold save-button">저장</div>
+                            <div class="rw-typo-bodytext0-bold save-button item-font">저장</div>
                         </rw-button>
                     </div>
                 </section>

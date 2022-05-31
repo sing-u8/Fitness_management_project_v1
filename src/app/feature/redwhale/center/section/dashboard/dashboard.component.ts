@@ -102,6 +102,11 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     }
     whenFinishRegisterMember() {
         this.toggleDirectRegisterMemberFullModal()
+        this.toggleRegisterMemberModal()
+    }
+    closeDirectRegisterMemberFullmodal() {
+        this.toggleDirectRegisterMemberFullModal()
+        this.toggleRegisterMemberModal()
     }
 
     //

@@ -14,8 +14,8 @@
     </div>
     <div class="col4" [class.notification]="isHolding">
         <div
-            (click)="!isExpired && toggleShowFullClass()"
-            (rwClickOutside)="!isExpired && closeShowFullClass()"
+            (mousemove)="!isExpired && openShowFullClass()"
+            (mouseleave)="!isExpired && closeShowFullClass()"
             class="col4__content"
             [class.pointer-cursor]="!isExpired && showFullClassArrow"
         >
@@ -53,7 +53,7 @@
 
         <div class="d-flex align-items-center">
             <div class="alert-icon"></div>
-            {{membership.pause_start_date}} - {{membership.pause_end_date}} ({{membership.pause_start_date | period :
+            {{membership.pause_start_date | dateFormat:'YYYY.MM.DD'}} - {{membership.pause_end_date | dateFormat:'YYYY.MM.DD'}} ({{membership.pause_start_date | period :
             membership.pause_end_date}}일) {{isHoldingReservaed ? '홀딩 예약' : '홀딩중'}}
         </div>
 

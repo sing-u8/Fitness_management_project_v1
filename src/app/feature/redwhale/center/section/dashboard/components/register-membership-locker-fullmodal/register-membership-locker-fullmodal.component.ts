@@ -12,6 +12,7 @@ import {
     OnChanges,
     AfterViewChecked,
 } from '@angular/core'
+import { Router, ActivatedRoute } from '@angular/router'
 
 import _ from 'lodash'
 import dayjs from 'dayjs'
@@ -25,7 +26,7 @@ import { ClickEmitterType } from '@shared/components/common/button/button.compon
 
 // component Store
 import { RegisterMembershipLockerFullmodalStore, stateInit } from './componentStore/register-ml-fullmodal.store'
-import { Observable } from 'rxjs'
+import { Observable, Subscription } from 'rxjs'
 //
 
 import { CenterUser } from '@schemas/center-user'
@@ -93,22 +94,39 @@ export class RegisterMembershipLockerFullmodalComponent implements OnInit, OnCha
         })
     })
 
+    public lockerItemsExist = false
+    public membershipItemsExist = false
+    public lieSubscriber = this.cmpStore.doLockerItemsExist$.subscribe((doExist) => {
+        this.lockerItemsExist = doExist
+        console.log('cmpStore.doLockerItemsExist$ : ', this.lockerItemsExist)
+    })
+    public mieSubscriber = this.cmpStore.doMembershipItemsExist$.subscribe((doExist) => {
+        this.membershipItemsExist = doExist
+        console.log('cmpStore.doMembershipItemsExist$ : ', this.membershipItemsExist)
+    })
+
     constructor(
         private renderer: Renderer2,
         private readonly cmpStore: RegisterMembershipLockerFullmodalStore,
         private storageService: StorageService,
-        private nxStore: Store
+        private nxStore: Store,
+        private router: Router,
+        private activatedRoute: ActivatedRoute
     ) {}
 
     ngOnInit(): void {
         this.center = this.storageService.getCenter()
         // this.cmpStore.setState(stateInit)
+        this.cmpStore.checkLockerItemsExist(this.center.id)
+        this.cmpStore.checkMembershipItemsExist(this.center.id)
         this.cmpStore.getInstructorsEffect(this.center.id)
         this.cmpStore.getmembershipItemsEffect(this.center.id)
     }
     ngOnDestroy(): void {
         this.TotalPriceSumSubscriber.unsubscribe()
         this.isAllMlItemDoneSubscriber.unsubscribe()
+        this.lieSubscriber.unsubscribe()
+        this.mieSubscriber.unsubscribe()
     }
     ngOnChanges(changes: SimpleChanges): void {
         console.log('ngOnChanges ;;; ', changes)
@@ -136,7 +154,15 @@ export class RegisterMembershipLockerFullmodalComponent implements OnInit, OnCha
                     this.renderer.removeClass(this.modalWrapperElement.nativeElement, 'display-flex')
                 }, 200)
 
-                this.cmpStore.setState(_.cloneDeep(stateInit))
+                this.cmpStore.setState(
+                    _.cloneDeep({
+                        ...stateInit,
+                        ...{
+                            doLockerItemsExist: this.lockerItemsExist,
+                            doMembershipItemsExist: this.membershipItemsExist,
+                        },
+                    })
+                )
             }
         }
     }
@@ -171,6 +197,10 @@ export class RegisterMembershipLockerFullmodalComponent implements OnInit, OnCha
     // modal methods
     public doShowLockerSelectModal = false
     public doShowMembershipListModal = false
+
+    checkLockerItemEmpty() {
+        this.lockerItemsExist ? this.toggleLockerSelectModal() : this.openShowLockerEmpty()
+    }
     toggleLockerSelectModal() {
         this.doShowLockerSelectModal = !this.doShowLockerSelectModal
     }
@@ -184,6 +214,9 @@ export class RegisterMembershipLockerFullmodalComponent implements OnInit, OnCha
         // console.log('onLockerSelected: ', item, this.gymRegisterMlState.itemList, this.itemList)
     }
 
+    checkMembershipItemEmpty() {
+        this.membershipItemsExist ? this.toggleMembershipListModal() : this.openShowMembershipEmpty()
+    }
     toggleMembershipListModal() {
         this.doShowMembershipListModal = !this.doShowMembershipListModal
     }
@@ -195,6 +228,50 @@ export class RegisterMembershipLockerFullmodalComponent implements OnInit, OnCha
         this.cmpStore.addMlItem(this.cmpStore.initMembershipItem(item))
         this.closeMembershipListModal()
         // console.log('onMembershipTicketSelected: ', item, this.gymRegisterMlState.itemList, this.itemList)
+    }
+
+    // don't exist membership, locker modals
+    public doShowLockerEmpty = false
+    public showLockerEmptyData = {
+        text: '앗! 추가할 수 있는 락커가 없어요. 😱',
+        subText: `회원에게 락커를 추가하기 위해
+                    먼저 센터의 락커 정보를 등록해주세요.`,
+        cancelButtonText: '뒤로',
+        confirmButtonText: '락커 등록하기',
+    }
+    openShowLockerEmpty() {
+        this.doShowLockerEmpty = true
+    }
+    closeShowLockerEmpty() {
+        this.doShowLockerEmpty = false
+    }
+    onLockerEmtpyConfirm() {
+        this.closeShowLockerEmpty()
+        this.close.emit()
+        this.router.navigate(['../locker'], {
+            relativeTo: this.activatedRoute,
+        })
+    }
+    public doShowMembershipEmpty = false
+    public showMembershipEmtpyData = {
+        text: '앗! 추가할 수 있는 회원권이 없어요. 😱',
+        subText: `회원에게 회원권을 추가하기 위해
+                    먼저 센터의 회원권 정보를 등록해주세요.`,
+        cancelButtonText: '뒤로',
+        confirmButtonText: '회원권 등록하기',
+    }
+    openShowMembershipEmpty() {
+        this.doShowMembershipEmpty = true
+    }
+    closeShowMembershipEmpty() {
+        this.doShowMembershipEmpty = false
+    }
+    onMembershipEmtpyConfirm() {
+        this.closeShowMembershipEmpty()
+        this.close.emit()
+        this.router.navigate(['../membership'], {
+            relativeTo: this.activatedRoute,
+        })
     }
 
     // register ml items func

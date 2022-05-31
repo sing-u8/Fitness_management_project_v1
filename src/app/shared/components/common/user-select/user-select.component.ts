@@ -12,6 +12,7 @@ import {
     EventEmitter,
 } from '@angular/core'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
+import { CenterUser } from '@schemas/center-user'
 
 // copy of ml-staff-selector
 @Component({
@@ -27,7 +28,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
     ],
 })
 export class UserSelectComponent implements AfterViewInit, ControlValueAccessor {
-    @Input() items: Array<{ name: string; value: any; disabled?: boolean }>
+    @Input() items: Array<{ name: string; value: CenterUser; disabled?: boolean }>
     @Input() disabled: boolean
     @Input() width: string
     @Input() height: string
@@ -41,7 +42,7 @@ export class UserSelectComponent implements AfterViewInit, ControlValueAccessor 
 
     @ViewChildren('.item') itemElememnts: QueryList<any>
 
-    value: any
+    value: { name: string; value: CenterUser }
     isOpen: boolean
 
     constructor(private el: ElementRef, private renderer: Renderer2) {

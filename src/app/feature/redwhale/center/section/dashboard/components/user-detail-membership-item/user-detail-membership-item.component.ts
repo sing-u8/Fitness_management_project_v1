@@ -81,7 +81,7 @@ export class UserDetailMembershipItemComponent implements OnInit, AfterViewInit 
         },
         removeRecord: {
             name: '기록 삭제',
-            color: 'var(--red)',
+            color: '#C2273B',
             visible: true,
             func: () => {
                 this.onRemoveRecord.emit(this.membership)
@@ -149,9 +149,9 @@ export class UserDetailMembershipItemComponent implements OnInit, AfterViewInit 
             }
         }
     }
-    toggleShowFullClass() {
+    openShowFullClass() {
         if (this.showFullClassArrow) {
-            this.openFullClass = !this.openFullClass
+            this.openFullClass = true
         }
     }
     closeShowFullClass() {

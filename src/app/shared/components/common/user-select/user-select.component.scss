@@ -3,7 +3,7 @@
     display: inline-flex;
 
     .selected {
-        height: 46px;
+        height: 48px;
         padding: 15px;
         border: 1px solid var(--border-color);
         border-radius: 5px;
@@ -38,6 +38,10 @@
             -moz-transition: transform 0.2s linear;
             -webkit-transition: transform 0.2s linear;
             -o-transition: transform 0.2s linear;
+        }
+
+        .text {
+            font-weight: 700;
         }
     }
 

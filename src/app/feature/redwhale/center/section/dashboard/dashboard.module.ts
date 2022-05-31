@@ -48,6 +48,7 @@ import { LockerShiftModalComponent } from './components/locker-shift-modal/locke
 import { ModifyPaymentFullmodalComponent } from './components/modify-payment-fullmodal/modify-payment-fullmodal.component'
 import { PaymentLockerWindowComponent } from './components/payment-locker-window/payment-locker-window.component'
 import { PaymentMembershipWindowComponent } from './components/payment-membership-window/payment-membership-window.component'
+import { DashboardChargeModalComponent } from './components/dashboard-charge-modal/dashboard-charge-modal.component'
 
 // section module
 import { CommonModule as SectionCommonModule } from '../common/common.module'
@@ -99,6 +100,7 @@ import { NgxSpinnerModule } from 'ngx-spinner'
         ModifyPaymentFullmodalComponent,
         PaymentLockerWindowComponent,
         PaymentMembershipWindowComponent,
+        DashboardChargeModalComponent,
     ],
     imports: [
         AngularCommonModule,

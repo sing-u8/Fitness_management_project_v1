@@ -19,7 +19,7 @@
     <div class="date-picker">
       <span class="rw-typo-subtext0-regular small-title">시작일 (변경 불가)</span>
       <div
-        class="date-pick-button disabled"
+        class="date-pick-button item-font disabled"
       >
         {{lockerState.date.startDate | dateFormat:'YYYY.MM.DD'}}
       </div>
@@ -28,13 +28,14 @@
       <span class="rw-typo-subtext0-regular small-title">만료일</span>
       <div
         class="date-pick-button"
+        [class.open] = "datepickFlag.end"
         rw-button rwButtonColor="var(--white)"
         rwButtonFontColor="var(--font-color)"
         (click) ="datepickFlag.end = !datepickFlag.end; $event.stopPropagation()"
       >
-        <span *ngIf="!lockerState.date.endDate; else showEndDate">날짜를 선택해주세요. {{lockerState.date.endDate}}</span>
+        <span class="item-font chose-date-font" *ngIf="!lockerState.date.endDate; else showEndDate">날짜를 선택해주세요. {{lockerState.date.endDate}}</span>
         <ng-template #showEndDate>
-          <span >{{lockerState.date.endDate | dateFormat:'YYYY-MM-DD'}} ({{dayDiff}}일)</span>
+          <span class="item-font">{{lockerState.date.endDate | dateFormat:'YYYY-MM-DD'}} ({{dayDiff}}일)</span>
         </ng-template>
 
       </div>
@@ -53,13 +54,13 @@
       <span class="rw-typo-subtext0-regular small-title">정상 금액</span>
       <div class="input-container">
         <input type="text" placeholder="0" [(ngModel)]="lockerState.amount.normalAmount"
-          (keyup)="onPriceKeyup($event, undefined)" class="rw-input">
-        <div class="input-count">원</div>
+          (keyup)="onPriceKeyup($event, undefined)" class="rw-input item-font">
+        <div class="input-count item-font">원</div>
       </div>
     </div>
     <div class="payment-item">
       <span class="rw-typo-subtext0-regular small-title">결제일</span>
-      <div class="input-disabled">
+      <div class="input-disabled item-font">
         {{lockerState.date.startDate | dateFormat:'YYYY.MM.DD'}}
       </div>
     </div>
@@ -71,7 +72,7 @@
       <div class="input-container">
         <input type="text" placeholder="0" [(ngModel)]="lockerState.price.cash"
           (keyup)="onPriceKeyup($event, 'cash')" class="rw-input">
-        <div class="input-count">원</div>
+        <div class="input-count item-font">원</div>
       </div>
     </div>
     <div class="payment-item">
@@ -79,7 +80,7 @@
       <div class="input-container">
         <input type="text" placeholder="0" [(ngModel)]="lockerState.price.card"
           (keyup)="onPriceKeyup($event, 'card')" class="rw-input">
-        <div class="input-count">원</div>
+        <div class="input-count item-font">원</div>
       </div>
     </div>
   </div>
@@ -90,7 +91,7 @@
       <div class="input-container">
         <input type="text" placeholder="0" [(ngModel)]="lockerState.price.trans"
           (keyup)="onPriceKeyup($event, 'trans')" class="rw-input">
-        <div class="input-count">원</div>
+        <div class="input-count item-font">원</div>
       </div>
     </div>
     <div class="payment-item">
@@ -98,7 +99,7 @@
       <div class="input-container">
         <input type="text" placeholder="0" [(ngModel)]="lockerState.price.unpaid"
           (keyup)="onPriceKeyup($event, 'unpaid')" class="rw-input">
-        <div class="input-count">원</div>
+        <div class="input-count item-font">원</div>
       </div>
     </div>
   </div>
@@ -110,23 +111,24 @@
         [height]="'48'"
         [width] = "'255'"
         [items] = "staffSelect_list"
+        [dropUp]="true"
         [(ngModel)] = "lockerState.assignee"
       ></db-ml-staff-selector>
     </div>
     <div class="payment-item">
       <span class="rw-typo-subtext0-regular small-title">결제 금액</span>
       <div class="input-container">
-        <div class="input-disabled text-right">
+        <div class="input-disabled item-font text-right">
           {{lockerState.amount.paymentAmount}}
         </div>
-        <div class="input-count disabled">원</div>
+        <div class="input-count item-font disabled">원</div>
       </div>
     </div>
   </div>
 
 
   <div class="delete-save-button">
-    <div class="delete-button"
+    <div class="delete-button item-font"
       rw-button
       rwButtonColor="var(--white)"
       rwButtonFontColor="var(--lightgrey)"
@@ -135,7 +137,7 @@
       삭제
     </div>
     <div
-      class="save-button"
+      class="save-button item-font"
       rw-button rwButtonColor="var(--font-color)"
       rwButtonFontColor="var(--white)"
       [rwButtonDisabled] = '!((lockerState.amount.normalAmount == lockerState.amount.paymentAmount)
@@ -168,11 +170,11 @@
   </div>
   <div class="bottom">
     <div class="date">
-      <span class="rw-typo-subtext0-regular small-title">기간</span>
-      <span class="rw-typo-bodytext1">{{lockerState.date.startDate}} - {{lockerState.date.endDate}} ({{lockerState.date | dayDiff}}일)</span>
+      <span class="rw-typo-subtext0-regular small-title2">기간</span>
+      <span class="rw-typo-bodytext1">{{lockerState.date.startDate | dateFormat:"YYYY.MM.DD"}} - {{lockerState.date.endDate | dateFormat:"YYYY.MM.DD"}} ({{lockerState.date | dayDiff}}일)</span>
     </div>
     <div class="pay">
-      <span class="rw-typo-subtext0-regular small-title">결제 금액 / 담당자</span>
+      <span class="rw-typo-subtext0-regular small-title2">결제 금액 / 담당자</span>
       <span class="rw-typo-bodytext1">￦{{lockerState.amount.paymentAmount ?? 0}} / {{lockerState.assignee.name}}</span>
     </div>
   </div>

@@ -24,22 +24,24 @@
       *ngFor="let v of value; let idx = index"
       (click)="v.selected = !v.selected; onSelect(value)"
     >
-      <rw-checkbox [checked]="v.selected" [noOpacity]="true"></rw-checkbox>
-      <div
-        class="icon"
-        [style.backgroundColor] = "v.item?.color ? v.item.color : 'var(--border-color)'"
-      >
-        <img src="assets/icons/etc/workout_white.svg">
-      </div>
-      <div class="card-desc-container">
-        <p class="categ rw-typo-subtext2 ">{{v.item?.category_name}}</p>
-        <div class="card-title-container rw-typo-title2">
-          <p class="card-title">{{v.item?.name}}</p>
-          <p class="card-desc1 rw-typo-subtext1">
-            {{v.item?.type == 'group' ? '그룹 수업' : '1:1 수업'}}
-            <span class="bar">|</span>
-            {{v.item?.instructors[0].center_user_name}}
-          </p>
+      <div class="card-inner-container">
+        <rw-checkbox [checked]="v.selected" [noOpacity]="true"></rw-checkbox>
+        <div
+          class="icon"
+          [style.backgroundColor] = "v.item?.color ? v.item.color : 'var(--border-color)'"
+        >
+          <img src="assets/icons/etc/workout_white.svg">
+        </div>
+        <div class="card-desc-container">
+          <p class="categ rw-typo-subtext2 ">{{v.item?.category_name}}</p>
+          <div class="card-title-container rw-typo-title2">
+            <p class="rw-typo-bodytext0">{{v.item?.name}}</p>
+            <p class="card-desc1 rw-typo-subtext1">
+              {{v.item?.type == 'group' ? '그룹 수업' : '1:1 수업'}}
+              <span class="bar">|</span>
+              {{v.item?.instructors[0].center_user_name}}
+            </p>
+          </div>
         </div>
       </div>
     </div>

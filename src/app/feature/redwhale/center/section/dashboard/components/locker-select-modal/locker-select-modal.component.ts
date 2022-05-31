@@ -80,9 +80,11 @@ export class LockerSelectModalComponent implements AfterViewChecked, OnChanges, 
             this.categList = categs
             this.selectedCateg = this.categList[0]
 
-            this.CenterLockerService.getItemList(this.center.id, this.selectedCateg.id).subscribe((items) => {
-                this.itemList = items
-            })
+            if (this.selectedCateg?.id) {
+                this.CenterLockerService.getItemList(this.center.id, this.selectedCateg.id).subscribe((items) => {
+                    this.itemList = items
+                })
+            }
         })
 
         this.initGridster()
@@ -94,7 +96,7 @@ export class LockerSelectModalComponent implements AfterViewChecked, OnChanges, 
                 this.changed = true
             }
         }
-        if (changes['lockerListInit'] && changes['lockerListInit'].currentValue == true) {
+        if (changes['lockerListInit'] && changes['lockerListInit'].currentValue == true && this.selectedCateg?.id) {
             this.CenterLockerService.getItemList(this.center.id, this.selectedCateg.id).subscribe((items) => {
                 this.itemList = items
             })

@@ -88,7 +88,7 @@ export class UserDetailLockerItemComponent implements OnInit, AfterViewInit {
         },
         removeRecord: {
             name: '기록 삭제',
-            color: 'var(--red)',
+            color: '#C2273B',
             visible: true,
             func: () => {
                 this.onRemoveRecord.emit(this.locker)

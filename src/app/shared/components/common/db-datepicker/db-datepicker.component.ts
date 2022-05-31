@@ -208,11 +208,11 @@ export class DbDatepickerComponent implements OnInit, OnChanges, AfterViewChecke
                 }
 
                 if (date.format('YYYYMMDD') == this.today.format('YYYYMMDD')) {
-                    weekCol['color'] = 'rgb(51, 102, 255)'
+                    weekCol['color'] = 'rgb(227, 74, 94)'
                 } else if (date.format('MM') != currentDate.format('MM')) {
-                    weekCol['color'] = 'rgb(228, 233, 242)'
+                    weekCol['color'] = '#CFCFCF'
                 } else {
-                    weekCol['color'] = 'rgb(143, 155, 179)'
+                    weekCol['color'] = '#606060'
                 }
 
                 if (this.mode == 'date') {

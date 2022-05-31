@@ -7,7 +7,6 @@
     padding: 0px 25px;
     position: relative;
 
-
     .border-bottom {
         width: calc(100% - 24px);
         height: 1px;
@@ -63,6 +62,11 @@
         width: 78px;
 
         .cancel_button {
+            border: 1px solid var(--border-color) !important;
+            font-weight: 700 !important;
+            font-size: 1.3rem !important;
+            line-height: 19px;
+            letter-spacing: -0.169px;
             &:hover {
                 background-color: var(--background-color) !important;
             }

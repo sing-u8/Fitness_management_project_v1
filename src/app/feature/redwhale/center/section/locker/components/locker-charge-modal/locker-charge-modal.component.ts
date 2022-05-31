@@ -9,9 +9,12 @@ import {
     SimpleChanges,
     AfterViewChecked,
     ViewChild,
+    OnDestroy,
 } from '@angular/core'
 import dayjs from 'dayjs'
 import _ from 'lodash'
+import { Subject, interval } from 'rxjs'
+import { takeUntil } from 'rxjs/operators'
 
 import { CenterUsersService } from '@services/center-users.service'
 import { CenterUserListService } from '@services/helper/center-user-list.service'
@@ -35,7 +38,7 @@ export interface LockerChargeType {
     templateUrl: './locker-charge-modal.component.html',
     styleUrls: ['./locker-charge-modal.component.scss'],
 })
-export class LockerChargeModalComponent implements OnChanges, AfterViewChecked {
+export class LockerChargeModalComponent implements OnChanges, AfterViewChecked, OnDestroy {
     @Input() visible: boolean
     @Input() type: 'register' | 'modify'
 
@@ -48,7 +51,9 @@ export class LockerChargeModalComponent implements OnChanges, AfterViewChecked {
 
     public changed: boolean
 
-    public paid_date: string
+    public paid_date: string = dayjs().format('YYYY.MM.DD')
+    public paid_date_raw: dayjs.Dayjs = dayjs()
+    public unsubscribe$ = new Subject<void>()
     public inputs = { pay_card: '', pay_cash: '', pay_trans: '', unpaid: '' }
     public total = ''
 
@@ -67,8 +72,16 @@ export class LockerChargeModalComponent implements OnChanges, AfterViewChecked {
         private storageService: StorageService,
         private centerUserListService: CenterUserListService
     ) {
+        interval(60000)
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe((__) => {
+                if (dayjs(this.paid_date_raw).isBefore(dayjs())) {
+                    this.paid_date_raw = dayjs()
+                    this.paid_date = dayjs().format('YYYY.MM.DD')
+                }
+            })
+
         this.isMouseModalDown = false
-        this.paid_date = dayjs().format('YYYY.MM.DD')
         this.center = this.storageService.getCenter()
         this.user = this.storageService.getUser()
         this.centerUserListService.getCenterInstructorList(this.center.id).subscribe((managers) => {
@@ -113,6 +126,11 @@ export class LockerChargeModalComponent implements OnChanges, AfterViewChecked {
                 }, 200)
             }
         }
+    }
+
+    ngOnDestroy(): void {
+        this.unsubscribe$.next()
+        this.unsubscribe$.complete()
     }
 
     onCancel(): void {

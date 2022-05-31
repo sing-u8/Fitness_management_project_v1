@@ -221,7 +221,7 @@ export class DatepickerComponent implements OnInit, OnChanges, AfterViewChecked,
                 }
 
                 if (date.format('YYYYMMDD') == this.today.format('YYYYMMDD')) {
-                    weekCol['color'] = 'rgb(51, 102, 255)'
+                    weekCol['color'] = 'rgb(227, 74, 94)'
                 } else if (date.format('MM') != currentDate.format('MM')) {
                     weekCol['color'] = 'rgb(228, 233, 242)'
                 } else {

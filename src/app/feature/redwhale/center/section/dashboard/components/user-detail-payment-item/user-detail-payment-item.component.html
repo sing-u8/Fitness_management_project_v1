@@ -13,7 +13,7 @@
     <div class="rw-typo-bodytext0-bold col5">
         <div class="d-flex align-items-center flex-column">
             <div class="rw-typo-bodytext0-bold total-price">
-                {{total | numberWithCommas}}원
+                {{payment.type_code == 'payment_type_refund' ? '-' : ''}}{{total | numberWithCommas}}원
             </div>
             <div class="l-prices">
                 <div
@@ -21,7 +21,7 @@
                     *ngFor="let item of pricesObj | keyvalue:originalOrder"
                 >
                     <div class="rw-typo-subtext3-darkgrey price-icon">{{item.value.name}}</div>
-                    <div class="rw-typo-subtext1 price-text">{{item.value.value | numberWithCommas}}</div>
+                    <div class="rw-typo-subtext1 price-text">{{payment.type_code == 'payment_type_refund' && item.value.value != '0' ? '-' : ''}}{{item.value.value | numberWithCommas}}</div>
                 </div>
             </div>
         </div>

@@ -6,7 +6,7 @@
       <div class="top">
 
         <div class="rw-typo-title1 title">
-          <span *ngIf="title.length > 7" class="rw-typo-title1 title">'{{title | wordEllipsis:7}}...'</span>
+          <span *ngIf="title.length > 7" class="rw-typo-title1 title">'{{title | wordEllipsis:10}}'</span>
           <span *ngIf="title.length < 7" class="rw-typo-title1 title">{{title}}</span>
           일정을 삭제하시겠어요?
         </div>

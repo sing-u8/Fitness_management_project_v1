@@ -16,7 +16,7 @@
         <div
             class="item d-flex align-items-center"
             *ngFor="let item of items"
-            [class.active]="item.value == value?.value"
+            [class.active]="item.id == value?.id"
             [class.disabled]="item.disabled"
             (click)="onSelect(item)"
         >

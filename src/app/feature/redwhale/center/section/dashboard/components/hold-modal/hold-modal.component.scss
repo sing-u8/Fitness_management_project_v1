@@ -107,6 +107,10 @@
                     border: 1px solid var(--border-color) !important;
                     border-radius: 5px !important;
 
+                    &.focused {
+                        border: 1px solid #C9C9C9 !important;
+                    }
+
                     span {
                         margin: 0px;
                     }

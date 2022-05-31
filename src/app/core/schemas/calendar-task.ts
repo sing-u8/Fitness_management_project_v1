@@ -4,7 +4,7 @@ import { CenterUser } from '@schemas/center-user'
 export interface CalendarTask {
     id: string
     calendar_task_group_id: string
-    type_code: string
+    type_code: 'calendar_task_type_normal' | 'calendar_task_type_class'
     type_code_name: string
     name: string
     all_day: boolean

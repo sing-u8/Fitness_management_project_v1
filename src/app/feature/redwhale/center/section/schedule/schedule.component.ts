@@ -16,6 +16,7 @@ import { CenterCalendarService, DeleteMode, UpdateCalendarTaskReqBody } from '@s
 import { CenterService } from '@services/center.service'
 import { CenterUsersService } from '@services/center-users.service'
 import { CalendarTaskService } from '@services/helper/calendar-task.service'
+import { WordService } from '@services/helper/word.service'
 
 // schemas
 import { Center } from '@schemas/center'
@@ -28,7 +29,7 @@ import { UserBooked } from '@schemas/user-booked'
 import { UserAbleToBook } from '@schemas/user-able-to-book'
 
 // rxjs
-import { Observable, Subject, lastValueFrom } from 'rxjs'
+import { Observable, Subject } from 'rxjs'
 import { takeUntil } from 'rxjs/operators'
 
 // ngrx
@@ -106,7 +107,8 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
         private renderer: Renderer2,
         private activatedRoute: ActivatedRoute,
         private router: Router,
-        private location: Location
+        private location: Location,
+        private wordService: WordService
     ) {
         this.center = this.storageService.getCenter()
         this.nxStore
@@ -347,6 +349,8 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
         this.activeStart = dayjs(calView.activeStart).format('YYYY-MM-DD')
         this.activeEnd = dayjs(calView.activeEnd).format('YYYY-MM-DD')
 
+        console.log('onMoveDate : ', calView, ' --- active time :', this.activeStart, ' : ', this.activeEnd)
+
         this.setDatePickerWhenViewChange(this.selectedDateViewType)
         this.setCalendarTitle(this.selectedDateViewType)
         this.getTaskList(this.selectedDateViewType)
@@ -366,6 +370,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.weekPickerData = { startDate: activeStart, endDate: activeEnd }
                 break
             case 'dayGridMonth':
+                // !! 가장 날짜를 많이 차지하는 달로 선택하게 하기  [필요하면]
                 this.datePickerData = { date: dayjs().format('YYYY-MM-DD') }
                 break
         }
@@ -534,6 +539,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     setDrawerDate() {
+        console.log('set drawer date : ', this.drawerDate, this.selectedDateViewType)
         if (!this.drawerDate.endDate) {
             this.nxStore.dispatch(
                 ScheduleActions.setSelectedDate({
@@ -631,6 +637,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
             if (this.dayCellLeave) {
                 this.hideScheduleDropdown()
             }
+            this.setSchedulingInstructor(arg)
             return
         }
         const highlight_El: HTMLElement = arg.jsEvent.toElement
@@ -835,7 +842,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.nxStore.dispatch(ScheduleActions.setIsScheduleEventChanged({ isScheduleEventChanged: true }))
                 this.nxStore.dispatch(
                     showToast({
-                        text: `${this.restrictText(calTask.name, 8)} 기타 일정이 수정 되었습니다.`,
+                        text: `'${this.wordService.ellipsis(calTask.name, 8)}' 기타 일정이 수정 되었습니다.`,
                     })
                 )
             })
@@ -901,7 +908,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.nxStore.dispatch(ScheduleActions.setIsScheduleEventChanged({ isScheduleEventChanged: true }))
                 this.nxStore.dispatch(
                     showToast({
-                        text: `${this.restrictText(calTask.name, 8)} 수업 일정이 수정 되었습니다.`,
+                        text: `'${this.wordService.ellipsis(calTask.name, 8)}' 수업 일정이 수정 되었습니다.`,
                     })
                 )
             })
@@ -960,9 +967,17 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
                         'daygrid-top-add-schedule-button'
                     )[0]
                     addSchButton_el.onclick = (e) => {
+                        console.log('add schButton event : ', e, '-- arg :', arg)
                         if (this.doShowScheduleDropdown == false) {
                             const bt_pos = addSchButton_el.getBoundingClientRect()
-                            this.drawerDate = { startDate: arg.date, endDate: null }
+                            this.drawerDate = {
+                                startDate: dayjs(
+                                    dayjs(`${dayjs(arg.date).format('YYYY-MM-DD')} ${this.operatingTime.start}`).format(
+                                        'YYYY-MM-DD HH:mm:ss'
+                                    )
+                                ).toDate(),
+                                endDate: null,
+                            }
                             const posX = window.innerWidth < 105 + bt_pos.right ? bt_pos.left - 84 : bt_pos.left
                             const posY = window.innerHeight < 85 + bt_pos.bottom ? bt_pos.top - 81 : bt_pos.bottom + 5
                             this.renderer.setStyle(this.schdule_dropdown_el.nativeElement, 'left', `${posX}px`)
@@ -1009,10 +1024,15 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
     // ------------------------- fullcalendar option functions ----------------------------------------------->//
 
     // ---------------------- vars and functions related to option functions ---------------------------------//
+    isLessonTask(arg: EventHoveringArg) {
+        return arg.event.extendedProps['originItem']['type_code'] == 'calendar_task_type_class'
+    }
+
     public tooltipText: string = undefined
     @ViewChild('member_schedule_tooltip') member_schedule_tooltip: ElementRef
 
     showTooltip(arg: EventHoveringArg) {
+        if (!this.isLessonTask(arg)) return
         const taskStatus = this.calendarTaskHelperService.getClassCalendarTaskStatus(
             arg.event.extendedProps['originItem']
         )
@@ -1265,7 +1285,9 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.getTaskList(this.selectedDateViewType)
                 this.hideDeleteEventModal()
                 this.nxStore.dispatch(
-                    showToast({ text: `'${this.restrictText(this.deletedEvent.name, 7)}' 기타 일정이 삭제되었습니다.` })
+                    showToast({
+                        text: `'${this.wordService.ellipsis(this.deletedEvent.name, 7)}' 기타 일정이 삭제되었습니다.`,
+                    })
                 )
                 this.deletedEvent = undefined
             })
@@ -1293,14 +1315,13 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
             this.getTaskList(this.selectedDateViewType)
             this.hideDeleteEventModal()
             this.nxStore.dispatch(
-                showToast({ text: `'${this.restrictText(this.deletedEvent.name, 7)}' 수업 일정이 삭제되었습니다.` })
+                showToast({
+                    text: `'${this.wordService.ellipsis(this.deletedEvent.name, 7)}' 수업 일정이 삭제되었습니다.`,
+                })
             )
             this.deletedEvent = undefined
             fn ? fn() : null
         })
-    }
-    restrictText(title: string, len: number): string {
-        return title.length > len ? title.slice(0, len) + '...' : title
     }
 
     // - // 반복 수업 일정 삭제 모달 ------------------------------
@@ -1345,7 +1366,10 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
             this.hideDelRepeatLessonModal()
             this.nxStore.dispatch(
                 showToast({
-                    text: `'${this.restrictText(this.delRepeatLessonData.name, 7)}' 수업 일정이 삭제되었습니다.`,
+                    text: `'${this.wordService.ellipsis(
+                        this.delRepeatLessonData.name,
+                        7
+                    )}' 수업 일정이 삭제되었습니다.`,
                 })
             )
             this.delRepeatLessonData = undefined

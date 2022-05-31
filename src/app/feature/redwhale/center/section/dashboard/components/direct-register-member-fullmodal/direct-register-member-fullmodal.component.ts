@@ -29,7 +29,6 @@ import { ClickEmitterType } from '@shared/components/common/button/button.compon
 
 // ngrx
 import * as DashboardActions from '@centerStore/actions/sec.dashboard.actions'
-
 import { Store } from '@ngrx/store'
 import _ from 'lodash'
 
@@ -53,7 +52,7 @@ export class DirectRegisterMemberFullmodalComponent implements OnInit, OnChanges
 
     public center: Center
 
-    public gender: Gender
+    public gender: Gender = 'male'
     public localFileData: LocalFileData
 
     public registerForm: FormGroup
@@ -78,7 +77,7 @@ export class DirectRegisterMemberFullmodalComponent implements OnInit, OnChanges
         private nxStore: Store,
         private renderer: Renderer2
     ) {
-        this.gender = ''
+        this.gender = 'male'
         this.localFileData = { src: undefined, file: undefined }
 
         this.center = this.storageService.getCenter()
@@ -140,7 +139,7 @@ export class DirectRegisterMemberFullmodalComponent implements OnInit, OnChanges
 
                 this.pictureService.resetLocalPicData()
                 this.localFileData = { src: undefined, file: undefined }
-                this.gender = ''
+                this.gender = 'male'
                 this.email.setValue('')
                 this.name.setValue('')
                 this.phone_number.setValue('')

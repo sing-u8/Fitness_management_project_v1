@@ -4,7 +4,7 @@
 >
 
     <div rwEllipsisDropdown [lineClamp]="2" class="col1">{{locker.category_name}}</div>
-    <div rwEllipsisDropdown [lineClamp]="2" class="col2" [class.notification]="isHolding">
+    <div rwEllipsisDropdown [lineClamp]="2" class="col2" >
         {{locker.name}}
     </div>
     <div class="col3" [class.notification]="isHolding">
@@ -31,7 +31,7 @@
     <div *ngIf="!isExpired && isHolding" class="rw-typo-subtext0-regular col-notification" [class.show-notification]="isHolding">
         <div class="d-flex align-items-center">
             <div class="alert-icon"></div>
-            {{locker.pause_start_date}} - {{locker.pause_end_date}} ({{locker.pause_start_date | period :
+            {{locker.pause_start_date | dateFormat:'YYYY.MM.DD'}} - {{locker.pause_end_date | dateFormat:'YYYY.MM.DD'}} ({{locker.pause_start_date | period :
             locker.pause_end_date}}일) {{isHoldingReservaed ? '홀딩 예약' : '홀딩중'}}
         </div>
 

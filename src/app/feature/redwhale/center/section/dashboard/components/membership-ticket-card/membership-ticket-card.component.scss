@@ -18,7 +18,8 @@
     border-radius: 5px;
 
     &:hover {
-        border-color: var(--darkgrey);
+        // border-color: var(--darkgrey);
+        box-shadow: 0px 0px 10px rgba(181, 181, 181, 0.109804);
     }
 
     &.isInWindow {

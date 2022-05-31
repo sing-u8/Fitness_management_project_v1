@@ -133,10 +133,8 @@ export class UserDetailMembershipComponent implements OnInit {
     onTransferMemberConfirm(centerUser: CenterUser) {
         this.toggleShowTransferModal()
         this.transferMember = centerUser
-        this.showTransferCheckModalText.text = `'${this.wordService.ellipsis(
-            this.selectedUserMembership.name,
-            15
-        )}' 회원권을
+        const membershipName = this.wordService.ellipsis(this.selectedUserMembership.name, 15)
+        this.showTransferCheckModalText.text = `'${membershipName}' 회원권을
             ${this.transferMember.center_user_name}님에게 양도하시겠어요?`
         this.toggleTransferCheckModal()
     }
@@ -309,7 +307,7 @@ export class UserDetailMembershipComponent implements OnInit {
         this.centerUsersMembershipService
             .stopMembershipTicket(this.center.id, this.curUserData.user.id, this.selectedUserMembership.id, reqBody)
             .subscribe((_) => {
-                const toastText = dayjs().isSameOrBefore(this.holdData.startDate)
+                const toastText = dayjs(this.holdData.startDate).isSameOrBefore(dayjs())
                     ? `'${this.wordService.ellipsis(this.selectedUserMembership.name, 6)}' 회원권이 홀딩되었습니다.`
                     : `'${this.wordService.ellipsis(
                           this.selectedUserMembership.name,
@@ -344,7 +342,7 @@ export class UserDetailMembershipComponent implements OnInit {
                     showToast({
                         text: `'${this.wordService.ellipsis(
                             this.selectedUserMembership.name,
-                            6
+                            8
                         )}' 회원권이 양도되었습니다.`,
                     })
                 )

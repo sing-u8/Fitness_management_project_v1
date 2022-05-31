@@ -136,7 +136,11 @@
                 width: 100%;
                 .small-title {
                     color: var(--grey);
-                    margin-bottom: 5px;
+                    margin-bottom: 3px;
+                    font-weight: 400;
+                    font-size: 1.2rem;
+                    line-height: 17px;
+                    letter-spacing: -0.144px;
                 }
                 .avatar-container {
                     display: flex;
@@ -240,6 +244,9 @@
                     margin-bottom: 15px;
                 }
 
+                .empty-guide-text {
+                    margin-bottom: 2px;
+                }
                 .find-text {
                     margin-top: 8px;
                 }
@@ -388,7 +395,7 @@
 }
 
 .empty-button {
-    width: 170px;
+    width: 130px;
     height: 35px;
     background-color: var(--white);
     border: 1px solid #e9e9e9;

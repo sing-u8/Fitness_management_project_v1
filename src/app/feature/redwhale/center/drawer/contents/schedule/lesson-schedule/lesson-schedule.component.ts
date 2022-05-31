@@ -9,6 +9,7 @@ import { CenterUsersService } from '@services/center-users.service'
 import { CenterLessonService } from '@services/center-lesson.service'
 import { CenterCalendarService, CreateCalendarTaskReqBody } from '@services/center-calendar.service'
 import { ScheduleHelperService } from '@services/center/schedule-helper.service'
+import { WordService } from '@services/helper/word.service'
 
 import { CenterUser } from '@schemas/center-user'
 import { Center } from '@schemas/center'
@@ -18,7 +19,7 @@ import { MembershipItem } from '@schemas/membership-item'
 import { Calendar } from '@schemas/calendar'
 
 // rxjs
-import { Subject } from 'rxjs'
+import { Subject, interval } from 'rxjs'
 import { takeUntil } from 'rxjs/operators'
 
 // ngrx
@@ -40,7 +41,8 @@ import { showToast } from '@appStore/actions/toast.action'
 export class LessonScheduleComponent implements OnInit, OnDestroy, AfterViewInit {
     public centerOperatingTime: ScheduleReducer.CenterOperatingHour = { start: null, end: null }
 
-    public titleTime: string
+    public titleTime: string = dayjs().format('M/D (dd) A hh시 mm분')
+    public titleRawTime: dayjs.Dayjs = dayjs()
 
     // lesson var
     public lessonCategList: Array<ClassCategory>
@@ -120,8 +122,17 @@ export class LessonScheduleComponent implements OnInit, OnDestroy, AfterViewInit
         private centerUsersService: CenterUsersService,
         private centerCalendarService: CenterCalendarService,
         private nxStore: Store,
-        private scheduleHelperService: ScheduleHelperService
+        private scheduleHelperService: ScheduleHelperService,
+        private wordService: WordService
     ) {
+        interval(3000)
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe((__) => {
+                if (dayjs(this.titleRawTime).isBefore(dayjs())) {
+                    this.titleRawTime = dayjs()
+                    this.titleTime = dayjs().format('M/D (dd) A hh시 mm분')
+                }
+            })
         this.center = this.storageService.getCenter()
         this.selectLessonCategories()
 
@@ -144,7 +155,6 @@ export class LessonScheduleComponent implements OnInit, OnDestroy, AfterViewInit
             .subscribe(([schDrawerIsReset, drawer]) => {
                 if (schDrawerIsReset == true && drawer['tabName'] == 'lesson-schedule') {
                     this.selectedLesson = undefined
-                    this.titleTime = dayjs().format('M/D (dd) A hh시 mm분')
                     this.initStaffList()
                     this.nxStore.dispatch(setScheduleDrawerIsReset({ isReset: false }))
                 }
@@ -184,8 +194,6 @@ export class LessonScheduleComponent implements OnInit, OnDestroy, AfterViewInit
     }
     // ------------------------------------------register lesson task------------------------------------------------
     registerLessonTask(fn?: () => void) {
-        console.log('registerLessonTask, type: ', this.selectedLesson.lesson.type_code_name)
-
         let reqBody: CreateCalendarTaskReqBody = undefined
         const selectedStaff = _.find(this.instructorList, (item) => {
             return this.StaffSelectValue.value.id == item.instructor.calendar_user.id
@@ -263,7 +271,14 @@ export class LessonScheduleComponent implements OnInit, OnDestroy, AfterViewInit
                 fn ? fn() : null
                 this.nxStore.dispatch(ScheduleActions.setIsScheduleEventChanged({ isScheduleEventChanged: true }))
                 this.closeDrawer()
-                this.nxStore.dispatch(showToast({ text: `${this.planDetailInputs.plan} 기타 일정이 추가되었습니다.` }))
+                this.nxStore.dispatch(
+                    showToast({
+                        text: `'${this.wordService.ellipsis(
+                            this.planDetailInputs.plan,
+                            8
+                        )}' 수업 일정이 추가되었습니다.`,
+                    })
+                )
             },
             error: (err) => {
                 console.log('gymCalendarService.createTask err: ', err)
@@ -400,7 +415,7 @@ export class LessonScheduleComponent implements OnInit, OnDestroy, AfterViewInit
 
             this.repeatDatepick.startDate = dayjs(date.startDate).format('YYYY-MM-DD')
             this.dayPick.date = dayjs(date.startDate).format('YYYY-MM-DD')
-            console.log('initTimePick(): ', this.timepick)
+            console.log('initTimePick(): ', this.timepick, ' --- select date : ', date)
         })
     }
 

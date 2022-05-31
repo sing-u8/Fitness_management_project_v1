@@ -5,12 +5,12 @@ import dayjs from 'dayjs'
 import isSameOrBefor from 'dayjs/plugin/isSameOrBefore'
 dayjs.extend(isSameOrBefor)
 
-import { GlobalService } from '@services/global.service'
 import { StorageService } from '@services/storage.service'
 import { CenterUsersService } from '@services/center-users.service'
 import { CenterLessonService } from '@services/center-lesson.service'
 import { CenterCalendarService, UpdateCalendarTaskReqBody, UpdateMode } from '@services/center-calendar.service'
 import { ScheduleHelperService } from '@services/center/schedule-helper.service'
+import { WordService } from '@services/helper/word.service'
 
 import { User } from '@schemas/user'
 import { CenterUser } from '@schemas/center-user'
@@ -132,7 +132,8 @@ export class ModifyLessonScheduleComponent implements OnInit, OnDestroy, AfterVi
         private centerUsersService: CenterUsersService,
         private centerCalendarService: CenterCalendarService,
         private nxStore: Store,
-        private scheduleHelperService: ScheduleHelperService
+        private scheduleHelperService: ScheduleHelperService,
+        private wordService: WordService
     ) {
         this.center = this.storageService.getCenter()
         this.selectLessonOptions()
@@ -246,7 +247,10 @@ export class ModifyLessonScheduleComponent implements OnInit, OnDestroy, AfterVi
                     this.closeDrawer()
                     this.nxStore.dispatch(
                         showToast({
-                            text: `'${this.restrictText(this.planDetailInputs.plan, 8)}' 수업 일정이 수정되었습니다.`,
+                            text: `'${this.wordService.ellipsis(
+                                this.planDetailInputs.plan,
+                                8
+                            )}' 수업 일정이 수정되었습니다.`,
                         })
                     )
                 },
@@ -295,7 +299,7 @@ export class ModifyLessonScheduleComponent implements OnInit, OnDestroy, AfterVi
     }
     public doShowModifyModal = false
     showModifyModal(title: string) {
-        this.modifyModalText.text = `'${this.restrictText(title, 7)}' 일정을 수정하시겠어요?`
+        this.modifyModalText.text = `'${this.wordService.ellipsis(title, 7)}' 일정을 수정하시겠어요?`
         this.doShowModifyModal = true
     }
     hideModifyModal() {
@@ -315,10 +319,6 @@ export class ModifyLessonScheduleComponent implements OnInit, OnDestroy, AfterVi
     }
     onReservedModifyModelConfirm() {
         this.modifyLessonTask()
-    }
-
-    restrictText(title: string, len: number): string {
-        return title.length > len ? title.slice(0, len) + '...' : title
     }
 
     // ------------------------------------------------------------------------------------------------------------

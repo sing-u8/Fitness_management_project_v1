@@ -26,7 +26,7 @@
     (click) = "$event.stopPropagation()"
   >
     <div
-      *ngFor="let color of iconColors | keyvalue; let i=index"
+      *ngFor="let color of iconColors | keyvalue:originalOrder; let i=index"
       class="color-item"
       [style.backgroundColor] = 'color.key'
       (click) = "sendSelectedColor(color.key)"

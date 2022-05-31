@@ -37,7 +37,7 @@
                     <div class="datepick-container">
                         <div class="date-picker">
                             <span class="rw-typo-subtext0-regular small-title">시작일 (변경 불가)</span>
-                            <div class="date-pick-button disabled">
+                            <div class="date-pick-button item-font disabled">
                                 {{date.startDate | dateFormat:'YYYY.MM.DD'}}
                             </div>
                         </div>
@@ -46,9 +46,9 @@
                             <div class="date-pick-button" rw-button rwButtonColor="var(--white)"
                                 rwButtonFontColor="var(--font-color)"
                                 (click)="onEndDateBtClick($event)">
-                                <span *ngIf="!date.endDate; else showEndDate">만료일을 선택해주세요.</span>
+                                <span class="item-font" *ngIf="!date.endDate; else showEndDate">만료일을 선택해주세요.</span>
                                 <ng-template #showEndDate>
-                                    <span>{{date.endDate | dateFormat:'YYYY.MM.DD'}} ({{dayDiff}}일)</span>
+                                    <span class="item-font">{{date.endDate | dateFormat:'YYYY.MM.DD'}} ({{dayDiff}}일)</span>
                                 </ng-template>
 
                             </div>
@@ -72,7 +72,7 @@
                             [disabled]="!date.startDate || !date.endDate"
                             (onClick)="confirmModify($event)"
                         >
-                            <div class="rw-typo-bodytext0-bold save-button">저장</div>
+                            <div class="rw-typo-bodytext0-bold save-button item-font">저장</div>
                         </rw-button>
                     </div>
                 </section>

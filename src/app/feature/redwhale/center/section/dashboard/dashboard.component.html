@@ -34,7 +34,6 @@
             </div>
             <db-member-detail
                 [curUserData]="(curUserData$ | async)"
-                (onRegisterML)="toggleDirectRegisterMemberFullModal()"
             ></db-member-detail>
         </section>
     </main>
@@ -48,6 +47,6 @@
 
 <db-direct-register-member-fullmodal
     [(visible)]="doShowDirectRegisterMemberFullModal"
-    (close)="toggleDirectRegisterMemberFullModal()"
+    (close)="closeDirectRegisterMemberFullmodal()"
     (finishRegister)="whenFinishRegisterMember()"
 ></db-direct-register-member-fullmodal>

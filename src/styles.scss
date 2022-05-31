@@ -52,6 +52,7 @@
 
 .rw-typo-headline2 {
     font-size: 2.2rem;
+    font-weight: 500;
     line-height: 1.45;
     letter-spacing: -0.48px;
     color: var(--font-color);
@@ -142,6 +143,7 @@
 .rw-typo-bodytext2 {
     font-size: 1.3rem;
     line-height: 1.46;
+    font-weight: 500;
     letter-spacing: -0.17px;
     color: var(--font-color);
 }
@@ -158,6 +160,13 @@
     font-size: 1.3rem;
     line-height: 1.46;
     font-weight: 400;
+    letter-spacing: -0.17px;
+    color: var(--darkgrey);
+}
+.rw-typo-bodytext2-normal_darkgrey {
+    font-size: 1.3rem;
+    line-height: 1.46;
+    font-weight: 500;
     letter-spacing: -0.17px;
     color: var(--darkgrey);
 }
@@ -205,6 +214,7 @@
 .rw-typo-subtext3 {
     font-size: 1.1rem;
     line-height: 1.45;
+    font-weight: 500;
     letter-spacing: -0.12px;
     color: var(--font-color);
 }
@@ -212,6 +222,7 @@
 .rw-typo-subtext3-darkgrey {
     font-size: 1.1rem;
     line-height: 1.45;
+    font-weight: 500;
     letter-spacing: -0.12px;
     color: var(--darkgrey);
 }
@@ -317,8 +328,8 @@
     color: var(--font-color);
 
     &::placeholder {
-        font-weight: 400;
-        color: var(--grey);
+        font-weight: 400 !important;
+        color: var(--grey) !important;
     }
 
     &:focus {
@@ -327,8 +338,8 @@
     }
 
     &:focus::placeholder {
-        font-weight: 400;
-        color: var(--grey);
+        font-weight: 400 !important;
+        color: var(--grey) !important;
     }
 
     &:disabled {
@@ -357,8 +368,8 @@
     color: var(--font-color);
 
     &::placeholder {
-        font-weight: 400;
-        color: var(--grey);
+        font-weight: 400 !important;
+        color: var(--grey) !important;
     }
 
     &:focus {
@@ -367,8 +378,8 @@
     }
 
     &:focus::placeholder {
-        font-weight: 400;
-        color: var(--grey);
+        font-weight: 400 !important;
+        color: var(--grey) !important;
     }
 }
 

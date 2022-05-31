@@ -49,11 +49,11 @@ export interface ConfirmOuput {
 }
 
 @Component({
-    selector: 'rw-charge-modal',
-    templateUrl: './charge-modal.component.html',
-    styleUrls: ['./charge-modal.component.scss'],
+    selector: 'rw-dashboard-charge-modal',
+    templateUrl: './dashboard-charge-modal.component.html',
+    styleUrls: ['./dashboard-charge-modal.component.scss'],
 })
-export class ChargeModalComponent implements OnChanges, AfterViewChecked, OnDestroy {
+export class DashboardChargeModalComponent implements OnChanges, AfterViewChecked, OnDestroy {
     @Input() visible: boolean
     @Input() chargeMode: ChargeMode = 'extend'
     @Input() inputs = { pay_card: '', pay_cash: '', pay_trans: '', unpaid: '' }
@@ -145,6 +145,7 @@ export class ChargeModalComponent implements OnChanges, AfterViewChecked, OnDest
             }
         }
     }
+
     ngOnDestroy(): void {
         this.unsubscribe$.next()
         this.unsubscribe$.complete()

@@ -19,6 +19,7 @@ import dayjs from 'dayjs'
 import { StorageService } from '@services/storage.service'
 import { CenterLockerService } from '@services/center-locker.service'
 import { CenterUsersLockerService } from '@services/center-users-locker.service.service'
+import { WordService } from '@services/helper/word.service'
 
 import { CompactType, GridsterConfig, GridType } from 'angular-gridster2'
 
@@ -26,6 +27,7 @@ import { UserLocker } from '@schemas/user-locker'
 import { LockerCategory } from '@schemas/locker-category'
 import { LockerItem } from '@schemas/locker-item'
 import { Center } from '@schemas/center'
+import { CenterUser } from '@schemas/center-user'
 
 // ngrx
 import { Store } from '@ngrx/store'
@@ -44,6 +46,7 @@ CenterLockerService
 export class LockerShiftModalComponent implements AfterViewChecked, OnChanges, OnInit, OnDestroy {
     @Input() visible: boolean
     @Input() userLocker: UserLocker
+    @Input() curUser: CenterUser
 
     @ViewChild('modalBackgroundElement') modalBackgroundElement
     @ViewChild('modalWrapperElement') modalWrapperElement
@@ -60,9 +63,9 @@ export class LockerShiftModalComponent implements AfterViewChecked, OnChanges, O
     public shiftConfirmText = {
         text: ``,
         subText: `확인 버튼을 클릭하시면,
-      즉시 회원의 락커 자리가 변경돼요.`,
+            즉시 회원의 락커 자리가 변경돼요.`,
         cancelButtonText: '취소',
-        confirmButtonText: '이동',
+        confirmButtonText: '이동하기',
     }
 
     public isSameCategWithSelectedTicket = false
@@ -86,6 +89,7 @@ export class LockerShiftModalComponent implements AfterViewChecked, OnChanges, O
         private storageService: StorageService,
         private centerLockerService: CenterLockerService,
         private centerUsersLockerService: CenterUsersLockerService,
+        private wordService: WordService,
         private nxStore: Store
     ) {
         this.isMouseModalDown = false
@@ -227,10 +231,11 @@ export class LockerShiftModalComponent implements AfterViewChecked, OnChanges, O
         this.shiftConfirmModal = false
     }
     onShiftConfirm() {
+        console.log('onShiftConfirm  -- userLocker : ', this.userLocker)
         this.nxStore.dispatch(
             startMoveLockerTicketInDashboard({
                 centerId: this.center.id,
-                userId: this.userLocker.user.id,
+                userId: this.curUser.id,
                 lockerTicketId: this.userLocker.id,
                 startLockerReqBody: {
                     locker_item_id: this.shiftLocker.id,
@@ -240,7 +245,10 @@ export class LockerShiftModalComponent implements AfterViewChecked, OnChanges, O
                     this.confirm.emit({})
                     this.nxStore.dispatch(
                         showToast({
-                            text: `${this.userLocker.user.name}님의 락커가 [${this.selectedCateg.name}] 락커${this.shiftLocker.name}으로 이동되었습니다.`,
+                            text: `${this.curUser.center_user_name}님의 락커가 [${this.wordService.ellipsis(
+                                this.selectedCateg.name,
+                                10
+                            )}] 락커${this.wordService.ellipsis(this.shiftLocker.name, 13)}으로 이동되었습니다.`,
                         })
                     )
                 },

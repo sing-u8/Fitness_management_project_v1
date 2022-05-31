@@ -230,8 +230,8 @@ export class CenterUsersMembershipService {
 
 export interface CreateMembershipTicketReqBody {
     membership_item_id: string
-    category_name: string
-    name: string
+    // category_name: string
+    // name: string
     start_date: string
     end_date: string
     count: number
@@ -251,8 +251,6 @@ export interface CreateMembershipTicketReqBody {
 }
 
 export interface UpdateMembershipTicketReqBody {
-    category_name?: string
-    name?: string
     start_date?: string
     end_date?: string
     count?: number
