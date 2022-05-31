@@ -55,7 +55,7 @@ export class EllipsisDropdownDirective implements AfterViewInit, OnDestroy {
     }
     checkIsOverFlow(element, line: number, deviation: number) {
         const elementStyles = getComputedStyle(element)
-        return Number(elementStyles.lineHeight.replace(/[^0-9]/gi, '')) * line <= element.offsetHeight - deviation
+        return Number(elementStyles.lineHeight.replace(/[^0-9]/gi, '')) * line < element.scrollHeight - deviation
     }
 }
 

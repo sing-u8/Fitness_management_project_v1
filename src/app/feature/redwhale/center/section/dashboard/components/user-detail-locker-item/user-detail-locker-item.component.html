@@ -14,7 +14,7 @@
         <div class="col4__content">
             {{restDate}}일 남음
         </div>
-        <div class="col4__menu" (click)="toggleMenuDropDown(); $event.stopPropagation()" (rwClickOutside)="hideMenuDropDown()">
+        <div class="col4__menu" (click)="toggleMenuDropDown(); " (rwClickOutside)="hideMenuDropDown()">
             <div class="l-menu-items" [class.show-items]="showMenuDropDown">
                 <div
                     class="menu-item"
@@ -35,7 +35,7 @@
             locker.pause_end_date}}일) {{isHoldingReservaed ? '홀딩 예약' : '홀딩중'}}
         </div>
 
-        <div class="notification-menu" (click)="toggleNotificationDropDown(); $event.stopPropagation()"
+        <div class="notification-menu" (click)="toggleNotificationDropDown();"
             (rwClickOutside)="hideNotificationDropDown()">
             <div class="l-menu-items" [class.show-items]="showNotificationDropDown">
                 <div class="menu-item" *ngFor="let item of holdingMenuDropDownItemObj | keyvalue : originalOrder"

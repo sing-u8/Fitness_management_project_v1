@@ -26,7 +26,7 @@
             </div>
         </div>
 
-        <div class="col5__menu" (click)="toggleMenuDropDown(); $event.stopPropagation()" (rwClickOutside)="hideMenuDropDown()">
+        <div class="col5__menu" (click)="toggleMenuDropDown(); " (rwClickOutside)="hideMenuDropDown()">
             <div class="l-menu-items" [class.show-items]="showMenuDropDown">
                 <div
                     class="menu-item"

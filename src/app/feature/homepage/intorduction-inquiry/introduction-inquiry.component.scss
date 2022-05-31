@@ -194,9 +194,7 @@ article.l-intro-inquiry {
                     }
                 }
 
-                span {
-                    display: flex;
-                }
+
             }
         }
 
@@ -269,6 +267,10 @@ article.l-intro-inquiry {
 
                 .radio-text {
                     width: 400px;
+
+                    span {
+                        display: flex;
+                    }
                 }
             }
 
