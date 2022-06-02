@@ -22,7 +22,7 @@
     </div> -->
     <div class="week-row col d-flex justify-content-between align-items-center"
         *ngFor="let weekRow of weekRows; let i = index">
-        <div class="week-col d-flex justify-content-center align-items-center"
+        <div class="week-col d-flex justify-content-center align-items-center align-self-start"
             *ngFor="let weekCol of weekRow; let j = index" [style.color]="weekCol.color"
             [class.selected]="weekCol.selected" (click)="selectDate(i, j)">
             {{ weekCol.day }}
@@ -55,7 +55,7 @@
     <div class="week-row col d-flex justify-content-between align-items-center"
         *ngFor="let weekRow of weekRows; let i = index" [class.selected]="weekNumbers[i] == selectedWeek"
         (click)="selectWeek(i)">
-        <div class="week-col d-flex justify-content-center align-items-center"
+        <div class="week-col d-flex justify-content-center align-items-center align-self-start"
             *ngFor="let weekCol of weekRow; let j = index" [style.color]="weekCol.color">
             {{ weekCol.day }}
         </div>
@@ -86,7 +86,7 @@
     </div> -->
     <div class="week-row col d-flex justify-content-between align-items-center"
         *ngFor="let weekRow of weekRows; let i = index">
-        <div class="week-col d-flex justify-content-center align-items-center"
+        <div class="week-col d-flex justify-content-center align-items-center align-self-start"
             *ngFor="let weekCol of weekRow; let j = index" [style.color]="weekCol.color"
             [class.selected]="selectedDateObj[weekCol.date]" (click)="multiSelectDate(weekCol)">
             {{ weekCol.day }}
@@ -119,7 +119,7 @@
     </div> -->
     <div class="week-row col d-flex justify-content-between align-items-center"
         *ngFor="let weekRow of weekRows; let i = index">
-        <div class="week-col d-flex justify-content-center align-items-center"
+        <div class="week-col d-flex justify-content-center align-items-center align-self-start"
             *ngFor="let weekCol of weekRow; let j = index"
             [style.color]="weekCol.color"
             [class.start-date]="isStartDate(weekCol)"
@@ -165,7 +165,7 @@
     </div> -->
     <div class="week-row col d-flex justify-content-between align-items-center"
         *ngFor="let weekRow of weekRows; let i = index">
-        <div class="week-col d-flex justify-content-center align-items-center"
+        <div class="week-col d-flex justify-content-center align-items-center align-self-start"
             *ngFor="let weekCol of weekRow; let j = index"
             [style.color]="weekCol.color"
             [class.start-date]="isStartDate(weekCol)"

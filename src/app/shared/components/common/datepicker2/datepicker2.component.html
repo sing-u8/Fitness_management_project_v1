@@ -24,7 +24,7 @@
         *ngFor="let weekRow of weekRows; let i = index"
     >
         <div
-            class="week-col d-flex justify-content-center align-items-center"
+            class="week-col d-flex justify-content-center align-items-center "
             *ngFor="let weekCol of weekRow; let j = index"
             [style.color]="weekCol.color"
             [class.selected]="weekCol.selected"
@@ -63,7 +63,7 @@
         (click)="selectWeek(i)"
     >
         <div
-            class="week-col d-flex justify-content-center align-items-center"
+            class="week-col d-flex justify-content-center align-items-center "
             *ngFor="let weekCol of weekRow; let j = index; first as isFirst; last as isLast"
             [style.color]="weekCol.color"
             [class.edge] = "weekNumbers[i] == selectedWeek && (isFirst || isLast)"

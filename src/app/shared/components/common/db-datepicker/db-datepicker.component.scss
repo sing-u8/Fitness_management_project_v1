@@ -1,7 +1,7 @@
 .rw-datepicker {
     width: 256px;
     height: 258px;
-    padding: 19px 15px;
+    padding: 19px 15px 15px;
     border-radius: 5px;
     background-color: var(--white);
 
@@ -98,9 +98,13 @@
     }
 
     .week-row {
+        min-height: 33px;
+        &:last-of-type{
+            min-height: 28px;
+        }
         .week-col {
-            width: 26px;
-            height: 26px;
+            width: 28px;
+            height: 28px;
             border-radius: 50%;
             font-size: 1.2rem;
         }
@@ -120,7 +124,7 @@
         .week-row {
             .week-col {
                 width: 34px;
-                height: 26px;
+                height: 28px;
                 border-radius: unset;
                 font-size: 1.2rem;
             }
