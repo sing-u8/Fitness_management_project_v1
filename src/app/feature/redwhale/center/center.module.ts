@@ -32,10 +32,11 @@ import { FeatureKey as MembershipFeatureKey } from '@centerStore/selectors/sec.m
 import { FeatureKey as LockerFeatureKey } from '@centerStore/selectors/sec.locker.selector'
 import { FeatureKey as DashboardFeatureKey } from '@centerStore/selectors/sec.dashoboard.selector'
 import { FeatureKey as ScheduleFeatureKey } from '@centerStore/selectors/sec.schedule.selector'
+import { FeatureKey as SaleFeatureKey } from '@centerStore/selectors/sec.sale.selector'
 
 // - // states reducer and effect
 import { lessonReducer } from '@centerStore/reducers/sec.lesson.reducer'
-import { LessongEffect } from '@centerStore/effects/sec.lesson.effect'
+import { LessonEffect } from '@centerStore/effects/sec.lesson.effect'
 
 import { membershipReducer } from '@centerStore/reducers/sec.membership.reducer'
 import { MembershipEffect } from '@centerStore/effects/sec.membership.effect'
@@ -48,6 +49,9 @@ import { DashboardEffect } from '@centerStore/effects/sec.dashboard.effect'
 
 import { scheduleReducer } from '@centerStore/reducers/sec.schedule.reducer'
 import { ScheduleEffect } from '@centerStore/effects/sec.schedule.effect'
+
+import { saleReducer } from '@centerStore/reducers/sec.sale.reducer'
+import { SaleEffect } from '@centerStore/effects/sec.sale.effect'
 
 @NgModule({
     declarations: [
@@ -79,8 +83,16 @@ import { ScheduleEffect } from '@centerStore/effects/sec.schedule.effect'
             [LockerFeatureKey]: lockerReducer,
             [DashboardFeatureKey]: dashboardReducer,
             [ScheduleFeatureKey]: scheduleReducer,
+            [SaleFeatureKey]: saleReducer,
         }),
-        EffectsModule.forFeature([LessongEffect, MembershipEffect, LockerEffect, ScheduleEffect, DashboardEffect]),
+        EffectsModule.forFeature([
+            LessonEffect,
+            MembershipEffect,
+            LockerEffect,
+            ScheduleEffect,
+            DashboardEffect,
+            SaleEffect,
+        ]),
         // ngrx     --> //
     ],
     exports: [],

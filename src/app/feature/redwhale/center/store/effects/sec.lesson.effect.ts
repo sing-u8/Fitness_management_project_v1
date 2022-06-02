@@ -22,7 +22,7 @@ import { CenterUsersService } from '@services/center-users.service'
 import _ from 'lodash'
 
 @Injectable()
-export class LessongEffect {
+export class LessonEffect {
     constructor(
         private actions$: Actions,
         private gymLessonApi: CenterLessonService,

@@ -1,7 +1,230 @@
+* {
+    padding: 0px;
+    margin: 0px;
+}
+
 :host {
     height: 100%;
 }
 
 .sale {
     height: 100%;
+    padding: 25px 32px 35px 32px;
+
+    // 나중에 수정하기 -  1440 부터는 사이드바가 밀고 나오지 않고, 한 레이어 위로 나오게
+
+    min-width: 1180px;
+
+    @media (min-widh: 1440px) {
+        min-width: 1440px;
+    }
+
+    .header {
+        display: flex;
+        align-items: center;
+        border-bottom: 1px solid var(--border-color);
+        height: 58px;
+
+        width: 100%;
+        padding-bottom: 15px;
+        margin-bottom: 30px;
+
+        .header-text {
+            display: flex;
+            align-items: baseline;
+
+            .title {
+                margin-right: 6px;
+            }
+
+            .title-desc {
+                color: var(--font-color);
+            }
+        }
+    }
+
+    .content-container {
+        display: flex;
+        height: calc(100vh - 185px);
+        width: 100%;
+        position: relative;
+
+        .content-title-margin {
+            margin-bottom: 5px;
+        }
+
+        .left-content {
+            display: flex;
+            flex-direction: column;
+            // width: 100%;
+            width: 245px; // 220 + 여백 25
+            height: 100%;
+            position: relative;
+            transition: max-width 0.2s ease-in;
+            -moz-transition: max-width 0.2s ease-in;
+            -webkit-transition: max-width 0.2s ease-in;
+            -o-transition: max-width 0.2s ease-in;
+
+            @media (min-width: 1440px) {
+                width: 280px; // 250 + 여백 30
+            }
+
+            &>p {
+                // height: 42px;
+                display: flex;
+                align-items: center;
+            }
+
+            .left-inner-content {
+                display: flex;
+                flex-direction: column;
+                width: 100%;
+                height: calc(100% - 47px);
+
+                .select-locker-guide-box {
+                    display: flex;
+                    align-items: center;
+                    width: 220px;
+                    height: 46px;
+                    box-shadow: 0px 0px 10px #b5b5b51c;
+                    border-radius: 5px;
+                    background-color: var(--white);
+                    padding-left: 18px;
+                    color: var(--grey);
+
+                    @media (min-width: 1440px) {
+                        width: 250px;
+                    }
+                }
+            }
+
+            rw-sale-summary-box {
+                margin-bottom: 10px;
+            }
+        }
+
+        .right-content {
+            transition: max-width 0.2s ease-in;
+            -moz-transition: max-width 0.2s ease-in;
+            -webkit-transition: max-width 0.2s ease-in;
+            -o-transition: max-width 0.2s ease-in;
+            display: flex;
+            flex-direction: column;
+            padding-left: 28px;
+            position: relative;
+            width: calc(100% - 245px);
+            height: 100%;
+
+            @media (min-width: 1440px) {
+                width: calc(100% - 280px);
+                padding-left: 33px;
+            }
+
+            .content-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                position: relative;
+                width: 100%;
+
+                .header-left {
+                    position: relative;
+                    width: calc(100% - 240px);
+                    height: 100%;
+                    align-items: center;
+                    display: flex;
+
+                    &>span {
+                        margin-right: 12px;
+                    }
+
+                    .filter-tag-container {
+                        width: calc(100% - 41px); // 41px = left span width and margin
+                        height: 100%;
+                        display: flex;
+                        align-items: center;
+                        position: absolute;
+                        left: 41px;
+                        bottom: -5px;
+
+                        .filter-tag {
+                            display: flex;
+                            align-items: center;
+                            justify-content: space-around;
+                            height: 33px;
+                            border-radius: 27px;
+                            background-color: var(--white);
+                            padding: 0px 13px;
+
+                            .tag-texts {
+                                display: flex;
+                                align-items: center;
+                                width: max-content;
+
+                                .tag-type {
+                                    color: var(--grey);
+                                }
+                            }
+
+                            &>img {
+                                width: 20px;
+                                height: 20px;
+                                margin-left: 13px;
+                                cursor: pointer;
+                                border-radius: 5px;
+
+                                &:hover {
+                                    background-color: var(--lightergrey);
+                                }
+                            }
+
+                            &:not(:last-child) {
+                                margin-right: 8px;
+                            }
+                        }
+                    }
+                }
+            }
+
+            rw-sale-table {
+                width: 100%;
+                height: calc(100% - 47px) !important;
+            }
+        }
+    }
+}
+
+.sale-scroll-x {
+    // overflow-x: scroll;
+    // overflow-x: hidden;
+    overflow-x: scroll; // overlay;
+
+    /* width */
+    &::-webkit-scrollbar {
+        height: 8px;
+    }
+
+    /* Track */
+    &::-webkit-scrollbar-track {
+        // box-shadow: inset 0 0 5px grey;
+        background-color: transparent;
+        border-radius: 15px;
+    }
+
+    /* Handle */
+    &::-webkit-scrollbar-thumb {
+        border: 3px solid transparent;
+        background-clip: padding-box;
+        background-color: #cfcfcf;
+        border-radius: 15px;
+    }
+
+    /* Handle on hover */
+    &::-webkit-scrollbar-thumb:hover {
+        background-color: var(--darkgrey);
+    }
+
+    &::-webkit-scrollbar-corner {
+        background-color: transparent;
+    }
 }
