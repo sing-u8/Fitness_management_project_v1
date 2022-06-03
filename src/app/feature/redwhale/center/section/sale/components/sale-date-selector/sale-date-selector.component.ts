@@ -2,7 +2,7 @@ import { Component, OnInit, AfterViewInit, Input, Output, EventEmitter, OnChange
 import _ from 'lodash'
 import dayjs from 'dayjs'
 
-import { SelectedDate, Date } from '@services/etc/gym-sale-state.service'
+import * as FromSale from '@centerStore/reducers/sec.sale.reducer'
 
 @Component({
     selector: 'rw-sale-date-selector',
@@ -12,13 +12,13 @@ import { SelectedDate, Date } from '@services/etc/gym-sale-state.service'
 
 // 변경 될 떄  토스트 생성하기 !
 export class SaleDateSelectorComponent implements OnInit, AfterViewInit, OnChanges {
-    @Input() selectedDate: SelectedDate
-    @Output() onChangeDate = new EventEmitter<SelectedDate>()
+    @Input() selectedDate: FromSale.SelectedDate
+    @Output() onChangeDate = new EventEmitter<FromSale.SelectedDate>()
 
     public isOpen: boolean
     public datePickType: DatePickType
-    public monthDateData: { year: Date; month: Date }
-    public RangeDateData: { startDate: Date; endDate: Date }
+    public monthDateData: { year: FromSale.DateType; month: FromSale.DateType }
+    public RangeDateData: { startDate: FromSale.DateType; endDate: FromSale.DateType }
     constructor() {}
 
     ngOnInit(): void {
@@ -47,7 +47,7 @@ export class SaleDateSelectorComponent implements OnInit, AfterViewInit, OnChang
             this.setRangeDateData(this.selectedDate[0], this.selectedDate[1])
             this.setMonthDateData()
         } else if (_.isString(this.selectedDate)) {
-            this.setMonthDateData(this.selectedDate as Date)
+            this.setMonthDateData(this.selectedDate as FromSale.DateType)
             this.setRangeDateData()
         }
     }
@@ -78,7 +78,7 @@ export class SaleDateSelectorComponent implements OnInit, AfterViewInit, OnChang
         this.datePickType = type
     }
 
-    setDatePickType(inputDate: SelectedDate) {
+    setDatePickType(inputDate: FromSale.SelectedDate) {
         if (_.isArray(inputDate)) {
             this.datePickType = 'range'
         } else if (_.isString(inputDate)) {
@@ -86,7 +86,7 @@ export class SaleDateSelectorComponent implements OnInit, AfterViewInit, OnChang
         }
     }
 
-    setMonthDateData(inputDate?: Date) {
+    setMonthDateData(inputDate?: FromSale.DateType) {
         if (!inputDate) {
             this.monthDateData = { year: dayjs().format('YYYY'), month: undefined }
             return
@@ -106,18 +106,23 @@ export class SaleDateSelectorComponent implements OnInit, AfterViewInit, OnChang
         if (_.isArray(this.selectedDate)) {
             return false
         } else if (_.isString(this.selectedDate)) {
-            return (this.selectedDate as Date) == dayjs(this.monthDateData.year + '-' + inputMonth).format('YYYY.MM')
+            return (
+                (this.selectedDate as FromSale.DateType) ==
+                dayjs(this.monthDateData.year + '-' + inputMonth).format('YYYY.MM')
+            )
+        } else {
+            return false
         }
     }
 
-    setRangeDateData(startDate?: Date, endDate?: Date) {
+    setRangeDateData(startDate?: FromSale.DateType, endDate?: FromSale.DateType) {
         this.RangeDateData.startDate = startDate ?? undefined
         this.RangeDateData.endDate = endDate ?? undefined
     }
     applyRangeDateDate() {
         this.selectedDate = [
             dayjs(this.RangeDateData.startDate).format('YYYY.MM.DD'),
-            dayjs(this.RangeDateData.endDate).format('YYYY.MM.DD') == 'Invalid Date'
+            dayjs(this.RangeDateData.endDate).format('YYYY.MM.DD') == 'Invalid FromSale.DateType'
                 ? ''
                 : dayjs(this.RangeDateData.endDate).format('YYYY.MM.DD'),
         ]

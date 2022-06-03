@@ -27,16 +27,14 @@
 
         width: 100%;
         padding-bottom: 15px;
-        margin-bottom: 30px;
+        margin-bottom: 15px;
 
         .header-text {
             display: flex;
             align-items: baseline;
-
             .title {
                 margin-right: 6px;
             }
-
             .title-desc {
                 color: var(--font-color);
             }
@@ -48,7 +46,6 @@
         height: calc(100vh - 185px);
         width: 100%;
         position: relative;
-
         .content-title-margin {
             margin-bottom: 5px;
         }
@@ -64,17 +61,15 @@
             -moz-transition: max-width 0.2s ease-in;
             -webkit-transition: max-width 0.2s ease-in;
             -o-transition: max-width 0.2s ease-in;
-
             @media (min-width: 1440px) {
                 width: 280px; // 250 + 여백 30
             }
 
-            &>p {
-                // height: 42px;
+            & > p {
+                height: 42px;
                 display: flex;
                 align-items: center;
             }
-
             .left-inner-content {
                 display: flex;
                 flex-direction: column;
@@ -91,7 +86,6 @@
                     background-color: var(--white);
                     padding-left: 18px;
                     color: var(--grey);
-
                     @media (min-width: 1440px) {
                         width: 250px;
                     }
@@ -133,8 +127,7 @@
                     height: 100%;
                     align-items: center;
                     display: flex;
-
-                    &>span {
+                    & > span {
                         margin-right: 12px;
                     }
 
@@ -160,13 +153,12 @@
                                 display: flex;
                                 align-items: center;
                                 width: max-content;
-
                                 .tag-type {
                                     color: var(--grey);
                                 }
                             }
 
-                            &>img {
+                            & > img {
                                 width: 20px;
                                 height: 20px;
                                 margin-left: 13px;

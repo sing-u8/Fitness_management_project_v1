@@ -1262,7 +1262,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
     showDeleteEventModal(task: CalendarTask, eventType: 'general' | 'lesson') {
         this.deletedEvent = task
         this.deleteEventType = eventType
-        this.deleteEventText.text = `'${task.name}'' 일정을 삭제하시겠어요?`
+        this.deleteEventText.text = `'${task.name}' 일정을 삭제하시겠어요?`
         this.doShowDeleteEventModal = true
     }
     hideDeleteEventModal() {

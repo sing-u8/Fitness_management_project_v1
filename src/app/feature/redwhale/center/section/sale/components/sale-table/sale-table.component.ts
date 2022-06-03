@@ -2,9 +2,22 @@ import { Component, Input, OnInit, OnDestroy } from '@angular/core'
 import { Subscription } from 'rxjs'
 import _ from 'lodash'
 
-import { SalesData, Statistics } from '@schemas/sale'
+// import { SalesData, Statistics } from '@schemas/sale'
+import { StatsSales } from '@schemas/stats-sales'
 
-import { GymSaleStateService, Inputs, TypeCheck, Filters } from '@services/etc/gym-sale-state.service'
+// import { GymSaleStateService, Inputs, TypeCheck, Filters } from '@services/etc/gym-sale-state.service'
+
+// rxjs
+import { Observable, Subject } from 'rxjs'
+import { takeUntil } from 'rxjs/operators'
+
+// ngrx and store
+import { Store, select } from '@ngrx/store'
+import { showToast } from '@appStore/actions/toast.action'
+
+import * as FromSale from '@centerStore/reducers/sec.sale.reducer'
+import * as SaleSelector from '@centerStore/selectors/sec.sale.selector'
+import * as SaleActions from '@centerStore/actions/sec.sale.actions'
 
 @Component({
     selector: 'rw-sale-table',
@@ -12,23 +25,27 @@ import { GymSaleStateService, Inputs, TypeCheck, Filters } from '@services/etc/g
     styleUrls: ['./sale-table.component.scss'],
 })
 export class SaleTableComponent implements OnInit, OnDestroy {
-    @Input() saleData: Array<SalesData>
-    @Input() saleStatistics: Statistics
+    @Input() saleData: Array<StatsSales>
+    @Input() saleStatistics: { total: number; cash: number; card: number; trans: number; unpaid: number } = {
+        total: 0,
+        cash: 0,
+        card: 0,
+        trans: 0,
+        unpaid: 0,
+    }
     @Input() showEmptyTableFlag: string
 
-    isFilteredSubscription: Subscription
-    typeCheckSubscription: Subscription
-    inputsSubscription: Subscription
+    public unsubscriber$ = new Subject<void>()
 
     public isMemberOpen: boolean
     public isTypeOpen: boolean
     public isMembershipLockerOpen: boolean
     public isPersonInChargeOpen: boolean
 
-    public isFiltered: Record<Filters, boolean> // { member: boolean; type: boolean; membershipLocker: boolean; personInCharge: boolean }
+    public isFiltered: Record<FromSale.Filters, boolean>
     public typeChecks: {
-        cur: Record<TypeCheck, boolean> // { onetoone: boolean; group: boolean; locker: boolean }
-        applied: Record<TypeCheck, boolean> // { onetoone: boolean; group: boolean; locker: boolean }
+        cur: FromSale.TypeCheck
+        applied: FromSale.TypeCheck
     }
     public inputs: {
         member: { cur: string; applied: string }
@@ -36,7 +53,7 @@ export class SaleTableComponent implements OnInit, OnDestroy {
         personInCharge: { cur: string; applied: string }
     }
 
-    constructor(private gymSaleState: GymSaleStateService) {
+    constructor(private nxStore: Store) {
         this.isMemberOpen = false
         this.isTypeOpen = false
         this.isMembershipLockerOpen = false
@@ -53,16 +70,17 @@ export class SaleTableComponent implements OnInit, OnDestroy {
             personInCharge: { cur: '', applied: '' },
         }
 
-        this.isFilteredSubscription = gymSaleState.selectIsFiltered().subscribe((_isFiltered) => {
+        this.nxStore.pipe(select(SaleSelector.isFiltered), takeUntil(this.unsubscriber$)).subscribe((_isFiltered) => {
             this.isFiltered = { ..._isFiltered }
             // console.log('_isFiltered select: ', _isFiltered, this.isFiltered)
         })
-        this.typeCheckSubscription = gymSaleState.selectTypeCheck().subscribe((_typeCheck) => {
+
+        this.nxStore.pipe(select(SaleSelector.typeCheck), takeUntil(this.unsubscriber$)).subscribe((_typeCheck) => {
             // console.log('_typeCheck select: ', _typeCheck)
-            this.typeChecks.cur = { ..._typeCheck }
-            this.typeChecks.applied = { ..._typeCheck }
+            this.typeChecks.cur = _.cloneDeep(_typeCheck)
+            this.typeChecks.applied = _.cloneDeep(_typeCheck)
         })
-        this.inputsSubscription = gymSaleState.selectInputs().subscribe((_inputs) => {
+        this.nxStore.pipe(select(SaleSelector.inputs), takeUntil(this.unsubscriber$)).subscribe((_inputs) => {
             console.log('_inputs select: ', _inputs)
             _.forEach(_.keys(_inputs), (v) => {
                 this.inputs[v].cur = _inputs[v]
@@ -76,9 +94,8 @@ export class SaleTableComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
-        this.isFilteredSubscription.unsubscribe()
-        this.typeCheckSubscription.unsubscribe()
-        this.inputsSubscription.unsubscribe()
+        this.unsubscriber$.next()
+        this.unsubscriber$.complete()
     }
 
     toggleMember(e) {
@@ -128,7 +145,7 @@ export class SaleTableComponent implements OnInit, OnDestroy {
     }
 
     // typecheck box method
-    toggleTypeCheckBox(type: TypeCheck) {
+    toggleTypeCheckBox(type: FromSale.TypeCheckString) {
         this.typeChecks.cur[type] = !this.typeChecks.cur[type]
     }
     applyTypeCheckBox() {
@@ -168,14 +185,14 @@ export class SaleTableComponent implements OnInit, OnDestroy {
 
         this.checkInputFiltered(type)
     }
-    restoreInputToApplied(type: Inputs) {
+    restoreInputToApplied(type: FromSale.InputString) {
         this.inputs[type].cur = this.inputs[type].applied
     }
-    resetInput(type: Inputs) {
+    resetInput(type: FromSale.InputString) {
         this.gymSaleState.setInputs({ [type]: '' })
         this.gymSaleState.setIsFiltered({ [type]: false })
     }
-    checkInputFiltered(type: Inputs) {
+    checkInputFiltered(type: FromSale.InputString) {
         console.log('checkInputFiltered: ', this.inputs[type].applied)
         this.gymSaleState.setIsFiltered({ [type]: this.inputs[type].applied.length > 0 ? true : false })
     }

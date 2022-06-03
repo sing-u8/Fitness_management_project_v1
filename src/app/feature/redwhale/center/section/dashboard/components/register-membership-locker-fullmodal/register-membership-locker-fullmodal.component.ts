@@ -98,11 +98,9 @@ export class RegisterMembershipLockerFullmodalComponent implements OnInit, OnCha
     public membershipItemsExist = false
     public lieSubscriber = this.cmpStore.doLockerItemsExist$.subscribe((doExist) => {
         this.lockerItemsExist = doExist
-        console.log('cmpStore.doLockerItemsExist$ : ', this.lockerItemsExist)
     })
     public mieSubscriber = this.cmpStore.doMembershipItemsExist$.subscribe((doExist) => {
         this.membershipItemsExist = doExist
-        console.log('cmpStore.doMembershipItemsExist$ : ', this.membershipItemsExist)
     })
 
     constructor(

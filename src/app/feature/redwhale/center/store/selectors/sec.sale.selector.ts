@@ -13,3 +13,4 @@ export const isFiltered = createSelector(GymSaleFeature, FromSale.selectIsFilter
 export const typeCheck = createSelector(GymSaleFeature, FromSale.selectTypeCheck)
 export const inputs = createSelector(GymSaleFeature, FromSale.selectInputs)
 export const selectedDate = createSelector(GymSaleFeature, FromSale.selectSelectedDate)
+export const saleData = createSelector(GymSaleFeature, FromSale.selectSaleData)

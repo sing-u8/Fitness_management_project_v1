@@ -33,8 +33,10 @@
                     </div>
 
                 </div>
-                <!-- <rw-sale-date-selector [(selectedDate)]="selectorDate" (onChangeDate)="onDateSeleted($event)">
-                </rw-sale-date-selector> -->
+                <rw-sale-date-selector
+                    [selectedDate]="selectedDate"
+                    (onChangeDate)="onDateSeleted($event)"
+                ></rw-sale-date-selector>
             </div>
             <!-- <rw-sale-table [saleData]="saleData" [saleStatistics]="saleStatistics"
                 [showEmptyTableFlag]="showEmptyTableFlag"></rw-sale-table> -->

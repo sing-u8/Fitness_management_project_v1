@@ -48,13 +48,13 @@
 
     <div *ngIf="datePickType =='range'" class="date-picker">
 
-      <rw-datepicker
-        mode="multiline-component" width="263"
-        [hideWeekHeader] = "true"
+      <db-datepicker
+        mode="multiline-component"
+        width="263"
         [(data)]="RangeDateData"
         (dataChange)="setRangeDateData($event.startDate, $event.endDate);"
         [isShadow] ="false"
-      ></rw-datepicker>
+      ></db-datepicker>
 
       <div class="date-picker-bottom">
         <div

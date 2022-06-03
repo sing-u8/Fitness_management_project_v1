@@ -6,6 +6,7 @@ import { SharedModule } from '@shared/shared.module'
 
 // components
 import { SaleComponent } from './sale.component'
+import { SaleDateSelectorComponent } from './components/sale-date-selector/sale-date-selector.component'
 
 // pipe
 import { SaleDatePipe } from './pipes/sale-date.pipe'
@@ -21,6 +22,7 @@ import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader'
     declarations: [
         // components
         SaleComponent,
+        SaleDateSelectorComponent,
         // pipes
         SaleDatePipe,
         SaleTableTypePipe,

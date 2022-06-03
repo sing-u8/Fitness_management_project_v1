@@ -2,9 +2,11 @@ import { on } from '@ngrx/store'
 import { createImmerReducer } from 'ngrx-immer/store'
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity'
 import _ from 'lodash'
+import dayjs from 'dayjs'
 
 // schemas
 import { Loading } from '@schemas/store/loading'
+import { StatsSales } from '@schemas/stats-sales'
 
 import * as SaleActions from '../actions/sec.sale.actions'
 
@@ -21,7 +23,6 @@ export type Inputs = Record<InputString, string>
 const inputsInit = { member: '', membershipLocker: '', personInCharge: '' }
 
 export type SelectedDate = string | [string, string]
-export const SelectedDateInit = undefined
 export type DateType = string
 export const DateTypeInit = undefined
 export type DateRange = [string, string]
@@ -34,6 +35,7 @@ export interface State {
     error: string
 
     // main
+    saleData: Array<StatsSales>
     isFiltered: IsFiltered
     typeCheck: TypeCheck
     inputs: Inputs
@@ -47,10 +49,11 @@ export const initialState: State = {
     error: '',
 
     // main
+    saleData: [],
     isFiltered: isFilteredInit,
     typeCheck: typeCheckInit,
     inputs: inputsInit,
-    selectedDate: SelectedDateInit,
+    selectedDate: dayjs().format('YYYY.MM'),
 }
 
 export const saleReducer = createImmerReducer(
@@ -60,6 +63,9 @@ export const saleReducer = createImmerReducer(
     // - // async
 
     // sync
+    on(SaleActions.setSaleData, (state) => {
+        return state
+    }),
 
     // common
     on(SaleActions.resetAll, (state) => {
@@ -86,3 +92,4 @@ export const selectIsFiltered = (state: State) => state.isFiltered
 export const selectTypeCheck = (state: State) => state.typeCheck
 export const selectInputs = (state: State) => state.inputs
 export const selectSelectedDate = (state: State) => state.selectedDate
+export const selectSaleData = (state: State) => state.saleData
