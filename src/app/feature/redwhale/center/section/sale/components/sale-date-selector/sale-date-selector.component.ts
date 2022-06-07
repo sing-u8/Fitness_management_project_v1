@@ -122,7 +122,7 @@ export class SaleDateSelectorComponent implements OnInit, AfterViewInit, OnChang
     applyRangeDateDate() {
         this.selectedDate = [
             dayjs(this.RangeDateData.startDate).format('YYYY.MM.DD'),
-            dayjs(this.RangeDateData.endDate).format('YYYY.MM.DD') == 'Invalid FromSale.DateType'
+            dayjs(this.RangeDateData.endDate).format('YYYY.MM.DD') == 'Invalid Date'
                 ? ''
                 : dayjs(this.RangeDateData.endDate).format('YYYY.MM.DD'),
         ]
