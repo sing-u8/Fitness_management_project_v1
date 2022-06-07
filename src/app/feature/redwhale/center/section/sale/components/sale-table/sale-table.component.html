@@ -3,7 +3,39 @@
   <thead>
     <tr class="rw-typo-bodytext0 title">
       <th></th>
-      <th>결제일</th>
+      <th>날짜</th>
+
+      <th>
+        <div>
+          구분
+          <img *ngIf="!(showEmptyTableFlag == 'register' && saleData?.length == 0
+                          && !(isFiltered.member || isFiltered.membershipLocker || isFiltered.personInCharge || isFiltered.type && !isFiltered.member))
+                          && !isTypeOpen && !isFiltered.type" (click)="toggleType($event); restoreTypeCheckToApplied()"
+            src="assets/icons/etc/filter_white.svg">
+          <img *ngIf="!(showEmptyTableFlag == 'register' && saleData?.length == 0) && isTypeOpen || isFiltered.type"
+            (click)="toggleType($event); restoreTypeCheckToApplied()" src="assets/icons/etc/filter_fill_white.svg">
+
+          <div *ngIf="isTypeOpen" (rwClickOutside)="closeType(); restoreTypeCheckToApplied()" class="type-dropdown">
+            <div class="rw-typo-bodytext2-bold title">구분</div>
+            <div class="checkbox-container">
+              <rw-checkbox text="회원권" [checked]="typeChecks.cur.membership" (click)="toggleTypeCheckBox('membership')">
+              </rw-checkbox>
+              <rw-checkbox text="락커" [checked]="typeChecks.cur.locker" (click)="toggleTypeCheckBox('locker')"></rw-checkbox>
+            </div>
+            <div class="button-container">
+              <div class="rw-typo-bodytext2 reset" rw-button rwButtonColor="var(--white)" rwButtonFontColor="var(--grey)"
+                (click)="resetTypeChecBox()">
+                초기화
+              </div>
+              <div class="rw-typo-bodytext2 search" rw-button rwButtonColor="var(--red)" rwButtonFontColor="var(--white)"
+                [rwButtonDisabled]="!typeChecks.cur.membership && !typeChecks.cur.locker" (click)="applyTypeCheckBox()">
+                적용하기
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </th>
 
       <th>
         <div>
@@ -28,7 +60,7 @@
                 required
                 class="rw-input" type="text"
                 placeholder="회원명 / 전화번호 검색"
-                [rw-autoFocus]
+                rw-autoFocus
                 [(ngModel)] = inputs.member.cur
                 #member_input = ngModel
                 (keyup.enter) = "applyInput('member'); closeMember()"
@@ -63,44 +95,28 @@
 
       <th>
         <div>
-          구분
-          <img
-            *ngIf="!(showEmptyTableFlag == 'register' && saleData?.length == 0
-                    && !(isFiltered.member || isFiltered.membershipLocker || isFiltered.personInCharge || isFiltered.type && !isFiltered.member))
-                    && !isTypeOpen && !isFiltered.type"
-            (click)="toggleType($event); restoreTypeCheckToApplied()"
-            src="assets/icons/etc/filter_white.svg"
-          >
-          <img
-            *ngIf="!(showEmptyTableFlag == 'register' && saleData?.length == 0) && isTypeOpen || isFiltered.type"
-            (click)="toggleType($event); restoreTypeCheckToApplied()"
-            src="assets/icons/etc/filter_fill_white.svg"
-          >
+          상품
+          <img *ngIf="!(showEmptyTableFlag == 'register' && saleData?.length == 0
+                                && !(isFiltered.member || isFiltered.membershipLocker || isFiltered.personInCharge || isFiltered.type && !isFiltered.member))
+                                && !isTypeOpen && !isFiltered.type" (click)="toggleType($event); restoreTypeCheckToApplied()"
+            src="assets/icons/etc/filter_white.svg">
+          <img *ngIf="!(showEmptyTableFlag == 'register' && saleData?.length == 0) && isTypeOpen || isFiltered.type"
+            (click)="toggleType($event); restoreTypeCheckToApplied()" src="assets/icons/etc/filter_fill_white.svg">
 
           <div *ngIf="isTypeOpen" (rwClickOutside)="closeType(); restoreTypeCheckToApplied()" class="type-dropdown">
-            <div class="rw-typo-bodytext2-bold title">구분</div>
+            <div class="rw-typo-bodytext2-bold title">상품</div>
             <div class="checkbox-container">
-              <rw-checkbox text="회원권" [checked]="typeChecks.cur.membership" (click)="toggleTypeCheckBox('membership')"></rw-checkbox>
+              <rw-checkbox text="회원권" [checked]="typeChecks.cur.membership" (click)="toggleTypeCheckBox('membership')">
+              </rw-checkbox>
               <rw-checkbox text="락커" [checked]="typeChecks.cur.locker" (click)="toggleTypeCheckBox('locker')"></rw-checkbox>
             </div>
             <div class="button-container">
-              <div
-                class="rw-typo-bodytext2 reset"
-                rw-button
-                rwButtonColor="var(--white)"
-                rwButtonFontColor="var(--grey)"
-                (click) = "resetTypeChecBox()"
-              >
+              <div class="rw-typo-bodytext2 reset" rw-button rwButtonColor="var(--white)" rwButtonFontColor="var(--grey)"
+                (click)="resetTypeChecBox()">
                 초기화
               </div>
-              <div
-                class="rw-typo-bodytext2 search"
-                rw-button
-                rwButtonColor="var(--red)"
-                rwButtonFontColor="var(--white)"
-                [rwButtonDisabled]="!typeChecks.cur.membership && !typeChecks.cur.locker"
-                (click) ="applyTypeCheckBox()"
-              >
+              <div class="rw-typo-bodytext2 search" rw-button rwButtonColor="var(--red)" rwButtonFontColor="var(--white)"
+                [rwButtonDisabled]="!typeChecks.cur.membership && !typeChecks.cur.locker" (click)="applyTypeCheckBox()">
                 적용하기
               </div>
             </div>
@@ -132,7 +148,7 @@
                 required
                 class="rw-input" type="text"
                 placeholder="회원권/락커명 검색"
-                [rw-autoFocus]
+                rw-autoFocus
                 [(ngModel)] = inputs.membershipLocker.cur
                 #membershipLocker_input = ngModel
                 (keyup.enter) = "applyInput('membershipLocker'); closeMembershipLocker()"
@@ -190,7 +206,7 @@
                 required
                 class="rw-input" type="text"
                 placeholder="센터 직원명 검색"
-                [rw-autoFocus]
+                rw-autoFocus
                 [(ngModel)] = inputs.personInCharge.cur
                 #personInCharge_input = ngModel
                 (keyup.enter) = "applyInput('personInCharge'); closePersonInCharge()"
@@ -273,19 +289,19 @@
   <tbody *ngIf="saleData?.length > 0 "  class="data-container rw-typo-bodytext1 table-scroll-y">
     <tr *ngFor="let item of saleData">
       <td></td>
-      <td>{{item.paid_date | dateFormat:'YY.MM.DD'}}</td>
+      <td>{{item.date | dateFormat:'YY.MM.DD'}}</td>
       <td>
         <div class="member-container">
           <!-- <p class="name">{{item.customer_name ? item.customer_name : item.customer_given_name}}</p> -->
-          <p class="name">{{item.customer_name}}</p>
-          <p class="phone rw-typo-subtext0-regular">{{item.customer_phone_number | phoneNumber}}</p>
+          <p class="name">{{item.center_user_name}}</p>
+          <p class="phone rw-typo-subtext0-regular">{{item.center_user_phone_number | phoneNumber}}</p>
         </div>
       </td>
-      <td>{{item.category | saleTableType}}</td>
-      <td>{{item.content_name}}</td>
+      <td>{{item.product_type_code_name}}</td>
+      <td>{{item.product_name}}</td>
       <!-- <td>{{item?.assignee?.given_name ? item.assignee.given_name : item.assignee_name}}</td> -->
-      <td>{{item.assignee_name}}</td>
-      <td class="rw-typo-subtext0 price">￦ {{item.price | numberWithCommas}}</td>
+      <td>{{item.responsibility_user_name}}</td>
+      <td class="rw-typo-subtext0 price">￦ {{item | saleTotalPrice}}</td>
       <td></td>
     </tr>
   </tbody>

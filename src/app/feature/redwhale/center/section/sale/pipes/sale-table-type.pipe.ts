@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core'
 
-type Type = 'locker' | 'membership'
+type Type = 'user_membership' | 'user_locker'
 
 @Pipe({
     name: 'saleTableType',
@@ -8,9 +8,9 @@ type Type = 'locker' | 'membership'
 export class SaleTableTypePipe implements PipeTransform {
     transform(value: Type): string {
         switch (value) {
-            case 'locker':
+            case 'user_locker':
                 return '락커'
-            case 'membership':
+            case 'user_membership':
                 return '회원권'
         }
     }

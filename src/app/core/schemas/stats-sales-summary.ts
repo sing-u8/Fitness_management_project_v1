@@ -6,8 +6,8 @@ export interface StatsSalesSummary {
 }
 
 export interface StatsSalesSummaryItem {
-    card: number
-    cash: number
-    trans: number
-    unpaid: number
+    card: string
+    cash: string
+    trans: string
+    unpaid: string
 }

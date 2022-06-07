@@ -19,8 +19,15 @@ export class CenterStatsService {
 
     constructor(private http: HttpClient) {}
 
+    /**
+     *
+     * @param centerId 'string'
+     * @param date 'yyyy-MM'
+     * @param option
+     * @returns
+     */
     getStatsSales(centerId: string, date: string, option?: getStatsSaleOption): Observable<Array<StatsSales>> {
-        let url = this.SERVER + `${centerId}/stats/sales` + `?date=${date}`
+        let url = this.SERVER + `/${centerId}/stats/sales` + `?date=${date}`
 
         if (!_.isEmpty(option) && _.keys(option).length > 0) {
             _.forIn(option, (v, k) => {
@@ -42,7 +49,7 @@ export class CenterStatsService {
         )
     }
     getStatsSalesSummary(centerId: string): Observable<StatsSalesSummary> {
-        const url = this.SERVER + `${centerId}/stats/sales_summary`
+        const url = this.SERVER + `/${centerId}/stats/sales_summary`
 
         const options = {
             headers: new HttpHeaders({

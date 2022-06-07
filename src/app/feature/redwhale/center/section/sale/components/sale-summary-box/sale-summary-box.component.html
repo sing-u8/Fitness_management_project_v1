@@ -27,7 +27,7 @@
   </div>
   <div [class.show]="isContentOpen" class="detail-content">
 
-    <div *ngFor="let v of SaleSummary?.cur | keyvalue" class="detail-item">
+    <div *ngFor="let v of SaleSummary?.cur | keyvalue : originalOrder" class="detail-item">
 
       <div
         class="rw-typo-bodytext1"

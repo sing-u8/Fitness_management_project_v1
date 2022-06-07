@@ -20,43 +20,43 @@ table.sale-table {
     th,
     td {
         text-align: left;
-        padding-left: 25px;
         color: var(--white);
 
         &:nth-child(1),
-        &:nth-child(8) {
-            width: 25px;
+        &:nth-child(9) {
+            width: 22px;
+            min-width: 22px;
         }
         &:nth-child(2) {
-            min-width: 83px;
-            width: 9.41%;
-            // border-bottom: 1px solid var(--border-color);
+            min-width: 64px;
+            width: 7.3%;
         }
         &:nth-child(3) {
-            min-width: 110px;
-            width: 11.12%;
-            // border-bottom: 1px solid var(--border-color);
+            min-width: 56px;
+            width: 6.39%;
         }
         &:nth-child(4) {
-            min-width: 84px;
-            width: 9.42%;
-            // border-bottom: 1px solid var(--border-color);
+            min-width: 90px;
+            width: 10.27%;
         }
         &:nth-child(5) {
-            // width: 41.8%;
-            // width: max-content;
-            min-width: 148px;
-            // border-bottom: 1px solid var(--border-color);
+            min-width: 56px;
+            width: 6.39%;
         }
         &:nth-child(6) {
             min-width: 117px;
-            width: 11.65%;
-            // border-bottom: 1px solid var(--border-color);
+            width: 13.35%;
         }
         &:nth-child(7) {
-            min-width: 172px;
-            width: 16.6%;
-            // border-bottom: 1px solid var(--border-color);
+            min-width: 97px;
+            width: 11.07%;
+        }
+        &:nth-child(8) {
+            min-width: 352px;
+            width: 40.23%;
+        }
+        @media (min-width: 1440px ) {
+            padding-right: 14px;
         }
     }
     td {

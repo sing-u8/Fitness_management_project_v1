@@ -11,9 +11,9 @@
         <aside class="left-content">
             <p class="rw-typo-title1 content-title-margin">통계</p>
 
-            <div class="left-inner-content thin-scroll-y">
-                <!-- <rw-sale-summary-box [type]="'month'"></rw-sale-summary-box>
-                <rw-sale-summary-box [type]="'day'"></rw-sale-summary-box> -->
+            <div class="left-inner-content thin-scroll-y-overlay2">
+                <rw-sale-summary-box [type]="'month'"></rw-sale-summary-box>
+                <rw-sale-summary-box [type]="'day'"></rw-sale-summary-box>
             </div>
         </aside>
 
@@ -38,8 +38,10 @@
                     (onChangeDate)="onDateSeleted($event)"
                 ></rw-sale-date-selector>
             </div>
-            <!-- <rw-sale-table [saleData]="saleData" [saleStatistics]="saleStatistics"
-                [showEmptyTableFlag]="showEmptyTableFlag"></rw-sale-table> -->
+            <rw-sale-table
+                [saleData]="(saleData$ | async)"
+                [showEmptyTableFlag]="showEmptyTableFlag"
+            ></rw-sale-table>
         </main>
 
     </article>

@@ -61,9 +61,41 @@ export const saleReducer = createImmerReducer(
 
     // main
     // - // async
+    on(SaleActions.startGetSaleData, (state) => {
+        return state
+    }),
+    on(SaleActions.finishGetSaleData, (state, { saleData }) => {
+        state.saleData = saleData
+        return state
+    }),
 
     // sync
-    on(SaleActions.setSaleData, (state) => {
+    on(SaleActions.setIsFiltered, (state, { newState }) => {
+        state.isFiltered = { ...state.isFiltered, ...newState }
+        return state
+    }),
+    on(SaleActions.setTypeCheck, (state, { newState }) => {
+        state.typeCheck = { ...state.typeCheck, ...newState }
+        return state
+    }),
+    on(SaleActions.resetTypeCheck, (state) => {
+        state.typeCheck = typeCheckInit
+        return state
+    }),
+    on(SaleActions.setInputs, (state, { newState }) => {
+        state.inputs = { ...state.inputs, ...newState }
+        return state
+    }),
+    on(SaleActions.resetInputs, (state) => {
+        state.inputs = inputsInit
+        return state
+    }),
+    on(SaleActions.setSelectedDate, (state, { selectedDate }) => {
+        state.selectedDate = selectedDate
+        return state
+    }),
+    on(SaleActions.setSaleData, (state, { saleData }) => {
+        state.saleData = saleData
         return state
     }),
 

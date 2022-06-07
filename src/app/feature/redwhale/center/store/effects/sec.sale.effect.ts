@@ -4,6 +4,8 @@ import { Store } from '@ngrx/store'
 import { of, EMPTY } from 'rxjs'
 import { catchError, switchMap, tap, map, filter } from 'rxjs/operators'
 
+import { CenterStatsService } from '@services/center-stats.service'
+
 import * as SaleActions from '../actions/sec.sale.actions'
 import * as SaleReducer from '../reducers/sec.sale.reducer'
 
@@ -13,5 +15,18 @@ import _ from 'lodash'
 
 @Injectable()
 export class SaleEffect {
-    constructor(private actions$: Actions, private store: Store) {}
+    constructor(private actions$: Actions, private nxStore: Store, private centerStatApi: CenterStatsService) {}
+
+    // sale data
+    public getSaleData = createEffect(() =>
+        this.actions$.pipe(
+            ofType(SaleActions.startGetSaleData),
+            switchMap(({ centerId, date, option }) =>
+                this.centerStatApi.getStatsSales(centerId, date, option).pipe(
+                    map((saleData) => SaleActions.finishGetSaleData({ saleData })),
+                    catchError((err: string) => of(SaleActions.setError({ error: err })))
+                )
+            )
+        )
+    )
 }

@@ -13,7 +13,7 @@
 
     // 나중에 수정하기 -  1440 부터는 사이드바가 밀고 나오지 않고, 한 레이어 위로 나오게
 
-    min-width: 1180px;
+    min-width: 1213px;
 
     @media (min-widh: 1440px) {
         min-width: 1440px;
@@ -73,6 +73,7 @@
             .left-inner-content {
                 display: flex;
                 flex-direction: column;
+                align-items: flex-start;
                 width: 100%;
                 height: calc(100% - 47px);
 
@@ -108,6 +109,7 @@
             position: relative;
             width: calc(100% - 245px);
             height: 100%;
+            position: relative;
 
             @media (min-width: 1440px) {
                 width: calc(100% - 280px);

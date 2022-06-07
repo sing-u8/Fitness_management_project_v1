@@ -2,16 +2,16 @@ import { Component, OnInit, Input, AfterViewInit } from '@angular/core'
 import dayjs from 'dayjs'
 import _ from 'lodash'
 
-import { GymSaleService } from '@services/gym-sale.service'
+import { CenterStatsService } from '@services/center-stats.service'
 import { StorageService } from '@services/storage.service'
 
-import { TheDaySummary, TheMonthSummary } from '@schemas/sale'
 import { Center } from '@schemas/center'
 
+import { originalOrder } from '@helpers/pipe/keyvalue'
+
 type SaleSummary = {
-    // !! cash --> ca_sh 순서를 현금, 카드, 계좌이체, 미수금으로 나열하기 위해서 네이밍 수정
-    prev: { ca_sh: number; card: number; trans: number; unpaid: number }
-    cur: { ca_sh: number; card: number; trans: number; unpaid: number }
+    prev: { cash: number; card: number; trans: number; unpaid: number }
+    cur: { cash: number; card: number; trans: number; unpaid: number }
 }
 
 @Component({
@@ -25,8 +25,8 @@ export class SaleSummaryBoxComponent implements OnInit, AfterViewInit {
     @Input() type: 'day' | 'month'
 
     public center: Center
+    public originalOrder = originalOrder
 
-    public theSummary: TheMonthSummary | TheDaySummary
     public prevTotal = 0
     public curTotal = 0
 
@@ -36,17 +36,16 @@ export class SaleSummaryBoxComponent implements OnInit, AfterViewInit {
     public title = ''
 
     public isContentOpen: boolean
-    // !! cash --> ca_sh 순서를 현금, 카드, 계좌이체, 미수금으로 나열하기 위해서 네이밍 수정
-    public detailTitle = { ca_sh: '현금', card: '카드', trans: '계좌이체', unpaid: '미수금' }
+    public detailTitle = { cash: '현금', card: '카드', trans: '계좌이체', unpaid: '미수금' }
 
-    constructor(private gymSaleService: GymSaleService, private storageService: StorageService) {
+    constructor(private centerStatsService: CenterStatsService, private storageService: StorageService) {
         this.center = this.storageService.getCenter()
     }
 
     ngOnInit(): void {}
     ngAfterViewInit(): void {
         this.initBoxTexts()
-        this.getSaleDashboard(dayjs().format('YYYY-MM-DD'), this.type)
+        this.getSaleDashboard(this.type)
     }
 
     initBoxTexts() {
@@ -63,48 +62,48 @@ export class SaleSummaryBoxComponent implements OnInit, AfterViewInit {
         this.isContentOpen = !this.isContentOpen
     }
 
-    getSaleDashboard(date: string, type: 'day' | 'month') {
+    getSaleDashboard(type: 'day' | 'month') {
         // date format : 'YYYY-MM-DD'
-        this.gymSaleService.getSaleDashborad(this.center.id, date).subscribe((saleBoard) => {
+        this.centerStatsService.getStatsSalesSummary(this.center.id).subscribe((saleBoard) => {
             switch (type) {
                 case 'day':
                     this.SaleSummary = {
                         prev: {
-                            ca_sh: Number(saleBoard.yesterday_cash),
-                            trans: Number(saleBoard.yesterday_trans),
-                            card: Number(saleBoard.yesterday_card),
-                            unpaid: Number(saleBoard.yesterday_unpaid),
+                            cash: Number(saleBoard.yesterday.cash),
+                            trans: Number(saleBoard.yesterday.trans),
+                            card: Number(saleBoard.yesterday.card),
+                            unpaid: Number(saleBoard.yesterday.unpaid),
                         },
                         cur: {
-                            ca_sh: Number(saleBoard.today_cash),
-                            trans: Number(saleBoard.today_trans),
-                            card: Number(saleBoard.today_card),
-                            unpaid: Number(saleBoard.today_unpaid),
+                            cash: Number(saleBoard.today.cash),
+                            trans: Number(saleBoard.today.trans),
+                            card: Number(saleBoard.today.card),
+                            unpaid: Number(saleBoard.today.unpaid),
                         },
                     }
 
-                    this.curTotal = Number(saleBoard.today_total)
-                    this.prevTotal = Number(saleBoard.yesterday_total)
+                    this.curTotal = _.reduce(_.values(saleBoard.today), (acc, cur) => acc + Number(cur), 0)
+                    this.prevTotal = _.reduce(_.values(saleBoard.yesterday), (acc, cur) => acc + Number(cur), 0)
 
                     break
                 case 'month':
                     this.SaleSummary = {
                         prev: {
-                            ca_sh: Number(saleBoard.last_month_cash),
-                            trans: Number(saleBoard.last_month_trans),
-                            card: Number(saleBoard.last_month_card),
-                            unpaid: Number(saleBoard.last_month_unpaid),
+                            cash: Number(saleBoard.last_month.cash),
+                            trans: Number(saleBoard.last_month.trans),
+                            card: Number(saleBoard.last_month.card),
+                            unpaid: Number(saleBoard.last_month.unpaid),
                         },
                         cur: {
-                            ca_sh: Number(saleBoard.this_month_cash),
-                            trans: Number(saleBoard.this_month_trans),
-                            card: Number(saleBoard.this_month_card),
-                            unpaid: Number(saleBoard.this_month_unpaid),
+                            cash: Number(saleBoard.this_month.cash),
+                            trans: Number(saleBoard.this_month.trans),
+                            card: Number(saleBoard.this_month.card),
+                            unpaid: Number(saleBoard.this_month.unpaid),
                         },
                     }
 
-                    this.curTotal = Number(saleBoard.this_month_total)
-                    this.prevTotal = Number(saleBoard.last_month_total)
+                    this.curTotal = _.reduce(_.values(saleBoard.this_month), (acc, cur) => acc + Number(cur), 0)
+                    this.prevTotal = _.reduce(_.values(saleBoard.last_month), (acc, cur) => acc + Number(cur), 0)
 
                     break
             }

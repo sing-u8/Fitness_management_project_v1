@@ -5,8 +5,6 @@ import _ from 'lodash'
 // import { SalesData, Statistics } from '@schemas/sale'
 import { StatsSales } from '@schemas/stats-sales'
 
-// import { GymSaleStateService, Inputs, TypeCheck, Filters } from '@services/etc/gym-sale-state.service'
-
 // rxjs
 import { Observable, Subject } from 'rxjs'
 import { takeUntil } from 'rxjs/operators'
@@ -151,7 +149,7 @@ export class SaleTableComponent implements OnInit, OnDestroy {
     applyTypeCheckBox() {
         if (!this.typeChecks.cur.membership && !this.typeChecks.cur.locker) return
 
-        this.gymSaleState.setTypeCheck(this.typeChecks.cur)
+        this.nxStore.dispatch(SaleActions.setTypeCheck({ newState: this.typeChecks.cur }))
         this.checkTypeChecBoxFiltered()
         this.closeType()
     }
@@ -161,26 +159,34 @@ export class SaleTableComponent implements OnInit, OnDestroy {
         })
     }
     resetTypeChecBox() {
-        this.gymSaleState.setTypeCheck({ membership: true, locker: true })
-        this.gymSaleState.setIsFiltered({ type: false })
+        this.nxStore.dispatch(SaleActions.setTypeCheck({ newState: { membership: true, locker: true } }))
+        this.nxStore.dispatch(
+            SaleActions.setIsFiltered({
+                newState: {
+                    type: false,
+                },
+            })
+        )
     }
     checkTypeChecBoxFiltered() {
         console.log('checkTypeChecBoxFiltered: this.typeChecks.applied - ', this.typeChecks.applied)
         this.isFiltered.type = _.some(this.typeChecks.applied, (v) => v == false) ? true : false
-        this.gymSaleState.setIsFiltered({ type: this.isFiltered.type })
+        this.nxStore.dispatch(
+            SaleActions.setIsFiltered({
+                newState: {
+                    type: this.isFiltered.type,
+                },
+            })
+        )
     }
 
     // inputs method
-    applyInput(type: Inputs) {
-        console.log(
-            'cur  applied  state: ',
-            this.inputs[type].cur,
-            this.inputs[type].applied,
-            this.gymSaleState.inputs[type]
-        )
+    applyInput(type: FromSale.InputString) {
+        console.log('cur  applied  state: ', this.inputs[type].cur, this.inputs[type].applied)
+
         this.inputs[type].cur = _.trim(this.inputs[type].cur)
         this.inputs[type].applied != this.inputs[type].cur
-            ? this.gymSaleState.setInputs({ [type]: this.inputs[type].cur })
+            ? this.nxStore.dispatch(SaleActions.setInputs({ newState: { [type]: this.inputs[type].cur } }))
             : null
 
         this.checkInputFiltered(type)
@@ -189,17 +195,40 @@ export class SaleTableComponent implements OnInit, OnDestroy {
         this.inputs[type].cur = this.inputs[type].applied
     }
     resetInput(type: FromSale.InputString) {
-        this.gymSaleState.setInputs({ [type]: '' })
-        this.gymSaleState.setIsFiltered({ [type]: false })
+        this.nxStore.dispatch(SaleActions.setInputs({ newState: { [type]: '' } }))
+        this.nxStore.dispatch(
+            SaleActions.setIsFiltered({
+                newState: {
+                    [type]: false,
+                },
+            })
+        )
     }
     checkInputFiltered(type: FromSale.InputString) {
         console.log('checkInputFiltered: ', this.inputs[type].applied)
-        this.gymSaleState.setIsFiltered({ [type]: this.inputs[type].applied.length > 0 ? true : false })
+        this.nxStore.dispatch(
+            SaleActions.setIsFiltered({
+                newState: {
+                    [type]: this.inputs[type].applied.length > 0 ? true : false,
+                },
+            })
+        )
     }
     // reset all tag
     resetAllTag() {
-        this.gymSaleState.setInputs({ member: '', membershipLocker: '', personInCharge: '' })
-        this.gymSaleState.setTypeCheck({ membership: true, locker: true })
-        this.gymSaleState.setIsFiltered({ member: false, membershipLocker: false, personInCharge: false, type: false })
+        this.nxStore.dispatch(SaleActions.setTypeCheck({ newState: { membership: true, locker: true } }))
+        this.nxStore.dispatch(
+            SaleActions.setInputs({ newState: { member: '', membershipLocker: '', personInCharge: '' } })
+        )
+        this.nxStore.dispatch(
+            SaleActions.setIsFiltered({
+                newState: {
+                    member: false,
+                    membershipLocker: false,
+                    personInCharge: false,
+                    type: false,
+                },
+            })
+        )
     }
 }

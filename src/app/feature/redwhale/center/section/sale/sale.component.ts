@@ -33,7 +33,7 @@ import * as SaleActions from '@centerStore/actions/sec.sale.actions'
 })
 export class SaleComponent implements OnInit, OnDestroy {
     // ngrx vars
-    public saleData = this.nxStore.select(SaleSelector.saleData)
+    public saleData$ = this.nxStore.select(SaleSelector.saleData)
     // ngrx copy vars
     public unsubscriber$ = new Subject<void>()
     public selectedDate: FromSale.SelectedDate
@@ -87,18 +87,18 @@ export class SaleComponent implements OnInit, OnDestroy {
     }
 
     ngAfterViewInit(): void {
-        this.resizeUnlistener = this.renderer.listen('window', 'resize', (event) => {
-            if (event.target.innerWidth >= 1180 && event.target.innerWidth <= 1440) {
-                this.renderer.setStyle(this.sale.nativeElement, 'minWidth', `${event.target.innerWidth - 64}px`)
-            }
-        })
+        // this.resizeUnlistener = this.renderer.listen('window', 'resize', (event) => {
+        //     if (event.target.innerWidth >= 1180 && event.target.innerWidth <= 1440) {
+        //         this.renderer.setStyle(this.sale.nativeElement, 'minWidth', `${event.target.innerWidth - 64}px`)
+        //     }
+        // })
     }
 
     // sale-date-selector vars and funcs
-    onDateSeleted(date) {
-        // this.gymSaleState.setSelectedDate(date)
+    onDateSeleted(date: FromSale.SelectedDate) {
+        this.nxStore.dispatch(SaleActions.setSelectedDate({ selectedDate: date }))
         this.selectedDate = date
-        // this.getSaleTableWrpper(this.selectorDate, this.tableOption)
+        this.getSaleTableWrpper(this.selectedDate, this.tableOption)
         this.nxStore.dispatch(showToast({ text: '매출 조회 기간이 변경되었습니다.' }))
     }
 
@@ -218,7 +218,7 @@ export class SaleComponent implements OnInit, OnDestroy {
                     ? 'register'
                     : 'reFilter'
             } else if (dateList.length == 3) {
-                start = dayjs(new Date(dateList[0], dateList[1] - 1, dateList[2] - 1)).format('YYYY-MM-DD') // startDate // dateList[0] + '-' + dateList[1] + '-' + dateList[2]
+                start = dayjs(new Date(dateList[0], dateList[1] - 1, dateList[2])).format('YYYY-MM-DD') // startDate // dateList[0] + '-' + dateList[1] + '-' + dateList[2]
                 end = startDate // dateList[0] + '-' + dateList[1] + '-' + dateList[2]
                 this.showEmptyTableFlag = dayjs(`${dateList[0]}-${dateList[1]}-${dateList[2]}`).isSame(
                     dayjs().format('YYYY-MM-DD'),
@@ -228,8 +228,10 @@ export class SaleComponent implements OnInit, OnDestroy {
                     : 'reFilter'
             }
         } else {
-            const dateList = _.map(_.split(startDate, '.'), _.parseInt)
-            start = dayjs(new Date(dateList[0], dateList[1] - 1, dateList[2] - 1)).format('YYYY-MM-DD')
+            const _startDateList = _.map(_.split(startDate, '.'), _.parseInt)
+            start = dayjs(new Date(_startDateList[0], _startDateList[1] - 1, _startDateList[2])).format('YYYY-MM-DD')
+            const _endDateList = _.map(_.split(endDate, '.'), _.parseInt)
+            end = dayjs(new Date(_endDateList[0], _endDateList[1] - 1, _endDateList[2])).format('YYYY-MM-DD')
             const startDateList = _.split(startDate, '.')
             const endtDateList = _.split(endDate, '.')
             this.showEmptyTableFlag = dayjs(dayjs().format('YYYY-MM-DD')).isBetween(
@@ -242,6 +244,8 @@ export class SaleComponent implements OnInit, OnDestroy {
                 : 'reFilter'
         }
 
+        console.log('getSaleTable - start, end : ', start, end)
+
         this.callGetSaleTable(start, end, option)
     }
     callGetSaleTable(start: string, end: string, option?: getStatsSaleOption) {
@@ -249,6 +253,7 @@ export class SaleComponent implements OnInit, OnDestroy {
         //     this.saleData = saleTable.sales_data
         //     this.saleStatistics = saleTable.statistics
         // })
+        // this.nxStore.dispatch(SaleActions.startGetSaleData({centerId: this.center.id, }))
     }
 
     // date helper methods
