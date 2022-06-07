@@ -8,9 +8,6 @@ import { Subscription } from 'rxjs'
 import { Center } from '@schemas/center'
 import { StatsSales } from '@schemas/stats-sales'
 
-// import { GymSaleStateService, Inputs, TypeCheck, Filters, SelectedDate } from '@services/etc/gym-sale-state.service'
-// import { GymSaleService, getSaleByContentOption } from '@services/gym-sale.service'
-
 import { StorageService } from '@services/storage.service'
 import { getStatsSaleOption } from '@services/center-stats.service'
 
@@ -54,7 +51,7 @@ export class SaleComponent implements OnInit, OnDestroy {
     }>
 
     public center: Center
-    public tableOption
+    public tableOption: getStatsSaleOption
 
     public resizeUnlistener: () => void
     @ViewChild('sale') sale: ElementRef
@@ -64,7 +61,7 @@ export class SaleComponent implements OnInit, OnDestroy {
         this.filterTagList = []
         this.center = this.storageService.getCenter()
 
-        // this.isFilteredSubscription = this.selectFilter()
+        this.selectIsFiltered()
         this.nxStore
             .pipe(select(SaleSelector.selectedDate), takeUntil(this.unsubscriber$))
             .subscribe((selectedDate) => {
@@ -83,7 +80,7 @@ export class SaleComponent implements OnInit, OnDestroy {
         // this.isFilteredSubscription.unsubscribe()
         this.unsubscriber$.next()
         this.unsubscriber$.complete()
-        this.resizeUnlistener()
+        // this.resizeUnlistener()
     }
 
     ngAfterViewInit(): void {
@@ -148,6 +145,7 @@ export class SaleComponent implements OnInit, OnDestroy {
                 },
                 {}
             )
+            console.log('selectIsFiltered --- ', this.tableOption, ', ', this.filterTagList)
             // this.tableOption = _.keys(this.tableOption).length > 0 ? this.tableOption : undefined
             this.getSaleTableWrpper(this.selectedDate, this.tableOption)
         })
@@ -249,6 +247,9 @@ export class SaleComponent implements OnInit, OnDestroy {
         this.callGetSaleTable(start, end, option)
     }
     callGetSaleTable(start: string, end: string, option?: getStatsSaleOption) {
+        this.nxStore.dispatch(
+            SaleActions.startGetSaleData({ centerId: this.center.id, start_date: start, end_date: end })
+        )
         // this.gymSaleService.getSaleByContent(this.center.id, start, end, option).subscribe((saleTable) => {
         //     this.saleData = saleTable.sales_data
         //     this.saleStatistics = saleTable.statistics
@@ -285,19 +286,23 @@ export class SaleComponent implements OnInit, OnDestroy {
                 return '결제 담당자'
             case 'type':
                 return '구분'
+            case 'product':
+                return '상품'
         }
     }
 
     queryMatcher(filter: FromSale.Filters) {
         switch (filter) {
             case 'member':
-                return 'user_keyword'
+                return 'center_user_name'
             case 'membershipLocker':
-                return 'keyword'
+                return 'product_name'
             case 'personInCharge':
-                return 'assignee_name'
+                return 'responsibility_user_name'
             case 'type':
-                return 'category'
+                return 'type_code'
+            case 'product':
+                return 'product_type_code'
         }
     }
 }

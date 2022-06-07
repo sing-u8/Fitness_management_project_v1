@@ -57,7 +57,7 @@ export class SaleTableComponent implements OnInit, OnDestroy {
         this.isMembershipLockerOpen = false
         this.isPersonInChargeOpen = false
 
-        this.isFiltered = { member: false, type: false, membershipLocker: false, personInCharge: false }
+        this.isFiltered = { member: false, type: false, membershipLocker: false, personInCharge: false, product: false }
         this.typeChecks = {
             cur: { membership: true, locker: true },
             applied: { membership: true, locker: true },

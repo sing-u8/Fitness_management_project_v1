@@ -249,20 +249,20 @@
 
   <tbody
     *ngIf="!(isFiltered.member || isFiltered.type || isFiltered.membershipLocker || isFiltered.personInCharge)
-            && saleData?.length == 0 && showEmptyTableFlag == 'register'"
+            && saleData?.length == 0 "
     class="none-data-container"
   >
     <img src="assets/icons/etc/empty_screen.svg" >
-    <p class="rw-typo-subtext2-1">회원권 / 락커를 등록하신 후,</p>
-    <p class="rw-typo-subtext2-1">매출 정보를 입력하시면 매출 정보와 통계를</p>
-    <p class="rw-typo-subtext2-1">확인하실 수 있어요!</p>
+    <p class="rw-typo-subtext2">회원권 / 락커를 등록하신 후,</p>
+    <p class="rw-typo-subtext2">매출 정보를 입력하시면 매출 정보와 통계를</p>
+    <p class="rw-typo-subtext2">확인하실 수 있어요!</p>
     <div class="go-lesson-button" (click)="null">
       <p>회원권/ 락커 등록하기</p>
       <img src="assets/icons/etc/short_right_arrow_grey.svg">
     </div>
   </tbody>
 
-  <tbody
+  <!-- <tbody
     *ngIf="!(isFiltered.member || isFiltered.type || isFiltered.membershipLocker || isFiltered.personInCharge)
             && saleData?.length == 0 && showEmptyTableFlag == 'reFilter'"
     class="none-data-container"
@@ -270,7 +270,7 @@
     <img src="assets/icons/etc/empty_screen.svg" >
     <p class="rw-typo-subtext2-1">설정하신 기간에 발생한 매출이 없습니다.</p>
     <p class="rw-typo-subtext2-1">기간을 다시 설정해주세요.</p>
-  </tbody>
+  </tbody> -->
 
   <tbody
     *ngIf="(isFiltered.member || isFiltered.type || isFiltered.membershipLocker || isFiltered.personInCharge)
@@ -278,8 +278,8 @@
     class="none-data-container"
   >
     <img src="assets/icons/etc/empty_screen.svg" >
-    <p class="rw-typo-subtext2-1">검색하신 결과를 찾을 수 없습니다.</p>
-    <p class="rw-typo-subtext2-1">설정하신 필터와 기간을 다시 확인해주세요!</p>
+    <p class="rw-typo-subtext2">검색하신 결과를 찾을 수 없습니다.</p>
+    <p class="rw-typo-subtext2">설정하신 필터와 기간을 다시 확인해주세요!</p>
     <div class="go-lesson-button" (click)="resetAllTag()">
       <p>모든 필터 초기화하기</p>
       <img src="assets/icons/etc/short_right_arrow_grey.svg">
@@ -290,18 +290,37 @@
     <tr *ngFor="let item of saleData">
       <td></td>
       <td>{{item.date | dateFormat:'YY.MM.DD'}}</td>
+      <td>{{item.type_code_name}}</td>
       <td>
         <div class="member-container">
-          <!-- <p class="name">{{item.customer_name ? item.customer_name : item.customer_given_name}}</p> -->
           <p class="name">{{item.center_user_name}}</p>
           <p class="phone rw-typo-subtext0-regular">{{item.center_user_phone_number | phoneNumber}}</p>
         </div>
       </td>
       <td>{{item.product_type_code_name}}</td>
       <td>{{item.product_name}}</td>
-      <!-- <td>{{item?.assignee?.given_name ? item.assignee.given_name : item.assignee_name}}</td> -->
       <td>{{item.responsibility_user_name}}</td>
-      <td class="rw-typo-subtext0 price">￦ {{item | saleTotalPrice}}</td>
+      <td class="rw-typo-bodytext0-bold price">
+        {{item | saleTotalPrice}}원
+        <div class="l-price-detail">
+          <div class="price-detail">
+            <div class="price-detail-tag rw-typo-subtext3-darkgrey">현금</div>
+            <div class="price-detail-value rw-typo-subtext1">{{item.cash | numberWithCommas}}</div>
+          </div>
+          <div class="price-detail">
+            <div class="price-detail-tag rw-typo-subtext3-darkgrey">카드</div>
+            <div class="price-detail-value">{{item.card | numberWithCommas}}</div>
+          </div>
+          <div class="price-detail">
+            <div class="price-detail-tag rw-typo-subtext3-darkgrey">계좌</div>
+            <div class="price-detail-value rw-typo-subtext1">{{item.trans | numberWithCommas}}</div>
+          </div>
+          <div class="price-detail">
+            <div class="price-detail-tag rw-typo-subtext3-darkgrey">미수</div>
+            <div class="price-detail-value rw-typo-subtext1">{{item.unpaid | numberWithCommas}}</div>
+          </div>
+        </div>
+      </td>
       <td></td>
     </tr>
   </tbody>

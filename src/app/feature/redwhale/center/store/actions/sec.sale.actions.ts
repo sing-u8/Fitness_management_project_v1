@@ -12,7 +12,7 @@ const FeatureKey = 'Center/Sale'
 // - // async
 export const startGetSaleData = createAction(
     `[${FeatureKey}] Start Get Sale Data`,
-    props<{ centerId: string; date: string; option?: getStatsSaleOption }>()
+    props<{ centerId: string; start_date: string; end_date: string; option?: getStatsSaleOption }>()
 )
 export const finishGetSaleData = createAction(
     `[${FeatureKey}] Finish Get Sale Data`,

@@ -26,8 +26,13 @@ export class CenterStatsService {
      * @param option
      * @returns
      */
-    getStatsSales(centerId: string, date: string, option?: getStatsSaleOption): Observable<Array<StatsSales>> {
-        let url = this.SERVER + `/${centerId}/stats/sales` + `?date=${date}`
+    getStatsSales(
+        centerId: string,
+        start_date: string,
+        end_date: string,
+        option?: getStatsSaleOption
+    ): Observable<Array<StatsSales>> {
+        let url = this.SERVER + `/${centerId}/stats/sales` + `?start_date=${start_date}&end_date=${end_date}`
 
         if (!_.isEmpty(option) && _.keys(option).length > 0) {
             _.forIn(option, (v, k) => {

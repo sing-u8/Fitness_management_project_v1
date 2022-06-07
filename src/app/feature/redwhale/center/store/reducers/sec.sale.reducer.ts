@@ -10,8 +10,8 @@ import { StatsSales } from '@schemas/stats-sales'
 
 import * as SaleActions from '../actions/sec.sale.actions'
 
-export type Filters = 'member' | 'membershipLocker' | 'personInCharge' | 'type'
-const isFilteredInit = { member: false, membershipLocker: false, personInCharge: false, type: false }
+export type Filters = 'member' | 'membershipLocker' | 'personInCharge' | 'type' | 'product'
+const isFilteredInit = { member: false, membershipLocker: false, personInCharge: false, type: false, product: false }
 export type IsFiltered = Record<Filters, boolean>
 
 export type TypeCheckString = 'membership' | 'locker'
