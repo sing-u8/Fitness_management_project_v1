@@ -63,7 +63,6 @@ export class SaleComponent implements OnInit, OnDestroy {
         this.filterTagList = []
         this.center = this.storageService.getCenter()
 
-        this.selectIsFiltered()
         this.nxStore
             .pipe(select(SaleSelector.selectedDate), takeUntil(this.unsubscriber$))
             .subscribe((selectedDate) => {
@@ -80,6 +79,7 @@ export class SaleComponent implements OnInit, OnDestroy {
         this.nxStore.pipe(select(SaleSelector.inputs), takeUntil(this.unsubscriber$)).subscribe((inputs) => {
             this.inputs = _.cloneDeep(inputs)
         })
+        this.selectIsFiltered()
     }
 
     ngOnInit(): void {}
