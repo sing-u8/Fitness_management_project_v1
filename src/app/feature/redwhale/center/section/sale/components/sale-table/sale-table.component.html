@@ -1,15 +1,15 @@
-<table class="sale-table">
+<table class="sale-table" #sale_table>
 
   <thead>
     <tr class="rw-typo-bodytext0 title">
-      <th></th>
+      <!-- <th></th> -->
       <th>날짜</th>
 
       <th>
         <div>
           구분
           <img *ngIf="!(showEmptyTableFlag == 'register' && saleData?.length == 0
-                          && !(isFiltered.member || isFiltered.membershipLocker || isFiltered.personInCharge || isFiltered.type && !isFiltered.member))
+                          && !(isFiltered.member || isFiltered.membershipLocker || isFiltered.personInCharge || isFiltered.type || isFiltered.product  && !isFiltered.member))
                           && !isTypeOpen && !isFiltered.type" (click)="toggleType($event); restoreTypeCheckToApplied()"
             src="assets/icons/etc/filter_white.svg">
           <img *ngIf="!(showEmptyTableFlag == 'register' && saleData?.length == 0) && isTypeOpen || isFiltered.type"
@@ -18,17 +18,22 @@
           <div *ngIf="isTypeOpen" (rwClickOutside)="closeType(); restoreTypeCheckToApplied()" class="type-dropdown">
             <div class="rw-typo-bodytext2-bold title">구분</div>
             <div class="checkbox-container">
-              <rw-checkbox text="회원권" [checked]="typeChecks.cur.membership" (click)="toggleTypeCheckBox('membership')">
-              </rw-checkbox>
-              <rw-checkbox text="락커" [checked]="typeChecks.cur.locker" (click)="toggleTypeCheckBox('locker')"></rw-checkbox>
+              <rw-checkbox text="결제" [checked]="typeChecks.cur.payment" (click)="toggleTypeCheckBox('payment')"></rw-checkbox>
+              <rw-checkbox text="환불" [checked]="typeChecks.cur.refund" (click)="toggleTypeCheckBox('refund')"></rw-checkbox>
+              <rw-checkbox text="양도" [checked]="typeChecks.cur.transfer" (click)="toggleTypeCheckBox('transfer')"></rw-checkbox>
             </div>
             <div class="button-container">
               <div class="rw-typo-bodytext2 reset" rw-button rwButtonColor="var(--white)" rwButtonFontColor="var(--grey)"
                 (click)="resetTypeChecBox()">
                 초기화
               </div>
-              <div class="rw-typo-bodytext2 search" rw-button rwButtonColor="var(--red)" rwButtonFontColor="var(--white)"
-                [rwButtonDisabled]="!typeChecks.cur.membership && !typeChecks.cur.locker" (click)="applyTypeCheckBox()">
+              <div
+                class="rw-typo-bodytext2 search"
+                rw-button rwButtonColor="var(--red)"
+                rwButtonFontColor="var(--white)"
+                [rwButtonDisabled]="!typeChecks.cur.payment && !typeChecks.cur.refund&& !typeChecks.cur.transfer"
+                (click)="applyTypeCheckBox()"
+              >
                 적용하기
               </div>
             </div>
@@ -97,26 +102,25 @@
         <div>
           상품
           <img *ngIf="!(showEmptyTableFlag == 'register' && saleData?.length == 0
-                                && !(isFiltered.member || isFiltered.membershipLocker || isFiltered.personInCharge || isFiltered.type && !isFiltered.member))
-                                && !isTypeOpen && !isFiltered.type" (click)="toggleType($event); restoreTypeCheckToApplied()"
+                                && !(isFiltered.member || isFiltered.membershipLocker || isFiltered.personInCharge || isFiltered.type || isFiltered.product && !isFiltered.member))
+                                && !isProductOpen && !isFiltered.product" (click)="toggleProduct($event); restoreProductCheckToApplied()"
             src="assets/icons/etc/filter_white.svg">
-          <img *ngIf="!(showEmptyTableFlag == 'register' && saleData?.length == 0) && isTypeOpen || isFiltered.type"
-            (click)="toggleType($event); restoreTypeCheckToApplied()" src="assets/icons/etc/filter_fill_white.svg">
+          <img *ngIf="!(showEmptyTableFlag == 'register' && saleData?.length == 0) && isProductOpen || isFiltered.product"
+            (click)="toggleProduct($event); restoreProductCheckToApplied()" src="assets/icons/etc/filter_fill_white.svg">
 
-          <div *ngIf="isTypeOpen" (rwClickOutside)="closeType(); restoreTypeCheckToApplied()" class="type-dropdown">
+          <div *ngIf="isProductOpen" (rwClickOutside)="closeProduct(); restoreProductCheckToApplied()" class="type-dropdown">
             <div class="rw-typo-bodytext2-bold title">상품</div>
             <div class="checkbox-container">
-              <rw-checkbox text="회원권" [checked]="typeChecks.cur.membership" (click)="toggleTypeCheckBox('membership')">
-              </rw-checkbox>
-              <rw-checkbox text="락커" [checked]="typeChecks.cur.locker" (click)="toggleTypeCheckBox('locker')"></rw-checkbox>
+              <rw-checkbox text="회원권" [checked]="productChecks.cur.membership" (click)="toggleProductCheckBox('membership')"></rw-checkbox>
+              <rw-checkbox text="락커" [checked]="productChecks.cur.locker" (click)="toggleProductCheckBox('locker')"></rw-checkbox>
             </div>
             <div class="button-container">
               <div class="rw-typo-bodytext2 reset" rw-button rwButtonColor="var(--white)" rwButtonFontColor="var(--grey)"
-                (click)="resetTypeChecBox()">
+                (click)="resetProductChecBox()">
                 초기화
               </div>
               <div class="rw-typo-bodytext2 search" rw-button rwButtonColor="var(--red)" rwButtonFontColor="var(--white)"
-                [rwButtonDisabled]="!typeChecks.cur.membership && !typeChecks.cur.locker" (click)="applyTypeCheckBox()">
+                [rwButtonDisabled]="!productChecks.cur.membership && !productChecks.cur.locker" (click)="applyProductCheckBox()">
                 적용하기
               </div>
             </div>
@@ -125,12 +129,12 @@
         </div>
       </th>
 
-      <th>
+      <th  [style.maxWidth.px]="productNameWidth">
         <div>
           회원권/락커명
           <img
             *ngIf="!(showEmptyTableFlag == 'register' && saleData?.length == 0
-                    && !(isFiltered.member || isFiltered.membershipLocker || isFiltered.personInCharge || isFiltered.type && !isFiltered.member))
+                    && !(isFiltered.member || isFiltered.membershipLocker || isFiltered.personInCharge || isFiltered.type || isFiltered.product && !isFiltered.member))
                     && !isMembershipLockerOpen && !isFiltered.membershipLocker"
             (click)="toggleMembershipLocker($event); restoreInputToApplied('membershipLocker')"
             src="assets/icons/etc/filter_white.svg"
@@ -188,7 +192,7 @@
           결제 담당자
           <img
             *ngIf="!(showEmptyTableFlag == 'register' && saleData?.length == 0
-                    && !(isFiltered.member || isFiltered.membershipLocker || isFiltered.personInCharge || isFiltered.type && !isFiltered.member))
+                    && !(isFiltered.member || isFiltered.membershipLocker || isFiltered.personInCharge || isFiltered.type || isFiltered.product && !isFiltered.member))
                     && !isPersonInChargeOpen && !isFiltered.personInCharge"
             (click)="togglePersonInCharge($event); restoreInputToApplied('personInCharge')"
             src="assets/icons/etc/filter_white.svg"
@@ -241,14 +245,14 @@
       </th>
 
       <th>결제 금액</th>
-      <th></th>
+      <!-- <th></th> -->
     </tr>
   </thead>
 
 
 
   <tbody
-    *ngIf="!(isFiltered.member || isFiltered.type || isFiltered.membershipLocker || isFiltered.personInCharge)
+    *ngIf="!(isFiltered.member || isFiltered.type || isFiltered.membershipLocker || isFiltered.personInCharge || isFiltered.product)
             && saleData?.length == 0 "
     class="none-data-container"
   >
@@ -273,7 +277,7 @@
   </tbody> -->
 
   <tbody
-    *ngIf="(isFiltered.member || isFiltered.type || isFiltered.membershipLocker || isFiltered.personInCharge)
+    *ngIf="(isFiltered.member || isFiltered.type || isFiltered.membershipLocker || isFiltered.personInCharge || isFiltered.product)
             && saleData?.length == 0"
     class="none-data-container"
   >
@@ -288,7 +292,7 @@
 
   <tbody *ngIf="saleData?.length > 0 "  class="data-container rw-typo-bodytext1 table-scroll-y">
     <tr *ngFor="let item of saleData">
-      <td></td>
+      <!-- <td></td> -->
       <td>{{item.date | dateFormat:'YY.MM.DD'}}</td>
       <td>{{item.type_code_name}}</td>
       <td>
@@ -298,7 +302,11 @@
         </div>
       </td>
       <td>{{item.product_type_code_name}}</td>
-      <td>{{item.product_name}}</td>
+      <td [style.maxWidth.px]="productNameWidth">
+        <span class="product-name line-ellipsis">
+          {{item.product_name}}
+        </span>
+      </td>
       <td>{{item.responsibility_user_name}}</td>
       <td class="rw-typo-bodytext0-bold price">
         {{item | saleTotalPrice}}원
@@ -309,7 +317,7 @@
           </div>
           <div class="price-detail">
             <div class="price-detail-tag rw-typo-subtext3-darkgrey">카드</div>
-            <div class="price-detail-value">{{item.card | numberWithCommas}}</div>
+            <div class="price-detail-value rw-typo-subtext1">{{item.card | numberWithCommas}}</div>
           </div>
           <div class="price-detail">
             <div class="price-detail-tag rw-typo-subtext3-darkgrey">계좌</div>
@@ -321,17 +329,18 @@
           </div>
         </div>
       </td>
-      <td></td>
+      <!-- <td></td> -->
     </tr>
   </tbody>
 
   <tfoot *ngIf="saleData?.length > 0 " >
     <div class="foot">
-      <div class="rw-typo-bodytext0 cash-title">매출 총 합계</div>
+      <div class="rw-typo-bodytext0-bold cash-title">매출 총 합계</div>
       <div class="cash-container">
-        <div class="rw-typo-title1 total">￦ {{saleStatistics?.total | numberWithCommas}}</div>
+        <div class="rw-typo-title1 total">{{saleStatistics?.total | numberWithCommas}}원</div>
 
-        <ng-container *ngIf="saleStatistics?.cash && saleStatistics?.card && saleStatistics?.trans && saleStatistics?.unpaid">
+        <!-- *ngIf="saleStatistics?.cash && saleStatistics?.card && saleStatistics?.trans && saleStatistics?.unpaid" -->
+        <div class="statistic-detail" >
           <div class="rw-typo-subtext0-regular cash">
             <div class="type-icon">현금</div>
             {{saleStatistics?.cash| numberWithCommas}}
@@ -348,7 +357,7 @@
             <div class="type-icon">미수</div>
             {{saleStatistics?.unpaid| numberWithCommas}}
           </div>
-        </ng-container>
+        </div>
 
 
       </div>

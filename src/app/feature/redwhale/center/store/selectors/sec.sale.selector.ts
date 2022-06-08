@@ -11,6 +11,8 @@ export const GymSaleFeature = createSelector(GymFeature, (state: GymState) => st
 
 export const isFiltered = createSelector(GymSaleFeature, FromSale.selectIsFiltered)
 export const typeCheck = createSelector(GymSaleFeature, FromSale.selectTypeCheck)
+export const productCheck = createSelector(GymSaleFeature, FromSale.selectProductCheck)
 export const inputs = createSelector(GymSaleFeature, FromSale.selectInputs)
 export const selectedDate = createSelector(GymSaleFeature, FromSale.selectSelectedDate)
 export const saleData = createSelector(GymSaleFeature, FromSale.selectSaleData)
+export const saleStatistics = createSelector(GymSaleFeature, FromSale.selectSaleStatistics)

@@ -31,11 +31,13 @@ import * as SaleActions from '@centerStore/actions/sec.sale.actions'
 export class SaleComponent implements OnInit, OnDestroy {
     // ngrx vars
     public saleData$ = this.nxStore.select(SaleSelector.saleData)
+    public saleStatistics$ = this.nxStore.select(SaleSelector.saleStatistics)
     // ngrx copy vars
     public unsubscriber$ = new Subject<void>()
     public selectedDate: FromSale.SelectedDate
     public isFiltered: FromSale.IsFiltered
     public typeCheck: FromSale.TypeCheck
+    public productCheck: FromSale.ProductCheck
     public inputs: FromSale.Inputs
     //
 
@@ -70,6 +72,11 @@ export class SaleComponent implements OnInit, OnDestroy {
         this.nxStore.pipe(select(SaleSelector.typeCheck), takeUntil(this.unsubscriber$)).subscribe((typeCheck) => {
             this.typeCheck = _.cloneDeep(typeCheck)
         })
+        this.nxStore
+            .pipe(select(SaleSelector.productCheck), takeUntil(this.unsubscriber$))
+            .subscribe((productCheck) => {
+                this.productCheck = _.cloneDeep(productCheck)
+            })
         this.nxStore.pipe(select(SaleSelector.inputs), takeUntil(this.unsubscriber$)).subscribe((inputs) => {
             this.inputs = _.cloneDeep(inputs)
         })
@@ -102,6 +109,7 @@ export class SaleComponent implements OnInit, OnDestroy {
     // sale isFiltered vars and func
     selectIsFiltered() {
         this.nxStore.pipe(select(SaleSelector.isFiltered), takeUntil(this.unsubscriber$)).subscribe((_isFiltered) => {
+            console.log('select is filtered : ', _isFiltered)
             // make filter tag list
             _.forEach(_.keys(_isFiltered), (filterType) => {
                 if (filterType == 'type') {
@@ -113,6 +121,20 @@ export class SaleComponent implements OnInit, OnDestroy {
                         index == -1
                             ? this.filterTagList.push(this.makeTypeTagObj())
                             : (this.filterTagList[index] = this.makeTypeTagObj())
+                    } else {
+                        // when type flag = false
+                        _.remove(this.filterTagList, (item) => item.type === this.filterMatcher(filterType))
+                    }
+                } else if (filterType == 'product') {
+                    if (_isFiltered[filterType] == true) {
+                        // when type flag = true
+                        const index = _.findIndex(this.filterTagList, {
+                            type: this.filterMatcher(filterType),
+                        })
+                        console.log('product index :: ', index, this.filterTagList)
+                        index == -1
+                            ? this.filterTagList.push(this.makeProductTagObj())
+                            : (this.filterTagList[index] = this.makeProductTagObj())
                     } else {
                         // when type flag = false
                         _.remove(this.filterTagList, (item) => item.type === this.filterMatcher(filterType))
@@ -135,20 +157,40 @@ export class SaleComponent implements OnInit, OnDestroy {
                 }
             })
 
-            this.tableOption = _.reduce(
-                this.filterTagList,
-                (obj, item) => {
-                    return {
-                        ...obj,
-                        [item.queryCateg]: item.query,
-                    }
-                },
-                {}
-            )
+            console.log('table option -- ', this.filterTagList)
+            this.makeTableOption()
             console.log('selectIsFiltered --- ', this.tableOption, ', ', this.filterTagList)
             // this.tableOption = _.keys(this.tableOption).length > 0 ? this.tableOption : undefined
             this.getSaleTableWrpper(this.selectedDate, this.tableOption)
         })
+    }
+
+    // filter option method
+    makeTableOption() {
+        this.tableOption = _.reduce(
+            this.filterTagList,
+            (obj, item) => {
+                if (item.queryCateg == 'product_type_code') {
+                    const props = _.map(_.split(item.query, '|'), (v) => 'user_' + v)
+                    return {
+                        ...obj,
+                        [item.queryCateg]: props,
+                    }
+                } else if (item.queryCateg == 'type_code') {
+                    const props = _.map(_.split(item.query, '|'), (v) => 'payment_type_' + v)
+                    return {
+                        ...obj,
+                        [item.queryCateg]: props,
+                    }
+                } else {
+                    return {
+                        ...obj,
+                        [item.queryCateg]: item.query,
+                    }
+                }
+            },
+            {}
+        )
     }
 
     // filter tag method
@@ -178,6 +220,37 @@ export class SaleComponent implements OnInit, OnDestroy {
                     SaleActions.setIsFiltered({
                         newState: {
                             type: false,
+                        },
+                    })
+                )
+            },
+        }
+    }
+    makeProductTagObj() {
+        const type = this.filterMatcher('product')
+        const category = this.queryMatcher('product')
+        let value = ''
+        let query = ''
+
+        _.forEach(_.keys(this.productCheck), (key) => {
+            if (this.productCheck[key]) {
+                value = value + this.productMatcher(key as FromSale.ProductCheckString) + ', '
+                query = query + key + '|' // %7C
+            }
+        })
+        value = _.trimEnd(value, ', ')
+        query = _.trimEnd(query, '|')
+        return {
+            query: query,
+            queryCateg: category,
+            type: type,
+            value: value,
+            cancelFn: () => {
+                this.nxStore.dispatch(SaleActions.resetProductCheck())
+                this.nxStore.dispatch(
+                    SaleActions.setIsFiltered({
+                        newState: {
+                            product: false,
                         },
                     })
                 )
@@ -216,8 +289,8 @@ export class SaleComponent implements OnInit, OnDestroy {
                     ? 'register'
                     : 'reFilter'
             } else if (dateList.length == 3) {
-                start = dayjs(new Date(dateList[0], dateList[1] - 1, dateList[2])).format('YYYY-MM-DD') // startDate // dateList[0] + '-' + dateList[1] + '-' + dateList[2]
-                end = startDate // dateList[0] + '-' + dateList[1] + '-' + dateList[2]
+                start = dayjs(new Date(dateList[0], dateList[1] - 1, dateList[2])).format('YYYY-MM-DD')
+                end = dayjs(new Date(dateList[0], dateList[1] - 1, dateList[2])).format('YYYY-MM-DD')
                 this.showEmptyTableFlag = dayjs(`${dateList[0]}-${dateList[1]}-${dateList[2]}`).isSame(
                     dayjs().format('YYYY-MM-DD'),
                     'day'
@@ -247,14 +320,10 @@ export class SaleComponent implements OnInit, OnDestroy {
         this.callGetSaleTable(start, end, option)
     }
     callGetSaleTable(start: string, end: string, option?: getStatsSaleOption) {
+        console.log('callGetSaleTable -- options : ', option)
         this.nxStore.dispatch(
-            SaleActions.startGetSaleData({ centerId: this.center.id, start_date: start, end_date: end })
+            SaleActions.startGetSaleData({ centerId: this.center.id, start_date: start, end_date: end, option: option })
         )
-        // this.gymSaleService.getSaleByContent(this.center.id, start, end, option).subscribe((saleTable) => {
-        //     this.saleData = saleTable.sales_data
-        //     this.saleStatistics = saleTable.statistics
-        // })
-        // this.nxStore.dispatch(SaleActions.startGetSaleData({centerId: this.center.id, }))
     }
 
     // date helper methods
@@ -269,10 +338,21 @@ export class SaleComponent implements OnInit, OnDestroy {
     // helpers
     typeMatcher(type: FromSale.TypeCheckString) {
         switch (type) {
-            case 'membership':
-                return '회원권'
+            case 'payment':
+                return '결제'
+            case 'refund':
+                return '환불'
+            case 'transfer':
+                return '양도'
+        }
+    }
+
+    productMatcher(type: FromSale.ProductCheckString) {
+        switch (type) {
             case 'locker':
                 return '락커'
+            case 'membership':
+                return '회원권'
         }
     }
 

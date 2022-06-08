@@ -14,13 +14,26 @@ export type Filters = 'member' | 'membershipLocker' | 'personInCharge' | 'type' 
 const isFilteredInit = { member: false, membershipLocker: false, personInCharge: false, type: false, product: false }
 export type IsFiltered = Record<Filters, boolean>
 
-export type TypeCheckString = 'membership' | 'locker'
+export type TypeCheckString = 'payment' | 'refund' | 'transfer'
 export type TypeCheck = Record<TypeCheckString, boolean>
-const typeCheckInit = { membership: true, locker: true }
+const typeCheckInit = { payment: true, refund: true, transfer: true }
+
+export type ProductCheckString = 'membership' | 'locker'
+export type ProductCheck = Record<ProductCheckString, boolean>
+const ProductCheckInit = { membership: true, locker: true }
 
 export type InputString = 'member' | 'membershipLocker' | 'personInCharge'
 export type Inputs = Record<InputString, string>
 const inputsInit = { member: '', membershipLocker: '', personInCharge: '' }
+
+export type SaleStatistics = { total: number; cash: number; card: number; trans: number; unpaid: number }
+export const SaleStatisticsInit = {
+    total: 0,
+    cash: 0,
+    card: 0,
+    trans: 0,
+    unpaid: 0,
+}
 
 export type SelectedDate = string | [string, string]
 export type DateType = string
@@ -38,6 +51,7 @@ export interface State {
     saleData: Array<StatsSales>
     isFiltered: IsFiltered
     typeCheck: TypeCheck
+    productCheck: ProductCheck
     inputs: Inputs
     selectedDate: SelectedDate
 }
@@ -52,6 +66,7 @@ export const initialState: State = {
     saleData: [],
     isFiltered: isFilteredInit,
     typeCheck: typeCheckInit,
+    productCheck: ProductCheckInit,
     inputs: inputsInit,
     selectedDate: dayjs().format('YYYY.MM'),
 }
@@ -80,6 +95,14 @@ export const saleReducer = createImmerReducer(
     }),
     on(SaleActions.resetTypeCheck, (state) => {
         state.typeCheck = typeCheckInit
+        return state
+    }),
+    on(SaleActions.setProductCheck, (state, { newState }) => {
+        state.productCheck = { ...state.productCheck, ...newState }
+        return state
+    }),
+    on(SaleActions.resetProductCheck, (state) => {
+        state.productCheck = ProductCheckInit
         return state
     }),
     on(SaleActions.setInputs, (state, { newState }) => {
@@ -122,6 +145,21 @@ export const selectIsLoading = (state: State) => state.isLoading
 // main
 export const selectIsFiltered = (state: State) => state.isFiltered
 export const selectTypeCheck = (state: State) => state.typeCheck
+export const selectProductCheck = (state: State) => state.productCheck
 export const selectInputs = (state: State) => state.inputs
 export const selectSelectedDate = (state: State) => state.selectedDate
 export const selectSaleData = (state: State) => state.saleData
+export const selectSaleStatistics = (state: State) => {
+    return _.reduce(
+        state.saleData,
+        (acc, cur) => {
+            acc.card += cur.card
+            acc.cash += cur.cash
+            acc.trans += cur.trans
+            acc.unpaid += cur.unpaid
+            acc.total += cur.card + cur.cash + cur.trans + cur.unpaid
+            return acc
+        },
+        _.cloneDeep(SaleStatisticsInit)
+    )
+}

@@ -28,7 +28,12 @@ export const setTypeCheck = createAction(
     `[${FeatureKey}] Set TypeCheck state`,
     props<{ newState: Partial<FromSaleReducer.TypeCheck> }>()
 )
-export const resetTypeCheck = createAction(`[${FeatureKey}] reset TypeCheck state`)
+export const resetTypeCheck = createAction(`[${FeatureKey}] reset ProductCheck state`)
+export const setProductCheck = createAction(
+    `[${FeatureKey}] Set ProductCheck state`,
+    props<{ newState: Partial<FromSaleReducer.ProductCheck> }>()
+)
+export const resetProductCheck = createAction(`[${FeatureKey}] reset ProductCheck state`)
 export const setInputs = createAction(
     `[${FeatureKey}] Set Inputs`,
     props<{ newState: Partial<FromSaleReducer.Inputs> }>()

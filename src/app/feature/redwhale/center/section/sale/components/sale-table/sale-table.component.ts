@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnDestroy } from '@angular/core'
+import { Component, Input, OnInit, OnDestroy, Renderer2, ViewChild, ElementRef, AfterViewInit } from '@angular/core'
 import { Subscription } from 'rxjs'
 import _ from 'lodash'
 
@@ -22,16 +22,14 @@ import * as SaleActions from '@centerStore/actions/sec.sale.actions'
     templateUrl: './sale-table.component.html',
     styleUrls: ['./sale-table.component.scss'],
 })
-export class SaleTableComponent implements OnInit, OnDestroy {
+export class SaleTableComponent implements OnInit, OnDestroy, AfterViewInit {
     @Input() saleData: Array<StatsSales>
-    @Input() saleStatistics: { total: number; cash: number; card: number; trans: number; unpaid: number } = {
-        total: 0,
-        cash: 0,
-        card: 0,
-        trans: 0,
-        unpaid: 0,
-    }
+    @Input() saleStatistics: FromSale.SaleStatistics = _.cloneDeep(FromSale.SaleStatisticsInit)
     @Input() showEmptyTableFlag: string
+
+    @ViewChild('sale_table') sale_table_el: ElementRef
+    public productNameWidth = 0
+    public resizeUnlistener: () => void
 
     public unsubscriber$ = new Subject<void>()
 
@@ -39,11 +37,16 @@ export class SaleTableComponent implements OnInit, OnDestroy {
     public isTypeOpen: boolean
     public isMembershipLockerOpen: boolean
     public isPersonInChargeOpen: boolean
+    public isProductOpen: boolean
 
     public isFiltered: Record<FromSale.Filters, boolean>
     public typeChecks: {
         cur: FromSale.TypeCheck
         applied: FromSale.TypeCheck
+    }
+    public productChecks: {
+        cur: FromSale.ProductCheck
+        applied: FromSale.ProductCheck
     }
     public inputs: {
         member: { cur: string; applied: string }
@@ -51,16 +54,21 @@ export class SaleTableComponent implements OnInit, OnDestroy {
         personInCharge: { cur: string; applied: string }
     }
 
-    constructor(private nxStore: Store) {
+    constructor(private nxStore: Store, private renderer: Renderer2) {
         this.isMemberOpen = false
         this.isTypeOpen = false
         this.isMembershipLockerOpen = false
         this.isPersonInChargeOpen = false
+        this.isProductOpen = false
 
         this.isFiltered = { member: false, type: false, membershipLocker: false, personInCharge: false, product: false }
         this.typeChecks = {
-            cur: { membership: true, locker: true },
-            applied: { membership: true, locker: true },
+            cur: { payment: true, refund: true, transfer: true },
+            applied: { payment: true, refund: true, transfer: true },
+        }
+        this.productChecks = {
+            cur: { locker: true, membership: true },
+            applied: { locker: true, membership: true },
         }
         this.inputs = {
             member: { cur: '', applied: '' },
@@ -70,16 +78,19 @@ export class SaleTableComponent implements OnInit, OnDestroy {
 
         this.nxStore.pipe(select(SaleSelector.isFiltered), takeUntil(this.unsubscriber$)).subscribe((_isFiltered) => {
             this.isFiltered = { ..._isFiltered }
-            // console.log('_isFiltered select: ', _isFiltered, this.isFiltered)
         })
 
         this.nxStore.pipe(select(SaleSelector.typeCheck), takeUntil(this.unsubscriber$)).subscribe((_typeCheck) => {
-            // console.log('_typeCheck select: ', _typeCheck)
             this.typeChecks.cur = _.cloneDeep(_typeCheck)
             this.typeChecks.applied = _.cloneDeep(_typeCheck)
         })
+        this.nxStore
+            .pipe(select(SaleSelector.productCheck), takeUntil(this.unsubscriber$))
+            .subscribe((_productCheck) => {
+                this.productChecks.cur = _.cloneDeep(_productCheck)
+                this.productChecks.applied = _.cloneDeep(_productCheck)
+            })
         this.nxStore.pipe(select(SaleSelector.inputs), takeUntil(this.unsubscriber$)).subscribe((_inputs) => {
-            console.log('_inputs select: ', _inputs)
             _.forEach(_.keys(_inputs), (v) => {
                 this.inputs[v].cur = _inputs[v]
                 this.inputs[v].applied = _inputs[v]
@@ -87,13 +98,19 @@ export class SaleTableComponent implements OnInit, OnDestroy {
         })
     }
 
-    ngOnInit(): void {
-        // this.data = dummyData
+    ngOnInit(): void {}
+
+    ngAfterViewInit(): void {
+        this.productNameWidth = this.sale_table_el.nativeElement.offsetWidth * 0.1335
+        this.resizeUnlistener = this.renderer.listen('window', 'resize', (event) => {
+            this.productNameWidth = this.sale_table_el.nativeElement.offsetWidth * 0.1335
+        })
     }
 
     ngOnDestroy(): void {
         this.unsubscriber$.next()
         this.unsubscriber$.complete()
+        this.resizeUnlistener()
     }
 
     toggleMember(e) {
@@ -102,6 +119,7 @@ export class SaleTableComponent implements OnInit, OnDestroy {
         this.closeMembershipLocker()
         this.closePersonInCharge()
         this.closeType()
+        this.closeProduct()
         e.stopPropagation()
     }
     toggleType(e) {
@@ -110,6 +128,7 @@ export class SaleTableComponent implements OnInit, OnDestroy {
         this.closeMember()
         this.closeMembershipLocker()
         this.closePersonInCharge()
+        this.closeProduct()
         e.stopPropagation()
     }
     toggleMembershipLocker(e) {
@@ -118,10 +137,20 @@ export class SaleTableComponent implements OnInit, OnDestroy {
         this.closePersonInCharge()
         this.closeType()
         this.closeMember()
+        this.closeProduct()
         e.stopPropagation()
     }
     togglePersonInCharge(e) {
         this.isPersonInChargeOpen = !this.isPersonInChargeOpen
+
+        this.closeMembershipLocker()
+        this.closeType()
+        this.closeMember()
+        this.closePersonInCharge()
+        e.stopPropagation()
+    }
+    toggleProduct(e) {
+        this.isProductOpen = !this.isProductOpen
 
         this.closeMembershipLocker()
         this.closeType()
@@ -141,13 +170,16 @@ export class SaleTableComponent implements OnInit, OnDestroy {
     closePersonInCharge() {
         this.isPersonInChargeOpen = false
     }
+    closeProduct() {
+        this.isProductOpen = false
+    }
 
     // typecheck box method
     toggleTypeCheckBox(type: FromSale.TypeCheckString) {
         this.typeChecks.cur[type] = !this.typeChecks.cur[type]
     }
     applyTypeCheckBox() {
-        if (!this.typeChecks.cur.membership && !this.typeChecks.cur.locker) return
+        if (!this.typeChecks.cur.payment && !this.typeChecks.cur.refund && !this.typeChecks.cur.transfer) return
 
         this.nxStore.dispatch(SaleActions.setTypeCheck({ newState: this.typeChecks.cur }))
         this.checkTypeChecBoxFiltered()
@@ -159,7 +191,7 @@ export class SaleTableComponent implements OnInit, OnDestroy {
         })
     }
     resetTypeChecBox() {
-        this.nxStore.dispatch(SaleActions.setTypeCheck({ newState: { membership: true, locker: true } }))
+        this.nxStore.dispatch(SaleActions.setTypeCheck({ newState: { payment: true, refund: true, transfer: true } }))
         this.nxStore.dispatch(
             SaleActions.setIsFiltered({
                 newState: {
@@ -169,7 +201,6 @@ export class SaleTableComponent implements OnInit, OnDestroy {
         )
     }
     checkTypeChecBoxFiltered() {
-        console.log('checkTypeChecBoxFiltered: this.typeChecks.applied - ', this.typeChecks.applied)
         this.isFiltered.type = _.some(this.typeChecks.applied, (v) => v == false) ? true : false
         this.nxStore.dispatch(
             SaleActions.setIsFiltered({
@@ -180,10 +211,45 @@ export class SaleTableComponent implements OnInit, OnDestroy {
         )
     }
 
+    // productcheck box method
+    toggleProductCheckBox(type: FromSale.ProductCheckString) {
+        this.productChecks.cur[type] = !this.productChecks.cur[type]
+    }
+    applyProductCheckBox() {
+        if (!this.productChecks.cur.membership && !this.productChecks.cur.locker) return
+
+        this.nxStore.dispatch(SaleActions.setProductCheck({ newState: this.productChecks.cur }))
+        this.checkProductChecBoxFiltered()
+        this.closeProduct()
+    }
+    restoreProductCheckToApplied() {
+        _.forEach(_.keys(this.productChecks.cur), (v) => {
+            this.productChecks.cur[v] = this.productChecks.applied[v]
+        })
+    }
+    resetProductChecBox() {
+        this.nxStore.dispatch(SaleActions.setProductCheck({ newState: { membership: true, locker: true } }))
+        this.nxStore.dispatch(
+            SaleActions.setIsFiltered({
+                newState: {
+                    product: false,
+                },
+            })
+        )
+    }
+    checkProductChecBoxFiltered() {
+        this.isFiltered.product = _.some(this.productChecks.applied, (v) => v == false) ? true : false
+        this.nxStore.dispatch(
+            SaleActions.setIsFiltered({
+                newState: {
+                    product: this.isFiltered.product,
+                },
+            })
+        )
+    }
+
     // inputs method
     applyInput(type: FromSale.InputString) {
-        console.log('cur  applied  state: ', this.inputs[type].cur, this.inputs[type].applied)
-
         this.inputs[type].cur = _.trim(this.inputs[type].cur)
         this.inputs[type].applied != this.inputs[type].cur
             ? this.nxStore.dispatch(SaleActions.setInputs({ newState: { [type]: this.inputs[type].cur } }))
@@ -205,7 +271,6 @@ export class SaleTableComponent implements OnInit, OnDestroy {
         )
     }
     checkInputFiltered(type: FromSale.InputString) {
-        console.log('checkInputFiltered: ', this.inputs[type].applied)
         this.nxStore.dispatch(
             SaleActions.setIsFiltered({
                 newState: {
@@ -216,7 +281,8 @@ export class SaleTableComponent implements OnInit, OnDestroy {
     }
     // reset all tag
     resetAllTag() {
-        this.nxStore.dispatch(SaleActions.setTypeCheck({ newState: { membership: true, locker: true } }))
+        this.nxStore.dispatch(SaleActions.setTypeCheck({ newState: { payment: true, refund: true, transfer: true } }))
+        this.nxStore.dispatch(SaleActions.setProductCheck({ newState: { membership: true, locker: true } }))
         this.nxStore.dispatch(
             SaleActions.setInputs({ newState: { member: '', membershipLocker: '', personInCharge: '' } })
         )
@@ -227,6 +293,7 @@ export class SaleTableComponent implements OnInit, OnDestroy {
                     membershipLocker: false,
                     personInCharge: false,
                     type: false,
+                    product: false,
                 },
             })
         )

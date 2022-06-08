@@ -22,40 +22,38 @@ table.sale-table {
         text-align: left;
         color: var(--white);
 
-        &:nth-child(1),
-        &:nth-child(9) {
-            width: 22px;
-            min-width: 22px;
-            border: none;
+        &:nth-child(1) {
+
+            min-width: 86px;
+            width: 9.81%;
+            max-width: 9.81%;
+            padding-left: 22px !important;
         }
         &:nth-child(2) {
-            min-width: 64px;
-            width: 7.3%;
-        }
-        &:nth-child(3) {
             min-width: 56px;
             width: 6.39%;
         }
-        &:nth-child(4) {
+        &:nth-child(3) {
             min-width: 90px;
             width: 10.27%;
         }
-        &:nth-child(5) {
+        &:nth-child(4) {
             min-width: 56px;
             width: 6.39%;
         }
-        &:nth-child(6) {
+        &:nth-child(5) {
             min-width: 117px;
             width: 13.35%;
         }
-        &:nth-child(7) {
+        &:nth-child(6) {
             min-width: 97px;
             width: 11.07%;
         }
-        &:nth-child(8) {
-            min-width: 352px;
-            width: 40.23%;
-
+        &:nth-child(7) {
+            min-width: 374px;
+            width: 42.72%;
+            padding-right: 22px !important;
+            position: relative;
         }
         @media (min-width: 1440px ) {
             padding-right: 14px;
@@ -64,6 +62,9 @@ table.sale-table {
     td {
         color: var(--font-color);
         border-bottom: solid 1px var(--border-color);
+        &:nth-child(5) {
+            padding-right: 5px !important;
+        }
     }
 
     thead,
@@ -150,7 +151,13 @@ table.sale-table {
             height: 70px;
 
             td {
-                padding: 16px 0px 15px 0px;
+                padding: 14px 0px 14px 0px;
+                vertical-align: text-top;
+
+                .product-name {
+                    width: 100%;
+                    height: 100%;
+                }
 
                 .phone {
                     color: var(--grey);
@@ -171,8 +178,10 @@ table.sale-table {
             .l-price-detail {
                 display: flex;
                 flex-direction: row;
+                margin-top: 6px;
                 .price-detail {
                     display: flex;
+                    width: 25%;
                     .price-detail-tag {
                         width: 26px;
                         height: 17px;
@@ -184,7 +193,9 @@ table.sale-table {
                         justify-content: center;
                     }
 
-                    .price-detail-value {}
+                    .price-detail-value {
+                        margin-left:3px;
+                    }
                 }
             }
         }
@@ -192,7 +203,7 @@ table.sale-table {
 
     tfoot {
         width: 100%;
-        height: 52px;
+        height: 65px;
         position: relative;
         .foot {
             display: flex;
@@ -201,6 +212,7 @@ table.sale-table {
             align-items: center;
             justify-content: space-between;
             padding: 0px 25px;
+            background-color: var(--white);
 
             border-top: 1px solid var(--border-color);
             .cash-title {
@@ -211,11 +223,14 @@ table.sale-table {
             .cash-container {
                 height: 100%;
                 display: flex;
-                justify-content: flex-end;
-                align-items: center;
+                flex-direction: column;
+                justify-content: center;
 
                 .total {
-                    margin-right: 15px;
+                    margin-bottom: 6px;
+                }
+                .statistic-detail {
+                    display: flex;
                 }
 
                 .cash,
@@ -235,8 +250,8 @@ table.sale-table {
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    width: 28px;
-                    height: 16px;
+                    width: 26px;
+                    height: 17px;
                     font-size: 1.1rem;
                     line-height: 1.45;
                     letter-spacing: -0.12px;
