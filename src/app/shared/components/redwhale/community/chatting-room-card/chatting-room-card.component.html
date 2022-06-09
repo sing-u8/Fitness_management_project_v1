@@ -1,0 +1,41 @@
+<section
+  class="chatting-room-card"
+  [class.selected] = "selectedRoom?.id == room?.id"
+>
+
+  <div class="left">
+
+    <div class="avatar-container">
+
+      <img *ngIf="isNoticeRoom == true" src="assets/icons/etc/notice.svg" alt="notice.svg" class="notice">
+      <rw-multi-avatar
+        *ngIf="!isNoticeRoom"
+        [userList]="userList"
+        [hideUserPicture]="hideUserPicture"
+      ></rw-multi-avatar>
+
+    </div>
+
+    <div class="card-title">
+      <span class="rw-typo-bodytext0-bold">{{room.name}}</span>
+    </div>
+
+    <div class="count-container">
+      <span *ngIf="room?.doChatWithMe" class="rw-typo-subtext0-regular me">나</span>
+      <span *ngIf="(!room?.doChatWithMe && !hideUserCount) && (room.userList.length != 2)" class="rw-typo-subtext0-regular group">{{room.userList.length}}</span>
+    </div>
+
+  </div>
+
+  <div class="right">
+    <div
+      *ngIf="room.unread > 0"
+      class="rw-typo-subtext3"
+      [class.single-badge] = "room.unread < 10 && room.unread > 0"
+      [class.multi-badge] = "room.unread > 9"
+    >
+      {{room.unread}}
+    </div>
+  </div>
+
+</section>

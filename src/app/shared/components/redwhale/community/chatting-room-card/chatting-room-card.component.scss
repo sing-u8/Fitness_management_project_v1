@@ -1,0 +1,74 @@
+* {
+    padding: 0px;
+    margin: 0px;
+}
+
+section.chatting-room-card {
+    display: flex;
+    align-items: center;
+    position: relative;
+    justify-content: space-between;
+    padding: 0px 12px;
+    height: 48px;
+    width: 248px;
+    border-radius: 5px;
+    background-color: var(--white);
+    cursor: pointer;
+
+    &:hover {
+        background-color: var(--background-color);
+    }
+
+    &.selected {
+        background-color: var(--border-color);
+    }
+
+    .left {
+        max-width: calc(100% - 28px);
+        min-width: calc(100% - 50px);
+        display: flex;
+        align-items: center;
+        .avatar-container {
+            img.notice {
+                margin-top: 3px;
+            }
+        }
+
+        .card-title {
+            margin: 0px 10px;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+            max-width: 165px;
+        }
+
+        .count-container {
+            span {
+                color: var(--grey);
+            }
+        }
+    }
+    .right {
+        margin-left: 5px;
+        .single-badge {
+            width: 21px;
+            height: 21px;
+            background-color: var(--red);
+            border-radius: 50%;
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .multi-badge {
+            height: 21px;
+            padding: 0px 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--red);
+            border-radius: 11px;
+            color: var(--white);
+        }
+    }
+}

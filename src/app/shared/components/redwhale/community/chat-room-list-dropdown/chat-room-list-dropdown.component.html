@@ -1,0 +1,26 @@
+<div class="chat-room-list-dropdown" (click)="$event.stopPropagation()">
+  <div class="rw-typo-bodytext2-bold dropdown-header">
+    채팅 참여자 {{userList.length}}
+  </div>
+
+  <div class="userList-container thin-scroll-y-overlay2">
+    <div *ngIf="isRoomHost" class="rw-typo-bodytext2-bold invite-user-button" (click)="onInviteUserClick()">
+      <img src="assets/icons/etc/plus-red.svg" alt="plus-red.svg">
+      채팅 참여자 초대
+    </div>
+    <div
+      class="user-data"
+      *ngFor="let user of userList; let i = index"
+    >
+      <rw-avatar
+        [image] ="user.center_user_picture"
+        [text]="user.center_user_name"
+        [backgroundColor]="user.color"
+        size="25"
+        fontSize="10"
+      ></rw-avatar>
+      <span id="user-name" class="rw-typo-bodytext2">{{user.center_user_name}}</span>
+      <span *ngIf="user.id == myId" class="rw-typo-subtext0-regular isMe">나</span>
+    </div>
+  </div>
+</div>

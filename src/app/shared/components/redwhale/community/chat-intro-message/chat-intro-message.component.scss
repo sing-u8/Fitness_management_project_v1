@@ -1,0 +1,48 @@
+* {
+    padding: 0px;
+    margin: 0px;
+}
+
+.chat-intro-message {
+    #dm-with-me,
+    #dm,
+    #group,
+    #general {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        padding-left: 25px;
+        width: 90%;
+
+        .icon {
+            font-size: 1.6rem;
+        }
+        .title {
+            span {
+                color: var(--red);
+            }
+            margin-top: 15px;
+        }
+        .content {
+            color: var(--darkgrey);
+            &:not(:last-of-type) {
+                margin-top: 15px;
+            }
+        }
+    }
+
+    &.is-sidebar {
+        #dm-with-me,
+        #dm,
+        #group,
+        #general {
+            padding-left: 18px;
+
+            .content {
+                &:last-of-type {
+                    margin-top: 10px;
+                }
+            }
+        }
+    }
+}

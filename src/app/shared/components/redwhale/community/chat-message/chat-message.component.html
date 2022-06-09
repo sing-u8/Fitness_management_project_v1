@@ -1,0 +1,221 @@
+<section class="message">
+
+  <section
+    class="msg-type-date"
+    *ngIf="type == 'date'"
+  >
+    <div class="divider">
+      <div class="col"></div>
+      <span class="rw-typo-bodytext2">{{ message.timestamp | dateFormat: 'YYYY년 MM월 DD일 (dd)' }}</span>
+      <div class="col"></div>
+    </div>
+  </section>
+
+  <section
+    class="msg-type-info"
+    *ngIf="type == 'info'"
+  >
+    <span id='info-text' class="rw-typo-bodytext2-regular">{{message.text}}</span>
+    <span id="time" class="rw-typo-subtext0-regular">{{message.timestamp | dateFormat: 'a hh:mm'}}</span>
+  </section>
+
+  <section
+    class="msg-type-image default"
+    *ngIf="type == 'image'"
+  >
+    <rw-chat-message-user
+      [message]="message"
+      [showUserInfo]="showUserInfo"
+      [isSidebar] = "isSidebar"
+      [currentUser] = "currentUser"
+    >
+      <div class="message-container" [class.is-sidebar]="isSidebar">
+        <ng-container [ngTemplateOutlet]="messageItem"></ng-container>
+
+        <div
+          #image_item_container
+          class="image-item-container"
+          [class.multi-image] = "message.file.length > 1 && !isSidebar"
+          [class.file-text-margin] = "message.text?.length > 0"
+        >
+          <div
+            #image_gauge
+            *ngIf="isLoading == true"
+            class="gauge-container"
+          >
+            <ngx-gauge
+              [value] = "gauge"
+              type="full"
+              append = '%'
+              size = "50"
+              [animate] = "false"
+              cap = "round"
+            ></ngx-gauge>
+          </div>
+          <div
+            class="image-item"
+            *ngFor = "let image of message.file; let idx = index "
+          >
+            <div class="image-container">
+              <img id="image" src="{{image.url}}" (click)="onFileClick(image.url)">
+              <div
+                class="download-button"
+                (mouseover)="showDownloadButton = true"
+                (mouseout)="showDownloadButton = false"
+                (click) = "onDownloadFile(image)"
+              >
+                <img *ngIf="!showDownloadButton" id="download-off" src="assets/icons/etc/download-darkgrey.svg" alt="download.svg">
+                <img *ngIf="showDownloadButton" id="download-on" src="assets/icons/etc/download-fontcolor.svg" alt="download.svg">
+                <span class="rw-typo-subtext0">다운로드</span>
+              </div>
+            </div>
+            <p class="rw-typo-subtext0-regular file-name">{{image.originFileName}}</p>
+          </div>
+
+        </div>
+
+      </div>
+    </rw-chat-message-user>
+  </section>
+
+
+  <section
+    class="msg-type-file default"
+    *ngIf="type == 'file'"
+  >
+    <rw-chat-message-user
+      [message]="message"
+      [showUserInfo]="showUserInfo"
+      [isSidebar] = "isSidebar"
+      [currentUser] = "currentUser"
+    >
+      <div class="message-container" [class.is-sidebar]="isSidebar">
+        <ng-container [ngTemplateOutlet]="messageItem"></ng-container>
+
+        <div
+          #file_item_container
+          class="file-item-container"
+          [class.file-text-margin] = "message.text?.length > 0"
+        >
+          <div *ngIf="isLoading == true" class="gauge-container">
+            <ngx-gauge [value]="gauge" type="full" append='%' size="50" [animate]="false" cap="round"></ngx-gauge>
+          </div>
+          <div *ngFor="let file of message.file" class="file-item">
+            <div class="file-left">
+              <img src="assets/icons/etc/file_after_download_red.svg" alt="file_after_download.svg">
+              <img *ngIf="false" src="assets/icons/etc/file_after_download_red.svg" alt="file_after_download.svg">
+              <div class="file-item-content">
+                <div class="rw-typo-bodytext0 file-name">{{file.originFileName}}</div>
+                <div class="rw-typo-subtext0-regular file-size">{{file.byte | filesize}}</div>
+              </div>
+            </div>
+
+            <div
+              id="file-right"
+              class="download-button"
+              (click) = "onDownloadFile(file)"
+            >
+              <img id="download-off" src="assets/icons/etc/download-darkgrey.svg" alt="download.svg">
+              <span class="rw-typo-subtext0">다운로드</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </rw-chat-message-user>
+  </section>
+
+
+  <section
+    class="msg-type-video default"
+    *ngIf="type == 'video'"
+  >
+    <rw-chat-message-user
+      [message]="message"
+      [showUserInfo]="showUserInfo"
+      [isSidebar] = "isSidebar"
+      [currentUser] = "currentUser"
+    >
+      <div class="message-container" [class.is-sidebar]="isSidebar" >
+        <ng-container [ngTemplateOutlet]="messageItem"></ng-container>
+
+        <div
+          #video_item_container
+          class="video-item-container"
+          [class.multi-video]="message.file.length > 1 && !isSidebar"
+          [class.file-text-margin] = "message.text?.length > 0"
+        >
+          <div *ngIf="isLoading == true" class="gauge-container">
+            <ngx-gauge [value]="gauge" type="full" append='%' size="50" [animate]="false" cap="round"></ngx-gauge>
+          </div>
+
+          <div class="video-item" *ngFor="let video of message.file; let idx = index ">
+            <div  class="video-container">
+              <img
+                *ngIf="!isLoading"
+                src="assets/icons/etc/play_video.svg"
+                alt="file_after_download.svg" id="play" (click)="onFileClick(video.url)"
+              >
+              <img id="video" src="{{videoImgURL[idx]}}">
+              <div *ngIf="!isLoading" class="download-button" (mouseover)="showDownloadButton = true" (mouseout)="showDownloadButton = false"
+                (click)="onDownloadFile(video)">
+                <img *ngIf="!showDownloadButton" id="download-off" src="assets/icons/etc/download-darkgrey.svg"
+                  alt="download.svg">
+                <img *ngIf="showDownloadButton" id="download-on" src="assets/icons/etc/download-fontcolor.svg"
+                  alt="download.svg">
+                <span class="rw-typo-subtext0">다운로드</span>
+              </div>
+            </div>
+            <div *ngIf="!fileLoaded && !isLoading" class="spinner-container">
+              <ngx-spinner [name] = "spName"></ngx-spinner>
+            </div>
+
+            <p class="rw-typo-subtext0-regular file-name">{{video.originFileName}}</p>
+          </div>
+
+        </div>
+
+      </div>
+    </rw-chat-message-user>
+  </section>
+
+
+  <section
+    class="msg-type-text default"
+    *ngIf="type == 'text'"
+  >
+    <rw-chat-message-user
+      [message]="message"
+      [showUserInfo]="showUserInfo"
+      [isSidebar] = "isSidebar"
+      [currentUser] = "currentUser"
+    >
+      <div class="message-container" [class.is-sidebar]="isSidebar">
+        <ng-container [ngTemplateOutlet]="messageItem"></ng-container>
+      </div>
+    </rw-chat-message-user>
+  </section>
+
+</section>
+
+
+
+
+<!-- nTemplateOutlet (component) -->
+<ng-template #messageItem>
+  <p class="rw-typo-bodytext1 text">
+    <span *ngIf="isLinkMessage == false">{{message.text}}</span>
+    <a *ngIf="isLinkMessage == true" id="opengraph_url" (click)="onOpenGraphClick()">{{message.text}}</a>
+  </p>
+  <div
+    *ngIf="message.link.opengraphList.length > 0"
+    class="opengraph"
+    (click)="onOpenGraphClick()"
+  >
+    <img class="picture" src="{{message.link.opengraphList[0].image}}" alt={{message.link.opengraphList[0].title}}>
+    <div class="content">
+      <div class="rw-typo-bodytext0 title">{{message.link.opengraphList[0].title}}</div>
+      <div class="rw-typo-subtext0-regular desc grey">{{message.link.opengraphList[0].description}}</div>
+    </div>
+  </div>
+</ng-template>

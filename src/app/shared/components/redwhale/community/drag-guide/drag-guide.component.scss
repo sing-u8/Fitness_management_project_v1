@@ -1,0 +1,70 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+.drag-guide {
+    z-index: 999;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    background-color: rgba(33, 33, 33, 0.3);
+
+    align-items: center;
+    justify-content: center;
+
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s cubic-bezier(0.25, 0.8, 0.25, 0.8);
+    -moz-transition: opacity 0.3s cubic-bezier(0.25, 0.8, 0.25, 0.8);
+    -webkit-transition: opacity 0.3s cubic-bezier(0.25, 0.8, 0.25, 0.8);
+    -o-transition: opacity 0.3s cubic-bezier(0.25, 0.8, 0.25, 0.8);
+
+    &.show-guide {
+        display: flex;
+        opacity: 1;
+    }
+
+    .guide-icon-container {
+        display: flex;
+        align-items: center;
+        border-radius: 6px;
+        background-color: var(--white);
+        padding: 0px 40px 0px 20px;
+        width: 320px;
+        height: 108px;
+        position: relative;
+
+        img {
+            width: 68px;
+            height: 68px;
+        }
+
+        .text-container {
+            display: flex;
+            flex-direction: column;
+            margin-left: 7.5px;
+        }
+    }
+
+    &.is-sidebar {
+        position: absolute;
+        .guide-icon-container {
+            padding: 0px 25px 0px 15px;
+            width: 260px;
+            height: 86px;
+            img {
+                width: 50px;
+                height: 50px;
+            }
+
+            span {
+                font-size: 1.4rem;
+                line-height: 1.4;
+                letter-spacing: -0.23px;
+            }
+        }
+    }
+}

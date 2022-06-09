@@ -1,4 +1,4 @@
-import { CenterUser } from './users-center'
+import { CenterUser } from './center-user'
 
 export interface Lesson {
     id: string

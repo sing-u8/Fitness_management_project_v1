@@ -1,0 +1,37 @@
+<section
+  class="chat-message-user other-msg-type"
+  [class.is-sidebar] = "isSidebar"
+>
+  <div
+    class="avatar-container"
+  >
+    <rw-avatar
+      *ngIf="showUserInfo"
+      [image] = "hideMessengerPicture ? null : message.user.avatar"
+      size="42"
+      fontSize="12"
+      [text]="message.user.name"
+      [backgroundColor] = "message.user.color"
+    ></rw-avatar>
+  </div>
+  <div
+    class="message-container"
+  >
+    <div
+      class="user-information"
+      *ngIf="showUserInfo"
+    >
+      <span class="rw-typo-bodytext0-bold user-name">
+        {{message.user.name}}
+      </span>
+      <span class="rw-typo-subtext0-regular created-at">
+        {{message.timestamp | dateFormat: 'a hh:mm'}}
+      </span>
+    </div>
+
+    <div class="user-message">
+      <ng-content></ng-content>
+    </div>
+  </div>
+</section>
+

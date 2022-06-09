@@ -1,0 +1,71 @@
+* {
+    padding: 0px;
+    margin: 0px;
+}
+
+div.chat-room-list-dropdown {
+    width: 200px;
+    min-height: 100px;
+    max-height: 380px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 15px 0px 10px 0px;
+    position: relative;
+    background-color: var(--white);
+    border-radius: 5px;
+    border: 1px solid var(--border-color);
+
+    .dropdown-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: flex-start;
+        width: 178px;
+        min-height: 28px;
+        border-bottom: 1px solid var(--border-color);
+        margin-bottom: 5px;
+    }
+
+    .userList-container {
+        width: 100%;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        .user-data,
+        .invite-user-button {
+            padding: 8px;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            width: 178px;
+            height: 40px;
+            border-radius: 5px;
+
+            &:hover {
+                background-color: var(--background-color);
+            }
+
+            .isMe {
+                color: var(--grey);
+            }
+        }
+        .user-data {
+            span#user-name {
+                margin: 0px 10px 0px 8px;
+            }
+        }
+
+        .invite-user-button {
+            color: var(--red);
+            cursor: pointer;
+
+            img {
+                width: 20px;
+                height: 20px;
+                margin-right: 5px;
+            }
+        }
+    }
+}

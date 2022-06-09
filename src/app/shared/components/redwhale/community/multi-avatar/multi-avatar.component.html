@@ -1,0 +1,38 @@
+<section class="multi-avatar">
+  <div *ngIf="users.length == 1" class="oneAvatar">
+    <rw-avatar
+      size="32" fontSize="12"
+      [image]="hideUserPictureList[0] == true ? null : users[0]?.center_user_picture"
+      [text] = "users[0]?.center_user_name"
+      [backgroundColor]="users[0]?.color"
+    ></rw-avatar>
+  </div>
+  <div *ngIf="users.length == 2" class="twoAvatar">
+    <rw-avatar
+      *ngFor="let user of users; let idx = index"
+      size="19" fontSize="8"
+      [image]="hideUserPictureList[idx] == true ? null : user?.center_user_picture"
+      [text] = "user?.center_user_name"
+      [backgroundColor]="user?.color"
+    ></rw-avatar>
+  </div>
+  <div *ngIf="users.length == 3" class="threeAvatar">
+    <rw-avatar
+      *ngFor="let user of users; let idx = index"
+      size="19" fontSize="8"
+      [image]="hideUserPictureList[idx] == true ? null : user?.center_user_picture"
+      [text] = "user?.center_user_name"
+      [backgroundColor]="user?.color"
+    ></rw-avatar>
+  </div>
+  <div *ngIf="users.length == 4" class="fourAvatar">
+    <rw-avatar
+      *ngFor="let user of users; let idx = index"
+      size="19" fontSize="8"
+      [image]="hideUserPictureList[idx] == true ? null : user?.center_user_picture"
+      [text] = "user?.center_user_name"
+      [backgroundColor]="user?.color"
+    ></rw-avatar>
+  </div>
+
+</section>

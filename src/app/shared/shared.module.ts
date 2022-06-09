@@ -28,14 +28,24 @@ import { ChargeModalComponent } from './components/common/charge-modal/charge-mo
 import { DatepickModalComponent } from './components/common/datepick-modal/datepick-modal.component'
 import { DbDatepickerComponent } from './components/common/db-datepicker/db-datepicker.component'
 
-// - //
+// -drawer- //
 import { LessonFlipListComponent } from './components/redwhale/drawer/lesson-flip-list/lesson-flip-list.component'
 import { DrawerLessonCardComponent } from './components/redwhale/drawer/drawer-lesson-card/drawer-lesson-card.component'
 import { DwMembershipListModalComponent } from './components/redwhale/drawer/dw-membership-list-modal/dw-membership-list-modal.component'
 import { DrawerModifyLessonCardComponent } from './components/redwhale/drawer/drawer-modify-lesson-card/drawer-modify-lesson-card.component'
 
-// - //
+// -schedule- //
 import { SchDayRepeatSelectComponent } from './components/redwhale/schedule/sch-day-repeat-select/sch-day-repeat-select.component'
+
+// -community- //
+import { MultiAvatarComponent } from './components/redwhale/community/multi-avatar/multi-avatar.component'
+import { InviteRoomModalComponent } from './components/redwhale/community/invite-room-modal/invite-room-modal.component'
+import { DragGuideComponent } from './components/redwhale/community/drag-guide/drag-guide.component'
+import { ChatRoomListDropdownComponent } from './components/redwhale/community/chat-room-list-dropdown/chat-room-list-dropdown.component'
+import { ChatMessageUserComponent } from './components/redwhale/community/chat-message-user/chat-message-user.component'
+import { ChatMessageComponent } from './components/redwhale/community/chat-message/chat-message.component'
+import { ChatIntroMessageComponent } from './components/redwhale/community/chat-intro-message/chat-intro-message.component'
+import { ChattingRoomCardComponent } from './components/redwhale/community/chatting-room-card/chatting-room-card.component'
 
 // Directives
 // import { AutoScrollDirective } from './directives/auto-scroll.directive'
@@ -123,13 +133,24 @@ FullCalendarModule.registerPlugins([
         SmallModalComponent,
         MemberListModalComponent,
         LessonFlipListComponent,
+        // -- //drawer
         DrawerLessonCardComponent,
         SchDayRepeatSelectComponent,
         DwMembershipListModalComponent,
         DrawerModifyLessonCardComponent,
         ChargeModalComponent,
         DatepickModalComponent,
+        // -- //schedule
         DbDatepickerComponent,
+        // -- //community
+        MultiAvatarComponent,
+        InviteRoomModalComponent,
+        DragGuideComponent,
+        ChatRoomListDropdownComponent,
+        ChatMessageUserComponent,
+        ChatMessageComponent,
+        ChatIntroMessageComponent,
+        ChattingRoomCardComponent,
         // Directives
         // AutoScrollDirective,
         ButtonDirective,
