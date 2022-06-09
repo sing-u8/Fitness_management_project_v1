@@ -110,11 +110,15 @@ export class SaleComponent implements OnInit, OnDestroy {
     public doSettingShowSaleModal = false
     openSettingShowSaleModal() {
         this.doSettingShowSaleModal = true
+        console.log('openSettingShowSaleModal : ', this.showSale)
     }
     onSettingShowSaleModalCancel() {
         this.doSettingShowSaleModal = false
     }
-    onSettingShowSaleModalConfirm(Return: any) {}
+    onSettingShowSaleModalConfirm(Return: boolean) {
+        this.doSettingShowSaleModal = false
+        console.log('onSettingShowSaleModalConfirm : ', Return, this.showSale)
+    }
 
     // sale-date-selector vars and funcs
     onDateSeleted(date: FromSale.SelectedDate) {

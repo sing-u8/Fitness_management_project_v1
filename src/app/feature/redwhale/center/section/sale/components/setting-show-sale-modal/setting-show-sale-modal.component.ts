@@ -32,13 +32,13 @@ export interface modalData {
 export class SettingShowSaleModalComponent implements OnChanges, AfterViewChecked, OnInit {
     @Input() visible: boolean
     @Input() data: modalData
-    @Input() value: boolean
+    @Input() value!: boolean
+    @Output() valueChange = new EventEmitter<boolean>()
 
     @ViewChild('modalBackgroundElement') modalBackgroundElement
     @ViewChild('modalWrapperElement') modalWrapperElement
 
     @Output() visibleChange = new EventEmitter<boolean>()
-    @Output() valueChange = new EventEmitter<boolean>()
     @Output() cancel = new EventEmitter<any>()
     @Output() confirm = new EventEmitter<any>()
 
@@ -66,7 +66,7 @@ export class SettingShowSaleModalComponent implements OnChanges, AfterViewChecke
     }
     ngOnInit() {}
     ngOnChanges(changes: SimpleChanges) {
-        if (!changes['visible'].firstChange) {
+        if (changes['visible'] && !changes['visible'].firstChange) {
             if (changes['visible'].previousValue != changes['visible'].currentValue) {
                 this.changed = true
             }
@@ -99,6 +99,7 @@ export class SettingShowSaleModalComponent implements OnChanges, AfterViewChecke
     }
 
     onConfirm(): void {
+        console.log('onConfirm : ', this.value)
         this.confirm.emit(this.value)
         this.valueChange.emit(this.value)
     }
