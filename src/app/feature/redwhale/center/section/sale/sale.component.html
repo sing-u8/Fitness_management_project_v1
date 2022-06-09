@@ -4,6 +4,10 @@
             <span class="title rw-typo-headline1">매출</span>
             <span class="title-desc rw-typo-subtext1">원하는 조건을 설정하여 매출을 간편하게 확인해보세요.</span>
         </div>
+        <div class="setting-operating-hour-button" rw-button rwButtonColor="var(--white)" (click)="openSettingShowSaleModal()">
+            <img src="assets/icons/header/settings.svg">
+            <span class="rw-typo-bodytext0-bold">매출 공개 설정</span>
+        </div>
     </header>
 
     <article class="content-container thin-scroll-y">
@@ -48,3 +52,11 @@
     </article>
 
 </section>
+
+<rw-setting-show-sale-modal
+    [(visible)] = "doSettingShowSaleModal"
+    [data] = "settingShowSaleData"
+    [(value)] = "showSale"
+    (cancel) = 'onSettingShowSaleModalCancel()'
+    (confirm) = 'onSettingShowSaleModalConfirm($event)'
+></rw-setting-show-sale-modal>

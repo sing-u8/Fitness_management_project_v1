@@ -1,1 +1,184 @@
-<div class="community"></div>
+<section
+    id="community-section"
+    class="community"
+>
+
+    <div *ngIf="showUpdateNotification" class="notification-update-soon">
+        <div class="rw-typo-bodytext2-regular empty-space"></div>
+        <span class="notification-text">
+            채팅 기능이 곧 업데이트 될 예정이에요! 이후 기존의 채팅 기록이 사라질 수 있으니 중요한 기록은 꼭 다른 곳에 보관해주세요. 🙏
+        </span>
+        <img (click)="onCloseUpdateNotification()" src="assets/icons/etc/close_white.svg">
+    </div>
+
+    <section class="chatting-container" [class.update-notification-exist]="showUpdateNotification">
+        <div class="chatting-sidebar">
+            <div class="sidebar-header">
+                <span class="rw-typo-title1">채팅</span>
+                <img
+                    rw-tooltip
+                    rwTooltipTitle="새 채팅방 만들기"
+                    rwTooltipPlacement="bottom"
+                    src="assets/icons/etc/plus.svg"
+                    alt="plus.svg" (click)="showCreateRoomModal()"
+                >
+            </div>
+            <div class="chatting-room-container thin-scroll-y-overlay2">
+                <!-- <rw-chatting-room-card
+                    *ngFor="let room of userRoomList$ | async; let i = index" [userId]="user.id"
+                    [room]="room" [isNoticeRoom]="room.id == 'general'" [selectedRoom]="selectedRoom.value"
+                    [currentUser]="currentUser.user" (click)="joinRoom(room)"
+                ></rw-chatting-room-card> -->
+            </div>
+        </div>
+
+        <div class="chatting-screen-container">
+
+            <div class="chatting-screen-header">
+                <form id="left" class="room-title">
+<!--
+                    <span *ngIf="!changeRoomMode" class="rw-typo-title2">{{this.selectedRoom.value?.name}}</span>
+                    <img
+                        rw-tooltip rwTooltipTitle="채팅방 이름 변경"
+                        rwTooltipPlacement="bottom"
+                        *ngIf="this.selectedRoom.value?.type =='private'
+                                && this.selectedRoom.value?.id != 'general'
+                                && !changeRoomMode" src="assets/icons/etc/edit-darkgrey.svg"
+                        alt="edit-darkgrey.svg"
+                        (click)="showChangeRoomNameModal()"
+                    >
+
+                    <input
+                        *ngIf="changeRoomMode"
+                        class="rw-input rw-typo-title2"
+                        placeholder="{{selectedRoom?.value?.name}}"
+                        (keyup.enter)="changeRoomName(changeRoomInput.value, changeRoomInput.valid)"
+                        (rwClickOutside)="changeRoomName(changeRoomInput.value, changeRoomInput.valid)"
+                        type="text"
+                        [formControl]="changeRoomInput"
+                    > -->
+                </form>
+
+                <!-- <div *ngIf="selectedRoom.value?.userList[0] != selectedRoom.value?.userList[1]" id="right">
+                    <div *ngIf="isMember == false" class="room-user-number" (click)="toggleRoomUserListDropDown()"
+                        (rwClickOutside)="closeRoomUserListDropDown()">
+                        <img src="assets/icons/etc/user-count.svg" alt="user-count.svg">
+                        <span class="rw-typo-bodytext0 user-count">
+                            {{roomUserList.length}}
+                        </span>
+                    </div>
+
+                    <div class="leave-room-button" (click)="toggleLeaveRoomDropdown()"
+                        (rwClickOutside)="closeLeaveRoomDropdown()" *ngIf="selectedRoom.value?.id != 'general'">
+                        <img src="assets/icons/etc/menu-vertical.svg" alt="vertical-menu">
+                    </div>
+
+                    <div *ngIf="showLeaveRoomDropdown" class="leave-room-dropdown" (click)="openLeaveRoomModal()">
+                        이 채팅방에서 나가기
+                    </div>
+
+                    <rw-chat-room-list-dropdown
+                        *ngIf="showRoomUserList"
+                        [userList]="roomUserList"
+                        [myId]="user.id"
+                        [isRoomHost]="isRoomHost"
+                        (clickInviteUser)="closeRoomUserListDropDown();showInviteUserModal()"
+                    ></rw-chat-room-list-dropdown>
+                </div> -->
+            </div>
+
+            <div #chat_screen class="chatting-screen">
+
+                <!-- <div
+                    #chatting_screen class="chatting-screen-content thin-scroll-y-overlay2"
+                    (scroll)="scrolled($event)"
+                >
+                    <rw-chat-message *ngFor="let data of roomMsgObj$v.loadingMsgList | keyvalue; let i = index"
+                        [message]="data.value.message" [showUserInfo]="true" [isLoading]="true"
+                        [gauge]="data.value.gauge" [currentUser]="currentUser.user"></rw-chat-message>
+
+                    <rw-chat-message #message_el *ngFor="let message of roomMsgObj$v.msgList; let i = index"
+                        [message]="message" [showUserInfo]="showUser(i)" [currentUser]="currentUser.user">
+                    </rw-chat-message>
+
+                    <rw-chat-intro-message [isSideBar]="false" [selectedRoom]="selectedRoom.value" [user]="user"
+                        [msgList]="roomMsgObj$v.msgList" [showIntroMessage]="showIntroMessage">
+                    </rw-chat-intro-message>
+                </div> -->
+
+                <!-- <div #chatting_input class="chatting-input-container">
+
+                    <div class="plus-box">
+                        <img
+                            src="{{addBtSrc}}"
+                            alt="plus.svg" rw-tooltip rwTooltipTitle="파일 첨부"
+                            rwTooltipPlacement="bottom" (click)="file_picker.click()"
+                            (mouseover)="addFileBtMouseHover()" (mouseleave)="addFileBtMouseLeave()">
+                    </div>
+
+                    <form class="input-box">
+
+                        <textarea
+                            rw-textarea-autoResize
+                            [textareaResizeOption]="textareaResizeOption"
+                            (onResize)="onChatInputResize($event)"
+                            class="rw-typo-bodytext0-bold thin-scroll-y-overlay2"
+                            placeholder="메시지를 입력해주세요. (Shift + Enter 줄바꿈)"
+                            [formControl]="chatInput"
+                            (keypress)="onInputKeyPress($event)"
+                        ></textarea>
+
+                        <input
+                            type="file"
+                            accept="image/*, video/*, .hwp, .pdf, .doc, .docx"
+                            #file_picker hidden
+                            multiple (change)="onFilePickerChange(file_picker)"
+                        >
+
+                        <div *ngIf="fileList.length > 0" class="file-thumbnail-list thin-scroll-x-overlay2">
+                            <div
+                                class="file-thumbnail"
+                                [class.file]="file.type == 'file'"
+                                *ngFor="let file of fileList; let idx = index"
+                            >
+
+                                <img *ngIf="file.type == 'image'" src="{{file.result}}" id="background">
+                                <div *ngIf="file.type == 'video'" class="video-container">
+                                    <img src="{{file.result}}" id="background">
+                                    <img src="assets/icons/etc/play_video.svg" alt="play_video" id="play">
+                                </div>
+                                <div *ngIf="file.type == 'file'" class="file-item">
+                                    <img src="assets/icons/etc/file_after_download_red.svg"
+                                        alt="file_after_download.svg">
+                                    <div class="file-item-content">
+                                        <div class="rw-typo-bodytext0 file-name">{{file.file.name}}</div>
+                                        <div class="rw-typo-subtext0-regular file-size">{{file.file.size | filesize}}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <img
+                                    src="assets/icons/etc/close_white.svg"
+                                    alt="close_white.svg" id="close"
+                                    (click)="removeFile(idx)"
+                                >
+                            </div>
+                        </div>
+
+                    </form>
+
+                    <div
+                        class="send-button"
+                        [class.active]="chatInput.valid || fileList.length > 0"
+                        (click)="sendMessage(chatInput.value)"
+                    >
+                        보내기
+                    </div>
+
+                </div> -->
+
+            </div>
+        </div>
+    </section>
+
+</section>

@@ -9,6 +9,7 @@ import { SaleComponent } from './sale.component'
 import { SaleDateSelectorComponent } from './components/sale-date-selector/sale-date-selector.component'
 import { SaleTableComponent } from './components/sale-table/sale-table.component'
 import { SaleSummaryBoxComponent } from './components/sale-summary-box/sale-summary-box.component'
+import { SettingShowSaleModalComponent } from './components/setting-show-sale-modal/setting-show-sale-modal.component'
 
 // pipe
 import { SaleDatePipe } from './pipes/sale-date.pipe'
@@ -28,6 +29,7 @@ import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader'
         SaleDateSelectorComponent,
         SaleTableComponent,
         SaleSummaryBoxComponent,
+        SettingShowSaleModalComponent,
         // pipes
         SaleDatePipe,
         SaleTableTypePipe,

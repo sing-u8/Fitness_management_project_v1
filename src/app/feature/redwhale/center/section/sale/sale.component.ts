@@ -7,6 +7,7 @@ import { Subscription } from 'rxjs'
 
 import { Center } from '@schemas/center'
 import { StatsSales } from '@schemas/stats-sales'
+import { modalData } from './components/setting-show-sale-modal/setting-show-sale-modal.component'
 
 import { StorageService } from '@services/storage.service'
 import { getStatsSaleOption } from '@services/center-stats.service'
@@ -97,6 +98,23 @@ export class SaleComponent implements OnInit, OnDestroy {
         //     }
         // })
     }
+    // setting show sale vars and funcs
+    public settingShowSaleData: modalData = {
+        text: '매출 공개 여부를 설정해주세요.',
+        subText: `비공개 시, 운영자와 관리자에게만 매출 페이지가 보여지며
+                    공개 시, 강사에게도 매출 페이지가 공개돼요.`,
+        cancelButtonText: '취소',
+        confirmButtonText: '저장하기',
+    }
+    public showSale = false
+    public doSettingShowSaleModal = false
+    openSettingShowSaleModal() {
+        this.doSettingShowSaleModal = true
+    }
+    onSettingShowSaleModalCancel() {
+        this.doSettingShowSaleModal = false
+    }
+    onSettingShowSaleModalConfirm(Return: any) {}
 
     // sale-date-selector vars and funcs
     onDateSeleted(date: FromSale.SelectedDate) {

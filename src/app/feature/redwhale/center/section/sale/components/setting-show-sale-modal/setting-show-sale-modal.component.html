@@ -1,0 +1,30 @@
+<div class="rw-modal-background" #modalBackgroundElement></div>
+<div
+    class="rw-modal-wrapper"
+    (mouseup)="!isMouseModalDown && onCancel()"
+    (mousedown)='resetMouseModalDown()'
+    #modalWrapperElement
+>
+    <div class="rw-modal push-size user-select-none" (mousedown)='onMouseModalDown(); $event.stopPropagation()'>
+        <div class="title-container">
+            <div class="text rw-typo-title1 ">{{ data?.text }}</div>
+            <div class="sub-text rw-typo-subtext1">{{ data?.subText }}</div>
+        </div>
+
+        <div id='push-notice' class="input">
+            <div class="push-notice-container">
+                <rw-switch [text]="value  ? '강사에게도 매출 공개  🙉' :'강사에게 매출 비공개  🙈'" [(ngModel)]="value"></rw-switch>
+            </div>
+        </div>
+
+        <div class="button-group">
+            <div class="cancel " rw-button (click)="onCancel()">
+                {{ data?.cancelButtonText || '취소' }}
+            </div>
+            <div class="confirm " rw-button rwButtonColor="var(--red)" (click)="onConfirm()">
+                {{ data?.confirmButtonText || '확인' }}
+            </div>
+        </div>
+    </div>
+
+</div>
