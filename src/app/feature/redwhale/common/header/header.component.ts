@@ -14,6 +14,7 @@ import { Observable, Subscription } from 'rxjs'
 
 // ngrx
 import { Store, select } from '@ngrx/store'
+import { resetAllState } from '@centerStore/actions/sec.center.all.actions'
 import { drawerSelector } from '@appStore/selectors'
 import { showModal } from '@appStore/actions/modal.action'
 import { openDrawer, closeDrawer } from '@appStore/actions/drawer.action'
@@ -90,6 +91,7 @@ export class HeaderComponent implements OnInit {
 
     changeGym(center: Center) {
         if (this.user.selected_center.address == center.address) return
+        this.resetCenterState()
         this.centerService.getCenter(center.id).subscribe({
             next: (center) => {
                 this.storageService.setCenter(center)
@@ -154,6 +156,11 @@ export class HeaderComponent implements OnInit {
     async logout() {
         // await this.storageService.removeUser()
         // this.router.navigateByUrl('/auth/login')
+        this.resetCenterState()
         await this.storageService.logout()
+    }
+
+    resetCenterState() {
+        resetAllState(this.nxStore)
     }
 }

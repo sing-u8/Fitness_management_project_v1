@@ -7,7 +7,7 @@
         <div
             *ngIf="url != '/redwhale-home'"
             class="home d-flex justify-content-center align-items-center"
-            (click)="goRouterLink('/redwhale-home')"
+            (click)="resetCenterState(); goRouterLink('/redwhale-home')"
         >
             <div class="home-icon"></div>
         </div>

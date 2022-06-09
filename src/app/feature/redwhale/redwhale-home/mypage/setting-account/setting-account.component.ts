@@ -19,6 +19,7 @@ import { originalOrder } from '@helpers/pipe/keyvalue'
 
 // ngrx
 import { Store } from '@ngrx/store'
+import { resetAllState } from '@centerStore/actions/sec.center.all.actions'
 import { showToast } from '@appStore/actions/toast.action'
 
 @Component({
@@ -296,10 +297,15 @@ export class SettingAccountComponent implements OnInit {
     async logout() {
         // await this.storageService.removeUser()
         // this.router.navigateByUrl('/auth/login')
+        this.resetCenterState()
         await this.storageService.logout()
     }
 
     gotoRemoveAccount() {
         this.router.navigateByUrl('/redwhale-home/remove-account')
+    }
+
+    resetCenterState() {
+        resetAllState(this.nxStore)
     }
 }
