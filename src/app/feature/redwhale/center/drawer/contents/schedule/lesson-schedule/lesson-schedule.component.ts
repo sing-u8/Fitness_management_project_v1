@@ -41,8 +41,7 @@ import { showToast } from '@appStore/actions/toast.action'
 export class LessonScheduleComponent implements OnInit, OnDestroy, AfterViewInit {
     public centerOperatingTime: ScheduleReducer.CenterOperatingHour = { start: null, end: null }
 
-    public titleTime: string = dayjs().format('M/D (dd) A hh시 mm분')
-    public titleRawTime: dayjs.Dayjs = dayjs()
+    public titleTime$ = this.nxStore.select(ScheduleSelector.taskTitleTime)
 
     // lesson var
     public lessonCategList: Array<ClassCategory>
@@ -125,14 +124,6 @@ export class LessonScheduleComponent implements OnInit, OnDestroy, AfterViewInit
         private scheduleHelperService: ScheduleHelperService,
         private wordService: WordService
     ) {
-        interval(3000)
-            .pipe(takeUntil(this.unsubscribe$))
-            .subscribe((__) => {
-                if (dayjs(this.titleRawTime).isBefore(dayjs())) {
-                    this.titleRawTime = dayjs()
-                    this.titleTime = dayjs().format('M/D (dd) A hh시 mm분')
-                }
-            })
         this.center = this.storageService.getCenter()
         this.selectLessonCategories()
 

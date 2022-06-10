@@ -1,7 +1,7 @@
 <div class="lesson-schedule d-flex flex-column">
   <div class="header">
       <div class="title">
-        <span class="rw-typo-subtext4">{{titleTime}}</span>
+        <span class="rw-typo-subtext4">{{titleTime$ | async}}</span>
         <span *ngIf="!selectedLesson" class="rw-typo-title2">등록할 수업을 선택해주세요.</span>
         <span *ngIf="selectedLesson" class="rw-typo-title2">수업 일정을 입력해주세요.</span>
       </div>

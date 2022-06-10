@@ -1,15 +1,15 @@
 import { on } from '@ngrx/store'
 import { createImmerReducer } from 'ngrx-immer/store'
-import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity'
+
 import _ from 'lodash'
+import dayjs from 'dayjs'
+
 import { UpdateMode } from '@services/center-calendar.service'
 
 // schemas
 import { Loading } from '@schemas/store/loading'
-import { CenterUser } from '@schemas/center-user'
 import { Calendar } from '@schemas/calendar'
 import { CalendarTask } from '@schemas/calendar-task'
-import { CalendarTaskClass } from '@schemas/calendar-task-class'
 
 import * as ScheduleActions from '../actions/sec.schedule.actions'
 
@@ -76,6 +76,7 @@ export interface State {
     selectedDate: SelectedDate
     schedulingInstructor: Calendar
     isScheduleEventChanged: boolean
+    taskTitleTime: string // string type -> MM/DD (dd) a hh:mm
 
     modifyGeneralEvent: CalendarTask
     modifyLessonEvent: CalendarTask
@@ -99,6 +100,7 @@ export const initialState: State = {
     selectedDate: SelectedDateInit,
     schedulingInstructor: undefined,
     isScheduleEventChanged: false,
+    taskTitleTime: '',
 
     modifyGeneralEvent: undefined,
     modifyLessonEvent: undefined,
@@ -174,6 +176,10 @@ export const scheduleReducer = createImmerReducer(
         state.modifyLessonOption = option
         return state
     }),
+    on(ScheduleActions.setTaskTitleTime, (state, { taskTitleTime }) => {
+        state.taskTitleTime = dayjs(taskTitleTime).format('MM/DD (dd) a hh시 mm분')
+        return state
+    }),
 
     // common
     on(ScheduleActions.resetAll, (state) => {
@@ -212,3 +218,4 @@ export const selectIsScheduleEventChanged = (state: State) => state.isScheduleEv
 export const selectModifyGeneralEvent = (state: State) => state.modifyGeneralEvent
 export const selectModifyLessonEvent = (state: State) => state.modifyLessonEvent
 export const selectModifyLessonOption = (state: State) => state.modifyLessonOption
+export const selectTaskTitleTime = (state: State) => state.taskTitleTime

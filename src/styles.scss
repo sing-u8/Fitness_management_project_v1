@@ -327,7 +327,7 @@
     letter-spacing: -0.2px;
     color: var(--font-color);
 
-    &::placeholder {
+    &::placeholder, &::-webkit-input-placeholder, &:-ms-input-placeholder {
         font-weight: 400 !important;
         color: var(--grey) !important;
     }
@@ -337,7 +337,9 @@
         border: 1px solid var(--grey);
     }
 
-    &:focus::placeholder {
+    &:focus::placeholder,
+    &:focus::-webkit-input-placeholder,
+    &:focus:-ms-input-placeholder {
         font-weight: 400 !important;
         color: var(--grey) !important;
     }

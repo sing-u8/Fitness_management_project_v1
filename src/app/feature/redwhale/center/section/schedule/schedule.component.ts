@@ -23,7 +23,6 @@ import { Center } from '@schemas/center'
 import { Calendar } from '@schemas/calendar'
 import { CalendarTask } from '@schemas/calendar-task'
 import { Loading } from '@schemas/store/loading'
-import { CenterUser } from '@schemas/center-user'
 import { User } from '@schemas/user'
 import { UserBooked } from '@schemas/user-booked'
 import { UserAbleToBook } from '@schemas/user-able-to-book'
@@ -517,6 +516,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
     openGeneralScheduleDrawer() {
         this.setDrawerDate()
 
+        this.setTaskTitleTime()
         this.nxStore.dispatch(openDrawer({ tabName: 'general-schedule' }))
         this.nxStore.dispatch(setScheduleDrawerIsReset({ isReset: true }))
 
@@ -525,6 +525,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
     openLessonScheduleDrawer() {
         this.setDrawerDate()
 
+        this.setTaskTitleTime()
         this.nxStore.dispatch(openDrawer({ tabName: 'lesson-schedule' }))
         this.nxStore.dispatch(setScheduleDrawerIsReset({ isReset: true }))
 
@@ -700,6 +701,21 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
                 )
             }
         }
+        this.setTempTaskTitleTime(arg)
+    }
+
+    public tempTaskTitleTime: Date = undefined
+    public setTempTaskTitleTime(arg) {
+        if (arg.view.type == 'dayGridMonth') {
+            const date = this.operatingTime.start.split(':').map((time) => Number(time))
+            this.tempTaskTitleTime = new Date(new Date().setHours(date[0], date[1], date[2]))
+            console.log('setTempTaskTitleTime : ', date, ' - ', this.tempTaskTitleTime)
+        } else {
+            this.tempTaskTitleTime = arg.date
+        }
+    }
+    public setTaskTitleTime() {
+        this.nxStore.dispatch(ScheduleActions.setTaskTitleTime({ taskTitleTime: this.tempTaskTitleTime }))
     }
 
     eventDidMount(arg) {
@@ -913,13 +929,13 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
         // console.log('dayCellDidMount arg: ', arg)
 
         if (arg.view.type == 'dayGridMonth') {
-            console.log('dayCellDidMount =======================')
+            // console.log('dayCellDidMount =======================')
             if (arg.el.classList.contains('fc-daygrid-day')) {
                 // normal daycell element
                 const daygridDayTop_el: HTMLElement = arg.el.getElementsByClassName('fc-daygrid-day-top')[0]
                 const isToday = arg.el.classList.contains('fc-day-today')
                 if (daygridDayTop_el) {
-                    console.log('daygridDayTop_el : ', daygridDayTop_el)
+                    // console.log('daygridDayTop_el : ', daygridDayTop_el)
                     daygridDayTop_el.style.flexDirection = 'row'
                     daygridDayTop_el.style.justifyContent = 'space-between'
                     daygridDayTop_el.style.alignItems = 'center'

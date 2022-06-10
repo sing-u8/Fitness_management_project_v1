@@ -75,6 +75,8 @@ export const setModifyLessonOption = createAction(
     props<{ option: FromSchReducer.ModifyLessonOption }>()
 )
 
+export const setTaskTitleTime = createAction(`[${FeatureKey}] Set TaskTitleTime`, props<{ taskTitleTime: Date }>())
+
 // common
 export const resetAll = createAction(`[${FeatureKey}] Reset All Schedule States`)
 export const setCurCenterId = createAction(`[${FeatureKey}] Set Current Center Id`, props<{ centerId: string }>())

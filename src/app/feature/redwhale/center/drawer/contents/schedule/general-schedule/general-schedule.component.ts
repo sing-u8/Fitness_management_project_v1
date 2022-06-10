@@ -37,8 +37,7 @@ export class GeneralScheduleComponent implements OnInit, AfterViewInit, OnDestro
 
     public centerOperatingTime: ScheduleReducer.CenterOperatingHour = { start: null, end: null }
 
-    public titleTime: string = dayjs().format('M/D (dd) A hh시 mm분')
-    public titleRawTime: dayjs.Dayjs = dayjs()
+    public titleTime$ = this.nxStore.select(ScheduleSelector.taskTitleTime)
 
     public staffSelect_list: Array<{ name: string; value: CenterUser }> = []
     public instructorList: Array<ScheduleReducer.InstructorType> = []
@@ -114,15 +113,6 @@ export class GeneralScheduleComponent implements OnInit, AfterViewInit, OnDestro
     ) {}
 
     ngOnInit(): void {
-        interval(3000)
-            .pipe(takeUntil(this.unsubscribe$))
-            .subscribe((__) => {
-                if (dayjs(this.titleRawTime).isBefore(dayjs())) {
-                    this.titleRawTime = dayjs()
-                    this.titleTime = dayjs().format('M/D (dd) A hh시 mm분')
-                }
-            })
-
         this.nxStore
             .pipe(
                 select(scheduleIsResetSelector),
