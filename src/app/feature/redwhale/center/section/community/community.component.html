@@ -2,16 +2,7 @@
     id="community-section"
     class="community"
 >
-
-    <div *ngIf="showUpdateNotification" class="notification-update-soon">
-        <div class="rw-typo-bodytext2-regular empty-space"></div>
-        <span class="notification-text">
-            채팅 기능이 곧 업데이트 될 예정이에요! 이후 기존의 채팅 기록이 사라질 수 있으니 중요한 기록은 꼭 다른 곳에 보관해주세요. 🙏
-        </span>
-        <img (click)="onCloseUpdateNotification()" src="assets/icons/etc/close_white.svg">
-    </div>
-
-    <section class="chatting-container" [class.update-notification-exist]="showUpdateNotification">
+    <section class="chatting-container" >
         <div class="chatting-sidebar">
             <div class="sidebar-header">
                 <span class="rw-typo-title1">채팅</span>

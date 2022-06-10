@@ -44,10 +44,6 @@
         position: relative;
         display: flex;
 
-        &.update-notification-exist {
-            height: calc(100% - #{$notiHeight});
-        }
-
         div.chatting-sidebar {
             width: 266px;
             height: 100%;

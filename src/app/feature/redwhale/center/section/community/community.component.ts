@@ -23,11 +23,6 @@ export class CommunityComponent implements OnInit {
     }
     // <-----------------------------------
 
-    // update notification vars and funcs
-    public showUpdateNotification = true
-    onCloseUpdateNotification() {
-        this.showUpdateNotification = false
-    }
     // <-----------------------------------
 
     // modal vars and fucntions

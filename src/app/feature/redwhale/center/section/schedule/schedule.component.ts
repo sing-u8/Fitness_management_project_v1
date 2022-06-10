@@ -722,18 +722,11 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
                 eventTitleEl.style.whiteSpace = 'nowrap'
                 eventTitleEl.style.color = '#606060'
 
-                if (arg.event.extendedProps.originItem.memo) {
-                    eventTimeEl.style.fontSize = '1.1rem'
-                    eventTimeEl.style.fontWeight = '400'
-                    eventTimeEl.style.whiteSpace = 'nowrap'
-                    eventTimeEl.style.color = '#c9c9c9'
-                    eventTimeEl.innerHTML = `${arg.event.extendedProps.originItem.memo}`
-                } else {
-                    eventTitleEl.style.alignItems = 'center'
-                    eventTitleEl.style.display = 'flex'
-                    eventTitleEl.style.height = '100%'
-                    eventTimeEl.style.display = 'none'
-                }
+                eventTimeEl.style.fontSize = '1.1rem'
+                eventTimeEl.style.fontWeight = '400'
+                eventTimeEl.style.whiteSpace = 'nowrap'
+                eventTimeEl.style.color = '#c9c9c9'
+                eventTimeEl.innerHTML = `${arg.event.extendedProps.originItem.responsibility.name}`
             } else {
                 eventTitleEl.classList.add('rw-typo-subtext0')
                 eventTitleEl.style.fontSize = '1.2rem'
