@@ -14,14 +14,14 @@
     <div class="plan-and-detail-info">
       <p class="small-title">일정명 / 상세 정보</p>
       <input
-        class="rw-input plan-input"
+        class="plan-input rw-input"
         required
         placeholder="일정명을 입력해주세요."
         [(ngModel)]="planTexts.planTitle"
         #plan_title = ngModel
       >
       <textarea
-        class="rw-textarea plan-textarea thin-scroll-y thin-scroll-x"
+        class="plan-textarea rw-textarea thin-scroll-y thin-scroll-x"
         placeholder="일정 상세 정보를 입력해주세요. (선택)"
         [(ngModel)]="planTexts.planDetail"
         #plan_detail = ngModel

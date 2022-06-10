@@ -52,7 +52,7 @@
           <p class="small-title">일정명 / 상세 정보</p>
           <div class="plan-input-container">
             <input
-              class="rw-input plan-input"
+              class="plan-input rw-input"
               placeholder="일정명을 입력해주세요."  required
               [(ngModel)] = "planDetailInputs.plan"
               #plan_input = ngModel
@@ -64,7 +64,7 @@
           </div>
 
           <textarea
-            class="rw-textarea plan-textarea thin-scroll-y thin-scroll-x"
+            class="plan-textarea rw-textarea thin-scroll-y thin-scroll-x"
             placeholder="회원에게 전달하고 싶은 일정 상세 정보를 입력해주세요. (선택)"
             [(ngModel)] = "planDetailInputs.detail"
           ></textarea>

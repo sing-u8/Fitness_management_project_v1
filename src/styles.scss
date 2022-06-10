@@ -327,7 +327,15 @@
     letter-spacing: -0.2px;
     color: var(--font-color);
 
-    &::placeholder, &::-webkit-input-placeholder, &:-ms-input-placeholder {
+    &::placeholder {
+        font-weight: 400 !important;
+        color: var(--grey) !important;
+    }
+    &::-webkit-input-placeholder{
+        font-weight: 400 !important;
+        color: var(--grey) !important;
+    }
+    &:-ms-input-placeholder{
         font-weight: 400 !important;
         color: var(--grey) !important;
     }
@@ -337,8 +345,14 @@
         border: 1px solid var(--grey);
     }
 
-    &:focus::placeholder,
-    &:focus::-webkit-input-placeholder,
+    &:focus::placeholder{
+        font-weight: 400 !important;
+        color: var(--grey) !important;
+    }
+    &:focus::-webkit-input-placeholder{
+        font-weight: 400 !important;
+        color: var(--grey) !important;
+    }
     &:focus:-ms-input-placeholder {
         font-weight: 400 !important;
         color: var(--grey) !important;
@@ -374,12 +388,31 @@
         color: var(--grey) !important;
     }
 
+    &::-webkit-input-placeholder {
+        font-weight: 400 !important;
+        color: var(--grey) !important;
+    }
+
+    &:-ms-input-placeholder {
+        font-weight: 400 !important;
+        color: var(--grey) !important;
+    }
+
     &:focus {
         font-weight: 700;
         border: 1px solid var(--grey);
     }
-
     &:focus::placeholder {
+        font-weight: 400 !important;
+        color: var(--grey) !important;
+    }
+
+    &:focus::-webkit-input-placeholder {
+        font-weight: 400 !important;
+        color: var(--grey) !important;
+    }
+
+    &:focus:-ms-input-placeholder {
         font-weight: 400 !important;
         color: var(--grey) !important;
     }

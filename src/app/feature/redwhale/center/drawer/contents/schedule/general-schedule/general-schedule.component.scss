@@ -71,11 +71,11 @@
             .plan-textarea {
                 width: 100%;
                 font-size: 1.4rem;
-                font-weight: 400 !important;
+                font-weight: 400;
                 height: 180px;
                 padding: 15px;
                 &:focus {
-                    font-weight: 700 !important;
+                    font-weight: 700;
                 }
             }
         }
