@@ -41,8 +41,8 @@ export class InviteRoomModalComponent implements AfterViewChecked, OnChanges, On
     @ViewChild('modalWrapperElement') modalWrapperElement
 
     @Output() visibleChange = new EventEmitter<boolean>()
-    @Output() cancel = new EventEmitter<any>()
-    @Output() confirm = new EventEmitter<any>()
+    @Output() cancel = new EventEmitter<void>()
+    @Output() confirm = new EventEmitter<Array<CenterUser>>()
 
     public searchInput: FormControl
     public userList: UserList = []
@@ -124,7 +124,7 @@ export class InviteRoomModalComponent implements AfterViewChecked, OnChanges, On
     }
 
     onCancel(): void {
-        this.cancel.emit({})
+        this.cancel.emit()
         this.searchInput.setValue('')
         this.userList = []
         this.selectedNum = 0

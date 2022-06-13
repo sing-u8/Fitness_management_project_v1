@@ -7,7 +7,6 @@ import { catchError, switchMap, tap, map, exhaustMap, mapTo } from 'rxjs/operato
 import _ from 'lodash'
 
 import * as DashboardActions from '../actions/sec.dashboard.actions'
-import * as DashboardSelector from '../selectors/sec.dashoboard.selector'
 import * as DashboardReducer from '../reducers/sec.dashboard.reducer'
 
 import { showToast } from '@appStore/actions/toast.action'

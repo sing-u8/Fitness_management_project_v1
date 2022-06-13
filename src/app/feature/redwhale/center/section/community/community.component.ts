@@ -26,6 +26,7 @@ import { ChatRoomMessage } from '@schemas/chat-room-message'
 import { ChatRoomUser } from '@schemas/chat-room-user'
 
 import { StorageService } from '@services/storage.service'
+import * as CenterChatRoomApi from '@services/center-chat-room.service'
 
 // ngrx
 import { Store, select } from '@ngrx/store'
@@ -66,12 +67,6 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
         this.nxStore
             .pipe(select(CommunitySelector.curCenterId), takeUntil(this.unsubscribe$))
             .subscribe((curCenterId) => {
-                console.log(
-                    'DashboardSelector.curCenterId : ',
-                    curCenterId != this.center.id,
-                    curCenterId,
-                    this.center.id
-                )
                 if (curCenterId != this.center.id) {
                     this.nxStore.dispatch(CommunityActions.resetAll())
                 }
@@ -95,6 +90,21 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
     }
     // <-----------------------------------
 
+    // functions related to room
+    createChatRoom(selectedMembers: Array<CenterUser>) {
+        const user_ids = selectedMembers.map((v) => v.id)
+        user_ids.push(this.user.id)
+        this.nxStore.dispatch(
+            CommunityActions.startCreateChatRoom({
+                centerId: this.center.id,
+                reqBody: {
+                    users_ids: user_ids,
+                    type_code: user_ids.length == 2 ? 'chat_room_type_chat_with_me' : 'chat_room_type_general',
+                },
+                spot: 'main',
+            })
+        )
+    }
     // <-----------------------------------
 
     // modal vars and fucntions
@@ -109,7 +119,7 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
     }
     onCreateRoomConfirm(members: Array<CenterUser>) {
         this.hideCreateRoomModal()
-        // members.length == 1 ? this.createDmRoom(members) : this.createGroupRoom(members)
+        this.createChatRoom(members)
     }
 
     // - // 채팅방 초대
@@ -123,15 +133,7 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
     onInviteUserConfirm(members: Array<CenterUser>) {
         console.log('onInviteUserConfirm: ', members)
         this.hideInviteUserModal()
-        // const addedUserIdList = this.addUserToSelectedRoom(members).map((roomUser) => roomUser.userId)
-        // const mergedUserIdList = [...this.selectedRoom.value.userList, ...addedUserIdList]
-        // this.sendInviteInfoMessage(members, this.selectedRoom.value.userList)
-        // this.selectedRoom.value.userList.forEach((userId) => {
-        //     this.firestoreService.updateUserRoom(userId, this.gym.id, this.selectedRoom.value.id, {
-        //         userList: mergedUserIdList,
-        //     })
-        // })
-        // this.selectedRoom.value.userList = mergedUserIdList
+        this.createChatRoom(members)
     }
 
     // - // 채팅방 나가기

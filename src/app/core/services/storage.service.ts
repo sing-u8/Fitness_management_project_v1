@@ -7,7 +7,9 @@ declare let Kakao: any
 import { User } from '@schemas/user'
 import { Center } from '@schemas/center'
 
-import * as _ from 'lodash'
+import { WsChatService } from '@services/web-socket/ws-chat.service'
+
+import _ from 'lodash'
 
 type UserOrEmpty = User | { sign_in_method: string }
 
@@ -16,7 +18,7 @@ export class StorageService {
     private storage = sessionStorage
     private userKey = 'redwhale:authUser'
 
-    constructor(private fireAuth: Auth, private router: Router) {}
+    constructor(private fireAuth: Auth, private router: Router, private WsChat: WsChatService) {}
 
     getUser(): User {
         return JSON.parse(this.storage.getItem(this.userKey))
@@ -54,6 +56,7 @@ export class StorageService {
 
     async logout() {
         await this.removeUser()
+        this.WsChat.closeChatWs()
         this.router.navigateByUrl('/auth/login')
     }
 

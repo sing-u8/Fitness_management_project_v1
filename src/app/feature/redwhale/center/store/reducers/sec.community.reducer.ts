@@ -10,6 +10,8 @@ import { ChatRoomMessage } from '@schemas/chat-room-message'
 import { ChatRoomUser } from '@schemas/chat-room-user'
 import { Loading } from '@schemas/store/loading'
 
+export type spot = 'main' | 'drawer'
+
 export interface State {
     // common
     curCenterId: string
@@ -17,6 +19,8 @@ export interface State {
     error: string
 
     // main
+    mainCurChatRoom: ChatRoom
+    drawerCurChatRoom: ChatRoom
 }
 
 export const initialState: State = {
@@ -26,12 +30,34 @@ export const initialState: State = {
     error: '',
 
     // main
+    // main - screen = main
+    mainCurChatRoom: undefined,
+    // main - drawer
+    drawerCurChatRoom: undefined,
 }
 
 export const communityReducer = createImmerReducer(
     initialState,
+    // async
+    on(CommunitydActions.startCreateChatRoom, (state, { centerId, reqBody, spot }) => {
+        console.log('startCreateChatRoom --', centerId, reqBody, spot)
+        return state
+    }),
+    on(CommunitydActions.finishCreateChatRoom, (state, { chatRoom, spot }) => {
+        return state
+    }),
+    // sync
+    // common
     on(CommunitydActions.setCurCenterId, (state, { centerId }) => {
         state.curCenterId = centerId
+        return state
+    }),
+    on(CommunitydActions.error, (state, { error }) => {
+        state.error = error
+        return state
+    }),
+    on(CommunitydActions.resetAll, (state) => {
+        state = { ...state, ...initialState }
         return state
     })
 )

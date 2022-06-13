@@ -16,7 +16,7 @@ import { ChatRoomMessage } from '@schemas/chat-room-message'
 @Injectable({
     providedIn: 'root',
 })
-export class CenterStatsService {
+export class CenterChatRoomService {
     private SERVER = `${environment.protocol}${environment.subDomain}${environment.domain}${environment.port}${environment.version}/center`
 
     constructor(private http: HttpClient) {}

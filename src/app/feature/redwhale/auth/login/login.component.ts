@@ -81,9 +81,14 @@ export class LoginComponent implements OnInit, OnDestroy {
     signInWithGoogle(btLoadingFns: ClickEmitterType) {
         btLoadingFns.showLoading()
         this.signInMethod = 'google'
-        signInWithPopup(this.fireAuth, new GoogleAuthProvider()).finally(() => {
-            btLoadingFns.hideLoading()
-        })
+        signInWithPopup(this.fireAuth, new GoogleAuthProvider())
+            .then((res) => {
+                console.log('then --- google login : ', res)
+            })
+            .finally(() => {
+                console.log('finally --- google login : ', this.storageService.getUser())
+                btLoadingFns.hideLoading()
+            })
     }
 
     signInWithApple(btLoadingFns: ClickEmitterType) {
