@@ -1,6 +1,5 @@
 import { on } from '@ngrx/store'
 import { createImmerReducer } from 'ngrx-immer/store'
-import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity'
 import _ from 'lodash'
 
 // schema

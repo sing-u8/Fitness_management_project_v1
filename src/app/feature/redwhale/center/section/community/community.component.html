@@ -173,3 +173,33 @@
     </section>
 
 </section>
+
+
+<rw-invite-room-modal
+    [mode] = "'create'"
+    [(visible)] = "doShowCreateRoomModal"
+    (cancel) = "hideCreateRoomModal()"
+    (confirm) = "onCreateRoomConfirm($event)"
+></rw-invite-room-modal>
+<!-- <rw-invite-room-modal
+    [mode] = "'invite'"
+    [roomUserList] = "roomUserList"
+    [(visible)] = "doShowInviteUserModal"
+    (cancel) = "hideInviteUserModal()"
+    (confirm) = "onInviteUserConfirm($event)"
+></rw-invite-room-modal> -->
+
+
+<rw-modal
+    [(visible)] = "showLeaveRoomModal"
+    [data] ="showLeaveRoomModalText"
+    (cancel) = "closeLeaveRoomModal()"
+    (confirm) = "leaveRoomModalConfirm()"
+></rw-modal>
+
+<rw-modal
+    [(visible)] = "doShowChangeRoomNameModal"
+    [data] ="changeRoomNameText"
+    (cancel) = "hidehangeRoomNameModal()"
+    (confirm) = "confirmChangeRoomNameModal()"
+></rw-modal>

@@ -213,13 +213,24 @@ FullCalendarModule.registerPlugins([
         SmallModalComponent,
         MemberListModalComponent,
         LessonFlipListComponent,
+        // -- //drawer
         DrawerLessonCardComponent,
         SchDayRepeatSelectComponent,
         DwMembershipListModalComponent,
         DrawerModifyLessonCardComponent,
         ChargeModalComponent,
         DatepickModalComponent,
+        // -- //schedule
         DbDatepickerComponent,
+        // -- //community
+        MultiAvatarComponent,
+        InviteRoomModalComponent,
+        DragGuideComponent,
+        ChatRoomListDropdownComponent,
+        ChatMessageUserComponent,
+        ChatMessageComponent,
+        ChatIntroMessageComponent,
+        ChattingRoomCardComponent,
         // Directives
         // AutoScrollDirective,
         ButtonDirective,

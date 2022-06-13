@@ -6,6 +6,7 @@ import * as FromLocker from '@centerStore/reducers/sec.locker.reducer'
 import * as FromDashboard from '@centerStore/reducers/sec.dashboard.reducer'
 import * as FromSchedule from '@centerStore/reducers/sec.schedule.reducer'
 import * as FromSale from '@centerStore/reducers/sec.sale.reducer'
+import * as FromCommunity from '@centerStore/reducers/sec.community.reducer'
 
 export interface GymState {
     'Center/Lesson': FromLesson.State
@@ -14,6 +15,7 @@ export interface GymState {
     'Center/Dashboard': FromDashboard.State
     'Center/Schedule': FromSchedule.State
     'Center/Sale': FromSale.State
+    'Center/Community': FromCommunity.State
 }
 
 export const FeatureKey = 'Center'
