@@ -199,6 +199,8 @@ export class ModifyLessonScheduleComponent implements OnInit, OnDestroy, AfterVi
                 repeat_end_date: dayjs(this.repeatDatepick.endDate).format('YYYY-MM-DD'),
                 responsibility_user_id: selectedStaff.instructor.calendar_user.id,
                 class: {
+                    name: this.lessonEvent.class.name,
+                    category_name: this.lessonEvent.class.category_name,
                     class_item_id: this.lessonEvent.class.class_item_id,
                     type_code: this.lessonEvent.class.type_code,
                     state_code: 'calendar_task_class_state_active',
@@ -222,6 +224,8 @@ export class ModifyLessonScheduleComponent implements OnInit, OnDestroy, AfterVi
                 memo: this.planDetailInputs.detail,
                 responsibility_user_id: selectedStaff.instructor.calendar_user.id,
                 class: {
+                    name: this.lessonEvent.class.name,
+                    category_name: this.lessonEvent.class.category_name,
                     class_item_id: this.lessonEvent.class.class_item_id,
                     type_code: this.lessonEvent.class.type_code,
                     state_code: 'calendar_task_class_state_active',

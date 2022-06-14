@@ -868,6 +868,8 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
                     end_date: dayjs(arg.event.endStr).format('YYYY-MM-DD'),
                     end_time: dayjs(arg.event.endStr).format('HH:mm'),
                     class: {
+                        name: eventData.class.name,
+                        category_name: eventData.class.category_name,
                         class_item_id: eventData.class.class_item_id,
                         type_code: eventData.class.type_code,
                         state_code: 'calendar_task_class_state_active',
@@ -891,6 +893,8 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
                     end_date: dayjs(arg.event.endStr).format('YYYY-MM-DD'),
                     end_time: dayjs(arg.event.endStr).format('HH:mm'),
                     class: {
+                        name: eventData.class.name,
+                        category_name: eventData.class.category_name,
                         class_item_id: eventData.class.class_item_id,
                         type_code: eventData.class.type_code,
                         state_code: 'calendar_task_class_state_active',

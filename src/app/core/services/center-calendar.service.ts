@@ -279,6 +279,8 @@ export interface UpdateCalendarTaskReqBody {
 }
 
 export interface ClassForCU {
+    category_name: string
+    name: string
     class_item_id?: string
     type_code?: string
     state_code?: 'calendar_task_class_state_active' | 'calendar_task_class_state_inactive'

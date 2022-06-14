@@ -212,6 +212,8 @@ export class LessonScheduleComponent implements OnInit, OnDestroy, AfterViewInit
                 repeat_end_date: dayjs(this.repeatDatepick.endDate).format('YYYY-MM-DD'),
                 responsibility_user_id: selectedStaff.instructor.calendar_user.id,
                 class: {
+                    category_name: this.selectedLesson.lessonCateg.name,
+                    name: this.selectedLesson.lesson.name,
                     class_item_id: this.selectedLesson.lesson.id,
                     type_code: this.selectedLesson.lesson.type_code,
                     state_code: 'calendar_task_class_state_active',
@@ -242,6 +244,8 @@ export class LessonScheduleComponent implements OnInit, OnDestroy, AfterViewInit
                 repeat: false,
                 responsibility_user_id: selectedStaff.instructor.calendar_user.id,
                 class: {
+                    category_name: this.selectedLesson.lessonCateg.name,
+                    name: this.selectedLesson.lesson.name,
                     class_item_id: this.selectedLesson.lesson.id,
                     type_code: this.selectedLesson.lesson.type_code,
                     state_code: 'calendar_task_class_state_active',
