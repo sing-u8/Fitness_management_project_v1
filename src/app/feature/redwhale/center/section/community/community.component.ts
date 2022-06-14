@@ -48,6 +48,7 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
     public center: Center
 
     // ngrx vars
+    // public chatRoomList$ = this.nxStore.select(CommunitySelector)
 
     public unsubscribe$ = new Subject<void>()
 
@@ -98,8 +99,8 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
             CommunityActions.startCreateChatRoom({
                 centerId: this.center.id,
                 reqBody: {
-                    users_ids: user_ids,
-                    type_code: user_ids.length == 2 ? 'chat_room_type_chat_with_me' : 'chat_room_type_general',
+                    user_ids: user_ids,
+                    type_code: 'chat_room_type_general',
                 },
                 spot: 'main',
             })

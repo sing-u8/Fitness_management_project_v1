@@ -19,7 +19,10 @@ export interface State {
     error: string
 
     // main
+    ChatRoomList: Array<ChatRoom>
+    // main - screen = main
     mainCurChatRoom: ChatRoom
+    // main - drawer
     drawerCurChatRoom: ChatRoom
 }
 
@@ -30,6 +33,7 @@ export const initialState: State = {
     error: '',
 
     // main
+    ChatRoomList: [],
     // main - screen = main
     mainCurChatRoom: undefined,
     // main - drawer
@@ -39,11 +43,17 @@ export const initialState: State = {
 export const communityReducer = createImmerReducer(
     initialState,
     // async
-    on(CommunitydActions.startCreateChatRoom, (state, { centerId, reqBody, spot }) => {
-        console.log('startCreateChatRoom --', centerId, reqBody, spot)
+    on(CommunitydActions.finishCreateChatRoom, (state, { chatRoom, spot }) => {
+        if (spot == 'main') {
+            state.mainCurChatRoom = chatRoom
+        } else {
+            state.drawerCurChatRoom = chatRoom
+        }
+        state.ChatRoomList.push(chatRoom)
         return state
     }),
-    on(CommunitydActions.finishCreateChatRoom, (state, { chatRoom, spot }) => {
+    on(CommunitydActions.finishGetChatRooms, (state, { chatRooms }) => {
+        state.ChatRoomList = chatRooms
         return state
     }),
     // sync
@@ -61,6 +71,10 @@ export const communityReducer = createImmerReducer(
         return state
     })
 )
+
+// main
+export const selectMainCurChatRoom = (state: State) => state.mainCurChatRoom
+export const selectDrawerCurChatRoom = (state: State) => state.drawerCurChatRoom
 
 // common
 export const selectCurCenterId = (state: State) => state.curCenterId

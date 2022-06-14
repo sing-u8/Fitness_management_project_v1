@@ -30,17 +30,7 @@ export class WsChatService {
     connect(url: string): WebSocketSubject<any> {
         if (!this.chatWs) {
             this.chatWs = webSocket(this.wss)
-            this.chatWs.subscribe({
-                next: (ws) => {
-                    this.switchByWsChatBase(ws as wsChat.Base)
-                },
-                error: (err) => {
-                    console.log('web socket chat error : ', err)
-                },
-                complete: () => {
-                    console.log('web socket chat complete!')
-                },
-            })
+            this.chatWs
             console.log('rxjs webSocket connected: ' + url)
         }
         return this.chatWs
@@ -48,6 +38,18 @@ export class WsChatService {
 
     subscribeChatWs(accessToken: string) {
         console.log('subscribeChatWs - ', accessToken)
+        this.chatWs.subscribe({
+            next: (ws) => {
+                this.switchByWsChatBase(ws as wsChat.Base)
+            },
+            error: (err) => {
+                console.log('web socket chat error : ', err)
+            },
+            complete: () => {
+                console.log('web socket chat complete!')
+            },
+        })
+
         this.chatWs.next({
             action: 'subscription',
             accessToken: accessToken,

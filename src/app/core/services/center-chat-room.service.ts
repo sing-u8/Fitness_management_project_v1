@@ -38,7 +38,7 @@ export class CenterChatRoomService {
     }
 
     // 채팅방 조회
-    getCenterRoom(centerId: string): Observable<Array<ChatRoom>> {
+    getChatRoom(centerId: string): Observable<Array<ChatRoom>> {
         const url = this.SERVER + `/${centerId}/chat_room`
         const options = {
             headers: new HttpHeaders({
@@ -54,7 +54,7 @@ export class CenterChatRoomService {
     }
 
     // 채팅방 수정
-    updateCenterRoom(centerId: string, chatRoomId: string, reqBody: UpdateCenterRoomReqBody): Observable<Response> {
+    updateChatRoom(centerId: string, chatRoomId: string, reqBody: UpdateCenterRoomReqBody): Observable<Response> {
         const url = this.SERVER + `/${centerId}/chat_room/${chatRoomId}`
         const options = {
             headers: new HttpHeaders({
@@ -176,7 +176,7 @@ export class CenterChatRoomService {
 
 export interface CreateChatRoomReqBody {
     type_code: 'chat_room_type_chat_with_me' | 'chat_room_type_general'
-    users_ids: Array<string>
+    user_ids: Array<string>
 }
 
 export interface UpdateCenterRoomReqBody {
