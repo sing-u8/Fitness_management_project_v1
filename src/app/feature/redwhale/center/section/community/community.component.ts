@@ -48,7 +48,11 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
     public center: Center
 
     // ngrx vars
-    // public chatRoomList$ = this.nxStore.select(CommunitySelector)
+    public chatRoomList$ = this.nxStore.select(CommunitySelector.chatRoomList)
+
+    public curChatRoom$ = this.nxStore.select(CommunitySelector.mainCurChatRoom)
+    public chatRoomUserList$ = this.nxStore.select(CommunitySelector.mainChatRoomUserList)
+    public chatRoomMsgs$ = this.nxStore.select(CommunitySelector.mainChatRoomMsgs)
 
     public unsubscribe$ = new Subject<void>()
 
@@ -70,6 +74,7 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
             .subscribe((curCenterId) => {
                 if (curCenterId != this.center.id) {
                     this.nxStore.dispatch(CommunityActions.resetAll())
+                    this.nxStore.dispatch(CommunityActions.startGetChatRooms({ centerId: this.center.id }))
                 }
             })
 
@@ -109,6 +114,13 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
     // <-----------------------------------
 
     // modal vars and fucntions
+
+    // - // 채팅방 입장
+    public joinRoom(chatRoom: ChatRoom) {
+        this.nxStore.dispatch(
+            CommunityActions.startJoinChatRoom({ centerId: this.center.id, chatRoom: chatRoom, spot: 'main' })
+        )
+    }
 
     // - // 채팅방 생성
     public doShowCreateRoomModal = false
@@ -186,9 +198,13 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
     changeRoomName(newName: string, inputValid: boolean) {
         if (inputValid) {
             const trimName = _.trim(newName)
-            // this.firestoreService.updateUserRoom(this.user.id, this.gym.id, this.selectedRoom.value.id, {
-            //     name: trimName,
-            // })
+            this.nxStore.dispatch(
+                CommunityActions.startUpdateChatRoomName({
+                    centerId: this.center.id,
+                    reqBody: { name: trimName },
+                    spot: 'main',
+                })
+            )
         }
         this.resetChangeRoomNameData()
     }

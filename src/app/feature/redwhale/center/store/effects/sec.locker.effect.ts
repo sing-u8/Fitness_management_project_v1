@@ -1,19 +1,15 @@
 import { Injectable } from '@angular/core'
 import { createEffect, Actions, ofType, concatLatestFrom } from '@ngrx/effects'
 import { Store } from '@ngrx/store'
-import { of, EMPTY, iif } from 'rxjs'
-import { catchError, switchMap, tap, map, exhaustMap, mapTo } from 'rxjs/operators'
+import { of } from 'rxjs'
+import { catchError, switchMap, map } from 'rxjs/operators'
 
 import { showToast } from '@appStore/actions/toast.action'
 
 import * as LockerActions from '../actions/sec.locker.actions'
 import * as LockerSelector from '../selectors/sec.locker.selector'
 
-import { LockerCategory } from '@schemas/locker-category'
-import { LockerItem } from '@schemas/locker-item'
-
 import { CenterLockerService } from '@services/center-locker.service'
-import { UsersLockerService } from '@services/users-locker.service'
 import { CenterUsersLockerService } from '@services/center-users-locker.service.service'
 import { StorageService } from '@services/storage.service'
 
@@ -25,7 +21,6 @@ export class LockerEffect {
         private actions$: Actions,
         private store: Store,
         private centerLokcerApi: CenterLockerService,
-        private usersLockerApi: UsersLockerService,
         private centerUsersLockerApi: CenterUsersLockerService,
         private storageService: StorageService
     ) {}

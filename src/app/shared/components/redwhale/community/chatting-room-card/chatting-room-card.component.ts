@@ -1,8 +1,7 @@
 import { Component, OnInit, Input, AfterViewInit, OnChanges } from '@angular/core'
 
-import { UserGymRoomFE } from '@schemas/firestore/user-gym-room'
-
-import { CenterUser } from '@schemas/center-user'
+import { ChatRoom } from '@schemas/chat-room'
+import { ChatRoomUser } from '@schemas/chat-room-user'
 
 @Component({
     selector: 'rw-chatting-room-card',
@@ -11,36 +10,23 @@ import { CenterUser } from '@schemas/center-user'
 })
 export class ChattingRoomCardComponent implements OnInit, AfterViewInit, OnChanges {
     @Input() userId: string
-    @Input() isNoticeRoom: boolean
-    @Input() room: UserGymRoomFE
-    @Input() selectedRoom: UserGymRoomFE
-    @Input() currentUser: CenterUser
-    @Input() messengerGetter: (id: string) => CenterUser
+    @Input() room: ChatRoom
+    @Input() selectedRoom: ChatRoom
 
-    public userList: CenterUser[] = []
-
-    public hideUserCount = false
-    public hideUserPicture = false
+    public userList: ChatRoomUser[] = []
 
     constructor() {}
 
     ngOnInit(): void {
         this.initUserListInScreen()
-        this.setHideUserPicture()
-        this.setHideUserCount()
     }
     ngAfterViewInit(): void {}
     ngOnChanges(): void {}
 
     initUserListInScreen() {
-        this.userList = this.room.doChatWithMe
-            ? [this.room.userList[0]].map((userId) => this.messengerGetter(userId))
-            : this.room.userList.filter((userId) => userId != this.userId).map((userId) => this.messengerGetter(userId))
-    }
-    setHideUserCount() {
-        this.hideUserCount = this.currentUser.role_code == 'member' && this.isNoticeRoom
-    }
-    setHideUserPicture() {
-        this.hideUserPicture = this.currentUser.role_code == 'member'
+        this.userList =
+            this.room.type_code == 'chat_room_type_chat_with_me'
+                ? [this.room.chat_room_users.find((v) => v.id == this.userId)]
+                : this.room.chat_room_users.filter((v) => v.id != this.userId).map((v) => v)
     }
 }

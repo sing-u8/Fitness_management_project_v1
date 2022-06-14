@@ -3,6 +3,8 @@ import { createAction, props } from '@ngrx/store'
 import * as FromCommunity from '@centerStore/reducers/sec.community.reducer'
 
 import { ChatRoom } from '@schemas/chat-room'
+import { ChatRoomMessage } from '@schemas/chat-room-message'
+import { ChatRoomUser } from '@schemas/chat-room-user'
 
 import * as ChatRoomApi from '@services/center-chat-room.service'
 
@@ -32,4 +34,42 @@ export const finishGetChatRooms = createAction(
     props<{ chatRooms: Array<ChatRoom> }>()
 )
 
+export const startJoinChatRoom = createAction(
+    `[${FeatureKey}] Start Join Chat Room`,
+    props<{ chatRoom: ChatRoom; centerId: string; spot: FromCommunity.spot }>()
+)
+export const finishJoinChatRoom = createAction(
+    `[${FeatureKey}] Finish Join Chat Room`,
+    props<{
+        chatRoom: ChatRoom
+        chatRoomMesgs: Array<ChatRoomMessage>
+        chatRoomUsers: Array<ChatRoomUser>
+        spot: FromCommunity.spot
+        isSameRoom: boolean
+    }>()
+)
+
+export const startGetChatRoomMsgs = createAction(
+    `[${FeatureKey}] Start Get Chat Room Messages`,
+    props<{ centerId: string; chatRoomId: string }>()
+)
+export const finishGetChatRoomMsgs = createAction(
+    `[${FeatureKey}] Finish Get Chat Room Messages`,
+    props<{ chatRoomMsgs: Array<ChatRoomMessage> }>()
+)
+
+export const startUpdateChatRoomName = createAction(
+    `[${FeatureKey}] Start Change Chat Room Name`,
+    props<{ centerId: string; reqBody: ChatRoomApi.UpdateCenterRoomReqBody; spot: FromCommunity.spot }>()
+)
+export const finishUpdateChatRoomName = createAction(
+    `[${FeatureKey}] Finish Change Chat Room Name`,
+    props<{ chatRoom: ChatRoom; spot: FromCommunity.spot }>()
+)
+
 // - // sync
+export const updateChatRooms = createAction(`[${FeatureKey}] Update Chat Room`, props<{ chatRoom: ChatRoom }>())
+export const updateChatRoomMsgs = createAction(
+    `[${FeatureKey}] Update Chat Room Messages`,
+    props<{ chatRoomMsg: ChatRoomMessage }>()
+)

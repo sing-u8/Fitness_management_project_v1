@@ -19,11 +19,16 @@ export interface State {
     error: string
 
     // main
-    ChatRoomList: Array<ChatRoom>
+    chatRoomList: Array<ChatRoom>
+
     // main - screen = main
     mainCurChatRoom: ChatRoom
+    mainChatRoomMsgs: Array<ChatRoomMessage>
+    mainChatRoomUserList: Array<ChatRoomUser>
     // main - drawer
     drawerCurChatRoom: ChatRoom
+    drawerChatRoomMsgs: Array<ChatRoomMessage>
+    drawerChatRoomUserList: Array<ChatRoomUser>
 }
 
 export const initialState: State = {
@@ -33,11 +38,16 @@ export const initialState: State = {
     error: '',
 
     // main
-    ChatRoomList: [],
+    chatRoomList: [],
+
     // main - screen = main
     mainCurChatRoom: undefined,
+    mainChatRoomMsgs: [],
+    mainChatRoomUserList: [],
     // main - drawer
     drawerCurChatRoom: undefined,
+    drawerChatRoomMsgs: [],
+    drawerChatRoomUserList: [],
 }
 
 export const communityReducer = createImmerReducer(
@@ -49,14 +59,61 @@ export const communityReducer = createImmerReducer(
         } else {
             state.drawerCurChatRoom = chatRoom
         }
-        state.ChatRoomList.push(chatRoom)
+        state.chatRoomList.push(chatRoom)
         return state
     }),
     on(CommunitydActions.finishGetChatRooms, (state, { chatRooms }) => {
-        state.ChatRoomList = chatRooms
+        state.chatRoomList = chatRooms
+        return state
+    }),
+    on(CommunitydActions.startJoinChatRoom, (state, { chatRoom, spot }) => {
+        // if (spot == 'main') {
+        //     state.mainCurChatRoom = chatRoom
+        // } else {
+        //     state.drawerCurChatRoom = chatRoom
+        // }
+        return state
+    }),
+    on(CommunitydActions.finishJoinChatRoom, (state, { chatRoom, chatRoomMesgs, chatRoomUsers, spot }) => {
+        // !! 추후에 추가 수정 필요
+        if (spot == 'main') {
+            state.mainCurChatRoom = chatRoom
+            state.mainChatRoomMsgs = chatRoomMesgs
+            state.mainChatRoomUserList = chatRoomUsers
+        } else {
+            state.drawerCurChatRoom = chatRoom
+            state.drawerChatRoomMsgs = chatRoomMesgs
+            state.drawerChatRoomUserList = chatRoomUsers
+        }
+        return state
+    }),
+    on(CommunitydActions.startUpdateChatRoomName, (state, { spot, reqBody }) => {
+        if (spot == 'main') {
+            state.mainCurChatRoom.name = reqBody.name
+            state.chatRoomList.find((v) => v.id == state.mainCurChatRoom.id).name = reqBody.name
+        } else {
+            state.drawerCurChatRoom.name = reqBody.name
+            state.chatRoomList.find((v) => v.id == state.drawerCurChatRoom.id).name = reqBody.name
+        }
+        return state
+    }),
+    on(CommunitydActions.finishUpdateChatRoomName, (state, { spot, chatRoom }) => {
+        if (spot == 'main') {
+            state.mainCurChatRoom = chatRoom
+            state.chatRoomList[state.chatRoomList.findIndex((v) => v.id == state.mainCurChatRoom.id)] = chatRoom
+        } else {
+            state.drawerCurChatRoom = chatRoom
+            state.chatRoomList[state.chatRoomList.findIndex((v) => v.id == state.drawerCurChatRoom.id)] = chatRoom
+        }
         return state
     }),
     // sync
+    on(CommunitydActions.updateChatRooms, (state, { chatRoom }) => {
+        return state
+    }),
+    on(CommunitydActions.updateChatRoomMsgs, (state, { chatRoomMsg }) => {
+        return state
+    }),
     // common
     on(CommunitydActions.setCurCenterId, (state, { centerId }) => {
         state.curCenterId = centerId
@@ -73,8 +130,15 @@ export const communityReducer = createImmerReducer(
 )
 
 // main
+export const selectChatRoomList = (state: State) => state.chatRoomList
+// main - screen = main
 export const selectMainCurChatRoom = (state: State) => state.mainCurChatRoom
+export const selectMainChatRoomMsgs = (state: State) => state.mainChatRoomMsgs
+export const selectMainChatRoomUserList = (state: State) => state.mainChatRoomUserList
+// main - drawer
 export const selectDrawerCurChatRoom = (state: State) => state.drawerCurChatRoom
+export const selectDrawerChatRoomMsgs = (state: State) => state.drawerChatRoomMsgs
+export const selectDrawerChatRoomUserList = (state: State) => state.drawerChatRoomUserList
 
 // common
 export const selectCurCenterId = (state: State) => state.curCenterId

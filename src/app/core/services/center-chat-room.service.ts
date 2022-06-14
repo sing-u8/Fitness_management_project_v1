@@ -54,7 +54,7 @@ export class CenterChatRoomService {
     }
 
     // 채팅방 수정
-    updateChatRoom(centerId: string, chatRoomId: string, reqBody: UpdateCenterRoomReqBody): Observable<Response> {
+    updateChatRoom(centerId: string, chatRoomId: string, reqBody: UpdateCenterRoomReqBody): Observable<ChatRoom> {
         const url = this.SERVER + `/${centerId}/chat_room/${chatRoomId}`
         const options = {
             headers: new HttpHeaders({
@@ -63,7 +63,7 @@ export class CenterChatRoomService {
         }
         return this.http.put<Response>(url, reqBody, options).pipe(
             map((res) => {
-                return res
+                return res.dataset[0]
             }),
             catchError(handleError)
         )

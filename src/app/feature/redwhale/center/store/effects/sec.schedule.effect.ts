@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core'
-import { createEffect, Actions, ofType, concatLatestFrom } from '@ngrx/effects'
-import { Store } from '@ngrx/store'
-import { of, EMPTY, iif, forkJoin } from 'rxjs'
-import { catchError, switchMap, tap, map, filter, find, mergeMap } from 'rxjs/operators'
+import { createEffect, Actions, ofType } from '@ngrx/effects'
+import { of, forkJoin } from 'rxjs'
+import { catchError, switchMap, map } from 'rxjs/operators'
 
 import { StorageService } from '@services/storage.service'
 import { CenterCalendarService } from '@services/center-calendar.service'
@@ -10,10 +9,7 @@ import { CenterUsersService } from '@services/center-users.service'
 import { CenterLessonService } from '@services/center-lesson.service'
 
 import * as ScheduleActions from '../actions/sec.schedule.actions'
-import * as ScheduleSelector from '../selectors/sec.schedule.selector'
 import * as ScheduleReducer from '../reducers/sec.schedule.reducer'
-
-import { showToast } from '@appStore/actions/toast.action'
 
 import _ from 'lodash'
 
@@ -21,7 +17,6 @@ import _ from 'lodash'
 export class ScheduleEffect {
     constructor(
         private actions$: Actions,
-        private store: Store,
         private storageService: StorageService,
         private centerCalendarApi: CenterCalendarService,
         private centerUsersApi: CenterUsersService,

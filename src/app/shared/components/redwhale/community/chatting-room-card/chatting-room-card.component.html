@@ -7,11 +7,9 @@
 
     <div class="avatar-container">
 
-      <img *ngIf="isNoticeRoom == true" src="assets/icons/etc/notice.svg" alt="notice.svg" class="notice">
+      <!-- <img *ngIf="isNoticeRoom == true" src="assets/icons/etc/notice.svg" alt="notice.svg" class="notice"> -->
       <rw-multi-avatar
-        *ngIf="!isNoticeRoom"
         [userList]="userList"
-        [hideUserPicture]="hideUserPicture"
       ></rw-multi-avatar>
 
     </div>
@@ -21,20 +19,26 @@
     </div>
 
     <div class="count-container">
-      <span *ngIf="room?.doChatWithMe" class="rw-typo-subtext0-regular me">나</span>
-      <span *ngIf="(!room?.doChatWithMe && !hideUserCount) && (room.userList.length != 2)" class="rw-typo-subtext0-regular group">{{room.userList.length}}</span>
+      <span *ngIf="room?.type_code == 'chat_room_type_chat_with_me'" class="rw-typo-subtext0-regular me">나</span>
+      <span
+        *ngIf="(room?.type_code != 'chat_room_type_chat_with_me')
+              && (room.chat_room_users.length != 2)"
+        class="rw-typo-subtext0-regular group"
+      >
+        {{room.chat_room_users.length}}
+      </span>
     </div>
 
   </div>
 
   <div class="right">
     <div
-      *ngIf="room.unread > 0"
+      *ngIf="room.unread_message_count > 0"
       class="rw-typo-subtext3"
-      [class.single-badge] = "room.unread < 10 && room.unread > 0"
-      [class.multi-badge] = "room.unread > 9"
+      [class.single-badge] = "room.unread_message_count < 10 && room.unread_message_count > 0"
+      [class.multi-badge] = "room.unread_message_count > 9"
     >
-      {{room.unread}}
+      {{room.unread_message_count}}
     </div>
   </div>
 

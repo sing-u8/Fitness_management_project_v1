@@ -15,26 +15,31 @@
                 >
             </div>
             <div class="chatting-room-container thin-scroll-y-overlay2">
-                <!-- <rw-chatting-room-card
-                    *ngFor="let room of userRoomList$ | async; let i = index" [userId]="user.id"
-                    [room]="room" [isNoticeRoom]="room.id == 'general'" [selectedRoom]="selectedRoom.value"
-                    [currentUser]="currentUser.user" (click)="joinRoom(room)"
-                ></rw-chatting-room-card> -->
+                <rw-chatting-room-card
+                    *ngFor="let room of chatRoomList$ | async; let i = index"
+                    [userId]="user.id"
+                    [room]="room"
+                    [selectedRoom]="(curChatRoom$ | async)"
+                    (click)="joinRoom(room)"
+                ></rw-chatting-room-card>
             </div>
         </div>
 
         <div class="chatting-screen-container">
 
             <div class="chatting-screen-header">
-                <form id="left" class="room-title">
-<!--
-                    <span *ngIf="!changeRoomMode" class="rw-typo-title2">{{this.selectedRoom.value?.name}}</span>
+                <form
+                    *ngIf="(curChatRoom$ | async)"
+                    id="left"
+                    class="room-title"
+                >
+                    <span *ngIf="!changeRoomMode" class="rw-typo-title2">{{(curChatRoom$ | async).name}}</span>
                     <img
                         rw-tooltip rwTooltipTitle="채팅방 이름 변경"
                         rwTooltipPlacement="bottom"
-                        *ngIf="this.selectedRoom.value?.type =='private'
-                                && this.selectedRoom.value?.id != 'general'
-                                && !changeRoomMode" src="assets/icons/etc/edit-darkgrey.svg"
+                        *ngIf=" (curChatRoom$ | async).type_code == 'chat_room_type_general'
+                                && !changeRoomMode"
+                        src="assets/icons/etc/edit-darkgrey.svg"
                         alt="edit-darkgrey.svg"
                         (click)="showChangeRoomNameModal()"
                     >
@@ -42,12 +47,12 @@
                     <input
                         *ngIf="changeRoomMode"
                         class="rw-input rw-typo-title2"
-                        placeholder="{{selectedRoom?.value?.name}}"
+                        placeholder="{{(curChatRoom$ | async).name}}"
                         (keyup.enter)="changeRoomName(changeRoomInput.value, changeRoomInput.valid)"
                         (rwClickOutside)="changeRoomName(changeRoomInput.value, changeRoomInput.valid)"
                         type="text"
                         [formControl]="changeRoomInput"
-                    > -->
+                    >
                 </form>
 
                 <!-- <div *ngIf="selectedRoom.value?.userList[0] != selectedRoom.value?.userList[1]" id="right">
