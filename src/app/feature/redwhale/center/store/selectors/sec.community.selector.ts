@@ -10,10 +10,13 @@ export const CommunityFeature = createSelector(GymFeature, (state: GymState) => 
 export const chatRoomList = createSelector(CommunityFeature, FromCommunity.selectChatRoomList)
 
 // main - screen = main
+
+export const mainPreChatRoom = createSelector(CommunityFeature, FromCommunity.selectMainPreChatRoom)
 export const mainCurChatRoom = createSelector(CommunityFeature, FromCommunity.selectMainCurChatRoom)
 export const mainChatRoomMsgs = createSelector(CommunityFeature, FromCommunity.selectMainChatRoomMsgs)
 export const mainChatRoomUserList = createSelector(CommunityFeature, FromCommunity.selectMainChatRoomUserList)
 // main - rawer
+export const drawerPreChatRoom = createSelector(CommunityFeature, FromCommunity.selectDrawerPreChatRoom)
 export const drawerCurChatRoom = createSelector(CommunityFeature, FromCommunity.selectDrawerCurChatRoom)
 export const drawerChatRoomMsgs = createSelector(CommunityFeature, FromCommunity.selectDrawerChatRoomMsgs)
 export const drawerChatRoomUserList = createSelector(CommunityFeature, FromCommunity.selectDrawerChatRoomUserList)

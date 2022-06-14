@@ -67,6 +67,15 @@ export const finishUpdateChatRoomName = createAction(
     props<{ chatRoom: ChatRoom; spot: FromCommunity.spot }>()
 )
 
+export const startLeaveChatRoom = createAction(
+    `[${FeatureKey}] Start Leave Chat Room`,
+    props<{ centerId: string; spot: FromCommunity.spot }>()
+)
+export const finishLeaveChatRoom = createAction(
+    `[${FeatureKey}] Finish Leave Chat Room`,
+    props<{ spot: FromCommunity.spot }>()
+)
+
 // - // sync
 export const updateChatRooms = createAction(`[${FeatureKey}] Update Chat Room`, props<{ chatRoom: ChatRoom }>())
 export const updateChatRoomMsgs = createAction(

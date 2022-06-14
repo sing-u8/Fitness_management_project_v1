@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
 
-import { CenterUser } from '@schemas/center-user'
+import { ChatRoomUser } from '@schemas/chat-room-user'
 
 @Component({
     selector: 'rw-chat-room-list-dropdown',
@@ -9,7 +9,7 @@ import { CenterUser } from '@schemas/center-user'
 })
 export class ChatRoomListDropdownComponent implements OnInit {
     @Input() myId: string
-    @Input() userList: CenterUser[]
+    @Input() userList: ChatRoomUser[]
     @Input() isRoomHost: boolean
     @Output() clickInviteUser = new EventEmitter()
 

@@ -13,13 +13,13 @@
       *ngFor="let user of userList; let i = index"
     >
       <rw-avatar
-        [image] ="user.center_user_picture"
-        [text]="user.center_user_name"
+        [image] ="user.picture"
+        [text]="user.name"
         [backgroundColor]="user.color"
         size="25"
         fontSize="10"
       ></rw-avatar>
-      <span id="user-name" class="rw-typo-bodytext2">{{user.center_user_name}}</span>
+      <span id="user-name" class="rw-typo-bodytext2">{{user.name}}</span>
       <span *ngIf="user.id == myId" class="rw-typo-subtext0-regular isMe">나</span>
     </div>
   </div>

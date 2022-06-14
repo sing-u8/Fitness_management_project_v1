@@ -150,6 +150,13 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     // - // 채팅방 나가기
+    public showLeaveRoomDropdown = false
+    toggleLeaveRoomDropdown() {
+        this.showLeaveRoomDropdown = !this.showLeaveRoomDropdown
+    }
+    closeLeaveRoomDropdown() {
+        this.showLeaveRoomDropdown = false
+    }
     public showLeaveRoomModal = false
     public showLeaveRoomModalText = {
         text: '채팅방에서 나가시겠어요?',
@@ -165,11 +172,8 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
         this.showLeaveRoomModal = false
     }
     leaveRoomModalConfirm() {
-        // if (this.selectedRoom.value?.isTempRoom == true) {
-        //     this.leaveTempRoom(this.selectedRoom.value.id)
-        // } else {
-        //     this.leaveRoom()
-        // }
+        // !! 임시 채팅방일 때와 생성된 채팅방 구분해서 호출하기
+        this.nxStore.dispatch(CommunityActions.startLeaveChatRoom({ centerId: this.center.id, spot: 'main' }))
         this.closeLeaveRoomModal()
     }
 
@@ -213,6 +217,40 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
         this.changeRoomInput.setValue('')
     }
     // <---------------------
+
+    // chat room userList dropdown
+    public showRoomUserList = false
+    public isRoomHost = false
+    toggleRoomUserListDropDown() {
+        this.showRoomUserList = !this.showRoomUserList
+    }
+    closeRoomUserListDropDown() {
+        this.showRoomUserList = false
+    }
+    initRoomUserList(userIdList: string[]) {
+        this.checkIsRoomHost()
+        // const isMe: GymUser = this.gymCommunityState.getValueFromUserMapState(this.user.id)
+        // const inviteeList: GymUser[] = userIdList
+        //     .filter((userId) => userId != this.user.id)
+        //     .map((userId) => this.gymCommunityState.getValueFromUserMapState(userId))
+        //     .sort()
+        // this.roomUserList = [isMe, ...inviteeList]
+    }
+    checkIsRoomHost() {
+        // if (this.selectedRoom.value.type == 'dm') {
+        //     this.isRoomHost = false
+        // } else if (this.selectedRoom.value.id == 'general') {
+        //     // ! 공지사항일 때 회원초대 상태 -- 추후에 수정하기
+        //     this.isRoomHost = false
+        // } else {
+        //     // roomid ex -> group@2b08c5ba-8c7a-11eb-b321-020f65958450#1634735919449
+        //     const hostId = this.selectedRoom.value.id.split('@')[1].split('#')[0]
+        //     this.isRoomHost = this.user.id == hostId
+        // }
+    }
+    // <---------------------
+
+    //
 
     // - // chatInput fucntions and validator, chat-message component helper tag vars  //!! 더 추가 필요
     @ViewChild('chatting_screen') chatting_screen: ElementRef

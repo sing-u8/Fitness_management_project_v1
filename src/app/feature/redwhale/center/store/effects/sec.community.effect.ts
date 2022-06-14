@@ -47,25 +47,26 @@ export class CommunityEffect {
     public joinChatRoom = createEffect(() =>
         this.actions$.pipe(
             ofType(CommunityActions.startJoinChatRoom),
-            concatLatestFrom(({ spot }) =>
-                spot == 'main'
-                    ? this.store.select(CommunitySelector.mainCurChatRoom)
-                    : this.store.select(CommunitySelector.drawerCurChatRoom)
-            ),
+            concatLatestFrom(({ spot }) => {
+                console.log('in CommunitydActions.startJoinChatRoom effect !!!!')
+                return spot == 'main'
+                    ? this.store.select(CommunitySelector.mainPreChatRoom)
+                    : this.store.select(CommunitySelector.drawerPreChatRoom)
+            }),
             switchMap(([{ centerId, chatRoom, spot }, curChatRoom]) => {
                 if (!_.isEmpty(curChatRoom) && curChatRoom.id == chatRoom.id) {
                     return []
                 } else {
                     return forkJoin({
-                        chatMsgs: this.centerChatRoomApi.getChatRoomMessage(centerId, chatRoom.id),
-                        chatUsers: this.centerChatRoomApi.getChatRoomMember(centerId, chatRoom.id),
+                        chatRoomMesgs: this.centerChatRoomApi.getChatRoomMessage(centerId, chatRoom.id),
+                        chatRoomUsers: this.centerChatRoomApi.getChatRoomMember(centerId, chatRoom.id),
                     }).pipe(
-                        switchMap(({ chatMsgs, chatUsers }) => {
+                        switchMap(({ chatRoomMesgs, chatRoomUsers }) => {
                             return [
                                 CommunityActions.finishJoinChatRoom({
                                     chatRoom,
-                                    chatRoomMesgs: chatMsgs,
-                                    chatRoomUsers: chatUsers,
+                                    chatRoomMesgs,
+                                    chatRoomUsers,
                                     spot,
                                     isSameRoom: false,
                                 }),
@@ -90,6 +91,25 @@ export class CommunityEffect {
                 this.centerChatRoomApi.updateChatRoom(centerId, curChatRoom.id, reqBody).pipe(
                     switchMap((chatRoom) => {
                         return [CommunityActions.finishUpdateChatRoomName({ chatRoom, spot })]
+                    })
+                )
+            ),
+            catchError((err: string) => of(CommunityActions.error({ error: err })))
+        )
+    )
+
+    public leaveChatRoom$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(CommunityActions.startLeaveChatRoom),
+            concatLatestFrom(({ spot }) =>
+                spot == 'main'
+                    ? this.store.select(CommunitySelector.mainPreChatRoom)
+                    : this.store.select(CommunitySelector.drawerPreChatRoom)
+            ),
+            switchMap(([{ centerId, spot }, curChatRoom]) =>
+                this.centerChatRoomApi.leaveChatRoom(centerId, curChatRoom.id).pipe(
+                    switchMap((__) => {
+                        return [CommunityActions.finishLeaveChatRoom({ spot })]
                     })
                 )
             ),

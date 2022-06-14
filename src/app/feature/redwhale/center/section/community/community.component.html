@@ -55,17 +55,21 @@
                     >
                 </form>
 
-                <!-- <div *ngIf="selectedRoom.value?.userList[0] != selectedRoom.value?.userList[1]" id="right">
-                    <div *ngIf="isMember == false" class="room-user-number" (click)="toggleRoomUserListDropDown()"
+                <div *ngIf="(curChatRoom$ | async) && (curChatRoom$ | async).type_code == 'chat_room_type_general'" id="right">
+                    <div class="room-user-number" (click)="toggleRoomUserListDropDown()"
                         (rwClickOutside)="closeRoomUserListDropDown()">
                         <img src="assets/icons/etc/user-count.svg" alt="user-count.svg">
                         <span class="rw-typo-bodytext0 user-count">
-                            {{roomUserList.length}}
+                            {{(chatRoomUserList$ | async).length}}
                         </span>
                     </div>
 
-                    <div class="leave-room-button" (click)="toggleLeaveRoomDropdown()"
-                        (rwClickOutside)="closeLeaveRoomDropdown()" *ngIf="selectedRoom.value?.id != 'general'">
+                    <div
+                        class="leave-room-button"
+                        (click)="toggleLeaveRoomDropdown()"
+                        (rwClickOutside)="closeLeaveRoomDropdown()"
+                        *ngIf="(curChatRoom$ | async).type_code == 'chat_room_type_general'"
+                    >
                         <img src="assets/icons/etc/menu-vertical.svg" alt="vertical-menu">
                     </div>
 
@@ -75,12 +79,12 @@
 
                     <rw-chat-room-list-dropdown
                         *ngIf="showRoomUserList"
-                        [userList]="roomUserList"
+                        [userList]="(chatRoomUserList$ | async)"
                         [myId]="user.id"
                         [isRoomHost]="isRoomHost"
                         (clickInviteUser)="closeRoomUserListDropDown();showInviteUserModal()"
                     ></rw-chat-room-list-dropdown>
-                </div> -->
+                </div>
             </div>
 
             <div #chat_screen class="chatting-screen">
