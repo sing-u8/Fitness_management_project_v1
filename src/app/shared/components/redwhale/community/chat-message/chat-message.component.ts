@@ -14,8 +14,8 @@ import { saveAs } from 'file-saver'
 
 import { FileService } from '@services/file.service'
 
-import { MsgType, Message, File as _File } from '@schemas/firestore/message'
 import { CenterUser } from '@schemas/center-user'
+import { ChatRoomMessage, ChatRoomMessageType } from '@schemas/chat-room-message'
 
 @Component({
     selector: 'rw-chat-message',
@@ -23,16 +23,14 @@ import { CenterUser } from '@schemas/center-user'
     styleUrls: ['./chat-message.component.scss'],
 })
 export class ChatMessageComponent implements OnInit, AfterContentInit, AfterViewInit {
-    @Input() message: Message
+    @Input() message: ChatRoomMessage
     @Input() showUserInfo: boolean
     @Input() isSidebar: boolean
 
     @Input() isLoading: boolean
     @Input() gauge: number
 
-    @Input() currentUser: CenterUser
-
-    public type: MsgType | 'date'
+    public type: ChatRoomMessageType | 'date' | 'info' | 'image' | 'file' | 'video' // !! 이후에 날짜 문구 표시는 어떻게 해야할 지 고려하기
     public showDownloadButton = false
 
     public isLinkMessage = false
@@ -55,65 +53,50 @@ export class ChatMessageComponent implements OnInit, AfterContentInit, AfterView
         this.fileLoaded = false
     }
     ngAfterViewInit(): void {
-        this.isLinkMessage =
-            this.message.type != 'date' && this.message.type != 'info' && this.message.link.opengraphList.length > 0
-                ? true
-                : false
-        if (this.isLinkMessage)
-            console.log('isLinkMessage: ', this.isLinkMessage, this.message.link.opengraphList[0]?.url)
+        this.isLinkMessage = false
+        // this.message.type != 'date' && this.message.type != 'info' && this.message.link.opengraphList.length > 0
+        //     ? true
+        //     : false
         this.initMessageFileStyle()
     }
     ngAfterContentInit(): void {
-        this.type = this.message.type
+        this.type = this.message.type_code
     }
 
     onOpenGraphClick() {
-        const url = this.message.link.opengraphList[0].url
+        const url = this.message.url
         window.open(url)
     }
     onFileClick(url: string) {
         window.open(url)
     }
 
-    async onDownloadFile(file: _File) {
+    async onDownloadFile(file: ChatRoomMessage) {
         const fileBlob = await this.fileService.getUploadedFile(file.url)
-        saveAs(fileBlob, file.originFileName)
+        saveAs(fileBlob, file.originalname)
     }
 
     // ---------------------------------------- file style ---------------------------------------  //
     async initMessageFileStyle() {
-        this.message.file
-        switch (this.message.type) {
-            case 'image':
-                this.setGridStyle(this.image_item_container_EL, this.message.file.length)
-                break
-            case 'video':
-                this.SpinnerService.show(this.spName, {
-                    bdColor: 'rgba(96, 96, 96, 0.45',
-                    fullScreen: false,
-                    type: 'ball-spin',
-                    size: 'default',
-                })
-                this.setGridStyle(this.video_item_container_EL, this.message.file.length)
-
-                // Promise.all(
-                //     this.message.file.map(async (file) => {
-                //         const uplodedFile = await this.fileService.getUploadedFile(file.url)
-                //         const thumbnailFile = await this.videoProcessingService.generateThumbnail(uplodedFile)
-                //         return thumbnailFile.url
-                //     })
-                // ).then((value) => {
-                //     this.videoImgURL = value
-                //     this.fileLoaded = true
-                //
-                // })
-                this.videoImgURL = this.message.file.map((file) => file.thumbnail)
-                if (this.isLoading) return
-                this.fileLoaded = true
-                this.SpinnerService.hide(this.spName)
-                console.log('this.videoImgURL : ', this.videoImgURL)
-                break
-        }
+        // switch (this.message.type_code) {
+        //     case 'image':
+        //         this.setGridStyle(this.image_item_container_EL, this.message.file.length)
+        //         break
+        //     case 'video':
+        //         this.SpinnerService.show(this.spName, {
+        //             bdColor: 'rgba(96, 96, 96, 0.45',
+        //             fullScreen: false,
+        //             type: 'ball-spin',
+        //             size: 'default',
+        //         })
+        //         this.setGridStyle(this.video_item_container_EL, this.message.file.length)
+        //         this.videoImgURL = this.message.file.map((file) => file.thumbnail)
+        //         if (this.isLoading) return
+        //         this.fileLoaded = true
+        //         this.SpinnerService.hide(this.spName)
+        //         console.log('this.videoImgURL : ', this.videoImgURL)
+        //         break
+        // }
     }
 
     setGridStyle(el: ElementRef, fileSize: number) {

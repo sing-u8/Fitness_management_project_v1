@@ -1,9 +1,9 @@
 export const environment = {
     production: true,
     protocol: 'https://',
-    subDomain: 'dev.',
+    subDomain: 'api.',
     domain: 'redwhale.xyz',
-    port: ':3000',
+    port: ':443',
     version: '/latest',
     wss: 'wss://nwa565188k.execute-api.ap-northeast-2.amazonaws.com/dev',
     firebase: {

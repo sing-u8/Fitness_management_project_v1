@@ -7,11 +7,11 @@ import handleError from './handleError'
 import { environment } from '@environments/environment'
 
 import { Response } from '@schemas/response'
-import { ChatRoom } from '@schemas/chat-room'
+import { ChatRoom, ChatRoomPermissionCode, ChatRoomTypeCode } from '@schemas/chat-room'
+import { ChatRoomMessage, ChatRoomMessageType } from '@schemas/chat-room-message'
 import { ChatRoomUser } from '@schemas/chat-room-user'
 
 import _ from 'lodash'
-import { ChatRoomMessage } from '@schemas/chat-room-message'
 
 @Injectable({
     providedIn: 'root',
@@ -175,7 +175,7 @@ export class CenterChatRoomService {
 }
 
 export interface CreateChatRoomReqBody {
-    type_code: 'chat_room_type_chat_with_me' | 'chat_room_type_general'
+    type_code: ChatRoomTypeCode
     user_ids: Array<string>
 }
 
@@ -188,5 +188,10 @@ export interface InviteMemberToChatRoomReqBody {
 }
 
 export interface SendMessageReqBody {
-    name: string
+    type_code: ChatRoomMessageType
+    text: string
+    url: string
+    originalname: string
+    mimetype: string
+    size: number
 }

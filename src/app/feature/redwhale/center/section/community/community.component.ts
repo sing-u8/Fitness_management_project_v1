@@ -26,6 +26,7 @@ import { ChatRoomMessage } from '@schemas/chat-room-message'
 import { ChatRoomUser } from '@schemas/chat-room-user'
 
 import { StorageService } from '@services/storage.service'
+import { VideoProcessingService } from '@services/helper/video-processing-service.service'
 import * as CenterChatRoomApi from '@services/center-chat-room.service'
 
 // ngrx
@@ -53,6 +54,7 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
     public curChatRoom$ = this.nxStore.select(CommunitySelector.mainCurChatRoom)
     public chatRoomUserList$ = this.nxStore.select(CommunitySelector.mainChatRoomUserList)
     public chatRoomMsgs$ = this.nxStore.select(CommunitySelector.mainChatRoomMsgs)
+    public chatRoomMsgs_: ChatRoomMessage[] = []
 
     public unsubscribe$ = new Subject<void>()
 
@@ -61,7 +63,8 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
         private router: Router,
         private renderer: Renderer2,
         private storageService: StorageService,
-        private nxStore: Store
+        private nxStore: Store,
+        private videoProcessingService: VideoProcessingService
     ) {
         this.chatInput = this.fb.control('', { validators: [Validators.required, this.inputValidator()] })
         this.changeRoomInput = this.fb.control('', { validators: [Validators.required, this.inputValidator()] })
@@ -79,6 +82,9 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
             })
 
         this.nxStore.dispatch(CommunityActions.setCurCenterId({ centerId: this.center.id }))
+        this.chatRoomMsgs$.pipe(takeUntil(this.unsubscribe$)).subscribe((crMsgs) => {
+            this.chatRoomMsgs_ = crMsgs
+        })
     }
 
     ngOnInit(): void {}
@@ -94,6 +100,101 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
     addFileBtMouseHover() {
         this.addBtSrc = this.addBtSrcObj.hover
     }
+
+    // file drag guide vars & func
+    public showFileDragGuide = false
+    onFileDragEnter() {
+        this.showFileDragGuide = true
+    }
+    onFileDragLeave() {
+        this.showFileDragGuide = false
+    }
+
+    // file functions
+    public fileList = [] // : ChatFileList = []
+    onFileDrop(files: FileList) {
+        this.setFileToFileList(files)
+    }
+    onFilePickerChange(event: any) {
+        const files: FileList = event.files
+        this.setFileToFileList(files)
+    }
+
+    async setFileToFileList(files: FileList) {
+        // if (!this.isFileExist(files)) return
+        // this.fileList = []
+        // const videoChatFile = await this.setFIleToFileListForVideo(files)
+        // if (videoChatFile != undefined) {
+        //     this.fileList.push(videoChatFile)
+        //     this.resizeChatScreen()
+        //     return
+        // }
+        // let fileInsertCount = 0
+        // for (const [key, value] of Object.entries(files)) {
+        //     if (this.commonCommunityService.checkFileLengthExceed(fileInsertCount, 4)) break
+        //     if (this.commonCommunityService.checkFileSizeTooLarge(value)) {
+        //         this.globalService.showToast(`${value.name}의 파일 용량이 300MB를 초과하였습니다.`)
+        //         continue
+        //     }
+        //     const type = this.commonCommunityService.setLocalFileType(value)
+        //     if (type == 'image') {
+        //         const fileReader = new FileReader()
+        //         fileReader.onload = (e) => {
+        //             this.fileList.push({
+        //                 file: value,
+        //                 result: e.target.result as string,
+        //                 type: type,
+        //                 videoImageFile: null,
+        //             })
+        //             this.resizeChatScreen()
+        //         }
+        //         fileReader.readAsDataURL(value)
+        //     } else {
+        //         const thumbnailFile =
+        //             type == 'video' ? await this.videoProcessingService.generateThumbnail(value) : null
+        //         this.fileList.push({
+        //             file: value,
+        //             result: thumbnailFile != null ? thumbnailFile.url : null,
+        //             type: type,
+        //             videoImageFile: thumbnailFile != null ? thumbnailFile.file : null,
+        //         })
+        //         this.resizeChatScreen()
+        //     }
+        //     fileInsertCount++
+        // }
+    }
+
+    // setFileToFileList helper
+
+    async setFIleToFileListForVideo(files: FileList): Promise<any | null> {
+        // const videoFile = _.values(files).find((file) => this.commonCommunityService.setLocalFileType(file) == 'video')
+        // if (videoFile == undefined) return null
+        // const thumbnailFile = await this.videoProcessingService.generateThumbnail(videoFile)
+        // const videoChatFile: ChatFile = {
+        //     file: videoFile,
+        //     result: thumbnailFile.url,
+        //     type: 'video',
+        //     videoImageFile: thumbnailFile.file,
+        // }
+        // if (files.length > 1) {
+        //     this.nxStore.dispatch(showToast({ text: '영상 파일이 포함된 경우, 하나의 영상만 전송할 수 있습니다.' }))
+        // }
+        // return videoChatFile
+    }
+
+    //
+
+    isFileExist(fileList: FileList) {
+        if (fileList && fileList.length == 0) {
+            return false
+        }
+        return true
+    }
+    removeFile(idx: number) {
+        this.fileList = this.fileList.filter((value, index) => idx != index)
+        this.resizeChatScreen()
+    }
+
     // <-----------------------------------
 
     // functions related to room
@@ -259,6 +360,98 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
     @ViewChild('chatting_input') chatting_input: ElementRef
     @ViewChildren('message_el') message_el: QueryList<any>
 
+    // chat-message component helper
+    public isNearBottom = true
+    showUser(index): boolean {
+        return this.chatRoomMsgs_.length > index + 1 &&
+            this.chatRoomMsgs_[index].user_id &&
+            this.chatRoomMsgs_[index].user_id == this.chatRoomMsgs_[index + 1].user_id &&
+            dayjs(this.chatRoomMsgs_[index].created_at).format('YYYY-MM-DD_HH_mm') ==
+                dayjs(this.chatRoomMsgs_[index + 1].created_at).format('YYYY-MM-DD_HH_mm')
+            ? // && this.chatRoomMsgs_[index + 1].type_code != 'info'
+              false
+            : true
+    }
+
+    scrolled(event: any): void {
+        this.isNearBottom = this.isScrollNearBottom()
+
+        if (this.isScrollNearTop()) {
+            this.prevMessageList()
+        }
+    }
+    onItemElementsChanged(): void {
+        if (this.isNearBottom) {
+            this.scrollToBottom()
+        }
+    }
+    scrollToBottom(): void {
+        this.chatting_screen.nativeElement.scroll({
+            top: this.chatting_screen.nativeElement.scrollHeight,
+            left: 0,
+            // behavior: 'smooth'
+        })
+    }
+
+    isScrollNearTop(): boolean {
+        const threshold = 10
+        const position =
+            this.chatting_screen.nativeElement.scrollTop * -1 + this.chatting_screen.nativeElement.offsetHeight
+        const height = this.chatting_screen.nativeElement.scrollHeight
+        return position + threshold >= height
+    }
+
+    isScrollNearBottom(): boolean {
+        const threshold = 100
+        const position =
+            this.chatting_screen.nativeElement.scrollTop * -1 + this.chatting_screen.nativeElement.offsetHeight
+        const height = this.chatting_screen.nativeElement.offsetHeight
+        return position < height + threshold
+    }
+
+    // - // chatInput fucntions and validator
+    public textareaResizeOption = {
+        fontSize: 14,
+        maxLine: 10,
+        initHeight: 50,
+        lineHeight: 1.43,
+    }
+
+    public resizeHeight = 50
+
+    onChatInputResize(resizeHeight: string) {
+        this.resizeHeight = Number(resizeHeight.slice(0, -2))
+        this.resizeChatScreen()
+    }
+    resizeChatScreen() {
+        if (this.fileList.length > 0) {
+            const screenPadMar = 145 + this.resizeHeight // 120px --> padding: 10px * 2 + margin: 25px 15px + fileHeight: 85px
+            const inputHeight = 105 + this.resizeHeight // 20px --> padding: 10px * 2 + fileHeight: 85px
+            this.renderer.setStyle(this.chatting_screen.nativeElement, 'height', `calc(100% - ${screenPadMar}px)`)
+            this.renderer.setStyle(this.chatting_input.nativeElement, 'height', `${inputHeight}px`)
+        } else {
+            const screenPadMar = 60 + this.resizeHeight // 60px --> padding: 10px * 2 + margin: 25px 15px
+            const inputHeight = 20 + this.resizeHeight // 20px --> padding: 10px * 2
+            this.renderer.setStyle(this.chatting_screen.nativeElement, 'height', `calc(100% - ${screenPadMar}px)`)
+            this.renderer.setStyle(this.chatting_input.nativeElement, 'height', `${inputHeight}px`)
+        }
+    }
+    resetChatScreenSize() {
+        this.renderer.removeStyle(this.chatting_screen.nativeElement, 'height')
+        this.renderer.removeStyle(this.chatting_input.nativeElement, 'height')
+    }
+
+    onInputKeyPress(e: KeyboardEvent) {
+        if (e.key == 'Enter' && !e.shiftKey) {
+            // prevent default behavior
+            e.preventDefault()
+            // this.sendMessage(this.chatInput.value)
+            return false
+        } else {
+            return true
+        }
+    }
+
     inputValidator(): ValidatorFn {
         return (control: AbstractControl): ValidationErrors | null => {
             if (!_.trim(control.value)) {
@@ -268,4 +461,10 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
         }
     }
     // <---------------------
+
+    // ----------------------------------------- message funcs -----------------------------------------------------
+    prevMessageList() {}
+
+    // ----------------------------------- send message function -------------------------------------->//
+    sendMessage(text: string) {}
 }

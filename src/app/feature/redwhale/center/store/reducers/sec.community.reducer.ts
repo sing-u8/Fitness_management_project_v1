@@ -74,7 +74,6 @@ export const communityReducer = createImmerReducer(
         return state
     }),
     on(CommunitydActions.startJoinChatRoom, (state, { chatRoom, spot }) => {
-        console.log('in CommunitydActions.startJoinChatRoom  reducer!!!!')
         if (spot == 'main') {
             state.mainPreChatRoom = state.mainCurChatRoom
             state.mainCurChatRoom = chatRoom

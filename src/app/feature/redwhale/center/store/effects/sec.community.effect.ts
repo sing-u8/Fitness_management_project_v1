@@ -50,7 +50,6 @@ export class CommunityEffect {
         this.actions$.pipe(
             ofType(CommunityActions.startJoinChatRoom),
             concatLatestFrom(({ spot }) => {
-                console.log('in CommunitydActions.startJoinChatRoom effect !!!!')
                 return spot == 'main'
                     ? this.store.select(CommunitySelector.mainPreChatRoom)
                     : this.store.select(CommunitySelector.drawerPreChatRoom)

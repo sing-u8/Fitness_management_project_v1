@@ -7,11 +7,11 @@
   >
     <rw-avatar
       *ngIf="showUserInfo"
-      [image] = "hideMessengerPicture ? null : message.user.avatar"
+      [image] = "message.user_picture"
       size="42"
       fontSize="12"
-      [text]="message.user.name"
-      [backgroundColor] = "message.user.color"
+      [text]="message.user_name"
+      [backgroundColor] = "message.user_background"
     ></rw-avatar>
   </div>
   <div
@@ -22,10 +22,10 @@
       *ngIf="showUserInfo"
     >
       <span class="rw-typo-bodytext0-bold user-name">
-        {{message.user.name}}
+        {{message.user_name}}
       </span>
       <span class="rw-typo-subtext0-regular created-at">
-        {{message.timestamp | dateFormat: 'a hh:mm'}}
+        {{message.created_at| dateFormat: 'a hh:mm'}}
       </span>
     </div>
 

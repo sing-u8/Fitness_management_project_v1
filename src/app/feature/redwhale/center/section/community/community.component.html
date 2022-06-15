@@ -89,24 +89,38 @@
 
             <div #chat_screen class="chatting-screen">
 
-                <!-- <div
-                    #chatting_screen class="chatting-screen-content thin-scroll-y-overlay2"
+                <div
+                    #chatting_screen
+                    class="chatting-screen-content thin-scroll-y-overlay2"
                     (scroll)="scrolled($event)"
                 >
-                    <rw-chat-message *ngFor="let data of roomMsgObj$v.loadingMsgList | keyvalue; let i = index"
-                        [message]="data.value.message" [showUserInfo]="true" [isLoading]="true"
-                        [gauge]="data.value.gauge" [currentUser]="currentUser.user"></rw-chat-message>
+                    <!-- <rw-chat-message
+                        *ngFor="let data of roomMsgObj$v.loadingMsgList | keyvalue; let i = index"
+                        [message]="data.value.message"
+                        [showUserInfo]="true"
+                        [isLoading]="true"
+                        [gauge]="data.value.gauge"
+                        [currentUser]="currentUser.user"
+                    ></rw-chat-message> -->
 
-                    <rw-chat-message #message_el *ngFor="let message of roomMsgObj$v.msgList; let i = index"
-                        [message]="message" [showUserInfo]="showUser(i)" [currentUser]="currentUser.user">
-                    </rw-chat-message>
+                    <rw-chat-message
+                        #message_el
+                        *ngFor="let message of (chatRoomMsgs$ | async); let i = index"
+                        [message]="message"
+                        [showUserInfo]="showUser(i)"
+                    ></rw-chat-message>
 
-                    <rw-chat-intro-message [isSideBar]="false" [selectedRoom]="selectedRoom.value" [user]="user"
-                        [msgList]="roomMsgObj$v.msgList" [showIntroMessage]="showIntroMessage">
-                    </rw-chat-intro-message>
-                </div> -->
+                    <!-- <rw-chat-intro-message
+                        [isSideBar]="false"
+                        [selectedRoom]="selectedRoom.value"
+                        [user]="user"
+                        [msgList]="roomMsgObj$v.msgList"
+                        [showIntroMessage]="showIntroMessage"
+                    >
+                    </rw-chat-intro-message> -->
+                </div>
 
-                <!-- <div #chatting_input class="chatting-input-container">
+                <div #chatting_input class="chatting-input-container">
 
                     <div class="plus-box">
                         <img
@@ -175,7 +189,7 @@
                         보내기
                     </div>
 
-                </div> -->
+                </div>
 
             </div>
         </div>
