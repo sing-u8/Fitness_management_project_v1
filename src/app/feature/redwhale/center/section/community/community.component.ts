@@ -466,5 +466,20 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
     prevMessageList() {}
 
     // ----------------------------------- send message function -------------------------------------->//
-    sendMessage(text: string) {}
+    sendMessage(text: string) {
+        // !! 분기 필요
+        this.sendTextMessage(text)
+    }
+
+    sendTextMessage(text: string) {
+        const reqBody: CenterChatRoomApi.SendMessageReqBody = {
+            type_code: 'chat_room_message_type_text',
+            text: text,
+            url: '_',
+            originalname: '_',
+            mimetype: '_',
+            size: 0,
+        }
+        this.nxStore.dispatch(CommunityActions.startSendMessage({ centerId: this.center.id, reqBody, spot: 'main' }))
+    }
 }

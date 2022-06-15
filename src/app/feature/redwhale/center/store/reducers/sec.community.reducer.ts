@@ -145,17 +145,24 @@ export const communityReducer = createImmerReducer(
                 ...state.mainCurChatRoom.chat_room_users,
                 ..._invitedMembers,
             ].slice(0, 5)
-            state.chatRoomList[state.chatRoomList.findIndex((v) => v.id == state.mainCurChatRoom.id)].chat_room_users =
-                state.mainCurChatRoom.chat_room_users
+
+            state.mainCurChatRoom.chat_room_user_count += _invitedMembers.length
+            const idx = state.chatRoomList.findIndex((v) => v.id == state.mainCurChatRoom.id)
+            state.chatRoomList[idx].chat_room_users = state.mainCurChatRoom.chat_room_users
+            state.chatRoomList[idx].chat_room_user_count += _invitedMembers.length
+
             state.mainChatRoomUserList = [...state.mainChatRoomUserList, ..._invitedMembers]
         } else {
             state.drawerCurChatRoom.chat_room_users = [
                 ...state.drawerCurChatRoom.chat_room_users,
                 ..._invitedMembers,
             ].slice(0, 5)
-            state.chatRoomList[
-                state.chatRoomList.findIndex((v) => v.id == state.drawerCurChatRoom.id)
-            ].chat_room_users = state.drawerCurChatRoom.chat_room_users
+
+            state.drawerCurChatRoom.chat_room_user_count += _invitedMembers.length
+            const idx = state.chatRoomList.findIndex((v) => v.id == state.drawerCurChatRoom.id)
+            state.chatRoomList[idx].chat_room_users = state.drawerCurChatRoom.chat_room_users
+            state.chatRoomList[idx].chat_room_user_count += _invitedMembers.length
+
             state.drawerChatRoomUserList = [...state.drawerChatRoomUserList, ..._invitedMembers]
         }
         return state
@@ -169,6 +176,21 @@ export const communityReducer = createImmerReducer(
             state.drawerCurChatRoom = chatRoom
             state.chatRoomList[state.chatRoomList.findIndex((v) => v.id == state.drawerCurChatRoom.id)] =
                 state.drawerCurChatRoom
+        }
+        return state
+    }),
+
+    on(CommunitydActions.startSendMessage, (state, { spot }) => {
+        if (spot == 'main') {
+        } else {
+        }
+        return state
+    }),
+    on(CommunitydActions.finishSendMessage, (state, { spot, chatRoomMessage }) => {
+        if (spot == 'main') {
+            state.mainChatRoomMsgs.unshift(chatRoomMessage)
+        } else {
+            state.drawerChatRoomMsgs.unshift(chatRoomMessage)
         }
         return state
     }),

@@ -126,7 +126,7 @@ export class CenterChatRoomService {
         centerId: string,
         chatRoomId: string,
         reqBody: SendMessageReqBody
-    ): Observable<Array<ChatRoomMessage>> {
+    ): Observable<ChatRoomMessage> {
         const url = this.SERVER + `/${centerId}/chat_room/${chatRoomId}/message`
         const options = {
             headers: new HttpHeaders({
@@ -135,7 +135,7 @@ export class CenterChatRoomService {
         }
         return this.http.post<Response>(url, reqBody, options).pipe(
             map((res) => {
-                return res.dataset
+                return res.dataset[0]
             }),
             catchError(handleError)
         )

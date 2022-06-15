@@ -156,4 +156,23 @@ export class CommunityEffect {
             catchError((err: string) => of(CommunityActions.error({ error: err })))
         )
     )
+
+    public sendMessageToChatRoom$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(CommunityActions.startSendMessage),
+            concatLatestFrom(({ spot }) =>
+                spot == 'main'
+                    ? this.store.select(CommunitySelector.mainCurChatRoom)
+                    : this.store.select(CommunitySelector.drawerCurChatRoom)
+            ),
+            switchMap(([{ centerId, reqBody, spot }, curChatRoom]) =>
+                this.centerChatRoomApi.sendMeesageToChatRoom(centerId, curChatRoom.id, reqBody).pipe(
+                    switchMap((chatRoomMessage) => {
+                        return [CommunityActions.finishSendMessage({ spot, chatRoomMessage })]
+                    })
+                )
+            ),
+            catchError((err: string) => of(CommunityActions.error({ error: err })))
+        )
+    )
 }

@@ -90,6 +90,22 @@ export const finishiInviteMembers = createAction(
     props<{ chatRoom: ChatRoom; spot: FromCommunity.spot }>()
 )
 
+export const startSendMessage = createAction(
+    `[${FeatureKey}] Start Send Message to ChatRoom`,
+    props<{
+        centerId: string
+        reqBody: ChatRoomApi.SendMessageReqBody
+        spot: FromCommunity.spot
+    }>()
+)
+export const finishSendMessage = createAction(
+    `[${FeatureKey}] Finish Send Message to ChatRoom`,
+    props<{
+        chatRoomMessage: ChatRoomMessage
+        spot: FromCommunity.spot
+    }>()
+)
+
 // - // sync
 export const updateChatRooms = createAction(`[${FeatureKey}] Update Chat Room`, props<{ chatRoom: ChatRoom }>())
 export const updateChatRoomMsgs = createAction(

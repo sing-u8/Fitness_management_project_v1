@@ -8,6 +8,7 @@ export interface ChatRoom {
     permission_code_name: string
     name: string
     center_name: string
+    chat_room_user_count: number
     chat_room_users: Array<ChatRoomUser>
     last_message: string
     last_message_created_at: string
