@@ -8,6 +8,8 @@ import { CenterChatRoomService } from '@services/center-chat-room.service'
 
 import _ from 'lodash'
 
+import { showToast } from '@appStore/actions/toast.action'
+
 import * as CommunityActions from '../actions/sec.community.actions'
 import * as CommunitySelector from '../selectors/sec.community.selector'
 import * as CommunityReducer from '../reducers/sec.community.reducer'
@@ -90,7 +92,10 @@ export class CommunityEffect {
             switchMap(([{ centerId, reqBody, spot }, curChatRoom]) =>
                 this.centerChatRoomApi.updateChatRoom(centerId, curChatRoom.id, reqBody).pipe(
                     switchMap((chatRoom) => {
-                        return [CommunityActions.finishUpdateChatRoomName({ chatRoom, spot })]
+                        return [
+                            CommunityActions.finishUpdateChatRoomName({ chatRoom, spot }),
+                            showToast({ text: `채팅방의 이름이 변경되었습니다.` }),
+                        ]
                     })
                 )
             ),
@@ -109,9 +114,45 @@ export class CommunityEffect {
             switchMap(([{ centerId, spot }, curChatRoom]) =>
                 this.centerChatRoomApi.leaveChatRoom(centerId, curChatRoom.id).pipe(
                     switchMap((__) => {
-                        return [CommunityActions.finishLeaveChatRoom({ spot })]
+                        return [
+                            showToast({ text: `채팅방 나가기가 완료되었습니다.` }),
+                            CommunityActions.finishLeaveChatRoom({ spot }),
+                        ]
                     })
                 )
+            ),
+            catchError((err: string) => of(CommunityActions.error({ error: err })))
+        )
+    )
+
+    public inviteMembers$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(CommunityActions.startInviteMembers),
+            concatLatestFrom(({ spot }) =>
+                spot == 'main'
+                    ? this.store.select(CommunitySelector.mainCurChatRoom)
+                    : this.store.select(CommunitySelector.drawerCurChatRoom)
+            ),
+            switchMap(([{ centerId, invitedMembers, spot }, curChatRoom]) =>
+                this.centerChatRoomApi
+                    .inviteMemberToChatRoom(centerId, curChatRoom.id, {
+                        user_ids: invitedMembers.map((v) => v.id),
+                    })
+                    .pipe(
+                        switchMap((__) =>
+                            this.centerChatRoomApi.getChatRoom(centerId).pipe(
+                                map((chatRooms) => chatRooms.find((v) => v.id == curChatRoom.id)),
+                                switchMap((chatRoom) => {
+                                    return [
+                                        CommunityActions.finishiInviteMembers({
+                                            spot,
+                                            chatRoom,
+                                        }),
+                                    ]
+                                })
+                            )
+                        )
+                    )
             ),
             catchError((err: string) => of(CommunityActions.error({ error: err })))
         )

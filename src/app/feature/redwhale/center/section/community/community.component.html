@@ -81,7 +81,7 @@
                         *ngIf="showRoomUserList"
                         [userList]="(chatRoomUserList$ | async)"
                         [myId]="user.id"
-                        [isRoomHost]="isRoomHost"
+                        [isRoomHost]="(curChatRoom$ | async)?.permission_code == 'chat_room_user_permission_owner'"
                         (clickInviteUser)="closeRoomUserListDropDown();showInviteUserModal()"
                     ></rw-chat-room-list-dropdown>
                 </div>
@@ -190,13 +190,13 @@
     (cancel) = "hideCreateRoomModal()"
     (confirm) = "onCreateRoomConfirm($event)"
 ></rw-invite-room-modal>
-<!-- <rw-invite-room-modal
+<rw-invite-room-modal
     [mode] = "'invite'"
-    [roomUserList] = "roomUserList"
+    [roomUserList] = "(chatRoomUserList$ | async)"
     [(visible)] = "doShowInviteUserModal"
     (cancel) = "hideInviteUserModal()"
     (confirm) = "onInviteUserConfirm($event)"
-></rw-invite-room-modal> -->
+></rw-invite-room-modal>
 
 
 <rw-modal

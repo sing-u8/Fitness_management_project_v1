@@ -9,6 +9,7 @@ import { ChatRoom } from '@schemas/chat-room'
 import { ChatRoomMessage } from '@schemas/chat-room-message'
 import { ChatRoomUser } from '@schemas/chat-room-user'
 import { Loading } from '@schemas/store/loading'
+import { CenterUser } from '@schemas/center-user'
 
 export type spot = 'main' | 'drawer'
 
@@ -136,6 +137,42 @@ export const communityReducer = createImmerReducer(
         }
         return state
     }),
+    on(CommunitydActions.startInviteMembers, (state, { invitedMembers, spot }) => {
+        const _invitedMembers = CenterUserToChatRoomUser(invitedMembers)
+
+        // !! 채팅방 속성에 인원이 추가되면 인원수도 추가하기
+        if (spot == 'main') {
+            state.mainCurChatRoom.chat_room_users = [
+                ...state.mainCurChatRoom.chat_room_users,
+                ..._invitedMembers,
+            ].slice(0, 5)
+            state.chatRoomList[state.chatRoomList.findIndex((v) => v.id == state.mainCurChatRoom.id)].chat_room_users =
+                state.mainCurChatRoom.chat_room_users
+            state.mainChatRoomUserList = [...state.mainChatRoomUserList, ..._invitedMembers]
+        } else {
+            state.drawerCurChatRoom.chat_room_users = [
+                ...state.drawerCurChatRoom.chat_room_users,
+                ..._invitedMembers,
+            ].slice(0, 5)
+            state.chatRoomList[
+                state.chatRoomList.findIndex((v) => v.id == state.drawerCurChatRoom.id)
+            ].chat_room_users = state.drawerCurChatRoom.chat_room_users
+            state.drawerChatRoomUserList = [...state.drawerChatRoomUserList, ..._invitedMembers]
+        }
+        return state
+    }),
+    on(CommunitydActions.finishiInviteMembers, (state, { spot, chatRoom }) => {
+        if (spot == 'main') {
+            state.mainCurChatRoom = chatRoom
+            state.chatRoomList[state.chatRoomList.findIndex((v) => v.id == state.mainCurChatRoom.id)] =
+                state.mainCurChatRoom
+        } else {
+            state.drawerCurChatRoom = chatRoom
+            state.chatRoomList[state.chatRoomList.findIndex((v) => v.id == state.drawerCurChatRoom.id)] =
+                state.drawerCurChatRoom
+        }
+        return state
+    }),
     // sync
     on(CommunitydActions.updateChatRooms, (state, { chatRoom }) => {
         return state
@@ -157,6 +194,19 @@ export const communityReducer = createImmerReducer(
         return state
     })
 )
+
+// helper
+function CenterUserToChatRoomUser(members: Array<CenterUser>): Array<ChatRoomUser> {
+    return _.map(members, (v) => ({
+        id: v.id,
+        name: v.center_user_name,
+        permission_code: 'chat_room_user_permission_member',
+        permission_code_name: '멤버',
+        color: v.color,
+        picture: v.center_user_picture,
+        background: v.center_user_background,
+    }))
+}
 
 // main
 export const selectChatRoomList = (state: State) => state.chatRoomList

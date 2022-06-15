@@ -22,6 +22,7 @@ import { CenterUsersService } from '@services/center-users.service'
 import { StorageService } from '@services/storage.service'
 
 import { CenterUser } from '@schemas/center-user'
+import { ChatRoomUser } from '@schemas/chat-room-user'
 import { User } from '@schemas/user'
 import { Center } from '@schemas/center'
 
@@ -35,7 +36,7 @@ type UserList = Array<{ show: boolean; selected: boolean; user: CenterUser; join
 export class InviteRoomModalComponent implements AfterViewChecked, OnChanges, OnDestroy, AfterViewInit {
     @Input() visible: boolean
     @Input() mode: 'invite' | 'create'
-    @Input() roomUserList: Array<CenterUser> = []
+    @Input() roomUserList: Array<ChatRoomUser> = []
 
     @ViewChild('modalBackgroundElement') modalBackgroundElement
     @ViewChild('modalWrapperElement') modalWrapperElement
@@ -93,6 +94,7 @@ export class InviteRoomModalComponent implements AfterViewChecked, OnChanges, On
                 }
             }
         }
+
         if (this.mode == 'invite' && changes['roomUserList'] && !changes['roomUserList'].firstChange) {
             this.getMemberList()
         }
@@ -126,7 +128,7 @@ export class InviteRoomModalComponent implements AfterViewChecked, OnChanges, On
     onCancel(): void {
         this.cancel.emit()
         this.searchInput.setValue('')
-        this.userList = []
+        // this.userList = []
         this.selectedNum = 0
     }
 
@@ -134,7 +136,7 @@ export class InviteRoomModalComponent implements AfterViewChecked, OnChanges, On
         const selectedUserList = this.getSelectedMemberList()
         this.confirm.emit(selectedUserList)
         this.searchInput.setValue('')
-        this.userList = []
+        // this.userList = []
         this.selectedNum = 0
     }
 
@@ -147,6 +149,7 @@ export class InviteRoomModalComponent implements AfterViewChecked, OnChanges, On
     }
     // ----------------------------- get member lsit func
     getMemberList() {
+        // !! 매번 열 때마다 초기회 때문에 체크가 날라가는 경우가 있음
         this.centerUsersService.getUserList(this.gym.id, '', '', '').subscribe((users) => {
             this.userList = users
                 .reverse()

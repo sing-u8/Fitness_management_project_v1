@@ -146,7 +146,9 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
     onInviteUserConfirm(members: Array<CenterUser>) {
         console.log('onInviteUserConfirm: ', members)
         this.hideInviteUserModal()
-        this.createChatRoom(members)
+        this.nxStore.dispatch(
+            CommunityActions.startInviteMembers({ centerId: this.center.id, invitedMembers: members, spot: 'main' })
+        )
     }
 
     // - // 채팅방 나가기

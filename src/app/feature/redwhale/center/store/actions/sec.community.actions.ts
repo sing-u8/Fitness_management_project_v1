@@ -5,6 +5,7 @@ import * as FromCommunity from '@centerStore/reducers/sec.community.reducer'
 import { ChatRoom } from '@schemas/chat-room'
 import { ChatRoomMessage } from '@schemas/chat-room-message'
 import { ChatRoomUser } from '@schemas/chat-room-user'
+import { CenterUser } from '@schemas/center-user'
 
 import * as ChatRoomApi from '@services/center-chat-room.service'
 
@@ -74,6 +75,19 @@ export const startLeaveChatRoom = createAction(
 export const finishLeaveChatRoom = createAction(
     `[${FeatureKey}] Finish Leave Chat Room`,
     props<{ spot: FromCommunity.spot }>()
+)
+
+export const startInviteMembers = createAction(
+    `[${FeatureKey}] Start Invite Members to ChatRoom`,
+    props<{
+        centerId: string
+        invitedMembers: Array<CenterUser>
+        spot: FromCommunity.spot
+    }>()
+)
+export const finishiInviteMembers = createAction(
+    `[${FeatureKey}] Finish Invite Members to ChatRoom`,
+    props<{ chatRoom: ChatRoom; spot: FromCommunity.spot }>()
 )
 
 // - // sync
