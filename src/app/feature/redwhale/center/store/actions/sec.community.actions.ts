@@ -29,7 +29,10 @@ export const finishCreateChatRoom = createAction(
     props<{ chatRoom: ChatRoom; spot: FromCommunity.spot }>()
 )
 
-export const startGetChatRooms = createAction(`[${FeatureKey}] Start Get Chat Rooms`, props<{ centerId: string }>())
+export const startGetChatRooms = createAction(
+    `[${FeatureKey}] Start Get Chat Rooms`,
+    props<{ centerId: string; curUserId: string; spot: FromCommunity.spot }>()
+)
 export const finishGetChatRooms = createAction(
     `[${FeatureKey}] Finish Get Chat Rooms`,
     props<{ chatRooms: Array<ChatRoom> }>()

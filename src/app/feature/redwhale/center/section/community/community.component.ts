@@ -77,7 +77,13 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
             .subscribe((curCenterId) => {
                 if (curCenterId != this.center.id) {
                     this.nxStore.dispatch(CommunityActions.resetAll())
-                    this.nxStore.dispatch(CommunityActions.startGetChatRooms({ centerId: this.center.id }))
+                    this.nxStore.dispatch(
+                        CommunityActions.startGetChatRooms({
+                            centerId: this.center.id,
+                            curUserId: this.user.id,
+                            spot: 'main',
+                        })
+                    )
                 }
             })
 

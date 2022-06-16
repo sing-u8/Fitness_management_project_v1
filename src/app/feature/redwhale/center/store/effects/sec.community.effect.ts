@@ -35,10 +35,26 @@ export class CommunityEffect {
     public getChatRoom$ = createEffect(() =>
         this.actions$.pipe(
             ofType(CommunityActions.startGetChatRooms),
-            switchMap(({ centerId }) =>
+            switchMap(({ centerId, spot, curUserId }) =>
                 this.centerChatRoomApi.getChatRoom(centerId).pipe(
                     switchMap((chatRooms) => {
-                        return [CommunityActions.finishGetChatRooms({ chatRooms })]
+                        const isMyChatRooomExist =
+                            chatRooms.findIndex((v) => v.type_code == 'chat_room_type_chat_with_me') != -1
+                        if (isMyChatRooomExist) {
+                            return [CommunityActions.finishGetChatRooms({ chatRooms })]
+                        } else {
+                            return [
+                                CommunityActions.finishGetChatRooms({ chatRooms }),
+                                CommunityActions.startCreateChatRoom({
+                                    centerId,
+                                    spot,
+                                    reqBody: {
+                                        type_code: 'chat_room_type_chat_with_me',
+                                        user_ids: [curUserId],
+                                    },
+                                }),
+                            ]
+                        }
                     })
                 )
             ),
