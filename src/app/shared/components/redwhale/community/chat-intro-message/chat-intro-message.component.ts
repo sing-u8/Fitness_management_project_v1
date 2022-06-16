@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, OnChanges } from '@angular/core'
 
-import { UserGymRoomFE } from '@schemas/firestore/user-gym-room'
+import { ChatRoom } from '@schemas/chat-room'
+import { ChatRoomMessage } from '@schemas/chat-room-message'
 import { User } from '@schemas/user'
 
 @Component({
@@ -10,10 +11,10 @@ import { User } from '@schemas/user'
 })
 export class ChatIntroMessageComponent implements OnInit, OnChanges {
     @Input() isSideBar: boolean
-    @Input() selectedRoom: UserGymRoomFE
-    @Input() msgList: Array<any>
+    @Input() selectedRoom: ChatRoom
+    @Input() msgList: Array<ChatRoomMessage>
+    @Input() isTempRoom: boolean
     @Input() user: User
-    @Input() showIntroMessage: boolean
 
     constructor() {}
 
@@ -25,10 +26,7 @@ export class ChatIntroMessageComponent implements OnInit, OnChanges {
     }
 
     updateIsNewRoom() {
-        this.isNewRoom =
-            (this.msgList.length == 0 || (this.msgList.length == 1 && this.msgList[0].type == 'date')) &&
-            this.showIntroMessage
-                ? true
-                : false
+        this.isNewRoom = this.msgList.length == 0 ? true : false
     }
+    // || (this.msgList.length == 1 && this.msgList[0].type == 'date')
 }

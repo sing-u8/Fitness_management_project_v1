@@ -114,14 +114,14 @@
                         [showUserInfo]="showUser(i)"
                     ></rw-chat-message>
 
-                    <!-- <rw-chat-intro-message
+                    <rw-chat-intro-message
+                        *ngIf="(curChatRoom$ | async)"
                         [isSideBar]="false"
-                        [selectedRoom]="selectedRoom.value"
+                        [selectedRoom]="(curChatRoom$ | async)"
                         [user]="user"
-                        [msgList]="roomMsgObj$v.msgList"
-                        [showIntroMessage]="showIntroMessage"
+                        [msgList]="(chatRoomMsgs$ | async)"
                     >
-                    </rw-chat-intro-message> -->
+                    </rw-chat-intro-message>
                 </div>
 
                 <div #chatting_input class="chatting-input-container">
