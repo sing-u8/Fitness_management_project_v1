@@ -139,6 +139,10 @@ export const createTempChatRoom = createAction(
     `[${FeatureKey}] Create Temp Chat Room`,
     props<{ center: Center; members: Array<CenterUser>; curUser: CenterUser; spot: FromCommunity.spot }>()
 )
+export const leaveTempChatRoom = createAction(
+    `[${FeatureKey}] Leave Temp Chat Room`,
+    props<{ spot: FromCommunity.spot }>()
+)
 
 export const updateChatRooms = createAction(`[${FeatureKey}] Update Chat Room`, props<{ chatRoom: ChatRoom }>())
 export const updateChatRoomMsgs = createAction(

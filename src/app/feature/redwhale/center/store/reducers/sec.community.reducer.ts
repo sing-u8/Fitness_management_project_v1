@@ -79,10 +79,10 @@ export const communityReducer = createImmerReducer(
     on(CommunitydActions.finishGetChatRooms, (state, { chatRooms, spot }) => {
         state.chatRoomList = chatRooms
         const myChatRoom = chatRooms.find((v) => v.type_code == 'chat_room_type_chat_with_me')
-        if (spot == 'main') {
+        if (spot == 'main' && myChatRoom != undefined) {
             state.mainCurChatRoom = myChatRoom
             state.mainChatRoomUserList = myChatRoom.chat_room_users
-        } else {
+        } else if (myChatRoom != undefined) {
             state.drawerCurChatRoom = myChatRoom
             state.drawerChatRoomUserList = myChatRoom.chat_room_users
         }
@@ -259,6 +259,21 @@ export const communityReducer = createImmerReducer(
         }
         return state
     }),
+    on(CommunitydActions.leaveTempChatRoom, (state, { spot }) => {
+        if (spot == 'main') {
+            state.chatRoomList = _.filter(state.chatRoomList, (v) => v.id != state.mainCurChatRoom.id)
+            state.mainCurChatRoom = undefined
+            state.mainChatRoomMsgs = []
+            state.mainChatRoomUserList = []
+        } else {
+            state.chatRoomList = _.filter(state.chatRoomList, (v) => v.id != state.mainCurChatRoom.id)
+            state.drawerCurChatRoom = undefined
+            state.drawerChatRoomUserList = []
+            state.drawerChatRoomMsgs = []
+        }
+        return state
+    }),
+
     on(CommunitydActions.updateChatRooms, (state, { chatRoom }) => {
         return state
     }),
@@ -299,8 +314,10 @@ export const selectIsLoading = (state: State) => state.isLoading
 export const selectError = (state: State) => state.error
 
 // etc selector
-export const selectCurMainChatRoomIsTemp = (state: State) => _.includes(state.mainCurChatRoom.id, IsTmepRoom)
-export const selectCurDrawerChatRoomIsTemp = (state: State) => _.includes(state.drawerCurChatRoom.id, IsTmepRoom)
+export const selectCurMainChatRoomIsTemp = (state: State) =>
+    state.mainCurChatRoom && _.includes(state.mainCurChatRoom.id, IsTmepRoom)
+export const selectCurDrawerChatRoomIsTemp = (state: State) =>
+    state.drawerCurChatRoom && _.includes(state.drawerCurChatRoom.id, IsTmepRoom)
 
 //
 
