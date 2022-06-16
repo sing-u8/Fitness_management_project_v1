@@ -8,6 +8,7 @@ import { ChatRoomUser } from '@schemas/chat-room-user'
 import { CenterUser } from '@schemas/center-user'
 
 import * as ChatRoomApi from '@services/center-chat-room.service'
+import { Center } from '@schemas/center'
 
 const FeatureKey = 'Center/Community'
 
@@ -35,7 +36,7 @@ export const startGetChatRooms = createAction(
 )
 export const finishGetChatRooms = createAction(
     `[${FeatureKey}] Finish Get Chat Rooms`,
-    props<{ chatRooms: Array<ChatRoom> }>()
+    props<{ chatRooms: Array<ChatRoom>; spot: FromCommunity.spot }>()
 )
 
 export const startJoinChatRoom = createAction(
@@ -108,8 +109,37 @@ export const finishSendMessage = createAction(
         spot: FromCommunity.spot
     }>()
 )
+// - // -- // async for temp room
+export const startSendMessageToTempRoom = createAction(
+    `[${FeatureKey}] Start Send Message to TempChatRoom`,
+    props<{
+        centerId: string
+        reqBody: {
+            createRoom: ChatRoomApi.CreateChatRoomReqBody
+            sendMsg: ChatRoomApi.SendMessageReqBody
+        }
+        spot: FromCommunity.spot
+    }>()
+)
+export const finishSendMessageToTempRoom = createAction(
+    `[${FeatureKey}] Finish Send Message to TempChatRoom`,
+    props<{
+        chatRoom: ChatRoom
+        chatRoomMessage: ChatRoomMessage
+        spot: FromCommunity.spot
+    }>()
+)
 
 // - // sync
+export const joinTempChatRoom = createAction(
+    `[${FeatureKey}] Join Temp Chat Room`,
+    props<{ chatRoom: ChatRoom; spot: FromCommunity.spot }>()
+)
+export const createTempChatRoom = createAction(
+    `[${FeatureKey}] Create Temp Chat Room`,
+    props<{ center: Center; members: Array<CenterUser>; curUser: CenterUser; spot: FromCommunity.spot }>()
+)
+
 export const updateChatRooms = createAction(`[${FeatureKey}] Update Chat Room`, props<{ chatRoom: ChatRoom }>())
 export const updateChatRoomMsgs = createAction(
     `[${FeatureKey}] Update Chat Room Messages`,

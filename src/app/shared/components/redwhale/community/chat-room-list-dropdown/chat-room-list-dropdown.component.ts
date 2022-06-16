@@ -11,6 +11,7 @@ export class ChatRoomListDropdownComponent implements OnInit {
     @Input() myId: string
     @Input() userList: ChatRoomUser[]
     @Input() isRoomHost: boolean
+    @Input() isTempRoom: boolean
     @Output() clickInviteUser = new EventEmitter()
 
     onInviteUserClick() {

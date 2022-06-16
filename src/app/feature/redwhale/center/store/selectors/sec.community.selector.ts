@@ -25,3 +25,7 @@ export const drawerChatRoomUserList = createSelector(CommunityFeature, FromCommu
 export const curCenterId = createSelector(CommunityFeature, FromCommunity.selectCurCenterId)
 export const isLoading = createSelector(CommunityFeature, FromCommunity.selectIsLoading)
 export const error = createSelector(CommunityFeature, FromCommunity.selectError)
+
+// etc
+export const curMainChatRoomIsTemp = createSelector(CommunityFeature, FromCommunity.selectCurMainChatRoomIsTemp)
+export const curDrawerChatRoomIsTemp = createSelector(CommunityFeature, FromCommunity.selectCurDrawerChatRoomIsTemp)

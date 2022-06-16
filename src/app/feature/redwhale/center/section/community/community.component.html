@@ -38,6 +38,7 @@
                         rw-tooltip rwTooltipTitle="채팅방 이름 변경"
                         rwTooltipPlacement="bottom"
                         *ngIf=" (curChatRoom$ | async).type_code == 'chat_room_type_general'
+                                && (isCurChatRoomTemp$ | async) != true
                                 && !changeRoomMode"
                         src="assets/icons/etc/edit-darkgrey.svg"
                         alt="edit-darkgrey.svg"
@@ -56,8 +57,10 @@
                 </form>
 
                 <div *ngIf="(curChatRoom$ | async) && (curChatRoom$ | async).type_code == 'chat_room_type_general'" id="right">
-                    <div class="room-user-number" (click)="toggleRoomUserListDropDown()"
-                        (rwClickOutside)="closeRoomUserListDropDown()">
+                    <div class="room-user-number"
+                        (click)="toggleRoomUserListDropDown()"
+                        (rwClickOutside)="closeRoomUserListDropDown()"
+                    >
                         <img src="assets/icons/etc/user-count.svg" alt="user-count.svg">
                         <span class="rw-typo-bodytext0 user-count">
                             {{(chatRoomUserList$ | async).length}}
@@ -82,6 +85,7 @@
                         [userList]="(chatRoomUserList$ | async)"
                         [myId]="user.id"
                         [isRoomHost]="(curChatRoom$ | async)?.permission_code == 'chat_room_user_permission_owner'"
+                        [isTempRoom]="(isCurChatRoomTemp$ | async)"
                         (clickInviteUser)="closeRoomUserListDropDown();showInviteUserModal()"
                     ></rw-chat-room-list-dropdown>
                 </div>

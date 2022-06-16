@@ -27,6 +27,7 @@ import { User } from '@schemas/user'
 import { Center } from '@schemas/center'
 
 type UserList = Array<{ show: boolean; selected: boolean; user: CenterUser; joinedAlready: boolean }>
+export type Confirm = { members: Array<CenterUser>; curCenterUser: CenterUser }
 
 @Component({
     selector: 'rw-invite-room-modal',
@@ -43,7 +44,7 @@ export class InviteRoomModalComponent implements AfterViewChecked, OnChanges, On
 
     @Output() visibleChange = new EventEmitter<boolean>()
     @Output() cancel = new EventEmitter<void>()
-    @Output() confirm = new EventEmitter<Array<CenterUser>>()
+    @Output() confirm = new EventEmitter<Confirm>()
 
     public searchInput: FormControl
     public userList: UserList = []
@@ -53,6 +54,7 @@ export class InviteRoomModalComponent implements AfterViewChecked, OnChanges, On
 
     public gym: Center
     public user: User
+    public curCenterUser: CenterUser
 
     public isMouseModalDown: boolean
 
@@ -134,7 +136,7 @@ export class InviteRoomModalComponent implements AfterViewChecked, OnChanges, On
 
     onConfirm(): void {
         const selectedUserList = this.getSelectedMemberList()
-        this.confirm.emit(selectedUserList)
+        this.confirm.emit({ curCenterUser: this.curCenterUser, members: selectedUserList })
         this.searchInput.setValue('')
         // this.userList = []
         this.selectedNum = 0
@@ -156,7 +158,12 @@ export class InviteRoomModalComponent implements AfterViewChecked, OnChanges, On
                 .map((user) => {
                     return { show: true, selected: false, user: user, joinedAlready: false }
                 })
-                .filter((listData) => listData.user.id != this.user.id)
+                .filter((listData) => {
+                    if (listData.user.id == this.user.id) {
+                        this.curCenterUser = listData.user
+                    }
+                    return listData.user.id != this.user.id
+                })
             this.checkMemberJoined()
         })
     }

@@ -18,12 +18,15 @@ import _ from 'lodash'
 import { Subject, Subscription, Observable } from 'rxjs'
 import { takeUntil } from 'rxjs/operators'
 
+import { Loading } from '@schemas/store/loading'
 import { CenterUser } from '@schemas/center-user'
 import { User } from '@schemas/user'
 import { Center } from '@schemas/center'
-import { ChatRoom } from '@schemas/chat-room'
+import { ChatRoom, IsTmepRoom } from '@schemas/chat-room'
 import { ChatRoomMessage } from '@schemas/chat-room-message'
 import { ChatRoomUser } from '@schemas/chat-room-user'
+
+import { Confirm as InviteConfirm } from '@shared/components/redwhale/community/invite-room-modal/invite-room-modal.component'
 
 import { StorageService } from '@services/storage.service'
 import { VideoProcessingService } from '@services/helper/video-processing-service.service'
@@ -37,6 +40,8 @@ import { showToast } from '@appStore/actions/toast.action'
 import * as FromCommunity from '@centerStore/reducers/sec.community.reducer'
 import * as CommunitySelector from '@centerStore/selectors/sec.community.selector'
 import * as CommunityActions from '@centerStore/actions/sec.community.actions'
+import { isLoading } from '../../store/selectors/sec.membership.selector'
+import { curMainChatRoomIsTemp } from '../../store/selectors/sec.community.selector'
 
 @Component({
     selector: 'community',
@@ -49,10 +54,17 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
     public center: Center
 
     // ngrx vars
+    public isLoading$ = this.nxStore.select(CommunitySelector.isLoading)
+    public isLoading_: Loading
+
     public chatRoomList$ = this.nxStore.select(CommunitySelector.chatRoomList)
 
     public curChatRoom$ = this.nxStore.select(CommunitySelector.mainCurChatRoom)
+    public curChatRoom_: ChatRoom = undefined
+    public isCurChatRoomTemp$ = this.nxStore.select(CommunitySelector.curMainChatRoomIsTemp)
+
     public chatRoomUserList$ = this.nxStore.select(CommunitySelector.mainChatRoomUserList)
+
     public chatRoomMsgs$ = this.nxStore.select(CommunitySelector.mainChatRoomMsgs)
     public chatRoomMsgs_: ChatRoomMessage[] = []
 
@@ -72,24 +84,34 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
         this.center = this.storageService.getCenter()
         this.user = this.storageService.getUser()
 
+        this.isLoading$.pipe(takeUntil(this.unsubscribe$)).subscribe((isLoading) => {
+            this.isLoading_ = isLoading
+        })
+
         this.nxStore
             .pipe(select(CommunitySelector.curCenterId), takeUntil(this.unsubscribe$))
             .subscribe((curCenterId) => {
                 if (curCenterId != this.center.id) {
                     this.nxStore.dispatch(CommunityActions.resetAll())
-                    this.nxStore.dispatch(
-                        CommunityActions.startGetChatRooms({
-                            centerId: this.center.id,
-                            curUserId: this.user.id,
-                            spot: 'main',
-                        })
-                    )
+                    // !! 한 번 호출후에 호출하지 않기
+                    if (this.isLoading_ == 'idle') {
+                        this.nxStore.dispatch(
+                            CommunityActions.startGetChatRooms({
+                                centerId: this.center.id,
+                                curUserId: this.user.id,
+                                spot: 'main',
+                            })
+                        )
+                    }
                 }
             })
 
         this.nxStore.dispatch(CommunityActions.setCurCenterId({ centerId: this.center.id }))
         this.chatRoomMsgs$.pipe(takeUntil(this.unsubscribe$)).subscribe((crMsgs) => {
             this.chatRoomMsgs_ = crMsgs
+        })
+        this.curChatRoom$.pipe(takeUntil(this.unsubscribe$)).subscribe((curChatRoom) => {
+            this.curChatRoom_ = curChatRoom
         })
     }
 
@@ -204,9 +226,10 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
     // <-----------------------------------
 
     // functions related to room
-    createChatRoom(selectedMembers: Array<CenterUser>) {
+    // ! needed to modify
+    createChatRoom(selectedMembers: Array<CenterUser>, curCenterUser: CenterUser) {
         const user_ids = selectedMembers.map((v) => v.id)
-        user_ids.push(this.user.id)
+        user_ids.push(curCenterUser.id)
         this.nxStore.dispatch(
             CommunityActions.startCreateChatRoom({
                 centerId: this.center.id,
@@ -218,15 +241,30 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
             })
         )
     }
+
+    createTemChatRoom(selectedMembers: Array<CenterUser>, curCenterUser: CenterUser) {
+        this.nxStore.dispatch(
+            CommunityActions.createTempChatRoom({
+                center: this.center,
+                members: selectedMembers,
+                curUser: curCenterUser,
+                spot: 'main',
+            })
+        )
+    }
     // <-----------------------------------
 
     // modal vars and fucntions
 
     // - // 채팅방 입장
     public joinRoom(chatRoom: ChatRoom) {
-        this.nxStore.dispatch(
-            CommunityActions.startJoinChatRoom({ centerId: this.center.id, chatRoom: chatRoom, spot: 'main' })
-        )
+        if (_.includes(chatRoom.id, IsTmepRoom)) {
+            this.nxStore.dispatch(CommunityActions.joinTempChatRoom({ chatRoom, spot: 'main' }))
+        } else {
+            this.nxStore.dispatch(
+                CommunityActions.startJoinChatRoom({ centerId: this.center.id, chatRoom: chatRoom, spot: 'main' })
+            )
+        }
     }
 
     // - // 채팅방 생성
@@ -237,9 +275,10 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
     hideCreateRoomModal() {
         this.doShowCreateRoomModal = false
     }
-    onCreateRoomConfirm(members: Array<CenterUser>) {
+    onCreateRoomConfirm(res: InviteConfirm) {
         this.hideCreateRoomModal()
-        this.createChatRoom(members)
+        this.createTemChatRoom(res.members, res.curCenterUser)
+        // this.createChatRoom(res.members, res.curCenterUser)
     }
 
     // - // 채팅방 초대
@@ -250,11 +289,10 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
     hideInviteUserModal() {
         this.doShowInviteUserModal = false
     }
-    onInviteUserConfirm(members: Array<CenterUser>) {
-        console.log('onInviteUserConfirm: ', members)
+    onInviteUserConfirm(res: InviteConfirm) {
         this.hideInviteUserModal()
         this.nxStore.dispatch(
-            CommunityActions.startInviteMembers({ centerId: this.center.id, invitedMembers: members, spot: 'main' })
+            CommunityActions.startInviteMembers({ centerId: this.center.id, invitedMembers: res.members, spot: 'main' })
         )
     }
 
@@ -478,14 +516,42 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     sendTextMessage(text: string) {
-        const reqBody: CenterChatRoomApi.SendMessageReqBody = {
-            type_code: 'chat_room_message_type_text',
-            text: text,
-            url: '_',
-            originalname: '_',
-            mimetype: '_',
-            size: 0,
+        if (_.includes(this.curChatRoom_.id, IsTmepRoom)) {
+            const createRoom: CenterChatRoomApi.CreateChatRoomReqBody = {
+                type_code: 'chat_room_type_general',
+                user_ids: this.curChatRoom_.chat_room_users.map((v) => v.id),
+            }
+            const sendMsg: CenterChatRoomApi.SendMessageReqBody = {
+                type_code: 'chat_room_message_type_text',
+                text: text,
+                url: '_',
+                originalname: '_',
+                mimetype: '_',
+                size: 0,
+            }
+
+            this.nxStore.dispatch(
+                CommunityActions.startSendMessageToTempRoom({
+                    centerId: this.center.id,
+                    reqBody: {
+                        createRoom,
+                        sendMsg,
+                    },
+                    spot: 'main',
+                })
+            )
+        } else {
+            const reqBody: CenterChatRoomApi.SendMessageReqBody = {
+                type_code: 'chat_room_message_type_text',
+                text: text,
+                url: '_',
+                originalname: '_',
+                mimetype: '_',
+                size: 0,
+            }
+            this.nxStore.dispatch(
+                CommunityActions.startSendMessage({ centerId: this.center.id, reqBody, spot: 'main' })
+            )
         }
-        this.nxStore.dispatch(CommunityActions.startSendMessage({ centerId: this.center.id, reqBody, spot: 'main' }))
     }
 }

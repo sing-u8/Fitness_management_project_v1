@@ -41,10 +41,10 @@ export class CommunityEffect {
                         const isMyChatRooomExist =
                             chatRooms.findIndex((v) => v.type_code == 'chat_room_type_chat_with_me') != -1
                         if (isMyChatRooomExist) {
-                            return [CommunityActions.finishGetChatRooms({ chatRooms })]
+                            return [CommunityActions.finishGetChatRooms({ chatRooms, spot })]
                         } else {
                             return [
-                                CommunityActions.finishGetChatRooms({ chatRooms }),
+                                CommunityActions.finishGetChatRooms({ chatRooms, spot }),
                                 CommunityActions.startCreateChatRoom({
                                     centerId,
                                     spot,
@@ -186,6 +186,28 @@ export class CommunityEffect {
                     switchMap((chatRoomMessage) => {
                         return [CommunityActions.finishSendMessage({ spot, chatRoomMessage })]
                     })
+                )
+            ),
+            catchError((err: string) => of(CommunityActions.error({ error: err })))
+        )
+    )
+
+    // for temp room
+
+    public startSendMessageToTempRoom$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(CommunityActions.startSendMessageToTempRoom),
+            switchMap(({ centerId, reqBody, spot }) =>
+                this.centerChatRoomApi.createChatRoom(centerId, reqBody.createRoom).pipe(
+                    switchMap((chatRoom) =>
+                        this.centerChatRoomApi.sendMeesageToChatRoom(centerId, chatRoom.id, reqBody.sendMsg).pipe(
+                            switchMap((chatRoomMessage) => {
+                                return [
+                                    CommunityActions.finishSendMessageToTempRoom({ spot, chatRoomMessage, chatRoom }),
+                                ]
+                            })
+                        )
+                    )
                 )
             ),
             catchError((err: string) => of(CommunityActions.error({ error: err })))
