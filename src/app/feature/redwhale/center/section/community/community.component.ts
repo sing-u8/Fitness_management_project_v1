@@ -378,27 +378,6 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
     closeRoomUserListDropDown() {
         this.showRoomUserList = false
     }
-    initRoomUserList(userIdList: string[]) {
-        this.checkIsRoomHost()
-        // const isMe: GymUser = this.gymCommunityState.getValueFromUserMapState(this.user.id)
-        // const inviteeList: GymUser[] = userIdList
-        //     .filter((userId) => userId != this.user.id)
-        //     .map((userId) => this.gymCommunityState.getValueFromUserMapState(userId))
-        //     .sort()
-        // this.roomUserList = [isMe, ...inviteeList]
-    }
-    checkIsRoomHost() {
-        // if (this.selectedRoom.value.type == 'dm') {
-        //     this.isRoomHost = false
-        // } else if (this.selectedRoom.value.id == 'general') {
-        //     // ! 공지사항일 때 회원초대 상태 -- 추후에 수정하기
-        //     this.isRoomHost = false
-        // } else {
-        //     // roomid ex -> group@2b08c5ba-8c7a-11eb-b321-020f65958450#1634735919449
-        //     const hostId = this.selectedRoom.value.id.split('@')[1].split('#')[0]
-        //     this.isRoomHost = this.user.id == hostId
-        // }
-    }
     // <---------------------
 
     //
