@@ -15,7 +15,7 @@ import { HttpEvent, HttpEventType } from '@angular/common/http'
 
 import dayjs from 'dayjs'
 import _ from 'lodash'
-import { Subject, Subscription, Observable } from 'rxjs'
+import { Subject } from 'rxjs'
 import { takeUntil } from 'rxjs/operators'
 
 import { Loading } from '@schemas/store/loading'
@@ -24,6 +24,7 @@ import { User } from '@schemas/user'
 import { Center } from '@schemas/center'
 import { ChatRoom, IsTmepRoom } from '@schemas/chat-room'
 import { ChatRoomMessage } from '@schemas/chat-room-message'
+import { ChatFile } from '@schemas/center/community/chat-file'
 import { ChatRoomUser } from '@schemas/chat-room-user'
 
 import { Confirm as InviteConfirm } from '@shared/components/redwhale/community/invite-room-modal/invite-room-modal.component'
@@ -31,6 +32,7 @@ import { Confirm as InviteConfirm } from '@shared/components/redwhale/community/
 import { StorageService } from '@services/storage.service'
 import { VideoProcessingService } from '@services/helper/video-processing-service.service'
 import * as CenterChatRoomApi from '@services/center-chat-room.service'
+import { CommonCommunityService } from '@services/helper/common-community.service'
 
 // ngrx
 import { Store, select } from '@ngrx/store'
@@ -68,6 +70,8 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
     public chatRoomMsgs$ = this.nxStore.select(CommunitySelector.mainChatRoomMsgs)
     public chatRoomMsgs_: ChatRoomMessage[] = []
 
+    public chatRoomLoadingMsgs$ = this.nxStore.select(CommunitySelector.mainChatRoomLoadingMsgs)
+
     public unsubscribe$ = new Subject<void>()
 
     constructor(
@@ -76,7 +80,8 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
         private renderer: Renderer2,
         private storageService: StorageService,
         private nxStore: Store,
-        private videoProcessingService: VideoProcessingService
+        private videoProcessingService: VideoProcessingService,
+        private commonCommunityService: CommonCommunityService
     ) {
         this.chatInput = this.fb.control('', { validators: [Validators.required, this.inputValidator()] })
         this.changeRoomInput = this.fb.control('', { validators: [Validators.required, this.inputValidator()] })
@@ -139,7 +144,7 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     // file functions
-    public fileList = [] // : ChatFileList = []
+    public fileList: Array<ChatFile> = []
     onFileDrop(files: FileList) {
         this.setFileToFileList(files)
     }
@@ -149,65 +154,71 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     async setFileToFileList(files: FileList) {
-        // if (!this.isFileExist(files)) return
-        // this.fileList = []
-        // const videoChatFile = await this.setFIleToFileListForVideo(files)
-        // if (videoChatFile != undefined) {
-        //     this.fileList.push(videoChatFile)
-        //     this.resizeChatScreen()
-        //     return
-        // }
-        // let fileInsertCount = 0
-        // for (const [key, value] of Object.entries(files)) {
-        //     if (this.commonCommunityService.checkFileLengthExceed(fileInsertCount, 4)) break
-        //     if (this.commonCommunityService.checkFileSizeTooLarge(value)) {
-        //         this.globalService.showToast(`${value.name}의 파일 용량이 300MB를 초과하였습니다.`)
-        //         continue
-        //     }
-        //     const type = this.commonCommunityService.setLocalFileType(value)
-        //     if (type == 'image') {
-        //         const fileReader = new FileReader()
-        //         fileReader.onload = (e) => {
-        //             this.fileList.push({
-        //                 file: value,
-        //                 result: e.target.result as string,
-        //                 type: type,
-        //                 videoImageFile: null,
-        //             })
-        //             this.resizeChatScreen()
-        //         }
-        //         fileReader.readAsDataURL(value)
-        //     } else {
-        //         const thumbnailFile =
-        //             type == 'video' ? await this.videoProcessingService.generateThumbnail(value) : null
-        //         this.fileList.push({
-        //             file: value,
-        //             result: thumbnailFile != null ? thumbnailFile.url : null,
-        //             type: type,
-        //             videoImageFile: thumbnailFile != null ? thumbnailFile.file : null,
-        //         })
-        //         this.resizeChatScreen()
-        //     }
-        //     fileInsertCount++
-        // }
+        if (!this.isFileExist(files)) return
+        this.fileList = []
+        const videoChatFile = await this.setFIleToFileListForVideo(files)
+        if (videoChatFile != undefined) {
+            this.fileList.push(videoChatFile)
+            this.resizeChatScreen()
+            return
+        }
+        let fileInsertCount = 0
+        for (const [key, value] of Object.entries(files)) {
+            if (this.commonCommunityService.checkFileLengthExceed(fileInsertCount, 1)) break
+            if (this.commonCommunityService.checkFileSizeTooLarge(value)) {
+                this.nxStore.dispatch(showToast({ text: `${value.name}의 파일 용량이 300MB를 초과하였습니다.` }))
+                continue
+            }
+            const type = this.commonCommunityService.setLocalFileType(value)
+            if (type == 'image') {
+                const fileReader = new FileReader()
+                fileReader.onload = (e) => {
+                    this.fileList.push({
+                        file: value,
+                        result: e.target.result as string,
+                        type: type,
+                        mimetype: value.type,
+                        videoImageFile: null,
+                    })
+                    this.resizeChatScreen()
+
+                    console.log('setFileToFileList -- filelist : ', type, '; ', this.fileList, files)
+                }
+                fileReader.readAsDataURL(value)
+            } else {
+                const thumbnailFile =
+                    type == 'video' ? await this.videoProcessingService.generateThumbnail(value) : null
+                this.fileList.push({
+                    file: value,
+                    result: thumbnailFile != null ? thumbnailFile.url : null,
+                    type: type,
+                    mimetype: value.type,
+                    videoImageFile: thumbnailFile != null ? thumbnailFile.file : null,
+                })
+                this.resizeChatScreen()
+            }
+            fileInsertCount++
+            console.log('setFileToFileList -- filelist : ', type, '; ', this.fileList, files)
+        }
     }
 
     // setFileToFileList helper
 
     async setFIleToFileListForVideo(files: FileList): Promise<any | null> {
-        // const videoFile = _.values(files).find((file) => this.commonCommunityService.setLocalFileType(file) == 'video')
-        // if (videoFile == undefined) return null
-        // const thumbnailFile = await this.videoProcessingService.generateThumbnail(videoFile)
-        // const videoChatFile: ChatFile = {
-        //     file: videoFile,
-        //     result: thumbnailFile.url,
-        //     type: 'video',
-        //     videoImageFile: thumbnailFile.file,
-        // }
-        // if (files.length > 1) {
-        //     this.nxStore.dispatch(showToast({ text: '영상 파일이 포함된 경우, 하나의 영상만 전송할 수 있습니다.' }))
-        // }
-        // return videoChatFile
+        const videoFile = _.values(files).find((file) => this.commonCommunityService.setLocalFileType(file) == 'video')
+        if (videoFile == undefined) return null
+        const thumbnailFile = await this.videoProcessingService.generateThumbnail(videoFile)
+        const videoChatFile: ChatFile = {
+            file: videoFile,
+            result: thumbnailFile.url,
+            type: 'video',
+            mimetype: videoFile.type,
+            videoImageFile: thumbnailFile.file,
+        }
+        if (files.length > 1) {
+            this.nxStore.dispatch(showToast({ text: '영상 파일이 포함된 경우, 하나의 영상만 전송할 수 있습니다.' }))
+        }
+        return videoChatFile
     }
 
     //
@@ -472,7 +483,7 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
         if (e.key == 'Enter' && !e.shiftKey) {
             // prevent default behavior
             e.preventDefault()
-            // this.sendMessage(this.chatInput.value)
+            this.sendMessage(this.chatInput.value)
             return false
         } else {
             return true
@@ -487,6 +498,12 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
             return null
         }
     }
+
+    resetChatInputData() {
+        this.chatInput.setValue('')
+        this.resetChatScreenSize()
+        this.fileList = []
+    }
     // <---------------------
 
     // ----------------------------------------- message funcs -----------------------------------------------------
@@ -495,7 +512,12 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
     // ----------------------------------- send message function -------------------------------------->//
     sendMessage(text: string) {
         // !! 분기 필요
-        this.sendTextMessage(text)
+        if (this.fileList.length > 0) {
+            this.sendMessageWithFile(text)
+        } else {
+            this.sendTextMessage(text)
+        }
+        this.resetChatInputData()
     }
 
     sendTextMessage(text: string) {
@@ -534,6 +556,33 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
             }
             this.nxStore.dispatch(
                 CommunityActions.startSendMessage({ centerId: this.center.id, reqBody, spot: 'main' })
+            )
+        }
+    }
+
+    sendMessageWithFile(text: string) {
+        // !! 썸네일 작업이 필요할 때 여기서 ... 했었음
+
+        if (_.includes(this.curChatRoom_.id, IsTmepRoom)) {
+            this.nxStore.dispatch(
+                CommunityActions.startSendMessageWithFileToTempRoom({
+                    centerId: this.center.id,
+                    user: this.user,
+                    text,
+                    fileList: this.fileList,
+                    user_ids: this.curChatRoom_.chat_room_users.map((v) => v.id),
+                    spot: 'main',
+                })
+            )
+        } else {
+            this.nxStore.dispatch(
+                CommunityActions.startSendMessageWithFile({
+                    centerId: this.center.id,
+                    user: this.user,
+                    text,
+                    fileList: this.fileList,
+                    spot: 'main',
+                })
             )
         }
     }

@@ -15,7 +15,7 @@ import { saveAs } from 'file-saver'
 import { FileService } from '@services/file.service'
 
 import { CenterUser } from '@schemas/center-user'
-import { ChatRoomMessage, ChatRoomMessageType } from '@schemas/chat-room-message'
+import { ChatRoomMessage, ChatRoomMessageType, ChatRoomLoadingMessage } from '@schemas/chat-room-message'
 
 @Component({
     selector: 'rw-chat-message',
@@ -23,14 +23,14 @@ import { ChatRoomMessage, ChatRoomMessageType } from '@schemas/chat-room-message
     styleUrls: ['./chat-message.component.scss'],
 })
 export class ChatMessageComponent implements OnInit, AfterContentInit, AfterViewInit {
-    @Input() message: ChatRoomMessage
+    @Input() message: ChatRoomLoadingMessage | ChatRoomMessage
     @Input() showUserInfo: boolean
     @Input() isSidebar: boolean
 
     @Input() isLoading: boolean
     @Input() gauge: number
 
-    public type: ChatRoomMessageType | 'date' | 'info' | 'image' | 'file' | 'video' // !! 이후에 날짜 문구 표시는 어떻게 해야할 지 고려하기
+    public type: 'text' | 'date' | 'info' | 'image' | 'file' | 'video'
     public showDownloadButton = false
 
     public isLinkMessage = false
@@ -57,10 +57,21 @@ export class ChatMessageComponent implements OnInit, AfterContentInit, AfterView
         // this.message.type != 'date' && this.message.type != 'info' && this.message.link.opengraphList.length > 0
         //     ? true
         //     : false
-        this.initMessageFileStyle()
     }
     ngAfterContentInit(): void {
-        this.type = this.message.type_code
+        if (this.message.type_code == 'chat_room_message_type_text') {
+            this.type = 'text'
+        } else {
+            const firstFileType = this.message.mimetype.split('/')[0]
+            this.type = firstFileType.includes('application')
+                ? 'file'
+                : firstFileType.includes('image')
+                ? 'image'
+                : firstFileType.includes('video')
+                ? 'video'
+                : 'text'
+        }
+        this.initMessageFileStyle()
     }
 
     onOpenGraphClick() {
@@ -78,25 +89,27 @@ export class ChatMessageComponent implements OnInit, AfterContentInit, AfterView
 
     // ---------------------------------------- file style ---------------------------------------  //
     async initMessageFileStyle() {
-        // switch (this.message.type_code) {
-        //     case 'image':
-        //         this.setGridStyle(this.image_item_container_EL, this.message.file.length)
-        //         break
-        //     case 'video':
-        //         this.SpinnerService.show(this.spName, {
-        //             bdColor: 'rgba(96, 96, 96, 0.45',
-        //             fullScreen: false,
-        //             type: 'ball-spin',
-        //             size: 'default',
-        //         })
-        //         this.setGridStyle(this.video_item_container_EL, this.message.file.length)
-        //         this.videoImgURL = this.message.file.map((file) => file.thumbnail)
-        //         if (this.isLoading) return
-        //         this.fileLoaded = true
-        //         this.SpinnerService.hide(this.spName)
-        //         console.log('this.videoImgURL : ', this.videoImgURL)
-        //         break
-        // }
+        if ('gauge' in this.message) {
+            switch (this.type) {
+                case 'image':
+                    this.setGridStyle(this.image_item_container_EL, 1)
+                    break
+                case 'video':
+                    this.SpinnerService.show(this.message.gauge.id, {
+                        bdColor: 'rgba(96, 96, 96, 0.45',
+                        fullScreen: false,
+                        type: 'ball-spin',
+                        size: 'default',
+                    })
+                    this.setGridStyle(this.video_item_container_EL, 1)
+                    this.videoImgURL = [this.message.url] // file.map((file) => file.thumbnail)
+                    if (this.isLoading) return
+                    this.fileLoaded = true
+                    this.SpinnerService.hide(this.message.gauge.id)
+                    console.log('this.videoImgURL : ', this.videoImgURL)
+                    break
+            }
+        }
     }
 
     setGridStyle(el: ElementRef, fileSize: number) {

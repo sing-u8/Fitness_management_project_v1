@@ -15,4 +15,11 @@ export interface ChatRoomMessage {
     created_at: string
 }
 
+export interface ChatRoomLoadingMessage extends ChatRoomMessage {
+    gauge: {
+        id: string
+        value: number
+    }
+}
+
 export type ChatRoomMessageType = 'chat_room_message_type_text' | 'chat_room_message_type_file'

@@ -7,11 +7,12 @@ import * as CommunitydActions from '../actions/sec.community.actions'
 
 // schema
 import { ChatRoom, IsTmepRoom } from '@schemas/chat-room'
-import { ChatRoomMessage } from '@schemas/chat-room-message'
+import { ChatRoomMessage, ChatRoomLoadingMessage } from '@schemas/chat-room-message'
 import { ChatRoomUser } from '@schemas/chat-room-user'
 import { Loading } from '@schemas/store/loading'
 import { CenterUser } from '@schemas/center-user'
 import { Center } from '@schemas/center'
+import { ChatFile } from '@schemas/center/community/chat-file'
 
 export type spot = 'main' | 'drawer'
 
@@ -28,11 +29,13 @@ export interface State {
     mainPreChatRoom: ChatRoom
     mainCurChatRoom: ChatRoom
     mainChatRoomMsgs: Array<ChatRoomMessage>
+    mainChatRoomLoadingMsgs: Array<ChatRoomLoadingMessage>
     mainChatRoomUserList: Array<ChatRoomUser>
     // main - drawer
     drawerPreChatRoom: ChatRoom
     drawerCurChatRoom: ChatRoom
     drawerChatRoomMsgs: Array<ChatRoomMessage>
+    drawerChatRoomLoadingMsgs: Array<ChatRoomLoadingMessage>
     drawerChatRoomUserList: Array<ChatRoomUser>
 }
 
@@ -49,11 +52,13 @@ export const initialState: State = {
     mainPreChatRoom: undefined,
     mainCurChatRoom: undefined,
     mainChatRoomMsgs: [],
+    mainChatRoomLoadingMsgs: [],
     mainChatRoomUserList: [],
     // main - drawer
     drawerPreChatRoom: undefined,
     drawerCurChatRoom: undefined,
     drawerChatRoomMsgs: [],
+    drawerChatRoomLoadingMsgs: [],
     drawerChatRoomUserList: [],
 }
 
@@ -199,12 +204,12 @@ export const communityReducer = createImmerReducer(
         return state
     }),
 
-    on(CommunitydActions.startSendMessage, (state, { spot }) => {
-        if (spot == 'main') {
-        } else {
-        }
-        return state
-    }),
+    // on(CommunitydActions.startSendMessage, (state, { spot }) => {
+    //     if (spot == 'main') {
+    //     } else {
+    //     }
+    //     return state
+    // }),
     on(CommunitydActions.finishSendMessage, (state, { spot, chatRoomMessage }) => {
         if (spot == 'main') {
             state.mainChatRoomMsgs.unshift(chatRoomMessage)
@@ -213,6 +218,10 @@ export const communityReducer = createImmerReducer(
         }
         return state
     }),
+
+    // on(CommunitydActions.finishSendMessageWithFile, (state) => {
+    //     return state
+    // }),
 
     // - // for temp romm
     on(CommunitydActions.finishSendMessageToTempRoom, (state, { spot, chatRoomMessage, chatRoom }) => {
@@ -274,12 +283,42 @@ export const communityReducer = createImmerReducer(
         return state
     }),
 
+    on(CommunitydActions.addChatRoomLoadingMsgs, (state, { spot, msg }) => {
+        if (spot == 'main') {
+            state.mainChatRoomLoadingMsgs.unshift(msg)
+        } else {
+            state.drawerChatRoomLoadingMsgs.unshift(msg)
+        }
+        return state
+    }),
+    on(CommunitydActions.updateChatRoomLoadingMsg, (state, { spot, msgId, gauge }) => {
+        if (spot == 'main') {
+            state.mainChatRoomLoadingMsgs[
+                state.mainChatRoomLoadingMsgs.findIndex((v) => v.gauge.id == msgId)
+            ].gauge.value = gauge
+        } else {
+            state.drawerChatRoomLoadingMsgs[
+                state.drawerChatRoomLoadingMsgs.findIndex((v) => v.gauge.id == msgId)
+            ].gauge.value = gauge
+        }
+        return state
+    }),
+    on(CommunitydActions.removeChatRoomLoadingMsgs, (state, { spot, loadingMsgId }) => {
+        if (spot == 'main') {
+            state.mainChatRoomLoadingMsgs = state.mainChatRoomLoadingMsgs.filter((v) => v.gauge.id != loadingMsgId)
+        } else {
+            state.drawerChatRoomLoadingMsgs = state.drawerChatRoomLoadingMsgs.filter((v) => v.gauge.id != loadingMsgId)
+        }
+        return state
+    }),
+
     on(CommunitydActions.updateChatRooms, (state, { chatRoom }) => {
         return state
     }),
     on(CommunitydActions.updateChatRoomMsgs, (state, { chatRoomMsg }) => {
         return state
     }),
+
     // common
     on(CommunitydActions.setCurCenterId, (state, { centerId }) => {
         state.curCenterId = centerId
@@ -301,11 +340,13 @@ export const selectChatRoomList = (state: State) => state.chatRoomList
 export const selectMainPreChatRoom = (state: State) => state.mainPreChatRoom
 export const selectMainCurChatRoom = (state: State) => state.mainCurChatRoom
 export const selectMainChatRoomMsgs = (state: State) => state.mainChatRoomMsgs
+export const selectMainChatRoomLoadingMsgs = (state: State) => state.mainChatRoomLoadingMsgs
 export const selectMainChatRoomUserList = (state: State) => state.mainChatRoomUserList
 // main - drawer
 export const selectDrawerPreChatRoom = (state: State) => state.drawerPreChatRoom
 export const selectDrawerCurChatRoom = (state: State) => state.drawerCurChatRoom
 export const selectDrawerChatRoomMsgs = (state: State) => state.drawerChatRoomMsgs
+export const selectDrawerChatRoomLoadingMsgs = (state: State) => state.drawerChatRoomLoadingMsgs
 export const selectDrawerChatRoomUserList = (state: State) => state.drawerChatRoomUserList
 
 // common

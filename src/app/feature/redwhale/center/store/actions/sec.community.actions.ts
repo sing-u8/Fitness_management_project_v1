@@ -3,12 +3,14 @@ import { createAction, props } from '@ngrx/store'
 import * as FromCommunity from '@centerStore/reducers/sec.community.reducer'
 
 import { ChatRoom } from '@schemas/chat-room'
-import { ChatRoomMessage } from '@schemas/chat-room-message'
+import { ChatRoomMessage, ChatRoomLoadingMessage } from '@schemas/chat-room-message'
 import { ChatRoomUser } from '@schemas/chat-room-user'
 import { CenterUser } from '@schemas/center-user'
+import { ChatFile } from '@schemas/center/community/chat-file'
+import { Center } from '@schemas/center'
 
 import * as ChatRoomApi from '@services/center-chat-room.service'
-import { Center } from '@schemas/center'
+import { User } from '@schemas/user'
 
 const FeatureKey = 'Center/Community'
 
@@ -109,6 +111,25 @@ export const finishSendMessage = createAction(
         spot: FromCommunity.spot
     }>()
 )
+
+export const startSendMessageWithFile = createAction(
+    `[${FeatureKey}] Start Send Message With File to ChatRoom`,
+    props<{
+        centerId: string
+        user: User
+        text: string
+        fileList: Array<ChatFile>
+        spot: FromCommunity.spot
+    }>()
+)
+// export const finishSendMessageWithFile = createAction(
+//     `[${FeatureKey}] Finish Send Message With File to ChatRoom`,
+//     props<{
+//         chatRoomMessage: ChatRoomMessage
+//         spot: FromCommunity.spot
+//     }>()
+// )
+
 // - // -- // async for temp room
 export const startSendMessageToTempRoom = createAction(
     `[${FeatureKey}] Start Send Message to TempChatRoom`,
@@ -130,6 +151,18 @@ export const finishSendMessageToTempRoom = createAction(
     }>()
 )
 
+export const startSendMessageWithFileToTempRoom = createAction(
+    `[${FeatureKey}] Start Send Message With File to TempChatRoom`,
+    props<{
+        centerId: string
+        user: User
+        user_ids: Array<string>
+        text: string
+        fileList: Array<ChatFile>
+        spot: FromCommunity.spot
+    }>()
+)
+
 // - // sync
 export const joinTempChatRoom = createAction(
     `[${FeatureKey}] Join Temp Chat Room`,
@@ -142,6 +175,19 @@ export const createTempChatRoom = createAction(
 export const leaveTempChatRoom = createAction(
     `[${FeatureKey}] Leave Temp Chat Room`,
     props<{ spot: FromCommunity.spot }>()
+)
+
+export const addChatRoomLoadingMsgs = createAction(
+    `[${FeatureKey}] Add Chat Room Loading Messages`,
+    props<{ msg: ChatRoomLoadingMessage; spot: FromCommunity.spot }>()
+)
+export const updateChatRoomLoadingMsg = createAction(
+    `[${FeatureKey}] Update Chat Room Loading Messages`,
+    props<{ msgId: string; spot: FromCommunity.spot; gauge: number }>()
+)
+export const removeChatRoomLoadingMsgs = createAction(
+    `[${FeatureKey}] remove Chat Room Loading Messages`,
+    props<{ loadingMsgId: string; spot: FromCommunity.spot }>()
 )
 
 export const updateChatRooms = createAction(`[${FeatureKey}] Update Chat Room`, props<{ chatRoom: ChatRoom }>())

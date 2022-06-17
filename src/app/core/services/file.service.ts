@@ -16,7 +16,7 @@ export type FileTypeCode =
     | 'file_type_center_background'
     | 'file_type_center_user_picture'
     | 'file_type_center_user_background'
-    | 'file_type_chat'
+    | 'file_type_center_chat'
 
 @Injectable({
     providedIn: 'root',
@@ -143,6 +143,6 @@ export interface CreateFileRequestBody {
     type_code: FileTypeCode
     center_id?: string
     center_user_id?: string
-    chat_room_id?: string
+    center_chat_room_id?: string
     // files  : FileList   -- is already in other param
 }

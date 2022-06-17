@@ -82,7 +82,7 @@
 
   <section
     class="msg-type-file default"
-    *ngIf="type == 'chat_room_message_type_file'"
+    *ngIf="type == 'file'"
   >
     <rw-chat-message-user
       [message]="message"
@@ -186,7 +186,7 @@
 
   <section
     class="msg-type-text default"
-    *ngIf="type == 'chat_room_message_type_text'"
+    *ngIf="type == 'text'"
   >
     <rw-chat-message-user
       [message]="message"

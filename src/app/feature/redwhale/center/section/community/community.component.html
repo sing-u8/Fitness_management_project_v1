@@ -98,14 +98,13 @@
                     class="chatting-screen-content thin-scroll-y-overlay2"
                     (scroll)="scrolled($event)"
                 >
-                    <!-- <rw-chat-message
-                        *ngFor="let data of roomMsgObj$v.loadingMsgList | keyvalue; let i = index"
-                        [message]="data.value.message"
+                    <rw-chat-message
+                        *ngFor="let msg of (chatRoomLoadingMsgs$ | async); let i = index"
+                        [message]="msg"
                         [showUserInfo]="true"
                         [isLoading]="true"
-                        [gauge]="data.value.gauge"
-                        [currentUser]="currentUser.user"
-                    ></rw-chat-message> -->
+                        [gauge]="msg.gauge.value"
+                    ></rw-chat-message>
 
                     <rw-chat-message
                         #message_el
