@@ -1,7 +1,17 @@
 <section
     id="community-section"
     class="community"
+    rw-dropzone2
+    (onDrop)="onFileDrop($event);onFileDragLeave()"
+    (onDragOver) = "onFileDragEnter()"
+    (onDragLeave) = "onFileDragLeave()"
 >
+
+    <rw-drag-guide
+        [showGuide]="showFileDragGuide"
+        [isSideBar]="false"
+    ></rw-drag-guide>
+
     <section class="chatting-container" >
         <div class="chatting-sidebar">
             <div class="sidebar-header">
