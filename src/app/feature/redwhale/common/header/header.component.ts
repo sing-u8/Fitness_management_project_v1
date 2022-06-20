@@ -5,6 +5,7 @@ import { StorageService } from '@services/storage.service'
 
 import { CenterService } from '@services/center.service'
 import { UsersCenterService } from '@services/users-center.service'
+import { WsChatService } from '@services/web-socket/ws-chat.service'
 
 import { User } from '@schemas/user'
 import { Center } from '@schemas/center'
@@ -45,7 +46,8 @@ export class HeaderComponent implements OnInit {
         private centerService: CenterService,
         private usersCenterService: UsersCenterService,
         private activatedRoute: ActivatedRoute,
-        private nxStore: Store
+        private nxStore: Store,
+        private wsChatService: WsChatService
     ) {}
 
     ngOnInit(): void {
@@ -158,6 +160,7 @@ export class HeaderComponent implements OnInit {
         // this.router.navigateByUrl('/auth/login')
         this.resetCenterState()
         await this.storageService.logout()
+        this.wsChatService.closeChatWs()
     }
 
     resetCenterState() {

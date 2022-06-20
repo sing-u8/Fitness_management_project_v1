@@ -8,6 +8,7 @@ import { UsersService } from '@services/users.service'
 import { StorageService } from '@services/storage.service'
 import { SettingAccountModalService } from '@services/home/setting-account-modal.service'
 import { GlobalSettingAccountService } from '@services/home/global-setting-account.service'
+import { WsChatService } from '@services/web-socket/ws-chat.service'
 
 import { User } from '@schemas/user'
 import { modalType, modalData } from '@schemas/home/setting-account-modal'
@@ -86,7 +87,8 @@ export class SettingAccountComponent implements OnInit {
         private nxStore: Store,
         private fileservice: FileService,
         private globalSettingAccountService: GlobalSettingAccountService,
-        private router: Router
+        private router: Router,
+        private wsChatService: WsChatService
     ) {}
 
     ngOnInit(): void {
@@ -299,6 +301,7 @@ export class SettingAccountComponent implements OnInit {
         // this.router.navigateByUrl('/auth/login')
         this.resetCenterState()
         await this.storageService.logout()
+        this.wsChatService.closeChatWs()
     }
 
     gotoRemoveAccount() {

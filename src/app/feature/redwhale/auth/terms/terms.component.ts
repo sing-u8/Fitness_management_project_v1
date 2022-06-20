@@ -6,6 +6,7 @@ import { takeUntil } from 'rxjs/operators'
 import { StorageService } from '@services/storage.service'
 
 import { UsersService } from '@services/users.service'
+import { WsChatService } from '@services/web-socket/ws-chat.service'
 
 import { User } from '@schemas/user'
 
@@ -47,7 +48,8 @@ export class TermsComponent implements OnInit, OnDestroy {
         private router: Router,
         private nxStore: Store,
         private storageService: StorageService,
-        private usersService: UsersService
+        private usersService: UsersService,
+        private wsChatService: WsChatService
     ) {
         this.user = this.storageService.getUser()
 
@@ -176,6 +178,7 @@ export class TermsComponent implements OnInit, OnDestroy {
 
     cancelWhenSocialUser() {
         this.storageService.logout()
+        this.wsChatService.closeChatWs()
     }
 
     showModal(name: string) {
