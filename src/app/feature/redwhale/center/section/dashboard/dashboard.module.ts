@@ -49,6 +49,7 @@ import { ModifyPaymentFullmodalComponent } from './components/modify-payment-ful
 import { PaymentLockerWindowComponent } from './components/payment-locker-window/payment-locker-window.component'
 import { PaymentMembershipWindowComponent } from './components/payment-membership-window/payment-membership-window.component'
 import { DashboardChargeModalComponent } from './components/dashboard-charge-modal/dashboard-charge-modal.component'
+import { MemberRoleSelectComponent } from './components/member-role-select/member-role-select.component'
 
 // section module
 import { CommonModule as SectionCommonModule } from '../common/common.module'
@@ -101,6 +102,7 @@ import { NgxSpinnerModule } from 'ngx-spinner'
         PaymentLockerWindowComponent,
         PaymentMembershipWindowComponent,
         DashboardChargeModalComponent,
+        MemberRoleSelectComponent,
     ],
     imports: [
         AngularCommonModule,

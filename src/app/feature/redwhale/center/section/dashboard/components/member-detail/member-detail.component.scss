@@ -198,6 +198,23 @@ section.member-detail__body {
                             overflow: hidden;
                             text-overflow: ellipsis;
                             white-space: nowrap;
+
+                            & span {
+                                font-weight: 400;
+                                font-size: 14px;
+                                line-height: 20px;
+                                letter-spacing: -0.196px;
+                                width: calc(100% - 76px);
+                                overflow: hidden;
+                                text-overflow: ellipsis;
+                                white-space: nowrap;
+                            }
+                        }
+                        .content_select {
+                            font-weight: 400;
+                            font-size: 14px;
+                            line-height: 20px;
+                            letter-spacing: -0.196px;
                         }
                     }
                 }

@@ -148,6 +148,7 @@ export const dashboardReducer = createImmerReducer(
 
         // ! role_code가 포함되었을 때, role_name도 바꿔줘야함
         state.curUserData.user = _.assign(state.curUserData.user, reqBody)
+        console.log('startSetCurUserData reducer - ', state.curUserData.user)
 
         const userListsKeys = _.keys(state.usersLists) as MemberSelectCateg[]
         userListsKeys.forEach((key) => {

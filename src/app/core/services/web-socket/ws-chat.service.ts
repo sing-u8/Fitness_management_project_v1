@@ -57,7 +57,6 @@ export class WsChatService implements OnDestroy {
 
         this.chatWs.subscribe({
             next: (ws) => {
-                console.log('web socket chat next : ', ws)
                 this.switchByWsChatBase(ws as wsChat.Base)
             },
             error: (err) => {

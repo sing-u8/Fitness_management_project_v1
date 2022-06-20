@@ -74,7 +74,21 @@
                     </div>
                     <div class="l-info">
                         <div class="title">권한</div>
-                        <div class="content">{{!curUserData.user ? '-' : curUserData.user.role_name}}</div>
+                        <div class="content_select">
+                            <span *ngIf="!curUserData.user">{{'-'}}</span>
+                            <rw-member-role-select
+                                *ngIf="curUserData.user"
+                                [staffId]="user.id"
+                                [member]="curUserData?.user"
+                                [visible] = "doShowRoleSelect"
+                                [userRole] = "userRole"
+                                [employeeRole] = "staffRole"
+                                (onClose) = "closeRoleSelect()"
+                                (onSetUserRole) = "setUserRole($event)"
+                                (onToggleSelect) = "toggleRoleSelect()"
+                                (onSaveRole) = "openChangeRoleModal()"
+                            ></rw-member-role-select>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -252,3 +266,11 @@
     (finishRegister)="onFinishRegisterML()"
     [curUser]="curUserData.user"
 ></db-register-membership-locker-fullmodal>
+
+<rw-modal
+    (click)="$event.stopPropagation()"
+    [(visible)]="doShowChangeRoleModal"
+    [data]="changeRoleModalText"
+    (cancel)="closeChangeRoleModal()"
+    (confirm)="confirmChangeRoleModal()"
+></rw-modal>

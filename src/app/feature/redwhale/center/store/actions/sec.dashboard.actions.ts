@@ -11,6 +11,7 @@ import {
 
 import { CreateUserRequestBody, UpdateUserRequestBody } from '@services/center-users.service'
 import { CreateFileRequestBody } from '@services/file.service'
+import { ModifyCenterRoleReqBody } from '@services/center-role-permission.service'
 
 import { ImageFile } from '@services/helper/picture-management.service'
 
@@ -52,6 +53,11 @@ export const finishGetUserData = createAction(
 
 export const startSetCurUserData = createAction(
     `[${FeatureKey}] Start Set Current User Data Memo`,
+    props<{ centerId: string; userId: string; reqBody: UpdateUserRequestBody; callback?: () => void }>()
+)
+
+export const startDelegate = createAction(
+    `[${FeatureKey}] Start Delegate Owner To Another Member`,
     props<{ centerId: string; userId: string; reqBody: UpdateUserRequestBody; callback?: () => void }>()
 )
 
