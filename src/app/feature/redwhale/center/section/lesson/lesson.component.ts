@@ -25,7 +25,7 @@ import {
 
 // rxjs
 import { Observable, Subject } from 'rxjs'
-import { takeUntil } from 'rxjs/operators'
+import { takeUntil, take } from 'rxjs/operators'
 
 // ngrx
 import { Store, select } from '@ngrx/store'
@@ -115,7 +115,7 @@ export class LessonComponent implements OnInit, AfterViewInit, OnDestroy {
         private fb: FormBuilder
     ) {
         this.center = this.storageService.getCenter()
-        this.nxStore.pipe(select(LessonSelector.currentCenter), takeUntil(this.unSubscriber$)).subscribe((curGym) => {
+        this.nxStore.pipe(select(LessonSelector.currentCenter), take(1)).subscribe((curGym) => {
             if (curGym != this.center.id) {
                 this.nxStore.dispatch(LessonActions.resetAll())
                 this.nxStore.dispatch(LessonActions.setCurrentGym({ currentCenter: this.center.id }))

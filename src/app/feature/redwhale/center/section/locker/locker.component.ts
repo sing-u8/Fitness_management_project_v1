@@ -29,7 +29,7 @@ import { Center } from '@schemas/center'
 
 // rxjs
 import { Observable, Subject } from 'rxjs'
-import { takeUntil, debounceTime } from 'rxjs/operators'
+import { takeUntil, debounceTime, take } from 'rxjs/operators'
 
 // ngrx
 import { Store, select } from '@ngrx/store'
@@ -114,15 +114,13 @@ export class LockerComponent implements OnInit, AfterViewInit, OnDestroy {
         this.lockerItemCountInput = this.fb.control('0')
 
         this.center = this.storageService.getCenter()
-        this.nxStore
-            .pipe(select(LockerSelector.curCenterId), takeUntil(this.unSubscriber$))
-            .subscribe((curCenterId) => {
-                if (curCenterId != this.center.id) {
-                    // this.lockerSerState.resetLockerItemList()
-                    this.nxStore.dispatch(LockerActions.resetAll())
-                    this.nxStore.dispatch(LockerActions.startLoadLockerCategs({ centerId: this.center.id }))
-                }
-            })
+        this.nxStore.pipe(select(LockerSelector.curCenterId), take(1)).subscribe((curCenterId) => {
+            if (curCenterId != this.center.id) {
+                // this.lockerSerState.resetLockerItemList()
+                this.nxStore.dispatch(LockerActions.resetAll())
+                this.nxStore.dispatch(LockerActions.startLoadLockerCategs({ centerId: this.center.id }))
+            }
+        })
         this.nxStore
             .pipe(select(LockerSelector.curLockerCateg), takeUntil(this.unSubscriber$))
             .subscribe((curLockerCateg) => {

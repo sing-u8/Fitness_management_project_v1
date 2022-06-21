@@ -246,7 +246,7 @@ export const dashboardReducer = createImmerReducer(
         return state
     }),
     on(DashboardActions.resetAll, (state) => {
-        state = { ...state, ...initialState }
+        state = initialState // { ...state, ...initialState }
         return state
     })
 )

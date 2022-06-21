@@ -6,6 +6,7 @@ import * as LockerActions from '@centerStore/actions/sec.locker.actions'
 import * as MembershipActions from '@centerStore/actions/sec.membership.actions'
 import * as SaleActions from '@centerStore/actions/sec.sale.actions'
 import * as ScheduleActions from '@centerStore/actions/sec.schedule.actions'
+import * as CommunityActions from '@centerStore/actions/sec.community.actions'
 
 export function resetAllState(nxStore: Store) {
     nxStore.dispatch(DashboardActions.resetAll())
@@ -14,4 +15,5 @@ export function resetAllState(nxStore: Store) {
     nxStore.dispatch(MembershipActions.resetAll())
     nxStore.dispatch(SaleActions.resetAll())
     nxStore.dispatch(ScheduleActions.resetAll())
+    nxStore.dispatch(CommunityActions.resetAll())
 }

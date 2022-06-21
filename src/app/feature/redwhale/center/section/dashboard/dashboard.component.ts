@@ -20,7 +20,7 @@ import { UserLocker } from '@schemas/user-locker'
 
 // rxjs
 import { Observable, Subject } from 'rxjs'
-import { takeUntil } from 'rxjs/operators'
+import { takeUntil, take } from 'rxjs/operators'
 
 // ngrx
 import { Store, select } from '@ngrx/store'
@@ -173,6 +173,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     public isLoading$ = this.nxStore.select(DashboardSelector.isLoading)
 
     public unsubscribe$ = new Subject<void>()
+
     constructor(
         private centerService: CenterService,
         private storageService: StorageService,
@@ -186,21 +187,14 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
         this.centerStaff = this.storageService.getUser()
         this.center = this.storageService.getCenter()
 
-        this.nxStore
-            .pipe(select(DashboardSelector.curCenterId), takeUntil(this.unsubscribe$))
-            .subscribe((curCenterId) => {
-                console.log(
-                    'DashboardSelector.curCenterId : ',
-                    curCenterId != this.center.id,
-                    curCenterId,
-                    this.center.id
-                )
-                if (curCenterId != this.center.id) {
-                    // this.lockerSerState.resetLockerItemList()
-                    this.nxStore.dispatch(DashboardActions.resetAll())
-                    this.nxStore.dispatch(DashboardActions.startLoadMemberList({ centerId: this.center.id }))
-                }
-            })
+        this.nxStore.pipe(select(DashboardSelector.curCenterId), take(1)).subscribe((curCenterId) => {
+            console.log('DashboardSelector.curCenterId : ', curCenterId != this.center.id, curCenterId, this.center.id)
+            if (curCenterId != this.center.id) {
+                // this.lockerSerState.resetLockerItemList()
+                this.nxStore.dispatch(DashboardActions.resetAll())
+                this.nxStore.dispatch(DashboardActions.startLoadMemberList({ centerId: this.center.id }))
+            }
+        })
 
         this.nxStore.dispatch(DashboardActions.setCurCenterId({ centerId: this.center.id }))
     }

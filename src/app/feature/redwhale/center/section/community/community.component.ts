@@ -16,7 +16,7 @@ import { HttpEvent, HttpEventType } from '@angular/common/http'
 import dayjs from 'dayjs'
 import _ from 'lodash'
 import { Subject } from 'rxjs'
-import { takeUntil } from 'rxjs/operators'
+import { takeUntil, take } from 'rxjs/operators'
 
 import { Loading } from '@schemas/store/loading'
 import { CenterUser } from '@schemas/center-user'
@@ -93,23 +93,21 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
             this.isLoading_ = isLoading
         })
 
-        this.nxStore
-            .pipe(select(CommunitySelector.curCenterId), takeUntil(this.unsubscribe$))
-            .subscribe((curCenterId) => {
-                if (curCenterId != this.center.id) {
-                    this.nxStore.dispatch(CommunityActions.resetAll())
-                    // !! 한 번 호출후에 호출하지 않기
-                    if (this.isLoading_ == 'idle') {
-                        this.nxStore.dispatch(
-                            CommunityActions.startGetChatRooms({
-                                centerId: this.center.id,
-                                curUserId: this.user.id,
-                                spot: 'main',
-                            })
-                        )
-                    }
+        this.nxStore.pipe(select(CommunitySelector.curCenterId), take(1)).subscribe((curCenterId) => {
+            if (curCenterId != this.center.id) {
+                this.nxStore.dispatch(CommunityActions.resetAll())
+                // !! 한 번 호출후에 호출하지 않기
+                if (this.isLoading_ == 'idle') {
+                    this.nxStore.dispatch(
+                        CommunityActions.startGetChatRooms({
+                            centerId: this.center.id,
+                            curUserId: this.user.id,
+                            spot: 'main',
+                        })
+                    )
                 }
-            })
+            }
+        })
 
         this.nxStore.dispatch(CommunityActions.setCurCenterId({ centerId: this.center.id }))
         this.chatRoomMsgs$.pipe(takeUntil(this.unsubscribe$)).subscribe((crMsgs) => {

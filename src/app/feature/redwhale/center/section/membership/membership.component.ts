@@ -20,7 +20,7 @@ import { SelectedMembership, initialSelectedMembership } from '@centerStore/redu
 
 // rxjs
 import { Observable, Subject } from 'rxjs'
-import { takeUntil } from 'rxjs/operators'
+import { takeUntil, take } from 'rxjs/operators'
 
 // ngrx
 import { Store, select } from '@ngrx/store'
@@ -80,6 +80,8 @@ export class MembershipComponent implements OnInit {
     public centerReservableLessonItemList: Array<ClassItem>
     public isReserveLessonExist: boolean
 
+    public isOnceInitialized = false
+
     constructor(
         private activatedRoute: ActivatedRoute,
         private route: Router,
@@ -89,15 +91,13 @@ export class MembershipComponent implements OnInit {
         private fb: FormBuilder
     ) {
         this.center = this.storageService.getCenter()
-        this.nxStore
-            .pipe(select(MembershipSelector.currentCenter), takeUntil(this.unSubscriber$))
-            .subscribe((curGym) => {
-                console.log('memberhsip center : ', ' : ', curGym, ' : ', this.center.id)
-                if (curGym != this.center.id) {
-                    this.nxStore.dispatch(MembershipActions.resetAll())
-                    this.nxStore.dispatch(MembershipActions.startLoadMembershipCategs({ centerId: this.center.id }))
-                }
-            })
+        this.nxStore.pipe(select(MembershipSelector.currentCenter), take(1)).subscribe((curGym) => {
+            console.log('memberhsip center : ', ' : ', curGym, ' : ', this.center.id)
+            if (curGym != this.center.id) {
+                this.nxStore.dispatch(MembershipActions.resetAll())
+                this.nxStore.dispatch(MembershipActions.startLoadMembershipCategs({ centerId: this.center.id }))
+            }
+        })
 
         this.nxStore.dispatch(MembershipActions.setCurrentGym({ currentCenter: this.center.id }))
 

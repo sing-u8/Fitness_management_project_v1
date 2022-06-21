@@ -82,7 +82,7 @@ export class WsChatService implements OnDestroy {
 
     // helper
     switchByWsChatBase(ws: wsChat.Base) {
-        console.log(' switchByWsChatBase -- ', ws)
+        console.log(' switchByWsChatBase -- ', ws, ' ; center : ', this.storageService.getCenter())
         if (ws.topic == 'chat_room' && ws.operation == 'create') {
         } else if (ws.topic == 'chat_room' && ws.operation == 'create') {
         } else if (ws.topic == 'chat_room_user' && ws.operation == 'delete') {

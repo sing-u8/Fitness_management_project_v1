@@ -29,7 +29,7 @@ import { UserAbleToBook } from '@schemas/user-able-to-book'
 
 // rxjs
 import { Observable, Subject } from 'rxjs'
-import { takeUntil } from 'rxjs/operators'
+import { takeUntil, take } from 'rxjs/operators'
 
 // ngrx
 import { Store, select } from '@ngrx/store'
@@ -134,16 +134,14 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.doShowEmptyLessonModal = doExist ? false : true
             })
 
-        this.nxStore
-            .pipe(select(ScheduleSelector.curCenterId), takeUntil(this.unsubscriber$))
-            .subscribe((curCenterid) => {
-                console.log('select(ScheduleSelector.curCenterId) !!!!!')
-                if (curCenterid != this.center.id) {
-                    console.log('select(ScheduleSelector.curCenterId)  ---curCenterid != this.center.id !!!!!')
-                    this.nxStore.dispatch(ScheduleActions.resetAll())
-                    this.nxStore.dispatch(ScheduleActions.startLoadScheduleState())
-                }
-            })
+        this.nxStore.pipe(select(ScheduleSelector.curCenterId), take(1)).subscribe((curCenterid) => {
+            console.log('select(ScheduleSelector.curCenterId) !!!!!')
+            if (curCenterid != this.center.id) {
+                console.log('select(ScheduleSelector.curCenterId)  ---curCenterid != this.center.id !!!!!')
+                this.nxStore.dispatch(ScheduleActions.resetAll())
+                this.nxStore.dispatch(ScheduleActions.startLoadScheduleState())
+            }
+        })
     }
     ngAfterViewInit(): void {
         this.setCalendarTitle('timeGridWeek')
