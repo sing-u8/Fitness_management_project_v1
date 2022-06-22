@@ -1,11 +1,13 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges, OnDestroy } from '@angular/core'
 import { FormBuilder, FormControl, Validators } from '@angular/forms'
+import { Router, ActivatedRoute } from '@angular/router'
 import _ from 'lodash'
 
 import { StorageService } from '@services/storage.service'
 import { NgxSpinnerService } from 'ngx-spinner'
 import { WordService } from '@services/helper/word.service'
 import { UsersCenterService } from '@services/users-center.service'
+import { CenterService } from '@services/center.service'
 
 import { Center } from '@schemas/center'
 import { Loading } from '@schemas/componentStore/loading'
@@ -49,7 +51,10 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
         private nxStore: Store,
         private spinner: NgxSpinnerService,
         private wordService: WordService,
-        private usersCenterService: UsersCenterService
+        private usersCenterService: UsersCenterService,
+        private centerService: CenterService,
+        private router: Router,
+        private activatedRoute: ActivatedRoute
     ) {
         this.center = this.storageService.getCenter()
         this.user = this.storageService.getUser()
@@ -270,21 +275,30 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
         const roleKey = _.findKey(this.userRole, (bool) => bool)
 
         if (roleKey == 'owner') {
-            // this.gymService.delegate(this.gym.id, { user_id: this.userData.id }).subscribe(async (__) => {
-            //     this.doShowChangeRoleModal = false
-            //     this.globalService.showToast(
-            //         `${this.wordService.ellipsis(this.userData.gym_user_name, 4)}님이 ${
-            //             this.roleName[roleKey]
-            //         }로 변경되었습니다.`
-            //     )
-            //     await this.GymDashboardService.modifyUserInformation(this.gym.id, this.centerStaff.id, {
-            //         role_code: 'member',
-            //     }).toPromise()
-            //     const newGym = await this.gymService.getGym(this.gym.id).toPromise()
-            //     this.storageService.setGym(newGym)
-            //     this.globalService.setIsGymChangedForNav(true)
-            //     this.router.navigate(['./community'], { relativeTo: this.activatedRoute })
-            // })
+            // !! 추후에 수정이 필요 (이전 운영자에 대한 권한 처리 부분)
+            this.nxStore.dispatch(
+                DashboardActions.startDelegate({
+                    centerId: this.center.id,
+                    reqBody: {
+                        user_id: this.curUserData.user.id,
+                    },
+                    callback: () => {
+                        this.doShowChangeRoleModal = false
+                        this.nxStore.dispatch(
+                            showToast({
+                                text: `${this.wordService.ellipsis(this.curUserData.user.center_user_name, 4)}님이 ${
+                                    this.roleName[roleKey]
+                                }로 변경되었습니다.`,
+                            })
+                        )
+                        this.centerService.getCenter(this.center.id).subscribe((center) => {
+                            const newCenter = center
+                            this.storageService.setCenter(newCenter)
+                        })
+                        this.router.navigate(['./community'], { relativeTo: this.activatedRoute })
+                    },
+                })
+            )
         } else {
             console.log('update member role : ', roleKey, ' - ')
             this.nxStore.dispatch(

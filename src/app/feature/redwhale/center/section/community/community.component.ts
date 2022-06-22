@@ -267,6 +267,8 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
 
     // - // 채팅방 입장
     public joinRoom(chatRoom: ChatRoom) {
+        this.resetChangeRoomNameData()
+        this.resetChatInputData()
         if (_.includes(chatRoom.id, IsTmepRoom)) {
             this.nxStore.dispatch(CommunityActions.joinTempChatRoom({ chatRoom, spot: 'main' }))
         } else {

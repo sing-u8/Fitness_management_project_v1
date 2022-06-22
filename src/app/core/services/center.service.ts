@@ -123,12 +123,12 @@ export class CenterService {
     }
 }
 
-class CreateCenterRequestBody {
+export interface CreateCenterRequestBody {
     name: string
     address: string
 }
 
-class UpdateCenterRequestBody {
+export interface UpdateCenterRequestBody {
     name?: string
     address?: string
     color?: string
@@ -140,6 +140,6 @@ class UpdateCenterRequestBody {
     close_time?: string
 }
 
-class DelegateRequestBody {
+export interface DelegateRequestBody {
     user_id: string
 }

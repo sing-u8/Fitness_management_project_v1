@@ -8,39 +8,41 @@ export type Operation = 'create' | 'update' | 'delete'
 export interface Base {
     topic: Topic
     operation: Operation
-    info: any
+    info: { center_id: string }
     dataset: any
 }
 
 export interface CreateChatRoom extends Base {
     topic: 'chat_room'
     operation: 'create'
-    info: Record<string, never>
+    info: {
+        center_id: string
+    }
     dataset: Array<ChatRoom>
 }
-export interface UpdateChatRoom {
+export interface UpdateChatRoom extends Base {
     topic: 'chat_room'
     operation: 'update'
-    info: { chat_room_id: string }
+    info: { chat_room_id: string; center_id: string }
     dataset: Array<ChatRoom>
 }
 
-export interface DeleteChatRoomUser {
+export interface DeleteChatRoomUser extends Base {
     topic: 'chat_room_user'
     operation: 'delete'
-    info: { chat_room_id: string; chat_room_user_id: string }
+    info: { chat_room_id: string; chat_room_user_id: string; center_id: string }
     dataset: Array<ChatRoomUser>
 }
 
-export interface CreateChatRoomMessage {
+export interface CreateChatRoomMessage extends Base {
     topic: 'chat_room_message'
     operation: 'create'
-    info: { chat_room_id: string }
+    info: { chat_room_id: string; center_id: string }
     dataset: Array<ChatRoomMessage>
 }
-export interface DeleteChatRoomMessage {
+export interface DeleteChatRoomMessage extends Base {
     topic: 'chat_room_message'
     operation: 'delete'
-    info: { chat_room_id: string; message_id: string }
+    info: { chat_room_id: string; message_id: string; center_id: string }
     dataset: Array<never>
 }

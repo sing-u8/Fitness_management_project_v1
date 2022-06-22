@@ -94,7 +94,7 @@ import resourceTimeGridPlugin from '@fullcalendar/resource-timegrid'
 import { GridsterModule } from 'angular-gridster2'
 
 // // ngx libraries
-// import { NgxGaugeModule } from 'ngx-gauge'
+import { NgxGaugeModule } from 'ngx-gauge'
 import { NgxSpinnerModule } from 'ngx-spinner'
 
 // import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader'
@@ -186,6 +186,7 @@ FullCalendarModule.registerPlugins([
         CommonModule,
         FormsModule,
         // DragulaModule.forRoot(),
+        NgxGaugeModule,
         GridsterModule,
         ReactiveFormsModule,
         NgxSpinnerModule,

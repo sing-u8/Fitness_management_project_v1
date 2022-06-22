@@ -48,7 +48,7 @@
               [value] = "gauge"
               type="full"
               append = '%'
-              size = "50"
+              [size] = "gaugeSize"
               [animate] = "false"
               cap = "round"
             ></ngx-gauge>
@@ -99,7 +99,7 @@
           [class.file-text-margin] = "message.text?.length > 0"
         >
           <div *ngIf="isLoading == true" class="gauge-container">
-            <ngx-gauge [value]="gauge" type="full" append='%' size="50" [animate]="false" cap="round"></ngx-gauge>
+            <ngx-gauge [value]="gauge" type="full" append='%' [size]="gaugeSize" [animate]="false" cap="round"></ngx-gauge>
           </div>
           <!--*ngFor="let file of message.file"-->
           <div class="file-item">
@@ -149,7 +149,7 @@
           [class.file-text-margin] = "message.text?.length > 0"
         >
           <div *ngIf="isLoading == true" class="gauge-container">
-            <ngx-gauge [value]="gauge" type="full" append='%' size="50" [animate]="false" cap="round"></ngx-gauge>
+            <ngx-gauge [value]="gauge" type="full" append='%' [size]="gaugeSize" [animate]="false" cap="round"></ngx-gauge>
           </div>
 
           <!-- *ngFor="let video of message.file; let idx = index " -->

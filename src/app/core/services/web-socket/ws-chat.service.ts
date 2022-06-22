@@ -57,7 +57,9 @@ export class WsChatService implements OnDestroy {
 
         this.chatWs.subscribe({
             next: (ws) => {
-                this.switchByWsChatBase(ws as wsChat.Base)
+                if (this.isCenterExist() && this.isCenterMessage(ws)) {
+                    this.switchByWsChatBase(ws as wsChat.Base)
+                }
             },
             error: (err) => {
                 console.log('web socket chat error : ', err)
@@ -81,13 +83,30 @@ export class WsChatService implements OnDestroy {
     }
 
     // helper
+    isCenterExist() {
+        return !_.isEmpty(this.storageService.getCenter())
+    }
+    isCenterMessage(ws: wsChat.Base) {
+        return ws.info.center_id == this.storageService.getCenter()?.id
+    }
+
     switchByWsChatBase(ws: wsChat.Base) {
         console.log(' switchByWsChatBase -- ', ws, ' ; center : ', this.storageService.getCenter())
         if (ws.topic == 'chat_room' && ws.operation == 'create') {
-        } else if (ws.topic == 'chat_room' && ws.operation == 'create') {
+            this.nxStore.dispatch(CommunityActions.createChatRoomByWS({ ws_data: ws as wsChat.CreateChatRoom }))
+        } else if (ws.topic == 'chat_room' && ws.operation == 'update') {
+            this.nxStore.dispatch(CommunityActions.updateChatRoomByWS({ ws_data: ws as wsChat.UpdateChatRoom }))
         } else if (ws.topic == 'chat_room_user' && ws.operation == 'delete') {
+            this.nxStore.dispatch(CommunityActions.deleteChatRoomUserByWS({ ws_data: ws as wsChat.DeleteChatRoomUser }))
         } else if (ws.topic == 'chat_room_message' && ws.operation == 'create') {
+            this.nxStore.dispatch(
+                CommunityActions.createChatRoomMsgByWS({ ws_data: ws as wsChat.CreateChatRoomMessage })
+            )
         } else if (ws.topic == 'chat_room_message' && ws.operation == 'delete') {
+            // ! 아직 기획에서 보이지 않음
+            this.nxStore.dispatch(
+                CommunityActions.deleteChatRoomMsgByWS({ ws_data: ws as wsChat.DeleteChatRoomMessage })
+            )
         }
     }
 }

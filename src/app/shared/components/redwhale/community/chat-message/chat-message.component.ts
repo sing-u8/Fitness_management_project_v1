@@ -36,6 +36,7 @@ export class ChatMessageComponent implements OnInit, AfterContentInit, AfterView
     public isLinkMessage = false
 
     public spName = 'sp'
+    public gaugeSize = 50
 
     @ViewChild('image_item_container') image_item_container_EL: ElementRef
 
@@ -54,6 +55,11 @@ export class ChatMessageComponent implements OnInit, AfterContentInit, AfterView
     }
     ngAfterViewInit(): void {
         this.isLinkMessage = false
+        if ('gauge' in this.message) {
+            this.spName = this.message.gauge.id
+        } else {
+            this.spName = this.message.id
+        }
         // this.message.type != 'date' && this.message.type != 'info' && this.message.link.opengraphList.length > 0
         //     ? true
         //     : false
@@ -90,12 +96,13 @@ export class ChatMessageComponent implements OnInit, AfterContentInit, AfterView
     // ---------------------------------------- file style ---------------------------------------  //
     async initMessageFileStyle() {
         if ('gauge' in this.message) {
+            console.log(' gauge in message !! ', this.type, ' - ')
             switch (this.type) {
                 case 'image':
                     this.setGridStyle(this.image_item_container_EL, 1)
                     break
                 case 'video':
-                    this.SpinnerService.show(this.message.gauge.id, {
+                    this.SpinnerService.show(this.spName, {
                         bdColor: 'rgba(96, 96, 96, 0.45',
                         fullScreen: false,
                         type: 'ball-spin',
@@ -105,7 +112,20 @@ export class ChatMessageComponent implements OnInit, AfterContentInit, AfterView
                     this.videoImgURL = [this.message.url] // file.map((file) => file.thumbnail)
                     if (this.isLoading) return
                     this.fileLoaded = true
-                    this.SpinnerService.hide(this.message.gauge.id)
+                    this.SpinnerService.hide(this.spName)
+                    console.log('this.videoImgURL : ', this.videoImgURL)
+                    break
+            }
+        } else {
+            switch (this.type) {
+                case 'image':
+                    this.setGridStyle(this.image_item_container_EL, 1)
+                    break
+                case 'video':
+                    this.setGridStyle(this.video_item_container_EL, 1)
+                    this.videoImgURL = [this.message.url] // file.map((file) => file.thumbnail)
+                    if (this.isLoading) return
+                    this.fileLoaded = true
                     console.log('this.videoImgURL : ', this.videoImgURL)
                     break
             }

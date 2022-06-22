@@ -96,17 +96,25 @@ export const communityReducer = createImmerReducer(
         return state
     }),
     on(CommunitydActions.startJoinChatRoom, (state, { chatRoom, spot }) => {
+        console.log(' startJoinChatRoom ------ ', chatRoom)
+        const chatRoomIdx = state.chatRoomList.findIndex((v) => v.id == chatRoom.id)
+        const _chatRoom = _.cloneDeep(chatRoom)
+        _chatRoom.unread_message_count = 0
+
+        state.chatRoomList[chatRoomIdx] = _chatRoom
+
         if (spot == 'main') {
             state.mainPreChatRoom = state.mainCurChatRoom
-            state.mainCurChatRoom = chatRoom
+            state.mainCurChatRoom = _chatRoom
         } else {
             state.drawerPreChatRoom = state.drawerPreChatRoom
-            state.drawerCurChatRoom = chatRoom
+            state.drawerCurChatRoom = _chatRoom
         }
         return state
     }),
     on(CommunitydActions.finishJoinChatRoom, (state, { chatRoom, chatRoomMesgs, chatRoomUsers, spot }) => {
         // !! 추후에 추가 수정 필요
+
         if (spot == 'main') {
             state.mainPreChatRoom = undefined
             state.mainChatRoomMsgs = chatRoomMesgs
@@ -312,10 +320,77 @@ export const communityReducer = createImmerReducer(
         return state
     }),
 
-    on(CommunitydActions.updateChatRooms, (state, { chatRoom }) => {
+    // for web socket
+    // ! 있는 채팅방에 회원이 초대 됐을 때 초대에 관한 웹 소켓이 없음
+    on(CommunitydActions.createChatRoomByWS, (state, { ws_data }) => {
+        state.chatRoomList.unshift(ws_data.dataset[0])
         return state
     }),
-    on(CommunitydActions.updateChatRoomMsgs, (state, { chatRoomMsg }) => {
+    on(CommunitydActions.updateChatRoomByWS, (state, { ws_data }) => {
+        const chatRoomIdx = state.chatRoomList.findIndex((v) => v.id == ws_data.dataset[0].id)
+        state.chatRoomList[chatRoomIdx] = ws_data.dataset[0]
+
+        if (!_.isEmpty(state.mainCurChatRoom) && state.mainCurChatRoom.id == ws_data.info.chat_room_id) {
+            state.mainCurChatRoom = ws_data.dataset[0]
+        }
+        if (!_.isEmpty(state.drawerCurChatRoom) && state.drawerCurChatRoom.id == ws_data.info.chat_room_id) {
+            state.drawerCurChatRoom = ws_data.dataset[0]
+        }
+
+        return state
+    }),
+
+    on(CommunitydActions.deleteChatRoomUserByWS, (state, { ws_data }) => {
+        const chatRoomIdx = state.chatRoomList.findIndex((v) => v.id == ws_data.info.chat_room_id)
+
+        const chatRoom = state.chatRoomList[chatRoomIdx]
+
+        chatRoom.chat_room_users.filter((v) => v.id != ws_data.dataset[0].id)
+        chatRoom.chat_room_user_count -= 1
+        state.chatRoomList[chatRoomIdx] = chatRoom
+
+        if (!_.isEmpty(state.mainCurChatRoom) && state.mainCurChatRoom.id == ws_data.info.chat_room_id) {
+            state.mainCurChatRoom = chatRoom
+            state.mainChatRoomUserList = state.mainChatRoomUserList.filter((v) => v.id != ws_data.dataset[0].id)
+        }
+        if (!_.isEmpty(state.drawerCurChatRoom) && state.drawerCurChatRoom.id == ws_data.info.chat_room_id) {
+            state.drawerCurChatRoom = chatRoom
+            state.drawerChatRoomUserList = state.drawerChatRoomUserList.filter((v) => v.id != ws_data.dataset[0].id)
+        }
+
+        return state
+    }),
+
+    on(CommunitydActions.createChatRoomMsgByWS, (state, { ws_data }) => {
+        const chatRoomIdx = state.chatRoomList.findIndex((v) => v.id == ws_data.info.chat_room_id)
+        const chatRoom = state.chatRoomList[chatRoomIdx]
+
+        chatRoom.last_message = ws_data.dataset[0].text
+        chatRoom.last_message_created_at = ws_data.dataset[0].created_at
+        chatRoom.unread_message_count += 1
+
+        if (!_.isEmpty(state.mainCurChatRoom) && state.mainCurChatRoom.id == ws_data.info.chat_room_id) {
+            state.mainChatRoomMsgs.unshift(ws_data.dataset[0])
+            chatRoom.unread_message_count -= 1
+        }
+        if (!_.isEmpty(state.drawerCurChatRoom) && state.drawerCurChatRoom.id == ws_data.info.chat_room_id) {
+            state.drawerChatRoomMsgs.unshift(ws_data.dataset[0])
+            chatRoom.unread_message_count -= 1
+        }
+
+        return state
+    }),
+    on(CommunitydActions.deleteChatRoomMsgByWS, (state, { ws_data }) => {
+        // ! 아직 적용되지 않은 기능
+        const chatRoomIdx = state.chatRoomList.findIndex((v) => v.id == ws_data.info.chat_room_id)
+        // const chatRoom = state.chatRoomList[chatRoomIdx]
+
+        if (!_.isEmpty(state.mainCurChatRoom) && state.mainCurChatRoom.id == ws_data.info.chat_room_id) {
+            state.mainChatRoomMsgs.filter((v) => v.id != ws_data.info.message_id)
+        }
+        if (!_.isEmpty(state.drawerCurChatRoom) && state.drawerCurChatRoom.id == ws_data.info.chat_room_id) {
+            state.drawerChatRoomMsgs.filter((v) => v.id != ws_data.info.message_id)
+        }
         return state
     }),
 

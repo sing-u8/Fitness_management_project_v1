@@ -8,6 +8,7 @@ import { ChatRoomUser } from '@schemas/chat-room-user'
 import { CenterUser } from '@schemas/center-user'
 import { ChatFile } from '@schemas/center/community/chat-file'
 import { Center } from '@schemas/center'
+import * as WS from '@schemas/web-socket/ws-chat'
 
 import * as ChatRoomApi from '@services/center-chat-room.service'
 import { User } from '@schemas/user'
@@ -190,8 +191,26 @@ export const removeChatRoomLoadingMsgs = createAction(
     props<{ loadingMsgId: string; spot: FromCommunity.spot }>()
 )
 
-export const updateChatRooms = createAction(`[${FeatureKey}] Update Chat Room`, props<{ chatRoom: ChatRoom }>())
-export const updateChatRoomMsgs = createAction(
-    `[${FeatureKey}] Update Chat Room Messages`,
-    props<{ chatRoomMsg: ChatRoomMessage }>()
+// for web socket
+export const createChatRoomByWS = createAction(
+    `[${FeatureKey}] Create Chat Room By Web Socket`,
+    props<{ ws_data: WS.CreateChatRoom }>()
+)
+export const updateChatRoomByWS = createAction(
+    `[${FeatureKey}] Update Chat Room By Web Socket`,
+    props<{ ws_data: WS.UpdateChatRoom }>()
+)
+
+export const deleteChatRoomUserByWS = createAction(
+    `[${FeatureKey}] Delete Chat Room User By Web Socket`,
+    props<{ ws_data: WS.DeleteChatRoomUser }>()
+)
+
+export const createChatRoomMsgByWS = createAction(
+    `[${FeatureKey}] Create Chat Room Message By Web Socket`,
+    props<{ ws_data: WS.CreateChatRoomMessage }>()
+)
+export const deleteChatRoomMsgByWS = createAction(
+    `[${FeatureKey}] Delete Chat Room Message By Web Socket`,
+    props<{ ws_data: WS.DeleteChatRoomMessage }>()
 )

@@ -17,6 +17,7 @@ import { CenterUsersLockerService } from '@services/center-users-locker.service.
 import { CenterUsersMembershipService } from '@services/center-users-membership.service'
 import { CenterUsersPaymentService } from '@services/center-users-payment.service'
 import { CenterUsersBookingService } from '@services/center-users-booking.service'
+import { CenterService, DelegateRequestBody } from '@services/center.service'
 
 import { CenterUser } from '@schemas/center-user'
 
@@ -30,7 +31,8 @@ export class DashboardEffect {
         private centerUsersLockerApi: CenterUsersLockerService,
         private centerUsersMembershipApi: CenterUsersMembershipService,
         private centerUsersPaymentApi: CenterUsersPaymentService,
-        private centerUsersBookingService: CenterUsersBookingService
+        private centerUsersBookingService: CenterUsersBookingService,
+        private centerService: CenterService
     ) {}
 
     public loadMemberList$ = createEffect(() =>
@@ -126,6 +128,22 @@ export class DashboardEffect {
                 ofType(DashboardActions.startSetCurUserData),
                 switchMap(({ centerId, reqBody, userId, callback }) =>
                     this.centerUsersApi.updateUser(centerId, userId, reqBody).pipe(
+                        tap(() => {
+                            callback ? callback() : null
+                        })
+                    )
+                ),
+                catchError((err: string) => of(DashboardActions.error({ error: err })))
+            ),
+        { dispatch: false }
+    )
+
+    public delegate = createEffect(
+        () =>
+            this.actions$.pipe(
+                ofType(DashboardActions.startDelegate),
+                switchMap(({ centerId, reqBody, callback }) =>
+                    this.centerService.delegate(centerId, reqBody).pipe(
                         tap(() => {
                             callback ? callback() : null
                         })

@@ -148,7 +148,6 @@ export const dashboardReducer = createImmerReducer(
 
         // ! role_code가 포함되었을 때, role_name도 바꿔줘야함
         state.curUserData.user = _.assign(state.curUserData.user, reqBody)
-        console.log('startSetCurUserData reducer - ', state.curUserData.user)
 
         const userListsKeys = _.keys(state.usersLists) as MemberSelectCateg[]
         userListsKeys.forEach((key) => {
@@ -163,6 +162,11 @@ export const dashboardReducer = createImmerReducer(
 
         return state
     }),
+
+    on(DashboardActions.startDelegate, (state, { centerId, reqBody }) => {
+        return state
+    }),
+
     on(DashboardActions.finishRemoveCurUserProfile, (state, { userId, profileUrl }) => {
         state.curUserData.user.center_user_picture = profileUrl
 
@@ -178,6 +182,7 @@ export const dashboardReducer = createImmerReducer(
         })
         return state
     }),
+
     on(DashboardActions.finishRegisterCurUserProfile, (state, { userId, profileUrl }) => {
         state.curUserData.user.center_user_picture = profileUrl
 
