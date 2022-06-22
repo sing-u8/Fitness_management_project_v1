@@ -253,7 +253,6 @@ export class CommunityEffect {
 
                             case HttpEventType.UploadProgress:
                                 const gauge = Math.floor((res.event.loaded / res.event.total) * 100)
-                                console.log('message gauge : ', gauge)
                                 this.store.dispatch(
                                     CommunityActions.updateChatRoomLoadingMsg({ msgId: res.msgId, spot, gauge })
                                 )

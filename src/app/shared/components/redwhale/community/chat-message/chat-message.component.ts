@@ -10,9 +10,12 @@ import {
 } from '@angular/core'
 import { NgxSpinnerService } from 'ngx-spinner'
 
+// const ogs = require('open-graph-scraper')
+
 import { saveAs } from 'file-saver'
 
 import { FileService } from '@services/file.service'
+import { VideoProcessingService } from '@services/helper/video-processing-service.service'
 
 import { CenterUser } from '@schemas/center-user'
 import { ChatRoomMessage, ChatRoomMessageType, ChatRoomLoadingMessage } from '@schemas/chat-room-message'
@@ -47,7 +50,8 @@ export class ChatMessageComponent implements OnInit, AfterContentInit, AfterView
     constructor(
         private renderer: Renderer2,
         private fileService: FileService,
-        private SpinnerService: NgxSpinnerService
+        private SpinnerService: NgxSpinnerService,
+        private videoProcessingService: VideoProcessingService
     ) {}
 
     ngOnInit(): void {
@@ -77,6 +81,14 @@ export class ChatMessageComponent implements OnInit, AfterContentInit, AfterView
                 ? 'video'
                 : 'text'
         }
+
+        if (this.type == 'video') {
+            this.videoProcessingService.generateThumbnailFromVideoUrl(this.message.url).then(({ imgUrl }) => {
+                this.videoImgURL = [imgUrl]
+            })
+        }
+
+        this.checkMsgIsOpenGraph()
         this.initMessageFileStyle()
     }
 
@@ -123,7 +135,7 @@ export class ChatMessageComponent implements OnInit, AfterContentInit, AfterView
                     break
                 case 'video':
                     this.setGridStyle(this.video_item_container_EL, 1)
-                    this.videoImgURL = [this.message.url] // file.map((file) => file.thumbnail)
+                    // this.videoImgURL = [this.message.url] // file.map((file) => file.thumbnail)
                     if (this.isLoading) return
                     this.fileLoaded = true
                     console.log('this.videoImgURL : ', this.videoImgURL)
@@ -140,5 +152,20 @@ export class ChatMessageComponent implements OnInit, AfterContentInit, AfterView
             this.renderer.setStyle(el.nativeElement, 'gap', `10px`)
             this.renderer.setStyle(el.nativeElement, 'display', `grid`)
         }
+    }
+
+    // ----------------------------------- open grahp funcs and vars --------------------------------------
+    public isOgs = false
+    checkMsgIsOpenGraph() {
+        const options = {
+            url: this.message.text,
+        }
+        // ogs(options)
+        //     .then((data) => {
+        //         console.log('ogs data : ', data)
+        //     })
+        //     .catch((err) => {
+        //         console.log('ogs err: ', err)
+        //     })
     }
 }
