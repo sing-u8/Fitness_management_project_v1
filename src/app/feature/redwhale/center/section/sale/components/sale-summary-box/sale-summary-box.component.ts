@@ -50,10 +50,10 @@ export class SaleSummaryBoxComponent implements OnInit, AfterViewInit {
 
     initBoxTexts() {
         if (this.type == 'day') {
-            this.title = '당일 총 매출'
+            this.title = '오늘 총 매출'
             this.summaryDescText = '어제 대비'
         } else {
-            this.title = '당월 총 매출'
+            this.title = `${dayjs().format('M')}월 총 매출`
             this.summaryDescText = '전월 대비'
         }
     }

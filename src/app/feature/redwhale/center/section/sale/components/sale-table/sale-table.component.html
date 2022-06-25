@@ -3,6 +3,7 @@
   <thead>
     <tr class="rw-typo-bodytext0 title">
       <!-- <th></th> -->
+
       <th>날짜</th>
 
       <th>
@@ -260,7 +261,7 @@
     <p class="rw-typo-subtext2">회원권 / 락커를 등록하신 후,</p>
     <p class="rw-typo-subtext2">매출 정보를 입력하시면 매출 정보와 통계를</p>
     <p class="rw-typo-subtext2">확인하실 수 있어요!</p>
-    <div class="go-lesson-button" (click)="null">
+    <div class="go-lesson-button" (click)="navigateToDashboard()">
       <p>회원권/ 락커 등록하기</p>
       <img src="assets/icons/etc/short_right_arrow_grey.svg">
     </div>
@@ -290,7 +291,11 @@
     </div>
   </tbody>
 
-  <tbody *ngIf="saleData?.length > 0 "  class="data-container rw-typo-bodytext1 table-scroll-y">
+  <tbody
+    #sale_table_body
+    *ngIf="saleData?.length > 0 "
+    class="data-container rw-typo-bodytext1 table-scroll-y"
+  >
     <tr *ngFor="let item of saleData">
       <!-- <td></td> -->
       <td>{{item.date | dateFormat:'YY.MM.DD'}}</td>
@@ -309,23 +314,31 @@
       </td>
       <td>{{item.responsibility_user_name}}</td>
       <td class="rw-typo-bodytext0-bold price">
-        {{item | saleTotalPrice}}원
+        {{item.type_code == 'payment_type_refund' ? '-' : ''}}{{item | saleTotalPrice}}원
         <div class="l-price-detail">
           <div class="price-detail">
             <div class="price-detail-tag rw-typo-subtext3-darkgrey">현금</div>
-            <div class="price-detail-value rw-typo-subtext1">{{item.cash | numberWithCommas}}</div>
+            <div class="price-detail-value rw-typo-subtext1">
+              {{item.type_code == 'payment_type_refund' && item.cash > 0 ? '-' : ''}}{{item.cash | numberWithCommas}}
+            </div>
           </div>
           <div class="price-detail">
             <div class="price-detail-tag rw-typo-subtext3-darkgrey">카드</div>
-            <div class="price-detail-value rw-typo-subtext1">{{item.card | numberWithCommas}}</div>
+            <div class="price-detail-value rw-typo-subtext1">
+              {{item.type_code == 'payment_type_refund' && item.card > 0 ? '-' : ''}}{{item.card | numberWithCommas}}
+            </div>
           </div>
           <div class="price-detail">
             <div class="price-detail-tag rw-typo-subtext3-darkgrey">계좌</div>
-            <div class="price-detail-value rw-typo-subtext1">{{item.trans | numberWithCommas}}</div>
+            <div class="price-detail-value rw-typo-subtext1">
+              {{item.type_code == 'payment_type_refund' && item.trans > 0 ? '-' : ''}}{{item.trans | numberWithCommas}}
+            </div>
           </div>
           <div class="price-detail">
             <div class="price-detail-tag rw-typo-subtext3-darkgrey">미수</div>
-            <div class="price-detail-value rw-typo-subtext1">{{item.unpaid | numberWithCommas}}</div>
+            <div class="price-detail-value rw-typo-subtext1">
+              {{item.type_code == 'payment_type_refund' && item.unpaid > 0 ? '-' : ''}}{{item.unpaid | numberWithCommas}}
+            </div>
           </div>
         </div>
       </td>
@@ -333,7 +346,10 @@
     </tr>
   </tbody>
 
-  <tfoot *ngIf="saleData?.length > 0 " >
+  <tfoot
+    [class.is-scrollable] = "isScrollableTableBody"
+    *ngIf="saleData?.length > 0 "
+  >
     <div class="foot">
       <div class="rw-typo-bodytext0-bold cash-title">매출 총 합계</div>
       <div class="cash-container">

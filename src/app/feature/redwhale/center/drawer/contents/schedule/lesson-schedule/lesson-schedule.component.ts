@@ -244,11 +244,11 @@ export class LessonScheduleComponent implements OnInit, OnDestroy, AfterViewInit
                 repeat: false,
                 responsibility_user_id: selectedStaff.instructor.calendar_user.id,
                 class: {
-                    category_name: this.selectedLesson.lessonCateg.name,
-                    name: this.selectedLesson.lesson.name,
                     class_item_id: this.selectedLesson.lesson.id,
                     type_code: this.selectedLesson.lesson.type_code,
                     state_code: 'calendar_task_class_state_active',
+                    category_name: this.selectedLesson.lessonCateg.name,
+                    name: this.selectedLesson.lesson.name,
                     duration: String(this.selectedLesson.lesson.duration),
                     capacity: this.people,
                     start_booking_until: this.reserveSettingInputs.reservation_start,
@@ -257,10 +257,8 @@ export class LessonScheduleComponent implements OnInit, OnDestroy, AfterViewInit
                     instructor_user_ids: [selectedStaff.instructor.calendar_user.id],
                 },
             }
-
-            console.log('none dayRepeatSwitch req body: ', reqBody)
         }
-
+        console.log('createCalendarTask req body: ', reqBody)
         this.centerCalendarService.createCalendarTask(this.center.id, selectedStaff.instructor.id, reqBody).subscribe({
             next: (res) => {
                 fn ? fn() : null

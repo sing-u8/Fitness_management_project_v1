@@ -23,7 +23,6 @@ table.sale-table {
         color: var(--white);
 
         &:nth-child(1) {
-
             min-width: 86px;
             width: 9.81%;
             max-width: 9.81%;
@@ -67,6 +66,12 @@ table.sale-table {
         }
     }
 
+    thead {
+        th {
+            font-weight: 500 !important;
+        }
+    }
+
     thead,
     tbody tr {
         display: table;
@@ -84,6 +89,7 @@ table.sale-table {
             & > img {
                 cursor: pointer;
                 margin-left: 3px;
+                margin-top: 2px;
             }
         }
     }
@@ -135,7 +141,7 @@ table.sale-table {
 
     tbody.data-container {
         width: 100%;
-        height: calc(100% - 45px - 52px);
+        height: calc(100% - 45px - 64.5px);
         overflow: overlay;
         position: absolute;
         background-color: var(--white);
@@ -205,13 +211,16 @@ table.sale-table {
         width: 100%;
         height: 65px;
         position: relative;
+        &.is-scrollable {
+            box-shadow: 0px 0px 10px rgb(181 181 181 / 30%);
+        }
         .foot {
             display: flex;
             width: 100%;
             height: 100%;
             align-items: center;
             justify-content: space-between;
-            padding: 0px 25px;
+            padding: 0px 22px 0px 25px;
             background-color: var(--white);
 
             border-top: 1px solid var(--border-color);
@@ -222,9 +231,11 @@ table.sale-table {
             }
             .cash-container {
                 height: 100%;
+                width: 352px; // 352px + 22px = 374px;
                 display: flex;
                 flex-direction: column;
                 justify-content: center;
+                position: relative;
 
                 .total {
                     margin-bottom: 6px;
@@ -239,6 +250,7 @@ table.sale-table {
                 .unpaid {
                     display: flex;
                     height: 100%;
+                    width: 25%;
                     align-items: center;
                     margin-right: 12px;
                 }

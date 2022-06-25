@@ -84,9 +84,11 @@ export class CommunityEffect {
         this.actions$.pipe(
             ofType(CommunityActions.startJoinChatRoom),
             concatLatestFrom(({ spot }) => {
-                return spot == 'main'
-                    ? this.store.select(CommunitySelector.mainPreChatRoom)
-                    : this.store.select(CommunitySelector.drawerPreChatRoom)
+                return [
+                    spot == 'main'
+                        ? this.store.select(CommunitySelector.mainPreChatRoom)
+                        : this.store.select(CommunitySelector.drawerPreChatRoom),
+                ]
             }),
             switchMap(([{ centerId, chatRoom, spot }, curChatRoom]) => {
                 if (!_.isEmpty(curChatRoom) && curChatRoom.id == chatRoom.id) {
@@ -139,17 +141,23 @@ export class CommunityEffect {
     public leaveChatRoom$ = createEffect(() =>
         this.actions$.pipe(
             ofType(CommunityActions.startLeaveChatRoom),
-            concatLatestFrom(({ spot }) =>
+            concatLatestFrom(({ spot }) => [
                 spot == 'main'
                     ? this.store.select(CommunitySelector.mainPreChatRoom)
-                    : this.store.select(CommunitySelector.drawerPreChatRoom)
-            ),
-            switchMap(([{ centerId, spot }, curChatRoom]) =>
+                    : this.store.select(CommunitySelector.drawerPreChatRoom),
+                this.store.select(CommunitySelector.chatRoomList),
+            ]),
+            switchMap(([{ centerId, spot }, curChatRoom, chatRoomList]) =>
                 this.centerChatRoomApi.leaveChatRoom(centerId, curChatRoom.id).pipe(
                     switchMap((__) => {
                         return [
                             showToast({ text: `채팅방 나가기가 완료되었습니다.` }),
                             CommunityActions.finishLeaveChatRoom({ spot }),
+                            CommunityActions.startJoinChatRoom({
+                                centerId,
+                                spot,
+                                chatRoom: chatRoomList.find((v) => v.type_code == 'chat_room_type_chat_with_me'),
+                            }),
                         ]
                     })
                 )

@@ -395,6 +395,8 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
     getTaskList(viewType: ViewType, callback?: (eventList: ScheduleEvent[]) => void) {
         const calendars: Calendar[] = this.instructorList$_.map((v) => v.instructor) // .filter((v) => v.selected)
         const calendarIds: string[] = calendars.map((v) => v.id)
+
+        console.log('calendarIds : ', calendarIds)
         this.CenterCalendarService.getAllCalendarTask(this.center.id, {
             calendar_ids: calendarIds,
             start_date: this.activeStart,

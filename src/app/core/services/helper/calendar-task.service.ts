@@ -42,15 +42,15 @@ export class CalendarTaskService {
     }
 
     getClassCalendarTaskStatus(ct: CalendarTask): ClassCalendarTaskStatus {
-        if (this.isBookable(ct)) {
-            return {
-                status: 'bookable',
-                text: '예약을 받고 있어요. 🤗',
-            }
-        } else if (this.isBookedFull(ct)) {
+        if (this.isBookedFull(ct)) {
             return {
                 status: 'bookedFull',
                 text: '정원이 다 찼어요. 🎉',
+            }
+        } else if (this.isBookable(ct)) {
+            return {
+                status: 'bookable',
+                text: '예약을 받고 있어요. 🤗',
             }
         } else if (this.isBookableDurationEnd(ct)) {
             return {

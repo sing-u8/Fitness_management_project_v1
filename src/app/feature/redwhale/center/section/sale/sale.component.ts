@@ -106,7 +106,9 @@ export class SaleComponent implements OnInit, OnDestroy {
         cancelButtonText: '취소',
         confirmButtonText: '저장하기',
     }
-    public showSale = false
+
+    // ! 이후에 API로 수정 필요
+    public showSale = true
     public doSettingShowSaleModal = false
     openSettingShowSaleModal() {
         this.doSettingShowSaleModal = true

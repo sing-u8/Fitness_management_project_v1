@@ -2,17 +2,21 @@
     id="community-section"
     class="community"
     rw-dropzone2
+    [dropLeaveTargetId]="'main_drag_guide'"
     (onDrop)="onFileDrop($event);onFileDragLeave()"
-    (onDragOver) = "onFileDragEnter()"
+    (onDragOver) = "onFileDragOver()"
     (onDragLeave) = "onFileDragLeave()"
 >
 
     <rw-drag-guide
+        id="main_drag_guide"
         [showGuide]="showFileDragGuide"
         [isSideBar]="false"
     ></rw-drag-guide>
 
-    <section class="chatting-container" >
+    <section
+        class="chatting-container"
+    >
         <div class="chatting-sidebar">
             <div class="sidebar-header">
                 <span class="rw-typo-title1">채팅</span>
@@ -63,6 +67,7 @@
                         (rwClickOutside)="changeRoomName(changeRoomInput.value, changeRoomInput.valid)"
                         type="text"
                         [formControl]="changeRoomInput"
+                        rw-autoFocus
                     >
                 </form>
 
@@ -87,7 +92,9 @@
                     </div>
 
                     <div *ngIf="showLeaveRoomDropdown" class="leave-room-dropdown" (click)="openLeaveRoomModal()">
-                        이 채팅방에서 나가기
+                        <div>
+                            이 채팅방에서 나가기
+                        </div>
                     </div>
 
                     <rw-chat-room-list-dropdown
@@ -133,7 +140,7 @@
                     </rw-chat-intro-message>
                 </div>
 
-                <div #chatting_input class="chatting-input-container">
+                <div #chatting_input class="chatting-input-container" [class.isFocused] = "isTextAreaFoucsed">
 
                     <div class="plus-box">
                         <img
@@ -153,6 +160,8 @@
                             placeholder="메시지를 입력해주세요. (Shift + Enter 줄바꿈)"
                             [formControl]="chatInput"
                             (keypress)="onInputKeyPress($event)"
+                            (focus) = "onTextAreaFocused()"
+                            (blur) = "onTextAreaBlur()"
                         ></textarea>
 
                         <input

@@ -10,7 +10,7 @@ import { WsChatService } from '@services/web-socket/ws-chat.service'
 
 import { User } from '@schemas/user'
 
-import * as _ from 'lodash'
+import _ from 'lodash'
 
 // ngrx
 import { Store, select } from '@ngrx/store'

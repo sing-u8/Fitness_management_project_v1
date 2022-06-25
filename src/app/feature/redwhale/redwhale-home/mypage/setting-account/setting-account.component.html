@@ -17,7 +17,7 @@
                   </div>
                   <input type="file" accept="image/*" #userProfile (change)="registerPhoto(userProfile)" hidden />
               </div>
-              <p *ngIf="user.picture.length > 0" (click)="onInputClick('delavatar')" class="del-profile rw-typo-subtext1">사진 삭제</p>
+              <p *ngIf="user.picture?.length > 0" (click)="onInputClick('delavatar')" class="del-profile rw-typo-subtext1">사진 삭제</p>
           </div>
 
           <div class="inputs">

@@ -1,4 +1,15 @@
-import { Component, Input, OnInit, OnDestroy, Renderer2, ViewChild, ElementRef, AfterViewInit } from '@angular/core'
+import {
+    Component,
+    Input,
+    OnInit,
+    OnDestroy,
+    Renderer2,
+    ViewChild,
+    ElementRef,
+    AfterViewInit,
+    AfterViewChecked,
+} from '@angular/core'
+import { Router, ActivatedRoute } from '@angular/router'
 import { Subscription } from 'rxjs'
 import _ from 'lodash'
 
@@ -22,7 +33,7 @@ import * as SaleActions from '@centerStore/actions/sec.sale.actions'
     templateUrl: './sale-table.component.html',
     styleUrls: ['./sale-table.component.scss'],
 })
-export class SaleTableComponent implements OnInit, OnDestroy, AfterViewInit {
+export class SaleTableComponent implements OnInit, OnDestroy, AfterViewInit, AfterViewChecked {
     @Input() saleData: Array<StatsSales>
     @Input() saleStatistics: FromSale.SaleStatistics = _.cloneDeep(FromSale.SaleStatisticsInit)
     @Input() showEmptyTableFlag: string
@@ -54,7 +65,12 @@ export class SaleTableComponent implements OnInit, OnDestroy, AfterViewInit {
         personInCharge: { cur: string; applied: string }
     }
 
-    constructor(private nxStore: Store, private renderer: Renderer2) {
+    constructor(
+        private nxStore: Store,
+        private renderer: Renderer2,
+        private router: Router,
+        private activatedRoute: ActivatedRoute
+    ) {
         this.isMemberOpen = false
         this.isTypeOpen = false
         this.isMembershipLockerOpen = false
@@ -107,6 +123,16 @@ export class SaleTableComponent implements OnInit, OnDestroy, AfterViewInit {
         })
     }
 
+    ngAfterViewChecked(): void {
+        this.checkIsSaleTableBodyScrollable()
+    }
+
+    // router
+    navigateToDashboard() {
+        this.router.navigate(['../dashboard'], { relativeTo: this.activatedRoute })
+    }
+    //
+
     ngOnDestroy(): void {
         this.unsubscriber$.next()
         this.unsubscriber$.complete()
@@ -146,7 +172,7 @@ export class SaleTableComponent implements OnInit, OnDestroy, AfterViewInit {
         this.closeMembershipLocker()
         this.closeType()
         this.closeMember()
-        this.closePersonInCharge()
+        this.closeProduct()
         e.stopPropagation()
     }
     toggleProduct(e) {
@@ -155,6 +181,7 @@ export class SaleTableComponent implements OnInit, OnDestroy, AfterViewInit {
         this.closeMembershipLocker()
         this.closeType()
         this.closeMember()
+        this.closePersonInCharge()
         e.stopPropagation()
     }
 
@@ -297,5 +324,20 @@ export class SaleTableComponent implements OnInit, OnDestroy, AfterViewInit {
                 },
             })
         )
+    }
+
+    // sale_table_body funcs and vars
+    @ViewChild('sale_table_body') sale_table_body_el: ElementRef
+    public isScrollableTableBody = false
+    checkIsSaleTableBodyScrollable() {
+        if (this.saleData.length > 0 && this.sale_table_body_el) {
+            if (
+                this.sale_table_body_el.nativeElement.scrollHeight > this.sale_table_body_el.nativeElement.offsetHeight
+            ) {
+                this.isScrollableTableBody = true
+            } else {
+                this.isScrollableTableBody = false
+            }
+        }
     }
 }

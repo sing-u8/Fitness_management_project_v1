@@ -1,8 +1,6 @@
 import { Component, OnInit, Input, Output, AfterViewInit } from '@angular/core'
 
-import { Message } from '@schemas/firestore/message'
 import { ChatRoomMessage } from '@schemas/chat-room-message'
-import { CenterUser } from '@schemas/center-user'
 
 @Component({
     selector: 'rw-chat-message-user',
@@ -18,7 +16,5 @@ export class ChatMessageUserComponent implements OnInit, AfterViewInit {
     constructor() {}
 
     ngOnInit(): void {}
-    ngAfterViewInit(): void {
-        // console.log('message in chat MSG comp: ', this.message)
-    }
+    ngAfterViewInit(): void {}
 }

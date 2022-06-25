@@ -11,7 +11,7 @@
     <p class="rw-typo-bodytext1 content">
       앗, 본인이신가요?
     </p>
-    <p class="rw-typo-bodytext1 content">
+    <p class="rw-typo-bodytext1 content last-p">
       그렇다면 이 공간을 나만의 <br *ngIf="isSideBar"/> 메모장으로 활용해보세요!
     </p>
   </div>
@@ -23,7 +23,7 @@
             && selectedRoom?.chat_room_users.length == 2; else group"
     >
       <p class="rw-typo-bodytext0-bold title">💌
-        <span class="rw-typo-bodytext0-bold">{{selectedRoom?.name}}</span>님에게 메세지를 보내보세요.
+        <span class="rw-typo-bodytext0-bold">{{selectedRoom?.name}}</span>님에게 메시지를 보내보세요.
       </p>
     </div>
   </ng-template>
@@ -41,7 +41,7 @@
       <p class="rw-typo-bodytext1 content">
         이 공간에 첫 메시지를 남겨보세요.
       </p>
-      <p class="rw-typo-bodytext1 content">
+      <p class="rw-typo-bodytext1 content last-p">
         {{user.name}}님이 첫 메시지를 보낸 직후부터
         <br *ngIf="isSideBar" /> 다른 멤버들도 채팅에 참여할 수 있어요.
       </p>

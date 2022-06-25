@@ -13,7 +13,7 @@ export class RateOfChangePipe implements PipeTransform {
             returnValue = to == 0 ? `100%` : `${Number(((to - value) / to) * 100).toFixed(1)}%`
             returnValue = isSign ? '-' + returnValue : returnValue
         } else {
-            returnValue = '-'
+            returnValue = ''
         }
         return returnValue
     }

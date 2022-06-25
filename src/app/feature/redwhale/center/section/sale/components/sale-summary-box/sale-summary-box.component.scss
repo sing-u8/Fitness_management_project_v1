@@ -32,8 +32,8 @@
             -moz-transition: transform 0.2s linear;
             -webkit-transition: transform 0.2s linear;
             -o-transition: transform 0.2s linear;
-            width: 14px;
-            height: 14px;
+            width: 21px;
+            height: 21px;
             font-size: 2.2rem;
             color: var(--font-color);
             margin-top: 2.5px;
@@ -96,9 +96,11 @@
 
             & .plus {
                 color: var(--darkgreen);
+                font-weight: 700;
             }
             & .minus {
                 color: var(--darkred);
+                font-weight: 700;
             }
         }
 

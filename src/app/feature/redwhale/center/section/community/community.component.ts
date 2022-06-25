@@ -60,6 +60,7 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
     public isLoading_: Loading
 
     public chatRoomList$ = this.nxStore.select(CommunitySelector.chatRoomList)
+    public chatRoomList_: Array<ChatRoom> = []
 
     public curChatRoom$ = this.nxStore.select(CommunitySelector.mainCurChatRoom)
     public curChatRoom_: ChatRoom = undefined
@@ -116,16 +117,31 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
         this.curChatRoom$.pipe(takeUntil(this.unsubscribe$)).subscribe((curChatRoom) => {
             this.curChatRoom_ = curChatRoom
         })
+        this.chatRoomList$.pipe(takeUntil(this.unsubscribe$)).subscribe((chatRoomList) => {
+            this.chatRoomList_ = chatRoomList
+        })
     }
 
     ngOnInit(): void {}
     ngAfterViewInit(): void {}
     ngOnDestroy(): void {}
 
+    // input focused funcs and vars
+    public isTextAreaFoucsed = false
+    onTextAreaFocused() {
+        this.isTextAreaFoucsed = true
+        this.addBtSrc = this.addBtSrcObj.hover
+    }
+    onTextAreaBlur() {
+        this.isTextAreaFoucsed = false
+        this.addBtSrc = this.addBtSrcObj.leave
+    }
+
     // addfile button vars and func
     public addBtSrcObj = { leave: 'assets/icons/etc/plus-grey.svg', hover: 'assets/icons/etc/plus-red.svg' }
     public addBtSrc = 'assets/icons/etc/plus-grey.svg'
     addFileBtMouseLeave() {
+        if (this.isTextAreaFoucsed) return
         this.addBtSrc = this.addBtSrcObj.leave
     }
     addFileBtMouseHover() {
@@ -134,10 +150,12 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
 
     // file drag guide vars & func
     public showFileDragGuide = false
-    onFileDragEnter() {
+    onFileDragOver() {
+        console.log('in chat drag Over !! ')
         this.showFileDragGuide = true
     }
     onFileDragLeave() {
+        console.log('in chat drag leave !! ')
         this.showFileDragGuide = false
     }
 
@@ -333,6 +351,14 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
         // !! 임시 채팅방일 때와 생성된 채팅방 구분해서 호출하기
         if (_.includes(this.curChatRoom_.id, IsTmepRoom)) {
             this.nxStore.dispatch(CommunityActions.leaveTempChatRoom({ spot: 'main' }))
+            this.nxStore.dispatch(showToast({ text: '채팅방 나가기가 완료되었습니다' }))
+            this.nxStore.dispatch(
+                CommunityActions.startJoinChatRoom({
+                    centerId: this.center.id,
+                    chatRoom: this.chatRoomList_.find((v) => v.type_code == 'chat_room_type_chat_with_me'),
+                    spot: 'main',
+                })
+            )
         } else {
             this.nxStore.dispatch(CommunityActions.startLeaveChatRoom({ centerId: this.center.id, spot: 'main' }))
         }
@@ -455,7 +481,8 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
         lineHeight: 1.43,
     }
 
-    public resizeHeight = 50
+    // ! 입력란 여백 제조정 필요
+    public resizeHeight = 42
 
     onChatInputResize(resizeHeight: string) {
         this.resizeHeight = Number(resizeHeight.slice(0, -2))
@@ -463,12 +490,12 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
     }
     resizeChatScreen() {
         if (this.fileList.length > 0) {
-            const screenPadMar = 145 + this.resizeHeight // 120px --> padding: 10px * 2 + margin: 25px 15px + fileHeight: 85px
+            const screenPadMar = 150 + this.resizeHeight // 120px --> padding: 10px * 2 + margin: 30px 15px + fileHeight: 85px
             const inputHeight = 105 + this.resizeHeight // 20px --> padding: 10px * 2 + fileHeight: 85px
             this.renderer.setStyle(this.chatting_screen.nativeElement, 'height', `calc(100% - ${screenPadMar}px)`)
             this.renderer.setStyle(this.chatting_input.nativeElement, 'height', `${inputHeight}px`)
         } else {
-            const screenPadMar = 60 + this.resizeHeight // 60px --> padding: 10px * 2 + margin: 25px 15px
+            const screenPadMar = 65 + this.resizeHeight // 60px --> padding: 10px * 2 + margin: 30px 15px
             const inputHeight = 20 + this.resizeHeight // 20px --> padding: 10px * 2
             this.renderer.setStyle(this.chatting_screen.nativeElement, 'height', `calc(100% - ${screenPadMar}px)`)
             this.renderer.setStyle(this.chatting_input.nativeElement, 'height', `${inputHeight}px`)
