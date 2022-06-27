@@ -1,0 +1,98 @@
+<div class="rw-modal-background" #modalBackgroundElement></div>
+
+<div
+  class="rw-modal-wrapper justify-content-center align-items-center"
+  (mouseup)="!isMouseModalDown && onCancel()"
+  (mousedown) = 'resetMouseModalDown()'
+  #modalWrapperElement
+>
+    <div
+      class="rw-modal user-select-none"
+      (mousedown) ='onMouseModalDown(); $event.stopPropagation()'
+    >
+
+      <div
+        class="modal-header"
+        [class.no-ticket-margin] = "lockerList.length == 0 && membershipList.length == 0"
+      >
+        <div class="header-title">
+          <p class="rw-typo-headline1">{{this.memberName}} 회원님,</p>
+          <p class="rw-typo-headline1">출석체크가 완료되었어요. 🤗</p>
+        </div>
+        <div class="rw-typo-title2 header-desc ">
+          {{lockerList.length == 0 && membershipList.length == 0
+            ? "앗! 사용 가능한 회원권/락커가 없어요."
+            : "보유하신 회원권/락커 정보를 확인해보세요."
+          }}
+        </div>
+
+        <img src="assets/icons/etc/close.svg" (click)="onCancel()">
+      </div>
+
+      <div *ngIf="lockerList.length > 0 || membershipList.length > 0" class="ticket-container thin-scroll-y-overlay2">
+
+        <ng-container *ngIf="lockerList.length > 0">
+          <div
+            *ngFor="let locker of lockerList"
+            class="locker-ticket"
+          >
+            <div class="left">
+              <div
+                class="icon"
+                [style.backgroundColor] = "'var(--border-color)'"
+              >
+                <img src="assets/icons/etc/locker-white.svg">
+              </div>
+              <div class="content">
+                <span class="rw-typo-title1">
+                  [{{locker?.category_name}}] {{locker?.name}}
+                </span>
+                <span class="rw-typo-bodytext1" [style.color] = "'var(--grey)'">
+                  {{locker?.start_date}} - {{locker?.end_date}} ({{ {startDate:locker?.start_date, endDate:locker?.end_date} | dayDiff}}일)
+                </span>
+              </div>
+            </div>
+
+          </div>
+        </ng-container>
+
+
+        <ng-container *ngIf="membershipList.length > 0">
+          <div
+            class="membership-ticket"
+            *ngFor="let membership of membershipList"
+          >
+
+            <div class="left">
+              <div
+                class="icon"
+                [style.backgroundColor] = "'var(--border-color)'"
+              >
+                <img src="assets/icons/etc/ticket-white.svg">
+              </div>
+              <div class="content">
+                <span class="rw-typo-title1" >
+                  [{{membership?.category_name}}] {{membership?.name}}
+                </span>
+                <span class="rw-typo-bodytext1" [style.color] = "'var(--grey)'">
+                  {{membership?.start_date}} - {{membership?.end_date}} ({{ {startDate:membership?.start_date, endDate:membership?.end_date } | dayDiff}}일)
+                </span>
+              </div>
+            </div>
+
+            <div class="right rw-typo-bodytext0">
+              <span class="rw-typo-title1">({{ {startDate:DayJs().format(), endDate:membership?.end_date } | dayDiff}}일) / {{membership.unlimited ? '무제한' : membership.count+'회'}} </span>남음
+            </div>
+
+          </div>
+        </ng-container>
+
+
+      </div>
+
+      <p class="rw-typo-bodytext1 close-guide">
+        {{timeOutCount}}초 후 자동으로 창이 꺼져요.
+      </p>
+
+    </div>
+</div>

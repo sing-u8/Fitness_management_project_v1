@@ -1,0 +1,190 @@
+* {
+    padding: 0px;
+    margin: 0px;
+}
+
+section.touch-pad {
+    height: 100vh;
+    width: 100vw;
+    position: relative;
+    display: flex;
+    background-color: var(--background-color);
+
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
+    section.left {
+        padding: 85px 0px 50px 55px;
+        width: 53%;
+        height: 100%;
+        background-color: var(--font-color);
+
+        .guideline-container {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+
+            .guide-top {
+                p.title {
+                    font-size: 2.7rem;
+                    line-height: 1.43;
+                    letter-spacing: -0.2px;
+                    color: var(--white);
+                    margin-bottom: 10px;
+
+                    u {
+                        text-underline-offset: 3px;
+                        text-decoration-thickness: 3px;
+                    }
+                }
+
+                .guide-text {
+                    padding-left: 35px;
+                    position: relative;
+                    opacity: 0.6;
+
+                    p {
+                        font-size: 1.8rem;
+                        font-weight: 500;
+                        line-height: 1.43;
+                        letter-spacing: -0.2px;
+                        color: var(--white);
+                    }
+
+                    img {
+                        position: absolute;
+                        left: 0px;
+                        top: -2px;
+                        width: 30px;
+                        height: 30px;
+                    }
+                }
+            }
+
+            .guide-bottom {
+
+                // margin-bottom: 30px;
+                .call-employee-button {
+                    width: 195px;
+                    height: 60px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 2rem;
+                    font-weight: 500;
+                    line-height: 1.43;
+                    letter-spacing: -0.2px;
+                    color: var(--white);
+
+                    &>img {
+                        margin-left: 10px;
+                    }
+
+                    cursor: pointer;
+                    border: 1px solid var(--white);
+                    border-radius: 5px;
+                    margin-bottom: 45px;
+                }
+            }
+
+            .title-top-margin {
+                margin-top: 25px;
+            }
+
+            .title-bottom-margin {
+                margin-bottom: 30px;
+            }
+        }
+    }
+
+    section.right {
+        display: flex;
+        align-items: center;
+        justify-content: center; //  수정 필요
+        width: calc(100% - 53%);
+        height: 100%;
+
+        .touch-pad-container {
+            width: 402px;
+            position: relative;
+
+            .touch-pad-display {
+                width: 100%;
+                display: flex;
+                align-items: center;
+                flex-direction: column;
+
+                .display-title {
+                    font-size: 1.8rem;
+                    font-weight: 500;
+                    line-height: 1.43;
+                    letter-spacing: -0.2px;
+                    color: var(--lightgrey);
+                    margin-bottom: 25px;
+                }
+
+                .input-container {
+                    input {
+                        all: unset;
+                        width: 100%;
+                        padding-right: 0px;
+                        padding-left: 0px;
+                        font-size: 4.8rem;
+                        font-weight: bold;
+                        text-align: center;
+                        letter-spacing: 15px;
+                        color: var(--font-color);
+                    }
+                }
+
+                .divider {
+                    width: 100%;
+                    height: 2px;
+                    border-top: 2px solid var(--lightgrey);
+                    margin-top: 20px;
+                    margin-bottom: 40px;
+                }
+            }
+
+            .touch-pad-grid {
+                width: 100%;
+                height: 540px;
+                display: grid;
+
+                gap: 15px;
+                grid-template-columns: repeat(3, 125px);
+                grid-template-rows: repeat(4, 125px);
+
+                .grid-item {
+                    width: 125px;
+                    height: 125px;
+                    background-color: var(--white);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    border-radius: 12px;
+                    cursor: pointer;
+
+                    font-size: 3.1rem;
+                    font-weight: 500;
+                    line-height: 1.43;
+                    letter-spacing: -0.2px;
+                    color: var(--font-color);
+
+                    &.confirm {
+                        color: var(--white);
+                        font-size: 2.1rem;
+                        background-color: var(--font-color);
+                    }
+
+                    &.erase {
+                        font-size: 2.1rem;
+                    }
+                }
+            }
+        }
+    }
+}

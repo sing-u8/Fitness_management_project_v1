@@ -38,7 +38,11 @@ const routes: Routes = [
     //             (m) => m.MembershipLockerFullModalModule
     //         ),
     // },
-
+    {
+        path: 'touch-pad',
+        canActivate: [CenterMemberBlockGuard],
+        loadChildren: () => import('./touch-pad/touch-pad.module').then((m) => m.TouchPadModule),
+    },
     // { path: 'touch-pad', component: TouchPadComponent, canActivate: [CenterMemberBlockGuard] },
 ]
 

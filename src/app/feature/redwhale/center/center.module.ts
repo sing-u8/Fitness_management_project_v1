@@ -9,6 +9,7 @@ import { CommonModule } from '../common/common.module'
 import { CenterComponent } from './center.component'
 import { NavComponent } from './nav/nav.component'
 import { DrawerModule } from './drawer/drawer.module'
+import { TouchPadModule } from './touch-pad/touch-pad.module'
 
 // sections
 import { CommunityComponent } from './section/community/community.component'
@@ -73,6 +74,7 @@ import { CommunityEffect } from '@centerStore/effects/sec.community.effect'
         CommonModule,
         ReactiveFormsModule,
         DrawerModule,
+        TouchPadModule,
         // sections modules
         LessonModule,
         MembershipModule,

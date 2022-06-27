@@ -1,0 +1,154 @@
+* {
+    padding: 0px;
+    margin: 0px;
+}
+
+.rw-modal-background {
+    display: none;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: var(--font-color);
+    opacity: 0;
+    transition: opacity 0.3s cubic-bezier(0.25, 0.8, 0.25, 0.8);
+    z-index: 999;
+}
+
+.rw-modal-background-show {
+    opacity: 0.3;
+}
+
+.rw-modal-wrapper {
+    display: none;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1000;
+
+    .rw-modal {
+        width: 552px;
+        // max-height: 470px;
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        background-color: var(--background-color);
+        padding: 0px;
+        border: 1px solid var(--border-color);
+        border-radius: 6px;
+        box-shadow: 0 0 10px 0 rgba(181, 181, 181, 0.11);
+        opacity: 0;
+        transition: opacity 0s;
+        padding: 38px 0px 43px 0px;
+
+        .modal-header {
+            width: calc(100% - 86px);
+            margin-bottom: 30px;
+            position: relative;
+            &.no-ticket-margin {
+                margin-bottom: 0px;
+            }
+
+            .header-title {
+                span:first-of-type {
+                    margin-bottom: 8px;
+                }
+                margin-bottom: 12px;
+            }
+
+            .header-desc {
+                font-weight: 400;
+            }
+
+            & > img {
+                width: 26px;
+                height: 26px;
+                border-radius: 3px;
+                cursor: pointer;
+                position: absolute;
+                top: 0px;
+                right: 0px;
+
+                &:hover {
+                    background-color: var(--background-color);
+                }
+            }
+        }
+        .ticket-container {
+            width: 100%;
+            max-height: 260px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            .locker-ticket,
+            .membership-ticket {
+                &:not(:last-of-type) {
+                    margin-bottom: 10px;
+                }
+                min-height: 80px;
+                width: calc(100% - 86px);
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                background-color: var(--white);
+                border-radius: 5px;
+                padding: 0 24px 0 14px;
+                .left {
+                    display: flex;
+                    align-items: center;
+                    .icon {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        width: 36px;
+                        height: 36px;
+                        border-radius: 50%;
+                        background-color: var(--font-color);
+                        margin-right: 8px;
+                        & > img {
+                            width: 26px;
+                            height: 26px;
+                        }
+                    }
+                    .content {
+                        display: flex;
+                        flex-direction: column;
+                    }
+                }
+                .right {
+                    & > span {
+                        color: var(--red);
+                    }
+                }
+            }
+            // .locker-ticket {
+
+            // }
+            // .membership-ticket {
+            //     margin-top: 10px;
+            // }
+        }
+
+        .close-guide {
+            position: absolute;
+            bottom: -35px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--lightgrey);
+        }
+    }
+}
+
+.rw-modal-wrapper-show {
+    .rw-modal {
+        opacity: 1;
+    }
+}
