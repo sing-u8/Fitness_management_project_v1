@@ -28,7 +28,7 @@
 
         width: 100%;
         padding-bottom: 15px;
-        margin-bottom: 15px;
+        margin-bottom: 20px;
 
         .header-text {
             display: flex;
@@ -44,7 +44,7 @@
         .setting-show-sale-button {
             padding: 0px !important;
             width: 130px;
-            height: 45px;
+            height: 44px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -59,7 +59,7 @@
 
     .content-container {
         display: flex;
-        height: calc(100vh - 185px);
+        height: calc(100vh - 190px);
         width: 100%;
         position: relative;
         .content-title-margin {

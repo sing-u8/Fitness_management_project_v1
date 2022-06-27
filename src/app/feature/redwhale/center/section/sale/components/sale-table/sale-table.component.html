@@ -2,8 +2,6 @@
 
   <thead>
     <tr class="rw-typo-bodytext0 title">
-      <!-- <th></th> -->
-
       <th>날짜</th>
 
       <th>
@@ -246,7 +244,6 @@
       </th>
 
       <th>결제 금액</th>
-      <!-- <th></th> -->
     </tr>
   </thead>
 
@@ -297,22 +294,30 @@
     class="data-container rw-typo-bodytext1 table-scroll-y"
   >
     <tr *ngFor="let item of saleData">
-      <!-- <td></td> -->
-      <td>{{item.date | dateFormat:'YY.MM.DD'}}</td>
+
+      <td>
+        {{item.date | dateFormat:'YY.MM.DD'}}
+      </td>
+
       <td>{{item.type_code_name}}</td>
+
       <td>
         <div class="member-container">
           <p class="name">{{item.center_user_name}}</p>
           <p class="phone rw-typo-subtext0-regular">{{item.center_user_phone_number | phoneNumber}}</p>
         </div>
       </td>
+
       <td>{{item.product_type_code_name}}</td>
+
       <td [style.maxWidth.px]="productNameWidth">
         <span class="product-name line-ellipsis">
           {{item.product_name}}
         </span>
       </td>
+
       <td>{{item.responsibility_user_name}}</td>
+
       <td class="rw-typo-bodytext0-bold price">
         {{item.type_code == 'payment_type_refund' ? '-' : ''}}{{item | saleTotalPrice}}원
         <div class="l-price-detail">
@@ -342,7 +347,7 @@
           </div>
         </div>
       </td>
-      <!-- <td></td> -->
+
     </tr>
   </tbody>
 
@@ -379,8 +384,6 @@
       </div>
     </div>
   </tfoot>
-
-
 
 
 </table>
