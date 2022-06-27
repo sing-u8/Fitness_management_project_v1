@@ -45,16 +45,16 @@
 .rw-typo-headline1 {
     font-size: 2.2rem;
     font-weight: 700;
-    line-height: 1.45;
-    letter-spacing: -0.48px;
+    line-height: 32px;
+    letter-spacing: -0.484px;
     color: var(--font-color);
 }
 
 .rw-typo-headline2 {
     font-size: 2.2rem;
     font-weight: 500;
-    line-height: 1.45;
-    letter-spacing: -0.48px;
+    line-height: 32px;
+    letter-spacing: -0.484px;
     color: var(--font-color);
 }
 
@@ -70,21 +70,21 @@
     font-size: 1.5rem;
     font-weight: 700;
     line-height: 22px;
-    letter-spacing: -0.23px;
+    letter-spacing: -0.225px;
     color: var(--font-color);
 }
 .rw-typo-title2-none-color {
     font-size: 1.5rem;
     font-weight: 700;
     line-height: 22px;
-    letter-spacing: -0.23px;
+    letter-spacing: -0.225px;
 }
 
 .rw-typo-title2-medium {
     font-size: 1.5rem;
     font-weight: 700;
     line-height: 22px;
-    letter-spacing: -0.23px;
+    letter-spacing: -0.225px;
     color: var(--font-color);
 }
 
@@ -92,14 +92,14 @@
     font-size: 1.4rem;
     font-weight: 700;
     line-height: 20px;
-    letter-spacing: -0.2px;
+    letter-spacing: -0.196px;
     color: var(--font-color);
 }
 .rw-typo-bodytext0-regular {
     font-size: 1.4rem;
     font-weight: 400;
     line-height: 20px;
-    letter-spacing: -0.2px;
+    letter-spacing: -0.196px;
     color: var(--font-color);
 }
 
@@ -107,7 +107,7 @@
     font-size: 1.4rem;
     font-weight: 700;
     line-height: 20px;
-    letter-spacing: -0.2px;
+    letter-spacing: -0.196px;
     color: var(--darkgrey);
 }
 
@@ -115,7 +115,7 @@
     font-size: 1.4rem;
     font-weight: 500;
     line-height: 20px;
-    letter-spacing: -0.2px;
+    letter-spacing: -0.196px;
     color: var(--font-color);
 }
 
@@ -123,7 +123,7 @@
     font-size: 1.4rem;
     font-weight: 500;
     line-height: 20px;
-    letter-spacing: -0.2px;
+    letter-spacing: -0.196px;
     color: var(--darkgrey);
 }
 
@@ -131,21 +131,21 @@
     font-size: 1.4rem;
     font-weight: 400;
     line-height: 20px;
-    letter-spacing: -0.2px;
+    letter-spacing: -0.196px;
     color: var(--font-color);
 }
 .rw-typo-bodytext1_darkgrey {
     font-size: 1.4rem;
     font-weight: 400;
     line-height: 20px;
-    letter-spacing: -0.2px;
+    letter-spacing: -0.196px;
     color: var(--darkgrey);
 }
 .rw-typo-bodytext1_grey {
     font-size: 1.4rem;
     font-weight: 400;
     line-height: 20px;
-    letter-spacing: -0.2px;
+    letter-spacing: -0.196px;
     color: var(--grey);
 }
 
@@ -222,7 +222,7 @@
 
 .rw-typo-subtext3 {
     font-size: 1.1rem;
-    line-height: 1.45;
+    line-height: 32px;
     font-weight: 500;
     letter-spacing: -0.12px;
     color: var(--font-color);
@@ -230,7 +230,7 @@
 
 .rw-typo-subtext3-darkgrey {
     font-size: 1.1rem;
-    line-height: 1.45;
+    line-height: 32px;
     font-weight: 500;
     letter-spacing: -0.12px;
     color: var(--darkgrey);
@@ -239,7 +239,7 @@
 .rw-typo-subtext4 {
     font-size: 1.1rem;
     font-weight: 400;
-    line-height: 1.45;
+    line-height: 32px;
     letter-spacing: -0.12px;
     color: var(--grey);
 }
@@ -333,7 +333,7 @@
     font-size: 1.4rem;
     font-weight: 500;
     line-height: 20px;
-    letter-spacing: -0.2px;
+    letter-spacing: -0.196px;
     color: var(--font-color);
 
     &::placeholder {
@@ -389,7 +389,7 @@
     font-size: 1.4rem;
     font-weight: 500;
     line-height: 20px;
-    letter-spacing: -0.2px;
+    letter-spacing: -0.196px;
     color: var(--font-color);
 
     &::placeholder {

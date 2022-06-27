@@ -9,8 +9,8 @@ import { LessonComponent } from './section/lesson/lesson.component'
 import { LockerComponent } from './section/locker/locker.component'
 import { CommunityComponent } from './section/community/community.component'
 import { SaleComponent } from './section/sale/sale.component'
+import { TouchPadComponent } from './touch-pad/touch-pad.component'
 // import { ReserveScheduleComponent } from './section/reserve-schedule/reserve-schedule.component'
-// import { TouchPadComponent } from './touch-pad/touch-pad.component'
 
 import { CenterMemberBlockGuard } from '@guards/center-member-block.guard'
 
@@ -40,8 +40,8 @@ const routes: Routes = [
     // },
     {
         path: 'touch-pad',
+        component: TouchPadComponent,
         canActivate: [CenterMemberBlockGuard],
-        loadChildren: () => import('./touch-pad/touch-pad.module').then((m) => m.TouchPadModule),
     },
     // { path: 'touch-pad', component: TouchPadComponent, canActivate: [CenterMemberBlockGuard] },
 ]

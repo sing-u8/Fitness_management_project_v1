@@ -52,6 +52,7 @@ export class TouchPadComponent implements OnInit {
         }
 
         console.log('before api: ', this.touchPadInput)
+        this.showAttendanceModal()
         // this.gymDashboardService.attendGym(this.center.id, { membership_number: this.touchPadInput }, 'touchpad').subscribe()
         // this.gymAttendanceService
         //     .createAttendance(this.center.id, { membership_number: this.touchPadInput }, 'touchpad')
