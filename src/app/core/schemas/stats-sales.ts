@@ -1,6 +1,6 @@
 export interface StatsSales {
     date: string
-    type_code: string
+    type_code: 'payment_type_refund' | 'payment_type_payment' | 'payment_type_transfer'
     type_code_name: string
     center_user_name: string
     center_user_phone_number: string

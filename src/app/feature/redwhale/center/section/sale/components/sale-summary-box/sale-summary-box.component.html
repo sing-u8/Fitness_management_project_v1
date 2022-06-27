@@ -9,10 +9,10 @@
       <img class="mdi" *ngIf="curTotal >= prevTotal" src="assets/icons/etc/sale-up-arrow-lightgrey.svg">
       <img class="mdi" *ngIf="curTotal < prevTotal" src="assets/icons/etc/sale-down-arrow-lightgrey.svg">
       <p *ngIf="prevTotal != 0" class="rw-typo-subtext0-regular">
-        ￦ {{(curTotal - prevTotal) | absNumber | numberWithCommas}}
+        {{(curTotal - prevTotal) | absNumber | numberWithCommas}}원
       </p>
       <p *ngIf="prevTotal == 0" class="rw-typo-subtext0-regular">
-        ￦ 0
+        0원
       </p>
     </div>
     <div *ngIf="!(curTotal == 0 )" class="summary-desc">
@@ -46,13 +46,13 @@
         </div>
 
         <div class="price">
-          <div class="the-price">￦&nbsp;{{v.value | numberWithCommas}}</div>
+          <div class="the-price">{{v.value | numberWithCommas}}원</div>
 
           <div class="rw-typo-subtext0 price-change">
             <img class="mdi" *ngIf="curTotal >= prevTotal" src="assets/icons/etc/sale-up-arrow-lightgrey.svg">
             <img class="mdi" *ngIf="curTotal < prevTotal" src="assets/icons/etc/sale-down-arrow-lightgrey.svg">
-            <p *ngIf="SaleSummary.prev[v.key] != 0">￦&nbsp;{{ (v.value - SaleSummary.prev[v.key]) | absNumber | numberWithCommas}}</p>
-            <p *ngIf="SaleSummary.prev[v.key] == 0">￦&nbsp;0</p>
+            <p *ngIf="SaleSummary.prev[v.key] != 0">{{ (v.value - SaleSummary.prev[v.key]) | absNumber | numberWithCommas}}원</p>
+            <p *ngIf="SaleSummary.prev[v.key] == 0">0원</p>
           </div>
         </div>
 

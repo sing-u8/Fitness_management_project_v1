@@ -153,11 +153,14 @@ export const selectSaleStatistics = (state: State) => {
     return _.reduce(
         state.saleData,
         (acc, cur) => {
-            acc.card += cur.card
-            acc.cash += cur.cash
-            acc.trans += cur.trans
-            acc.unpaid += cur.unpaid
-            acc.total += cur.card + cur.cash + cur.trans + cur.unpaid
+            acc.card = cur.type_code == 'payment_type_refund' ? acc.card - cur.card : acc.card + cur.card
+            acc.cash = cur.type_code == 'payment_type_refund' ? acc.cash - cur.cash : acc.cash + cur.cash
+            acc.trans = cur.type_code == 'payment_type_refund' ? acc.trans - cur.trans : acc.trans + cur.trans
+            acc.unpaid = cur.type_code == 'payment_type_refund' ? acc.unpaid - cur.unpaid : acc.unpaid + cur.unpaid
+            acc.total =
+                cur.type_code == 'payment_type_refund'
+                    ? acc.total - (cur.card + cur.cash + cur.trans + cur.unpaid)
+                    : acc.total + cur.card + cur.cash + cur.trans + cur.unpaid
             return acc
         },
         _.cloneDeep(SaleStatisticsInit)
