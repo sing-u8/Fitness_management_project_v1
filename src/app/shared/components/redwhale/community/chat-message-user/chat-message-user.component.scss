@@ -21,7 +21,7 @@ section.chat-message-user {
         .user-information {
             display: flex;
             align-items: center;
-            margin-bottom: 8px;
+            margin-bottom: 4px;
 
             .created-at {
                 color: var(--grey);
@@ -47,7 +47,7 @@ section.chat-message-user {
             align-items: flex-start;
             .user-information {
                 .user-name {
-                    margin-right: 12px;
+                    margin-right: 9px;
                 }
             }
         }

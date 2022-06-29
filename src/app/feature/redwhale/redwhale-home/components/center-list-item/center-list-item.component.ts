@@ -71,6 +71,7 @@ export class CenterListItemComponent implements OnInit, AfterViewInit {
         } else {
             this.centerAvatar = this.center.picture
             this.renderer.setStyle(this.list_avatar.nativeElement, 'backgroundImage', `url(${this.centerAvatar})`)
+            this.renderer.setStyle(this.list_avatar.nativeElement, 'backgroundColor', 'var(--white)')
         }
     }
     initCenterBackground() {

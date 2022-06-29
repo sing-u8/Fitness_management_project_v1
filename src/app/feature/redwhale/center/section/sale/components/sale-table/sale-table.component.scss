@@ -83,20 +83,16 @@ table.sale-table {
     }
 
     thead {
-        tr {
-            display: table;
-            width: 100%;
-        }
         th {
             font-weight: 500 !important;
         }
     }
 
-    // thead tr,
-    // tbody tr {
-    //     display: table;
-    //     width: 100%;
-    // }
+    thead tr,
+    tbody tr {
+        display: table;
+        width: 100%;
+    }
 
     tr.title {
         height: 45px;

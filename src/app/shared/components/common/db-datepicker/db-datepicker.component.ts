@@ -33,6 +33,7 @@ export class DbDatepickerComponent implements OnInit, OnChanges, AfterViewChecke
         | 'looseOnlyStart'
         | 'looseOnlyEnd' /* only reg-ml until this line*/
     @Input() width: string
+    @Input() height: string
 
     @Input() data: any
     @Output() dataChange = new EventEmitter<any>()
@@ -135,9 +136,12 @@ export class DbDatepickerComponent implements OnInit, OnChanges, AfterViewChecke
     }
     ngAfterViewInit() {
         if (this.width) {
-            const paddingSide = (Number(this.width) - 255) / 2 + 10
+            // const paddingSide = (Number(this.width) - 255) / 2 + 10
             this.renderer.setStyle(this.multiline_datepicker.nativeElement, 'width', `${this.width}px`)
-            this.renderer.setStyle(this.multiline_datepicker.nativeElement, 'padding', `10px ${paddingSide}px`)
+            this.renderer.setStyle(this.multiline_datepicker.nativeElement, 'padding', `10px 10px`)
+        }
+        if (this.height) {
+            this.renderer.setStyle(this.multiline_datepicker.nativeElement, 'height', `${this.height}px`)
         }
         if (this.mode == 'multiline-component') {
             this.renderer.setStyle(this.multiline_datepicker.nativeElement, 'boxShadow', `none`)

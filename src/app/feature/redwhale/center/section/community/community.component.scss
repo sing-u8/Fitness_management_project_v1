@@ -243,7 +243,7 @@
                 .chatting-input-container {
                     display: flex;
                     width: calc(100% - 30px);
-                    height: 70px;
+                    min-height: 70px;
                     margin: 30px 15px 15px;
                     padding: 10px;
                     background-color: var(--white);
@@ -251,12 +251,12 @@
                     position: relative;
 
                     &.isFocused {
-                        margin: 29px 14px 14px;
-                        padding-bottom: 8px;
+                        margin: 30px 15px 15px;
+                        padding: 9px;
                         border: 1px solid var(--lightgrey);
                         .send-button {
-                            bottom: 8px !important;
-                            right: 8px !important;
+                            bottom: 9px !important;
+                            right: 9px !important;
                         }
                     }
 
@@ -268,6 +268,7 @@
                         border-right: 1px solid var(--border-color);
 
                         img {
+                            margin-top: 1px;
                             width: 25px;
                             height: 25px;
                             cursor: pointer;

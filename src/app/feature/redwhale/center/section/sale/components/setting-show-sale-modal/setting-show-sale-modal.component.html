@@ -9,11 +9,10 @@
         <div class="title-container">
             <div class="text rw-typo-title1 ">{{ data?.text }}</div>
             <div class="sub-text rw-typo-subtext1">{{ data?.subText }}</div>
-        </div>
-
-        <div id='push-notice' class="input">
-            <div class="push-notice-container">
-                <rw-switch [text]="value  ? '강사에게도 매출 공개  🙉' :'강사에게 매출 비공개  🙈'" [(ngModel)]="value"></rw-switch>
+            <div id='push-notice' class="input">
+                <div class="push-notice-container">
+                    <rw-switch [text]="value  ? '강사에게도 매출 공개  🙉' :'강사에게 매출 비공개  🙈'" [(ngModel)]="value"></rw-switch>
+                </div>
             </div>
         </div>
 

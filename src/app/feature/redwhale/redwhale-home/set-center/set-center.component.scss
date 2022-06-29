@@ -30,11 +30,11 @@ section {
 
         .header-text-container {
             width: $containerWidth;
-            margin-bottom: 25px;
+            margin-bottom: 27px;
         }
 
         .subtext-margin {
-            margin-top: 7px;
+            margin-top: 5px;
         }
 
         .close-button {
@@ -55,7 +55,7 @@ section {
         .create-center-outer-container {
             display: flex;
             justify-content: center;
-            padding-top: 40px;
+            padding-top: 38px;
 
             @media (max-width: 885px) {
                 justify-content: flex-start;
@@ -88,7 +88,7 @@ section {
 
 .center-preview {
     .item-container {
-        margin-top: 10px;
+        margin-top: 5px;
     }
 }
 
@@ -103,7 +103,7 @@ section {
         @include setting-container-common();
 
         .center-name-input {
-            margin-top: 10px;
+            margin-top: 5px;
             margin-bottom: 36px;
             height: 50px;
             width: 100%;

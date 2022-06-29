@@ -482,9 +482,10 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     // ! 입력란 여백 제조정 필요
-    public resizeHeight = 42
+    public resizeHeight = 50
 
     onChatInputResize(resizeHeight: string) {
+        console.log('onChatInputResize : ', resizeHeight)
         this.resizeHeight = Number(resizeHeight.slice(0, -2))
         this.resizeChatScreen()
     }

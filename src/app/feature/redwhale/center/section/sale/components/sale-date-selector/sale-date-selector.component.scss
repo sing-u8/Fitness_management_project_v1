@@ -55,8 +55,8 @@
         position: absolute;
         top: 46px;
         right: 0px;
-        width: 265px;
-        min-height: 280px;
+        width: 263px;
+        min-height: 276px;
         background-color: var(--white);
         border-radius: 5px;
         box-shadow: 0 0 10px 0 rgba(181, 181, 181, 0.15);
@@ -97,19 +97,31 @@
             .month-picker-header {
                 display: flex;
                 align-items: center;
-                justify-content: space-between;
-                width: 125px;
                 margin-bottom: 15px;
+                position: relative;
+                justify-content: center;
 
                 & > .mdi {
-                    width: 20px;
+                    display: flex;
+                    justify-content: inherit;
+                    width: 15px;
+                    font-size: 2rem;
                     color: var(--grey);
                     cursor: pointer;
+                    position:absolute;
 
                     &:hover {
                         color: var(--darkgrey);
                     }
                 }
+
+                & > .mdi-chevron-left {
+                    left: -40px;
+                }
+                & > .mdi-chevron-right {
+                    right: -40px;;
+                }
+
             }
             .month-item-grid {
                 display: grid;
@@ -146,7 +158,7 @@
             align-items: center;
 
             db-datepicker {
-                margin-top: 8px;
+                margin: 20px 4px 7px;
             }
 
             .date-picker-bottom {
