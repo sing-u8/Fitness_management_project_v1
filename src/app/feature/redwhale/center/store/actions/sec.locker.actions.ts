@@ -199,6 +199,10 @@ export const setCurLockerItemList = createAction(
     `[${FeatureKey}] Set Current Locker Item List`,
     props<{ lockerItemList: Array<LockerItem> }>()
 )
+export const updateCurLockerItemList = createAction(
+    `[${FeatureKey} Update Current Locker Item List]`,
+    props<{ lockerItemList: Array<LockerItem> }>()
+)
 export const resetCurLockerItemList = createAction(`[${FeatureKey}] Reset Current Locker Item List`)
 
 // cur Locker Item

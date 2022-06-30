@@ -24,6 +24,19 @@
       img {
         position: absolute;
         left: 11px;
+        &#kakao {
+          width: 34px;
+          height: 34px;
+        }
+        &#google {
+          width: 32px;
+          height: 32px;
+          left: 12px;
+        }
+        &#apple {
+          width: 34px;
+          height: 34px;
+        }
       }
     }
 

@@ -266,14 +266,10 @@ export class EmailComponent implements OnInit, AfterViewInit, OnDestroy {
         this.authService.sendVerificationCodeMail({ email: this.email }).subscribe({
             next: (v) => {
                 if (isShowModal) {
-                    this.nxStore.dispatch(
-                        showModal({
-                            data: {
-                                text: this.email,
-                                subText: `새로운 인증번호를 발송해드렸어요!
-                    확인 후 인증번호를 입력해주세요.`,
-                            },
-                        })
+                    this.showEmailModal(
+                        this.email,
+                        `새로운 인증번호를 발송해드렸어요!
+                        확인 후 인증번호를 입력해주세요.`
                     )
                 }
 
@@ -346,6 +342,6 @@ export class EmailComponent implements OnInit, AfterViewInit, OnDestroy {
         this.emailModalVisible = true
     }
     hideEmailModal() {
-        this.emailModalVisible = true
+        this.emailModalVisible = false
     }
 }

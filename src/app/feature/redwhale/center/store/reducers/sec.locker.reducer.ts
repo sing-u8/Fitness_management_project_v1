@@ -90,16 +90,18 @@ export const lockerReducer = createImmerReducer(
 
     on(LockerActions.startUpdateLockerItem, (state, { itemId, reqBody, curLockerItems }) => {
         let newItem: LockerItem = undefined
+        let newItemId: number = undefined
         const curLockerItems_copy = _.cloneDeep(curLockerItems)
         _.find(curLockerItems, (item, idx) => {
             if (item.id == itemId) {
                 curLockerItems_copy[idx] = { ...curLockerItems_copy[idx], ...reqBody }
                 newItem = curLockerItems_copy[idx]
+                newItemId = idx
                 return true
             }
             return false
         })
-        state.curLockerItemList = curLockerItems_copy
+        state.curLockerItemList[newItemId] = newItem
         return state
     }),
 

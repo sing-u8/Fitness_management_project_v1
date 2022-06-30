@@ -180,7 +180,7 @@ export class PhoneComponent implements OnInit, AfterViewInit, OnDestroy {
 
         this.authService.sendVerificationCodeSMSChange({ phone_number: this.phoneNumber }).subscribe({
             next: (v) => {
-                this.nxStore.dispatch(showToast({ text: '인증번호 문자가 전송되었습니다.' }))
+                this.nxStore.dispatch(showToast({ text: '카톡으로 인증번호가 전송되었습니다.' }))
                 if (this.interval) {
                     this.stopTimer()
                 }

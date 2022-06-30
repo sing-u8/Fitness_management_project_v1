@@ -3,6 +3,10 @@ import { Component, OnInit, Input, AfterViewInit, OnChanges } from '@angular/cor
 import { ChatRoom } from '@schemas/chat-room'
 import { ChatRoomUser } from '@schemas/chat-room-user'
 
+import { StorageService } from '@services/storage.service'
+
+import _ from 'lodash'
+
 @Component({
     selector: 'rw-chatting-room-card',
     templateUrl: './chatting-room-card.component.html',
@@ -14,13 +18,16 @@ export class ChattingRoomCardComponent implements OnInit, AfterViewInit, OnChang
     @Input() selectedRoom: ChatRoom
 
     public userList: ChatRoomUser[] = []
+    public chatRoomName = ''
 
-    constructor() {}
+    constructor(private storageService: StorageService) {}
 
     ngOnInit(): void {
         this.initUserListInScreen()
     }
-    ngAfterViewInit(): void {}
+    ngAfterViewInit(): void {
+        this.limitChatRoomName()
+    }
     ngOnChanges(): void {}
 
     initUserListInScreen() {
@@ -28,5 +35,15 @@ export class ChattingRoomCardComponent implements OnInit, AfterViewInit, OnChang
             this.room.type_code == 'chat_room_type_chat_with_me'
                 ? [this.room.chat_room_users.find((v) => v.id == this.userId)]
                 : this.room.chat_room_users.filter((v) => v.id != this.userId).map((v) => v)
+    }
+
+    limitChatRoomName() {
+        if (this.room.chat_room_users.length == 2) {
+            const user = this.storageService.getUser()
+            this.chatRoomName = _.filter(this.room.chat_room_users, (v) => v.id != user.id)[0].name
+        } else {
+            const userNames = _.split(this.room.name, ', ', 3)
+            this.chatRoomName = userNames.length > 2 ? `${userNames[0]}, ${userNames[1]}, ...` : this.room.name
+        }
     }
 }

@@ -15,11 +15,12 @@ export class TextareaAutoResize implements AfterViewInit {
         fontSize: 14,
         lineHeight: 1.43,
         maxLine: 10,
-        initHeight: 50,
+        initHeight: 30,
     }
 
     @Output('onResize') onResize = new EventEmitter<string>()
 
+    @HostListener(':keydown.backspace')
     @HostListener(':input')
     onInput() {
         this.resize()
@@ -39,11 +40,22 @@ export class TextareaAutoResize implements AfterViewInit {
 
     resize() {
         // !! 초기 height를 주고 싶으면 min-height로 설정해야함.
-        this.el.nativeElement.style.height = `0`
+        // this.el.nativeElement.style.height
         this.el.nativeElement.style.height =
             this.el.nativeElement.scrollHeight >= this.optionHeight
                 ? this.optionHeight + 'px'
                 : this.el.nativeElement.scrollHeight + 'px'
         this.onResize.emit(this.el.nativeElement.style.height)
+
+        // console.log(
+        //     'rw-textarea-autoResize ---- ',
+        //     this.el.nativeElement.style.height,
+        //     ' - ',
+        //     this.optionHeight,
+        //     ' - ',
+        //     this.el.nativeElement.scrollHeight,
+        //     ' - ',
+        //     this.el
+        // )
     }
 }

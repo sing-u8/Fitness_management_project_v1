@@ -170,7 +170,10 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     async setFileToFileList(files: FileList) {
+        console.log('enter set file to file list : ', files, ' - ', this.file_picker_el)
         if (!this.isFileExist(files)) return
+        console.log('isFileExist -- true')
+
         this.fileList = []
         const videoChatFile = await this.setFIleToFileListForVideo(files)
         if (videoChatFile != undefined) {
@@ -186,6 +189,7 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
                 continue
             }
             const type = this.commonCommunityService.setLocalFileType(value)
+            console.log(' enter file type setting !!!!!!!')
             if (type == 'image') {
                 const fileReader = new FileReader()
                 fileReader.onload = (e) => {
@@ -247,6 +251,7 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
     }
     removeFile(idx: number) {
         this.fileList = this.fileList.filter((value, index) => idx != index)
+        this.file_picker_el.nativeElement.value = ''
         this.resizeChatScreen()
     }
 
@@ -423,6 +428,8 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
     @ViewChild('chatting_screen') chatting_screen: ElementRef
     @ViewChild('chatting_input') chatting_input: ElementRef
     @ViewChildren('message_el') message_el: QueryList<any>
+    @ViewChild('chat_textarea') chat_textarea_el: ElementRef
+    @ViewChild('file_picker') file_picker_el: ElementRef
 
     // chat-message component helper
     public isNearBottom = true
@@ -477,12 +484,12 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
     public textareaResizeOption = {
         fontSize: 14,
         maxLine: 10,
-        initHeight: 50,
+        initHeight: 30,
         lineHeight: 1.43,
     }
 
     // ! 입력란 여백 제조정 필요
-    public resizeHeight = 50
+    public resizeHeight = 30
 
     onChatInputResize(resizeHeight: string) {
         console.log('onChatInputResize : ', resizeHeight)
@@ -503,8 +510,10 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
         }
     }
     resetChatScreenSize() {
+        this.resizeHeight = 30
         this.renderer.removeStyle(this.chatting_screen.nativeElement, 'height')
         this.renderer.removeStyle(this.chatting_input.nativeElement, 'height')
+        // this.renderer.removeStyle(this.chat_textarea_el.nativeElement, 'height')
     }
 
     onInputKeyPress(e: KeyboardEvent) {
@@ -512,7 +521,7 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
             // prevent default behavior
             e.preventDefault()
             this.sendMessage(this.chatInput.value)
-            return false
+            return true
         } else {
             return true
         }
@@ -531,6 +540,7 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
         this.chatInput.setValue('')
         this.resetChatScreenSize()
         this.fileList = []
+        this.file_picker_el.nativeElement.value = ''
     }
     // <---------------------
 

@@ -210,23 +210,49 @@
 </div>
 
 
-<rw-register-locker-modal [(visible)]=doShowRegisterLockerModal (cancel)="closeRegisterLockerModal()"
-    (confirm)="onRegisterMemberChoose($event)"></rw-register-locker-modal>
+<rw-register-locker-modal
+    [(visible)]=doShowRegisterLockerModal
+    (cancel)="closeRegisterLockerModal()"
+    (confirm)="onRegisterMemberChoose($event)"
+></rw-register-locker-modal>
 
-<rw-empty-locker-modal [(visible)]=doShowEmptyLockerModal [lockerItemName]="lockerEmptyTitle"
-    (cancel)="closeShowEmptyLockerModal()" (confirm)="onEmptyLockerModaConfirm($event)"></rw-empty-locker-modal>
+<rw-empty-locker-modal
+    [(visible)]=doShowEmptyLockerModal
+    [lockerItemName]="lockerEmptyTitle"
+    (cancel)="closeShowEmptyLockerModal()"
+    (confirm)="onEmptyLockerModaConfirm($event)"
+></rw-empty-locker-modal>
 
-<rw-modal [(visible)]="doShowRestartLockerModal" [data]="restartLockerText" (cancel)="closeShowRestartLockerModal()"
-    (confirm)="setLockerAvailable()"></rw-modal>
+<rw-modal
+    [(visible)]="doShowRestartLockerModal"
+    [data]="restartLockerText"
+    (cancel)="closeShowRestartLockerModal()"
+    (confirm)="setLockerAvailable()"
+></rw-modal>
 
-<rw-modal [(visible)]="doShowChangeDateModal" [data]="changeDateText" (cancel)="closeShowChangeDateModal()"
-    (confirm)="onChangeDateModalConfirm()"></rw-modal>
+<rw-modal
+    [(visible)]="doShowChangeDateModal"
+    [data]="changeDateText"
+    (cancel)="closeShowChangeDateModal()"
+    (confirm)="onChangeDateModalConfirm()"
+></rw-modal>
 
-<rw-locker-history-modal [(visible)]="doShowlockerHistory" [historyList]="lockerHistoryList"
-    [lockerName]="lockerItem.name" (cancel)="closeShowlockerHistory()"></rw-locker-history-modal>
+<rw-locker-history-modal
+    [(visible)]="doShowlockerHistory"
+    [historyList]="lockerHistoryList"
+    [lockerName]="lockerItem.name"
+    (cancel)="closeShowlockerHistory()"
+></rw-locker-history-modal>
 
-<rw-locker-charge-modal [(visible)]="doShowChargeModal" (cancel)="closeShowChargeModal()"
-    (confirm)="registerMember($event)"></rw-locker-charge-modal>
+<rw-locker-charge-modal
+    [(visible)]="doShowChargeModal"
+    (cancel)="closeShowChargeModal()"
+    (confirm)="registerMember($event)"
+></rw-locker-charge-modal>
 
-<rw-locker-charge-modal [(visible)]="doShowAdditionalChargeModal" [type]="'modify'"
-    (cancel)="closeShowAdditionalChargeModal()" (confirm)="changeDate($event)"></rw-locker-charge-modal>
+<rw-locker-charge-modal
+    [(visible)]="doShowAdditionalChargeModal"
+    [type]="'modify'"
+    (cancel)="closeShowAdditionalChargeModal()"
+    (confirm)="changeDate($event)"
+></rw-locker-charge-modal>

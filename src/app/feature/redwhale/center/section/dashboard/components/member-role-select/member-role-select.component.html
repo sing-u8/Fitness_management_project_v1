@@ -3,7 +3,6 @@
     class="member-role-select"
     [class.open]='visible'
     [class.show-arrow] = "showArrow"
-    [class.none-arrow] = "!showArrow"
     (click)="emitToggleSelect()"
     (rwClickOutside)="emitClose()"
   >

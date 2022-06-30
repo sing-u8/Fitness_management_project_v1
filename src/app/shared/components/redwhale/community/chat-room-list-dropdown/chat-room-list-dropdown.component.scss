@@ -10,18 +10,19 @@ div.chat-room-list-dropdown {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 15px 0px 10px 0px;
+    padding: 13px 0px 9px 0px;
     position: relative;
     background-color: var(--white);
     border-radius: 5px;
     border: 1px solid var(--border-color);
 
     .dropdown-header {
+        color: var(--darkgrey);
         display: flex;
         align-items: flex-start;
         justify-content: flex-start;
-        width: 178px;
-        min-height: 28px;
+        width: 180px;
+        min-height: 31.5px;
         border-bottom: 1px solid var(--border-color);
         margin-bottom: 5px;
     }
@@ -39,9 +40,10 @@ div.chat-room-list-dropdown {
             display: flex;
             justify-content: flex-start;
             align-items: center;
-            width: 178px;
+            width: 180px;
             height: 40px;
             border-radius: 5px;
+            margin-bottom: 1px;
 
             &:hover {
                 background-color: var(--background-color);
@@ -53,7 +55,7 @@ div.chat-room-list-dropdown {
         }
         .user-data {
             span#user-name {
-                margin: 0px 10px 0px 8px;
+                margin: 0px 7px 0px 7px;
             }
         }
 

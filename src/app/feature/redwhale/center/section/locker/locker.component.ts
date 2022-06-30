@@ -60,6 +60,8 @@ export class LockerComponent implements OnInit, AfterViewInit, OnDestroy {
     public center: Center = undefined
     public isEditMode = false
 
+    public categoryChanged = false
+
     // input vars and  flags
     public categInput: FormControl
     public isCategInputOpen = false
@@ -130,6 +132,7 @@ export class LockerComponent implements OnInit, AfterViewInit, OnDestroy {
                 }
                 this.curLockerCateg = curLockerCateg
                 this.categoryScrollControl(curLockerCateg)
+                this.categoryChanged = true
             })
 
         this.nxStore.dispatch(LockerActions.setCurCenterId({ centerId: this.center.id }))
@@ -137,8 +140,33 @@ export class LockerComponent implements OnInit, AfterViewInit, OnDestroy {
         this.nxStore
             .pipe(select(LockerSelector.curLockerItemList), takeUntil(this.unSubscriber$))
             .subscribe((curLockerItemList) => {
-                this.curLockerItemList = _.cloneDeep(curLockerItemList)
-                this.lockerItemCountInput.setValue(String(this.getMaximumLockerId(curLockerItemList) + 1))
+                console.log(
+                    'LockerSelector.curLockerItemList : ',
+                    curLockerItemList,
+                    'this.curLocker Item List : ',
+                    this.curLockerItemList,
+                    ' differenceWith -- ',
+                    _.differenceWith(this.curLockerItemList, curLockerItemList, _.isEqual),
+                    _.differenceWith(curLockerItemList, this.curLockerItemList, _.isEqual),
+                    _.isEqual(this.curLockerItemList, curLockerItemList),
+                    'category changed !! : ',
+                    this.categoryChanged
+                )
+
+                if (this.categoryChanged) {
+                    // when lcoker category changed
+                    this.curLockerItemList = _.cloneDeep(curLockerItemList)
+                    this.lockerItemCountInput.setValue(String(this.getMaximumLockerId(curLockerItemList) + 1))
+                    this.categoryChanged = false
+                    console.log('in locker list category changed')
+                } else {
+                    const preArr = _.differenceWith(this.curLockerItemList, curLockerItemList, _.isEqual)
+                    const postArr = _.differenceWith(curLockerItemList, this.curLockerItemList, _.isEqual)
+                    if (postArr.length > 0) {
+                        this.curLockerItemList = _.cloneDeep(curLockerItemList)
+                        this.lockerItemCountInput.setValue(String(this.getMaximumLockerId(curLockerItemList) + 1))
+                    }
+                }
             })
         this.nxStore.pipe(select(LockerSelector.LockerGlobalMode), takeUntil(this.unSubscriber$)).subscribe((lgm) => {
             this.LockerGlobalMode = lgm
@@ -425,6 +453,28 @@ export class LockerComponent implements OnInit, AfterViewInit, OnDestroy {
                 curLockerItems: _.cloneDeep(this.curLockerItemList),
             })
         )
+
+        // let newItem: LockerItem = undefined
+        // let newItemIdx: number = undefined
+
+        // _.find(this.curLockerItemList, (item, idx) => {
+        //     if (item.id == String(item['id'])) {
+        //         newItem = {
+        //             ...item[idx],
+        //             ...{
+        //                 name: item['name'],
+        //                 x: item.x,
+        //                 y: item.y,
+        //                 rows: item.rows,
+        //                 cols: item.cols,
+        //             },
+        //         }
+        //         newItemIdx = idx
+        //         return true
+        //     }
+        //     return false
+        // })
+        // this.curLockerItemList[newItemIdx] = newItem
     }
 
     //  gridster methods --> //

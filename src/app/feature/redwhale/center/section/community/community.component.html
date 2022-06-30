@@ -153,6 +153,7 @@
                     <form class="input-box">
 
                         <textarea
+                            #chat_textarea
                             rw-textarea-autoResize
                             [textareaResizeOption]="textareaResizeOption"
                             (onResize)="onChatInputResize($event)"
@@ -168,7 +169,8 @@
                             type="file"
                             accept="image/*, video/*, .hwp, .pdf, .doc, .docx"
                             #file_picker hidden
-                            multiple (change)="onFilePickerChange(file_picker)"
+                            multiple
+                            (change)="onFilePickerChange(file_picker)"
                         >
 
                         <div *ngIf="fileList.length > 0" class="file-thumbnail-list thin-scroll-x-overlay2">

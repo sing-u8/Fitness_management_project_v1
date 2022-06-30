@@ -289,7 +289,10 @@ section.member-detail__body {
                 line-height: 20px;
                 letter-spacing: -0.196px;
                 color: var(--font-color);
-                &::placeholder {
+
+                &::placeholder,
+                &::-webkit-input-placeholder,
+                &:-ms-input-placeholder {
                     font-weight: 400;
                     font-size: 1.4rem;
                     line-height: 20px;

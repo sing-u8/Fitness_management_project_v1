@@ -46,11 +46,12 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
-            height: calc(100% - 50px);
+
             width: 100%;
+            margin-top: 45px;
 
             .sub-text {
-                margin-top: 20px;
+                margin-top: 16px;
                 padding: 0 25px;
                 white-space: pre-line;
                 text-align: center;
@@ -59,7 +60,7 @@
 
         .button-group {
             height: 50px;
-            // margin-top: 40px;
+            margin-top: 35px;
             padding: 10px 0;
             border-top: 1px solid var(--border-color);
 

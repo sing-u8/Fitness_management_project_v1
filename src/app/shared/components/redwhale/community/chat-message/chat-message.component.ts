@@ -108,7 +108,6 @@ export class ChatMessageComponent implements OnInit, AfterContentInit, AfterView
     // ---------------------------------------- file style ---------------------------------------  //
     async initMessageFileStyle() {
         if ('gauge' in this.message) {
-            console.log(' gauge in message !! ', this.type, ' - ')
             switch (this.type) {
                 case 'image':
                     this.setGridStyle(this.image_item_container_EL, 1)
@@ -125,7 +124,6 @@ export class ChatMessageComponent implements OnInit, AfterContentInit, AfterView
                     if (this.isLoading) return
                     this.fileLoaded = true
                     this.SpinnerService.hide(this.spName)
-                    console.log('this.videoImgURL : ', this.videoImgURL)
                     break
             }
         } else {
@@ -138,7 +136,6 @@ export class ChatMessageComponent implements OnInit, AfterContentInit, AfterView
                     // this.videoImgURL = [this.message.url] // file.map((file) => file.thumbnail)
                     if (this.isLoading) return
                     this.fileLoaded = true
-                    console.log('this.videoImgURL : ', this.videoImgURL)
                     break
             }
         }
