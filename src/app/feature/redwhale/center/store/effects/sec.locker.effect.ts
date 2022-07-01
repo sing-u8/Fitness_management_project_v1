@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core'
 import { createEffect, Actions, ofType, concatLatestFrom } from '@ngrx/effects'
 import { Store } from '@ngrx/store'
 import { of } from 'rxjs'
-import { catchError, switchMap, map } from 'rxjs/operators'
+import { catchError, switchMap, map, exhaustMap, tap, mergeMap } from 'rxjs/operators'
 
 import { showToast } from '@appStore/actions/toast.action'
 
@@ -104,24 +104,23 @@ export class LockerEffect {
         )
     )
 
-    // !! replaced with locker component method
-    // public createLockerItem = createEffect(
-    //     () =>
-    //         this.actions$.pipe(
-    //             ofType(LockerActions.startCreateLockerItem),
-    //             exhaustMap(({ centerId, categoryId, reqBody, cbFn }) => {
-    //                 console.log('startCreateLockerItem in EFFECT!!!!')
-    //                 return this.centerLokcerApi.createItem(centerId, categoryId, reqBody).pipe(
-    //                     tap((lockerItem) => {
-    //                         console.log('startCreateLockerItem AND After createItem API in EFFECT!!!!')
-    //                         cbFn(lockerItem)
-    //                     }),
-    //                     catchError((err: string) => of(LockerActions.error({ error: err })))
-    //                 )
-    //             })
-    //         ),
-    //     { dispatch: false }
-    // )
+    // !! replaced with locker component method --> modifying
+    public createLockerItem = createEffect(
+        () =>
+            this.actions$.pipe(
+                ofType(LockerActions.startCreateLockerItem),
+                mergeMap(({ centerId, categoryId, reqBody, cbFn }) => {
+                    console.log('startCreateLockerItem in EFFECT!!!!')
+                    return this.centerLokcerApi.createItem(centerId, categoryId, reqBody).pipe(
+                        switchMap((lockerItem) => {
+                            return [LockerActions.finishCreateLockerItem({ lockerItem })]
+                        }),
+                        catchError((err: string) => of(LockerActions.error({ error: err })))
+                    )
+                })
+            )
+        // { dispatch: false }
+    )
 
     public updateLockerItem = createEffect(
         () =>

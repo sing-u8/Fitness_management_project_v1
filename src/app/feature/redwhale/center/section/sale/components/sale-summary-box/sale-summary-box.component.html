@@ -4,7 +4,7 @@
     <span class="mdi mdi-chevron-down"></span>
   </div>
   <div class="content">
-    <p class=" summary-value rw-typo-headline1">￦ {{curTotal | numberWithCommas}}</p>
+    <p class=" summary-value rw-typo-headline1">{{curTotal | numberWithCommas}}원</p>
     <div class="summary-difference-value">
       <img class="mdi" *ngIf="curTotal >= prevTotal" src="assets/icons/etc/sale-up-arrow-lightgrey.svg">
       <img class="mdi" *ngIf="curTotal < prevTotal" src="assets/icons/etc/sale-down-arrow-lightgrey.svg">

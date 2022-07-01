@@ -290,7 +290,7 @@ export class LockerDetailBoxComponent implements OnInit, OnChanges, OnDestroy {
                 centerId: this.center.id,
                 categoryId: this.curLockerCateg.id,
                 selectedItem: this.lockerItem,
-                curItemList: this.curLockerItems,
+                curItemList: _.cloneDeep(this.curLockerItems),
             })
         )
         this.nxStore.dispatch(showToast({ text: `[락커 ${this.lockerItem.name}]사용 불가 설정되었습니다.` }))
@@ -302,7 +302,7 @@ export class LockerDetailBoxComponent implements OnInit, OnChanges, OnDestroy {
                 centerId: this.center.id,
                 categoryId: this.curLockerCateg.id,
                 selectedItem: this.lockerItem,
-                curItemList: this.curLockerItems,
+                curItemList: _.cloneDeep(this.curLockerItems),
             })
         )
         this.nxStore.dispatch(showToast({ text: `[락커 ${this.lockerItem.name}]사용 불가 설정이 해제되었습니다.` }))

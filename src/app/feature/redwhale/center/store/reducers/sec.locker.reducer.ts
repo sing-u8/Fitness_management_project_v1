@@ -87,6 +87,20 @@ export const lockerReducer = createImmerReducer(
         state.curLockerItemList = lockerItems
         return state
     }),
+    // !! modifying
+    on(LockerActions.startCreateLockerItem, (state, { centerId, categoryId, reqBody }) => {
+        state.curLockerItemList.push({
+            ...reqBody,
+        } as LockerItem)
+        return state
+    }),
+    on(LockerActions.finishCreateLockerItem, (state, { lockerItem }) => {
+        const newItemIdx = _.findIndex(state.curLockerItemList, (item) => {
+            return lockerItem.x == item.x && lockerItem.y == item.y
+        })
+        state.curLockerItemList[newItemIdx] = lockerItem
+        return state
+    }),
 
     on(LockerActions.startUpdateLockerItem, (state, { itemId, reqBody, curLockerItems }) => {
         let newItem: LockerItem = undefined
@@ -106,7 +120,7 @@ export const lockerReducer = createImmerReducer(
     }),
 
     on(LockerActions.startDeleteLockerItem, (state, { item, curItemList }) => {
-        state.curLockerItemList = _.filter(curItemList, (lockerItem) => lockerItem.id != item.id)
+        state.curLockerItemList = _.filter(state.curLockerItemList, (lockerItem) => lockerItem.id != item.id) // _.cloneDeep(curItemList) // _.filter(curItemList, (lockerItem) => lockerItem.id != item.id)
         if (state.curLockerItem?.id == item.id) {
             state.curLockerItem = initialLockerState.curLockerItem
         }
