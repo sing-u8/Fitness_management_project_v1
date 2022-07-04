@@ -115,7 +115,7 @@
             <div *ngIf="selectedMembership?.membershipData " class="d-flex ">
               <div class="selected-membership-top__delete-membership-button" (click)="setItemDelOpen()">
                 <img src="assets/icons/etc/trash_grey.svg">
-                <span class="rw-typo-subtext2">회원권 삭제</span>
+                <span class="rw-typo-subtext2-1">회원권 삭제</span>
               </div>
             </div>
 
@@ -137,7 +137,7 @@
                 [style.cursor]="selectedMembership?.membershipData
                               && !selMembershipInputObj[btItem.value.property].isOn ? 'pointer' : 'auto'"
               >
-                <p class="rw-typo-subtext2">{{btItem.value.title}}</p>
+                <p class="rw-typo-subtext2-1">{{btItem.value.title}}</p>
                 <div
                   class="rw-typo-bodytext0 item-text"
                   *ngIf="!selMembershipInputObj[btItem.value.property].isOn"
@@ -198,7 +198,7 @@
           <div class="selected-membership-bottom"
             [style.display] = "selectedMembership?.membershipData == undefined ? 'none' : 'block' "
           >
-            <p class="rw-typo-subtext2">메모</p>
+            <p class="rw-typo-subtext2-1">메모</p>
             <textarea
               #membership_memo
               placeholder="메모를 입력해주세요."
@@ -216,7 +216,7 @@
       <!-- reservable membership -->
       <ng-container #selected_memLessonList_pending *ngIf = "(membershipIsloading$ | async) != 'done' ;else selected_memLessonList_done">
         <div class="selected-membership-lessonlist">
-          <p class="rw-typo-subtext2 selected-membership-lessonlist--margin">
+          <p class="rw-typo-subtext2-1 selected-membership-lessonlist--margin">
             예약 가능한 수업
           </p>
           <ngx-skeleton-loader
@@ -229,7 +229,7 @@
       <ng-template #selected_memLessonList_done>
         <div class="selected-membership-lessonlist">
 
-          <p class="rw-typo-subtext2 selected-membership-lessonlist--margin">
+          <p class="rw-typo-subtext2-1 selected-membership-lessonlist--margin">
             예약 가능한 수업
           </p>
 
@@ -276,7 +276,7 @@
               </div>
               <img class="pointer" src="assets/icons/etc/cursor_pointer.svg">
             </div>
-            <div class="guide-text rw-typo-subtext2">
+            <div class="guide-text rw-typo-subtext2-1">
               <p>카테고리에서 회원권을 선택하신 후,</p>
               <p>예약 가능한 수업을 추가해보세요!</p>
             </div>
@@ -287,7 +287,7 @@
             [class.h-show-up]="isReservLessonListModalOn"
           >
             <div class="modal-header">
-              <p class="rw-typo-subtext2">수업 목록</p>
+              <p class="rw-typo-subtext2-1">수업 목록</p>
               <img src="assets/icons/etc/close_grey.svg" (click)="setReserveLessonModalOff()">
             </div>
 
@@ -308,8 +308,8 @@
 
 
               <div class="lesson-guide-div">
-                <p class="rw-typo-subtext2">추가해야 할 수업이 목록에 없으신가요?</p>
-                <p class="rw-typo-subtext2">수업 페이지에서 수업을 바로 만들어보세요!</p>
+                <p class="rw-typo-subtext2-1">추가해야 할 수업이 목록에 없으신가요?</p>
+                <p class="rw-typo-subtext2-1">수업 페이지에서 수업을 바로 만들어보세요!</p>
                 <div class="go-lesson-button" (click)="goToLessonSection()">
                   <p>수업 만들러 가기</p>
                   <img src="assets/icons/etc/short_right_arrow_grey.svg">
@@ -320,8 +320,8 @@
 
             <div *ngIf=!isReserveLessonExist class="none-lesson">
               <img src="assets/icons/etc/empty_screen.svg">
-              <p class="rw-typo-subtext2">더 이상 추가할 수 있는 수업이 없어요.</p>
-              <p class="rw-typo-subtext2">수업 페이지에서 수업을 바로 만들어보세요!</p>
+              <p class="rw-typo-subtext2-1">더 이상 추가할 수 있는 수업이 없어요.</p>
+              <p class="rw-typo-subtext2-1">수업 페이지에서 수업을 바로 만들어보세요!</p>
               <div class="go-lesson-button" (click)="goToLessonSection()">
                 <p>수업 만들러 가기</p>
                 <img src="assets/icons/etc/short_right_arrow_grey.svg">

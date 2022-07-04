@@ -48,7 +48,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin-top: 40px;
+            margin-top: 35px;
 
             .title {
                 display: flex;
@@ -93,7 +93,7 @@
                 .datepicker__button {
                     display: flex;
                     justify-content: flex-start;
-                    padding: 15px 16px;
+                    padding: 15px 16px !important;
                     width: 170px;
                     height: 50px;
                     position: relative;

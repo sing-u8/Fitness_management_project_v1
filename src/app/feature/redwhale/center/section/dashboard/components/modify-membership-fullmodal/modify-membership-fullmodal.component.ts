@@ -202,7 +202,7 @@ export class ModifyMembershipFullmodalComponent implements OnInit, OnChanges, Af
         this.centerUsersMembershipService
             .updateMembershipTicket(this.center.id, this.centerUser.id, this.userMembership.id, reqBody)
             .subscribe((userMembership) => {
-                this.nxStore.dispatch(showToast({ text: `'${this.userMembership.name}'정보가 수정되었습니다.` }))
+                this.nxStore.dispatch(showToast({ text: `'${this.userMembership.name}' 정보가 수정되었습니다.` }))
                 this.nxStore.dispatch(
                     DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.centerUser })
                 )

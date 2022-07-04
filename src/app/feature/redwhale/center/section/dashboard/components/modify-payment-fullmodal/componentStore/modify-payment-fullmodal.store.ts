@@ -245,7 +245,7 @@ export class ModifyPaymentFullModalStore extends ComponentStore<State> {
                                 )
                                 this.nxStore.dispatch(
                                     showToast({
-                                        text: `'${param.payment.user_membership_name}'결제 정보가 수정되었습니다.`,
+                                        text: `'${param.payment.user_membership_name}' 결제 정보가 수정되었습니다.`,
                                     })
                                 )
                             })
@@ -298,7 +298,7 @@ export class ModifyPaymentFullModalStore extends ComponentStore<State> {
                                 )
                                 this.nxStore.dispatch(
                                     showToast({
-                                        text: `'${param.payment.user_locker_name}'결제 정보가 수정되었습니다.`,
+                                        text: `'${param.payment.user_locker_name}' 결제 정보가 수정되었습니다.`,
                                     })
                                 )
                             })

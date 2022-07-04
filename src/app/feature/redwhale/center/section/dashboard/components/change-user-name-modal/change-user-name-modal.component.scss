@@ -27,9 +27,9 @@
     .rw-modal {
         display: flex;
         flex-direction: column;
-        justify-content: space-between;
+        // justify-content: space-between;
 
-        width: 460px;
+        width: 457px;
         height: 290px;
         border-radius: 6px;
         background-color: var(--white);
@@ -42,7 +42,8 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        margin-top: 40px;
+        margin-top: 36px;
+        margin-bottom: 3px;
         .text {
             display: flex;
             justify-content: center;
@@ -55,6 +56,9 @@
             justify-content: center;
             text-align: center;
         }
+        .sub-text__first {
+            margin-top: 3px;
+        }
     }
 
     .input {
@@ -64,6 +68,9 @@
         width: 100%;
         height: 50px;
         position: relative;
+
+        margin: 44px 0 46px 0;
+
         & > p {
             position: absolute;
             top: -20px;

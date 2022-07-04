@@ -138,7 +138,7 @@ export class ModifyLockerFullmodalComponent implements OnInit, OnChanges, AfterV
             .subscribe((userMembership) => {
                 this.nxStore.dispatch(
                     showToast({
-                        text: `'[${this.userLocker.category_name}] ${this.userLocker.name}'정보가 수정되었습니다.`,
+                        text: `'[${this.userLocker.category_name}] ${this.userLocker.name}' 정보가 수정되었습니다.`,
                     })
                 )
                 this.nxStore.dispatch(

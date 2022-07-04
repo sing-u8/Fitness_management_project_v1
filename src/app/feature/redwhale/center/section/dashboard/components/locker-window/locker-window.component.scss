@@ -18,8 +18,8 @@
         display: flex;
         width: 585px;
         height: 58px;
-        padding-left: 27px;
-        padding-top: 20px;
+        padding-left: 25px;
+        padding-top: 17px;
         align-items: flex-start;
         border-bottom: 1px solid var(--border-color);
     }
@@ -91,6 +91,7 @@
                 width: 255px;
                 height: 48px;
                 position: relative;
+                padding: 14px 16px !important;
 
                 &.open {
                     border: 1px solid #C9C9C9;
@@ -146,7 +147,7 @@
                 width: 255px;
                 height: 48px;
                 position: relative;
-                padding: 13px 38px 13px 15px;
+                padding: 11px 42px 13px 15px;
                 cursor: not-allowed;
                 background-color: var(--background-color);
                 color: var(--grey);
@@ -167,7 +168,7 @@
                     width: 100%;
                     height: 100%;
                     text-align: right;
-                    padding: 0px 38px 0px 15px;
+                    padding: 0px 42px 0px 15px;
                 }
                 .input-count {
                     position: absolute;
@@ -214,7 +215,7 @@
     margin-bottom: 5px;
     box-shadow: 0px 0px 10px #b5b5b51c;
     border-radius: 7px;
-    padding: 12px 0px 16px 12px;
+    padding: 12px 0px 16px 0px;
 
     .top {
         display: flex;
@@ -303,8 +304,8 @@
     margin-bottom: 5px;
 }
 .small-title2 {
-    color: var(--darkgrey);
-    margin-bottom: 3px;
+    color: var(--grey);
+    margin-bottom: 4px;
 }
 
 .item-font {

@@ -46,7 +46,7 @@ section.modify-membership-fullmodal-wrapper {
 
             .header-text-container {
                 width: $containerWidth;
-                margin-bottom: 30px;
+                margin-bottom: 27px;
 
                 .membership-title {
                     text-decoration: underline;
@@ -82,7 +82,7 @@ section.modify-membership-fullmodal-wrapper {
                     box-shadow: 0px 0px 10px #b5b5b51c;
                     border-radius: 7px;
                     background-color: var(--white);
-                    padding: 20px;
+                    padding: 17px 25px 20px;
 
                     .window-header {
                         display: flex;
@@ -129,6 +129,11 @@ section.modify-membership-fullmodal-wrapper {
                                 display: flex;
                                 flex-direction: column;
                                 justify-content: space-between;
+                                span {
+                                    &:first-of-type {
+                                        margin-bottom: 2px;
+                                    }
+                                }
                             }
                         }
                     }
@@ -164,6 +169,7 @@ section.modify-membership-fullmodal-wrapper {
                                 width: 255px;
                                 height: 48px;
                                 position: relative;
+                                padding: 14px 16px !important;
                             }
 
                             db-datepicker {

@@ -440,7 +440,7 @@ export class LockerComponent implements OnInit, AfterViewInit, OnDestroy {
 
     addGridItem() {
         const newItem = {
-            name: String(this.curLockerItemList.length + 1),
+            name: String(Number(this.lockerItemCountInput.value)),
             rows: 1,
             cols: 1,
         } as LockerItem

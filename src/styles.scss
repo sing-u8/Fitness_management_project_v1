@@ -220,6 +220,14 @@
     letter-spacing: -0.144px;
     color: var(--grey);
 }
+.rw-typo-subtext2-1 {
+    font-size: 1.2rem;
+    font-weight: 400;
+    // line-height: 17px;
+    line-height: 17px;
+    letter-spacing: -0.144px;
+    color: var(--grey);
+}
 
 .rw-typo-subtext3 {
     font-size: 1.1rem;
@@ -351,7 +359,7 @@
     }
 
     &:focus {
-        font-weight: 700;
+        font-weight: 500;
         border: 1px solid var(--grey);
     }
 
@@ -409,7 +417,7 @@
     }
 
     &:focus {
-        font-weight: 700;
+        font-weight: 500;
         border: 1px solid var(--grey);
     }
     &:focus::placeholder {
@@ -1299,7 +1307,7 @@ gridster-item {
     width: 100%;
 
     p {
-        font-weight: 400;
+        font-weight: 500;
         font-size: 1.2rem;
         line-height: 19px;
 

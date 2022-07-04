@@ -4,7 +4,7 @@
 
     .selected {
         height: 46px;
-        padding: 15px;
+        padding: 11px 22px 11px 16px;
         border: 1px solid var(--border-color);
         border-radius: 5px;
         background-color: transparent;
@@ -75,7 +75,8 @@
 
         .item {
             height: 45px;
-            padding: 15px;
+            // padding: 15px;
+            padding: 11px 22px 11px 16px;
             cursor: pointer;
 
             display: flex;
