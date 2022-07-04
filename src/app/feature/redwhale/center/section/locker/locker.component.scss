@@ -138,7 +138,7 @@ $locker-min-width: 897px;
                 width: 100%;
                 height: 100%;
                 position: relative;
-                padding: 12px 20px;
+                padding: 12px 22px;
                 background-color: var(--white);
                 box-shadow: 0px 0px 10px #b5b5b51c;
                 border-radius: 5px;
@@ -146,7 +146,7 @@ $locker-min-width: 897px;
                 .l-locker__header {
                     position: relative;
                     width: 100%;
-                    height: 48px;
+                    height: 49px;
                     display: flex;
                     justify-content: space-between;
 
@@ -186,9 +186,9 @@ $locker-min-width: 897px;
                                     background-color: #cfcfcf;
                                 }
                                 img {
-                                    width: 24px !important;
-                                    height: 24px !important;
-                                    margin-left: 6px;
+                                    width: 20px !important;
+                                    height: 20px !important;
+                                    margin-left: 5.5px;
                                     &.word-x {
                                         margin-left: 0px;
                                     }
@@ -197,7 +197,7 @@ $locker-min-width: 897px;
                                 span {
                                     color: var(--darkgrey) !important;
                                     margin-left: 4px !important;
-                                    margin-right: 9px !important;
+                                    margin-right: 8.5px !important;
                                 }
                             }
 
@@ -232,8 +232,8 @@ $locker-min-width: 897px;
                                 text-align: right;
                             }
                             & .index-text {
-                                margin-left: 4px;
-                                margin-right: 14px;
+                                margin-left: 3px;
+                                margin-right: 12px;
                                 &.disabled {
                                     color: var(--grey);
                                 }
@@ -389,6 +389,7 @@ $locker-min-width: 897px;
                         height: 100%;
 
                         ::ng-deep gridster {
+                            padding: 11px 0 0 0 !important;
                             .grid-locker-item {
                                 box-shadow: none !important;
                             }
@@ -400,7 +401,7 @@ $locker-min-width: 897px;
             .move-locker-ticket-guide-image {
                 position: absolute;
                 bottom: 10px;
-                left: -194px;
+                left: -238px;
 
                 width: 194px;
                 height: 42px;

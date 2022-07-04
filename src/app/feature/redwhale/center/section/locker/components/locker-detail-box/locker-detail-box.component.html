@@ -94,7 +94,7 @@
                 <div class="date">
                     <span *ngIf="lockerDate.startDate">{{lockerDate.startDate | dashToDot}}</span>
                     <span *ngIf="!lockerDate.startDate">시작일</span>
-                    <span> &nbsp;&nbsp;-&nbsp;&nbsp; </span>
+                    <span> &nbsp;-&nbsp; </span>
                     <div
                         class="end-date"
                         [class.move-locket-ticket-mode]="lockerGlobalMode == 'moveLockerTicket'"
