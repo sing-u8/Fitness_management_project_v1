@@ -46,6 +46,8 @@ article.member-management {
         }
     }
 
+    $large:47px;
+    $x_large:56px;
     main.l-main {
         display: flex;
         width: 100%;
@@ -59,14 +61,14 @@ article.member-management {
             flex-direction: column;
             position: relative;
 
-            margin-right: 50px;
+            margin-right: $large;
             -ms-flex: 0 0 26.703%;
             flex: 0 0 26.703%;
             max-width: 26.703%;
             min-width: 290px;
 
             @media (min-width: 1440px) {
-                margin-right: 60px;
+                margin-right: $x_large;
                 -ms-flex: 0 0 26.942%;
                 flex: 0 0 26.942%;
                 max-width: 26.942%;
@@ -139,20 +141,20 @@ article.member-management {
 
         section.l-member-detail {
             position: relative;
-            -ms-flex: 0 0 calc(73.297% - 50px);
-            flex: 0 0 calc(73.297% - 50px);
-            max-width: calc(73.297% - 50px);
+            -ms-flex: 0 0 calc(73.297% - $large);
+            flex: 0 0 calc(73.297% - $large);
+            max-width: calc(73.297% - $large);
 
             @media (min-width: 1440px) {
-                -ms-flex: 0 0 calc(73.058% - 60px);
-                flex: 0 0 calc(73.058% - 60px);
-                max-width: calc(73.058% - 60px);
+                -ms-flex: 0 0 calc(73.058% - $x_large);
+                flex: 0 0 calc(73.058% - $x_large);
+                max-width: calc(73.058% - $x_large);
             }
 
             @media (min-width: 1920px) {
-                -ms-flex: 0 0 calc(76.154% - 60px);
-                flex: 0 0 calc(76.154% - 60px);
-                max-width: calc(76.154% - 60px);
+                -ms-flex: 0 0 calc(76.154% - $x_large);
+                flex: 0 0 calc(76.154% - $x_large);
+                max-width: calc(76.154% - $x_large);
             }
 
             @media (min-width: 2480px) {
