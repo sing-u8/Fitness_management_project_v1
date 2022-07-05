@@ -1,4 +1,9 @@
-<div class="rw-datepicker rw-datepicker-date d-flex flex-column user-select-none" *ngIf="mode == 'date'" [class.shadow]="shadowOn">
+<div
+    #rw_datepicker
+    class="rw-datepicker rw-datepicker-date d-flex flex-column user-select-none"
+    *ngIf="mode == 'date'"
+    [class.shadow]="shadowOn"
+>
     <div class="month col d-flex">
         <div class="start col-3 d-flex justify-content-start align-items-start">
             <span class="mdi mdi-chevron-double-left" (click)="previousYear()"></span>
@@ -10,7 +15,7 @@
             <span class="mdi mdi-chevron-double-right" (click)="nextYear()"></span>
         </div>
     </div>
-    <div class="week-header col d-flex justify-content-between align-items-center">
+    <!-- <div class="week-header col d-flex justify-content-between align-items-center">
         <div class="d-flex justify-content-center align-items-center">일</div>
         <div class="d-flex justify-content-center align-items-center">월</div>
         <div class="d-flex justify-content-center align-items-center">화</div>
@@ -18,7 +23,8 @@
         <div class="d-flex justify-content-center align-items-center">목</div>
         <div class="d-flex justify-content-center align-items-center">금</div>
         <div class="d-flex justify-content-center align-items-center">토</div>
-    </div>
+    </div> -->
+    <div *ngIf="isDivider" class="header-divider"></div>
     <div
         class="week-row col d-flex justify-content-between align-items-center"
         *ngFor="let weekRow of weekRows; let i = index"
@@ -35,7 +41,12 @@
     </div>
 </div>
 
-<div class="rw-datepicker rw-datepicker-week d-flex flex-column user-select-none" *ngIf="mode == 'week'" [class.shadow]="shadowOn">
+<div
+    #rw_datepicker
+    class="rw-datepicker rw-datepicker-week d-flex flex-column user-select-none"
+    *ngIf="mode == 'week'"
+    [class.shadow]="shadowOn"
+>
     <div class="month col d-flex">
         <div class="start col-3 d-flex justify-content-start align-items-start">
             <span class="mdi mdi-chevron-double-left" (click)="previousYear()"></span>
@@ -47,7 +58,7 @@
             <span class="mdi mdi-chevron-double-right" (click)="nextYear()"></span>
         </div>
     </div>
-    <div class="week-header col d-flex justify-content-between align-items-center">
+    <!-- <div class="week-header col d-flex justify-content-between align-items-center">
         <div class="d-flex justify-content-center align-items-center">일</div>
         <div class="d-flex justify-content-center align-items-center">월</div>
         <div class="d-flex justify-content-center align-items-center">화</div>
@@ -55,7 +66,9 @@
         <div class="d-flex justify-content-center align-items-center">목</div>
         <div class="d-flex justify-content-center align-items-center">금</div>
         <div class="d-flex justify-content-center align-items-center">토</div>
-    </div>
+    </div> -->
+
+    <div *ngIf="isDivider" class="header-divider"></div>
     <div
         class="week-row col d-flex justify-content-between align-items-center"
         *ngFor="let weekRow of weekRows; let i = index"
@@ -75,7 +88,12 @@
     </div>
 </div>
 
-<div class="rw-datepicker rw-datepicker-date d-flex flex-column user-select-none" *ngIf="mode == 'multi'" [class.shadow]="shadowOn">
+<div
+    #rw_datepicker
+    class="rw-datepicker rw-datepicker-date d-flex flex-column user-select-none"
+    *ngIf="mode == 'multi'"
+    [class.shadow]="shadowOn"
+>
     <div class="month col d-flex">
         <div class="start col-3 d-flex justify-content-start align-items-start">
             <span class="mdi mdi-chevron-double-left" (click)="previousYear()"></span>
@@ -87,7 +105,7 @@
             <span class="mdi mdi-chevron-double-right" (click)="nextYear()"></span>
         </div>
     </div>
-    <div class="week-header col d-flex justify-content-between align-items-center">
+    <!-- <div class="week-header col d-flex justify-content-between align-items-center">
         <div class="d-flex justify-content-center align-items-center">일</div>
         <div class="d-flex justify-content-center align-items-center">월</div>
         <div class="d-flex justify-content-center align-items-center">화</div>
@@ -95,7 +113,8 @@
         <div class="d-flex justify-content-center align-items-center">목</div>
         <div class="d-flex justify-content-center align-items-center">금</div>
         <div class="d-flex justify-content-center align-items-center">토</div>
-    </div>
+    </div> -->
+    <div *ngIf="isDivider" class="header-divider"></div>
     <div
         class="week-row col d-flex justify-content-between align-items-center"
         *ngFor="let weekRow of weekRows; let i = index"

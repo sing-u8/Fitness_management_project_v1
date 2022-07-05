@@ -133,7 +133,7 @@ export class TimePicker2Component implements OnInit, AfterViewInit, OnChanges {
             this.selectedTime = this.timeList[selectedTimeIdx]
         }
 
-        const timeHeight = selectedTimeIdx * 50 - 50
+        const timeHeight = selectedTimeIdx * 40 - 40
         this.renderer.setProperty(this.itemsElement.nativeElement, 'scrollTop', `${timeHeight}`)
     }
 

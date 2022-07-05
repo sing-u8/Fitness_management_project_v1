@@ -11,8 +11,8 @@
             rw-button rwButtonColor="var(--white)"
             (click)="openCenterOperatingModal()"
         >
-            <img src="assets/icons/header/settings.svg">
-            <span class="rw-typo-bodytext0-bold">운영시간 설정</span>
+            <img src="assets/icons/header/settings-darkgrey.svg">
+            <span class="rw-typo-bodytext0-darkgrey-bold">운영시간 설정</span>
         </div>
     </header>
 
@@ -33,12 +33,17 @@
                     [class.display-none]="selectedDateViewType !='resourceTimeGridDay'
                         && selectedDateViewType !='dayGridMonth'"
                     mode="date"
+                    [isDivider]="true"
                     [data]="datePickerData"
+                    [height]="'268px'"
                     (dataChange)="onDatePickerClick($event)"
                 ></rw-datepicker2>
                 <rw-datepicker2
                     [class.display-none]="selectedDateViewType !='timeGridWeek'"
-                    mode="week" [data]="weekPickerData"
+                    mode="week"
+                    [isDivider]="true"
+                    [data]="weekPickerData"
+                    [height]="'268px'"
                     (dataChange)="onWeekPickerClick($event)"
                 ></rw-datepicker2>
 
@@ -56,7 +61,7 @@
 
         <div class="schedule-body__right">
 
-            <header class="schedule-body__right-header schedule-body--title-margin">
+            <header class="schedule-body__right-header schedule-body--title-margin2">
 
                 <div class="header-left">
                     <p class="rw-typo-title1 ">캘린더</p>

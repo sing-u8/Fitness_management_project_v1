@@ -765,7 +765,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
                             position: absolute;
                             left: -1px;
                             top: -1px;
-                            height: 105%;
+                            height: calc(100% + 1px);
                             width: 4px;
                             background-color:${arg.event.extendedProps.originItem.color ?? 'var(--border-color)'};"
                         ></div>
@@ -805,7 +805,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
                             position: absolute;
                             left: -1px;
                             top: -1px;
-                            height: 105%;
+                            height: calc(100% + 1px);
                             width: 5px;
                             background-color:${arg.event.extendedProps.originItem.color ?? 'var(--border-color)'};"
                         ></div>

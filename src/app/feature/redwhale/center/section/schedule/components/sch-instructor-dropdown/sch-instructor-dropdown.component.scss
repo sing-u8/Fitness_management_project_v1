@@ -65,7 +65,7 @@
             display: flex;
             flex-direction: column;
             width: calc(100% - 34px);
-            padding: 12px 0px;
+            padding: 15px 0px;
 
             .select-button {
                 width: 215px;
@@ -74,18 +74,21 @@
                 justify-content: center;
                 align-items: center;
                 border-radius: 5px;
-                border: 1px solid var(--grey);
+                border: 1px solid var(--border-color);
+                margin-bottom: 12px;
 
                 & > img {
-                    width: 18px;
-                    height: 18px;
-                    margin-top: 3.5px;
-                    margin-right: 3px;
+                    width: 15px;
+                    height: 15px;
+                    margin-top: 2px;
+                    margin-right: 5px;
                 }
             }
 
             rw-checkbox {
-                margin-top: 12px;
+                &:not(:first-of-type) {
+                    margin-top: 12px;
+                }
             }
 
             .add-instructor-button {

@@ -9,7 +9,8 @@ import {
     AfterViewChecked,
     AfterViewInit,
     NgZone,
-    ViewChild,
+    ViewChildren,
+    QueryList,
     ElementRef,
     Renderer2,
 } from '@angular/core'
@@ -25,11 +26,15 @@ dayjs.extend(isBetween)
     styleUrls: ['./datepicker2.component.scss'],
 })
 export class Datepicker2Component implements OnInit, OnChanges, AfterViewChecked, AfterViewInit {
+    @Input() isDivider = false
     @Input() isShadow = true
     @Input() mode: 'date' | 'week' | 'multi' | 'modify-range'
 
     @Input() data: any
     @Input() shadowOn: boolean
+
+    @Input() height: string
+    @ViewChildren('rw_datepicker') rw_datepicker_els: QueryList<ElementRef>
 
     @Output() dataChange = new EventEmitter<any>()
 
@@ -89,7 +94,13 @@ export class Datepicker2Component implements OnInit, OnChanges, AfterViewChecked
             this.setDatePick()
         }
     }
-    ngAfterViewInit(): void {}
+    ngAfterViewInit(): void {
+        if (this.height) {
+            this.rw_datepicker_els.forEach((v) => {
+                this.renderer.setStyle(v.nativeElement, 'height', `${this.height}`)
+            })
+        }
+    }
     ngAfterViewChecked() {
         if (this.mode == 'date' && this.afterViewCheckedDate != this.data.date) {
             this.afterViewCheckedDate = this.data.date

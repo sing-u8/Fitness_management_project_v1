@@ -52,7 +52,12 @@
                 justify-content: center;
                 flex-direction: column;
                 width: 270px;
-                height: 42px;
+                height: 44px;
+                div {
+                    &:first-of-type() {
+                        margin-bottom: 2px;
+                    }
+                }
             }
 
             & > .day-of-week {
@@ -120,7 +125,7 @@
 
                 height: 100%;
                 width: 20%;
-                border-radius: 0 !important;
+                border-radius: 0 0 0 6px !important;
 
                 border-right: 1px solid var(--border-color);
                 color: var(--grey) !important;
@@ -139,7 +144,7 @@
 
                 height: 100%;
                 width: 80%;
-                border-radius: 0 !important;
+                border-radius: 0 0 6px 0 !important;
 
                 font-size: 1.4rem;
                 font-weight: 700;
