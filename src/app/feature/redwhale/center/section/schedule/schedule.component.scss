@@ -342,6 +342,7 @@ article.schedule {
 
 //---------------------------------------------- calendar styles -----------------------------------------------------------------------------------------
 :host ::ng-deep .fc {
+
     .fc-event-title {
         position: initial !important;
     }
@@ -360,6 +361,7 @@ article.schedule {
 
     .fc-scrollgrid {
         border: 1px solid transparent;
+        border-collapse: collapse;
     }
 
     .fc-day-today {
