@@ -1,8 +1,8 @@
 import { Directive, ElementRef, Renderer2, OnInit, OnDestroy, Input } from '@angular/core'
 import { FormControl, NgControl, Validators, AbstractControl, ValidatorFn, ValidationErrors } from '@angular/forms'
-import * as _ from 'lodash'
+import _ from 'lodash'
 import { Subscription } from 'rxjs'
-import { distinctUntilChanged, filter } from 'rxjs/operators'
+import { distinctUntilChanged, filter, map } from 'rxjs/operators'
 
 /**
  *  validator status - empty, required
@@ -40,7 +40,11 @@ export class CreateCenterDirective implements OnInit, OnDestroy {
         } else if (this.inputType == 'url') {
             this.inputChangeSubscription = this.inputControl.valueChanges
                 .pipe(
-                    filter((value) => value != _.replace(value, /[^a-zA-Z0-9-_]/gi, '')),
+                    // filter((value) => {
+                    //     console.log('url center value : ', value)
+                    //     this.inputControl.setValue(_.replace(value, /[^a-zA-Z0-9-_]/gi, ''))
+                    //     return value != _.replace(value, /[^a-zA-Z0-9-_]/gi, '')
+                    // }),
                     distinctUntilChanged()
                 )
                 .subscribe((value) => {
