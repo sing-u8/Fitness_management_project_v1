@@ -7,8 +7,8 @@ import { DeviceDetectorService } from 'ngx-device-detector'
     providedIn: 'root',
 })
 export class DeeplinkService {
-    private defaultURI = `https://links.redwhale.xyz/`
-    private defaultQuery = `&apn=xyz.redwhale.m&isi=1532693624&ibi=xyz.redwhale.m`
+    private defaultURI = `https://redwhale.xyz/`
+    private defaultQuery = `&apn=xyz.redwhale.m&isi=1532693624&ibi=xyz.redwhale.m` // ! not used now
 
     constructor(
         private deviceService: DeviceDetectorService,
@@ -37,10 +37,15 @@ export class DeeplinkService {
         // window.location.replace(replacedUrl)
     }
 
-    returnDeeplink(query?: string): string {
+    // returnDeeplink(centerId: string): string {
+    //     let replacedUrl = this.defaultURI
+    //     replacedUrl += `?link=${window.location.href}${this.defaultQuery}`
+    //     if (query) replacedUrl += `&${encodeURIComponent(query)}`
+    //     return replacedUrl
+    // }
+    returnDeeplink(centerUrl: string): string {
         let replacedUrl = this.defaultURI
-        replacedUrl += `?link=${window.location.href}${this.defaultQuery}`
-        if (query) replacedUrl += `&${encodeURIComponent(query)}`
+        replacedUrl += `${centerUrl}`
         return replacedUrl
     }
 

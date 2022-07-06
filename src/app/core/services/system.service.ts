@@ -4,6 +4,7 @@ import { Observable } from 'rxjs'
 import { catchError, map } from 'rxjs/operators'
 import { ReCaptchaV3Service } from 'ng-recaptcha'
 import handleError from './handleError'
+import _ from 'lodash'
 
 import { environment } from '@environments/environment'
 
@@ -13,29 +14,12 @@ import { Response } from '@schemas/response'
     providedIn: 'root',
 })
 export class SystemService {
-    private SERVER = `${environment.protocol}${environment.subDomain}${environment.domain}${environment.port}${environment.version}/system`
+    private SERVER = `${environment.protocol}${environment.subDomain}${environment.domain}${environment.port}${environment.version}`
 
     constructor(private http: HttpClient, private recaptchaV3Service: ReCaptchaV3Service) {}
 
-    getVersionList(): Observable<Array<any>> {
-        const url = this.SERVER + `/versions`
-
-        const options = {
-            headers: new HttpHeaders({
-                'Content-Type': 'application/json',
-            }),
-        }
-
-        return this.http.get<Response>(url, options).pipe(
-            map((res) => {
-                return res.dataset
-            }),
-            catchError(handleError)
-        )
-    }
-
-    getOpengraphList(text: string): Observable<Array<any>> {
-        const url = this.SERVER + `/opengraph`
+    getOpengraphList(text: string): Observable<Array<string> | false> {
+        const url = this.SERVER + `/service/opengraph`
 
         const options = {
             headers: new HttpHeaders({
@@ -47,6 +31,12 @@ export class SystemService {
 
         const urls = text.match(regex)
 
+        if (!_.isArray(urls)) {
+            return new Observable((sub) => {
+                sub.next(false)
+            })
+        }
+
         return this.http.post<Response>(url, { urls: urls }, options).pipe(
             map((res) => {
                 return res.dataset
@@ -55,65 +45,77 @@ export class SystemService {
         )
     }
 
-    recaptcha(requestBody: RecaptchaRequestBody): Observable<RecaptchaResponse> {
-        const url = this.SERVER + `/recaptcha`
+    // getVersionList(): Observable<Array<any>> {
+    //     const url = this.SERVER + `/versions`
 
-        const options = {
-            headers: new HttpHeaders({
-                'Content-Type': 'application/json',
-            }),
-        }
+    //     const options = {
+    //         headers: new HttpHeaders({
+    //             'Content-Type': 'application/json',
+    //         }),
+    //     }
 
-        return this.http.post<Response>(url, requestBody, options).pipe(
-            map((res) => {
-                return res.dataset[0]
-            }),
-            catchError(handleError)
-        )
-    }
+    //     return this.http.get<Response>(url, options).pipe(
+    //         map((res) => {
+    //             return res.dataset
+    //         }),
+    //         catchError(handleError)
+    //     )
+    // }
 
-    async isBot(action: string): Promise<boolean> {
-        const recaptchaToken = await this.recaptchaV3Service.execute(action).toPromise()
-        const result = await this.recaptcha({ recaptcha_token: recaptchaToken }).toPromise()
+    // recaptcha(requestBody: RecaptchaRequestBody): Observable<RecaptchaResponse> {
+    //     const url = this.SERVER + `/recaptcha`
 
-        if (result.success) {
-            const score = result['score']
-            if (score < 0.5) {
-                return true
-            } else {
-                return false
-            }
-        } else {
-            return true
-        }
-    }
+    //     const options = {
+    //         headers: new HttpHeaders({
+    //             'Content-Type': 'application/json',
+    //         }),
+    //     }
 
-    getCodeList(codeTypeList: Array<string>): Observable<Array<any>> {
-        const url = this.SERVER + `/codes?type=${codeTypeList.toString()}`
+    //     return this.http.post<Response>(url, requestBody, options).pipe(
+    //         map((res) => {
+    //             return res.dataset[0]
+    //         }),
+    //         catchError(handleError)
+    //     )
+    // }
 
-        const options = {
-            headers: new HttpHeaders({
-                'Content-Type': 'application/json',
-            }),
-        }
+    // async isBot(action: string): Promise<boolean> {
+    //     const recaptchaToken = await this.recaptchaV3Service.execute(action).toPromise()
+    //     const result = await this.recaptcha({ recaptcha_token: recaptchaToken }).toPromise()
 
-        return this.http.get<Response>(url, options).pipe(
-            map((res) => {
-                return res.dataset
-            }),
-            catchError(handleError)
-        )
-    }
+    //     if (result.success) {
+    //         const score = result['score']
+    //         if (score < 0.5) {
+    //             return true
+    //         } else {
+    //             return false
+    //         }
+    //     } else {
+    //         return true
+    //     }
+    // }
+
+    // getCodeList(codeTypeList: Array<string>): Observable<Array<any>> {
+    //     const url = this.SERVER + `/codes?type=${codeTypeList.toString()}`
+
+    //     const options = {
+    //         headers: new HttpHeaders({
+    //             'Content-Type': 'application/json',
+    //         }),
+    //     }
+
+    //     return this.http.get<Response>(url, options).pipe(
+    //         map((res) => {
+    //             return res.dataset
+    //         }),
+    //         catchError(handleError)
+    //     )
+    // }
 }
 
-type RecaptchaRequestBody = {
-    recaptcha_token: string
-}
-
-type RecaptchaResponse = {
-    success: boolean
-    challenge_ts: string
-    hostname: string
-    score: number
-    action: string
+export interface OpengraphOutput {
+    title: string
+    url: string
+    image: string
+    description: string
 }

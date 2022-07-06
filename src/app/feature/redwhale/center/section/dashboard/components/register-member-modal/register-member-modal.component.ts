@@ -101,11 +101,11 @@ export class RegisterMemberModalComponent implements AfterViewChecked, OnChanges
     @ViewChild('qrcode_canvas') qrcode_canvas: ElementRef
     @ViewChild('qrcode_canvas_download') qrcode_canvas_download: ElementRef
     createGymQRcode() {
-        const qrUri = this.deeplinkService.returnDeeplink(`gymId=${this.center.id}`)
+        const qrUri = this.deeplinkService.returnDeeplink(this.center.address)
         QRCode.toCanvas(this.qrcode_canvas.nativeElement, qrUri, { width: 225 }, (err) => {})
     }
     downloadGymQRcode(event) {
-        const qrUri = this.deeplinkService.returnDeeplink(`gymId=${this.center.id}`)
+        const qrUri = this.deeplinkService.returnDeeplink(this.center.address)
         QRCode.toDataURL(this.qrcode_canvas_download.nativeElement, qrUri, { width: 400 }, (err, uri) => {
             if (err) throw err
             event.target.href = uri
