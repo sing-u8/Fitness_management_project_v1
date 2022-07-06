@@ -38,7 +38,7 @@ export class WsChatService implements OnDestroy {
         this.closeChatWs()
     }
 
-    connect(url: string): WebSocketSubject<any> {
+    connect(url: string) {
         console.log(`WsChatService connect chatWs : `, this.chatWs)
         this.user = this.storageService.getUser()
         if (!this.chatWs) {
@@ -49,7 +49,7 @@ export class WsChatService implements OnDestroy {
             console.log('WsChatService connect subscribe chat ws ')
             this.subscribeChatWs(this.user.access_token)
         }
-        return this.chatWs
+        // return this.chatWs
     }
 
     subscribeChatWs(accessToken: string) {
@@ -66,6 +66,7 @@ export class WsChatService implements OnDestroy {
             },
             complete: () => {
                 console.log('web socket chat complete!')
+                this.connect(this.user.access_token)
             },
         })
         this.chatWs.next({

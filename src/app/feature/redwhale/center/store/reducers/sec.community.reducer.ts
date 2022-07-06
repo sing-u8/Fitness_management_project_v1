@@ -97,6 +97,7 @@ export const communityReducer = createImmerReducer(
     }),
     on(CommunitydActions.startJoinChatRoom, (state, { chatRoom, spot }) => {
         console.log(' startJoinChatRoom ------ ', chatRoom)
+        state.isLoading = 'pending'
         const chatRoomIdx = state.chatRoomList.findIndex((v) => v.id == chatRoom.id)
         const _chatRoom = _.cloneDeep(chatRoom)
         _chatRoom.unread_message_count = 0
@@ -114,6 +115,7 @@ export const communityReducer = createImmerReducer(
     }),
     on(CommunitydActions.finishJoinChatRoom, (state, { chatRoom, chatRoomMesgs, chatRoomUsers, spot }) => {
         // !! 추후에 추가 수정 필요
+        state.isLoading = 'done'
 
         if (spot == 'main') {
             state.mainPreChatRoom = undefined
@@ -147,6 +149,7 @@ export const communityReducer = createImmerReducer(
         return state
     }),
     on(CommunitydActions.startLeaveChatRoom, (state, { spot }) => {
+        state.isLoading = 'pending'
         if (spot == 'main') {
             state.mainPreChatRoom = state.mainCurChatRoom
             state.mainCurChatRoom = undefined

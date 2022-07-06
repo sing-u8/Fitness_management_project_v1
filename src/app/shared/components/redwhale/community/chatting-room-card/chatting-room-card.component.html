@@ -1,6 +1,8 @@
 <section
   class="chatting-room-card"
+  [class.loading] = "isLoading == 'pending'"
   [class.selected] = "selectedRoom?.id == room?.id"
+  (click)="onClick()"
 >
 
   <div class="left">

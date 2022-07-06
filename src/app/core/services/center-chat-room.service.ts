@@ -106,8 +106,8 @@ export class CenterChatRoomService {
     }
 
     // 채팅방 회원 조회
-    getChatRoomMember(centerId: string, chatRoomId: string): Observable<Array<ChatRoomUser>> {
-        const url = this.SERVER + `/${centerId}/chat_room/${chatRoomId}/users`
+    getChatRoomMember(centerId: string, chatRoomId: string, includeMe = false): Observable<Array<ChatRoomUser>> {
+        const url = this.SERVER + `/${centerId}/chat_room/${chatRoomId}/users?me=${includeMe}`
         const options = {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json',

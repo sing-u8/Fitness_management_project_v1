@@ -10,11 +10,12 @@ import {
 } from '@angular/core'
 import { NgxSpinnerService } from 'ngx-spinner'
 
-// const ogs = require('open-graph-scraper')
+import _ from 'lodash'
 
 import { saveAs } from 'file-saver'
-
+import { SystemService, OpengraphOutput } from '@services/system.service'
 import { FileService } from '@services/file.service'
+
 import { VideoProcessingService } from '@services/helper/video-processing-service.service'
 
 import { CenterUser } from '@schemas/center-user'
@@ -37,6 +38,7 @@ export class ChatMessageComponent implements OnInit, AfterContentInit, AfterView
     public showDownloadButton = false
 
     public isLinkMessage = false
+    public linkMessage: OpengraphOutput = undefined
 
     public spName = 'sp'
     public gaugeSize = 50
@@ -51,7 +53,8 @@ export class ChatMessageComponent implements OnInit, AfterContentInit, AfterView
         private renderer: Renderer2,
         private fileService: FileService,
         private SpinnerService: NgxSpinnerService,
-        private videoProcessingService: VideoProcessingService
+        private videoProcessingService: VideoProcessingService,
+        private systemService: SystemService
     ) {}
 
     ngOnInit(): void {
@@ -92,10 +95,6 @@ export class ChatMessageComponent implements OnInit, AfterContentInit, AfterView
         this.initMessageFileStyle()
     }
 
-    onOpenGraphClick() {
-        const url = this.message.url
-        window.open(url)
-    }
     onFileClick(url: string) {
         window.open(url)
     }
@@ -154,15 +153,23 @@ export class ChatMessageComponent implements OnInit, AfterContentInit, AfterView
     // ----------------------------------- open grahp funcs and vars --------------------------------------
     public isOgs = false
     checkMsgIsOpenGraph() {
-        const options = {
-            url: this.message.text,
-        }
-        // ogs(options)
-        //     .then((data) => {
-        //         console.log('ogs data : ', data)
-        //     })
-        //     .catch((err) => {
-        //         console.log('ogs err: ', err)
-        //     })
+        this.systemService.getOpengraphList(this.message.text).subscribe((msg) => {
+            if (msg != false) {
+                this.isLinkMessage = true
+                this.linkMessage = _.isEmpty(msg[0])
+                    ? {
+                          title: this.systemService.getOpenGraphUrl(this.message.text),
+                          description: '여기를 눌러 링크를 확인하세요',
+                          url: this.systemService.getOpenGraphUrl(this.message.text),
+                          image: undefined,
+                      }
+                    : msg[0]
+                console.log('check msg --', msg, ' ; ', this.linkMessage)
+            }
+        })
+    }
+    onOpenGraphClick() {
+        const url = this.linkMessage.url
+        window.open(url)
     }
 }

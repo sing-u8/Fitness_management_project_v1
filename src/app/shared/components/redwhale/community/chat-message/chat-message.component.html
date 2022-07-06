@@ -212,15 +212,15 @@
     <span *ngIf="isLinkMessage == false">{{message.text}}</span>
     <a *ngIf="isLinkMessage == true" id="opengraph_url" (click)="onOpenGraphClick()">{{message.text}}</a>
   </p>
-  <!-- <div
-    *ngIf="message.link.opengraphList.length > 0"
+  <div
+    *ngIf="linkMessage != undefined"
     class="opengraph"
     (click)="onOpenGraphClick()"
   >
-    <img class="picture" src="{{message.link.opengraphList[0].image}}" alt={{message.link.opengraphList[0].title}}>
-    <div class="content">
-      <div class="rw-typo-bodytext0 title">{{message.link.opengraphList[0].title}}</div>
-      <div class="rw-typo-subtext0-regular desc grey">{{message.link.opengraphList[0].description}}</div>
+    <img *ngIf="linkMessage?.image" class="picture" src="{{linkMessage?.image}}" alt={{linkMessage?.title}}>
+    <div class="content" [class.content__none_image]="!linkMessage?.image">
+      <div class="rw-typo-bodytext0 title">{{linkMessage?.title}}</div>
+      <div class="rw-typo-subtext0-regular desc grey">{{linkMessage?.description}}</div>
     </div>
-  </div> -->
+  </div>
 </ng-template>

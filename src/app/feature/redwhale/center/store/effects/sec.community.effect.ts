@@ -96,7 +96,7 @@ export class CommunityEffect {
                 } else {
                     return forkJoin({
                         chatRoomMesgs: this.centerChatRoomApi.getChatRoomMessage(centerId, chatRoom.id),
-                        chatRoomUsers: this.centerChatRoomApi.getChatRoomMember(centerId, chatRoom.id),
+                        chatRoomUsers: this.centerChatRoomApi.getChatRoomMember(centerId, chatRoom.id, true),
                     }).pipe(
                         switchMap(({ chatRoomMesgs, chatRoomUsers }) => {
                             return [

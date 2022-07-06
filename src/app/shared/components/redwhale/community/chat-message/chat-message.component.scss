@@ -345,13 +345,16 @@ section.message {
         object-fit: contain;
     }
     .content {
+        &__none_image {
+            width: 100%;
+        }
         width: calc(100% - 66px);
         height: 66px;
         display: flex;
         flex-direction: column;
         justify-content: center;
 
-        padding: 15px;
+        padding: 13px 12px 14px;
         position: relative;
         .title,
         .desc {

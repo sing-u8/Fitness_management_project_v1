@@ -18,7 +18,7 @@ export class SystemService {
 
     constructor(private http: HttpClient, private recaptchaV3Service: ReCaptchaV3Service) {}
 
-    getOpengraphList(text: string): Observable<Array<string> | false> {
+    getOpengraphList(text: string): Observable<Array<OpengraphOutput> | false> {
         const url = this.SERVER + `/service/opengraph`
 
         const options = {
@@ -43,6 +43,12 @@ export class SystemService {
             }),
             catchError(handleError)
         )
+    }
+
+    // helper
+    getOpenGraphUrl(text: string) {
+        const regex = /(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/gi
+        return text.match(regex)[0]
     }
 
     // getVersionList(): Observable<Array<any>> {

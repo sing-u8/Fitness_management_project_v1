@@ -1,7 +1,9 @@
-import { Component, OnInit, Input, AfterViewInit, OnChanges } from '@angular/core'
+import { Component, OnInit, Input, AfterViewInit, OnChanges, Output, EventEmitter } from '@angular/core'
 
 import { ChatRoom } from '@schemas/chat-room'
 import { ChatRoomUser } from '@schemas/chat-room-user'
+import { User } from '@schemas/user'
+import { Loading } from '@schemas/store/loading'
 
 import { StorageService } from '@services/storage.service'
 
@@ -13,9 +15,17 @@ import _ from 'lodash'
     styleUrls: ['./chatting-room-card.component.scss'],
 })
 export class ChattingRoomCardComponent implements OnInit, AfterViewInit, OnChanges {
-    @Input() userId: string
+    @Input() curUser: User
     @Input() room: ChatRoom
     @Input() selectedRoom: ChatRoom
+    @Input() isLoading: Loading
+
+    @Output() onCardClick = new EventEmitter<ChatRoom>()
+    onClick() {
+        if (this.isLoading == 'done') {
+            this.onCardClick.emit(this.room)
+        }
+    }
 
     public userList: ChatRoomUser[] = []
     public chatRoomName = ''
@@ -33,14 +43,23 @@ export class ChattingRoomCardComponent implements OnInit, AfterViewInit, OnChang
     initUserListInScreen() {
         this.userList =
             this.room.type_code == 'chat_room_type_chat_with_me'
-                ? [this.room.chat_room_users.find((v) => v.id == this.userId)]
-                : this.room.chat_room_users.filter((v) => v.id != this.userId).map((v) => v)
+                ? [
+                      {
+                          id: this.curUser.id,
+                          name: this.curUser.name,
+                          permission_code: undefined,
+                          permission_code_name: undefined,
+                          color: this.curUser.color,
+                          picture: this.curUser.picture,
+                          background: this.curUser.background,
+                      },
+                  ]
+                : this.room.chat_room_users.filter((v) => v.id != this.curUser.id).map((v) => v)
     }
 
     limitChatRoomName() {
         if (this.room.chat_room_users.length == 2) {
-            const user = this.storageService.getUser()
-            this.chatRoomName = _.filter(this.room.chat_room_users, (v) => v.id != user.id)[0].name
+            this.chatRoomName = _.filter(this.room.chat_room_users, (v) => v.id != this.curUser.id)[0].name
         } else {
             const userNames = _.split(this.room.name, ', ', 3)
             this.chatRoomName = userNames.length > 2 ? `${userNames[0]}, ${userNames[1]}, ...` : this.room.name

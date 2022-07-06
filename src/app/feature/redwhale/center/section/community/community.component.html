@@ -31,10 +31,11 @@
             <div class="chatting-room-container thin-scroll-y-overlay2">
                 <rw-chatting-room-card
                     *ngFor="let room of chatRoomList$ | async; let i = index"
-                    [userId]="user.id"
+                    [isLoading]="(isLoading$ | async)"
+                    [curUser]="user"
                     [room]="room"
                     [selectedRoom]="(curChatRoom$ | async)"
-                    (click)="joinRoom(room)"
+                    (onCardClick)="joinRoom($event)"
                 ></rw-chatting-room-card>
             </div>
         </div>

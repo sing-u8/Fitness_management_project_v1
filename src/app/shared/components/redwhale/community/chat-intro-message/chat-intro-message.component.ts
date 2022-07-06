@@ -20,13 +20,22 @@ export class ChatIntroMessageComponent implements OnInit, OnChanges {
 
     public isNewRoom = false
 
+    public dmChatRoomName = undefined
+
     ngOnInit(): void {}
     ngOnChanges(): void {
         this.updateIsNewRoom()
+        this.initDmChatRoomName()
     }
 
     updateIsNewRoom() {
         this.isNewRoom = this.msgList.length == 0 ? true : false
+    }
+
+    initDmChatRoomName() {
+        if (this.selectedRoom.chat_room_users.length == 2) {
+            this.dmChatRoomName = this.selectedRoom.chat_room_users.find((v) => v.id != this.user.id).name
+        }
     }
     // || (this.msgList.length == 1 && this.msgList[0].type == 'date')
 }

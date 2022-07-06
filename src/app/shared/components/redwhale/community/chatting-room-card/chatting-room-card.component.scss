@@ -15,6 +15,10 @@ section.chatting-room-card {
     background-color: #fbfbfb;
     cursor: pointer;
 
+    &.loading {
+        cursor: progress;
+    }
+
     &:hover {
         background-color: var(--background-color);
     }

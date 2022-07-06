@@ -42,8 +42,6 @@ import { showToast } from '@appStore/actions/toast.action'
 import * as FromCommunity from '@centerStore/reducers/sec.community.reducer'
 import * as CommunitySelector from '@centerStore/selectors/sec.community.selector'
 import * as CommunityActions from '@centerStore/actions/sec.community.actions'
-import { isLoading } from '../../store/selectors/sec.membership.selector'
-import { curMainChatRoomIsTemp } from '../../store/selectors/sec.community.selector'
 
 @Component({
     selector: 'community',
