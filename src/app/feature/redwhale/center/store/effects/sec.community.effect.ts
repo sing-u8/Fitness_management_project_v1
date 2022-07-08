@@ -487,8 +487,13 @@ export class CommunityEffect {
     public createChatRoomMsgByWS$ = createEffect(() =>
         this.actions$.pipe(
             ofType(CommunityActions.startCreateChatRoomMsgByWS),
-            concatLatestFrom(() => this.store.select(CommunitySelector.chatRoomList)),
-            switchMap(([{ ws_data }, chatRoomList]) => {
+            concatLatestFrom(() => [
+                this.store.select(CommunitySelector.chatRoomList),
+                this.store.select(CommunitySelector.isLoading),
+            ]),
+            switchMap(([{ ws_data }, chatRoomList, isLoading]) => {
+                console.log('call startCreateChatRoomMsgByWS -- ', chatRoomList)
+                // if (_.isEmpty(chatRoomList) || isLoading != 'done') return []
                 const chatRoomIdx = chatRoomList.findIndex((v) => v.id == ws_data.info.chat_room_id)
                 if (chatRoomIdx != -1) {
                     return [CommunityActions.finishCreateChatRoomMsgByWS({ ws_data, chatRoomIdx, chatRoomList })]
@@ -521,8 +526,8 @@ export class CommunityEffect {
                 ]),
                 switchMap(([{ ws_data }, curDrawerChatRoom, curMainChatRoom]) => {
                     if (
-                        curDrawerChatRoom.id == ws_data.info.chat_room_id ||
-                        curMainChatRoom.id == ws_data.info.chat_room_id
+                        curDrawerChatRoom?.id == ws_data.info.chat_room_id ||
+                        curMainChatRoom?.id == ws_data.info.chat_room_id
                     ) {
                         return this.centerChatRoomApi.readChatRoomMessage(
                             ws_data.info.center_id,

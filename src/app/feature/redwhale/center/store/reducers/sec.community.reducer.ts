@@ -439,6 +439,54 @@ export const communityReducer = createImmerReducer(
 
         return state
     }),
+
+    // on(CommunitydActions.createChatRoomMsgByWS, (state, { ws_data }) => {
+    //     const chatRoomIdx = state.chatRoomList.findIndex((v) => v.id == ws_data.info.chat_room_id)
+    //     const chatRoom = state.chatRoomList[chatRoomIdx]
+
+    //     chatRoom.last_message = ws_data.dataset[0].text
+    //     chatRoom.last_message_created_at = ws_data.dataset[0].created_at
+    //     chatRoom.unread_message_count += 1
+
+    //     if (!_.isEmpty(state.mainCurChatRoom) && state.mainCurChatRoom.id == ws_data.info.chat_room_id) {
+    //         state.mainChatRoomMsgs.unshift(ws_data.dataset[0])
+    //         chatRoom.unread_message_count -= 1
+    //     }
+    //     if (!_.isEmpty(state.drawerCurChatRoom) && state.drawerCurChatRoom.id == ws_data.info.chat_room_id) {
+    //         state.drawerChatRoomMsgs.unshift(ws_data.dataset[0])
+    //         chatRoom.unread_message_count -= 1
+    //     }
+
+    //     return state
+    // }),
+    on(CommunitydActions.readChatRoomByWS, (state, { ws_data }) => {
+        if (state.mainCurChatRoom?.id == ws_data.info.chat_room_id) {
+            _.find(state.mainChatRoomMsgs, (msg, idx) => {
+                if (msg.type_code == 'fe_chat_room_message_type_date') return false
+                const unread_users_ids = msg.unread_user_ids
+                const readUserId = _.remove(unread_users_ids, (id) => id == ws_data.info.user_id)
+                if (!_.isEmpty(readUserId)) {
+                    state.mainChatRoomMsgs[idx].unread_user_ids = unread_users_ids
+                    return false
+                }
+                console.log('read chat msg idx  --- ', idx)
+                return true
+            })
+        }
+        if (state.drawerCurChatRoom?.id == ws_data.info.chat_room_id) {
+            _.find(state.drawerChatRoomMsgs, (msg, idx) => {
+                if (msg.type_code == 'fe_chat_room_message_type_date') return false
+                const unread_users_ids = msg.unread_user_ids
+                const readUserId = _.remove(unread_users_ids, (id) => id == ws_data.info.user_id)
+                if (!_.isEmpty(readUserId)) {
+                    state.drawerChatRoomMsgs[idx].unread_user_ids = unread_users_ids
+                    return false
+                }
+                return true
+            })
+        }
+        return state
+    }),
     on(CommunitydActions.deleteChatRoomMsgByWS, (state, { ws_data }) => {
         // ! 아직 적용되지 않은 기능
         const chatRoomIdx = state.chatRoomList.findIndex((v) => v.id == ws_data.info.chat_room_id)
@@ -531,7 +579,10 @@ function makeTempChatRoom(center: Center, curUser: CenterUser, members: Array<Ce
         type_code_name: '일반',
         permission_code: 'chat_room_user_permission_owner',
         permission_code_name: '소유자',
-        name: members.reduce((acc, cur) => acc + `, ${cur.center_user_name}`, `${curUser.center_user_name}`),
+        name: members.reduce(
+            (acc, cur) => acc + (acc == '' ? `${cur.center_user_name}` : `, ${cur.center_user_name}`),
+            members.length == 1 ? '' : `${curUser.center_user_name}`
+        ),
         center_name: center.name,
         chat_room_user_count: 1 + members.length,
         chat_room_users: [

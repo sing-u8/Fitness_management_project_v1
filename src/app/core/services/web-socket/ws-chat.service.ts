@@ -92,7 +92,7 @@ export class WsChatService implements OnDestroy {
     }
 
     switchByWsChatBase(ws: wsChat.Base) {
-        console.log(' switchByWsChatBase -- ', ws, ' ; center : ', this.storageService.getCenter())
+        console.log(' switchByWsChatBase -- ', ws)
         if (ws.topic == 'chat_room' && ws.operation == 'create') {
             this.nxStore.dispatch(CommunityActions.createChatRoomByWS({ ws_data: ws as wsChat.CreateChatRoom }))
         } else if (ws.topic == 'chat_room' && ws.operation == 'read') {
@@ -106,6 +106,9 @@ export class WsChatService implements OnDestroy {
             this.nxStore.dispatch(
                 CommunityActions.startCreateChatRoomMsgByWS({ ws_data: ws as wsChat.CreateChatRoomMessage })
             )
+            // this.nxStore.dispatch(
+            //     CommunityActions.createChatRoomMsgByWS({ ws_data: ws as wsChat.CreateChatRoomMessage })
+            // )
         } else if (ws.topic == 'chat_room_message' && ws.operation == 'delete') {
             // ! 아직 기획에서 보이지 않음
             this.nxStore.dispatch(

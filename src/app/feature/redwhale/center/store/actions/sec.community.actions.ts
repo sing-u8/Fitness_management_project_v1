@@ -212,11 +212,11 @@ export const deleteChatRoomUserByWS = createAction(
 )
 
 export const startCreateChatRoomMsgByWS = createAction(
-    `[${FeatureKey}] Create Chat Room Message By Web Socket`,
+    `[${FeatureKey}] Start Create Chat Room Message By Web Socket`,
     props<{ ws_data: WS.CreateChatRoomMessage }>()
 )
 export const finishCreateChatRoomMsgByWS = createAction(
-    `[${FeatureKey}] Create Chat Room Message By Web Socket`,
+    `[${FeatureKey}] Finish Create Chat Room Message By Web Socket`,
     props<{ ws_data: WS.CreateChatRoomMessage; chatRoomIdx: number; chatRoomList: Array<ChatRoom> }>()
 )
 // export const createChatRoomMsgByWS = createAction(
