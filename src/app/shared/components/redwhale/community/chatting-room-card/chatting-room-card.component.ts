@@ -58,7 +58,7 @@ export class ChattingRoomCardComponent implements OnInit, AfterViewInit, OnChang
     }
 
     limitChatRoomName() {
-        if (this.room.chat_room_users.length == 2) {
+        if (this.room.chat_room_users.length == 1) {
             this.chatRoomName = _.filter(this.room.chat_room_users, (v) => v.id != this.curUser.id)[0].name
         } else {
             const userNames = _.split(this.room.name, ', ', 3)
