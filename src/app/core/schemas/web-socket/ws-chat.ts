@@ -3,7 +3,7 @@ import { ChatRoomMessage } from '@schemas/chat-room-message'
 import { ChatRoomUser } from '@schemas/chat-room-user'
 
 export type Topic = 'chat_room' | 'chat_room_user' | 'chat_room_message'
-export type Operation = 'create' | 'update' | 'delete'
+export type Operation = 'create' | 'update' | 'delete' | 'read'
 
 export interface Base {
     topic: Topic
@@ -19,6 +19,16 @@ export interface CreateChatRoom extends Base {
         center_id: string
     }
     dataset: Array<ChatRoom>
+}
+export interface ReadChatRoom extends Base {
+    topic: 'chat_room'
+    operation: 'read'
+    info: {
+        center_id: string
+        chat_room_id: string
+        user_id: string
+    }
+    dataset: Array<never>
 }
 export interface UpdateChatRoom extends Base {
     topic: 'chat_room'

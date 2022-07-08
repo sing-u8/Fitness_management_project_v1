@@ -68,6 +68,8 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
 
     public chatRoomMsgs$ = this.nxStore.select(CommunitySelector.mainChatRoomMsgs)
     public chatRoomMsgs_: ChatRoomMessage[] = []
+    public chatRoomMsgLoading$ = this.nxStore.select(CommunitySelector.mainChatRoomMsgLoading)
+    public chatRoomMsgLoading_ = false
 
     public chatRoomLoadingMsgs$ = this.nxStore.select(CommunitySelector.mainChatRoomLoadingMsgs)
 
@@ -90,6 +92,10 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
 
         this.isLoading$.pipe(takeUntil(this.unsubscribe$)).subscribe((isLoading) => {
             this.isLoading_ = isLoading
+        })
+
+        this.chatRoomMsgLoading$.pipe(takeUntil(this.unsubscribe$)).subscribe((chatRoomMsgLoading) => {
+            this.chatRoomMsgLoading_ = chatRoomMsgLoading
         })
 
         this.nxStore.pipe(select(CommunitySelector.curCenterId), take(1)).subscribe((curCenterId) => {
@@ -288,6 +294,7 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
 
     // - // 채팅방 입장
     public joinRoom(chatRoom: ChatRoom) {
+        if (chatRoom.id == this.curChatRoom_.id) return
         this.resetChangeRoomNameData()
         this.resetChatInputData()
         if (_.includes(chatRoom.id, IsTmepRoom)) {
@@ -445,8 +452,8 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
     scrolled(event: any): void {
         this.isNearBottom = this.isScrollNearBottom()
 
-        if (this.isScrollNearTop()) {
-            this.prevMessageList()
+        if (this.isScrollNearTop() && !this.chatRoomMsgLoading_) {
+            this.nxStore.dispatch(CommunityActions.startGetMoreChatRoomMsgs({ centerId: this.center.id, spot: 'main' }))
         }
     }
     onItemElementsChanged(): void {
@@ -467,6 +474,7 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
         const position =
             this.chatting_screen.nativeElement.scrollTop * -1 + this.chatting_screen.nativeElement.offsetHeight
         const height = this.chatting_screen.nativeElement.scrollHeight
+        // console.log(`isScrollNearTop -  ${position} , ${height} , ${position + threshold >= height}`)
         return position + threshold >= height
     }
 
@@ -490,7 +498,7 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
     public resizeHeight = 30
 
     onChatInputResize(resizeHeight: string) {
-        console.log('onChatInputResize : ', resizeHeight)
+        // console.log('onChatInputResize : ', resizeHeight)
         this.resizeHeight = Number(resizeHeight.slice(0, -2))
         this.resizeChatScreen()
     }
@@ -543,7 +551,6 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
     // <---------------------
 
     // ----------------------------------------- message funcs -----------------------------------------------------
-    prevMessageList() {}
 
     // ----------------------------------- send message function -------------------------------------->//
     sendMessage(text: string) {

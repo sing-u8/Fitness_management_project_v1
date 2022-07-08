@@ -14,12 +14,16 @@ export const chatRoomList = createSelector(CommunityFeature, FromCommunity.selec
 export const mainPreChatRoom = createSelector(CommunityFeature, FromCommunity.selectMainPreChatRoom)
 export const mainCurChatRoom = createSelector(CommunityFeature, FromCommunity.selectMainCurChatRoom)
 export const mainChatRoomMsgs = createSelector(CommunityFeature, FromCommunity.selectMainChatRoomMsgs)
+export const mainChatRoomMsgEnd = createSelector(CommunityFeature, FromCommunity.selectMainChatRoomMsgEnd)
+export const mainChatRoomMsgLoading = createSelector(CommunityFeature, FromCommunity.selectMainChatRoomMsgLoading)
 export const mainChatRoomLoadingMsgs = createSelector(CommunityFeature, FromCommunity.selectMainChatRoomLoadingMsgs)
 export const mainChatRoomUserList = createSelector(CommunityFeature, FromCommunity.selectMainChatRoomUserList)
 // main - rawer
 export const drawerPreChatRoom = createSelector(CommunityFeature, FromCommunity.selectDrawerPreChatRoom)
 export const drawerCurChatRoom = createSelector(CommunityFeature, FromCommunity.selectDrawerCurChatRoom)
 export const drawerChatRoomMsgs = createSelector(CommunityFeature, FromCommunity.selectDrawerChatRoomMsgs)
+export const drawerChatRoomMsgEnd = createSelector(CommunityFeature, FromCommunity.selectDrawerChatRoomMsgEnd)
+export const drawerChatRoomMsgLoading = createSelector(CommunityFeature, FromCommunity.selectDrawerChatRoomMsgLoading)
 export const drawerChatRoomLoadingMsgs = createSelector(CommunityFeature, FromCommunity.selectDrawerChatRoomLoadingMsgs)
 export const drawerChatRoomUserList = createSelector(CommunityFeature, FromCommunity.selectDrawerChatRoomUserList)
 

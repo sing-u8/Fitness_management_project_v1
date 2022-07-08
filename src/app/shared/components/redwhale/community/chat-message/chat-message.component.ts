@@ -74,6 +74,8 @@ export class ChatMessageComponent implements OnInit, AfterContentInit, AfterView
     ngAfterContentInit(): void {
         if (this.message.type_code == 'chat_room_message_type_text') {
             this.type = 'text'
+        } else if (this.message.type_code == 'fe_chat_room_message_type_date') {
+            this.type = 'date'
         } else {
             const firstFileType = this.message.mimetype.split('/')[0]
             this.type = firstFileType.includes('application')

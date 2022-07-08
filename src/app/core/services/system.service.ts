@@ -29,6 +29,11 @@ export class SystemService {
         // const regex = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g
         const regex = /(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/gi
 
+        if (_.isEmpty(text)) {
+            return new Observable((sub) => {
+                sub.next(false)
+            })
+        }
         const urls = text.match(regex)
 
         if (!_.isArray(urls)) {

@@ -49,6 +49,7 @@ export const startJoinChatRoom = createAction(
 export const finishJoinChatRoom = createAction(
     `[${FeatureKey}] Finish Join Chat Room`,
     props<{
+        centerId: string
         chatRoom: ChatRoom
         chatRoomMesgs: Array<ChatRoomMessage>
         chatRoomUsers: Array<ChatRoomUser>
@@ -57,13 +58,13 @@ export const finishJoinChatRoom = createAction(
     }>()
 )
 
-export const startGetChatRoomMsgs = createAction(
+export const startGetMoreChatRoomMsgs = createAction(
     `[${FeatureKey}] Start Get Chat Room Messages`,
-    props<{ centerId: string; chatRoomId: string }>()
+    props<{ centerId: string; spot: FromCommunity.spot }>()
 )
-export const finishGetChatRoomMsgs = createAction(
+export const finishGetMoreChatRoomMsgs = createAction(
     `[${FeatureKey}] Finish Get Chat Room Messages`,
-    props<{ chatRoomMsgs: Array<ChatRoomMessage> }>()
+    props<{ chatRoomMsgs: Array<ChatRoomMessage>; spot: FromCommunity.spot; chatRoomMsgEnd: boolean }>()
 )
 
 export const startUpdateChatRoomName = createAction(
@@ -200,16 +201,28 @@ export const updateChatRoomByWS = createAction(
     `[${FeatureKey}] Update Chat Room By Web Socket`,
     props<{ ws_data: WS.UpdateChatRoom }>()
 )
+export const readChatRoomByWS = createAction(
+    `[${FeatureKey}] Read Chat Room By Web Socket`,
+    props<{ ws_data: WS.ReadChatRoom }>()
+)
 
 export const deleteChatRoomUserByWS = createAction(
     `[${FeatureKey}] Delete Chat Room User By Web Socket`,
     props<{ ws_data: WS.DeleteChatRoomUser }>()
 )
 
-export const createChatRoomMsgByWS = createAction(
+export const startCreateChatRoomMsgByWS = createAction(
     `[${FeatureKey}] Create Chat Room Message By Web Socket`,
     props<{ ws_data: WS.CreateChatRoomMessage }>()
 )
+export const finishCreateChatRoomMsgByWS = createAction(
+    `[${FeatureKey}] Create Chat Room Message By Web Socket`,
+    props<{ ws_data: WS.CreateChatRoomMessage; chatRoomIdx: number; chatRoomList: Array<ChatRoom> }>()
+)
+// export const createChatRoomMsgByWS = createAction(
+//     `[${FeatureKey}] Create Chat Room Message By Web Socket`,
+//     props<{ ws_data: WS.CreateChatRoomMessage }>()
+// )
 export const deleteChatRoomMsgByWS = createAction(
     `[${FeatureKey}] Delete Chat Room Message By Web Socket`,
     props<{ ws_data: WS.DeleteChatRoomMessage }>()

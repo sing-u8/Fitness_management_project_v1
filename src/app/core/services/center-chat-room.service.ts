@@ -142,8 +142,16 @@ export class CenterChatRoomService {
     }
 
     // 채팅방 메시지 조회
-    getChatRoomMessage(centerId: string, chatRoomId: string): Observable<Array<ChatRoomMessage>> {
-        const url = this.SERVER + `/${centerId}/chat_room/${chatRoomId}/message`
+    getChatRoomMessage(
+        centerId: string,
+        chatRoomId: string,
+        page?: number,
+        pageSize?: number
+    ): Observable<Array<ChatRoomMessage>> {
+        const url =
+            this.SERVER +
+            `/${centerId}/chat_room/${chatRoomId}/message` +
+            (page && pageSize ? `?page=${page}&pageSize=${pageSize}` : '')
         const options = {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json',
@@ -168,6 +176,22 @@ export class CenterChatRoomService {
         return this.http.delete<Response>(url, options).pipe(
             map((res) => {
                 return res
+            }),
+            catchError(handleError)
+        )
+    }
+
+    // 채팅 메시지 읽음
+    readChatRoomMessage(centerId: string, chatRoomId: string): Observable<Response> {
+        const url = this.SERVER + `/${centerId}/chat_room/${chatRoomId}/read`
+        const options = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json',
+            }),
+        }
+        return this.http.post<Response>(url, {}, options).pipe(
+            map((res) => {
+                return res.dataset[0]
             }),
             catchError(handleError)
         )

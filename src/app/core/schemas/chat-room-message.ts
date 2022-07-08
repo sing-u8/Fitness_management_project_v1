@@ -4,6 +4,7 @@ export interface ChatRoomMessage {
     user_name: string
     user_picture: string
     user_background: string
+    user_color: string
     type_code: ChatRoomMessageType
     type_code_name: string
     text: string
@@ -11,7 +12,7 @@ export interface ChatRoomMessage {
     originalname: string
     mimetype: string
     size: number
-    read_yn: number
+    unread_user_ids: string[]
     created_at: string
 }
 
@@ -22,4 +23,7 @@ export interface ChatRoomLoadingMessage extends ChatRoomMessage {
     }
 }
 
-export type ChatRoomMessageType = 'chat_room_message_type_text' | 'chat_room_message_type_file'
+export type ChatRoomMessageType =
+    | 'chat_room_message_type_text'
+    | 'chat_room_message_type_file'
+    | 'fe_chat_room_message_type_date'

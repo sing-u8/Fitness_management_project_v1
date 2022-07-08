@@ -14,6 +14,8 @@ import { CenterUser } from '@schemas/center-user'
 import { Center } from '@schemas/center'
 import { ChatFile } from '@schemas/center/community/chat-file'
 
+export const messagePageSize = 20
+
 export type spot = 'main' | 'drawer'
 
 export interface State {
@@ -29,12 +31,16 @@ export interface State {
     mainPreChatRoom: ChatRoom
     mainCurChatRoom: ChatRoom
     mainChatRoomMsgs: Array<ChatRoomMessage>
+    mainChatRoomMsgLoading: boolean
+    mainChatRoomMsgEnd: boolean
     mainChatRoomLoadingMsgs: Array<ChatRoomLoadingMessage>
     mainChatRoomUserList: Array<ChatRoomUser>
     // main - drawer
     drawerPreChatRoom: ChatRoom
     drawerCurChatRoom: ChatRoom
     drawerChatRoomMsgs: Array<ChatRoomMessage>
+    drawerChatRoomMsgLoading: boolean
+    drawerChatRoomMsgEnd: boolean
     drawerChatRoomLoadingMsgs: Array<ChatRoomLoadingMessage>
     drawerChatRoomUserList: Array<ChatRoomUser>
 }
@@ -52,12 +58,16 @@ export const initialState: State = {
     mainPreChatRoom: undefined,
     mainCurChatRoom: undefined,
     mainChatRoomMsgs: [],
+    mainChatRoomMsgEnd: false,
+    mainChatRoomMsgLoading: false,
     mainChatRoomLoadingMsgs: [],
     mainChatRoomUserList: [],
     // main - drawer
     drawerPreChatRoom: undefined,
     drawerCurChatRoom: undefined,
     drawerChatRoomMsgs: [],
+    drawerChatRoomMsgEnd: false,
+    drawerChatRoomMsgLoading: false,
     drawerChatRoomLoadingMsgs: [],
     drawerChatRoomUserList: [],
 }
@@ -96,7 +106,6 @@ export const communityReducer = createImmerReducer(
         return state
     }),
     on(CommunitydActions.startJoinChatRoom, (state, { chatRoom, spot }) => {
-        console.log(' startJoinChatRoom ------ ', chatRoom)
         state.isLoading = 'pending'
         const chatRoomIdx = state.chatRoomList.findIndex((v) => v.id == chatRoom.id)
         const _chatRoom = _.cloneDeep(chatRoom)
@@ -107,9 +116,11 @@ export const communityReducer = createImmerReducer(
         if (spot == 'main') {
             state.mainPreChatRoom = state.mainCurChatRoom
             state.mainCurChatRoom = _chatRoom
+            state.mainChatRoomMsgEnd = false
         } else {
             state.drawerPreChatRoom = state.drawerPreChatRoom
             state.drawerCurChatRoom = _chatRoom
+            state.drawerChatRoomMsgEnd = false
         }
         return state
     }),
@@ -119,12 +130,22 @@ export const communityReducer = createImmerReducer(
 
         if (spot == 'main') {
             state.mainPreChatRoom = undefined
-            state.mainChatRoomMsgs = chatRoomMesgs
+            state.mainChatRoomMsgs = getDateInsteredMessage(chatRoomMesgs)
             state.mainChatRoomUserList = chatRoomUsers
+
+            const lastMsgDate = _.last(state.mainChatRoomMsgs)?.created_at
+            if (chatRoomMesgs.length < messagePageSize && lastMsgDate) {
+                state.mainChatRoomMsgs.push(makeDateMessage(lastMsgDate))
+            }
         } else {
             state.drawerPreChatRoom = undefined
-            state.drawerChatRoomMsgs = chatRoomMesgs
+            state.drawerChatRoomMsgs = getDateInsteredMessage(chatRoomMesgs)
             state.drawerChatRoomUserList = chatRoomUsers
+
+            const lastMsgDate = _.last(state.drawerChatRoomMsgs)?.created_at
+            if (chatRoomMesgs.length < messagePageSize && lastMsgDate) {
+                state.drawerChatRoomMsgs.push(makeDateMessage(lastMsgDate))
+            }
         }
         return state
     }),
@@ -223,8 +244,14 @@ export const communityReducer = createImmerReducer(
     // }),
     on(CommunitydActions.finishSendMessage, (state, { spot, chatRoomMessage }) => {
         if (spot == 'main') {
+            if (checkDayDiffBtMsgAndMsg(chatRoomMessage, state.mainChatRoomMsgs[0])) {
+                state.mainChatRoomMsgs.unshift(makeDateMessage(chatRoomMessage.created_at))
+            }
             state.mainChatRoomMsgs.unshift(chatRoomMessage)
         } else {
+            if (checkDayDiffBtMsgAndMsg(chatRoomMessage, state.drawerChatRoomMsgs[0])) {
+                state.mainChatRoomMsgs.unshift(makeDateMessage(chatRoomMessage.created_at))
+            }
             state.drawerChatRoomMsgs.unshift(chatRoomMessage)
         }
         return state
@@ -234,6 +261,35 @@ export const communityReducer = createImmerReducer(
     //     return state
     // }),
 
+    on(CommunitydActions.startGetMoreChatRoomMsgs, (state, { spot }) => {
+        if (spot == 'main') {
+            state.mainChatRoomMsgLoading = true
+        } else {
+            state.drawerChatRoomMsgLoading = true
+        }
+        return state
+    }),
+    on(CommunitydActions.finishGetMoreChatRoomMsgs, (state, { spot, chatRoomMsgs, chatRoomMsgEnd }) => {
+        if (spot == 'main') {
+            const newChatRoomMsgs = getDateInsteredMessage(chatRoomMsgs)
+            state.mainChatRoomMsgs = concatChatRoomMsg(state.mainChatRoomMsgs, newChatRoomMsgs)
+            if (chatRoomMsgEnd) {
+                state.mainChatRoomMsgs.push(makeDateMessage(_.last(state.mainChatRoomMsgs).created_at))
+            }
+            state.mainChatRoomMsgEnd = chatRoomMsgEnd
+            state.mainChatRoomMsgLoading = false
+        } else {
+            const newChatRoomMsgs = getDateInsteredMessage(chatRoomMsgs)
+            state.drawerChatRoomMsgs = concatChatRoomMsg(state.drawerChatRoomMsgs, newChatRoomMsgs)
+            if (chatRoomMsgEnd) {
+                state.drawerChatRoomMsgs.push(makeDateMessage(_.last(state.drawerChatRoomMsgs).created_at))
+            }
+            state.drawerChatRoomMsgEnd = chatRoomMsgEnd
+            state.drawerChatRoomMsgLoading = false
+        }
+        return state
+    }),
+
     // - // for temp romm
     on(CommunitydActions.finishSendMessageToTempRoom, (state, { spot, chatRoomMessage, chatRoom }) => {
         let preTempChatRoom: ChatRoom = undefined
@@ -241,12 +297,12 @@ export const communityReducer = createImmerReducer(
         if (spot == 'main') {
             preTempChatRoom = state.mainCurChatRoom
             state.mainCurChatRoom = chatRoom
-            state.mainChatRoomMsgs = [chatRoomMessage]
+            state.mainChatRoomMsgs = [chatRoomMessage, makeDateMessage(chatRoomMessage.created_at)]
             state.chatRoomList[state.chatRoomList.findIndex((v) => v.id == preTempChatRoom.id)] = chatRoom
         } else {
             preTempChatRoom = state.drawerCurChatRoom
             state.drawerCurChatRoom = chatRoom
-            state.drawerChatRoomMsgs = [chatRoomMessage]
+            state.drawerChatRoomMsgs = [chatRoomMessage, makeDateMessage(chatRoomMessage.created_at)]
             state.chatRoomList[state.chatRoomList.findIndex((v) => v.id == preTempChatRoom.id)] = chatRoom
         }
         return state
@@ -364,8 +420,8 @@ export const communityReducer = createImmerReducer(
         return state
     }),
 
-    on(CommunitydActions.createChatRoomMsgByWS, (state, { ws_data }) => {
-        const chatRoomIdx = state.chatRoomList.findIndex((v) => v.id == ws_data.info.chat_room_id)
+    on(CommunitydActions.finishCreateChatRoomMsgByWS, (state, { ws_data, chatRoomIdx, chatRoomList }) => {
+        state.chatRoomList = chatRoomList
         const chatRoom = state.chatRoomList[chatRoomIdx]
 
         chatRoom.last_message = ws_data.dataset[0].text
@@ -418,12 +474,16 @@ export const selectChatRoomList = (state: State) => state.chatRoomList
 export const selectMainPreChatRoom = (state: State) => state.mainPreChatRoom
 export const selectMainCurChatRoom = (state: State) => state.mainCurChatRoom
 export const selectMainChatRoomMsgs = (state: State) => state.mainChatRoomMsgs
+export const selectMainChatRoomMsgEnd = (state: State) => state.mainChatRoomMsgEnd
+export const selectMainChatRoomMsgLoading = (state: State) => state.mainChatRoomMsgLoading
 export const selectMainChatRoomLoadingMsgs = (state: State) => state.mainChatRoomLoadingMsgs
 export const selectMainChatRoomUserList = (state: State) => state.mainChatRoomUserList
 // main - drawer
 export const selectDrawerPreChatRoom = (state: State) => state.drawerPreChatRoom
 export const selectDrawerCurChatRoom = (state: State) => state.drawerCurChatRoom
 export const selectDrawerChatRoomMsgs = (state: State) => state.drawerChatRoomMsgs
+export const selectDrawerChatRoomMsgEnd = (state: State) => state.drawerChatRoomMsgEnd
+export const selectDrawerChatRoomMsgLoading = (state: State) => state.drawerChatRoomMsgLoading
 export const selectDrawerChatRoomLoadingMsgs = (state: State) => state.drawerChatRoomLoadingMsgs
 export const selectDrawerChatRoomUserList = (state: State) => state.drawerChatRoomUserList
 
@@ -497,5 +557,46 @@ function makeTempChatRoom(center: Center, curUser: CenterUser, members: Array<Ce
         last_message: null,
         last_message_created_at: null,
         unread_message_count: 0,
+    }
+}
+
+// date message funcs
+function getDateInsteredMessage(chatMessages: Array<ChatRoomMessage>): Array<ChatRoomMessage> {
+    const newChatMsgs: Array<ChatRoomMessage> = []
+    _.forEach(chatMessages, (v, i, arr) => {
+        newChatMsgs.push(v)
+        if (i < arr.length - 1 && checkDayDiffBtMsgAndMsg(arr[i], arr[i + 1])) {
+            newChatMsgs.push(makeDateMessage(arr[i].created_at))
+        }
+    })
+    return newChatMsgs
+}
+function concatChatRoomMsg(curMsgs: Array<ChatRoomMessage>, prevMsgs: Array<ChatRoomMessage>) {
+    if (checkDayDiffBtMsgAndMsg(curMsgs[curMsgs.length - 1], prevMsgs[0])) {
+        const dateMsg = makeDateMessage(curMsgs[curMsgs.length - 1].created_at)
+        curMsgs.push(dateMsg)
+    }
+    return _.uniqBy(_.concat(curMsgs, prevMsgs), 'id')
+}
+function checkDayDiffBtMsgAndMsg(currentMsg: ChatRoomMessage, prevMsg: ChatRoomMessage) {
+    return dayjs(currentMsg.created_at).diff(dayjs(prevMsg.created_at), 'day') > 0
+}
+function makeDateMessage(created_at: string): ChatRoomMessage {
+    return {
+        id: `crmd-${dayjs(created_at).format('YYYY-MM-DD HH:mm:ss')}`,
+        user_id: undefined,
+        user_name: undefined,
+        user_picture: undefined,
+        user_background: undefined,
+        user_color: undefined,
+        type_code: 'fe_chat_room_message_type_date',
+        type_code_name: '메시지 - 날짜',
+        text: undefined,
+        url: undefined,
+        originalname: undefined,
+        mimetype: undefined,
+        size: undefined,
+        unread_user_ids: [],
+        created_at: dayjs(created_at).format('YYYY-MM-DD HH:mm:ss'),
     }
 }

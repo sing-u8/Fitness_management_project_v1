@@ -3,7 +3,7 @@ import { HttpEvent, HttpEventType } from '@angular/common/http'
 import { createEffect, Actions, ofType, concatLatestFrom } from '@ngrx/effects'
 import { Store } from '@ngrx/store'
 import { of, EMPTY, iif, forkJoin } from 'rxjs'
-import { catchError, switchMap, tap, map, exhaustMap, mapTo } from 'rxjs/operators'
+import { catchError, switchMap, tap, map, exhaustMap, mapTo, filter, find } from 'rxjs/operators'
 
 import { CenterChatRoomService, CreateChatRoomReqBody, SendMessageReqBody } from '@services/center-chat-room.service'
 import { CommonCommunityService } from '@services/helper/common-community.service'
@@ -19,7 +19,6 @@ import { showToast } from '@appStore/actions/toast.action'
 import * as CommunityActions from '../actions/sec.community.actions'
 import * as CommunitySelector from '../selectors/sec.community.selector'
 import * as CommunityReducer from '../reducers/sec.community.reducer'
-
 @Injectable()
 export class CommunityEffect {
     constructor(
@@ -80,7 +79,7 @@ export class CommunityEffect {
         )
     )
 
-    public joinChatRoom = createEffect(() =>
+    public joinChatRoom$ = createEffect(() =>
         this.actions$.pipe(
             ofType(CommunityActions.startJoinChatRoom),
             concatLatestFrom(({ spot }) => {
@@ -95,12 +94,18 @@ export class CommunityEffect {
                     return []
                 } else {
                     return forkJoin({
-                        chatRoomMesgs: this.centerChatRoomApi.getChatRoomMessage(centerId, chatRoom.id),
+                        chatRoomMesgs: this.centerChatRoomApi.getChatRoomMessage(
+                            centerId,
+                            chatRoom.id,
+                            1,
+                            CommunityReducer.messagePageSize
+                        ),
                         chatRoomUsers: this.centerChatRoomApi.getChatRoomMember(centerId, chatRoom.id, true),
                     }).pipe(
                         switchMap(({ chatRoomMesgs, chatRoomUsers }) => {
                             return [
                                 CommunityActions.finishJoinChatRoom({
+                                    centerId,
                                     chatRoom,
                                     chatRoomMesgs,
                                     chatRoomUsers,
@@ -114,6 +119,17 @@ export class CommunityEffect {
             }),
             catchError((err: string) => of(CommunityActions.error({ error: err })))
         )
+    )
+    public afterJoinChagRoom$ = createEffect(
+        () =>
+            this.actions$.pipe(
+                ofType(CommunityActions.finishJoinChatRoom),
+                switchMap(({ centerId, chatRoom }) => {
+                    return this.centerChatRoomApi.readChatRoomMessage(centerId, chatRoom.id)
+                }),
+                catchError((err: string) => of(CommunityActions.error({ error: err })))
+            ),
+        { dispatch: false }
     )
 
     public updateChatRoomName$ = createEffect(() =>
@@ -242,6 +258,7 @@ export class CommunityEffect {
                                     user_name: user.name,
                                     user_picture: user.picture,
                                     user_background: user.background,
+                                    user_color: user.color,
                                     type_code: 'chat_room_message_type_file',
                                     type_code_name: '임시 메시지 - 파일',
                                     text: text,
@@ -249,7 +266,7 @@ export class CommunityEffect {
                                     originalname: fileList[0].file.name,
                                     mimetype: fileList[0].mimetype,
                                     size: fileList[0].file.size,
-                                    read_yn: 0,
+                                    unread_user_ids: [], // !! 추후에 필요에 따라 수정 필요
                                     created_at: dayjs().format('YYYY-MM-DD HH:mm:ss'),
                                     gauge: {
                                         id: res.msgId,
@@ -314,6 +331,44 @@ export class CommunityEffect {
                 )
     */
 
+    public getMoreChatRoomMessages = createEffect(() =>
+        this.actions$.pipe(
+            ofType(CommunityActions.startGetMoreChatRoomMsgs),
+            concatLatestFrom(({ spot }) => [
+                spot == 'main'
+                    ? this.store.select(CommunitySelector.mainCurChatRoom)
+                    : this.store.select(CommunitySelector.drawerCurChatRoom),
+                spot == 'main'
+                    ? this.store.select(CommunitySelector.mainChatRoomMsgs)
+                    : this.store.select(CommunitySelector.drawerChatRoomMsgs),
+                spot == 'main'
+                    ? this.store.select(CommunitySelector.mainChatRoomMsgEnd)
+                    : this.store.select(CommunitySelector.drawerChatRoomMsgEnd),
+            ]),
+            switchMap(([{ centerId, spot }, curChatRoom, chatRoomMsgs, chatRoomMsgEnd]) => {
+                if (chatRoomMsgEnd) {
+                    return []
+                }
+                const msgCount = _.filter(chatRoomMsgs, (v) => v.type_code != 'fe_chat_room_message_type_date').length
+                const page = _.floor(msgCount / CommunityReducer.messagePageSize) + 1
+                return this.centerChatRoomApi
+                    .getChatRoomMessage(centerId, curChatRoom.id, page, CommunityReducer.messagePageSize)
+                    .pipe(
+                        switchMap((chatRoomMsgs) => {
+                            return [
+                                CommunityActions.finishGetMoreChatRoomMsgs({
+                                    spot,
+                                    chatRoomMsgs,
+                                    chatRoomMsgEnd: chatRoomMsgs.length < CommunityReducer.messagePageSize,
+                                }),
+                            ]
+                        })
+                    )
+            }),
+            catchError((err: string) => of(CommunityActions.error({ error: err })))
+        )
+    )
+
     // for temp room
 
     public startSendMessageToTempRoom$ = createEffect(() =>
@@ -357,6 +412,7 @@ export class CommunityEffect {
                                             user_name: user.name,
                                             user_picture: user.picture,
                                             user_background: user.background,
+                                            user_color: user.color,
                                             type_code: 'chat_room_message_type_file',
                                             type_code_name: '임시 메시지 - 파일',
                                             text: text,
@@ -364,7 +420,7 @@ export class CommunityEffect {
                                             originalname: fileList[0].file.name,
                                             mimetype: fileList[0].mimetype,
                                             size: fileList[0].file.size,
-                                            read_yn: 0,
+                                            unread_user_ids: [], // !! 추후에 필요에 따라 수정 필요
                                             created_at: dayjs().format('YYYY-MM-DD HH:mm:ss'),
                                             gauge: {
                                                 id: res.msgId,
@@ -425,5 +481,59 @@ export class CommunityEffect {
             ),
             catchError((err: string) => of(CommunityActions.error({ error: err })))
         )
+    )
+
+    // web socket effects
+    public createChatRoomMsgByWS$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(CommunityActions.startCreateChatRoomMsgByWS),
+            concatLatestFrom(() => this.store.select(CommunitySelector.chatRoomList)),
+            switchMap(([{ ws_data }, chatRoomList]) => {
+                const chatRoomIdx = chatRoomList.findIndex((v) => v.id == ws_data.info.chat_room_id)
+                if (chatRoomIdx != -1) {
+                    return [CommunityActions.finishCreateChatRoomMsgByWS({ ws_data, chatRoomIdx, chatRoomList })]
+                } else {
+                    return this.centerChatRoomApi.getChatRoom(ws_data.info.center_id).pipe(
+                        switchMap((_chatRoomList) => {
+                            const chatRoomIdx = _chatRoomList.findIndex((v) => v.id == ws_data.info.chat_room_id)
+                            return [
+                                CommunityActions.finishCreateChatRoomMsgByWS({
+                                    ws_data,
+                                    chatRoomIdx,
+                                    chatRoomList: _chatRoomList,
+                                }),
+                            ]
+                        })
+                    )
+                }
+            }),
+            catchError((err: string) => of(CommunityActions.error({ error: err })))
+        )
+    )
+
+    public readChatMsgsByWS$ = createEffect(
+        () =>
+            this.actions$.pipe(
+                ofType(CommunityActions.startCreateChatRoomMsgByWS),
+                concatLatestFrom(() => [
+                    this.store.select(CommunitySelector.drawerCurChatRoom),
+                    this.store.select(CommunitySelector.mainCurChatRoom),
+                ]),
+                switchMap(([{ ws_data }, curDrawerChatRoom, curMainChatRoom]) => {
+                    if (
+                        curDrawerChatRoom.id == ws_data.info.chat_room_id ||
+                        curMainChatRoom.id == ws_data.info.chat_room_id
+                    ) {
+                        return this.centerChatRoomApi.readChatRoomMessage(
+                            ws_data.info.center_id,
+                            ws_data.info.chat_room_id
+                        )
+                    } else {
+                        return []
+                    }
+                }),
+                catchError((err: string) => of(CommunityActions.error({ error: err })))
+            ),
+        { dispatch: false }
     )
 }
