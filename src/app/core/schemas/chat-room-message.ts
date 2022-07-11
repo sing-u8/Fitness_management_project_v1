@@ -14,6 +14,7 @@ export interface ChatRoomMessage {
     size: number
     unread_user_ids: string[]
     created_at: string
+    deleted_at: string
 }
 
 export interface ChatRoomLoadingMessage extends ChatRoomMessage {

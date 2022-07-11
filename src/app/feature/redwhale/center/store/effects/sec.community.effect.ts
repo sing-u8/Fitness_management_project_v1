@@ -268,6 +268,7 @@ export class CommunityEffect {
                                     size: fileList[0].file.size,
                                     unread_user_ids: [], // !! 추후에 필요에 따라 수정 필요
                                     created_at: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+                                    deleted_at: null,
                                     gauge: {
                                         id: res.msgId,
                                         value: 0,
@@ -422,6 +423,7 @@ export class CommunityEffect {
                                             size: fileList[0].file.size,
                                             unread_user_ids: [], // !! 추후에 필요에 따라 수정 필요
                                             created_at: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+                                            deleted_at: null,
                                             gauge: {
                                                 id: res.msgId,
                                                 value: 0,

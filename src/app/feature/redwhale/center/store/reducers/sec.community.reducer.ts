@@ -193,34 +193,35 @@ export const communityReducer = createImmerReducer(
         return state
     }),
     on(CommunitydActions.startInviteMembers, (state, { invitedMembers, spot }) => {
-        const _invitedMembers = centerUserToChatRoomMemberUser(invitedMembers)
+        // !! createChatRoomUserByWS 부분이랑 중복이라 코드 제거
+        // const _invitedMembers = centerUserToChatRoomMemberUser(invitedMembers)
 
-        // !! 채팅방 속성에 인원이 추가되면 인원수도 추가하기
-        if (spot == 'main') {
-            state.mainCurChatRoom.chat_room_users = [
-                ...state.mainCurChatRoom.chat_room_users,
-                ..._invitedMembers,
-            ].slice(0, 5)
+        // // !! 채팅방 속성에 인원이 추가되면 인원수도 추가하기
+        // if (spot == 'main') {
+        //     state.mainCurChatRoom.chat_room_users = [
+        //         ...state.mainCurChatRoom.chat_room_users,
+        //         ..._invitedMembers,
+        //     ].slice(0, 5)
 
-            state.mainCurChatRoom.chat_room_user_count += _invitedMembers.length
-            const idx = state.chatRoomList.findIndex((v) => v.id == state.mainCurChatRoom.id)
-            state.chatRoomList[idx].chat_room_users = state.mainCurChatRoom.chat_room_users
-            state.chatRoomList[idx].chat_room_user_count += _invitedMembers.length
+        //     state.mainCurChatRoom.chat_room_user_count += _invitedMembers.length
+        //     const idx = state.chatRoomList.findIndex((v) => v.id == state.mainCurChatRoom.id)
+        //     state.chatRoomList[idx].chat_room_users = state.mainCurChatRoom.chat_room_users
+        //     state.chatRoomList[idx].chat_room_user_count += _invitedMembers.length
 
-            state.mainChatRoomUserList = [...state.mainChatRoomUserList, ..._invitedMembers]
-        } else {
-            state.drawerCurChatRoom.chat_room_users = [
-                ...state.drawerCurChatRoom.chat_room_users,
-                ..._invitedMembers,
-            ].slice(0, 5)
+        //     state.mainChatRoomUserList = [...state.mainChatRoomUserList, ..._invitedMembers]
+        // } else {
+        //     state.drawerCurChatRoom.chat_room_users = [
+        //         ...state.drawerCurChatRoom.chat_room_users,
+        //         ..._invitedMembers,
+        //     ].slice(0, 5)
 
-            state.drawerCurChatRoom.chat_room_user_count += _invitedMembers.length
-            const idx = state.chatRoomList.findIndex((v) => v.id == state.drawerCurChatRoom.id)
-            state.chatRoomList[idx].chat_room_users = state.drawerCurChatRoom.chat_room_users
-            state.chatRoomList[idx].chat_room_user_count += _invitedMembers.length
+        //     state.drawerCurChatRoom.chat_room_user_count += _invitedMembers.length
+        //     const idx = state.chatRoomList.findIndex((v) => v.id == state.drawerCurChatRoom.id)
+        //     state.chatRoomList[idx].chat_room_users = state.drawerCurChatRoom.chat_room_users
+        //     state.chatRoomList[idx].chat_room_user_count += _invitedMembers.length
 
-            state.drawerChatRoomUserList = [...state.drawerChatRoomUserList, ..._invitedMembers]
-        }
+        //     state.drawerChatRoomUserList = [...state.drawerChatRoomUserList, ..._invitedMembers]
+        // }
         return state
     }),
     on(CommunitydActions.finishiInviteMembers, (state, { spot, chatRoom }) => {
@@ -401,6 +402,36 @@ export const communityReducer = createImmerReducer(
         return state
     }),
 
+    on(CommunitydActions.createChatRoomUserByWS, (state, { ws_data }) => {
+        const chatRoomIdx = _.findIndex(state.chatRoomList, (chatRoom) => {
+            return chatRoom.id == ws_data.info.chat_room_id
+        })
+        const chatRoom = _.cloneDeep(state.chatRoomList[chatRoomIdx])
+        const chatRoomUsers = _.slice(
+            _.unionWith(chatRoom.chat_room_users, ws_data.dataset, (a, b) => a.id == b.id),
+            0,
+            5
+        )
+        chatRoom.chat_room_users = chatRoomUsers
+        chatRoom.chat_room_user_count += ws_data.dataset.length
+
+        _.assign(state.chatRoomList[chatRoomIdx], chatRoom)
+
+        if (state.mainCurChatRoom?.id == ws_data.info.chat_room_id) {
+            state.mainCurChatRoom.chat_room_users = _.cloneDeep(chatRoom.chat_room_users)
+            state.mainCurChatRoom.chat_room_user_count = chatRoom.chat_room_user_count
+
+            state.mainChatRoomUserList = [...state.mainChatRoomUserList, ...ws_data.dataset]
+        }
+        if (state.drawerCurChatRoom?.id == ws_data.info.chat_room_id) {
+            state.drawerCurChatRoom.chat_room_users = _.cloneDeep(chatRoom.chat_room_users)
+            state.drawerCurChatRoom.chat_room_user_count = chatRoom.chat_room_user_count
+
+            state.drawerChatRoomUserList = [...state.mainChatRoomUserList, ...ws_data.dataset]
+        }
+
+        return state
+    }),
     on(CommunitydActions.deleteChatRoomUserByWS, (state, { ws_data }) => {
         const chatRoomIdx = state.chatRoomList.findIndex((v) => v.id == ws_data.info.chat_room_id)
 
@@ -653,5 +684,6 @@ function makeDateMessage(created_at: string): ChatRoomMessage {
         size: undefined,
         unread_user_ids: [],
         created_at: dayjs(created_at).format('YYYY-MM-DD HH:mm:ss'),
+        deleted_at: null,
     }
 }
