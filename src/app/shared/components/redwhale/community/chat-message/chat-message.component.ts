@@ -168,8 +168,12 @@ export class ChatMessageComponent implements OnInit, AfterContentInit, AfterView
                           url: this.systemService.getOpenGraphUrl(this.message.text),
                           image: undefined,
                       }
-                    : msg[0]
-                console.log('check msg --', msg, ' ; ', this.linkMessage)
+                    : {
+                          title: msg[0].title ?? this.systemService.getOpenGraphUrl(this.message.text),
+                          description: msg[0].description ?? '여기를 눌러 링크를 확인하세요',
+                          url: this.systemService.getOpenGraphUrl(this.message.text),
+                          image: msg[0].image ?? undefined,
+                      }
             }
         })
     }
