@@ -11,10 +11,15 @@ section.message {
         &:hover {
             background-color: var(--border-color);
         }
-        padding: 8px 0px;
+        padding: 5px 0px;
+    }
+
+    & section.last-successive-msg {
+        margin: 0 0 10px 0;
     }
 
     section.msg-type-date {
+        padding: 24px;
         .divider {
             display: flex;
             align-items: center;
@@ -41,7 +46,7 @@ section.message {
         align-items: center;
         justify-content: center;
         background-color: var(--border-color);
-        margin: 20px 0px;
+        margin: 0px 0px 20px 0px;
         span#time {
             margin-left: 20px;
             color: var(--grey);

@@ -96,19 +96,17 @@ export class WsChatService implements OnDestroy {
         if (ws.topic == 'chat_room' && ws.operation == 'create') {
             this.nxStore.dispatch(CommunityActions.createChatRoomByWS({ ws_data: ws as wsChat.CreateChatRoom }))
         } else if (ws.topic == 'chat_room' && ws.operation == 'read') {
-            // !! 아직 어떤 역할로 써야할 지 파악 못함
             this.nxStore.dispatch(CommunityActions.readChatRoomByWS({ ws_data: ws as wsChat.ReadChatRoom }))
         } else if (ws.topic == 'chat_room' && ws.operation == 'update') {
             this.nxStore.dispatch(CommunityActions.updateChatRoomByWS({ ws_data: ws as wsChat.UpdateChatRoom }))
         } else if (ws.topic == 'chat_room_user' && ws.operation == 'delete') {
             this.nxStore.dispatch(CommunityActions.deleteChatRoomUserByWS({ ws_data: ws as wsChat.DeleteChatRoomUser }))
+        } else if (ws.topic == 'chat_room_user' && ws.operation == 'create') {
+            this.nxStore.dispatch(CommunityActions.createChatRoomUserByWS({ ws_data: ws as wsChat.CreateChatRoomUser }))
         } else if (ws.topic == 'chat_room_message' && ws.operation == 'create') {
             this.nxStore.dispatch(
                 CommunityActions.startCreateChatRoomMsgByWS({ ws_data: ws as wsChat.CreateChatRoomMessage })
             )
-            // this.nxStore.dispatch(
-            //     CommunityActions.createChatRoomMsgByWS({ ws_data: ws as wsChat.CreateChatRoomMessage })
-            // )
         } else if (ws.topic == 'chat_room_message' && ws.operation == 'delete') {
             // ! 아직 기획에서 보이지 않음
             this.nxStore.dispatch(

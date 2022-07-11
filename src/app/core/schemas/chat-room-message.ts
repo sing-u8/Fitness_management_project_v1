@@ -26,4 +26,5 @@ export interface ChatRoomLoadingMessage extends ChatRoomMessage {
 export type ChatRoomMessageType =
     | 'chat_room_message_type_text'
     | 'chat_room_message_type_file'
+    | 'chat_room_message_type_system'
     | 'fe_chat_room_message_type_date'

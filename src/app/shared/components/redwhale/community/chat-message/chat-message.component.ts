@@ -29,6 +29,7 @@ import { ChatRoomMessage, ChatRoomMessageType, ChatRoomLoadingMessage } from '@s
 export class ChatMessageComponent implements OnInit, AfterContentInit, AfterViewInit {
     @Input() message: ChatRoomLoadingMessage | ChatRoomMessage
     @Input() showUserInfo: boolean
+    @Input() lastSuccessiveMsg: boolean
     @Input() isSidebar: boolean
 
     @Input() isLoading: boolean
@@ -74,6 +75,8 @@ export class ChatMessageComponent implements OnInit, AfterContentInit, AfterView
     ngAfterContentInit(): void {
         if (this.message.type_code == 'chat_room_message_type_text') {
             this.type = 'text'
+        } else if (this.message.type_code == 'chat_room_message_type_system') {
+            this.type = 'info'
         } else if (this.message.type_code == 'fe_chat_room_message_type_date') {
             this.type = 'date'
         } else {

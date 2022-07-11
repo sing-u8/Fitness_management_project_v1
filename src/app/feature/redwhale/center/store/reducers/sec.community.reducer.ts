@@ -325,12 +325,14 @@ export const communityReducer = createImmerReducer(
         const tempChatRoom = makeTempChatRoom(center, curUser, members)
         state.chatRoomList.unshift(tempChatRoom)
         if (spot == 'main') {
-            state.mainCurChatRoom = tempChatRoom
             state.mainChatRoomUserList = tempChatRoom.chat_room_users
+            tempChatRoom.chat_room_users = tempChatRoom.chat_room_users.filter((v) => v.id != curUser.id)
+            state.mainCurChatRoom = tempChatRoom
             state.mainChatRoomMsgs = []
         } else {
-            state.drawerCurChatRoom = tempChatRoom
             state.drawerChatRoomUserList = tempChatRoom.chat_room_users
+            tempChatRoom.chat_room_users = tempChatRoom.chat_room_users.filter((v) => v.id != curUser.id)
+            state.drawerCurChatRoom = tempChatRoom
             state.drawerChatRoomMsgs = []
         }
         return state
@@ -421,44 +423,47 @@ export const communityReducer = createImmerReducer(
     }),
 
     on(CommunitydActions.finishCreateChatRoomMsgByWS, (state, { ws_data, chatRoomIdx, chatRoomList }) => {
-        state.chatRoomList = chatRoomList
-        const chatRoom = state.chatRoomList[chatRoomIdx]
+        if (!_.isEmpty(chatRoomList)) state.chatRoomList = _.cloneDeep(chatRoomList)
+        const chatRoom = _.cloneDeep(state.chatRoomList[chatRoomIdx])
 
-        chatRoom.last_message = ws_data.dataset[0].text
-        chatRoom.last_message_created_at = ws_data.dataset[0].created_at
-        chatRoom.unread_message_count += 1
+        let lastMsg = ''
+        let lastCreatedAt = dayjs().format('YYYY-MM-DD HH:mm:dd')
+        let unread_msg_count = 0
+        ws_data.dataset.forEach((msg) => {
+            if (msg.type_code != 'chat_room_message_type_system') {
+                lastMsg = msg.text
+                lastCreatedAt = msg.created_at
+                unread_msg_count += 1
+            }
+        })
 
-        if (!_.isEmpty(state.mainCurChatRoom) && state.mainCurChatRoom.id == ws_data.info.chat_room_id) {
-            state.mainChatRoomMsgs.unshift(ws_data.dataset[0])
-            chatRoom.unread_message_count -= 1
+        chatRoom.last_message = lastMsg
+        chatRoom.last_message_created_at = lastCreatedAt
+        chatRoom.unread_message_count += unread_msg_count
+
+        const isInMainChatRoom =
+            !_.isEmpty(state.mainCurChatRoom) && state.mainCurChatRoom.id == ws_data.info.chat_room_id
+        const isInDrawerChatRoom =
+            !_.isEmpty(state.drawerCurChatRoom) && state.drawerCurChatRoom.id == ws_data.info.chat_room_id
+        if (isInMainChatRoom) {
+            _.forEach(ws_data.dataset, (msg) => {
+                state.mainChatRoomMsgs.unshift(msg)
+            })
         }
-        if (!_.isEmpty(state.drawerCurChatRoom) && state.drawerCurChatRoom.id == ws_data.info.chat_room_id) {
-            state.drawerChatRoomMsgs.unshift(ws_data.dataset[0])
-            chatRoom.unread_message_count -= 1
+        if (isInDrawerChatRoom) {
+            _.forEach(ws_data.dataset, (msg) => {
+                state.drawerChatRoomMsgs.unshift(msg)
+            })
         }
+        if (isInMainChatRoom || isInDrawerChatRoom) {
+            chatRoom.unread_message_count -= unread_msg_count
+        }
+
+        _.assign(state.chatRoomList[chatRoomIdx], chatRoom)
+        // state.chatRoomList[chatRoomIdx] = chatRoom
 
         return state
     }),
-
-    // on(CommunitydActions.createChatRoomMsgByWS, (state, { ws_data }) => {
-    //     const chatRoomIdx = state.chatRoomList.findIndex((v) => v.id == ws_data.info.chat_room_id)
-    //     const chatRoom = state.chatRoomList[chatRoomIdx]
-
-    //     chatRoom.last_message = ws_data.dataset[0].text
-    //     chatRoom.last_message_created_at = ws_data.dataset[0].created_at
-    //     chatRoom.unread_message_count += 1
-
-    //     if (!_.isEmpty(state.mainCurChatRoom) && state.mainCurChatRoom.id == ws_data.info.chat_room_id) {
-    //         state.mainChatRoomMsgs.unshift(ws_data.dataset[0])
-    //         chatRoom.unread_message_count -= 1
-    //     }
-    //     if (!_.isEmpty(state.drawerCurChatRoom) && state.drawerCurChatRoom.id == ws_data.info.chat_room_id) {
-    //         state.drawerChatRoomMsgs.unshift(ws_data.dataset[0])
-    //         chatRoom.unread_message_count -= 1
-    //     }
-
-    //     return state
-    // }),
     on(CommunitydActions.readChatRoomByWS, (state, { ws_data }) => {
         if (state.mainCurChatRoom?.id == ws_data.info.chat_room_id) {
             _.find(state.mainChatRoomMsgs, (msg, idx) => {
@@ -469,7 +474,6 @@ export const communityReducer = createImmerReducer(
                     state.mainChatRoomMsgs[idx].unread_user_ids = unread_users_ids
                     return false
                 }
-                console.log('read chat msg idx  --- ', idx)
                 return true
             })
         }

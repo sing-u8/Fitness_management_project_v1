@@ -206,6 +206,10 @@ export const readChatRoomByWS = createAction(
     props<{ ws_data: WS.ReadChatRoom }>()
 )
 
+export const createChatRoomUserByWS = createAction(
+    `[${FeatureKey}] Create Chat Room User By Web Socket`,
+    props<{ ws_data: WS.CreateChatRoomUser }>()
+)
 export const deleteChatRoomUserByWS = createAction(
     `[${FeatureKey}] Delete Chat Room User By Web Socket`,
     props<{ ws_data: WS.DeleteChatRoomUser }>()
@@ -219,10 +223,7 @@ export const finishCreateChatRoomMsgByWS = createAction(
     `[${FeatureKey}] Finish Create Chat Room Message By Web Socket`,
     props<{ ws_data: WS.CreateChatRoomMessage; chatRoomIdx: number; chatRoomList: Array<ChatRoom> }>()
 )
-// export const createChatRoomMsgByWS = createAction(
-//     `[${FeatureKey}] Create Chat Room Message By Web Socket`,
-//     props<{ ws_data: WS.CreateChatRoomMessage }>()
-// )
+
 export const deleteChatRoomMsgByWS = createAction(
     `[${FeatureKey}] Delete Chat Room Message By Web Socket`,
     props<{ ws_data: WS.DeleteChatRoomMessage }>()

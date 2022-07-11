@@ -496,7 +496,13 @@ export class CommunityEffect {
                 // if (_.isEmpty(chatRoomList) || isLoading != 'done') return []
                 const chatRoomIdx = chatRoomList.findIndex((v) => v.id == ws_data.info.chat_room_id)
                 if (chatRoomIdx != -1) {
-                    return [CommunityActions.finishCreateChatRoomMsgByWS({ ws_data, chatRoomIdx, chatRoomList })]
+                    return [
+                        CommunityActions.finishCreateChatRoomMsgByWS({
+                            ws_data,
+                            chatRoomIdx,
+                            chatRoomList: undefined,
+                        }),
+                    ]
                 } else {
                     return this.centerChatRoomApi.getChatRoom(ws_data.info.center_id).pipe(
                         switchMap((_chatRoomList) => {
@@ -505,7 +511,7 @@ export class CommunityEffect {
                                 CommunityActions.finishCreateChatRoomMsgByWS({
                                     ws_data,
                                     chatRoomIdx,
-                                    chatRoomList: _chatRoomList,
+                                    chatRoomList: _.cloneDeep(_chatRoomList),
                                 }),
                             ]
                         })

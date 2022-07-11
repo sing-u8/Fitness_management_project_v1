@@ -10,7 +10,7 @@ section.chat-message-user {
 
     $avatarWidth: 42px;
     .avatar-container {
-        width: $avatarWidth;
+        min-width: $avatarWidth;
         // min-height: 30px;
     }
 

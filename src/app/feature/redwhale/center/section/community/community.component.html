@@ -129,6 +129,7 @@
                         *ngFor="let message of (chatRoomMsgs$ | async); let i = index"
                         [message]="message"
                         [showUserInfo]="showUser(i)"
+                        [lastSuccessiveMsg]="isLastSuccessiveMsg(i)"
                     ></rw-chat-message>
 
                     <rw-chat-intro-message

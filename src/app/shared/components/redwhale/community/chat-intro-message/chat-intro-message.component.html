@@ -20,7 +20,7 @@
     <div
       id="dm"
       *ngIf="selectedRoom?.type_code == 'chat_room_type_general'
-            && selectedRoom?.chat_room_users.length == 2; else group"
+            && selectedRoom?.chat_room_users.length == 1; else group"
     >
       <p class="rw-typo-bodytext0-bold title">💌
         <span class="rw-typo-bodytext0-bold">{{dmChatRoomName}}</span>님에게 메시지를 보내보세요.
@@ -32,7 +32,7 @@
     <div
       id="group"
       *ngIf="selectedRoom?.type_code == 'chat_room_type_general'
-          && selectedRoom?.chat_room_users.length > 2"
+          && selectedRoom?.chat_room_users.length > 1"
     >
       <p class="icon">💌</p>
       <p class="rw-typo-bodytext0-bold title">

@@ -438,15 +438,31 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
 
     // chat-message component helper
     public isNearBottom = true
-    showUser(index): boolean {
+    showUser(index: number): boolean {
         return this.chatRoomMsgs_.length > index + 1 &&
             this.chatRoomMsgs_[index].user_id &&
+            this.chatRoomMsgs_[index + 1].type_code != 'chat_room_message_type_system' &&
+            this.chatRoomMsgs_[index + 1].type_code != 'fe_chat_room_message_type_date' &&
             this.chatRoomMsgs_[index].user_id == this.chatRoomMsgs_[index + 1].user_id &&
             dayjs(this.chatRoomMsgs_[index].created_at).format('YYYY-MM-DD_HH_mm') ==
                 dayjs(this.chatRoomMsgs_[index + 1].created_at).format('YYYY-MM-DD_HH_mm')
-            ? // && this.chatRoomMsgs_[index + 1].type_code != 'info'
-              false
+            ? false
             : true
+    }
+    // need to be used with showUser
+    isLastSuccessiveMsg(index: number): boolean {
+        return (
+            index != 0 &&
+            (this.chatRoomMsgs_[index].user_id != this.chatRoomMsgs_[index - 1].user_id ||
+                (this.chatRoomMsgs_[index].user_id == this.chatRoomMsgs_[index - 1].user_id &&
+                    dayjs(this.chatRoomMsgs_[index].created_at).format('YYYY-MM-DD_HH_mm') !=
+                        dayjs(this.chatRoomMsgs_[index - 1].created_at).format('YYYY-MM-DD_HH_mm')))
+            //  &&
+            // (this.chatRoomMsgs_[index - 1].type_code != 'chat_room_message_type_system' ||
+            //     this.chatRoomMsgs_[index - 1].type_code != 'fe_chat_room_message_type_date' ||
+            //     dayjs(this.chatRoomMsgs_[index].created_at).format('YYYY-MM-DD_HH_mm') !=
+            //         dayjs(this.chatRoomMsgs_[index + 1].created_at).format('YYYY-MM-DD_HH_mm'))
+        )
     }
 
     scrolled(event: any): void {

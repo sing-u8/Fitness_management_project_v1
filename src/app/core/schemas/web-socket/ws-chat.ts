@@ -43,6 +43,12 @@ export interface DeleteChatRoomUser extends Base {
     info: { chat_room_id: string; chat_room_user_id: string; center_id: string }
     dataset: Array<ChatRoomUser>
 }
+export interface CreateChatRoomUser extends Base {
+    topic: 'chat_room_user'
+    operation: 'create'
+    info: { chat_room_id: string; center_id: string }
+    dataset: Array<ChatRoomUser>
+}
 
 export interface CreateChatRoomMessage extends Base {
     topic: 'chat_room_message'

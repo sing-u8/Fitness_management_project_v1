@@ -21,13 +21,13 @@
 
   <section
     class="msg-type-image default"
+    [class.last-successive-msg] = "lastSuccessiveMsg"
     *ngIf="type == 'image'"
   >
     <rw-chat-message-user
       [message]="message"
       [showUserInfo]="showUserInfo"
       [isSidebar] = "isSidebar"
-
     >
       <div class="message-container" [class.is-sidebar]="isSidebar">
         <ng-container [ngTemplateOutlet]="messageItem"></ng-container>
@@ -82,6 +82,7 @@
 
   <section
     class="msg-type-file default"
+    [class.last-successive-msg] = "lastSuccessiveMsg"
     *ngIf="type == 'file'"
   >
     <rw-chat-message-user
@@ -130,6 +131,7 @@
 
   <section
     class="msg-type-video default"
+    [class.last-successive-msg] = "lastSuccessiveMsg"
     *ngIf="type == 'video'"
   >
     <rw-chat-message-user
@@ -186,6 +188,7 @@
 
   <section
     class="msg-type-text default"
+    [class.last-successive-msg] = "lastSuccessiveMsg"
     *ngIf="type == 'text'"
   >
     <rw-chat-message-user

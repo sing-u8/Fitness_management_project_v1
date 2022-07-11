@@ -33,7 +33,7 @@ export class ChatIntroMessageComponent implements OnInit, OnChanges {
     }
 
     initDmChatRoomName() {
-        if (this.selectedRoom.chat_room_users.length == 2) {
+        if (this.selectedRoom.chat_room_users.length == 1) {
             this.dmChatRoomName = this.selectedRoom.chat_room_users.find((v) => v.id != this.user.id).name
         }
     }
