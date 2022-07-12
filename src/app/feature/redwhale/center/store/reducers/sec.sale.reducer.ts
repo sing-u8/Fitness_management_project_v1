@@ -109,8 +109,13 @@ export const saleReducer = createImmerReducer(
         state.inputs = { ...state.inputs, ...newState }
         return state
     }),
-    on(SaleActions.resetInputs, (state) => {
-        state.inputs = inputsInit
+    on(SaleActions.resetInput, (state, { inputType }) => {
+        state.inputs = {
+            ...state.inputs,
+            ...{
+                [inputType]: '',
+            },
+        }
         return state
     }),
     on(SaleActions.setSelectedDate, (state, { selectedDate }) => {

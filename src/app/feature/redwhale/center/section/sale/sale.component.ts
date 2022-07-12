@@ -291,7 +291,7 @@ export class SaleComponent implements OnInit, OnDestroy {
             type: type,
             value: value,
             cancelFn: () => {
-                this.nxStore.dispatch(SaleActions.resetInputs())
+                this.nxStore.dispatch(SaleActions.resetInput({ inputType: filterType }))
                 this.nxStore.dispatch(SaleActions.setIsFiltered({ newState: { [filterType]: false } }))
             },
         }

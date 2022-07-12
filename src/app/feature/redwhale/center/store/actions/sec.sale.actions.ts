@@ -38,7 +38,10 @@ export const setInputs = createAction(
     `[${FeatureKey}] Set Inputs`,
     props<{ newState: Partial<FromSaleReducer.Inputs> }>()
 )
-export const resetInputs = createAction(`[${FeatureKey}] Reset isFiltered state`)
+export const resetInput = createAction(
+    `[${FeatureKey}] Reset isFiltered Input state`,
+    props<{ inputType: FromSaleReducer.InputString }>()
+)
 export const setSelectedDate = createAction(
     `${[FeatureKey]} Set Selected Date`,
     props<{ selectedDate: FromSaleReducer.SelectedDate }>()
