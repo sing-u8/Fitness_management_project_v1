@@ -62,7 +62,7 @@ export class LockerShiftModalComponent implements AfterViewChecked, OnChanges, O
     public shiftLocker: LockerItem = undefined
     public shiftConfirmText = {
         text: ``,
-        subText: `확인 버튼을 클릭하시면,
+        subText: `'이동하기' 버튼을 클릭하시면,
             즉시 회원의 락커 자리가 변경돼요.`,
         cancelButtonText: '취소',
         confirmButtonText: '이동하기',
