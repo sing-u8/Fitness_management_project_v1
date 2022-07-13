@@ -1,4 +1,5 @@
 import { Component, OnInit, OnChanges } from '@angular/core'
+import { Location } from '@angular/common'
 import { Router } from '@angular/router'
 import { FormBuilder, FormControl, Validators } from '@angular/forms'
 
@@ -12,7 +13,7 @@ import { ClickEmitterType } from '@shared/components/common/button/button.compon
 import { Store } from '@ngrx/store'
 import { showToast } from '@appStore/actions/toast.action'
 
-import * as _ from 'lodash'
+import _ from 'lodash'
 import { combineLatestWith } from 'rxjs/operators'
 import { range } from 'rxjs'
 
@@ -50,6 +51,7 @@ export class SetCenterComponent implements OnInit {
     public center: Center = undefined
 
     constructor(
+        private location: Location,
         private fb: FormBuilder,
         private router: Router,
         private centerService: CenterService,
@@ -108,6 +110,10 @@ export class SetCenterComponent implements OnInit {
 
     goRouterLink(url: string) {
         this.router.navigateByUrl(url)
+    }
+
+    goBack() {
+        this.location.back()
     }
 
     // -------------------------------photo funcs---------------------------------//

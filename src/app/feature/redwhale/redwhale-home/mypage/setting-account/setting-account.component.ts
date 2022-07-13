@@ -43,7 +43,7 @@ export class SettingAccountComponent implements OnInit {
         sex: string // '남성' | '여성' | '--'
         birth_date: string
         marketing_agree: string // 0 or 1
-        push_notice: string // '켜기' | '끄기'
+        // push_notice: string // '켜기' | '끄기'
     } = {
         name: undefined,
         email: undefined,
@@ -52,7 +52,7 @@ export class SettingAccountComponent implements OnInit {
         sex: undefined,
         birth_date: undefined,
         marketing_agree: undefined,
-        push_notice: undefined,
+        // push_notice: undefined,
     }
 
     public delAvatarFlag: boolean
@@ -119,7 +119,7 @@ export class SettingAccountComponent implements OnInit {
         this.inputList.sex = this.user.sex == 'male' ? '남성' : this.user.sex == 'female' ? '여성' : undefined
         this.inputList.birth_date = this.user.birth_date ?? ''
         this.inputList.marketing_agree = marketing_agree_text
-        this.inputList.push_notice = this.user.push_notification ? '켜기' : '끄기'
+        // this.inputList.push_notice = this.user.push_notification ? '켜기' : '끄기'
 
         if (this.user.sign_in_method != 'email') {
             delete this.inputList.password

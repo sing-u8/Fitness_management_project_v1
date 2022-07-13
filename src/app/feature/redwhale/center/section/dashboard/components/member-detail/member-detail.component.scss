@@ -226,7 +226,8 @@ section.member-detail__body {
                 border-top: 1px solid var(--border-color);
                 display: flex;
                 align-items: center;
-                justify-content: space-between;
+                // justify-content: space-between;
+                justify-content: flex-start;
 
                 .vertical-divider {
                     height: 20px;

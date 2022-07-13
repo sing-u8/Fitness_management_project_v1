@@ -35,7 +35,7 @@
         <span class="rw-typo-subtext3">회원관리</span>
     </div>
 
-    <div
+    <!-- <div
         *ngIf="centerApiData?.role_code == 'member'"
         class="menu d-flex flex-column justify-content-center align-items-center"
         [routerLink]="['/', address, 'schedule-reservation']"
@@ -60,10 +60,10 @@
             </g>
         </svg>
         <span class="rw-typo-subtext3">예약</span>
-    </div>
+    </div> -->
 
-
-    <div
+    <!-- #r스케줄-->
+    <!-- <div
         *ngIf="centerApiData?.role_code != 'member'"
         class="menu d-flex flex-column justify-content-center align-items-center"
         [routerLink]="['/', address, 'schedule']"
@@ -127,8 +127,9 @@
             </g>
         </svg>
         <span class="rw-typo-subtext3">스케줄</span>
-    </div>
+    </div> -->
 
+    <!--membership-->
     <div
         *ngIf="centerApiData?.role_code != 'member'"
         class="menu d-flex flex-column justify-content-center align-items-center"
@@ -180,6 +181,7 @@
         <span class="rw-typo-subtext3">회원권</span>
     </div>
 
+    <!--lesson-->
     <div
         *ngIf="centerApiData?.role_code != 'member'"
         class="menu d-flex flex-column justify-content-center align-items-center"
@@ -212,6 +214,7 @@
         <span class="rw-typo-subtext3">수업</span>
     </div>
 
+    <!--locker-->
     <div
         *ngIf="centerApiData?.role_code != 'member'"
         class="menu d-flex flex-column justify-content-center align-items-center"
@@ -278,7 +281,8 @@
         <span class="rw-typo-subtext3">락커</span>
     </div>
 
-    <div
+    <!--chatting-->
+    <!-- <div
         class="menu d-flex flex-column justify-content-center align-items-center"
         [routerLink]="['/', address, 'community']"
         routerLinkActive="selected"
@@ -346,7 +350,7 @@
             </g>
         </svg>
         <span class="rw-typo-subtext3">채팅</span>
-    </div>
+    </div> -->
 
     <div
         *ngIf="centerApiData?.role_code != 'member'"

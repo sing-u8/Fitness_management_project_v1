@@ -48,15 +48,15 @@
                     </div>
                 </div>
                 <div class="h-line"></div>
-                <div class="sub-menu d-flex justify-content-between align-items-center">
-                    <div
+                <div class="sub-menu">
+                    <!-- <div
                         class="touchpad d-flex justify-content-center align-items-center"
                         (click) = "goTouchPad()"
                     >
                         <img src="assets/icons/header/touchpad.svg" />
                         <span class="rw-typo-bodytext2">터치패드 모드</span>
-                    </div>
-                    <div class="v-line-touchpad-settings"></div>
+                    </div> -->
+                    <!-- <div class="v-line-touchpad-settings"></div> -->
                     <div
                         class="settings d-flex justify-content-center align-items-center"
                         (click) = "goSettingCenter()"
@@ -102,7 +102,7 @@
         </div>
     </div>
     <div class="right-side-menu col d-flex justify-content-end align-items-center">
-        <div
+        <!-- <div
             class="menu-item d-flex align-items-center"
             [class.menu-item-selected]="(drawer$ | async)?.tabName == 'member'"
             (click)="openDrawer('member')"
@@ -131,9 +131,9 @@
             <span class="rw-typo-bodytext2">알림</span>
             <div class="dot-badge d-flex justify-content-center align-items-center"></div>
             <div class="menu-item-selected-line" *ngIf="(drawer$ | async)?.tabName == 'notification'"></div>
-        </div>
-        <div class="v-line-home" *ngIf="url == '/redwhale-home'"></div>
+        </div> -->
         <div class="v-line-center" *ngIf="url != '/redwhale-home'"></div>
+        <div class="v-line-home" *ngIf="url == '/redwhale-home'"></div>
         <div
             class="avatar d-flex align-items-center"
             [class.menu-item]="url == '/redwhale-home'"

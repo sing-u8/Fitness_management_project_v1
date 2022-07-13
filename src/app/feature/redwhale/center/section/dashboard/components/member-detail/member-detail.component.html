@@ -104,7 +104,7 @@
                     <div class="plus-icon"></div>
                     <span class="rw-typo-bodytext0-bold red">회원권 / 락커 등록</span>
                 </div>
-                <div class="vertical-divider"></div>
+                <!-- <div class="vertical-divider"></div>
                 <div
                     class="info-button"
                     [class.disabled]="!curUserData.user"
@@ -127,7 +127,7 @@
                 >
                     <img src="assets/icons/etc/attend.svg">
                     <span class="rw-typo-bodytext0-bold">수동 출석</span>
-                </div>
+                </div> -->
 
             </div>
         </div>
@@ -172,13 +172,13 @@
             >
                 락커
             </div>
-            <div
+            <!-- <div
                 class="member-detail-tag"
                 [class.selected]="(userDetailTag$ | async) == 'reservation'"
                 (click)="setUserDetailTag('reservation')"
             >
                 예약 내역
-            </div>
+            </div> -->
             <div
                 class="member-detail-tag"
                 [class.selected]="(userDetailTag$ | async) == 'payment'"
