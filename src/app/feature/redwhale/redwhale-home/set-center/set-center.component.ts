@@ -40,6 +40,7 @@ export class SetCenterComponent implements OnInit {
 
     public cetnerNameErrObj = {
         empty: '센터 이름을 입력해주세요.',
+        maxlength: '50자를 초과하였습니다.',
     }
     public centerAddrErrObj = {
         empty: '센터 url 주소를 입력해주세요.',
@@ -66,7 +67,7 @@ export class SetCenterComponent implements OnInit {
         this.localPhotoFiles = { center_picture: undefined, center_background: undefined }
 
         // formbulder
-        this.centerNameForm = this.fb.control('')
+        this.centerNameForm = this.fb.control('', { validators: [Validators.maxLength(50)] })
         this.centerAddrForm = this.fb.control('', {
             validators: [Validators.maxLength(15)],
         })
@@ -84,6 +85,7 @@ export class SetCenterComponent implements OnInit {
             )
             .subscribe(([center, cp, cbg]) => {
                 this.center = center
+                console.log('get center data : ', center, ' - ', cp, ' - ', cbg)
                 if (center.background) {
                     this.photoSrc.file_type_center_background = cbg[0]?.url ?? undefined
                     this.photoName.file_type_center_background = cbg[0]?.originalname ?? undefined

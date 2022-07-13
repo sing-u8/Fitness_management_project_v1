@@ -10,7 +10,8 @@
 
 article.schedule {
     height: 100%;
-    padding: 25px 32px 35px 32px;
+    // padding: 25px 32px 35px 32px;
+    padding: 35px ;
     min-width: 1220px;
 
     @media (min-width: 1440px) {
@@ -60,7 +61,7 @@ article.schedule {
 
     .l-schedule-body {
         display: flex;
-        height: calc(100vh - 190px);
+        height: calc(100vh - 200px);
         width: 100%;
         position: relative;
 

@@ -437,17 +437,21 @@ export const communityReducer = createImmerReducer(
 
         const chatRoom = state.chatRoomList[chatRoomIdx]
 
-        chatRoom.chat_room_users.filter((v) => v.id != ws_data.dataset[0].id)
+        chatRoom.chat_room_users.filter((v) => v.id != ws_data.info.chat_room_user_id)
         chatRoom.chat_room_user_count -= 1
         state.chatRoomList[chatRoomIdx] = chatRoom
 
         if (!_.isEmpty(state.mainCurChatRoom) && state.mainCurChatRoom.id == ws_data.info.chat_room_id) {
             state.mainCurChatRoom = chatRoom
-            state.mainChatRoomUserList = state.mainChatRoomUserList.filter((v) => v.id != ws_data.dataset[0].id)
+            state.mainChatRoomUserList = state.mainChatRoomUserList.filter(
+                (v) => v.id != ws_data.info.chat_room_user_id
+            )
         }
         if (!_.isEmpty(state.drawerCurChatRoom) && state.drawerCurChatRoom.id == ws_data.info.chat_room_id) {
             state.drawerCurChatRoom = chatRoom
-            state.drawerChatRoomUserList = state.drawerChatRoomUserList.filter((v) => v.id != ws_data.dataset[0].id)
+            state.drawerChatRoomUserList = state.drawerChatRoomUserList.filter(
+                (v) => v.id != ws_data.info.chat_room_user_id
+            )
         }
 
         return state

@@ -5,6 +5,9 @@ import { FormBuilder, FormControl, Validators } from '@angular/forms'
 import { CenterService } from '@services/center.service'
 import { FileService, FileTypeCode } from '@services/file.service'
 
+import { Error } from '@schemas/error'
+import { CreateCenterErrors } from '@schemas/errors/create-center-errors'
+
 // components
 import { ClickEmitterType } from '@shared/components/common/button/button.component'
 
@@ -36,6 +39,7 @@ export class CreateGymComponent implements OnInit {
 
     public cetnerNameErrObj = {
         empty: '센터 이름을 입력해주세요.',
+        maxlength: '50자를 초과하였습니다.',
     }
     public centerAddrErrObj = {
         empty: '센터 url 주소를 입력해주세요.',
@@ -61,7 +65,7 @@ export class CreateGymComponent implements OnInit {
         this.localPhotoFiles = { center_picture: undefined, center_background: undefined }
 
         // formbulder
-        this.centerNameForm = this.fb.control('')
+        this.centerNameForm = this.fb.control('', { validators: [Validators.maxLength(50)] })
         this.centerAddrForm = this.fb.control('', {
             validators: [Validators.maxLength(15)],
         })
@@ -168,9 +172,18 @@ export class CreateGymComponent implements OnInit {
                         })
                     })
                 },
-                error: (e) => {
+                error: (e: Error) => {
                     btLoadingFns.hideLoading()
-                    this.nxStore.dispatch(showToast({ text: '이미 존재하는 센터 주소입니다.' }))
+                    console.log('create center error : ', e)
+                    if (e.code == 'AUTHENTICATION_001') {
+                        this.nxStore.dispatch(showToast({ text: CreateCenterErrors.AUTHENTICATION_001.message }))
+                    } else if (e.code == 'AUTHENTICATION_002') {
+                        this.nxStore.dispatch(showToast({ text: CreateCenterErrors.AUTHENTICATION_002.message }))
+                    } else if (e.code == 'AUTHENTICATION_003') {
+                        this.nxStore.dispatch(showToast({ text: CreateCenterErrors.AUTHENTICATION_003.message }))
+                    } else if (e.code == 'FUNCTION_CENTER_001') {
+                        this.nxStore.dispatch(showToast({ text: CreateCenterErrors.FUNCTION_CENTER_001.message }))
+                    }
                 },
             })
     }

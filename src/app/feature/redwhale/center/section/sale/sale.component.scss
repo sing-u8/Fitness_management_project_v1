@@ -9,7 +9,8 @@
 
 .sale {
     height: 100%;
-    padding: 25px 32px 35px 32px;
+    // padding: 25px 32px 35px 32px;
+    padding: 35px;
 
     // 나중에 수정하기 -  1440 부터는 사이드바가 밀고 나오지 않고, 한 레이어 위로 나오게
 
@@ -59,7 +60,7 @@
 
     .content-container {
         display: flex;
-        height: calc(100vh - 187px);
+        height: calc(100vh - 200px);
         width: 100%;
         position: relative;
         .content-title-margin {

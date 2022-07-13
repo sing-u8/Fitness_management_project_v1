@@ -41,7 +41,7 @@ export interface DeleteChatRoomUser extends Base {
     topic: 'chat_room_user'
     operation: 'delete'
     info: { chat_room_id: string; chat_room_user_id: string; center_id: string }
-    dataset: Array<ChatRoomUser>
+    dataset: Array<never>
 }
 export interface CreateChatRoomUser extends Base {
     topic: 'chat_room_user'

@@ -56,8 +56,18 @@
         align-items: center;
         margin-bottom: 28px;
 
+        width: calc(100% - 90px);
+
         .contents-top {
             margin-bottom: 2px;
+        }
+
+        p {
+            width: 100%;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+            text-align: center;
         }
     }
 }

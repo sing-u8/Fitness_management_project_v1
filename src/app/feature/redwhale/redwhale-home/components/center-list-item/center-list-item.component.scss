@@ -53,11 +53,30 @@
         align-items: center;
         margin-bottom: 60px;
 
+        width: 100%;
+        position: relative;
+
         .contents-top {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             margin-bottom: 2px;
             & span:first-child {
-                margin-right: 3px;
+                margin-right: 5px;
+                max-width: calc(100% - 100px);
+                text-overflow: ellipsis;
+                overflow: hidden;
+                white-space: nowrap;
+                text-align: center;
             }
+        }
+        & p:nth-child(2) {
+            max-width: calc(100% - 80px);
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+            text-align: center;
         }
     }
     .list-bottom-toolbar {

@@ -17,7 +17,8 @@ gm-center-membership-category {
     }
 }
 
-$membership-padding: 25px 32px 0px 32px;
+// $membership-padding: 25px 32px 0px 32px;
+$membership-padding: 35px;
 $membership-min-width: 897px;
 
 .membership {
@@ -65,7 +66,7 @@ main {
         -webkit-transition: max-width 0.2s ease-in;
         -o-transition: max-width 0.2s ease-in;
         margin-bottom: 38px;
-        height: calc(100vh - 188px);
+        height: calc(100vh - 197px);
 
         &--flex {
             -ms-flex: 0 0 33.4201389%;
@@ -166,7 +167,7 @@ main {
         flex-direction: column;
         margin-bottom: 38px;
         margin-top: 13px;
-        height: calc(100vh - 201px);
+        height: calc(100vh - 210px);
         transition: max-width 0.2s ease-in;
         -moz-transition: max-width 0.2s ease-in;
         -webkit-transition: max-width 0.2s ease-in;
