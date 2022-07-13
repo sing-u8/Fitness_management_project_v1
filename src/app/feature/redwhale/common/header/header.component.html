@@ -85,7 +85,7 @@
                                     fontSize="11"
                                     [backgroundColor]="center.color"
                                 ></rw-avatar>
-                                <span class="rw-typo-bodytext2">{{ center.name }}</span>
+                                <span id="center_name" class="rw-typo-bodytext2">{{ center.name }}</span>
                                 <div
                                     class="selected d-flex justify-content-center align-items-center"
                                     *ngIf="user.selected_center.address == center.address"

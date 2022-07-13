@@ -159,10 +159,17 @@ p {
                 cursor: default;
 
                 .selected-center-info {
+                    position: relative;
                     padding: 25px;
 
                     div:nth-child(2) {
                         margin-left: 15px;
+                        width: calc(100% - 45px - 25px);
+                        span {
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            white-space: nowrap;
+                        }
                     }
                 }
 
@@ -225,8 +232,12 @@ p {
                                 background-color: var(--background-color);
                             }
 
-                            span {
+                            span#center_name {
                                 margin-left: 8px;
+                                width: calc(100% - 24px - 60px);
+                                overflow: hidden;
+                                text-overflow: ellipsis;
+                                white-space: nowrap;
                             }
 
                             .selected {
