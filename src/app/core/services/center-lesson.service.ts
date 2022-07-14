@@ -20,6 +20,26 @@ export class CenterLessonService {
 
     constructor(private http: HttpClient) {}
 
+    // 수업 아이템 일괄 조회
+    getAllClasses(gymId: string, page?: number, pageSize?: number): Observable<Array<ClassItem>> {
+        const url =
+            this.SERVER + `/${gymId}/class_item` + (page && pageSize ? `?page=${page}&pageSize=${pageSize}` : '')
+
+        const options = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json',
+            }),
+        }
+
+        return this.http.get<Response>(url, options).pipe(
+            map((res) => {
+                return res.dataset
+            }),
+            catchError(handleError)
+        )
+    }
+
+    // 카테고리 생성
     createCategory(gymId: string, requestBody: CreateCategoryRequestBody): Observable<ClassCategory> {
         const url = this.SERVER + `/${gymId}/class`
 
@@ -37,6 +57,7 @@ export class CenterLessonService {
         )
     }
 
+    // 카테고리 조회
     getCategoryList(gymId: string): Observable<Array<ClassCategory>> {
         const url = this.SERVER + `/${gymId}/class`
 
@@ -54,6 +75,7 @@ export class CenterLessonService {
         )
     }
 
+    // 카테고리 수정
     updateCategory(gymId: string, categoryId: string, requestBody: UpdateCategoryRequestBody): Observable<Response> {
         const url = this.SERVER + `/${gymId}/class/${categoryId}`
 
@@ -71,6 +93,7 @@ export class CenterLessonService {
         )
     }
 
+    // 카테고리 삭제
     deleteCategory(gymId: string, categoryId: string): Observable<Response> {
         const url = this.SERVER + `/${gymId}/class/${categoryId}`
 
@@ -88,6 +111,7 @@ export class CenterLessonService {
         )
     }
 
+    // 아이템 생성
     createItem(gymId: string, categoryId: string, requestBody: CreateItemRequestBody): Observable<ClassItem> {
         const url = this.SERVER + `/${gymId}/class/${categoryId}/item`
 
@@ -105,6 +129,7 @@ export class CenterLessonService {
         )
     }
 
+    // 아이템 조회
     getItems(gymId: string, categoryId: string): Observable<Array<ClassItem>> {
         const url = this.SERVER + `/${gymId}/class/${categoryId}/item`
 
@@ -122,23 +147,7 @@ export class CenterLessonService {
         )
     }
 
-    getItem(gymId: string, categoryId: string, itemId: string): Observable<ClassItem> {
-        const url = this.SERVER + `/${gymId}/class/${categoryId}/item/${itemId}`
-
-        const options = {
-            headers: new HttpHeaders({
-                'Content-Type': 'application/json',
-            }),
-        }
-
-        return this.http.get<Response>(url, options).pipe(
-            map((res) => {
-                return res.dataset[0]
-            }),
-            catchError(handleError)
-        )
-    }
-
+    // 아이템 수정
     updateItem(
         gymId: string,
         categoryId: string,
@@ -161,6 +170,7 @@ export class CenterLessonService {
         )
     }
 
+    // 아이템 삭제
     deleteItem(gymId: string, categoryId: string, itemId: string): Observable<Response> {
         const url = this.SERVER + `/${gymId}/class/${categoryId}/item/${itemId}`
 
@@ -178,6 +188,7 @@ export class CenterLessonService {
         )
     }
 
+    // 아이템 이동
     moveItem(
         gymId: string,
         categoryId: string,
@@ -200,6 +211,7 @@ export class CenterLessonService {
         )
     }
 
+    // 회원권 연결
     linkMembership(
         centerId: string,
         categoryId: string,
@@ -222,6 +234,7 @@ export class CenterLessonService {
         )
     }
 
+    // 연결된 회원권 조회
     getLinkedMemberships(centerId: string, categoryId: string, ItemId: string): Observable<Array<MembershipItem>> {
         const url = this.SERVER + `/${centerId}/class/${categoryId}/item/${ItemId}/membership`
 
@@ -239,6 +252,7 @@ export class CenterLessonService {
         )
     }
 
+    // 회원권 연결 해제
     removeLinkedMembership(
         centerId: string,
         categoryId: string,
@@ -261,6 +275,7 @@ export class CenterLessonService {
         )
     }
 
+    // 강사 추가
     addInstructor(
         centerId: string,
         categoryId: string,
@@ -283,6 +298,7 @@ export class CenterLessonService {
         )
     }
 
+    // 강사 조회
     getInstructors(centerId: string, categoryId: string, ItemId: string): Observable<Array<CenterUser>> {
         const url = this.SERVER + `/${centerId}/class/${categoryId}/item/${ItemId}/instructor`
 
@@ -300,6 +316,7 @@ export class CenterLessonService {
         )
     }
 
+    // 강사 삭제
     removeInstructor(
         centerId: string,
         categoryId: string,

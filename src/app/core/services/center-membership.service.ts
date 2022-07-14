@@ -19,6 +19,26 @@ export class CenterMembershipService {
 
     constructor(private http: HttpClient) {}
 
+    // 회원권 아이템 일괄 조회
+    getAllClasses(gymId: string, page?: number, pageSize?: number): Observable<Array<MembershipItem>> {
+        const url =
+            this.SERVER + `/${gymId}/membership_item` + (page && pageSize ? `?page=${page}&pageSize=${pageSize}` : '')
+
+        const options = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json',
+            }),
+        }
+
+        return this.http.get<Response>(url, options).pipe(
+            map((res) => {
+                return res.dataset
+            }),
+            catchError(handleError)
+        )
+    }
+
+    // 카테고리 생성
     createCategory(gymId: string, requestBody: CreateCategoryRequestBody): Observable<MembershipCategory> {
         const url = this.SERVER + `/${gymId}/membership`
 
@@ -36,6 +56,7 @@ export class CenterMembershipService {
         )
     }
 
+    // 카테고리 조회
     getCategoryList(gymId: string): Observable<Array<MembershipCategory>> {
         const url = this.SERVER + `/${gymId}/membership`
 
@@ -53,6 +74,7 @@ export class CenterMembershipService {
         )
     }
 
+    // 카테고리 수정
     updateCategory(gymId: string, categoryId: string, requestBody: UpdateCategoryRequestBody): Observable<Response> {
         const url = this.SERVER + `/${gymId}/membership/${categoryId}`
 
@@ -70,6 +92,7 @@ export class CenterMembershipService {
         )
     }
 
+    // 카테고리 삭제
     deleteCategory(gymId: string, categoryId: string): Observable<Response> {
         const url = this.SERVER + `/${gymId}/membership/${categoryId}`
 
@@ -87,6 +110,7 @@ export class CenterMembershipService {
         )
     }
 
+    // 아이템 생성
     createItem(gymId: string, categoryId: string, requestBody: CreateItemRequestBody): Observable<MembershipItem> {
         const url = this.SERVER + `/${gymId}/membership/${categoryId}/item`
 
@@ -104,6 +128,7 @@ export class CenterMembershipService {
         )
     }
 
+    // 아이템 조회
     getItems(gymId: string, categoryId: string): Observable<Array<MembershipItem>> {
         const url = this.SERVER + `/${gymId}/membership/${categoryId}/item`
 
@@ -121,23 +146,7 @@ export class CenterMembershipService {
         )
     }
 
-    getItem(gymId: string, categoryId: string, itemId: string): Observable<MembershipItem> {
-        const url = this.SERVER + `/${gymId}/membership/${categoryId}/item/${itemId}`
-
-        const options = {
-            headers: new HttpHeaders({
-                'Content-Type': 'application/json',
-            }),
-        }
-
-        return this.http.get<Response>(url, options).pipe(
-            map((res) => {
-                return res.dataset[0]
-            }),
-            catchError(handleError)
-        )
-    }
-
+    // 아이템 수정
     updateItem(
         gymId: string,
         categoryId: string,
@@ -160,6 +169,7 @@ export class CenterMembershipService {
         )
     }
 
+    // 아이템 삭제
     deleteItem(gymId: string, categoryId: string, itemId: string): Observable<Response> {
         const url = this.SERVER + `/${gymId}/membership/${categoryId}/item/${itemId}`
 
@@ -177,6 +187,7 @@ export class CenterMembershipService {
         )
     }
 
+    // 아이템 이동
     moveItem(
         gymId: string,
         categoryId: string,
@@ -199,6 +210,7 @@ export class CenterMembershipService {
         )
     }
 
+    // 수업 연결
     linkClass(
         centerId: string,
         categoryId: string,
@@ -221,6 +233,7 @@ export class CenterMembershipService {
         )
     }
 
+    // 연결된 수업 조회
     getLinkedClass(centerId: string, categoryId: string, ItemId: string): Observable<Array<ClassItem>> {
         const url = this.SERVER + `/${centerId}/membership/${categoryId}/item/${ItemId}/class`
 
@@ -238,6 +251,7 @@ export class CenterMembershipService {
         )
     }
 
+    //  수업 연결 해제
     removeLinkedClass(centerId: string, categoryId: string, ItemId: string, classItemId: string): Observable<Response> {
         const url = this.SERVER + `/${centerId}/membership/${categoryId}/item/${ItemId}/class/${classItemId}`
 
@@ -277,7 +291,6 @@ export interface UpdateItemRequestBody {
     price?: number
     color?: string
     memo?: string
-    class_item_ids?: Array<string>
 }
 
 export interface MoveItemRequestBody {
