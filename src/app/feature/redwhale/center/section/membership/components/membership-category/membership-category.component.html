@@ -2,7 +2,7 @@
 
   <div class="category-header">
     <div class="header-left" (click)= "toggleCategOpen()">
-      <div class="mdi mdi-chevron-down" [class.open]="isCategOpen"></div>
+      <div class="mdi mdi-chevron-down" [class.open]="categ.isCategOpen"></div>
       <span
         *ngIf="!isChangeNameOn" class="rw-typo-title1"
       >
@@ -16,7 +16,7 @@
         class="rw-input"
         [formControl]="categNameForm"
       >
-      <span class="rw-typo-title1 item-length">{{items.length}}</span>
+      <span class="rw-typo-title1 item-length">{{categ.item_count}}</span>
     </div>
 
     <div class="header-right">
@@ -40,11 +40,20 @@
 
   <div
     class="category-content"
-    [class.categ-open] = 'isCategOpen'
+    [class.categ-open] = 'categ.isCategOpen'
   >
-    <ng-template [ngIf] ="items.length != 0">
+    <ng-template #item_pending [ngIf] = "categ.isCategPending == 'pending' && categ.items.length == 0" [ngIfElse]="item_done">
+      <ngx-skeleton-loader
+        *ngFor="let _ of [].constructor(categ.item_count)"
+        count="1"
+        appearance="line"
+        [theme]="{width: '340px', height: '92px', 'border-radius':'5px', margin: '0px'}"
+      ></ngx-skeleton-loader>
+    </ng-template>
+
+    <ng-template #item_done>
       <gm-membership-card
-        *ngFor = "let item of items"
+        *ngFor = "let item of categ.items"
         [categItem] = "item"
         [categId] = "id"
         [centerId] = "centerId"

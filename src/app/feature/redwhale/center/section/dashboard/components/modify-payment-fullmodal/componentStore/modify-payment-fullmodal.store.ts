@@ -144,10 +144,10 @@ export class ModifyPaymentFullModalStore extends ComponentStore<State> {
     })
     setMembershipTicketMembershipItem = this.updater((state, membershipItem: MembershipItem) => {
         state.membershipTicket.membershipItem = membershipItem
-        state.membershipTicket.lessonList = membershipItem.class_items.map((v) => ({
-            selected: true,
-            item: v,
-        }))
+        // state.membershipTicket.lessonList = membershipItem.class_items.map((v) => ({
+        //     selected: true,
+        //     item: v,
+        // }))
         state.membershipTicket.amount.normalAmount = String(membershipItem.price).replace(/\B(?=(\d{3})+(?!\d))/g, ',')
         return _.cloneDeep(state)
     })
@@ -186,7 +186,8 @@ export class ModifyPaymentFullModalStore extends ComponentStore<State> {
         (param$: Observable<{ centerId: string; categoryId: string; itemId: string }>) =>
             param$.pipe(
                 switchMap((param) =>
-                    this.centerMembershipApi.getItem(param.centerId, param.categoryId, param.itemId).pipe(
+                    this.centerMembershipApi.getItems(param.centerId, param.categoryId).pipe(
+                        map((items) => _.find(items, (v) => v.id == param.itemId)),
                         tap({
                             next: (membershipItem) => {
                                 this.setMembershipTicketMembershipItem(membershipItem)

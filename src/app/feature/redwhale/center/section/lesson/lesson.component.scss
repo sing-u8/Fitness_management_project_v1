@@ -549,7 +549,8 @@ main {
                         align-items: center;
                         position: absolute;
                         top: calc(50% - 56px);
-                        left: calc(50% - 116px);
+                        left: 0;
+                        right: 0;
                         & p {
                             &:not(:first-of-type) {
                                 margin-top: 1px;

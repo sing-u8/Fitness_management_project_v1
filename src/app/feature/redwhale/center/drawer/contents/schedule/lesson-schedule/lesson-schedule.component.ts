@@ -328,7 +328,8 @@ export class LessonScheduleComponent implements OnInit, OnDestroy, AfterViewInit
     onLessonClick(lesson: ClassItem, lessonCateg: ClassCategory) {
         this.selectedLesson = { lesson: lesson, lessonCateg: lessonCateg }
         this.planDetailInputs = { plan: lesson.name, detail: lesson.memo }
-        this.lesMembershipList = lesson.membership_items
+        // !!
+        // this.lesMembershipList = lesson.membership_items
         this.people = String(lesson.capacity)
         this.color = lesson.color
 
@@ -419,9 +420,10 @@ export class LessonScheduleComponent implements OnInit, OnDestroy, AfterViewInit
             .subscribe((lessonCateg) => {
                 const fillCateg = []
                 const emtpyCateg = []
-                _.forEach(lessonCateg, (categ) => {
-                    categ.items.length > 0 ? fillCateg.push(categ) : emtpyCateg.push(categ)
-                })
+                // !!
+                // _.forEach(lessonCateg, (categ) => {
+                //     categ.items.length > 0 ? fillCateg.push(categ) : emtpyCateg.push(categ)
+                // })
                 this.lessonCategList = [...fillCateg, ...emtpyCateg]
                 this.isLessonCategInit = true
             })

@@ -348,22 +348,23 @@ export class LessonComponent implements OnInit, AfterViewInit, OnDestroy {
 
     removeReservationMembership(itemId: string, curLesMemItemList: Array<MembershipItem>) {
         const filteredIdList = _.filter(curLesMemItemList, (v) => v.id != itemId).map((v) => String(v.id))
-        const reqBody: UpdateItemRequestBody = { membership_item_ids: filteredIdList }
-        this.updateSelLesson(this.selectedLesson, reqBody, 'RemoveReservationMembership')
+        // const reqBody: UpdateItemRequestBody = { membership_item_ids: filteredIdList }
+        // this.updateSelLesson(this.selectedLesson, reqBody, 'RemoveReservationMembership')
     }
 
     initAddReservableMembershipList(lesItem: FromLesson.SelectedLesson) {
-        this.centerReservableMembershipItemList = _.reduce(
-            _.cloneDeep(this.centerMembershipCategList),
-            (list, v) => {
-                v.items.forEach((j) => list.push(j))
-                return list
-            },
-            []
-        )
-        _.remove(this.centerReservableMembershipItemList, (v) => {
-            return lesItem.lessonData.membership_items.some((j) => j.id == v.id)
-        })
+        // this.centerReservableMembershipItemList = _.reduce(
+        //     _.cloneDeep(this.centerMembershipCategList),
+        //     (list, v) => {
+        //         v.items.forEach((j) => list.push(j))
+        //         return list
+        //     },
+        //     []
+        // )
+        // !!
+        // _.remove(this.centerReservableMembershipItemList, (v) => {
+        //     return lesItem.lessonData.membership_items.some((j) => j.id == v.id)
+        // })
         this.isReserveMembershipExist = this.centerReservableMembershipItemList.length > 0 ? true : false
     }
 

@@ -81,16 +81,23 @@ export class MembershipCardComponent implements OnInit, AfterViewInit, OnDestroy
 
     onClickItem() {
         if (this.isIn == 'category') {
-            this.nxStore.dispatch(
-                MembershipActions.setSelectedMembership({
-                    selectedMembership: {
-                        centerId: this.centerId,
-                        categId: this.categId,
-                        categName: this.categName,
-                        membershipData: this.categItem,
-                    },
+            const selLessonSubscription: Subscription = this.nxStore
+                .pipe(select(LessonSelector.selectedLesson), takeUntil(this.unSubscriber$))
+                .subscribe((selectedLesson) => {
+                    if (selectedLesson.lessonData?.id != this.categItem.id)
+                        this.nxStore.dispatch(
+                            MembershipActions.startSetSelectedMembership({
+                                selectedMembership: {
+                                    centerId: this.centerId,
+                                    categId: this.categId,
+                                    categName: this.categName,
+                                    membershipData: this.categItem,
+                                },
+                            })
+                        )
                 })
-            )
+
+            selLessonSubscription.unsubscribe()
         } else if (this.isIn == 'addReservableItemList') {
             this.addReservableMembershipToLesson()
         }
@@ -103,15 +110,16 @@ export class MembershipCardComponent implements OnInit, AfterViewInit, OnDestroy
             .subscribe((selectedLesson) => {
                 selLesson = selectedLesson
             })
-        const membershipItemIdList: Array<string> = selLesson.lessonData.membership_items.map((v) => String(v.id))
-        membershipItemIdList.push(String(this.categItem.id))
-        this.nxStore.dispatch(
-            LessonActions.updateSelectedLesson({
-                selectedLesson: selLesson,
-                reqBody: { membership_item_ids: membershipItemIdList },
-                updateType: undefined,
-            })
-        )
+        // !!
+        // const membershipItemIdList: Array<string> = selLesson.lessonData.membership_items.map((v) => String(v.id))
+        // membershipItemIdList.push(String(this.categItem.id))
+        // this.nxStore.dispatch(
+        //     LessonActions.updateSelectedLesson({
+        //         selectedLesson: selLesson,
+        //         reqBody: { membership_item_ids: membershipItemIdList },
+        //         updateType: undefined,
+        //     })
+        // )
         // !! 예약가능한 회원권 추가할 때, 순서가 틀어지지 않는지 확인하기  위 액션이 끝난 후에 아래가 실행되어야 함!
         // this.nxStore.dispatch(MembershipActions.refreshSelectedMembership())
         selLessonSubscription.unsubscribe()

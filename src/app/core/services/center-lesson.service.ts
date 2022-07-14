@@ -358,13 +358,12 @@ export interface UpdateItemRequestBody {
     name?: string
     minutes?: number
     people?: number
-    instructor_user_id?: string
+    instructor_user_id?: string // !! 수정 필요
     color?: string
     memo?: string
     reservation_days?: number
     reservation_deadline_time?: number
     reservation_cancellation_time?: number
-    membership_item_ids?: Array<string>
 }
 
 export interface MoveItemRequestBody {

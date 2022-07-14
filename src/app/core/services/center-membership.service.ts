@@ -20,7 +20,7 @@ export class CenterMembershipService {
     constructor(private http: HttpClient) {}
 
     // 회원권 아이템 일괄 조회
-    getAllClasses(gymId: string, page?: number, pageSize?: number): Observable<Array<MembershipItem>> {
+    getAllMemberships(gymId: string, page?: number, pageSize?: number): Observable<Array<MembershipItem>> {
         const url =
             this.SERVER + `/${gymId}/membership_item` + (page && pageSize ? `?page=${page}&pageSize=${pageSize}` : '')
 

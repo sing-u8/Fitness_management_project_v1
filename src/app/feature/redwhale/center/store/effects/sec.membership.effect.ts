@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core'
 import { createEffect, Actions, ofType, concatLatestFrom } from '@ngrx/effects'
 import { Store } from '@ngrx/store'
-import { of, EMPTY } from 'rxjs'
-import { catchError, switchMap, tap, map, filter } from 'rxjs/operators'
+import { of, forkJoin } from 'rxjs'
+import { catchError, switchMap, map, filter } from 'rxjs/operators'
 import * as MembershipActions from '../actions/sec.membership.actions'
 import { MembershipCategoryState, SelectedMembership } from '../reducers/sec.membership.reducer'
 import * as MembershipSelector from '../selectors/sec.membership.selector'
@@ -11,24 +11,34 @@ import * as LessonActions from '../actions/sec.lesson.actions'
 import { showToast } from '@appStore/actions/toast.action'
 
 import { CenterMembershipService } from '@services/center-membership.service'
+import { CenterLessonService } from '@services/center-lesson.service'
 
 import _ from 'lodash'
 
+import { MembershipItem } from '@schemas/membership-item'
+
 @Injectable()
 export class MembershipEffect {
-    constructor(private actions$: Actions, private gymMembershipApi: CenterMembershipService, private store: Store) {}
+    constructor(
+        private actions$: Actions,
+        private centerMembershipApi: CenterMembershipService,
+        private centerLessonApi: CenterLessonService,
+        private store: Store
+    ) {}
 
     // membership category
     public loadMembershipCategs$ = createEffect(() =>
         this.actions$.pipe(
             ofType(MembershipActions.startLoadMembershipCategs),
             switchMap(({ centerId }) =>
-                this.gymMembershipApi.getCategoryList(centerId).pipe(
+                this.centerMembershipApi.getCategoryList(centerId).pipe(
                     map((categs) => {
                         const categState = _.map(categs, (categ) => {
-                            categ.items = _.reverse(categ.items)
+                            // categ.items = _.reverse(categ.items)
                             const _categState: MembershipCategoryState = {
                                 ...categ,
+                                isCategPending: 'done',
+                                items: [],
                                 isCategOpen: false,
                                 initialInputOn: false,
                             }
@@ -46,7 +56,7 @@ export class MembershipEffect {
         this.actions$.pipe(
             ofType(MembershipActions.startAddMembershipCateg),
             switchMap(({ centerId, categName }) =>
-                this.gymMembershipApi.createCategory(centerId, { name: categName }).pipe(
+                this.centerMembershipApi.createCategory(centerId, { name: categName }).pipe(
                     map((categ) => MembershipActions.FinishAddMembershipCateg({ membershipCateg: categ })),
                     catchError((err: string) => of(MembershipActions.error({ error: err })))
                 )
@@ -59,7 +69,7 @@ export class MembershipEffect {
             this.actions$.pipe(
                 ofType(MembershipActions.removeMembershipCateg),
                 switchMap(({ id, centerId }) =>
-                    this.gymMembershipApi.deleteCategory(centerId, id).pipe(
+                    this.centerMembershipApi.deleteCategory(centerId, id).pipe(
                         map(() => LessonActions.startUpsertState({ centerId: centerId })),
                         catchError((err: string) => of(MembershipActions.error({ error: err })))
                     )
@@ -73,7 +83,7 @@ export class MembershipEffect {
             this.actions$.pipe(
                 ofType(MembershipActions.changeMembershipCategName),
                 switchMap(({ centerId, id, categName }) =>
-                    this.gymMembershipApi.updateCategory(centerId, id, { name: categName }).pipe(
+                    this.centerMembershipApi.updateCategory(centerId, id, { name: categName }).pipe(
                         map(() => LessonActions.startUpsertState({ centerId: centerId })),
                         catchError((err: string) => of(MembershipActions.error({ error: err })))
                     )
@@ -84,17 +94,38 @@ export class MembershipEffect {
 
     // categ data
 
+    public getCategItemsWhenOpen = createEffect(() =>
+        this.actions$.pipe(
+            ofType(MembershipActions.startSetCategIsOpen),
+            concatLatestFrom(() => this.store.select(MembershipSelector.currentCenter)),
+            switchMap(([{ id, isOpen }, curCenterId]) => {
+                if (isOpen) {
+                    return this.centerMembershipApi.getItems(curCenterId, id).pipe(
+                        switchMap((items) => [
+                            MembershipActions.finishSetCategIsOpen({
+                                id,
+                                items,
+                            }),
+                        ])
+                    )
+                } else {
+                    return []
+                }
+            })
+        )
+    )
+
     public updateCategMembership = createEffect(() =>
         this.actions$.pipe(
             ofType(MembershipActions.startAddMembershipToCateg),
             switchMap(({ centerId, categId, categName, reqBody }) =>
-                this.gymMembershipApi.createItem(centerId, categId, reqBody).pipe(
+                this.centerMembershipApi.createItem(centerId, categId, reqBody).pipe(
                     switchMap((newItem) => [
                         MembershipActions.finishAddMembershipToCateg({
                             categId: categId,
                             newMembershipData: newItem,
                         }),
-                        MembershipActions.setSelectedMembership({
+                        MembershipActions.startSetSelectedMembership({
                             selectedMembership: {
                                 centerId: centerId,
                                 categId: categId,
@@ -114,7 +145,7 @@ export class MembershipEffect {
         this.actions$.pipe(
             ofType(MembershipActions.updateSelectedMembership),
             switchMap(({ selectedMembership, reqBody, updateType }) => {
-                return this.gymMembershipApi
+                return this.centerMembershipApi
                     .updateItem(
                         selectedMembership.centerId,
                         selectedMembership.categId,
@@ -127,11 +158,11 @@ export class MembershipEffect {
                         ),
                         concatLatestFrom(() => this.store.select(MembershipSelector.membershipCategEntities)),
                         switchMap(([action, memCategEn]) =>
-                            this.gymMembershipApi.getCategoryList(selectedMembership.centerId).pipe(
+                            this.centerMembershipApi.getCategoryList(selectedMembership.centerId).pipe(
                                 map((categs) => {
                                     const categState = _.map(categs, (categ) => {
-                                        categ.items = _.reverse(categ.items)
                                         const _categState: MembershipCategoryState = {
+                                            ...memCategEn[categ.id],
                                             ...categ,
                                             isCategOpen: memCategEn[categ.id].isCategOpen,
                                             initialInputOn: false,
@@ -142,22 +173,12 @@ export class MembershipEffect {
                                 }),
                                 concatLatestFrom(() => this.store.select(MembershipSelector.currentCenter)),
                                 switchMap(([memCategState, curGym]) => {
-                                    if (updateType == 'RemoveReservationLesson') {
-                                        return [
-                                            MembershipActions.updateMembershipCategs({
-                                                membershipCategState: memCategState,
-                                            }),
-                                            LessonActions.startUpsertState({ centerId: curGym }),
-                                            showToast({ text: '예약 가능한 수업 1개가 삭제되었습니다.' }),
-                                        ]
-                                    } else {
-                                        return [
-                                            MembershipActions.updateMembershipCategs({
-                                                membershipCategState: memCategState,
-                                            }),
-                                            LessonActions.startUpsertState({ centerId: curGym }),
-                                        ]
-                                    }
+                                    return [
+                                        MembershipActions.updateMembershipCategs({
+                                            membershipCategState: memCategState,
+                                        }),
+                                        LessonActions.startUpsertState({ centerId: curGym }),
+                                    ]
                                 })
                             )
                         )
@@ -170,7 +191,7 @@ export class MembershipEffect {
         this.actions$.pipe(
             ofType(MembershipActions.removeSelectedMembership),
             switchMap(({ selectedMembership }) =>
-                this.gymMembershipApi
+                this.centerMembershipApi
                     .deleteItem(
                         selectedMembership.centerId,
                         selectedMembership.categId,
@@ -191,26 +212,80 @@ export class MembershipEffect {
             filter(([action, selectedMembership]) => selectedMembership.membershipData != undefined),
             switchMap(([action, selectedMembership]) => {
                 console.log('refreshSelectedMembership$ : ', action, selectedMembership)
-                return this.gymMembershipApi
-                    .getItem(
+                return this.centerMembershipApi.getItems(selectedMembership.centerId, selectedMembership.categId).pipe(
+                    map((membershipItems) => {
+                        const membershipItem: MembershipItem = _.find(
+                            membershipItems,
+                            (v) => v.id == selectedMembership.membershipData.id
+                        )
+                        const newSelectedMembership: SelectedMembership = {
+                            ...selectedMembership,
+                            membershipData: membershipItem,
+                        }
+                        return MembershipActions.startSetSelectedMembership({
+                            selectedMembership: newSelectedMembership,
+                        })
+                    }),
+                    catchError((err: string) => of(MembershipActions.error({ error: err })))
+                )
+            })
+        )
+    )
+
+    // linked class item
+    public getLinkedClasses$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(MembershipActions.startSetSelectedMembership),
+            switchMap(({ selectedMembership }) =>
+                forkJoin({
+                    linkedClassItems: this.centerMembershipApi.getLinkedClass(
                         selectedMembership.centerId,
                         selectedMembership.categId,
                         selectedMembership.membershipData.id
-                    )
-                    .pipe(
-                        map((membershipItem) => {
-                            const newSelectedMembership: SelectedMembership = {
-                                ...selectedMembership,
-                                membershipData: membershipItem,
-                            }
-                            return MembershipActions.setSelectedMembership({
-                                selectedMembership: newSelectedMembership,
-                            })
-                        }),
-                        catchError((err: string) => of(MembershipActions.error({ error: err })))
-                    )
-            })
+                    ),
+                    allClassItems: this.centerLessonApi.getAllClasses(selectedMembership.centerId),
+                }).pipe(
+                    switchMap(({ linkedClassItems, allClassItems }) => {
+                        const linkableClassItems = _.differenceBy(allClassItems, linkedClassItems, 'id')
+                        return [MembershipActions.finishSetSelectedMembership({ linkedClassItems, linkableClassItems })]
+                    })
+                )
+            )
         )
+    )
+
+    public linkClass$ = createEffect(
+        () =>
+            this.actions$.pipe(
+                ofType(MembershipActions.startLinkClass),
+                concatLatestFrom(() => [this.store.select(MembershipSelector.selectedMembership)]),
+                switchMap(([{ linkClass }, curSelectedMembership]) =>
+                    this.centerMembershipApi.linkClass(
+                        curSelectedMembership.centerId,
+                        curSelectedMembership.categId,
+                        curSelectedMembership.membershipData.id,
+                        { class_item_id: linkClass.id }
+                    )
+                )
+            ),
+        { dispatch: false }
+    )
+
+    public unlinkClass$ = createEffect(
+        () =>
+            this.actions$.pipe(
+                ofType(MembershipActions.startUnlinkClass),
+                concatLatestFrom(() => [this.store.select(MembershipSelector.selectedMembership)]),
+                switchMap(([{ unlinkClass }, curSelectedMembership]) =>
+                    this.centerMembershipApi.removeLinkedClass(
+                        curSelectedMembership.centerId,
+                        curSelectedMembership.categId,
+                        curSelectedMembership.membershipData.id,
+                        unlinkClass.id
+                    )
+                )
+            ),
+        { dispatch: false }
     )
 
     // actions from lesson
@@ -219,15 +294,16 @@ export class MembershipEffect {
             ofType(MembershipActions.startUpsertState),
             concatLatestFrom(() => this.store.select(MembershipSelector.membershipCategEntities)),
             switchMap(([action, memCategEn]) =>
-                this.gymMembershipApi.getCategoryList(action.centerId).pipe(
+                this.centerMembershipApi.getCategoryList(action.centerId).pipe(
                     map((categs) => {
                         if (_.isEmpty(memCategEn)) {
                             return MembershipActions.finishUpsertState({ membershipCategState: [] })
                         }
 
                         const categState = _.map(categs, (categ) => {
-                            categ.items = _.reverse(categ.items)
+                            // categ.items = _.reverse(categ.items)
                             const _categState: MembershipCategoryState = {
+                                ...memCategEn[categ.id],
                                 ...categ,
                                 isCategOpen: memCategEn[categ.id].isCategOpen,
                                 initialInputOn: false,

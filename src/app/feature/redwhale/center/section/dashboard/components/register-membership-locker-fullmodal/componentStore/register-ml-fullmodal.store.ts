@@ -217,16 +217,15 @@ export class RegisterMembershipLockerFullmodalStore extends ComponentStore<State
                 this.centerMembershipApi.getCategoryList(centerId).pipe(
                     tap({
                         next: (membershipCateg) => {
-                            const membershipItemList = _.reduce(
-                                membershipCateg,
-                                (result, value) => {
-                                    _.forEach(value.items, (membershipitem) => [result.push(membershipitem)])
-                                    return result
-                                },
-                                []
-                            )
-
-                            this.setMembershipItems(membershipItemList)
+                            // const membershipItemList = _.reduce(
+                            //     membershipCateg,
+                            //     (result, value) => {
+                            //         _.forEach(value.items, (membershipitem) => [result.push(membershipitem)])
+                            //         return result
+                            //     },
+                            //     []
+                            // )
+                            // this.setMembershipItems(membershipItemList)
                         },
                         error: (err) => {
                             console.log('register-ml-fullmodal store - getmembershipItemsEffect err: ', err)
@@ -370,8 +369,8 @@ export class RegisterMembershipLockerFullmodalStore extends ComponentStore<State
                 this.centerMembershipApi.getCategoryList(centerId).pipe(
                     tap({
                         next: (membershipCategs) => {
-                            const doExist = _.some(membershipCategs, (v) => v.items.length != 0)
-                            this.setMembershipItemExist(doExist)
+                            // const doExist = _.some(membershipCategs, (v) => v.items.length != 0)
+                            // this.setMembershipItemExist(doExist)
                         },
                         error: (err) => {
                             console.log('register-ml-fullmodal store - checkMembershipItemsExist err: ', err)
@@ -426,9 +425,11 @@ export class RegisterMembershipLockerFullmodalStore extends ComponentStore<State
             count: { count: String(membership.count), infinite: membership.unlimited },
             assignee: undefined,
             membershipItem: membership,
-            lessonList: _.map(membership.class_items, (value) => {
-                return { selected: true, item: value }
-            }),
+            lessonList: [],
+            // !!
+            // _.map(membership.class_items, (value) => {
+            //     return { selected: true, item: value }
+            // }),
             status: 'modify' as const,
         }
     }

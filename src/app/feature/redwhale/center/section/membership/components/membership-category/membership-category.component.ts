@@ -1,11 +1,9 @@
 import { Component, OnInit, Input, AfterViewInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core'
 import { FormBuilder, FormControl } from '@angular/forms'
-import * as _ from 'lodash'
-
-import { MembershipItem } from '@schemas/membership-item'
+import _ from 'lodash'
 
 // rxjs
-import { Observable, Subject } from 'rxjs'
+import { Subject } from 'rxjs'
 import { takeUntil } from 'rxjs/operators'
 
 // ngrx
@@ -29,9 +27,7 @@ export class MembershipCategoryComponent implements OnInit, AfterViewInit {
     @Input() categ: FromMembership.MembershipCategoryState
     @Input() centerId: string
 
-    public items: Array<MembershipItem> = []
     public name: string
-    public isCategOpen: boolean
 
     public isDropdownOpen: boolean
     public isChangeNameOn: boolean
@@ -72,9 +68,7 @@ export class MembershipCategoryComponent implements OnInit, AfterViewInit {
         this.categNameForm.setValue(this.categ.name)
 
         // init input variable
-        this.items = this.categ.items
         this.name = this.categ.name
-        this.isCategOpen = this.categ.isCategOpen
         this.isAddMembershipInputOn = this.categ.initialInputOn
     }
     ngAfterViewInit(): void {}
@@ -94,7 +88,7 @@ export class MembershipCategoryComponent implements OnInit, AfterViewInit {
 
     toggleCategOpen() {
         if (this.isChangeNameOn) return
-        this.nxStore.dispatch(MembershipActions.setCategIsOpen({ id: this.id, isOpen: !this.isCategOpen }))
+        this.nxStore.dispatch(MembershipActions.startSetCategIsOpen({ id: this.id, isOpen: !this.categ.isCategOpen }))
     }
 
     setCategInputOpen() {
@@ -147,7 +141,7 @@ export class MembershipCategoryComponent implements OnInit, AfterViewInit {
 
         if (
             this.selectedMembership.membershipData &&
-            this.items.some((v) => v.id == this.selectedMembership.membershipData.id)
+            this.categ.items.some((v) => v.id == this.selectedMembership.membershipData.id)
         ) {
             this.nxStore.dispatch(MembershipActions.resetSelectedMembership())
         }
@@ -168,9 +162,9 @@ export class MembershipCategoryComponent implements OnInit, AfterViewInit {
         }
         if (_.trim(itemName) == '') {
             this.setAddMembershipItemOff()
-
             return
         }
+        console.log('call create membership item !!!!!!!!!!!')
         this.nxStore.dispatch(
             MembershipActions.startAddMembershipToCateg({
                 centerId: this.centerId,

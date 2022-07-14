@@ -6,20 +6,20 @@ import * as kvPipe from '@helpers/pipe/keyvalue'
 // services
 import { StorageService } from '@services/storage.service'
 import { CenterLessonService } from '@services/center-lesson.service'
+import { UpdateItemRequestBody, CenterMembershipService } from '@services/center-membership.service'
 
 // scehmas
 import { Center } from '@schemas/center'
 import { Drawer } from '@schemas/store/app/drawer.interface'
 import { ClassCategory } from '@schemas/class-category'
 import { ClassItem } from '@schemas/class-item'
-import { UpdateItemRequestBody } from '@services/center-membership.service'
 
 // ngrx reducer for type
 
 import { SelectedMembership, initialSelectedMembership } from '@centerStore/reducers/sec.membership.reducer'
 
 // rxjs
-import { Observable, Subject } from 'rxjs'
+import { Observable, Subject, forkJoin } from 'rxjs'
 import { takeUntil, take } from 'rxjs/operators'
 
 // ngrx
@@ -34,6 +34,7 @@ import * as MembershipActions from '@centerStore/actions/sec.membership.actions'
 import { ActivatedRoute, Router } from '@angular/router'
 
 import { originalOrder, reverseOrder } from '@helpers/pipe/keyvalue'
+import { Loading } from '@schemas/componentStore/loading'
 
 // screen types
 type SelectedMembershipObj = {
@@ -76,8 +77,6 @@ export class MembershipComponent implements OnInit {
     public selMembershipMemo: FormControl = this.fb.control('')
 
     // reservable lesson vars in selected membership
-    public centerLessonCategList: Array<ClassCategory>
-    public centerReservableLessonItemList: Array<ClassItem>
     public isReserveLessonExist: boolean
 
     public isOnceInitialized = false
@@ -87,7 +86,8 @@ export class MembershipComponent implements OnInit {
         private route: Router,
         private nxStore: Store,
         private storageService: StorageService,
-        private gymLessonService: CenterLessonService,
+        private centerLessonService: CenterLessonService,
+        private centerMembershipService: CenterMembershipService,
         private fb: FormBuilder
     ) {
         this.center = this.storageService.getCenter()
@@ -100,16 +100,6 @@ export class MembershipComponent implements OnInit {
         })
 
         this.nxStore.dispatch(MembershipActions.setCurrentGym({ currentCenter: this.center.id }))
-
-        this.gymLessonService.getCategoryList(this.center.id).subscribe((categs) => {
-            // this.isReserveLessonExist = categs.some((v) => {
-            //     return v.items.length > 0
-            // })
-            this.centerLessonCategList = categs
-            if (this.selectedMembership.membershipData) {
-                this.initAddReservableLessonList(this.selectedMembership) // !
-            }
-        })
 
         this.nxStore
             .pipe(select(MembershipSelector.selectedMembership), takeUntil(this.unSubscriber$))
@@ -129,7 +119,7 @@ export class MembershipComponent implements OnInit {
                         }
                     })
                     this.selMembershipMemo.setValue(this.selectedMembership.membershipData.memo)
-                    this.initAddReservableLessonList(this.selectedMembership)
+                    this.isReserveLessonExist = this.selectedMembership.linkableClassItems.length > 0 ? true : false
                 }
             })
     }
@@ -228,7 +218,6 @@ export class MembershipComponent implements OnInit {
                     ? Number(this.selMembershipInputObj[inputType].value.value.replace(/[^0-9]/gi, ''))
                     : this.selMembershipInputObj[inputType].value.value
 
-            // this.selMembershipInputObj[inputType].value.setValue(String(reqBody[inputType]))
             this.updateSelMembership(this.selectedMembership, reqBody as UpdateItemRequestBody)
         }
         this.selMembershipInputObj[inputType].isOn = false
@@ -304,27 +293,9 @@ export class MembershipComponent implements OnInit {
         this.isReservLessonListModalOn = false
     }
 
-    removeReservationLesson(itemId: string, curMemLesItemList: Array<ClassItem>) {
-        const filteredIdList = _.filter(curMemLesItemList, (v) => v.id != itemId).map((v) => String(v.id))
-
-        const reqBody: UpdateItemRequestBody = { class_item_ids: filteredIdList }
-        this.updateSelMembership(this.selectedMembership, reqBody, 'RemoveReservationLesson')
-    }
-
-    // init item add reservable lesson item list
-    initAddReservableLessonList(membItem: FromMembership.SelectedMembership) {
-        this.centerReservableLessonItemList = _.reduce(
-            _.cloneDeep(this.centerLessonCategList),
-            (list, v) => {
-                v.items.forEach((j) => list.push(j))
-                return list
-            },
-            []
-        )
-        _.remove(this.centerReservableLessonItemList, (v) => {
-            return membItem.membershipData.class_items.some((j) => j.id == v.id)
-        })
-        this.isReserveLessonExist = this.centerReservableLessonItemList.length > 0 ? true : false
+    // !!
+    removeReservationLesson(unlinkClass: ClassItem) {
+        this.nxStore.dispatch(MembershipActions.startUnlinkClass({ unlinkClass }))
     }
 
     // - // route

@@ -5,6 +5,7 @@ import { SelectedMembership, MembershipCategoryState } from '../reducers/sec.mem
 import { MembershipCategory } from '@schemas/membership-category'
 import { MembershipItem } from '@schemas/membership-item'
 import { UpdateItemRequestBody } from '@services/center-membership.service'
+import { ClassItem } from '@schemas/class-item'
 
 const FeatureKey = 'Center/Membership'
 
@@ -60,9 +61,13 @@ export const finishAddMembershipToCateg = createAction(
     }>()
 )
 
-export const setCategIsOpen = createAction(
-    `[${FeatureKey}] Set Category Status`,
+export const startSetCategIsOpen = createAction(
+    `[${FeatureKey}] Start Set Category Status`,
     props<{ id: string; isOpen: boolean }>()
+)
+export const finishSetCategIsOpen = createAction(
+    `[${FeatureKey}] Finish Set Category Status`,
+    props<{ id: string; items: Array<MembershipItem> }>()
 )
 
 // current gym
@@ -70,9 +75,13 @@ export const setCurrentGym = createAction(`[${FeatureKey}] Set Current Gym`, pro
 export const resetCurrentGym = createAction(`[${FeatureKey}] Set Reset CurrentGym`)
 
 // selected membership
-export const setSelectedMembership = createAction(
-    `[${FeatureKey}] Set Selected Membership`,
+export const startSetSelectedMembership = createAction(
+    `[${FeatureKey}] Start Set Selected Membership`,
     props<{ selectedMembership: SelectedMembership }>()
+)
+export const finishSetSelectedMembership = createAction(
+    `[${FeatureKey}] Finish Set Selected Membership`,
+    props<{ linkedClassItems: Array<ClassItem>; linkableClassItems: Array<ClassItem> }>()
 )
 
 export type UpdateType = undefined | 'RemoveReservationLesson'
@@ -93,6 +102,19 @@ export const resetSelectedMembership = createAction(`[${FeatureKey}] Reset Selec
 //
 export const resetAll = createAction(`[${FeatureKey}] Reset All`)
 export const error = createAction(`[${FeatureKey}] Membership Category State Error`, props<{ error: string }>())
+
+// linked lesson
+export const startLinkClass = createAction(
+    `[${FeatureKey}] Start Link Class To Membership`,
+    props<{ linkClass: ClassItem }>()
+)
+// export const finishLinkClass = createAction(`[${FeatureKey}] Start Link Class To Membership`, props<{}>())
+
+export const startUnlinkClass = createAction(
+    `[${FeatureKey}] Start Unlink Class To Membership`,
+    props<{ unlinkClass: ClassItem }>()
+)
+// export const finishUnlinkClass = createAction(`[${FeatureKey}] Start Link Class To Membership`, props<{}>())
 
 // actions from lesson
 export const startUpsertState = createAction(

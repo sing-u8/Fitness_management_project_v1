@@ -15,11 +15,11 @@ export class LessonFlipListComponent implements OnInit, AfterViewInit {
 
     ngOnInit(): void {}
     ngAfterViewInit(): void {
-        if (this.lessonCateg.items.length > 0) {
-            this.isOpen = true
-        } else {
-            this.isOpen = false
-        }
+        // if (this.lessonCateg.items.length > 0) {
+        //     this.isOpen = true
+        // } else {
+        //     this.isOpen = false
+        // }
     }
 
     toggleOpen() {

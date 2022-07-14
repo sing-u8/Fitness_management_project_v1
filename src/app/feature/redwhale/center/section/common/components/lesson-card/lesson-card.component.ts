@@ -91,24 +91,7 @@ export class LessonCardComponent implements OnInit, AfterViewInit, OnDestroy {
         }
     }
     addReservableLessonToMembership() {
-        let selMembership: FromMembership.SelectedMembership = undefined
-        const selMembershipSubscription: Subscription = this.nxStore
-            .pipe(select(MembershipSelector.selectedMembership), takeUntil(this.unSubscriber$))
-            .subscribe((selectedMembership) => {
-                selMembership = selectedMembership
-            })
-        const lessonItemIdList: Array<string> = selMembership.membershipData.class_items.map((v) => String(v.id))
-        lessonItemIdList.push(String(this.categItem.id))
-        this.nxStore.dispatch(
-            MembershipActions.updateSelectedMembership({
-                selectedMembership: selMembership,
-                reqBody: { class_item_ids: lessonItemIdList },
-                updateType: undefined,
-            })
-        )
-        // !! 예약가능한 수업 추가할 때, 순서가 틀어지지 않는지 확인하기  위 액션이 끝난 후에 아래가 실행되어야 함!
-        // this.nxStore.dispatch(LessonActions.refreshSelectedLesson())
-        selMembershipSubscription.unsubscribe()
+        this.nxStore.dispatch(MembershipActions.startLinkClass({ linkClass: this.categItem }))
         this.onAddReservableCard.emit({})
     }
 

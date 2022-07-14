@@ -40,9 +40,9 @@ export class ScheduleEffect {
                         const curCenterUser = _.find(centerUsers, (centerUser) => centerUser.id == user.id)
                         const curCalendar = _.find(calendars, (cal) => cal.calendar_user.id == curCenterUser.id)
                         const doLessonsExist =
-                            lessonCategs.length > 0 &&
-                            lessonCategs.reduce((acc, curCateg) => [...acc, curCateg.items], []).length > 0
-                                ? true
+                            lessonCategs.length > 0
+                                ? //  && lessonCategs.reduce((acc, curCateg) => [...acc, curCateg.items], []).length > 0
+                                  true
                                 : false
                         return { curCenterUser, curCalendar, calendars, doLessonsExist }
                     }),

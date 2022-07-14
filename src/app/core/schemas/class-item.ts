@@ -3,6 +3,7 @@ import { MembershipItem } from './membership-item'
 
 export interface ClassItem {
     id: string
+    category_id: string
     category_name: string
     type_code: 'class_item_type_onetoone' | 'class_item_type_group'
     type_code_name: string
@@ -16,5 +17,8 @@ export interface ClassItem {
     end_booking_before: number
     cancel_booking_before: number
     sequence_number: number
+}
+
+export interface FE_ClassItem extends ClassItem {
     membership_items: Array<MembershipItem>
 }

@@ -2,6 +2,7 @@ import { ClassItem } from './class-item'
 
 export interface MembershipItem {
     id: string
+    category_id: string
     category_name: string
     name: string
     days: number
@@ -11,5 +12,8 @@ export interface MembershipItem {
     color: string
     memo: string
     sequence_number: number
+}
+
+export interface FE_MembershipItem extends MembershipItem {
     class_items: Array<ClassItem>
 }

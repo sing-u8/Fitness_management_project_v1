@@ -21,6 +21,8 @@ import { CenterUsersService } from '@services/center-users.service'
 
 import _ from 'lodash'
 
+import { ClassItem } from '@schemas/class-item'
+
 @Injectable()
 export class LessonEffect {
     constructor(
@@ -38,9 +40,10 @@ export class LessonEffect {
                 this.gymLessonApi.getCategoryList(centerId).pipe(
                     map((categs) => {
                         const categState = _.map(categs, (categ) => {
-                            categ.items = _.reverse(categ.items)
+                            // categ.items = _.reverse(categ.items)
                             const _categState: LessonCategoryState = {
                                 ...categ,
+                                items: [],
                                 isCategOpen: false,
                                 initialInputOn: false,
                             }
@@ -162,8 +165,9 @@ export class LessonEffect {
                                 map((categs) => {
                                     console.log('update selected lesson  : ', reqBody, '- lesCategEn: ', lesCategEn)
                                     const categState = _.map(categs, (categ) => {
-                                        categ.items = _.reverse(categ.items)
+                                        // categ.items = _.reverse(categ.items)
                                         const _categState: LessonCategoryState = {
+                                            ...lesCategEn[categ.id],
                                             ...categ,
                                             isCategOpen: lesCategEn[categ.id].isCategOpen,
                                             initialInputOn: false,
@@ -218,17 +222,16 @@ export class LessonEffect {
             concatLatestFrom(() => this.store.select(LessonSelector.selectedLesson)),
             filter(([action, selectedLesson]) => selectedLesson.lessonData != undefined),
             switchMap(([action, selectedLesson]) =>
-                this.gymLessonApi
-                    .getItem(selectedLesson.centerId, selectedLesson.categId, selectedLesson.lessonData.id)
-                    .pipe(
-                        map((lessonItem) => {
-                            const newSelectedLesson: SelectedLesson = { ...selectedLesson, lessonData: lessonItem }
-                            return LessonActions.setSelectedLesson({
-                                selectedLesson: newSelectedLesson,
-                            })
-                        }),
-                        catchError((err: string) => of(LessonActions.error({ error: err })))
-                    )
+                this.gymLessonApi.getItems(selectedLesson.centerId, selectedLesson.categId).pipe(
+                    map((lessonItems) => {
+                        const lessonItem: ClassItem = _.find(lessonItems, (v) => v.id == selectedLesson.lessonData.id)
+                        const newSelectedLesson: SelectedLesson = { ...selectedLesson, lessonData: lessonItem }
+                        return LessonActions.setSelectedLesson({
+                            selectedLesson: newSelectedLesson,
+                        })
+                    }),
+                    catchError((err: string) => of(LessonActions.error({ error: err })))
+                )
             )
         )
     )
@@ -245,8 +248,9 @@ export class LessonEffect {
                             return LessonActions.finishUpsertState({ lessonCategState: [] })
                         }
                         const categState = _.map(categs, (categ) => {
-                            categ.items = _.reverse(categ.items)
+                            // categ.items = _.reverse(categ.items)
                             const _categState: LessonCategoryState = {
+                                ...lesCategEn[categ.id],
                                 ...categ,
                                 isCategOpen: lesCategEn[categ.id].isCategOpen,
                                 initialInputOn: false,

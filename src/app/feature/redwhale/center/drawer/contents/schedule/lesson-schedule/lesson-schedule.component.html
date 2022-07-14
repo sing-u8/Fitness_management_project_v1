@@ -29,12 +29,12 @@
           *ngFor="let categ of lessonCategList"
           [lessonCateg]="categ"
         >
-          <rw-drawer-lesson-card
+          <!-- <rw-drawer-lesson-card
             *ngFor="let lesson of categ.items"
             (click) = "onLessonClick(lesson, categ)"
             [lesson]="lesson"
             [categId]="categ.id"
-          ></rw-drawer-lesson-card>
+          ></rw-drawer-lesson-card> -->
         </dw-lesson-flip-list>
       </div>
     </ng-template>

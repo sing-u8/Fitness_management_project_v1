@@ -5,7 +5,7 @@ import _ from 'lodash'
 
 import * as LessonActions from '../actions/sec.lesson.actions'
 
-import { ClassCategory } from '@schemas/class-category'
+import { ClassCategory, FE_ClassCategory } from '@schemas/class-category'
 import { ClassItem } from '@schemas/class-item'
 import { CenterUser } from '@schemas/center-user'
 import { Loading } from '@schemas/store/loading'
@@ -23,7 +23,7 @@ export const initialSelectedLesson: SelectedLesson = {
     centerId: undefined,
 }
 
-export interface LessonCategoryState extends ClassCategory {
+export interface LessonCategoryState extends FE_ClassCategory {
     isCategOpen: boolean
     initialInputOn: boolean
 }
@@ -92,7 +92,12 @@ export const lessonReducer = createImmerReducer(
         return adapter.removeAll({ ...state })
     }),
     on(LessonActions.FinishAddLessonCateg, (state, { lessonCateg }) => {
-        const newOneLesCategState: LessonCategoryState = { ...lessonCateg, isCategOpen: true, initialInputOn: true }
+        const newOneLesCategState: LessonCategoryState = {
+            ...lessonCateg,
+            items: [],
+            isCategOpen: true,
+            initialInputOn: true,
+        }
         return adapter.addOne(newOneLesCategState, state)
     }),
     on(LessonActions.removeLessonCateg, (state, { id }) => {

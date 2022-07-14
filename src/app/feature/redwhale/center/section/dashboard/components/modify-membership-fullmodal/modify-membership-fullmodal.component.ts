@@ -32,6 +32,7 @@ import { ClassItem } from '@schemas/class-item'
 import { Store } from '@ngrx/store'
 import { showToast } from '@appStore/actions/toast.action'
 import * as DashboardActions from '@centerStore/actions/sec.dashboard.actions'
+import { MembershipItem } from '@schemas/membership-item'
 
 @Component({
     selector: 'db-modify-membership-fullmodal',
@@ -123,9 +124,13 @@ export class ModifyMembershipFullmodalComponent implements OnInit, OnChanges, Af
     }
     getClassItemList() {
         this.centerMembershipService
-            .getItem(this.center.id, this.userMembership.membership_category_id, this.userMembership.membership_item_id)
-            .subscribe((membershipItem) => {
-                this.classItemList = _.map(membershipItem.class_items, (v) => {
+            .getLinkedClass(
+                this.center.id,
+                this.userMembership.membership_category_id,
+                this.userMembership.membership_item_id
+            )
+            .subscribe((linkedClassItem) => {
+                this.classItemList = _.map(linkedClassItem, (v) => {
                     if (this.userMembership.class.findIndex((mc) => mc.id == v.id) != -1) {
                         return {
                             selected: true,
