@@ -5,6 +5,8 @@ import { TrainerFilter, SelectedLesson, LessonCategoryState } from '../reducers/
 import { ClassCategory } from '@schemas/class-category'
 import { UpdateItemRequestBody } from '@services/center-lesson.service'
 import { ClassItem } from '@schemas/class-item'
+import { MembershipItem } from '@schemas/membership-item'
+import { CenterUser } from '@schemas/center-user'
 
 const FeatureKey = 'Center/Lesson'
 
@@ -42,6 +44,7 @@ export const changeLessonCategName = createAction(
     `[${FeatureKey}] Change Lesson Category Name to Server`,
     props<{ centerId: string; id: string; categName: string }>()
 )
+
 export const startAddLessonToCateg = createAction(
     `[${FeatureKey}] Start Add New Lesson to Lesson Category to server`,
     props<{
@@ -59,9 +62,13 @@ export const finishAddLessonToCateg = createAction(
     }>()
 )
 
-export const setCategIsOpen = createAction(
-    `[${FeatureKey}] Set Category Status`,
+export const startSetCategIsOpen = createAction(
+    `[${FeatureKey}] Start Set Category Status`,
     props<{ id: string; isOpen: boolean }>()
+)
+export const finishSetCategIsOpen = createAction(
+    `[${FeatureKey}] Finish Set Category Status`,
+    props<{ id: string; items: Array<ClassItem> }>()
 )
 
 // trainer Filter
@@ -86,15 +93,22 @@ export const setCurrentGym = createAction(`[${FeatureKey}] Set Current Gym`, pro
 export const resetCurrentGym = createAction(`[${FeatureKey}] Set Reset CurrentGym`)
 
 // selected lesson
-export const setSelectedLesson = createAction(
-    `[${FeatureKey}] Set Selected Lesson`,
+export const startSetSelectedLesson = createAction(
+    `[${FeatureKey}] Start Set Selected Lesson`,
     props<{ selectedLesson: SelectedLesson }>()
 )
+export const finishSetSelectedLesson = createAction(
+    `[${FeatureKey}] Finish Set Selected Lesson`,
+    props<{ linkedMembershipItems: Array<MembershipItem>; linkableMembershipItems: Array<MembershipItem> }>()
+)
 
-export type UpdateType = undefined | 'RemoveReservationMembership'
+export const updateSelectedLessonInstructor = createAction(
+    `[${FeatureKey} Update Selected Lesson Instructor to Server]`,
+    props<{ instructor: { prev: CenterUser; cur: CenterUser }; selectedLesson: SelectedLesson }>()
+)
 export const updateSelectedLesson = createAction(
     `[${FeatureKey} Update Selected Lesson to Server]`,
-    props<{ selectedLesson: SelectedLesson; reqBody: UpdateItemRequestBody; updateType: UpdateType }>()
+    props<{ selectedLesson: SelectedLesson; reqBody: UpdateItemRequestBody }>()
 )
 export const removeSelectedLesson = createAction(
     `[${FeatureKey} remove Selected Lesson to Server]`,
@@ -110,15 +124,21 @@ export const resetSelectedLesson = createAction(`[${FeatureKey}] Reset Selected 
 export const resetAll = createAction(`[${FeatureKey}] Reset All`)
 export const error = createAction(`[${FeatureKey}] Lesson Category State Error`, props<{ error: string }>())
 
+// linked membership
+export const startLinkMembership = createAction(
+    `[${FeatureKey}] Start Link Membership To Class`,
+    props<{ linkMembership: MembershipItem }>()
+)
+// export const finishLinkClass = createAction(`[${FeatureKey}] Start Link Class To Membership`, props<{}>())
+
+export const startUnlinkMembership = createAction(
+    `[${FeatureKey}] Start Unlink Membership To Class`,
+    props<{ unlinkMembership: MembershipItem }>()
+)
+// export const finishUnlinkClass = createAction(`[${FeatureKey}] Start Link Class To Membership`, props<{}>())
+
 // actions from membership
-export const startUpsertState = createAction(
-    `[${FeatureKey}] Start Upsert State called by membership screen`,
-    props<{ centerId: string }>()
-)
-export const finishUpsertState = createAction(
-    `[${FeatureKey}] Finish Upsert State called by membership screen`,
-    props<{ lessonCategState: Array<LessonCategoryState> }>()
-)
+export const startUpsertState = createAction(`[${FeatureKey}] Start Upsert State called by membership screen`)
 
 // initial input
 export const disableInitInput = createAction(

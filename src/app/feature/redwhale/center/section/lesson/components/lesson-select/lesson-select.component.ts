@@ -34,6 +34,7 @@ export class LessonSelectComponent implements AfterViewInit, ControlValueAccesso
     @Input() noBorder: boolean
 
     @Output() onSelectChange = new EventEmitter<any>()
+    @Output() onSelectChanges = new EventEmitter<{ prev: any; cur: any }>()
 
     @ViewChild('selectElement') selectElement
     @ViewChild('selectedElement') selectedElement
@@ -90,6 +91,7 @@ export class LessonSelectComponent implements AfterViewInit, ControlValueAccesso
         if (item.disabled) return
 
         this.onSelectChange.emit(item)
+        this.onSelectChanges.emit({ prev: this.value, cur: item })
         this.close()
         this.onChanged(item)
     }

@@ -164,7 +164,6 @@ export class MembershipCategoryComponent implements OnInit, AfterViewInit {
             this.setAddMembershipItemOff()
             return
         }
-        console.log('call create membership item !!!!!!!!!!!')
         this.nxStore.dispatch(
             MembershipActions.startAddMembershipToCateg({
                 centerId: this.centerId,

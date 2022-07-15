@@ -162,7 +162,7 @@
                   [(ngModel)]="lessonManagerSelectValue"
                   [height_type]="'small'"
                   [noBorder]="true"
-                  (onSelectChange)="onLessonManagerSelected($event)"
+                  (onSelectChanges)="onLessonManagerSelected($event)"
                 ></gl-lesson-select>
               </div>
               <div class="selected-lesson-top__delete-lesson-button" (click)="setItemDelOpen()">
@@ -254,31 +254,8 @@
           </p>
 
           <div
-            *ngIf = "selectedLesson.lessonData"
-            class="l-membership-item thin-scroll-y"
-          >
-            <!-- <gm-membership-card
-              *ngFor="let memItem of selectedLesson.lessonData.membership_items"
-              [lesMembershipItem]="memItem"
-              [categId]="selectedLesson.categId"
-              [categName]="selectedLesson.categName"
-              [centerId]="center.id"
-              [isIn]="'reservableItemList'"
-              (onReservableCardDelete)="removeReservationMembership(memItem.id, selectedLesson.lessonData.membership_items)">
-            </gm-membership-card> -->
-
-            <div class="add-membership-button"
-              (click)=" setReserveMembershipModalOn(); $event.stopPropagation()"
-            >
-              <img src="assets/icons/etc/plus-darkgrey.svg">
-              <p class="add-membership-button__text">
-                예약 가능한 회원권 추가
-              </p>
-            </div>
-          </div>
-
-          <div class="l-guide-image"
-            *ngIf="!selectedLesson.lessonData"
+            class="l-guide-image"
+            *ngIf="!selectedLesson.lessonData && selectedLesson.isLoading == 'idle';else linked_membership_pending"
           >
             <div class="guide-image">
               <div class="guide-image__icon">
@@ -301,6 +278,35 @@
             </div>
           </div>
 
+          <ng-template #linked_membership_pending>
+            <ng-container *ngIf="selectedLesson.lessonData && selectedLesson.isLoading == 'pending';else linked_membership_done">
+              <ngx-skeleton-loader
+                  *ngFor="let _ of [1,2,3,4]"
+                  count="1"
+                  appearance="circle"
+                  [theme]="{'width':'calc(50% - 10px)', height: '92px', 'border-radius':'5px'}"
+                ></ngx-skeleton-loader>
+            </ng-container>
+          </ng-template>
+
+          <ng-template #linked_membership_done>
+            <div *ngIf="selectedLesson.lessonData" class="l-membership-item thin-scroll-y">
+              <gm-membership-card *ngFor="let memItem of selectedLesson.linkedMembershipItems" [lesMembershipItem]="memItem"
+                [categId]="selectedLesson.categId" [categName]="selectedLesson.categName" [centerId]="center.id"
+                [isIn]="'reservableItemList'"
+                (onReservableCardDelete)="removeReservationMembership(memItem)">
+              </gm-membership-card>
+
+              <div class="add-membership-button" (click)=" setReserveMembershipModalOn(); $event.stopPropagation()">
+                <img src="assets/icons/etc/plus-darkgrey.svg">
+                <p class="add-membership-button__text">
+                  예약 가능한 회원권 추가
+                </p>
+              </div>
+            </div>
+          </ng-template>
+
+
           <div class="reserve-membership-modal h-show-off"
             (rwClickOutside)="setReserveMembershipModalOff()"
             [class.h-show-up]="isReservMembershipListModalOn"
@@ -310,22 +316,13 @@
               <img src="assets/icons/etc/close_grey.svg" (click)="setReserveMembershipModalOff()">
             </div>
 
-            <div class="card-container thin-scroll-y
-              h-display-off" [class.h-display-on]="isReserveMembershipExist"
+            <div
+              class="card-container thin-scroll-y h-display-off"
+              [class.h-display-on]="isReserveMembershipExist"
             >
 
-              <div *ngFor="let item of centerReservableMembershipItemList" class="card">
-                <gm-membership-card
-                  [categItem]="item"
-                  [centerId]="center.id"
-                  [categName]="item.category_name"
-                  [isIn]="'addReservableItemList'"
-                  (onAddReservableCard)="setReserveMembershipModalOff()"
-                ></gm-membership-card>
-              </div>
-
-
-              <div class="membership-guide-div">
+              <div class="membership-guide-div"
+                *ngIf="!selectedLesson.lessonData && selectedLesson.isLoading =='idle';else linkable_membership_exist">
                 <p class="rw-typo-subtext2-1">추가해야 할 회원권이 목록에 없으신가요?</p>
                 <p class="rw-typo-subtext2-1">회원권 페이지에서 회원권을 바로 만들어보세요!</p>
                 <div class="go-membership-button" (click)="goToMembershipSection()">
@@ -333,8 +330,32 @@
                   <img src="assets/icons/etc/short_right_arrow_grey.svg">
                 </div>
               </div>
-            </div>
 
+              <ng-template #linkable_membership_exist>
+                <ng-container
+                  #linkable_membership_pending
+                  *ngIf="selectedLesson.lessonData && selectedLesson.isLoading =='pending';else linkable_membership_done"
+                >
+                  <ngx-skeleton-loader
+                    *ngFor="let _ of [1,2,3,4]"
+                    count="1"
+                    appearance="line"
+                    [theme]="{width:'', height: '92px', 'border-radius':'5px'}"
+                  ></ngx-skeleton-loader>
+                </ng-container>
+                <ng-template #linkable_membership_done>
+                  <div *ngFor="let item of selectedLesson.linkableMembershipItems" class="card">
+                    <gm-membership-card
+                      [categItem]="item"
+                      [centerId]="center.id"
+                      [categName]="item.category_name"
+                      [isIn]="'addReservableItemList'"
+                      (onAddReservableCard)="setReserveMembershipModalOff()"
+                    ></gm-membership-card>
+                  </div>
+                </ng-template>
+              </ng-template>
+            </div>
 
             <div *ngIf=!isReserveMembershipExist class="none-membership">
               <img src="assets/icons/etc/empty_screen.svg">
@@ -345,11 +366,11 @@
                 <img src="assets/icons/etc/short_right_arrow_grey.svg">
               </div>
             </div>
+
           </div>
 
         </div>
       </ng-template>
-
 
     </section>
   </main>

@@ -263,17 +263,12 @@
           <ng-template
             #linked_classes_pending
           >
-            <div
-              class="l-lesson-item thin-scroll-y"
-              *ngIf="selectedMembership.membershipData && selectedMembership.isLoading == 'pending';else linked_classes_done"
-            >
+            <ng-container *ngIf="selectedMembership.membershipData && selectedMembership.isLoading == 'pending';else linked_classes_done">
               <ngx-skeleton-loader
-                *ngFor="let _ of [1,2,3,4]"
-                count="1"
-                appearance="line"
-                [theme]="{width:'304.2px', height: '92px', 'border-radius':'5px'}"
+                *ngFor="let _ of [1,2,3,4]" count="1" appearance="circle"
+                [theme]="{'width':'calc(50% - 10px)', height: '92px', 'border-radius':'5px'}"
               ></ngx-skeleton-loader>
-            </div>
+            </ng-container>
           </ng-template>
           <ng-template #linked_classes_done >
             <div class="l-lesson-item thin-scroll-y">
@@ -291,7 +286,8 @@
             </div>
           </ng-template>
 
-          <div class="reserve-lesson-modal h-show-off"
+          <div
+            class="reserve-lesson-modal h-show-off"
             (rwClickOutside)="setReserveLessonModalOff()"
             [class.h-show-up]="isReservLessonListModalOn"
           >
@@ -325,7 +321,7 @@
                     *ngFor="let _ of [1,2,3,4]"
                     count="1"
                     appearance="line"
-                    [theme]="{width:'336px', height: '92px', 'border-radius':'5px'}"
+                    [theme]="{width:'100%', height: '92px', 'border-radius':'5px'}"
                   ></ngx-skeleton-loader>
                 </ng-container>
                 <ng-template #linkable_classes_done>
@@ -356,7 +352,6 @@
 
         </div>
       </ng-template>
-
 
     </section>
   </main>

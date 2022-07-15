@@ -80,7 +80,6 @@ export const membershipReducer = createImmerReducer(
     on(MembershipActions.resetMembershipCategs, (state) => {
         return adapter.removeAll({ ...state })
     }),
-    on(MembershipActions.startAddMembershipCateg, (state) => state),
     on(MembershipActions.FinishAddMembershipCateg, (state, { membershipCateg }) => {
         const newOneLesCategState: MembershipCategoryState = {
             ...membershipCateg,
@@ -135,7 +134,7 @@ export const membershipReducer = createImmerReducer(
         return adapter.updateOne({ id: id, changes: { ...copyOneLesCategState, items, isCategPending: 'done' } }, state)
     }),
 
-    // current gym
+    // current center
     on(MembershipActions.setCurrentGym, (state, { currentCenter }) => {
         state.currentCenter = currentCenter
         return state
@@ -160,7 +159,7 @@ export const membershipReducer = createImmerReducer(
         state.selectedMembership.isLoading = 'done'
         return state
     }),
-    on(MembershipActions.updateSelectedMembership, (state, { selectedMembership, reqBody, updateType }) => {
+    on(MembershipActions.updateSelectedMembership, (state, { selectedMembership, reqBody }) => {
         state.selectedMembership.membershipData = {
             ...state.selectedMembership.membershipData,
             ...reqBody,
@@ -215,17 +214,6 @@ export const membershipReducer = createImmerReducer(
         )
         _.remove(state.selectedMembership.linkedClassItems, (v) => v.id == unlinkClass.id)
         return state
-    }),
-    // actions from lesson
-    on(MembershipActions.finishUpsertState, (state, { membershipCategState }): State => {
-        const newState: State = adapter.upsertMany(membershipCategState, _.cloneDeep(state))
-        const preSelMembership = newState.selectedMembership
-        if (preSelMembership.membershipData != undefined) {
-            newState.selectedMembership.membershipData = newState.entities[preSelMembership.categId].items.find(
-                (categItem) => categItem.id == preSelMembership.membershipData.id
-            )
-        }
-        return newState
     }),
     // inital input
     on(MembershipActions.disableInitInput, (state, { categId }): State => {

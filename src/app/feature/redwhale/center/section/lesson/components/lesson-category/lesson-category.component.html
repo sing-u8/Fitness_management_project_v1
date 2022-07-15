@@ -16,7 +16,7 @@
         class="rw-input"
         [formControl] = "categNameForm"
       >
-      <span class="rw-typo-title1 item-length">{{items.length}}</span>
+      <span class="rw-typo-title1 item-length">{{categ.item_count}}</span>
     </form>
 
     <div class="header-right">
@@ -42,7 +42,16 @@
     class="category-content"
     [class.categ-open] = 'isCategOpen'
   >
-    <ng-template [ngIf] ="items.length != 0">
+    <ng-template #item_pending [ngIf] = "categ.isCategPending == 'pending' && categ.items.length == 0" [ngIfElse]="item_done">
+      <ngx-skeleton-loader
+        *ngFor="let _ of [].constructor(categ.item_count)"
+        count="1"
+        appearance="line"
+        [theme]="{width: '100%', height: '92px', 'border-radius':'5px', margin: '0px'}"
+      ></ngx-skeleton-loader>
+    </ng-template>
+
+    <ng-template #item_done>
       <gl-lesson-card
         *ngFor = "let item of items"
         [categItem] = "item"

@@ -76,16 +76,23 @@ export class LessonCardComponent implements OnInit, AfterViewInit, OnDestroy {
 
     onClickItem() {
         if (this.isIn == 'category') {
-            this.nxStore.dispatch(
-                LessonActions.setSelectedLesson({
-                    selectedLesson: {
-                        centerId: this.centerId,
-                        categId: this.categId,
-                        categName: this.categName,
-                        lessonData: this.categItem,
-                    },
+            const selLessonSubscription: Subscription = this.nxStore
+                .pipe(select(LessonSelector.selectedLesson), takeUntil(this.unSubscriber$))
+                .subscribe((selectedLesson) => {
+                    if (selectedLesson.lessonData?.id != this.categItem.id)
+                        this.nxStore.dispatch(
+                            LessonActions.startSetSelectedLesson({
+                                selectedLesson: {
+                                    centerId: this.centerId,
+                                    categId: this.categId,
+                                    categName: this.categName,
+                                    lessonData: this.categItem,
+                                },
+                            })
+                        )
                 })
-            )
+
+            selLessonSubscription.unsubscribe()
         } else if (this.isIn == 'addReservableItemList') {
             this.addReservableLessonToMembership()
         }

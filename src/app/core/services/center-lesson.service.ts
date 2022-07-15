@@ -354,16 +354,15 @@ export interface CreateItemRequestBody {
 }
 
 export interface UpdateItemRequestBody {
-    type_code?: string
+    type_code?: 'class_item_type_onetoone' | 'class_item_type_group'
     name?: string
-    minutes?: number
-    people?: number
-    instructor_user_id?: string // !! 수정 필요
+    duration?: number
+    capacity?: number
     color?: string
     memo?: string
-    reservation_days?: number
-    reservation_deadline_time?: number
-    reservation_cancellation_time?: number
+    start_booking_until?: number
+    end_booking_before?: number
+    cancel_booking_before?: number
 }
 
 export interface MoveItemRequestBody {

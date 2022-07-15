@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core'
 import { createEffect, Actions, ofType, concatLatestFrom } from '@ngrx/effects'
 import { Store } from '@ngrx/store'
-import { of, EMPTY } from 'rxjs'
+import { of, forkJoin } from 'rxjs'
 import { catchError, switchMap, tap, map, filter } from 'rxjs/operators'
 
 import * as LessonActions from '../actions/sec.lesson.actions'
@@ -17,6 +17,7 @@ import * as MembershipActions from '../actions/sec.membership.actions'
 import { showToast } from '@appStore/actions/toast.action'
 
 import { CenterLessonService } from '@services/center-lesson.service'
+import { CenterMembershipService } from '@services/center-membership.service'
 import { CenterUsersService } from '@services/center-users.service'
 
 import _ from 'lodash'
@@ -27,8 +28,9 @@ import { ClassItem } from '@schemas/class-item'
 export class LessonEffect {
     constructor(
         private actions$: Actions,
-        private gymLessonApi: CenterLessonService,
-        private gymUserApi: CenterUsersService,
+        private centerLessonApi: CenterLessonService,
+        private centerMembershipApi: CenterMembershipService,
+        private centerUserApi: CenterUsersService,
         private store: Store
     ) {}
 
@@ -37,12 +39,13 @@ export class LessonEffect {
         this.actions$.pipe(
             ofType(LessonActions.startLoadLessonCategs),
             switchMap(({ centerId }) =>
-                this.gymLessonApi.getCategoryList(centerId).pipe(
+                this.centerLessonApi.getCategoryList(centerId).pipe(
                     map((categs) => {
                         const categState = _.map(categs, (categ) => {
                             // categ.items = _.reverse(categ.items)
                             const _categState: LessonCategoryState = {
                                 ...categ,
+                                isCategPending: 'done',
                                 items: [],
                                 isCategOpen: false,
                                 initialInputOn: false,
@@ -61,7 +64,7 @@ export class LessonEffect {
         this.actions$.pipe(
             ofType(LessonActions.startAddLessonCateg),
             switchMap(({ centerId, categName }) =>
-                this.gymLessonApi.createCategory(centerId, { name: categName }).pipe(
+                this.centerLessonApi.createCategory(centerId, { name: categName }).pipe(
                     map((categ) => LessonActions.FinishAddLessonCateg({ lessonCateg: categ })),
                     catchError((err: string) => of(LessonActions.error({ error: err })))
                 )
@@ -74,8 +77,8 @@ export class LessonEffect {
             this.actions$.pipe(
                 ofType(LessonActions.removeLessonCateg),
                 switchMap(({ id, centerId }) =>
-                    this.gymLessonApi.deleteCategory(centerId, id).pipe(
-                        map(() => MembershipActions.startUpsertState({ centerId: centerId })),
+                    this.centerLessonApi.deleteCategory(centerId, id).pipe(
+                        map(() => MembershipActions.startUpsertState()),
                         catchError((err: string) => of(LessonActions.error({ error: err })))
                     )
                 )
@@ -88,8 +91,8 @@ export class LessonEffect {
             this.actions$.pipe(
                 ofType(LessonActions.changeLessonCategName),
                 switchMap(({ centerId, id, categName }) =>
-                    this.gymLessonApi.updateCategory(centerId, id, { name: categName }).pipe(
-                        map(() => MembershipActions.startUpsertState({ centerId: centerId })),
+                    this.centerLessonApi.updateCategory(centerId, id, { name: categName }).pipe(
+                        map(() => MembershipActions.startUpsertState()),
                         catchError((err: string) => of(LessonActions.error({ error: err })))
                     )
                 )
@@ -98,16 +101,36 @@ export class LessonEffect {
     )
 
     // categ data
+    public getCategItemsWhenOpen$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(LessonActions.startSetCategIsOpen),
+            concatLatestFrom(() => this.store.select(LessonSelector.currentCenter)),
+            switchMap(([{ id, isOpen }, curCenterId]) => {
+                if (isOpen) {
+                    return this.centerLessonApi.getItems(curCenterId, id).pipe(
+                        switchMap((items) => [
+                            LessonActions.finishSetCategIsOpen({
+                                id,
+                                items,
+                            }),
+                        ])
+                    )
+                } else {
+                    return []
+                }
+            })
+        )
+    )
 
     public updateCategLesson = createEffect(() =>
         this.actions$.pipe(
             ofType(LessonActions.startAddLessonToCateg),
             switchMap(({ centerId, categId, categName, reqBody }) =>
-                this.gymLessonApi.createItem(centerId, categId, reqBody).pipe(
+                this.centerLessonApi.createItem(centerId, categId, reqBody).pipe(
                     switchMap((newItem) => [
                         LessonActions.finishAddLessonToCateg({ categId: categId, newLessonData: newItem }),
 
-                        LessonActions.setSelectedLesson({
+                        LessonActions.startSetSelectedLesson({
                             selectedLesson: {
                                 centerId: centerId,
                                 categId: categId,
@@ -127,7 +150,7 @@ export class LessonEffect {
         this.actions$.pipe(
             ofType(LessonActions.startGetTrainerFilterList),
             switchMap(({ centerId }) => {
-                return this.gymUserApi.getUserList(centerId, '', '').pipe(
+                return this.centerUserApi.getUserList(centerId, '', '').pipe(
                     map((managers) => {
                         const newTrainerFilterList: Array<TrainerFilter> = _.cloneDeep(initialTrainerFilterList)
 
@@ -149,11 +172,38 @@ export class LessonEffect {
     )
 
     // selected lesson
+    public updateSelectedLessonInstructor = createEffect(() =>
+        this.actions$.pipe(
+            ofType(LessonActions.updateSelectedLessonInstructor),
+            switchMap(({ instructor, selectedLesson }) =>
+                this.centerLessonApi
+                    .removeInstructor(
+                        selectedLesson.centerId,
+                        selectedLesson.categId,
+                        selectedLesson.lessonData.id,
+                        instructor.prev.id
+                    )
+                    .pipe(
+                        switchMap(() =>
+                            this.centerLessonApi
+                                .addInstructor(
+                                    selectedLesson.centerId,
+                                    selectedLesson.categId,
+                                    selectedLesson.lessonData.id,
+                                    { instructor_user_id: instructor.cur.id }
+                                )
+                                .pipe(switchMap(() => [MembershipActions.startUpsertState()]))
+                        )
+                    )
+            )
+        )
+    )
+
     public updateSelectedLesson$ = createEffect(() =>
         this.actions$.pipe(
             ofType(LessonActions.updateSelectedLesson),
-            switchMap(({ selectedLesson, reqBody, updateType }) => {
-                return this.gymLessonApi
+            switchMap(({ selectedLesson, reqBody }) => {
+                return this.centerLessonApi
                     .updateItem(selectedLesson.centerId, selectedLesson.categId, selectedLesson.lessonData.id, reqBody)
                     .pipe(
                         catchError((err: string) =>
@@ -161,11 +211,9 @@ export class LessonEffect {
                         ),
                         concatLatestFrom(() => this.store.select(LessonSelector.LessonCategEntities)),
                         switchMap(([action, lesCategEn]) =>
-                            this.gymLessonApi.getCategoryList(selectedLesson.centerId).pipe(
+                            this.centerLessonApi.getCategoryList(selectedLesson.centerId).pipe(
                                 map((categs) => {
-                                    console.log('update selected lesson  : ', reqBody, '- lesCategEn: ', lesCategEn)
                                     const categState = _.map(categs, (categ) => {
-                                        // categ.items = _.reverse(categ.items)
                                         const _categState: LessonCategoryState = {
                                             ...lesCategEn[categ.id],
                                             ...categ,
@@ -178,22 +226,12 @@ export class LessonEffect {
                                 }),
                                 concatLatestFrom(() => this.store.select(LessonSelector.currentCenter)),
                                 switchMap(([lesCategState, curGym]) => {
-                                    if (updateType == 'RemoveReservationMembership') {
-                                        return [
-                                            LessonActions.updateLessonCategs({
-                                                lessonCategState: lesCategState,
-                                            }),
-                                            MembershipActions.startUpsertState({ centerId: curGym }),
-                                            showToast({ text: '예약 가능한 회원권 1개가 삭제되었습니다.' }),
-                                        ]
-                                    } else {
-                                        return [
-                                            LessonActions.updateLessonCategs({
-                                                lessonCategState: lesCategState,
-                                            }),
-                                            MembershipActions.startUpsertState({ centerId: curGym }),
-                                        ]
-                                    }
+                                    return [
+                                        LessonActions.updateLessonCategs({
+                                            lessonCategState: lesCategState,
+                                        }),
+                                        MembershipActions.startUpsertState(),
+                                    ]
                                 })
                             )
                         )
@@ -206,11 +244,11 @@ export class LessonEffect {
         this.actions$.pipe(
             ofType(LessonActions.removeSelectedLesson),
             switchMap(({ selectedLesson }) =>
-                this.gymLessonApi
+                this.centerLessonApi
                     .deleteItem(selectedLesson.centerId, selectedLesson.categId, selectedLesson.lessonData.id)
                     .pipe(
                         catchError((err: string) => of(LessonActions.error({ error: err }))),
-                        map(() => MembershipActions.startUpsertState({ centerId: selectedLesson.centerId }))
+                        map(() => MembershipActions.startUpsertState())
                     )
             )
         )
@@ -222,11 +260,11 @@ export class LessonEffect {
             concatLatestFrom(() => this.store.select(LessonSelector.selectedLesson)),
             filter(([action, selectedLesson]) => selectedLesson.lessonData != undefined),
             switchMap(([action, selectedLesson]) =>
-                this.gymLessonApi.getItems(selectedLesson.centerId, selectedLesson.categId).pipe(
+                this.centerLessonApi.getItems(selectedLesson.centerId, selectedLesson.categId).pipe(
                     map((lessonItems) => {
                         const lessonItem: ClassItem = _.find(lessonItems, (v) => v.id == selectedLesson.lessonData.id)
                         const newSelectedLesson: SelectedLesson = { ...selectedLesson, lessonData: lessonItem }
-                        return LessonActions.setSelectedLesson({
+                        return LessonActions.startSetSelectedLesson({
                             selectedLesson: newSelectedLesson,
                         })
                     }),
@@ -236,33 +274,80 @@ export class LessonEffect {
         )
     )
 
+    // linked class item
+
+    public getLinkedMemberships$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(LessonActions.startSetSelectedLesson),
+            switchMap(({ selectedLesson }) =>
+                forkJoin({
+                    linkedMembershipItems: this.centerLessonApi.getLinkedMemberships(
+                        selectedLesson.centerId,
+                        selectedLesson.categId,
+                        selectedLesson.lessonData.id
+                    ),
+                    allMembershipItems: this.centerMembershipApi.getAllMemberships(selectedLesson.centerId),
+                }).pipe(
+                    switchMap(({ linkedMembershipItems, allMembershipItems }) => {
+                        const linkableMembershipItems = _.differenceBy(allMembershipItems, linkedMembershipItems, 'id')
+                        return [
+                            LessonActions.finishSetSelectedLesson({ linkedMembershipItems, linkableMembershipItems }),
+                        ]
+                    })
+                )
+            )
+        )
+    )
+
+    public linkClass$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(LessonActions.startLinkMembership),
+            concatLatestFrom(() => [this.store.select(LessonSelector.selectedLesson)]),
+            switchMap(([{ linkMembership }, curSelecteLesson]) =>
+                this.centerLessonApi
+                    .linkMembership(
+                        curSelecteLesson.centerId,
+                        curSelecteLesson.categId,
+                        curSelecteLesson.lessonData.id,
+                        { membership_item_id: linkMembership.id }
+                    )
+                    .pipe(switchMap(() => [MembershipActions.startUpsertState()]))
+            )
+        )
+    )
+
+    public unlinkClass$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(LessonActions.startUnlinkMembership),
+            concatLatestFrom(() => [this.store.select(LessonSelector.selectedLesson)]),
+            switchMap(([{ unlinkMembership }, curSelecteLesson]) =>
+                this.centerLessonApi
+                    .removeLinkedMembership(
+                        curSelecteLesson.centerId,
+                        curSelecteLesson.categId,
+                        curSelecteLesson.lessonData.id,
+                        unlinkMembership.id
+                    )
+                    .pipe(switchMap(() => [MembershipActions.startUpsertState()]))
+            )
+        )
+    )
+
     // actions from lesson
     public upsertState$ = createEffect(() =>
         this.actions$.pipe(
             ofType(LessonActions.startUpsertState),
-            concatLatestFrom(() => this.store.select(LessonSelector.LessonCategEntities)),
-            switchMap(([action, lesCategEn]) =>
-                this.gymLessonApi.getCategoryList(action.centerId).pipe(
-                    map((categs) => {
-                        if (_.isEmpty(lesCategEn)) {
-                            return LessonActions.finishUpsertState({ lessonCategState: [] })
-                        }
-                        const categState = _.map(categs, (categ) => {
-                            // categ.items = _.reverse(categ.items)
-                            const _categState: LessonCategoryState = {
-                                ...lesCategEn[categ.id],
-                                ...categ,
-                                isCategOpen: lesCategEn[categ.id].isCategOpen,
-                                initialInputOn: false,
-                            }
-                            return _categState
-                        })
-                        console.log('upser lesson state : ', categs, categState)
-                        return LessonActions.finishUpsertState({ lessonCategState: categState })
-                    }),
-                    catchError((err: string) => of(LessonActions.error({ error: err })))
-                )
-            )
+            concatLatestFrom(() => [
+                this.store.select(LessonSelector.LessonCategEntities),
+                this.store.select(LessonSelector.selectedLesson),
+            ]),
+            switchMap(([action, lesCategEn, selectedLesson]) => {
+                if (!_.isEmpty(selectedLesson.lessonData)) {
+                    return [LessonActions.startSetSelectedLesson({ selectedLesson })]
+                } else {
+                    return []
+                }
+            })
         )
     )
 }

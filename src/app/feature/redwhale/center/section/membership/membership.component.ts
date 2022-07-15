@@ -11,7 +11,6 @@ import { UpdateItemRequestBody, CenterMembershipService } from '@services/center
 // scehmas
 import { Center } from '@schemas/center'
 import { Drawer } from '@schemas/store/app/drawer.interface'
-import { ClassCategory } from '@schemas/class-category'
 import { ClassItem } from '@schemas/class-item'
 
 // ngrx reducer for type
@@ -79,15 +78,11 @@ export class MembershipComponent implements OnInit {
     // reservable lesson vars in selected membership
     public isReserveLessonExist: boolean
 
-    public isOnceInitialized = false
-
     constructor(
         private activatedRoute: ActivatedRoute,
         private route: Router,
         private nxStore: Store,
         private storageService: StorageService,
-        private centerLessonService: CenterLessonService,
-        private centerMembershipService: CenterMembershipService,
         private fb: FormBuilder
     ) {
         this.center = this.storageService.getCenter()
@@ -293,7 +288,6 @@ export class MembershipComponent implements OnInit {
         this.isReservLessonListModalOn = false
     }
 
-    // !!
     removeReservationLesson(unlinkClass: ClassItem) {
         this.nxStore.dispatch(MembershipActions.startUnlinkClass({ unlinkClass }))
     }
@@ -304,16 +298,11 @@ export class MembershipComponent implements OnInit {
     }
 
     // nxStore helper
-    updateSelMembership(
-        selectedMembership: SelectedMembership,
-        reqBody: UpdateItemRequestBody,
-        updateType: MembershipActions.UpdateType = undefined
-    ) {
+    updateSelMembership(selectedMembership: SelectedMembership, reqBody: UpdateItemRequestBody) {
         this.nxStore.dispatch(
             MembershipActions.updateSelectedMembership({
                 selectedMembership,
                 reqBody,
-                updateType,
             })
         )
     }

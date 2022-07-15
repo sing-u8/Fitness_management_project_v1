@@ -7,25 +7,33 @@ import * as LessonActions from '../actions/sec.lesson.actions'
 
 import { ClassCategory, FE_ClassCategory } from '@schemas/class-category'
 import { ClassItem } from '@schemas/class-item'
-import { CenterUser } from '@schemas/center-user'
 import { Loading } from '@schemas/store/loading'
+import { CenterUser } from '@schemas/center-user'
+import { MembershipItem } from '@schemas/membership-item'
 
 export interface SelectedLesson {
     lessonData: ClassItem
     categId: string
     categName: string
     centerId: string
+    linkedMembershipItems?: Array<MembershipItem>
+    linkableMembershipItems?: Array<MembershipItem>
+    isLoading?: Loading
 }
 export const initialSelectedLesson: SelectedLesson = {
     lessonData: undefined,
     categId: undefined,
     categName: undefined,
     centerId: undefined,
+    linkedMembershipItems: [],
+    linkableMembershipItems: [],
+    isLoading: 'idle',
 }
 
 export interface LessonCategoryState extends FE_ClassCategory {
     isCategOpen: boolean
     initialInputOn: boolean
+    isCategPending: Loading
 }
 
 export interface TrainerFilter {
@@ -47,11 +55,12 @@ export type currentCenter = string
 
 export interface State extends EntityState<LessonCategoryState> {
     selectedLesson: SelectedLesson
-    selectedTrainerFilter: TrainerFilter
-    trainerFilterList: Array<TrainerFilter>
     currentCenter: currentCenter
     isLoading: Loading
     error: string
+
+    selectedTrainerFilter: TrainerFilter
+    trainerFilterList: Array<TrainerFilter>
 }
 
 export function selectCategoryId(categ: ClassCategory): string {
@@ -63,11 +72,11 @@ export const adapter: EntityAdapter<LessonCategoryState> = createEntityAdapter<L
 })
 export const initialState: State = adapter.getInitialState({
     selectedLesson: initialSelectedLesson,
-    selectedTrainerFilter: initialTrainerFilter,
-    trainerFilterList: initialTrainerFilterList,
     currentCenter: '',
     isLoading: 'idle',
     error: '',
+    selectedTrainerFilter: initialTrainerFilter,
+    trainerFilterList: initialTrainerFilterList,
 })
 
 export const lessonReducer = createImmerReducer(
@@ -94,6 +103,7 @@ export const lessonReducer = createImmerReducer(
     on(LessonActions.FinishAddLessonCateg, (state, { lessonCateg }) => {
         const newOneLesCategState: LessonCategoryState = {
             ...lessonCateg,
+            isCategPending: 'done',
             items: [],
             isCategOpen: true,
             initialInputOn: true,
@@ -116,11 +126,32 @@ export const lessonReducer = createImmerReducer(
         const copyOneLesCategState = state.entities[categId]
         const copyCategItems = _.cloneDeep(state.entities[categId].items)
         copyCategItems.push(newLessonData)
-        return adapter.updateOne({ id: categId, changes: { ...copyOneLesCategState, items: copyCategItems } }, state)
+        return adapter.updateOne(
+            {
+                id: categId,
+                changes: { ...copyOneLesCategState, items: copyCategItems, item_count: copyCategItems.length },
+            },
+            state
+        )
     }),
-    on(LessonActions.setCategIsOpen, (state, { id, isOpen }) => {
+    on(LessonActions.startSetCategIsOpen, (state, { id, isOpen }) => {
         const copyOneLesCategState = state.entities[id]
-        return adapter.updateOne({ id: id, changes: { ...copyOneLesCategState, isCategOpen: isOpen } }, state)
+        return adapter.updateOne(
+            {
+                id: id,
+                changes: {
+                    ...copyOneLesCategState,
+                    isCategOpen: isOpen,
+                    initialInputOn: false,
+                    isCategPending: 'pending',
+                },
+            },
+            state
+        )
+    }),
+    on(LessonActions.finishSetCategIsOpen, (state, { id, items }) => {
+        const copyOneLesCategState = state.entities[id]
+        return adapter.updateOne({ id: id, changes: { ...copyOneLesCategState, items, isCategPending: 'done' } }, state)
     }),
     // trainer filter
     on(LessonActions.setTrainerFilter, (state, { trainerFilter }) => {
@@ -151,18 +182,49 @@ export const lessonReducer = createImmerReducer(
     }),
 
     // selected lesson
-    on(LessonActions.setSelectedLesson, (state, { selectedLesson }) => {
-        state.selectedLesson = selectedLesson
+    on(LessonActions.startSetSelectedLesson, (state, { selectedLesson }) => {
+        state.selectedLesson = _.assign(state.selectedLesson, {
+            ...state.selectedLesson,
+            ...selectedLesson,
+            isLoading: 'pending',
+        })
+        return state
+    }),
+    on(LessonActions.finishSetSelectedLesson, (state, { linkedMembershipItems, linkableMembershipItems }) => {
+        state.selectedLesson.linkedMembershipItems = linkedMembershipItems
+        state.selectedLesson.linkableMembershipItems = linkableMembershipItems
+        state.selectedLesson.isLoading = 'done'
+        return state
+    }),
+    on(LessonActions.updateSelectedLessonInstructor, (state, { selectedLesson, instructor }) => {
+        state.selectedLesson.lessonData.instructors = [instructor.cur]
+        const itemIdx = _.findIndex(
+            state.entities[selectedLesson.categId].items,
+            (v) => v.id == selectedLesson.lessonData.id
+        )
+        state.entities[selectedLesson.categId].items[itemIdx].instructors = state.selectedLesson.lessonData.instructors
+        return state
+    }),
+    on(LessonActions.updateSelectedLesson, (state, { selectedLesson, reqBody }) => {
+        state.selectedLesson.lessonData = {
+            ...state.selectedLesson.lessonData,
+            ...reqBody,
+        }
+        const itemIdx = _.findIndex(
+            state.entities[selectedLesson.categId].items,
+            (v) => v.id == selectedLesson.lessonData.id
+        )
+        _.assign(state.entities[selectedLesson.categId].items[itemIdx], reqBody)
         return state
     }),
     on(LessonActions.removeSelectedLesson, (state, { selectedLesson }) => {
-        // need to update categ list -- finish v1
         const categId = selectedLesson.categId
         state.entities[categId].items = _.filter(
             state.entities[categId].items,
             (item) => item.id != selectedLesson.lessonData.id
         )
         state.selectedLesson = initialSelectedLesson
+        state.entities[selectedLesson.categId].item_count -= 1
         return state
     }),
     on(LessonActions.resetSelectedLesson, (state) => {
@@ -186,18 +248,22 @@ export const lessonReducer = createImmerReducer(
         return state
     }),
 
-    // actions from membership
-    on(LessonActions.finishUpsertState, (state, { lessonCategState }): State => {
-        console.log('LessonActions.finishUpserState : ', lessonCategState)
-        const newState: State = adapter.upsertMany(lessonCategState, _.cloneDeep(state))
-        const preSelLesson = newState.selectedLesson
-        if (preSelLesson.lessonData != undefined) {
-            newState.selectedLesson.lessonData = newState.entities[preSelLesson.categId].items.find(
-                (categItem) => categItem.id == preSelLesson.lessonData.id
-            )
-        }
-        return newState
+    // linked Membership
+    on(LessonActions.startLinkMembership, (state, { linkMembership }) => {
+        state.selectedLesson.linkedMembershipItems.push(linkMembership)
+        _.remove(state.selectedLesson.linkableMembershipItems, (v) => v.id == linkMembership.id)
+        return state
     }),
+    on(LessonActions.startUnlinkMembership, (state, { unlinkMembership }) => {
+        state.selectedLesson.linkableMembershipItems.push(unlinkMembership)
+        state.selectedLesson.linkableMembershipItems = _.sortBy(
+            state.selectedLesson.linkableMembershipItems,
+            (v) => v.category_id
+        )
+        _.remove(state.selectedLesson.linkedMembershipItems, (v) => v.id == unlinkMembership.id)
+        return state
+    }),
+
     // inital input
     on(LessonActions.disableInitInput, (state, { categId }): State => {
         return adapter.updateOne({ id: categId, changes: { initialInputOn: false } }, state)

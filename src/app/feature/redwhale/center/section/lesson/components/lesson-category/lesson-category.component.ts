@@ -1,11 +1,11 @@
 import { Component, OnInit, Input, AfterViewInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core'
 import { FormBuilder, FormControl } from '@angular/forms'
-import * as _ from 'lodash'
+import _ from 'lodash'
 
 import { ClassItem } from '@schemas/class-item'
 
 // rxjs
-import { Observable, Subject } from 'rxjs'
+import { Subject } from 'rxjs'
 import { takeUntil } from 'rxjs/operators'
 
 // ngrx
@@ -94,7 +94,7 @@ export class LessonCategoryComponent implements OnInit, AfterViewInit, OnDestroy
 
     toggleCategOpen() {
         if (this.isChangeNameOn) return
-        this.nxStore.dispatch(LessonActions.setCategIsOpen({ id: this.id, isOpen: !this.isCategOpen }))
+        this.nxStore.dispatch(LessonActions.startSetCategIsOpen({ id: this.id, isOpen: !this.isCategOpen }))
     }
 
     setCategInputOpen() {
@@ -144,7 +144,7 @@ export class LessonCategoryComponent implements OnInit, AfterViewInit, OnDestroy
     // delete category method
     onDeleteCategoryConfirm() {
         this.nxStore.dispatch(LessonActions.removeLessonCateg({ centerId: this.centerId, id: this.id }))
-        console.log('onDelCateg slelctedLesson: ', this.selectedLesson)
+
         if (this.selectedLesson.lessonData && this.items.some((v) => v.id == this.selectedLesson.lessonData.id)) {
             this.nxStore.dispatch(LessonActions.resetSelectedLesson())
         }

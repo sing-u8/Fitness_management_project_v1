@@ -8,7 +8,8 @@
     "build": "ng build",
     "build:dev": "ng build -c development",
     "build:prod": "ng build -c production",
-    "watch": "ng build --watch --configuration development",
+    "bulidAndDeploy:prod":"ng build -c production ",
+    "watch": "ng build --watch --configuration development && aws s3 sync ./dist/redwhale-renew s3://redwhale.xyz --acl public-read --delete --profile redwhale-web && aws cloudfront create-invalidation --distribution-id EIK58AU9N4DDK --paths '/*' --profile redwhale-web",
     "test": "ng test",
     "lint": "eslint src/**/*.ts",
     "lint:fix": "eslint --fix src/**/*.ts"

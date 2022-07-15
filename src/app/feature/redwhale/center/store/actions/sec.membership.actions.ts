@@ -84,10 +84,9 @@ export const finishSetSelectedMembership = createAction(
     props<{ linkedClassItems: Array<ClassItem>; linkableClassItems: Array<ClassItem> }>()
 )
 
-export type UpdateType = undefined | 'RemoveReservationLesson'
 export const updateSelectedMembership = createAction(
     `[${FeatureKey} Update Selected Membership to Server]`,
-    props<{ selectedMembership: SelectedMembership; reqBody: UpdateItemRequestBody; updateType: UpdateType }>()
+    props<{ selectedMembership: SelectedMembership; reqBody: UpdateItemRequestBody }>()
 )
 export const removeSelectedMembership = createAction(
     `[${FeatureKey} remove Selected Membership to Server]`,
@@ -117,14 +116,7 @@ export const startUnlinkClass = createAction(
 // export const finishUnlinkClass = createAction(`[${FeatureKey}] Start Link Class To Membership`, props<{}>())
 
 // actions from lesson
-export const startUpsertState = createAction(
-    `[${FeatureKey}] Start Upsert State called by lesson screen`,
-    props<{ centerId: string }>()
-)
-export const finishUpsertState = createAction(
-    `[${FeatureKey}] Finish Upsert State called by lesson screen`,
-    props<{ membershipCategState: Array<MembershipCategoryState> }>()
-)
+export const startUpsertState = createAction(`[${FeatureKey}] Start Upsert State called by lesson screen`)
 
 // initial input
 export const disableInitInput = createAction(
