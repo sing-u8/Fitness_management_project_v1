@@ -9,11 +9,11 @@
     <div class="col2" [class.notification]="isHolding">
         {{membership.start_date | dateFormat:'YYYY.MM.DD'}} - {{membership.end_date | dateFormat:'YYYY.MM.DD'}} ({{membership.start_date | period : membership.end_date}}일)
     </div>
-    <div class="col3" [class.notification]="isHolding">
+    <!-- <div class="col3" [class.notification]="isHolding">
         {{restDate}}일 / {{membership.unlimited ? '무제한' : membership.count < 1 || isExpired ? 0 : membership.count + '회' }} 남음
-    </div>
+    </div> -->
     <div class="col4" [class.notification]="isHolding">
-        <div
+        <!-- <div
             (mousemove)="!isExpired && openShowFullClass()"
             (mouseleave)="!isExpired && closeShowFullClass()"
             class="col4__content"
@@ -27,6 +27,10 @@
             ></div>
 
             <div *ngIf="openFullClass" class="ellipsis-dropdown">{{reservableClassFullText}}</div>
+        </div> -->
+
+        <div>
+            {{restDate}}일 / {{membership.unlimited ? '무제한' : membership.count < 1 || isExpired ? 0 : membership.count + '회' }} 남음
         </div>
         <div
             class="col4__menu"
