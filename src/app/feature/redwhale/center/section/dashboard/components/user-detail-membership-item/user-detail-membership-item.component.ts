@@ -129,25 +129,26 @@ export class UserDetailMembershipItemComponent implements OnInit, AfterViewInit 
     public showFullClassArrow = false
     public openFullClass = false
     getReservableClassText() {
-        if (this.membership.class.length > 1) {
-            this.showFullClassArrow = true
-            this.reservableClassText = `${this.wordService.ellipsis(this.membership.class[0].name, 11)} 외 ${
-                this.membership.class.length - 1
-            }개`
-            this.reservableClassFullText = _.reduce(
-                this.membership.class,
-                (acc, cur, idx, list) => {
-                    return acc + cur.name + (idx != list.length - 1 ? ', ' : '')
-                },
-                ''
-            )
-        } else {
-            this.reservableClassText = `${this.wordService.ellipsis(this.membership.class[0].name, 11)}`
-            if (this.membership.class[0].name.length > 11) {
-                this.showFullClassArrow = true
-                this.reservableClassFullText = this.membership.class[0].name
-            }
-        }
+        // !! 기능 숨김 및 스키마 변경으로 수정 필요
+        // if (this.membership.class.length > 1) {
+        //     this.showFullClassArrow = true
+        //     this.reservableClassText = `${this.wordService.ellipsis(this.membership.class[0].name, 11)} 외 ${
+        //         this.membership.class.length - 1
+        //     }개`
+        //     this.reservableClassFullText = _.reduce(
+        //         this.membership.class,
+        //         (acc, cur, idx, list) => {
+        //             return acc + cur.name + (idx != list.length - 1 ? ', ' : '')
+        //         },
+        //         ''
+        //     )
+        // } else {
+        //     this.reservableClassText = `${this.wordService.ellipsis(this.membership.class[0].name, 11)}`
+        //     if (this.membership.class[0].name.length > 11) {
+        //         this.showFullClassArrow = true
+        //         this.reservableClassFullText = this.membership.class[0].name
+        //     }
+        // }
     }
     openShowFullClass() {
         if (this.showFullClassArrow) {
