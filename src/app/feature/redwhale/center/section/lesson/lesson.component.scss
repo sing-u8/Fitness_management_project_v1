@@ -404,9 +404,9 @@ main {
                             color: var(--darkgrey);
                         }
 
-                        @media (min-width: 1920px) {
-                            height: 70px;
-                        }
+                        // @media (min-width: 1920px) {
+                        //     height: 70px;
+                        // }
                     }
                 }
 
@@ -642,7 +642,7 @@ main {
                 .selected-lesson-membershiplist {
                     // min-height: 556px;
                     .l-membership-item {
-                        grid-auto-rows: 80px !important;
+                        // grid-auto-rows: 80px !important;
                     }
                 }
                 .reserve-membership-modal {

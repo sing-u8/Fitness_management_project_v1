@@ -68,7 +68,6 @@ export class MembershipCategoryComponent implements OnInit, AfterViewInit {
         this.categNameForm.setValue(this.categ.name)
 
         // init input variable
-        this.name = this.categ.name
         this.isAddMembershipInputOn = this.categ.initialInputOn
     }
     ngAfterViewInit(): void {}
@@ -123,7 +122,7 @@ export class MembershipCategoryComponent implements OnInit, AfterViewInit {
 
     // categ name change method
     changeCategName() {
-        if (this.categ.name != this.categNameForm.value) {
+        if (this.categ.name != this.categNameForm.value && String(this.categNameForm.value) != '') {
             this.nxStore.dispatch(
                 MembershipActions.changeMembershipCategName({
                     centerId: this.centerId,
@@ -168,7 +167,7 @@ export class MembershipCategoryComponent implements OnInit, AfterViewInit {
             MembershipActions.startAddMembershipToCateg({
                 centerId: this.centerId,
                 categId: this.id,
-                categName: this.name,
+                categName: this.categ.name,
                 reqBody: {
                     name: itemName,
                     sequence_number: this.categ.items.length + 1,

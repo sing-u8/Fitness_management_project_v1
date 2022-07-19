@@ -232,7 +232,7 @@ export class MembershipComponent implements OnInit {
         },
         price: {
             title: '가격',
-            suffix: '￦',
+            suffix: '원',
             property: 'price',
         },
     }

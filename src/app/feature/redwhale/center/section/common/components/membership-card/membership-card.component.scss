@@ -88,17 +88,18 @@ p {
                 .card-title {
                     text-overflow: ellipsis;
                     overflow: hidden;
-                    width: 65%;
+                    // width: 65%;
+                    width: 95%;
                     display: -webkit-box;
                     -webkit-box-orient: vertical;
-                    -webkit-line-clamp: 2;
+                    -webkit-line-clamp: 1;
                     word-wrap: break-word;
                 }
-                .card-desc1 {
-                    display: none;
-                    width: 35%;
-                    text-align: end;
-                }
+                // .card-desc1 {
+                //     display: none;
+                //     width: 35%;
+                //     text-align: end;
+                // }
             }
         }
     }
@@ -133,12 +134,13 @@ p {
     .card-outer-container {
         min-height: 68px;
     }
-    .card-desc2 {
-        display: none;
-    }
-    .card-desc1 {
-        display: block !important;
-    }
+    // !! 2줄로만 표시하게 변경
+    // .card-desc2 {
+    //     display: none;
+    // }
+    // .card-desc1 {
+    //     display: block !important;
+    // }
     .reservable-card-delete {
         right: 8px !important;
         top: 8px !important;

@@ -85,30 +85,31 @@ p {
                 justify-content: space-between;
                 width: 100%;
                 .card-title {
-                    width: 65%;
+                    // width: 65%;
+                    width: 95%;
                     text-overflow: ellipsis;
                     overflow: hidden;
                     display: -webkit-box;
                     -webkit-box-orient: vertical;
-                    -webkit-line-clamp: 2;
+                    -webkit-line-clamp: 1;
                     word-wrap: break-word;
                 }
-                .card-desc1 {
-                    display: none;
-                    width: 35%;
-                    text-align: end;
-                    position: relative;
-                    flex-direction: row;
-                    justify-content: flex-end;
+                // .card-desc1 {
+                //     display: none;
+                //     width: 35%;
+                //     text-align: end;
+                //     position: relative;
+                //     flex-direction: row;
+                //     justify-content: flex-end;
 
-                    .card-desc-tr-name {
-                        display: block;
-                        text-overflow: ellipsis;
-                        overflow: hidden;
-                        white-space: nowrap;
-                        max-width: 50%;
-                    }
-                }
+                //     .card-desc-tr-name {
+                //         display: block;
+                //         text-overflow: ellipsis;
+                //         overflow: hidden;
+                //         white-space: nowrap;
+                //         max-width: 50%;
+                //     }
+                // }
             }
         }
     }
@@ -154,12 +155,13 @@ p {
     .card-outer-container {
         min-height: 68px;
     }
-    .card-desc2 {
-        display: none !important;
-    }
-    .card-desc1 {
-        display: flex !important;
-    }
+    // !! 2줄로만 표시하게 변경
+    // .card-desc2 {
+    //     display: none !important;
+    // }
+    // .card-desc1 {
+    //     display: flex !important;
+    // }
     .reservable-card-delete {
         right: 8px !important;
         top: 8px !important;

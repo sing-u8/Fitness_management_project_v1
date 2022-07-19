@@ -73,7 +73,6 @@ export class LessonCategoryComponent implements OnInit, AfterViewInit, OnDestroy
 
         // init input variable
         this.items = this.categ.items
-        this.name = this.categ.name
         this.isCategOpen = this.categ.isCategOpen
         this.isAddLessonInputOn = this.categ.initialInputOn
     }
@@ -129,7 +128,7 @@ export class LessonCategoryComponent implements OnInit, AfterViewInit, OnDestroy
 
     // categ name change method
     changeCategName() {
-        if (this.categ.name != this.categNameForm.value) {
+        if (this.categ.name != this.categNameForm.value && String(this.categNameForm.value) != '') {
             this.nxStore.dispatch(
                 LessonActions.changeLessonCategName({
                     centerId: this.centerId,
@@ -171,7 +170,7 @@ export class LessonCategoryComponent implements OnInit, AfterViewInit, OnDestroy
             LessonActions.startAddLessonToCateg({
                 centerId: this.centerId,
                 categId: this.id,
-                categName: this.name,
+                categName: this.categ.name,
                 reqBody: {
                     name: itemName,
                     sequence_number: this.categ.items.length + 1,

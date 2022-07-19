@@ -6,7 +6,7 @@
       <span
         *ngIf="!isChangeNameOn" class="rw-typo-title1"
       >
-        {{name}}
+        {{categ.name}}
       </span>
       <input
         *ngIf="isChangeNameOn"
@@ -15,6 +15,7 @@
         (keyup.enter) = "changeCategName()"
         class="rw-input"
         [formControl] = "categNameForm"
+        [placeholder]="categ.name"
       >
       <span class="rw-typo-title1 item-length">{{categ.item_count}}</span>
     </form>
