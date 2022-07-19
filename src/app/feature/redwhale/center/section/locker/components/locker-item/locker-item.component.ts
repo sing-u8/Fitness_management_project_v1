@@ -23,6 +23,7 @@ import _ from 'lodash'
 })
 export class LockerItemComponent implements OnInit, OnDestroy, AfterViewInit {
     @Input() lockerItem: LockerItem
+    @Input() selectedLockerItem: LockerItem
     @Input() curLockerItems: LockerItem[]
     @Input() editMode: boolean
     @Input() switchPlaceMode: boolean
@@ -129,7 +130,7 @@ export class LockerItemComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     onItemClick() {
-        if (this.isEditMode()) {
+        if (this.isEditMode() || this.selectedLockerItem?.id == this.lockerItem.id) {
             return
         } else if (
             this.lockerGlobalMode == 'moveLockerTicket' &&

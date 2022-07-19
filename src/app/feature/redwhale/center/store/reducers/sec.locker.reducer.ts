@@ -189,6 +189,12 @@ export const lockerReducer = createImmerReducer(
         state.curLockerItemList = lockerItems
         return state
     }),
+    on(LockerActions.finishExtendLockerTicket, (state, { extendedUserLocker, lockerItems, lockerItem }) => {
+        state.curLockerItem = lockerItem
+        state.curLockerItemList = lockerItems
+        state.curUserLocker = extendedUserLocker
+        return state
+    }),
 
     on(LockerActions.finishMoveLockerTicket, (state, { movedLockerItem, lockerItems }) => {
         state.curLockerItemList = lockerItems

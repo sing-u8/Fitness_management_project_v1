@@ -244,6 +244,7 @@
                                     <rw-locker-item
                                         *ngFor="let item of curLockerItemList; let i =index"
                                         [lockerItem]="item"
+                                        [selectedLockerItem]="curLockerItem"
                                         [curLockerItems]="curLockerItemList"
                                         [editMode]="isEditMode"
                                         (onItemDelete)="onDeleteLockerItem($event)"

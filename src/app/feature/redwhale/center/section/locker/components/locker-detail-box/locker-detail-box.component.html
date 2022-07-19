@@ -235,12 +235,6 @@
     (confirm)="onRegisterMemberChoose($event)"
 ></rw-register-locker-modal>
 
-<!-- <rw-empty-locker-modal
-    [(visible)]=doShowEmptyLockerModal
-    [lockerItemName]="lockerEmptyTitle"
-    (cancel)="closeShowEmptyLockerModal()"
-    (confirm)="onEmptyLockerModaConfirm($event)"
-></rw-empty-locker-modal> -->
 <rw-locker-charge-modal
     [(visible)]="doShowEmptyLockerModal"
     [type]="'refund'"

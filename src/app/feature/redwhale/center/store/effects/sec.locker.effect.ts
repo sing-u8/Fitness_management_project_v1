@@ -302,6 +302,39 @@ export class LockerEffect {
         )
     )
 
+    public extendLockerTicket = createEffect(() =>
+        this.actions$.pipe(
+            ofType(LockerActions.startExtendLockerTicket),
+            switchMap(({ centerId, userId, lockerTicketId, reqBody, cb }) =>
+                this.centerUsersLockerApi.extendLockerTicket(centerId, userId, lockerTicketId, reqBody).pipe(
+                    concatLatestFrom(() => [
+                        this.store.select(LockerSelector.curLockerCateg),
+                        this.store.select(LockerSelector.curLockerItem),
+                    ]),
+                    switchMap(([extendedUserLocker, curLockerCateg, curLockerItem]) => {
+                        return this.centerLokcerApi.getItemList(centerId, curLockerCateg.id).pipe(
+                            switchMap((lockerItems) => {
+                                const extendLockerItem = _.find(lockerItems, (item) => item.id == curLockerItem.id)
+                                cb ? cb() : null
+                                return [
+                                    LockerActions.finishExtendLockerTicket({
+                                        lockerItems,
+                                        lockerItem: extendLockerItem,
+                                        extendedUserLocker,
+                                    }),
+                                    showToast({
+                                        text: `[락커 ${extendLockerItem.name}] 만료일이 변경되었습니다.`,
+                                    }),
+                                ]
+                            })
+                        )
+                    }),
+                    catchError((err: string) => of(LockerActions.error({ error: err })))
+                )
+            )
+        )
+    )
+
     public moveLockerTicket = createEffect(() =>
         this.actions$.pipe(
             ofType(LockerActions.startMoveLockerTicket),

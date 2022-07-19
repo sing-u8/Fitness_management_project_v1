@@ -11,6 +11,7 @@ import {
     ExpireLockerTicketReqBody,
     RefundLockerTicketReqBody,
     StartLockerTicketReqBody,
+    ExtendLockerTicketReqBody,
 } from '@services/center-users-locker.service.service'
 import { UserLocker } from '@schemas/user-locker'
 import { LockerItemHistory } from '@schemas/locker-item-history'
@@ -95,18 +96,11 @@ export const startUpdateLockerItem = createAction(
         curLockerItems: LockerItem[]
     }>()
 )
-// !! not be needed
-// export const finishUpdateLockerItem = createAction(
-//     `[${FeatureKey}] finish Update Locker item`,
-//     props<{ lockerItem?: LockerItem }>()
-// )
 
 export const startDeleteLockerItem = createAction(
     `[${FeatureKey}] Start Delete Locker item`,
     props<{ centerId: string; categoryId: string; item: LockerItem; curItemList: LockerItem[] }>()
 )
-// !! not be needed
-// export const finishDeleteLockerItem = createAction(`[${FeatureKey}] finish Delete Locker item`)
 
 export const startStopItem = createAction(
     `[${FeatureKey}] Start Stop Locker item`,
@@ -165,12 +159,26 @@ export const startRefundLockerTicket = createAction(
         lockerTicketId: string
         reqBody: RefundLockerTicketReqBody
         cb?: () => void
-        // curLockerItems: LockerItem[]
     }>()
 )
 export const finishRefundLockerTicket = createAction(
     `[${FeatureKey}] Finish Refund Locker Ticket`,
     props<{ lockerItems: LockerItem[]; lockerItem: LockerItem }>()
+)
+
+export const startExtendLockerTicket = createAction(
+    `[${FeatureKey}] Start Extend Locker Ticket`,
+    props<{
+        centerId: string
+        userId: string
+        lockerTicketId: string
+        reqBody: ExtendLockerTicketReqBody
+        cb?: () => void
+    }>()
+)
+export const finishExtendLockerTicket = createAction(
+    `[${FeatureKey}] Finish Extend Locker Ticket`,
+    props<{ extendedUserLocker: UserLocker; lockerItems: LockerItem[]; lockerItem: LockerItem }>()
 )
 
 export const startMoveLockerTicket = createAction(

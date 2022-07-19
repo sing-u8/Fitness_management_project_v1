@@ -261,34 +261,31 @@ export class LockerDetailBoxComponent implements OnInit, OnChanges, OnDestroy {
 
     // 결제 가격 수정되는 방식에 따라 수정 필요!  결제 담당자 에러 때문에  주석 처리 ; 나중에 수정되면 수정하기!
     changeDate(res: ConfirmOuput) {
-        // !! API가 달라져서 수정 필요
-        // const changeDataReqBody = {
-        // }
-        // console.log('res.chargeType: ' + res.chargeType)
-        // const reqBody: ModifyLockerTicketRequestBody = {
-        //     locker_item_id: Number(this.lockerItem.id),
-        //     // start_date: this.lockerDate.startDate,
-        //     end_date: this.lockerDate.endDate,
-        //     pay_card: res.chargeType.pay_card,
-        //     pay_cash: res.chargeType.pay_cash,
-        //     pay_trans: res.chargeType.pay_trans,
-        //     unpaid: res.chargeType.unpaid,
-        //     pay_date: res.chargeType.pay_date,
-        //     assignee_id: res.chargeType.assignee_id,
-        // }
-        // console.log('reqBody: ', reqBody)
-        // this.closeShowAdditionalChargeModal()
-        // this.gymUserLockerTicketService
-        //     .modifyLockerTicket(
-        //         this.center.id,
-        //         this.lockerItem.locker_ticket.user_id,
-        //         this.lockerItem.locker_ticket.id,
-        //         reqBody
-        //     )
-        //     .subscribe((__) => {
-        //         this.getLockerItem()
-        //         this.globalService.showToast(`[락커 ${this.lockerItem.name}] 만료일이 변경되었습니다.`)
-        //     })
+        const reqBody = {
+            end_date: this.lockerDate.endDate,
+            payment: {
+                card: res.chargeType.pay_card,
+                trans: res.chargeType.pay_trans,
+                vbank: 0,
+                phone: 0,
+                cash: res.chargeType.pay_cash,
+                unpaid: res.chargeType.unpaid,
+                memo: '',
+                responsibility_user_id: res.chargeType.assignee_id,
+            },
+        }
+        this.nxStore.dispatch(
+            LockerActions.startExtendLockerTicket({
+                centerId: this.center.id,
+                userId: this.curUserLocker.user_id,
+                lockerTicketId: this.curUserLocker.id,
+                reqBody,
+                cb: () => {
+                    res.loadingFns.hideLoading()
+                    this.closeShowAdditionalChargeModal()
+                },
+            })
+        )
     }
 
     toggleShowRestartLockerModal() {
@@ -361,7 +358,6 @@ export class LockerDetailBoxComponent implements OnInit, OnChanges, OnDestroy {
         this.lockerDateDiff = dayjs(this.lockerDate.endDate).diff(dayjs(this.lockerDate.startDate), 'day') + 1
     }
 
-    // !! 추가 수정 필요 03/25 --> 05/02
     registerMember(res: ConfirmOuput) {
         const createLockerTicketReqBody: CreateLockerTicketReqBody = {
             locker_item_id: this.lockerItem.id,
@@ -401,9 +397,7 @@ export class LockerDetailBoxComponent implements OnInit, OnChanges, OnDestroy {
         this.nxStore.dispatch(showToast({ text: `[락커 ${this.lockerItem.name}]입력중인 정보가 초기화되었습니다.` }))
     }
 
-    // // buttonBox2 method
     emptyLocker(res: ConfirmOuput) {
-        // !! API  변경으로  재수정 필요
         const totalPrice = res.chargeType.pay_cash + res.chargeType.pay_card + res.chargeType.pay_trans
         if (totalPrice > 0) {
             this.nxStore.dispatch(
