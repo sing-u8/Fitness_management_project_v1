@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core'
 import { createEffect, Actions, ofType, concatLatestFrom } from '@ngrx/effects'
 import { Store } from '@ngrx/store'
-import { of } from 'rxjs'
+import { forkJoin, of } from 'rxjs'
 import { catchError, switchMap, map, exhaustMap, tap, mergeMap } from 'rxjs/operators'
 
 import { showToast } from '@appStore/actions/toast.action'
@@ -90,7 +90,7 @@ export class LockerEffect {
     )
 
     // locker item
-    public getLockerItemList = createEffect(() =>
+    public getLockerItemList$ = createEffect(() =>
         this.actions$.pipe(
             ofType(LockerActions.startGetLockerItemList),
             switchMap(({ centerId, categoryId }) =>
@@ -104,13 +104,31 @@ export class LockerEffect {
         )
     )
 
+    public getItemUserLocker$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(LockerActions.startSetCurLockerItem),
+            concatLatestFrom(() => [
+                this.store.select(LockerSelector.curCenterId),
+                this.store.select(LockerSelector.curLockerCateg),
+            ]),
+            switchMap(([{ lockerItem }, centerId, lockerCateg]) => {
+                if (_.isEmpty(lockerItem.user_locker_center_user_name)) {
+                    return [LockerActions.finishSetCurLockerItem({ userLocker: undefined })]
+                } else {
+                    return this.centerLokcerApi
+                        .getItemUserLocker(centerId, lockerCateg.id, lockerItem.id)
+                        .pipe(switchMap((userLocker) => [LockerActions.finishSetCurLockerItem({ userLocker })]))
+                }
+            })
+        )
+    )
+
     // !! replaced with locker component method --> modifying
-    public createLockerItem = createEffect(
+    public createLockerItem$ = createEffect(
         () =>
             this.actions$.pipe(
                 ofType(LockerActions.startCreateLockerItem),
                 mergeMap(({ centerId, categoryId, reqBody, cbFn }) => {
-                    console.log('startCreateLockerItem in EFFECT!!!!')
                     return this.centerLokcerApi.createItem(centerId, categoryId, reqBody).pipe(
                         switchMap((lockerItem) => {
                             return [LockerActions.finishCreateLockerItem({ lockerItem })]
@@ -185,7 +203,7 @@ export class LockerEffect {
     public createLockerTicket = createEffect(() =>
         this.actions$.pipe(
             ofType(LockerActions.startCreateLockerTicket),
-            switchMap(({ centerId, registerMemberId, createLockerTicketReqBody }) =>
+            switchMap(({ centerId, registerMemberId, createLockerTicketReqBody, cb }) =>
                 this.centerUsersLockerApi
                     .createLockerTicket(centerId, registerMemberId, createLockerTicketReqBody)
                     .pipe(
@@ -197,11 +215,12 @@ export class LockerEffect {
                                         lockerItems,
                                         (item) => item.id == resUserLocker.locker_item_id
                                     )
-
+                                    cb ? cb() : null
                                     return [
                                         LockerActions.finishCreateLockerTicket({
                                             lockerItems,
                                             lockerItem: updatedLockerItem,
+                                            userLocker: resUserLocker,
                                         }),
                                         showToast({
                                             text: `[락커 ${updatedLockerItem.name}]에 회원이 등록되었습니다.`,
@@ -220,7 +239,7 @@ export class LockerEffect {
     public refundLocketTicket = createEffect(() =>
         this.actions$.pipe(
             ofType(LockerActions.startRefundLockerTicket),
-            switchMap(({ centerId, userId, lockerTicketId, reqBody }) =>
+            switchMap(({ centerId, userId, lockerTicketId, reqBody, cb }) =>
                 this.centerUsersLockerApi.refundLockerTicket(centerId, userId, lockerTicketId, reqBody).pipe(
                     concatLatestFrom(() => [
                         this.store.select(LockerSelector.curLockerCateg),
@@ -230,12 +249,13 @@ export class LockerEffect {
                         return this.centerLokcerApi.getItemList(centerId, curLockerCateg.id).pipe(
                             switchMap((lockerItems) => {
                                 const updatedLockerItem = _.find(lockerItems, (item) => item.id == curLockerItem.id)
+                                cb ? cb() : null
                                 return [
                                     LockerActions.finishRefundLockerTicket({
                                         lockerItems,
                                         lockerItem: updatedLockerItem,
                                     }),
-                                    LockerActions.setCurLockerItem({ lockerItem: updatedLockerItem }),
+                                    LockerActions.startSetCurLockerItem({ lockerItem: updatedLockerItem }),
                                     showToast({
                                         text: `[락커 ${updatedLockerItem.name}] 락커 비우기가 완료되었습니다.`,
                                     }),
@@ -249,7 +269,38 @@ export class LockerEffect {
         )
     )
 
-    // public expireLockerTicket = createEffect(() => this.actions$.pipe(ofType(LockerActions.startExpireLockerTicket)))
+    public expireLockerTicket = createEffect(() =>
+        this.actions$.pipe(
+            ofType(LockerActions.startExpireLockerTicket),
+            switchMap(({ centerId, userId, lockerTicketId, reqBody, cb }) =>
+                this.centerUsersLockerApi.expireLockerTicket(centerId, userId, lockerTicketId, reqBody).pipe(
+                    concatLatestFrom(() => [
+                        this.store.select(LockerSelector.curLockerCateg),
+                        this.store.select(LockerSelector.curLockerItem),
+                    ]),
+                    switchMap(([__, curLockerCateg, curLockerItem]) => {
+                        return this.centerLokcerApi.getItemList(centerId, curLockerCateg.id).pipe(
+                            switchMap((lockerItems) => {
+                                const updatedLockerItem = _.find(lockerItems, (item) => item.id == curLockerItem.id)
+                                cb ? cb() : null
+                                return [
+                                    LockerActions.finishExpireLockerTicket({
+                                        lockerItems,
+                                        lockerItem: updatedLockerItem,
+                                    }),
+                                    LockerActions.startSetCurLockerItem({ lockerItem: updatedLockerItem }),
+                                    showToast({
+                                        text: `[락커 ${updatedLockerItem.name}] 락커 비우기가 완료되었습니다.`,
+                                    }),
+                                ]
+                            })
+                        )
+                    }),
+                    catchError((err: string) => of(LockerActions.error({ error: err })))
+                )
+            )
+        )
+    )
 
     public moveLockerTicket = createEffect(() =>
         this.actions$.pipe(
@@ -277,7 +328,7 @@ export class LockerEffect {
                                                 LockerActions.resetWillBeMovedLockerItem(),
                                                 LockerActions.setLockerGlobalMode({ lockerMode: 'normal' }),
                                                 showToast({
-                                                    text: `${curLockerItem.user_locker.user.name}님의 자리가 '[락커 ${movedLockerItem.name}]'으로 이동되었습니다.`,
+                                                    text: `${curLockerItem.user_locker_center_user_name}님의 자리가 '[락커 ${movedLockerItem.name}]'으로 이동되었습니다.`,
                                                 }),
                                             ]
                                         })

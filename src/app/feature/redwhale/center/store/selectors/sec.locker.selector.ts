@@ -13,7 +13,12 @@ export const lockerCategLength = createSelector(GymLockerFeature, FromLocker.sel
 
 export const curLockerCateg = createSelector(GymLockerFeature, FromLocker.selectCurLockerCateg)
 export const curLockerItem = createSelector(GymLockerFeature, FromLocker.selectCurLockerItem)
+
+export const curUserLocker = createSelector(GymLockerFeature, FromLocker.selectCurUserLocker)
+export const curUserLockerIsLoading = createSelector(GymLockerFeature, FromLocker.selectCurUserLockerLoading)
+
 export const curLockerItemList = createSelector(GymLockerFeature, FromLocker.selectCurLockerItemList)
+export const curLockerItemListIsLoading = createSelector(GymLockerFeature, FromLocker.selectCurLockerItemListIsLoading)
 export const willBeMovedLockerItem = createSelector(GymLockerFeature, FromLocker.selectWillBeMovedLockerItem)
 export const LockerGlobalMode = createSelector(GymLockerFeature, FromLocker.selectLockerGlobalMode)
 export const curCenterId = createSelector(GymLockerFeature, FromLocker.selectCurCenterId)

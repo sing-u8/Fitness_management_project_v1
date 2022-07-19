@@ -7,14 +7,16 @@ import { Refund } from '@schemas/refund'
 
 export interface UserLocker {
     id: string
-    locker_item_id: string
-    locker_category_id: string
     state_code:
         | 'user_locker_state_in_use'
         | 'user_locker_state_paused'
         | 'user_locker_state_refund'
         | 'user_locker_state_expired'
     state_code_name: string
+    locker_category_id: string
+    locker_item_id: string
+    center_id: string
+    center_name: string
     category_name: string
     name: string
     start_date: string
@@ -25,8 +27,23 @@ export interface UserLocker {
     created_at: string
     updated_by: string
     updated_at: string
-    user: UserInfo
-    center: CenterInfo
-    payment: Array<Payment>
-    history: Array<UserLockerHistory>
+
+    user_id: string
+    user_name: string
+    user_color: string
+    user_picture: string
+    user_background: string
+    center_user_name: string
+    center_user_memo: string
+    center_user_picture: string
+    center_user_background: string
+
+    total_price: number
+    total_refund: number
+
+    // !! will be removed
+    user?: UserInfo
+    center?: CenterInfo
+    payment?: Array<Payment>
+    history?: Array<UserLockerHistory>
 }

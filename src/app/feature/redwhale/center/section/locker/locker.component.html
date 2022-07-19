@@ -83,11 +83,7 @@
                     <ng-container
                         *ngIf="curLockerItem && !isEditMode"
                     >
-                        <rw-locker-detail-box
-                            [lockerItem]="curLockerItem"
-                            [curLockerItems]="curLockerItemList"
-                        >
-                        </rw-locker-detail-box>
+                        <rw-locker-detail-box></rw-locker-detail-box>
                     </ng-container>
                 </div>
             </div>
@@ -229,7 +225,18 @@
                         </ng-template>
 
                         <ng-template #LockerItemsExist>
-                            <div class="l-locker-item">
+                            <div
+                                *ngIf="(curLockerItemListIsLoading$ | async) == 'pending'" class="l-locker__section loading-item"
+                            >
+                                <ngx-skeleton-loader
+                                    *ngFor="let _ of [1,2,3,4,5,6,7,8]" count=1 appearance="line"
+                                    [theme]="{width: '65px', 'height': '65px', 'border-radius': '5px'}"
+                                ></ngx-skeleton-loader>
+                            </div>
+                            <div
+                                *ngIf="(curLockerItemListIsLoading$ | async) == 'done'"
+                                class="l-locker-item"
+                            >
                                 <gridster
                                     class="thin-scroll-x thin-scroll-y"
                                     [options]="gridsterOptions"

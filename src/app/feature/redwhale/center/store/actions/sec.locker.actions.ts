@@ -12,6 +12,8 @@ import {
     RefundLockerTicketReqBody,
     StartLockerTicketReqBody,
 } from '@services/center-users-locker.service.service'
+import { UserLocker } from '@schemas/user-locker'
+import { LockerItemHistory } from '@schemas/locker-item-history'
 
 const FeatureKey = 'Center/Locker'
 
@@ -132,16 +134,23 @@ export const startCreateLockerTicket = createAction(
         centerId: string
         registerMemberId: string
         createLockerTicketReqBody: CreateLockerTicketReqBody
+        cb?: () => void
     }>()
 )
 export const finishCreateLockerTicket = createAction(
     `[${FeatureKey}] finish Create Locker Ticket`,
-    props<{ lockerItems: LockerItem[]; lockerItem: LockerItem }>()
+    props<{ lockerItems: LockerItem[]; lockerItem: LockerItem; userLocker: UserLocker }>()
 )
 
 export const startExpireLockerTicket = createAction(
     `[${FeatureKey}] Start Expire Locker Ticket`,
-    props<{ centerId: string; userId: string; lockerTicketId: string; reqBody: ExpireLockerTicketReqBody }>()
+    props<{
+        centerId: string
+        userId: string
+        lockerTicketId: string
+        reqBody: ExpireLockerTicketReqBody
+        cb?: () => void
+    }>()
 )
 export const finishExpireLockerTicket = createAction(
     `[${FeatureKey}] Finish Expire Locker Ticket`,
@@ -155,7 +164,8 @@ export const startRefundLockerTicket = createAction(
         userId: string
         lockerTicketId: string
         reqBody: RefundLockerTicketReqBody
-        curLockerItems: LockerItem[]
+        cb?: () => void
+        // curLockerItems: LockerItem[]
     }>()
 )
 export const finishRefundLockerTicket = createAction(
@@ -206,9 +216,13 @@ export const updateCurLockerItemList = createAction(
 export const resetCurLockerItemList = createAction(`[${FeatureKey}] Reset Current Locker Item List`)
 
 // cur Locker Item
-export const setCurLockerItem = createAction(
-    `[${FeatureKey}] Set Current Locker Item`,
+export const startSetCurLockerItem = createAction(
+    `[${FeatureKey}] Start Set Current Locker Item`,
     props<{ lockerItem: LockerItem }>()
+)
+export const finishSetCurLockerItem = createAction(
+    `[${FeatureKey}] Finish Set Current Locker Item`,
+    props<{ userLocker: UserLocker }>()
 )
 export const resetCurLockerItem = createAction(`[${FeatureKey}] Reset Current Locker Item`)
 

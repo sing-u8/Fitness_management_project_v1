@@ -28,7 +28,7 @@ export class CenterCalendarService {
 
     // 캘린더 태스크 일괄 조회
     getAllCalendarTask(centerId: string, reqBody: GetAllCalendarTaskReqBody): Observable<Array<CalendarTask>> {
-        const url = this.SERVER + `/${centerId}/task`
+        const url = this.SERVER + `/${centerId}/calendar_task`
 
         return this.http.post<Response>(url, reqBody, this.options).pipe(
             map((res) => {

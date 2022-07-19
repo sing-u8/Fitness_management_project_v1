@@ -9,11 +9,15 @@ import { LockerCategory } from '@schemas/locker-category'
 import { LockerItem } from '@schemas/locker-item'
 import { Loading } from '@schemas/store/loading'
 import { curLockerCateg } from '../selectors/sec.locker.selector'
+import { UserLocker } from '@schemas/user-locker'
 
 export const initialLockerState: {
     curLockerCateg: LockerCategory
     curLockerItemList: Array<LockerItem>
+    curLockerItemsListIsLoading: Loading
     curLockerItem: LockerItem
+    curUserLocker: UserLocker
+    curUserLockerIsLoading: Loading
     willBeMovedLockerItem: LockerItem
     lockerGlobalMode: LockerGlobalMode
     curCenterId: string
@@ -22,7 +26,10 @@ export const initialLockerState: {
 } = {
     curLockerCateg: undefined,
     curLockerItemList: [],
+    curLockerItemsListIsLoading: 'idle',
     curLockerItem: undefined,
+    curUserLocker: undefined,
+    curUserLockerIsLoading: 'idle',
     willBeMovedLockerItem: undefined,
     lockerGlobalMode: 'normal',
     curCenterId: '',
@@ -34,7 +41,10 @@ export type LockerGlobalMode = 'normal' | 'moveLockerTicket'
 export interface State extends EntityState<LockerCategory> {
     curLockerCateg: LockerCategory
     curLockerItemList: Array<LockerItem>
+    curLockerItemsListIsLoading: Loading
     curLockerItem: LockerItem
+    curUserLocker: UserLocker
+    curUserLockerIsLoading: Loading
     willBeMovedLockerItem: LockerItem
     lockerGlobalMode: LockerGlobalMode
     curCenterId: string
@@ -83,7 +93,12 @@ export const lockerReducer = createImmerReducer(
         return state
     }),
     // -- // locker item
+    on(LockerActions.startGetLockerItemList, (state, { categoryId, centerId }) => {
+        state.curLockerItemsListIsLoading = 'pending'
+        return state
+    }),
     on(LockerActions.finishGetLockerItemList, (state, { lockerItems }) => {
+        state.curLockerItemsListIsLoading = 'done'
         state.curLockerItemList = lockerItems
         return state
     }),
@@ -159,13 +174,18 @@ export const lockerReducer = createImmerReducer(
     }),
 
     // - // locker ticket
-    on(LockerActions.finishCreateLockerTicket, (state, { lockerItems, lockerItem }) => {
+    on(LockerActions.finishCreateLockerTicket, (state, { lockerItems, lockerItem, userLocker }) => {
         state.curLockerItemList = lockerItems
         state.curLockerItem = lockerItem
+        state.curUserLocker = userLocker
         return state
     }),
 
     on(LockerActions.finishRefundLockerTicket, (state, { lockerItem, lockerItems }) => {
+        state.curLockerItemList = lockerItems
+        return state
+    }),
+    on(LockerActions.finishExpireLockerTicket, (state, { lockerItem, lockerItems }) => {
         state.curLockerItemList = lockerItems
         return state
     }),
@@ -198,9 +218,14 @@ export const lockerReducer = createImmerReducer(
         state.curLockerItemList.push(lockerItem)
         return state
     }),
-    // - // cur Locker Item
-    on(LockerActions.setCurLockerItem, (state, { lockerItem }) => {
+    on(LockerActions.startSetCurLockerItem, (state, { lockerItem }) => {
         state.curLockerItem = lockerItem
+        state.curUserLockerIsLoading = 'pending'
+        return state
+    }),
+    on(LockerActions.finishSetCurLockerItem, (state, { userLocker }) => {
+        state.curUserLocker = userLocker
+        state.curUserLockerIsLoading = 'done'
         return state
     }),
     on(LockerActions.resetCurLockerItem, (state) => {
@@ -271,7 +296,10 @@ export const selectLockerCategLength = (state: State) => {
 
 export const selectCurLockerCateg = (state: State) => state.curLockerCateg
 export const selectCurLockerItem = (state: State) => state.curLockerItem
+export const selectCurUserLocker = (state: State) => state.curUserLocker
+export const selectCurUserLockerLoading = (state: State) => state.curUserLockerIsLoading
 export const selectCurLockerItemList = (state: State) => state.curLockerItemList
+export const selectCurLockerItemListIsLoading = (state: State) => state.curLockerItemsListIsLoading
 export const selectWillBeMovedLockerItem = (state: State) => state.willBeMovedLockerItem
 export const selectLockerGlobalMode = (state: State) => state.lockerGlobalMode
 export const selectCurCenterId = (state: State) => state.curCenterId

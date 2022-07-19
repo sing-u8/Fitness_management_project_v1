@@ -7,6 +7,7 @@ import handleError from './handleError'
 import { environment } from '@environments/environment'
 import { Response } from '@schemas/response'
 import { UserMembership } from '@schemas/user-membership'
+import { ClassItem } from '@schemas/class-item'
 import { Payment } from '@schemas/payment'
 import { UserMembershipHistory } from '@schemas/user-membership-history'
 
@@ -211,15 +212,25 @@ export class CenterUsersMembershipService {
             catchError(handleError)
         )
     }
+    // 회원권 수업 조회
+    getMembershipTicketClasses(centerId: string, userId: string, membershipId: string): Observable<Array<ClassItem>> {
+        const url = this.SERVER + `/${centerId}/users/${userId}/membership/${membershipId}/class`
+        return this.http.get<Response>(url, this.options).pipe(
+            map((res) => {
+                return res.dataset
+            }),
+            catchError(handleError)
+        )
+    }
     // 회원권 사용내역 조회
     getMembershipTicketHistory(
         centerId: string,
         userId: string,
         membershipId: string
     ): Observable<Array<UserMembershipHistory>> {
-        const url = this.SERVER + `/${centerId}/users/${userId}/membership/${membershipId}/history}`
+        const url = this.SERVER + `/${centerId}/users/${userId}/membership/${membershipId}/history`
 
-        return this.http.delete<Response>(url, this.options).pipe(
+        return this.http.get<Response>(url, this.options).pipe(
             map((res) => {
                 return res.dataset
             }),

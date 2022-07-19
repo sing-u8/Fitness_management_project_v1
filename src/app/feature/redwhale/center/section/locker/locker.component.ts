@@ -38,6 +38,8 @@ import { showToast } from '@appStore/actions/toast.action'
 import * as FromLocker from '@centerStore/reducers/sec.locker.reducer'
 import * as LockerSelector from '@centerStore/selectors/sec.locker.selector'
 import * as LockerActions from '@centerStore/actions/sec.locker.actions'
+import { UserLocker } from '@schemas/user-locker'
+import { Loading } from '@schemas/componentStore/loading'
 
 @Component({
     selector: 'locker',
@@ -47,6 +49,7 @@ import * as LockerActions from '@centerStore/actions/sec.locker.actions'
 export class LockerComponent implements OnInit, AfterViewInit, OnDestroy {
     // ngrx state
     public isLoading$ = this.nxStore.pipe(select(LockerSelector.isLoading))
+    public curLockerItemListIsLoading$ = this.nxStore.pipe(select(LockerSelector.curLockerItemListIsLoading))
 
     public curLockerCateg: LockerCategory = FromLocker.initialLockerState.curLockerCateg
     public curLockerItemList: Array<LockerItem> = _.cloneDeep(FromLocker.initialLockerState.curLockerItemList)
@@ -302,14 +305,14 @@ export class LockerComponent implements OnInit, AfterViewInit, OnDestroy {
         this.openShowMoveLockerTicketModal(willBeMovedLocker)
     }
     modifyLockerTicket() {
-        this.nxStore.dispatch(
-            LockerActions.startMoveLockerTicket({
-                centerId: this.center.id,
-                userId: this.curLockerItem.user_locker.user.id,
-                lockerTicketId: this.curLockerItem.user_locker.id,
-                startLockerReqBody: { locker_item_id: this.willBeMovedLockerItem.id },
-            })
-        )
+        // this.nxStore.dispatch(
+        //     LockerActions.startMoveLockerTicket({
+        //         centerId: this.center.id,
+        //         userId: this.curLockerItem.user_locker.user.id,
+        //         lockerTicketId: this.curLockerItem.user_locker.id,
+        //         startLockerReqBody: { locker_item_id: this.willBeMovedLockerItem.id },
+        //     })
+        // )
         // this.nxStore.dispatch(LockerActions.resetWillBeMovedLockerItem())
         // this.nxStore.dispatch(LockerActions.setLockerGlobalMode({ lockerMode: 'normal' }))
         this.doShowMoveLockerTicketModal = false
@@ -339,7 +342,7 @@ export class LockerComponent implements OnInit, AfterViewInit, OnDestroy {
         this.delCategModalVisible = onOff
     }
     setWillBeDeletedCategory(categ: LockerCategory) {
-        if (_.find(this.curLockerItemList, (item) => item.user_locker)) {
+        if (_.find(this.curLockerItemList, (item) => item.state_code != 'locker_item_state_empty')) {
             this.toggleShowBlockDelCategory()
             return
         }

@@ -89,9 +89,9 @@ export class LockerItemComponent implements OnInit, OnDestroy, AfterViewInit {
 
     // ------------------------------------------------------------------------ //
     setStatusIcon() {
-        if (this.lockerItem.user_locker) {
+        if (this.lockerItem.user_locker_end_date) {
             const date1 = dayjs().format('YYYY-MM-DD')
-            const date2 = dayjs(this.lockerItem.user_locker.end_date)
+            const date2 = dayjs(this.lockerItem.user_locker_end_date)
             const dayDiff = date2.diff(date1, 'day')
             if (dayDiff < 8 && dayDiff >= 0) {
                 this.isSevenDaysRemain = true
@@ -137,8 +137,7 @@ export class LockerItemComponent implements OnInit, OnDestroy, AfterViewInit {
         ) {
             this.onAnotherEmptyLockerClick()
         } else if (this.lockerGlobalMode != 'moveLockerTicket') {
-            console.log('in locker item componenet setCurLockeritem: ', this.lockerItem)
-            this.nxStore.dispatch(LockerAction.setCurLockerItem({ lockerItem: _.cloneDeep(this.lockerItem) }))
+            this.nxStore.dispatch(LockerAction.startSetCurLockerItem({ lockerItem: _.cloneDeep(this.lockerItem) }))
             this.selected = true
         }
     }

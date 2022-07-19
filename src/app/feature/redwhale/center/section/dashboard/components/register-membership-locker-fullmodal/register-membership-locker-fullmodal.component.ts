@@ -221,9 +221,10 @@ export class RegisterMembershipLockerFullmodalComponent implements OnInit, OnCha
     closeMembershipListModal() {
         this.doShowMembershipListModal = false
     }
-    onMembershipTicketSelected(item: MembershipItem) {
+    async onMembershipTicketSelected(item: MembershipItem) {
         // this.gymRegisterMlState.create(this.gymRegisterMlState.initMembershipItem(item))
-        this.cmpStore.addMlItem(this.cmpStore.initMembershipItem(item))
+        const membershipTicket = await this.cmpStore.initMembershipItem(item)
+        this.cmpStore.addMlItem(membershipTicket)
         this.closeMembershipListModal()
         // console.log('onMembershipTicketSelected: ', item, this.gymRegisterMlState.itemList, this.itemList)
     }
@@ -287,6 +288,9 @@ export class RegisterMembershipLockerFullmodalComponent implements OnInit, OnCha
                     })
                 )
                 this.closeModal()
+            },
+            errCallback: () => {
+                btLoadingFns.hideLoading()
             },
         })
     }

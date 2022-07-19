@@ -15,6 +15,7 @@ import {
 
 import _ from 'lodash'
 import dayjs from 'dayjs'
+import { forkJoin } from 'rxjs'
 
 import { StorageService } from '@services/storage.service'
 import { CenterMembershipService } from '@services/center-membership.service'
@@ -123,28 +124,33 @@ export class ModifyMembershipFullmodalComponent implements OnInit, OnChanges, Af
         this.getClassItemList()
     }
     getClassItemList() {
-        this.centerMembershipService
-            .getLinkedClass(
+        forkJoin({
+            linkedClassList: this.centerMembershipService.getLinkedClass(
                 this.center.id,
                 this.userMembership.membership_category_id,
                 this.userMembership.membership_item_id
-            )
-            .subscribe((linkedClassItem) => {
-                this.classItemList = _.map(linkedClassItem, (v) => {
-                    if (this.userMembership.class.findIndex((mc) => mc.id == v.id) != -1) {
-                        return {
-                            selected: true,
-                            item: v,
-                        }
-                    } else {
-                        return {
-                            selected: false,
-                            item: v,
-                        }
+            ),
+            membershipTicketClassList: this.centerUsersMembershipService.getMembershipTicketClasses(
+                this.center.id,
+                this.userMembership.membership_category_id,
+                this.userMembership.membership_item_id
+            ),
+        }).subscribe(({ linkedClassList, membershipTicketClassList }) => {
+            console.log('getClassItemList in mmf -- ', linkedClassList, membershipTicketClassList)
+            this.classItemList = _.map(linkedClassList, (v) => {
+                if (membershipTicketClassList.findIndex((mc) => mc.id == v.id) != -1) {
+                    return {
+                        selected: true,
+                        item: v,
                     }
-                })
-                console.log('getClassItemList : ', this.classItemList)
+                } else {
+                    return {
+                        selected: false,
+                        item: v,
+                    }
+                }
             })
+        })
     }
 
     ngOnInit(): void {

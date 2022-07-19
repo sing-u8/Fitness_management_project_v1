@@ -10,6 +10,7 @@ import { Response } from '@schemas/response'
 import { LockerCategory } from '@schemas/locker-category'
 import { LockerItem } from '@schemas/locker-item'
 import { LockerItemHistory } from '@schemas/locker-item-history'
+import { UserLocker } from '@schemas/user-locker'
 
 @Injectable({
     providedIn: 'root',
@@ -19,6 +20,7 @@ export class CenterLockerService {
 
     constructor(private http: HttpClient) {}
 
+    // 카테고리 생성
     createCategory(centerId: string, requestBody: CreateCategoryRequestBody): Observable<LockerCategory> {
         const url = this.SERVER + `/${centerId}/locker`
 
@@ -36,6 +38,7 @@ export class CenterLockerService {
         )
     }
 
+    // 카테고리 조회
     getCategoryList(centerId: string): Observable<Array<LockerCategory>> {
         const url = this.SERVER + `/${centerId}/locker`
 
@@ -53,6 +56,7 @@ export class CenterLockerService {
         )
     }
 
+    // 카테고리 수정
     updateCategory(centerId: string, categoryId: string, requestBody: UpdateCategoryRequestBody): Observable<Response> {
         const url = this.SERVER + `/${centerId}/locker/${categoryId}`
 
@@ -70,6 +74,7 @@ export class CenterLockerService {
         )
     }
 
+    // 카테고리 삭제
     deleteCategory(centerId: string, categoryId: string): Observable<Response> {
         const url = this.SERVER + `/${centerId}/locker/${categoryId}`
 
@@ -87,6 +92,7 @@ export class CenterLockerService {
         )
     }
 
+    // 아이템 생성
     createItem(centerId: string, categoryId: string, requestBody: CreateItemRequestBody): Observable<LockerItem> {
         const url = this.SERVER + `/${centerId}/locker/${categoryId}/item`
 
@@ -104,6 +110,7 @@ export class CenterLockerService {
         )
     }
 
+    // 아이템 조회
     getItemList(centerId: string, categoryId: string): Observable<Array<LockerItem>> {
         const url = this.SERVER + `/${centerId}/locker/${categoryId}/item`
 
@@ -121,22 +128,7 @@ export class CenterLockerService {
         )
     }
 
-    getItem(centerId: string, categoryId: string, itemId: string): Observable<LockerItem> {
-        const url = this.SERVER + `/${centerId}/locker/${categoryId}/item/${itemId}`
-
-        const options = {
-            headers: new HttpHeaders({
-                'Content-Type': 'application/json',
-            }),
-        }
-        return this.http.get<Response>(url, options).pipe(
-            map((res) => {
-                return res.dataset[0]
-            }),
-            catchError(handleError)
-        )
-    }
-
+    // 아이템 수정
     updateItem(
         centerId: string,
         categoryId: string,
@@ -159,6 +151,7 @@ export class CenterLockerService {
         )
     }
 
+    // 아이템 삭제
     deleteItem(centerId: string, categoryId: string, itemId: string): Observable<Response> {
         const url = this.SERVER + `/${centerId}/locker/${categoryId}/item/${itemId}`
 
@@ -176,6 +169,7 @@ export class CenterLockerService {
         )
     }
 
+    // 아이템 사용내역 조회
     getItemHistories(centerId: string, categoryId: string, itemId: string): Observable<LockerItemHistory[]> {
         const url = this.SERVER + `/${centerId}/locker/${categoryId}/item/${itemId}/history`
 
@@ -193,39 +187,23 @@ export class CenterLockerService {
         )
     }
 
-    // restartItem(centerId: string, categoryId: string, itemId: string): Observable<Response> {
-    //     const url = this.SERVER + `/${centerId}/locker/${categoryId}/item/${itemId}/restart`
+    // 아이템에서 사용중인 사용자 락커 이용권 조회
+    getItemUserLocker(centerId: string, categoryId: string, itemId: string): Observable<UserLocker> {
+        const url = this.SERVER + `/${centerId}/locker/${categoryId}/item/${itemId}/user_locker`
 
-    //     const options = {
-    //         headers: new HttpHeaders({
-    //             'Content-Type': 'application/json',
-    //         }),
-    //     }
+        const options = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json',
+            }),
+        }
 
-    //     return this.http.put<Response>(url, {}, options).pipe(
-    //         map((res) => {
-    //             return res
-    //         }),
-    //         catchError(handleError)
-    //     )
-    // }
-
-    // stopItem(centerId: string, categoryId: string, itemId: string): Observable<Response> {
-    //     const url = this.SERVER + `/${centerId}/locker/${categoryId}/item/${itemId}/stop`
-
-    //     const options = {
-    //         headers: new HttpHeaders({
-    //             'Content-Type': 'application/json',
-    //         }),
-    //     }
-
-    //     return this.http.put<Response>(url, {}, options).pipe(
-    //         map((res) => {
-    //             return res
-    //         }),
-    //         catchError(handleError)
-    //     )
-    // }
+        return this.http.get<Response>(url, options).pipe(
+            map((res) => {
+                return res.dataset[0]
+            }),
+            catchError(handleError)
+        )
+    }
 }
 
 export interface CreateCategoryRequestBody {

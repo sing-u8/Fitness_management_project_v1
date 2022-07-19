@@ -1,9 +1,3 @@
-* {
-    padding: 0px;
-    margin: 0px;
-    text-align: initial;
-}
-
 .rw-modal-background {
     display: none;
     position: fixed;
@@ -14,7 +8,7 @@
     background-color: var(--font-color);
     opacity: 0;
     transition: opacity 0.3s cubic-bezier(0.25, 0.8, 0.25, 0.8);
-    z-index: 1010;
+    z-index: 999;
 }
 
 .rw-modal-background-show {
@@ -28,7 +22,7 @@
     right: 0;
     bottom: 0;
     left: 0;
-    z-index: 1011;
+    z-index: 1000;
 
     .rw-modal {
         width: 285px;
@@ -51,11 +45,6 @@
 
         $outer-width: 246px;
         $inner-width: 238px;
-
-        &.refund_height {
-            height: 514px;
-        }
-
         .header {
             display: flex;
             justify-content: space-between;
@@ -65,11 +54,9 @@
             border-bottom: 1px solid var(--border-color);
             margin-bottom: 20px;
             position: relative;
-
-            &>span {
+            & > span {
                 font-weight: 700;
             }
-
             .l-close {
                 position: absolute;
                 right: 0px;
@@ -81,11 +68,9 @@
                 height: 26px;
                 border-radius: 3px;
                 cursor: pointer;
-
                 &:hover {
                     background-color: var(--background-color);
                 }
-
                 img {
                     width: 20px;
                     height: 20px;
@@ -104,7 +89,7 @@
                 flex-direction: column;
                 margin-bottom: 16px;
 
-                &>span {
+                & > span {
                     margin-bottom: 5px;
                     color: var(--grey);
                 }
@@ -116,33 +101,30 @@
                 position: relative;
 
                 input {
-                    padding: 15px 40px 15px 15px;
+                    padding: 15px 15px 15px 45px;
                     height: 48px;
                     width: 100%;
                     text-align: right;
                 }
-
                 input::placeholder {
                     color: var(--font-color);
                 }
-
                 input::-webkit-input-placeholder {
                     color: var(--font-color);
                 }
-
                 input:-ms-input-placeholder {
                     color: var(--font-color);
                 }
 
-                &>span {
+                & > span {
                     margin-bottom: 5px;
                     color: var(--grey);
                 }
 
                 .currency {
                     position: absolute;
-                    right: 15px;
-                    bottom: 14.5px;
+                    left: 15px;
+                    bottom: 15.5px;
                 }
 
                 &:not(:last-child) {

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges, OnDestroy } from '@angular/core'
+import { Component, OnInit, Input, OnChanges, OnDestroy, SimpleChanges } from '@angular/core'
 import { Subject } from 'rxjs'
 import { takeUntil } from 'rxjs/operators'
 import _ from 'lodash'
@@ -14,8 +14,10 @@ import { LockerItem } from '@schemas/locker-item'
 import { Center } from '@schemas/center'
 import { LockerCategory } from '@schemas/locker-category'
 import { LockerItemHistory } from '@schemas/locker-item-history'
+import { UserLocker } from '@schemas/user-locker'
+import { Loading } from '@schemas/componentStore/loading'
 
-import { LockerChargeType } from '../../components/locker-charge-modal/locker-charge-modal.component'
+import { LockerChargeType, ConfirmOuput } from '../locker-charge-modal/locker-charge-modal.component'
 
 // ngrx
 import { Store, select } from '@ngrx/store'
@@ -31,13 +33,14 @@ import * as LockerActions from '@centerStore/actions/sec.locker.actions'
     styleUrls: ['./locker-detail-box.component.scss'],
 })
 export class LockerDetailBoxComponent implements OnInit, OnChanges, OnDestroy {
-    @Input() lockerItem: LockerItem
-    @Input() curLockerItems: LockerItem[]
-
     public center: Center
 
     public curLockerCateg: LockerCategory
     public lockerGlobalMode: FromLocker.LockerGlobalMode
+    public curUserLocker: UserLocker = FromLocker.initialLockerState.curUserLocker
+    public curLockerItems: LockerItem[] = FromLocker.initialLockerState.curLockerItemList
+    public lockerItem: LockerItem = FromLocker.initialLockerState.curLockerItem
+    public curUserLockerIsLoading$ = this.nxStore.select(LockerSelector.curUserLockerIsLoading)
 
     public doShowRestartLockerModal = false
     public doDropDownShow = false
@@ -88,18 +91,29 @@ export class LockerDetailBoxComponent implements OnInit, OnChanges, OnDestroy {
         this.nxStore.pipe(select(LockerSelector.curLockerCateg), takeUntil(this.unsubscriber$)).subscribe((clc) => {
             this.curLockerCateg = clc
         })
+        this.nxStore.pipe(select(LockerSelector.curLockerItemList), takeUntil(this.unsubscriber$)).subscribe((clil) => {
+            this.curLockerItems = clil
+        })
+        this.nxStore.pipe(select(LockerSelector.curLockerItem), takeUntil(this.unsubscriber$)).subscribe((cli) => {
+            this.lockerItem = cli
+            console.log('LockerSelector.curLockerItem : ', cli)
+            if (!_.isEmpty(this.lockerItem)) {
+                this.cancelChangeDate()
+                this.closeDoDatePickerShow()
+                this.getLockerHistory()
+                this.setStatusColor()
+                this.willRegisteredMember = undefined
+            }
+        })
+        this.nxStore.pipe(select(LockerSelector.curUserLocker), takeUntil(this.unsubscriber$)).subscribe((cul) => {
+            this.curUserLocker = cul
+            this.initLockerDateReamin()
+            this.initLockerDate()
+        })
     }
 
     ngOnInit(): void {}
-    ngOnChanges(): void {
-        this.initLockerDateReamin()
-        this.initLockerDate()
-        this.setStatusColor()
-        this.cancelChangeDate()
-        this.closeDoDatePickerShow()
-        this.getLockerHistory()
-        this.willRegisteredMember = undefined
-    }
+    ngOnChanges(changes: SimpleChanges): void {}
     ngOnDestroy(): void {
         this.unsubscriber$.next()
         this.unsubscriber$.complete()
@@ -129,9 +143,9 @@ export class LockerDetailBoxComponent implements OnInit, OnChanges, OnDestroy {
     }
     // lockerdate remain method
     initLockerDateReamin() {
-        if (this.lockerItem.user_locker) {
+        if (!_.isEmpty(this.curUserLocker)) {
             const date1 = dayjs().format('YYYY-MM-DD')
-            const date2 = dayjs(this.lockerItem.user_locker.end_date)
+            const date2 = dayjs(this.curUserLocker.end_date)
             this.dateRemain = date2.diff(date1, 'day') >= 0 ? date2.diff(date1, 'day') + 1 : date2.diff(date1, 'day')
         } else {
             this.dateRemain = undefined
@@ -139,9 +153,9 @@ export class LockerDetailBoxComponent implements OnInit, OnChanges, OnDestroy {
     }
     // locker date method
     initLockerDate() {
-        if (this.lockerItem.user_locker) {
-            this.lockerDate.startDate = this.lockerItem.user_locker.start_date
-            this.lockerDate.endDate = this.lockerItem.user_locker.end_date
+        if (!_.isEmpty(this.curUserLocker)) {
+            this.lockerDate.startDate = this.curUserLocker.start_date
+            this.lockerDate.endDate = this.curUserLocker.end_date
         } else {
             this.resetLockerDate()
         }
@@ -171,15 +185,14 @@ export class LockerDetailBoxComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     toggleShowEmptyLockerModal() {
-        this.lockerEmptyTitle = this.lockerItem.name
+        // this.lockerEmptyTitle = this.lockerItem.name
         this.doShowEmptyLockerModal = !this.doShowEmptyLockerModal
     }
     closeShowEmptyLockerModal() {
         this.doShowEmptyLockerModal = false
     }
-    onEmptyLockerModaConfirm(refund: string) {
-        this.emptyLocker(refund)
-        this.closeShowEmptyLockerModal()
+    onEmptyLockerModaConfirm(res: ConfirmOuput) {
+        this.emptyLocker(res)
     }
 
     openShowlockerHistory() {
@@ -247,21 +260,21 @@ export class LockerDetailBoxComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     // 결제 가격 수정되는 방식에 따라 수정 필요!  결제 담당자 에러 때문에  주석 처리 ; 나중에 수정되면 수정하기!
-    changeDate(modalReturn: LockerChargeType) {
+    changeDate(res: ConfirmOuput) {
         // !! API가 달라져서 수정 필요
         // const changeDataReqBody = {
         // }
-        // console.log('modalReturn: ' + modalReturn)
+        // console.log('res.chargeType: ' + res.chargeType)
         // const reqBody: ModifyLockerTicketRequestBody = {
         //     locker_item_id: Number(this.lockerItem.id),
         //     // start_date: this.lockerDate.startDate,
         //     end_date: this.lockerDate.endDate,
-        //     pay_card: modalReturn.pay_card,
-        //     pay_cash: modalReturn.pay_cash,
-        //     pay_trans: modalReturn.pay_trans,
-        //     unpaid: modalReturn.unpaid,
-        //     pay_date: modalReturn.pay_date,
-        //     assignee_id: modalReturn.assignee_id,
+        //     pay_card: res.chargeType.pay_card,
+        //     pay_cash: res.chargeType.pay_cash,
+        //     pay_trans: res.chargeType.pay_trans,
+        //     unpaid: res.chargeType.unpaid,
+        //     pay_date: res.chargeType.pay_date,
+        //     assignee_id: res.chargeType.assignee_id,
         // }
         // console.log('reqBody: ', reqBody)
         // this.closeShowAdditionalChargeModal()
@@ -323,7 +336,7 @@ export class LockerDetailBoxComponent implements OnInit, OnChanges, OnDestroy {
             this.statusColor = { border: _statusColor.stop, font: _statusColor.stop }
         } else {
             this.statusColor =
-                dayjs(this.lockerItem.user_locker.end_date).diff(dayjs(), 'day') < 0
+                dayjs(this.lockerItem.user_locker_end_date).diff(dayjs(), 'day') < 0
                     ? { border: _statusColor.exceed, font: _statusColor.exceed }
                     : { border: _statusColor.use, font: 'var(--font-color)' }
 
@@ -349,20 +362,20 @@ export class LockerDetailBoxComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     // !! 추가 수정 필요 03/25 --> 05/02
-    registerMember(modalReturn: LockerChargeType) {
+    registerMember(res: ConfirmOuput) {
         const createLockerTicketReqBody: CreateLockerTicketReqBody = {
             locker_item_id: this.lockerItem.id,
             start_date: this.lockerDate.startDate,
             end_date: this.lockerDate.endDate,
             payment: {
-                card: modalReturn.pay_card,
-                trans: modalReturn.pay_trans,
+                card: res.chargeType.pay_card,
+                trans: res.chargeType.pay_trans,
                 vbank: 0,
                 phone: 0,
-                cash: modalReturn.pay_cash,
-                unpaid: modalReturn.unpaid,
+                cash: res.chargeType.pay_cash,
+                unpaid: res.chargeType.unpaid,
                 memo: '',
-                responsibility_user_id: modalReturn.assignee_id,
+                responsibility_user_id: res.chargeType.assignee_id,
             },
         }
 
@@ -371,10 +384,14 @@ export class LockerDetailBoxComponent implements OnInit, OnChanges, OnDestroy {
                 centerId: this.center.id,
                 registerMemberId: this.willRegisteredMember.id,
                 createLockerTicketReqBody,
+                cb: () => {
+                    res.loadingFns.hideLoading()
+                    this.closeShowChargeModal()
+                    this.willRegisteredMember = undefined
+                },
             })
         )
-        this.closeShowChargeModal()
-        this.willRegisteredMember = undefined
+
         // this.nxStore.dispatch(showToast({ text: `[락커 ${this.lockerItem.name}]에 회원이 등록되었습니다.` }))
     }
 
@@ -385,37 +402,55 @@ export class LockerDetailBoxComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     // // buttonBox2 method
-    emptyLocker(refund: string) {
+    emptyLocker(res: ConfirmOuput) {
         // !! API  변경으로  재수정 필요
-        if (Number(refund) > 0) {
-            // this.nxStore.dispatch(
-            //     LockerActions.startRefundLockerTicket({
-            //         centerId: this.center.id,
-            //         userId: this.lockerItem.user_locker.user.id,
-            //         lockerTicketId: this.lockerItem.user_locker.id,
-            //         reqBody: {
-            //             amount: refund,
-            //         },
-            //         curLockerItems: this.curLockerItems,
-            //     })
-            // )
+        const totalPrice = res.chargeType.pay_cash + res.chargeType.pay_card + res.chargeType.pay_trans
+        if (totalPrice > 0) {
+            this.nxStore.dispatch(
+                LockerActions.startRefundLockerTicket({
+                    centerId: this.center.id,
+                    userId: this.curUserLocker.user_id,
+                    lockerTicketId: this.curUserLocker.id,
+                    reqBody: {
+                        payment: {
+                            card: res.chargeType.pay_card,
+                            trans: res.chargeType.pay_trans,
+                            vbank: 0,
+                            phone: 0,
+                            cash: res.chargeType.pay_cash,
+                            memo: '',
+                            responsibility_user_id: res.chargeType.assignee_id,
+                        },
+                    },
+                    cb: () => {
+                        res.loadingFns.hideLoading()
+                        this.closeShowEmptyLockerModal()
+                    },
+                })
+            )
         } else {
-            // this.nxStore.dispatch(
-            //     LockerActions.startExpireLockerTicket({
-            //         centerId: this.center.id,
-            //         userId: this.lockerItem.user_locker.user.id,
-            //         lockerTicketId: this.lockerItem.user_locker.id,
-            //         reqBody: {
-            //             payment: {
-            //                 card: 0,
-            //                 trans: 0,
-            //                 vbank: 0,
-            //                 phone: 0,
-            //                 cash: 0,
-            //             },
-            //         },
-            //     })
-            // )
+            this.nxStore.dispatch(
+                LockerActions.startExpireLockerTicket({
+                    centerId: this.center.id,
+                    userId: this.curUserLocker.user_id,
+                    lockerTicketId: this.curUserLocker.id,
+                    reqBody: {
+                        payment: {
+                            card: 0,
+                            trans: 0,
+                            vbank: 0,
+                            phone: 0,
+                            cash: 0,
+                            memo: '',
+                            responsibility_user_id: res.chargeType.assignee_id,
+                        },
+                    },
+                    cb: () => {
+                        res.loadingFns.hideLoading()
+                        this.closeShowEmptyLockerModal()
+                    },
+                })
+            )
         }
     }
 }

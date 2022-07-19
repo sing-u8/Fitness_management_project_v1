@@ -139,6 +139,7 @@ export class MembershipTicketWindowComponent implements OnInit, AfterViewInit, O
         return this.membershipState.date.startDate && this.membershipState.date.endDate ? true : false
     }
     isLessonSelected() {
+        return true
         return _.some(this.membershipState.lessonList, ['selected', true])
     }
 

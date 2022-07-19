@@ -97,7 +97,7 @@ export class HeaderComponent implements OnInit {
         this.centerService.getCenter(center.id).subscribe({
             next: (center) => {
                 this.storageService.setCenter(center)
-                const url = `${window.location.origin}/${center.address}/community`
+                const url = `${window.location.origin}/${center.address}`
                 window.open(url, '_self')
             },
             error: (e) => {
