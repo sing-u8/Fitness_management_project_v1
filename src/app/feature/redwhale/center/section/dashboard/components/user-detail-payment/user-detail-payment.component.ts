@@ -59,15 +59,13 @@ export class UserDetailPaymentComponent implements OnInit {
     }
     public selectedUserLocker: UserLocker = undefined
     getPaymentLockerItem() {
-        this.selectedUserLocker = this.curUserData.lockers.find(
-            (v) => v.payment.findIndex((pv) => pv.id == this.selectedPayment.id) != -1
-        )
+        this.selectedUserLocker = this.curUserData.lockers.find((v) => v.id == this.selectedPayment.user_locker_id)
         this.selectedUserMembership = undefined
     }
     public selectedUserMembership: UserMembership = undefined
     getPaymentMembershipItem() {
         this.selectedUserMembership = this.curUserData.memberships.find(
-            (v) => v.payment.findIndex((pv) => pv.id == this.selectedPayment.id) != -1
+            (v) => v.id == this.selectedPayment.user_membership_id
         )
         this.selectedUserLocker = undefined
     }

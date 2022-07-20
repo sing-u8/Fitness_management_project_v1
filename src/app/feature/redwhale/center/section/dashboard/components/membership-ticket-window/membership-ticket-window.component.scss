@@ -201,7 +201,7 @@
 
 .membership-ticket-done-card {
     width: 585px;
-    height: 186px;
+    // height: 186px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -270,6 +270,8 @@
         margin: 16px 0px;
     }
     .bottom {
+        margin-top: 16px; // !! 예약 가능한 수업이 생기면 삭제 필요
+
         display: flex;
         width: 515px;
         height: 40px;

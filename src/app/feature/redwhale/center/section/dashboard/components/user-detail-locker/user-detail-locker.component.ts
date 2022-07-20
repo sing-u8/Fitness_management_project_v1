@@ -21,6 +21,7 @@ import { CenterUser } from '@schemas/center-user'
 
 import _ from 'lodash'
 import dayjs from 'dayjs'
+import { firstValueFrom } from 'rxjs'
 
 // ngrx
 import { Store } from '@ngrx/store'
@@ -160,20 +161,14 @@ export class UserDetailLockerComponent implements OnInit {
     }
     onConfirmEmptyModal() {
         this.chargeMode =
-            this.checkIsLockerUnpaidExist() || this.checkIsLockerExpired()
+            this.timeService.getRestPeriod(dayjs().format(), this.selectedUserLocker.end_date) < 0 ||
+            this.checkIsLockerExpired()
                 ? 'empty_locker_payment'
                 : 'empty_locker_refund'
         this.hideEmptyModal()
         this.toggleChargeModal()
     }
 
-    checkIsLockerUnpaidExist() {
-        let unpaidTotal = 0
-        this.selectedUserLocker.payment.forEach((v) => {
-            unpaidTotal += v.unpaid
-        })
-        return unpaidTotal != 0 ? true : false
-    }
     checkIsLockerExpired() {
         return this.timeService.getRestPeriod(dayjs().format(), this.selectedUserLocker.end_date) < 1
     }

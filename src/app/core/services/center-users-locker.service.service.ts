@@ -208,12 +208,12 @@ export class CenterUsersLockerService {
     }
 
     // 락커 이용권 결제 조회
-    getLockerTicketPayment(centerId: string, userId: string, lockerId: string): Observable<Payment> {
+    getLockerTicketPayment(centerId: string, userId: string, lockerId: string): Observable<Array<Payment>> {
         const url = this.SERVER + `/${centerId}/users/${userId}/locker/${lockerId}/payment`
 
         return this.http.get<Response>(url, this.options).pipe(
             map((res) => {
-                return res.dataset[0]
+                return res.dataset
             }),
             catchError(handleError)
         )

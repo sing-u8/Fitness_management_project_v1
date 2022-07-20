@@ -220,6 +220,10 @@ export class LockerComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     // categ input method
+    // onLockerItemClick(lockerItem: LockerItem) {
+    //     this.lockerItemCountInput.setValue(String(this.getMaximumLockerId(this.curLockerItemList) + 1))
+    // }
+
     openCategInput() {
         this.isCategInputOpen = true
     }
@@ -374,6 +378,7 @@ export class LockerComponent implements OnInit, AfterViewInit, OnDestroy {
             fixedRowHeight: 65,
             pushItems: false,
             swap: true,
+
             draggable: {
                 enabled: false,
             },
@@ -431,7 +436,8 @@ export class LockerComponent implements OnInit, AfterViewInit, OnDestroy {
             cols: 1,
         } as LockerItem
         this.curLockerItemList.push(newItem)
-        this.lockerItemCountInput.setValue(String(this.getMaximumLockerId(this.curLockerItemList) + 1))
+        this.lockerItemCountInput.setValue(String(Number(this.lockerItemCountInput.value) + 1))
+        // this.lockerItemCountInput.setValue(String(this.getMaximumLockerId(this.curLockerItemList) + 1))
     }
     createGridItem(item: GridsterItem) {
         this.nxStore.dispatch(

@@ -40,10 +40,5 @@ export interface UserLocker {
 
     total_price: number
     total_refund: number
-
-    // !! will be removed
-    user?: UserInfo
-    center?: CenterInfo
-    payment?: Array<Payment>
-    history?: Array<UserLockerHistory>
+    total_unpaid: number
 }

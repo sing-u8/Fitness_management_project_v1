@@ -32,11 +32,5 @@ export interface UserMembership {
     updated_at: string
     total_price: number
     total_refund: number
-
-    // !! will be removed
-    user?: UserInfo
-    center?: CenterInfo
-    class?: Array<ClassItem>
-    payment?: Array<Payment>
-    history?: Array<UserLockerHistory>
+    total_unpaid: number
 }

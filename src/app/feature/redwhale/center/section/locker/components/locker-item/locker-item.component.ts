@@ -28,6 +28,7 @@ export class LockerItemComponent implements OnInit, OnDestroy, AfterViewInit {
     @Input() editMode: boolean
     @Input() switchPlaceMode: boolean
 
+    @Output() onItemSelected = new EventEmitter<LockerItem>()
     @Output() onItemDelete = new EventEmitter<LockerItem>()
     @Output() onMovableLockerClick = new EventEmitter<LockerItem>()
 

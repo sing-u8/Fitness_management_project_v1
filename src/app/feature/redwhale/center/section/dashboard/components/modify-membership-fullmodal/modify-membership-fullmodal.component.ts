@@ -189,6 +189,7 @@ export class ModifyMembershipFullmodalComponent implements OnInit, OnChanges, Af
 
     // check funcs
     isClassSelected() {
+        return true
         return _.some(this.classItemList, ['selected', true])
     }
     checkCount() {

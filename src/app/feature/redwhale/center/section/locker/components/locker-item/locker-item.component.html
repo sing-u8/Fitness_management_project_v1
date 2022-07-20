@@ -53,6 +53,7 @@
                             (touchstart)="$event.stopPropagation()"
                             [formControl]="nameInput"
                             maxlength="3"
+                            (keypress)="restrictToNumber($event)"
                             (keyup)="onInputKeyUp($event)"
                             (keyup.enter)="changeItemName()"
                             (rwClickOutside)="changeItemName()"
