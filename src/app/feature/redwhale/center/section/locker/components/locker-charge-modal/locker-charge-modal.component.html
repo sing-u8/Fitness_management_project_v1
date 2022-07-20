@@ -3,11 +3,11 @@
 <div class="rw-modal-wrapper justify-content-center align-items-center" (mouseup)="!isMouseModalDown && onCancel()"
     (mousedown)='resetMouseModalDown()' #modalWrapperElement>
     <div class="rw-modal user-select-none"
-        [class.refund_height]="type == 'refund'"
+        [class.refund_height]="type == 'refund' || type == 'refund_overuse'"
         (mousedown)='onMouseModalDown(); $event.stopPropagation()'>
         <div class="header">
             <span class="rw-typo-bodytext0">
-                {{type == 'modify'
+                {{type == 'modify' || type == 'refund_overuse'
                 ? '추가 결제 정보'
                 : type == 'refund'
                 ? '환불 금액'
@@ -52,7 +52,7 @@
                 <div class="currency">원</div>
             </div>
 
-            <div *ngIf="type != 'refund'"
+            <div *ngIf="type != 'refund' && type != 'refund_overuse'"
                 class="input-container">
                 <span class="rw-typo-subtext0-regular">미수금</span>
                 <input rw-input placeholder="0" [(ngModel)]="inputs.unpaid" (keyup)="onInputKeyup($event, 'unpaid')" />

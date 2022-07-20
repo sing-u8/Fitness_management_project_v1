@@ -351,10 +351,7 @@ export class LockerDatepickerComponent implements OnInit, OnChanges, AfterViewCh
     }
     initRegisterDate(weekCol) {
         // 초기 시작일 설정을 수정해야할 수도 있음
-        if (
-            this.lineSelectedDateObj.startDate &&
-            moment(weekCol.date).isSameOrBefore(moment().format('YYYY-MM-DD'), 'day')
-        )
+        if (this.lineSelectedDateObj.startDate && moment(weekCol.date).isBefore(moment().format('YYYY-MM-DD'), 'day'))
             return
         if (!this.lineSelectedDateObj.startDate) {
             this.lineSelectedDateObj.startDate = moment().format('YYYY-MM-DD')
@@ -367,7 +364,7 @@ export class LockerDatepickerComponent implements OnInit, OnChanges, AfterViewCh
     initExtendDate(weekCol) {
         if (
             this.lineSelectedDateObj.startDate &&
-            moment(weekCol.date).isSameOrBefore(moment().format(this.lineSelectedDateObj.startDate), 'day')
+            moment(weekCol.date).isBefore(moment().format(this.lineSelectedDateObj.startDate), 'day')
         )
             return
         if (!this.lineSelectedDateObj.startDate) {
@@ -409,6 +406,9 @@ export class LockerDatepickerComponent implements OnInit, OnChanges, AfterViewCh
     }
     isEndDate(weekCol) {
         return this.lineSelectedDateObj.endDate == weekCol.date ? true : false
+    }
+    isSameDate(weekCol) {
+        return weekCol.date == this.lineSelectedDateObj.startDate && weekCol.date == this.lineSelectedDateObj.endDate
     }
     isBetween(weekCol) {
         return moment(weekCol.date).isBetween(this.lineSelectedDateObj.startDate, this.lineSelectedDateObj.endDate)

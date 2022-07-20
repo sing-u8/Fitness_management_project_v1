@@ -35,7 +35,7 @@ export interface LockerChargeType {
     assignee_id: string
 }
 export type ModalInput = 'pay_card' | 'pay_cash' | 'pay_trans' | 'unpaid'
-export type ChargeMode = 'register' | 'modify' | 'refund'
+export type ChargeMode = 'register' | 'modify' | 'refund' | 'refund_overuse'
 export interface ConfirmOuput {
     chargeType: LockerChargeType
     loadingFns: ClickEmitterType
@@ -135,6 +135,8 @@ export class LockerChargeModalComponent implements OnChanges, AfterViewChecked, 
                     this.renderer.removeClass(this.modalBackgroundElement.nativeElement, 'display-block')
                     this.renderer.removeClass(this.modalWrapperElement.nativeElement, 'display-flex')
                 }, 200)
+
+                this.initModal()
             }
         }
     }
@@ -160,7 +162,7 @@ export class LockerChargeModalComponent implements OnChanges, AfterViewChecked, 
             pay_date: dayjs(this.paid_date).format('YYYY-MM-DD'),
             assignee_id: this.lockerStaffSelectValue.value.id,
         }
-        this.initModal()
+
         this.confirm.emit({
             chargeType: emitData,
             loadingFns: loadingFns,

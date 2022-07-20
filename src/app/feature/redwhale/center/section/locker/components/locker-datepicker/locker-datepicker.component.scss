@@ -173,6 +173,10 @@
             &.end-date {
                 border-radius: 0px 4px 4px 0px;
             }
+
+            &.same-date {
+                border-radius: 4px;
+            }
         }
 
         .avaliable-date {

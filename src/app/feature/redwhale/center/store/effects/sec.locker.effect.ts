@@ -31,8 +31,16 @@ export class LockerEffect {
             ofType(LockerActions.startLoadLockerCategs),
             switchMap(({ centerId }) =>
                 this.centerLokcerApi.getCategoryList(centerId).pipe(
-                    map((categs) => {
-                        return LockerActions.finishLoadLockerCategs({ lockerCategList: categs })
+                    switchMap((categs) => {
+                        if (categs.length > 0) {
+                            return [
+                                LockerActions.finishLoadLockerCategs({ lockerCategList: categs }),
+                                LockerActions.setCurLockerCateg({ lockerCateg: categs[0] }),
+                                LockerActions.startGetLockerItemList({ centerId, categoryId: categs[0].id }),
+                            ]
+                        } else {
+                            return [LockerActions.finishLoadLockerCategs({ lockerCategList: categs })]
+                        }
                     }),
                     catchError((err: string) => of(LockerActions.error({ error: err })))
                 )

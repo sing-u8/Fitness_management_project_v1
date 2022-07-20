@@ -28,6 +28,7 @@
         <div class="week-col d-flex justify-content-center align-items-center"
             *ngFor="let weekCol of weekRow; let j = index" [style.color]="weekCol.color"
             [class.start-date]="isStartDate(weekCol)" [class.end-date]="isEndDate(weekCol)"
+            [class.same-date]="isSameDate(weekCol)"
             [class.selected]="isEdgeDate(weekCol)" [class.between]="isBetween(weekCol)"
             [class.avaliable-date]="isAvailableDate(weekCol)" (click)="multiLineSelectDate(weekCol)" rw-tooltip
             [rwTooltipDisabled]="pastDisable(weekCol) "

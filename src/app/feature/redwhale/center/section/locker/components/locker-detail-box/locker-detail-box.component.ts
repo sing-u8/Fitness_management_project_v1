@@ -17,7 +17,7 @@ import { LockerItemHistory } from '@schemas/locker-item-history'
 import { UserLocker } from '@schemas/user-locker'
 import { Loading } from '@schemas/componentStore/loading'
 
-import { LockerChargeType, ConfirmOuput } from '../locker-charge-modal/locker-charge-modal.component'
+import { LockerChargeType, ConfirmOuput, ChargeMode } from '../locker-charge-modal/locker-charge-modal.component'
 
 // ngrx
 import { Store, select } from '@ngrx/store'
@@ -184,8 +184,13 @@ export class LockerDetailBoxComponent implements OnInit, OnChanges, OnDestroy {
         this.closeRegisterLockerModal()
     }
 
-    toggleShowEmptyLockerModal() {
-        // this.lockerEmptyTitle = this.lockerItem.name
+    public emptyLockerChargeType: ChargeMode = 'refund'
+    openShowEmptyLockerModal() {
+        if (this.dateRemain < 0) {
+            this.emptyLockerChargeType = 'refund_overuse'
+        } else {
+            this.emptyLockerChargeType = 'refund'
+        }
         this.doShowEmptyLockerModal = !this.doShowEmptyLockerModal
     }
     closeShowEmptyLockerModal() {
@@ -394,12 +399,11 @@ export class LockerDetailBoxComponent implements OnInit, OnChanges, OnDestroy {
     resetRegisterBox() {
         this.willRegisteredMember = undefined
         this.resetLockerDate()
-        this.nxStore.dispatch(showToast({ text: `[락커 ${this.lockerItem.name}]입력중인 정보가 초기화되었습니다.` }))
+        this.nxStore.dispatch(showToast({ text: `[락커 ${this.lockerItem.name}] 입력중인 정보가 초기화되었습니다.` }))
     }
 
     emptyLocker(res: ConfirmOuput) {
-        const totalPrice = res.chargeType.pay_cash + res.chargeType.pay_card + res.chargeType.pay_trans
-        if (totalPrice > 0) {
+        if (this.emptyLockerChargeType == 'refund') {
             this.nxStore.dispatch(
                 LockerActions.startRefundLockerTicket({
                     centerId: this.center.id,
@@ -422,7 +426,7 @@ export class LockerDetailBoxComponent implements OnInit, OnChanges, OnDestroy {
                     },
                 })
             )
-        } else {
+        } else if (this.emptyLockerChargeType == 'refund_overuse') {
             this.nxStore.dispatch(
                 LockerActions.startExpireLockerTicket({
                     centerId: this.center.id,
@@ -430,11 +434,11 @@ export class LockerDetailBoxComponent implements OnInit, OnChanges, OnDestroy {
                     lockerTicketId: this.curUserLocker.id,
                     reqBody: {
                         payment: {
-                            card: 0,
-                            trans: 0,
+                            card: res.chargeType.pay_card,
+                            trans: res.chargeType.pay_trans,
                             vbank: 0,
                             phone: 0,
-                            cash: 0,
+                            cash: res.chargeType.pay_cash,
                             memo: '',
                             responsibility_user_id: res.chargeType.assignee_id,
                         },

@@ -199,7 +199,7 @@
             </div>
             <div class="emptying-button" [class.move-locket-ticket-mode]="lockerGlobalMode == 'moveLockerTicket'"
                 rw-button rwButtonFontColor="var(--darkgrey)" rwButtonColor="var(--white)"
-                (click)="!checkMoveLockerTicketMode() && toggleShowEmptyLockerModal()">
+                (click)="!checkMoveLockerTicketMode() && openShowEmptyLockerModal()">
                 <img src="assets/icons/etc/clear_locker.svg">
                 <span>비우기</span>
             </div>
@@ -237,7 +237,7 @@
 
 <rw-locker-charge-modal
     [(visible)]="doShowEmptyLockerModal"
-    [type]="'refund'"
+    [type]="emptyLockerChargeType"
     (cancel)="closeShowEmptyLockerModal()"
     (confirm)="onEmptyLockerModaConfirm($event)"
 ></rw-locker-charge-modal>
