@@ -10,19 +10,17 @@ import {
     AfterViewChecked,
 } from '@angular/core'
 import { Router, ActivatedRoute } from '@angular/router'
-import { Subscription } from 'rxjs'
 import _ from 'lodash'
 
 // import { SalesData, Statistics } from '@schemas/sale'
 import { StatsSales } from '@schemas/stats-sales'
 
 // rxjs
-import { Observable, Subject } from 'rxjs'
+import { Subject } from 'rxjs'
 import { takeUntil } from 'rxjs/operators'
 
 // ngrx and store
 import { Store, select } from '@ngrx/store'
-import { showToast } from '@appStore/actions/toast.action'
 
 import * as FromSale from '@centerStore/reducers/sec.sale.reducer'
 import * as SaleSelector from '@centerStore/selectors/sec.sale.selector'

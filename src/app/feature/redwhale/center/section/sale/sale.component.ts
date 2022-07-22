@@ -83,7 +83,9 @@ export class SaleComponent implements OnInit, OnDestroy {
         this.selectIsFiltered()
     }
 
-    ngOnInit(): void {}
+    ngOnInit(): void {
+        this.nxStore.dispatch(SaleActions.startGetSaleSummary({ centerId: this.center.id }))
+    }
     ngOnDestroy(): void {
         // this.isFilteredSubscription.unsubscribe()
         this.unsubscriber$.next()
@@ -112,14 +114,12 @@ export class SaleComponent implements OnInit, OnDestroy {
     public doSettingShowSaleModal = false
     openSettingShowSaleModal() {
         this.doSettingShowSaleModal = true
-        console.log('openSettingShowSaleModal : ', this.showSale)
     }
     onSettingShowSaleModalCancel() {
         this.doSettingShowSaleModal = false
     }
     onSettingShowSaleModalConfirm(Return: boolean) {
         this.doSettingShowSaleModal = false
-        console.log('onSettingShowSaleModalConfirm : ', Return, this.showSale)
     }
 
     // sale-date-selector vars and funcs

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, AfterViewInit } from '@angular/core'
+import { Component, OnInit, Input, AfterViewInit, OnDestroy } from '@angular/core'
 import dayjs from 'dayjs'
 import _ from 'lodash'
 
@@ -7,7 +7,16 @@ import { StorageService } from '@services/storage.service'
 
 import { Center } from '@schemas/center'
 
+import { Store, select } from '@ngrx/store'
+
 import { originalOrder } from '@helpers/pipe/keyvalue'
+
+import * as FromSale from '@centerStore/reducers/sec.sale.reducer'
+import * as SaleSelector from '@centerStore/selectors/sec.sale.selector'
+
+// rxjs
+import { Observable, Subject } from 'rxjs'
+import { takeUntil } from 'rxjs/operators'
 
 type SaleSummary = {
     prev: { cash: number; card: number; trans: number; unpaid: number }
@@ -21,7 +30,7 @@ type SaleSummary = {
 })
 
 // input() 의 타입은 나중에 서버 반환값을 보고 고치기
-export class SaleSummaryBoxComponent implements OnInit, AfterViewInit {
+export class SaleSummaryBoxComponent implements OnInit, AfterViewInit, OnDestroy {
     @Input() type: 'day' | 'month'
 
     public center: Center
@@ -30,7 +39,7 @@ export class SaleSummaryBoxComponent implements OnInit, AfterViewInit {
     public prevTotal = 0
     public curTotal = 0
 
-    public SaleSummary: SaleSummary
+    public SaleSummary: FromSale.SaleSummary
 
     public summaryDescText = ''
     public title = ''
@@ -38,7 +47,14 @@ export class SaleSummaryBoxComponent implements OnInit, AfterViewInit {
     public isContentOpen: boolean
     public detailTitle = { cash: '현금', card: '카드', trans: '계좌이체', unpaid: '미수금' }
 
-    constructor(private centerStatsService: CenterStatsService, private storageService: StorageService) {
+    public isLoading$ = this.nxStore.select(SaleSelector.saleSummaryLoading)
+    public unsubscriber$ = new Subject<void>()
+
+    constructor(
+        private centerStatsService: CenterStatsService,
+        private storageService: StorageService,
+        private nxStore: Store
+    ) {
         this.center = this.storageService.getCenter()
     }
 
@@ -46,6 +62,10 @@ export class SaleSummaryBoxComponent implements OnInit, AfterViewInit {
     ngAfterViewInit(): void {
         this.initBoxTexts()
         this.getSaleDashboard(this.type)
+    }
+    ngOnDestroy(): void {
+        this.unsubscriber$.next()
+        this.unsubscriber$.complete()
     }
 
     initBoxTexts() {
@@ -63,50 +83,18 @@ export class SaleSummaryBoxComponent implements OnInit, AfterViewInit {
     }
 
     getSaleDashboard(type: 'day' | 'month') {
-        // date format : 'YYYY-MM-DD'
-        this.centerStatsService.getStatsSalesSummary(this.center.id).subscribe((saleBoard) => {
-            switch (type) {
-                case 'day':
-                    this.SaleSummary = {
-                        prev: {
-                            cash: Number(saleBoard.yesterday.cash),
-                            trans: Number(saleBoard.yesterday.trans),
-                            card: Number(saleBoard.yesterday.card),
-                            unpaid: Number(saleBoard.yesterday.unpaid),
-                        },
-                        cur: {
-                            cash: Number(saleBoard.today.cash),
-                            trans: Number(saleBoard.today.trans),
-                            card: Number(saleBoard.today.card),
-                            unpaid: Number(saleBoard.today.unpaid),
-                        },
-                    }
-
-                    this.curTotal = _.reduce(_.values(saleBoard.today), (acc, cur) => acc + Number(cur), 0)
-                    this.prevTotal = _.reduce(_.values(saleBoard.yesterday), (acc, cur) => acc + Number(cur), 0)
-
-                    break
-                case 'month':
-                    this.SaleSummary = {
-                        prev: {
-                            cash: Number(saleBoard.last_month.cash),
-                            trans: Number(saleBoard.last_month.trans),
-                            card: Number(saleBoard.last_month.card),
-                            unpaid: Number(saleBoard.last_month.unpaid),
-                        },
-                        cur: {
-                            cash: Number(saleBoard.this_month.cash),
-                            trans: Number(saleBoard.this_month.trans),
-                            card: Number(saleBoard.this_month.card),
-                            unpaid: Number(saleBoard.this_month.unpaid),
-                        },
-                    }
-
-                    this.curTotal = _.reduce(_.values(saleBoard.this_month), (acc, cur) => acc + Number(cur), 0)
-                    this.prevTotal = _.reduce(_.values(saleBoard.last_month), (acc, cur) => acc + Number(cur), 0)
-
-                    break
+        this.nxStore.pipe(select(SaleSelector.saleSummaryData), takeUntil(this.unsubscriber$)).subscribe((v) => {
+            if (type == 'day') {
+                this.SaleSummary = v.saleSummary.day
+                this.prevTotal = v.totalSummary.day.prev
+                this.curTotal = v.totalSummary.day.cur
+            } else {
+                this.SaleSummary = v.saleSummary.month
+                this.prevTotal = v.totalSummary.month.prev
+                this.curTotal = v.totalSummary.month.cur
             }
         })
+
+        // date format : 'YYYY-MM-DD'
     }
 }

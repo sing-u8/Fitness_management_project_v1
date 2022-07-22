@@ -1,13 +1,3 @@
-import { UserInfo } from '@schemas/user-info'
-import { CenterInfo } from '@schemas/center-info'
-import { ClassItem } from '@schemas/class-item'
-import { Payment } from '@schemas/payment'
-import { Unpaid } from '@schemas/unpaid'
-import { Refund } from '@schemas/refund'
-import { UserLockerHistory } from '@schemas/user-locker-history'
-import { UserMembershipClass } from '@schemas/user-membership-class'
-import { UserMembershipUsed } from '@schemas/user-membership-used'
-
 export interface UserMembership {
     id: string
     state_code: 'user_membership_state_in_use' | 'user_membership_state_paused' | 'user_membership_state_refund'

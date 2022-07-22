@@ -85,7 +85,6 @@ export class LockerComponent implements OnInit, AfterViewInit, OnDestroy {
 
     // gridster vars
     public gridsterOptions: GridsterConfig
-    public helpTexts = helpTexts
 
     // block delete categ vars
     public doShowBlockDelCategory = false
@@ -475,18 +474,3 @@ export class LockerComponent implements OnInit, AfterViewInit, OnDestroy {
 
     //  gridster methods --> //
 }
-
-const helpTexts = [
-    {
-        title: '변경모드가 무엇인가요?',
-        text: '센터 구조에 따라, 자유롭게 락커를 배치하고 한 눈에 관리하기 위한 초기 설정을 변경 모드에서 진행할 수 있어요. ex. 카테고리 생성, 락커 생성, 락커 배치 등',
-    },
-    {
-        title: '락커 배치는 어떻게 하나요?',
-        text: '카테고리 내 락커를 드래그 앤 드랍으로 원하는 자리로 이동할 수 있어요.',
-    },
-    {
-        title: '몇 개까지 만들 수 있나요?',
-        text: '카테고리 내 락커는 최대 100개까지 생성하실 수 있으며, 락커 카테고리는 필요하신 만큼 추가하실 수 있어요.',
-    },
-]

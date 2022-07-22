@@ -9,9 +9,11 @@
             <div class="top">
                 <div class="left">
                     <span class="rw-typo-title1">락커 {{lockerItem?.name}}</span>
-                    <div class="locker-status rw-typo-bodytext2" [style.borderColor]="statusColor.border"
+                    <div
+                        *ngIf="(curUserLockerIsLoading$ | async) == 'done'"
+                        class="locker-status rw-typo-bodytext2" [style.borderColor]="statusColor.border"
                         [style.color]="statusColor.font">
-                        {{lockerItem.state_code_name}}
+                        {{(dateRemain < 0 && lockerItemStateName == 'locker_item_state_in_use') ? '사용 초과' : lockerItemStateName}}
                     </div>
                 </div>
                 <div class="right">

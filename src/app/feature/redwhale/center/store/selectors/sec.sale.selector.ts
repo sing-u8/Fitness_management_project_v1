@@ -3,7 +3,6 @@ import { GymFeature, GymState } from './sec.selector'
 import * as FromSale from '@centerStore/reducers/sec.sale.reducer'
 
 import _ from 'lodash'
-import { Dictionary } from '@ngrx/entity'
 
 export const FeatureKey = 'Center/Sale'
 
@@ -16,3 +15,7 @@ export const inputs = createSelector(GymSaleFeature, FromSale.selectInputs)
 export const selectedDate = createSelector(GymSaleFeature, FromSale.selectSelectedDate)
 export const saleData = createSelector(GymSaleFeature, FromSale.selectSaleData)
 export const saleStatistics = createSelector(GymSaleFeature, FromSale.selectSaleStatistics)
+
+// sale summary
+export const saleSummaryData = createSelector(GymSaleFeature, FromSale.selectSummaryData)
+export const saleSummaryLoading = createSelector(GymSaleFeature, FromSale.selectSaleSummaryLoading)

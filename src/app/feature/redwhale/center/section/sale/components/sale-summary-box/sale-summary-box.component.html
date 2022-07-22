@@ -1,65 +1,91 @@
 <div class="dropdown-container">
-  <div class="header" [class.open]="isContentOpen" (click)="toggleContent()">
-    <span class="rw-typo-bodytext0-bold">{{title}}</span>
-    <span class="mdi mdi-chevron-down"></span>
-  </div>
-  <div class="content">
-    <p class=" summary-value rw-typo-headline1">{{curTotal | numberWithCommas}}원</p>
-    <div class="summary-difference-value">
-      <img class="mdi" *ngIf="curTotal >= prevTotal" src="assets/icons/etc/sale-up-arrow-lightgrey.svg">
-      <img class="mdi" *ngIf="curTotal < prevTotal" src="assets/icons/etc/sale-down-arrow-lightgrey.svg">
-      <p *ngIf="prevTotal != 0" class="rw-typo-subtext0-regular">
-        {{(curTotal - prevTotal) | absNumber | numberWithCommas}}원
-      </p>
-      <p *ngIf="prevTotal == 0" class="rw-typo-subtext0-regular">
-        0원
-      </p>
-    </div>
-    <div *ngIf="!(curTotal == 0 )" class="summary-desc">
-      <!-- <p *ngIf="curTotal == 0" class="rw-typo-bodytext2-regular">매출을 입력해주세요.</p> -->
-      <p *ngIf="curTotal != 0" class="rw-typo-bodytext2">
-        {{summaryDescText}}
-        <span *ngIf="curTotal - prevTotal > 0" class="plus">{{curTotal | rateOfChange:prevTotal}} 증가</span>
-        <span *ngIf="curTotal != 0 && curTotal - prevTotal < 0" class="minus">{{curTotal | rateOfChange:prevTotal}} 감소</span>
-        <span>했어요.</span>
-      </p>
-    </div>
-  </div>
-  <div [class.show]="isContentOpen" class="detail-content">
 
-    <div *ngFor="let v of SaleSummary?.cur | keyvalue : originalOrder" class="detail-item">
-
-      <div
-        class="rw-typo-bodytext1"
-        [class.line-break] = "detailTitle[v.key].length > 3"
-      >
-        {{detailTitle[v.key]}}
+  <ng-container *ngIf="(isLoading$ | async) == 'pending'; else ladoing_done" #loading_pending>
+    <div class="header" [class.open]="isContentOpen">
+      <span class="rw-typo-bodytext0-bold">{{title}}</span>
+      <span class="mdi mdi-chevron-down"></span>
+    </div>
+    <div class="content">
+      <p class=" summary-value rw-typo-headline1">
+        <ngx-skeleton-loader
+              count = 1
+              appearance="line"
+              [theme]="{width: '88px', height: '32px', 'border-radius': '5px'}"
+        ></ngx-skeleton-loader>
+      </p>
+      <div class="summary-difference-value">
+        <ngx-skeleton-loader
+          count = 1
+          appearance="line"
+          [theme]="{width: '67px', height: '17px', 'border-radius': '5px'}"
+        ></ngx-skeleton-loader>
       </div>
-      <div class="rw-typo-bodytext0 d-flex">
+    </div>
+  </ng-container>
+
+  <ng-template #ladoing_done>
+    <div class="header" [class.open]="isContentOpen" (click)="toggleContent()">
+      <span class="rw-typo-bodytext0-bold">{{title}}</span>
+      <span class="mdi mdi-chevron-down"></span>
+    </div>
+    <div class="content">
+      <p class=" summary-value rw-typo-headline1">{{curTotal | numberWithCommas}}원</p>
+      <div class="summary-difference-value">
+        <img class="mdi" *ngIf="curTotal >= prevTotal" src="assets/icons/etc/sale-up-arrow-lightgrey.svg">
+        <img class="mdi" *ngIf="curTotal < prevTotal" src="assets/icons/etc/sale-down-arrow-lightgrey.svg">
+        <p *ngIf="prevTotal != 0" class="rw-typo-subtext0-regular">
+          {{(curTotal - prevTotal) | absNumber | numberWithCommas}}원
+        </p>
+        <p *ngIf="prevTotal == 0" class="rw-typo-subtext0-regular">
+          0원
+        </p>
+      </div>
+      <div *ngIf="!(curTotal == 0 )" class="summary-desc">
+        <!-- <p *ngIf="curTotal == 0" class="rw-typo-bodytext2-regular">매출을 입력해주세요.</p> -->
+        <p *ngIf="curTotal != 0" class="rw-typo-bodytext2">
+          {{summaryDescText}}
+          <span *ngIf="curTotal - prevTotal > 0" class="plus">{{curTotal | rateOfChange:prevTotal}} 증가</span>
+          <span *ngIf="curTotal != 0 && curTotal - prevTotal < 0" class="minus">{{curTotal | rateOfChange:prevTotal}} 감소</span>
+          <span>했어요.</span>
+        </p>
+      </div>
+    </div>
+    <div [class.show]="isContentOpen" class="detail-content">
+
+      <div *ngFor="let v of SaleSummary?.cur | keyvalue : originalOrder" class="detail-item">
+
         <div
-
-          class="rw-typo-subtext3 change-ratio"
-          [class.plus] = "v.value > SaleSummary.prev[v.key]"
-          [class.minus] = "v.value < SaleSummary.prev[v.key]"
+          class="rw-typo-bodytext1"
+          [class.line-break] = "detailTitle[v.key].length > 3"
         >
-          {{v.value | rateOfChange:SaleSummary.prev[v.key]:true }}
+          {{detailTitle[v.key]}}
         </div>
+        <div class="rw-typo-bodytext0 d-flex">
+          <div
 
-        <div class="price">
-          <div class="the-price">{{v.value | numberWithCommas}}원</div>
-
-          <div class="rw-typo-subtext0 price-change">
-            <img class="mdi" *ngIf="curTotal >= prevTotal" src="assets/icons/etc/sale-up-arrow-lightgrey.svg">
-            <img class="mdi" *ngIf="curTotal < prevTotal" src="assets/icons/etc/sale-down-arrow-lightgrey.svg">
-            <p *ngIf="SaleSummary.prev[v.key] != 0">{{ (v.value - SaleSummary.prev[v.key]) | absNumber | numberWithCommas}}원</p>
-            <p *ngIf="SaleSummary.prev[v.key] == 0">0원</p>
+            class="rw-typo-subtext3 change-ratio"
+            [class.plus] = "v.value > SaleSummary.prev[v.key]"
+            [class.minus] = "v.value < SaleSummary.prev[v.key]"
+          >
+            {{v.value | rateOfChange:SaleSummary.prev[v.key]:true }}
           </div>
+
+          <div class="price">
+            <div class="the-price">{{v.value | numberWithCommas}}원</div>
+
+            <div class="rw-typo-subtext0 price-change">
+              <img class="mdi" *ngIf="curTotal >= prevTotal" src="assets/icons/etc/sale-up-arrow-lightgrey.svg">
+              <img class="mdi" *ngIf="curTotal < prevTotal" src="assets/icons/etc/sale-down-arrow-lightgrey.svg">
+              <p *ngIf="SaleSummary.prev[v.key] != 0">{{ (v.value - SaleSummary.prev[v.key]) | absNumber | numberWithCommas}}원</p>
+              <p *ngIf="SaleSummary.prev[v.key] == 0">0원</p>
+            </div>
+          </div>
+
         </div>
 
       </div>
 
     </div>
-
-  </div>
+  </ng-template>
 
 </div>

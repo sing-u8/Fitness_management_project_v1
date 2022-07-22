@@ -41,6 +41,25 @@ export const DateTypeInit = undefined
 export type DateRange = [string, string]
 export const DateRangeInit = [undefined, undefined]
 
+export type SaleType = 'day' | 'month'
+export type SaleSummary = {
+    prev: { cash: number; card: number; trans: number; unpaid: number }
+    cur: { cash: number; card: number; trans: number; unpaid: number }
+}
+export type TotalSummary = {
+    prev: number
+    cur: number
+}
+
+export const SaleSummaryInit = {
+    prev: { cash: 0, card: 0, trans: 0, unpaid: 0 },
+    cur: { cash: 0, card: 0, trans: 0, unpaid: 0 },
+}
+export const TotalSummaryInit = {
+    prev: 0,
+    cur: 0,
+}
+
 export interface State {
     // common
     curCenterId: string
@@ -54,6 +73,11 @@ export interface State {
     productCheck: ProductCheck
     inputs: Inputs
     selectedDate: SelectedDate
+
+    isSaleSummaryLoading: Loading
+    // day summary
+    saleSummary: Record<SaleType, SaleSummary>
+    saleTotal: Record<SaleType, TotalSummary>
 }
 
 export const initialState: State = {
@@ -69,6 +93,16 @@ export const initialState: State = {
     productCheck: ProductCheckInit,
     inputs: inputsInit,
     selectedDate: dayjs().format('YYYY.MM'),
+
+    isSaleSummaryLoading: 'idle',
+    saleSummary: {
+        day: SaleSummaryInit,
+        month: SaleSummaryInit,
+    },
+    saleTotal: {
+        day: TotalSummaryInit,
+        month: TotalSummaryInit,
+    },
 }
 
 export const saleReducer = createImmerReducer(
@@ -81,6 +115,49 @@ export const saleReducer = createImmerReducer(
     }),
     on(SaleActions.finishGetSaleData, (state, { saleData }) => {
         state.saleData = saleData
+        return state
+    }),
+
+    on(SaleActions.startGetSaleSummary, (state) => {
+        state.isSaleSummaryLoading = 'pending'
+        return state
+    }),
+    on(SaleActions.finishGetSaleSummary, (state, { saleSummary }) => {
+        state.isSaleSummaryLoading = 'done'
+        state.saleSummary.day = {
+            prev: {
+                cash: Number(saleSummary.yesterday.cash),
+                trans: Number(saleSummary.yesterday.trans),
+                card: Number(saleSummary.yesterday.card),
+                unpaid: Number(saleSummary.yesterday.unpaid),
+            },
+            cur: {
+                cash: Number(saleSummary.today.cash),
+                trans: Number(saleSummary.today.trans),
+                card: Number(saleSummary.today.card),
+                unpaid: Number(saleSummary.today.unpaid),
+            },
+        }
+        state.saleTotal.day.prev = _.reduce(_.values(saleSummary.today), (acc, cur) => acc + Number(cur), 0)
+        state.saleTotal.day.cur = _.reduce(_.values(saleSummary.yesterday), (acc, cur) => acc + Number(cur), 0)
+
+        state.saleSummary.month = {
+            prev: {
+                cash: Number(saleSummary.last_month.cash),
+                trans: Number(saleSummary.last_month.trans),
+                card: Number(saleSummary.last_month.card),
+                unpaid: Number(saleSummary.last_month.unpaid),
+            },
+            cur: {
+                cash: Number(saleSummary.this_month.cash),
+                trans: Number(saleSummary.this_month.trans),
+                card: Number(saleSummary.this_month.card),
+                unpaid: Number(saleSummary.this_month.unpaid),
+            },
+        }
+        state.saleTotal.month.prev = _.reduce(_.values(saleSummary.this_month), (acc, cur) => acc + Number(cur), 0)
+        state.saleTotal.month.cur = _.reduce(_.values(saleSummary.last_month), (acc, cur) => acc + Number(cur), 0)
+
         return state
     }),
 
@@ -171,3 +248,9 @@ export const selectSaleStatistics = (state: State) => {
         _.cloneDeep(SaleStatisticsInit)
     )
 }
+// sale summary
+export const selectSummaryData = (state: State) => ({
+    saleSummary: state.saleSummary,
+    totalSummary: state.saleTotal,
+})
+export const selectSaleSummaryLoading = (state: State) => state.isSaleSummaryLoading

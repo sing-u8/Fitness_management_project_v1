@@ -110,15 +110,26 @@ export class DashboardEffect {
                     lockers: this.centerUsersLockerApi.getLockerTickets(centerId, centerUser.id),
                     memberships: this.centerUsersMembershipApi.getMembershipTickets(centerId, centerUser.id),
                     payments: this.centerUsersPaymentApi.getPayments(centerId, centerUser.id),
-                    reservations: this.centerUsersBookingService.getBookings(centerId, centerUser.id),
+                    // reservations: this.centerUsersBookingService.getBookings(centerId, centerUser.id),
                 }).pipe(
-                    switchMap(({ memberships, lockers, payments, reservations }) => {
-                        console.log('getUserData -- reservations : ', reservations)
-                        return [DashboardActions.finishGetUserData({ memberships, lockers, payments, reservations })]
+                    switchMap(({ memberships, lockers, payments }) => {
+                        return [
+                            DashboardActions.finishGetUserData({
+                                memberships,
+                                lockers,
+                                payments,
+                                reservations: [],
+                            }),
+                        ]
                     })
                 )
             ),
-            catchError((err: string) => of(DashboardActions.error({ error: err })))
+            catchError((err: string) =>
+                of(
+                    DashboardActions.error({ error: err }),
+                    DashboardActions.finishGetUserData({ memberships: [], lockers: [], payments: [], reservations: [] })
+                )
+            )
         )
     )
 

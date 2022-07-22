@@ -1,17 +1,6 @@
-import { UserInfo } from '@schemas/user-info'
-import { CenterInfo } from '@schemas/center-info'
-import { Payment } from '@schemas/payment'
-import { Unpaid } from '@schemas/unpaid'
-import { UserLockerHistory } from '@schemas/user-locker-history'
-import { Refund } from '@schemas/refund'
-
 export interface UserLocker {
     id: string
-    state_code:
-        | 'user_locker_state_in_use'
-        | 'user_locker_state_paused'
-        | 'user_locker_state_refund'
-        | 'user_locker_state_expired'
+    state_code: UserLockerStateCode
     state_code_name: string
     locker_category_id: string
     locker_item_id: string
@@ -42,3 +31,9 @@ export interface UserLocker {
     total_refund: number
     total_unpaid: number
 }
+
+export type UserLockerStateCode =
+    | 'user_locker_state_in_use'
+    | 'user_locker_state_paused'
+    | 'user_locker_state_refund'
+    | 'user_locker_state_expired'

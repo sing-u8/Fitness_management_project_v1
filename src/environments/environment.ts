@@ -26,6 +26,11 @@ export const environment = {
 }
 
 /*
+dev.
+:3000
+
+devapi
+''
 
 export const environment = {
     production: true,

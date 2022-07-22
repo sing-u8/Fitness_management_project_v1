@@ -23,7 +23,7 @@ import moment from 'moment-timezone'
 })
 export class DbDatepickerComponent implements OnInit, OnChanges, AfterViewChecked, AfterViewInit {
     @Input() isShadow = true
-    @Input() mode: string // date, week, multi, multiline, multiline-component, reg-ml, holding
+    @Input() mode: 'date' | 'week' | 'multiline' | 'multi' | 'multiline-component' | 'reg-ml' | 'holding'
     @Input() option:
         | 'normal'
         | 'register'
@@ -366,7 +366,7 @@ export class DbDatepickerComponent implements OnInit, OnChanges, AfterViewChecke
 
     // ------------------ multi line methods -----------------------------------------------------------------------------------
     multiLineSelectDate(weekCol) {
-        this.toggleEdge(weekCol) == false ? this.setInitialLineDate(weekCol) : null
+        this.setInitialLineDate(weekCol)
     }
     // helper
     setInitialLineDate(weekCol) {
@@ -375,20 +375,25 @@ export class DbDatepickerComponent implements OnInit, OnChanges, AfterViewChecke
                 this.initNormalDateweekCol(weekCol)
                 break
             case 'register':
-                this.initRegisterDate(weekCol)
+                this.toggleEdge(weekCol) == false ? this.initRegisterDate(weekCol) : null
                 break
             case 'extend':
-                this.initExtendDate(weekCol)
+                this.toggleEdge(weekCol) == false ? this.initExtendDate(weekCol) : null
                 break
         }
     }
     // initlineDate methods for each type -->
     initNormalDateweekCol(weekCol) {
-        if (!this.lineSelectedDateObj.startDate) {
+        if (!this.lineSelectedDateObj.startDate && !this.lineSelectedDateObj.endDate) {
             this.lineSelectedDateObj.startDate = weekCol.date
             this.dataChange.emit(this.lineSelectedDateObj)
+        } else if (!this.lineSelectedDateObj.startDate && this.lineSelectedDateObj.endDate) {
+            if (moment(weekCol.date).isSameOrBefore(this.lineSelectedDateObj.endDate)) {
+                this.lineSelectedDateObj.startDate = weekCol.date
+                this.dataChange.emit(this.lineSelectedDateObj)
+            }
         } else if (!this.lineSelectedDateObj.endDate) {
-            if (moment(weekCol.date).isSameOrBefore(this.lineSelectedDateObj.startDate, 'day')) {
+            if (moment(weekCol.date).isBefore(this.lineSelectedDateObj.startDate, 'day')) {
                 this.lineSelectedDateObj.startDate = weekCol.date
                 this.dataChange.emit(this.lineSelectedDateObj)
             } else {
@@ -396,16 +401,18 @@ export class DbDatepickerComponent implements OnInit, OnChanges, AfterViewChecke
                 this.dataChange.emit(this.lineSelectedDateObj)
             }
         } else if (this.lineSelectedDateObj.startDate && this.lineSelectedDateObj.endDate) {
-            this.lineSelectedDateObj.startDate = moment(weekCol.date).isBefore(
-                this.lineSelectedDateObj.startDate,
-                'day'
-            )
-                ? weekCol.date
-                : this.lineSelectedDateObj.startDate
-            this.lineSelectedDateObj.endDate =
-                moment(weekCol.date).isAfter(this.lineSelectedDateObj.endDate, 'day') || this.isBetween(weekCol)
-                    ? weekCol.date
-                    : this.lineSelectedDateObj.endDate
+            if (moment(weekCol.date).isBefore(this.lineSelectedDateObj.startDate, 'day')) {
+                this.lineSelectedDateObj.startDate = weekCol.date
+            } else if (moment(weekCol.date).isSame(this.lineSelectedDateObj.startDate, 'day')) {
+                this.lineSelectedDateObj.startDate = ''
+            }
+
+            if (moment(weekCol.date).isSame(this.lineSelectedDateObj.endDate, 'day')) {
+                this.lineSelectedDateObj.endDate = ''
+            } else if (moment(weekCol.date).isAfter(this.lineSelectedDateObj.startDate, 'day')) {
+                this.lineSelectedDateObj.endDate = weekCol.date
+            }
+
             this.dataChange.emit(this.lineSelectedDateObj)
         }
     }
@@ -473,6 +480,9 @@ export class DbDatepickerComponent implements OnInit, OnChanges, AfterViewChecke
     }
     isEndDate(weekCol) {
         return this.lineSelectedDateObj.endDate == weekCol.date ? true : false
+    }
+    isSameDate(weekCol) {
+        return weekCol.date == this.lineSelectedDateObj.startDate && weekCol.date == this.lineSelectedDateObj.endDate
     }
     isBetween(weekCol) {
         return moment(weekCol.date).isBetween(this.lineSelectedDateObj.startDate, this.lineSelectedDateObj.endDate)

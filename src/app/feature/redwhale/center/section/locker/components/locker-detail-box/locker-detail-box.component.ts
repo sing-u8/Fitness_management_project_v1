@@ -14,7 +14,7 @@ import { LockerItem } from '@schemas/locker-item'
 import { Center } from '@schemas/center'
 import { LockerCategory } from '@schemas/locker-category'
 import { LockerItemHistory } from '@schemas/locker-item-history'
-import { UserLocker } from '@schemas/user-locker'
+import { UserLocker, UserLockerStateCode } from '@schemas/user-locker'
 import { Loading } from '@schemas/componentStore/loading'
 
 import { LockerChargeType, ConfirmOuput, ChargeMode } from '../locker-charge-modal/locker-charge-modal.component'
@@ -96,12 +96,12 @@ export class LockerDetailBoxComponent implements OnInit, OnChanges, OnDestroy {
         })
         this.nxStore.pipe(select(LockerSelector.curLockerItem), takeUntil(this.unsubscriber$)).subscribe((cli) => {
             this.lockerItem = cli
-            console.log('LockerSelector.curLockerItem : ', cli)
             if (!_.isEmpty(this.lockerItem)) {
                 this.cancelChangeDate()
                 this.closeDoDatePickerShow()
                 this.getLockerHistory()
                 this.setStatusColor()
+                this.geLockerItemStateName(this.lockerItem)
                 this.willRegisteredMember = undefined
             }
         })
@@ -109,6 +109,7 @@ export class LockerDetailBoxComponent implements OnInit, OnChanges, OnDestroy {
             this.curUserLocker = cul
             this.initLockerDateReamin()
             this.initLockerDate()
+            this.getLockerItemExpired(this.dateRemain, this.lockerItem)
         })
     }
 
@@ -119,6 +120,21 @@ export class LockerDetailBoxComponent implements OnInit, OnChanges, OnDestroy {
         this.unsubscriber$.complete()
     }
 
+    public lockerItemStateName = ''
+    geLockerItemStateName(lockerItem: LockerItem) {
+        if (lockerItem.state_code == 'locker_item_state_empty') {
+            this.lockerItemStateName = '사용 가능'
+        } else if (lockerItem.state_code == 'locker_item_state_in_use') {
+            this.lockerItemStateName = '사용중'
+        } else if (lockerItem.state_code == 'locker_item_state_stop_using') {
+            this.lockerItemStateName = '사용 불가'
+        }
+    }
+    getLockerItemExpired(dateRemain: number, curLockerItem: LockerItem) {
+        if (dateRemain < 0 && curLockerItem.state_code == 'locker_item_state_in_use') {
+            this.lockerItemStateName = '기간 초과'
+        }
+    }
     // check gloabl locker ticket -  move locker ticket
     checkMoveLockerTicketMode() {
         return this.lockerGlobalMode == 'moveLockerTicket' ? true : false
@@ -234,7 +250,6 @@ export class LockerDetailBoxComponent implements OnInit, OnChanges, OnDestroy {
 
     // strongly coupled ! --->
     toggleDoDatePickerShow() {
-        console.log('toggleDoDatePickerShow ----- start', this.doDatePickerShow, 'dateEditMode ----', this.dateEditMode)
         if (this.lockerItem.state_code == 'locker_item_state_empty' || this.dateEditMode == true) {
             this.doDatePickerShow = !this.doDatePickerShow
         } else if (this.lockerItem.state_code == 'locker_item_state_in_use') {
@@ -352,7 +367,6 @@ export class LockerDetailBoxComponent implements OnInit, OnChanges, OnDestroy {
     // on click method in search modal
 
     isLockerDateExist() {
-        console.log('isLockerDateExist: ', this.lockerDate.startDate && this.lockerDate.endDate)
         return this.lockerDate.startDate && this.lockerDate.endDate
     }
 

@@ -7,6 +7,8 @@ import * as _ from 'lodash'
 })
 export class SaleTotalPricePipe implements PipeTransform {
     transform(value: StatsSales): string {
-        return String(value.card + value.cash + value.trans + value.unpaid).replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+        const total = value.card + value.cash + value.trans + value.unpaid
+        const prefix = value.type_code == 'payment_type_refund' && total > 0 ? '-' : ''
+        return prefix + String(total).replace(/\B(?=(\d{3})+(?!\d))/g, ',')
     }
 }

@@ -29,4 +29,15 @@ export class SaleEffect {
             )
         )
     )
+
+    public getSaleSummary = createEffect(() =>
+        this.actions$.pipe(
+            ofType(SaleActions.startGetSaleSummary),
+            switchMap(({ centerId }) =>
+                this.centerStatApi
+                    .getStatsSalesSummary(centerId)
+                    .pipe(map((saleSummary) => SaleActions.finishGetSaleSummary({ saleSummary })))
+            )
+        )
+    )
 }

@@ -5,6 +5,7 @@ import * as FromSaleReducer from '@centerStore/reducers/sec.sale.reducer'
 import { StatsSales } from '@schemas/stats-sales'
 
 import { getStatsSaleOption } from '@services/center-stats.service'
+import { StatsSalesSummary } from '@schemas/stats-sales-summary'
 
 const FeatureKey = 'Center/Sale'
 
@@ -17,6 +18,13 @@ export const startGetSaleData = createAction(
 export const finishGetSaleData = createAction(
     `[${FeatureKey}] Finish Get Sale Data`,
     props<{ saleData: Array<StatsSales> }>()
+)
+
+// summary
+export const startGetSaleSummary = createAction(`[${FeatureKey}] Start Get Sale Summary`, props<{ centerId: string }>())
+export const finishGetSaleSummary = createAction(
+    `[${FeatureKey}] Finish Get Sale Summary`,
+    props<{ saleSummary: StatsSalesSummary }>()
 )
 
 // sync

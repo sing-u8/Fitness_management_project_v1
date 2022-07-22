@@ -24,4 +24,7 @@ export interface CenterUser {
     center_user_picture: string
     center_user_background: string
     created_at: string
+    user_membership_count: number
+    user_membership_end_date: string
+    total_unpaid: number
 }
