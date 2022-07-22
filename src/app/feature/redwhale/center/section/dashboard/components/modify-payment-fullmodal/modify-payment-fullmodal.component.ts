@@ -144,7 +144,6 @@ export class ModifyPaymentFullmodalComponent implements OnInit, OnChanges, After
     }
 
     onMemershipTicketChange(membershipTicket: MembershipTicket) {
-        console.log('onMemershipTicketChange : ', membershipTicket)
         this.cmpStore.setmembershipTicket(membershipTicket)
     }
 

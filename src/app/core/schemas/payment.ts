@@ -16,7 +16,9 @@ export interface Payment {
     cash: number
     unpaid: number
     memo: string
-    responsibility: CenterUser
+    responsibility_user_id: string
+    responsibility_user_name: string
+    responsibility_center_user_name: string
     created_by: string
     created_at: string
     updated_by: string

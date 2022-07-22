@@ -17,7 +17,7 @@ export type MembershipTicket = {
     amount?: { normalAmount: string; paymentAmount: string }
     price?: Price
     count?: { count: string; infinite: boolean }
-    assignee?: { name: string; value: CenterUser }
+    assignee?: { name: string; value: CenterUser; id: string }
     membershipItem: MembershipItem
     lessonList: Array<{ selected: boolean; item: ClassItem }>
     status?: 'none' | 'idle' | 'done'
@@ -27,7 +27,7 @@ export type LockerTicket = {
     date?: { startDate: string; endDate: string }
     amount?: { normalAmount: string; paymentAmount: string }
     price?: Price
-    assignee?: { name: string; value: CenterUser }
+    assignee?: { name: string; value: CenterUser; id: string }
     userLocker: UserLocker
     status?: 'none' | 'idle' | 'done'
 }

@@ -409,9 +409,9 @@ export class RegisterMembershipLockerFullmodalStore extends ComponentStore<State
     async initMembershipItem(membership: MembershipItem): Promise<MembershipTicket> {
         const price = membership.price ? membership.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') : '0'
         const center = this.storageService.getCenter()
-        const linkedClass = await firstValueFrom(
-            this.centerMembershipApi.getLinkedClass(center.id, membership.category_id, membership.id)
-        )
+        // const linkedClass = await firstValueFrom(
+        //     this.centerMembershipApi.getLinkedClass(center.id, membership.category_id, membership.id)
+        // )
         return {
             type: 'membership',
             date: {
@@ -431,9 +431,10 @@ export class RegisterMembershipLockerFullmodalStore extends ComponentStore<State
             count: { count: String(membership.count), infinite: membership.unlimited },
             assignee: undefined,
             membershipItem: membership,
-            lessonList: _.map(linkedClass, (value) => {
-                return { selected: true, item: value }
-            }),
+            lessonList: [],
+            // _.map(linkedClass, (value) => {
+            //     return { selected: true, item: value }
+            // })
             status: 'modify' as const,
         }
     }

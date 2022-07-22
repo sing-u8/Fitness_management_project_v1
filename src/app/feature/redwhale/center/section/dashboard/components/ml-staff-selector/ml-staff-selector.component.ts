@@ -42,7 +42,7 @@ export class MlStaffSelectorComponent implements AfterViewInit, ControlValueAcce
 
     @ViewChildren('.item') itemElememnts: QueryList<any>
 
-    value: { name: string; value: CenterUser }
+    value: { name: string; value: CenterUser; id: string }
     isOpen: boolean
 
     constructor(private el: ElementRef, private renderer: Renderer2) {

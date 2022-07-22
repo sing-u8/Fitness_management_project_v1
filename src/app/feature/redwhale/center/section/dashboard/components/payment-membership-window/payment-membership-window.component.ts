@@ -25,7 +25,7 @@ export class PaymentMembershipWindowComponent implements OnInit, AfterViewInit, 
 
     public selectedLessonText = ''
 
-    public staffSelect_list: Array<{ name: string; value: CenterUser }> = []
+    public staffSelect_list: Array<{ name: string; value: CenterUser; id: string }> = []
 
     public center: Center
 
@@ -41,12 +41,29 @@ export class PaymentMembershipWindowComponent implements OnInit, AfterViewInit, 
         if (changes['instructors']) {
             // console.log('changes in payment-membership-window : ', changes) // !! 생각보다 자주 바뀜 문제시 수정 필요, 상태를음좀 더 나눠야할 수 있음
             this.center = this.storageService.getCenter()
+            const user = this.storageService.getUser()
 
             this.staffSelect_list = []
             this.instructors.forEach((v) => {
+                this.membershipTicket.assignee =
+                    v.id == user.id
+                        ? {
+                              name: v.center_user_name,
+                              value: v,
+                              id: v.id,
+                          }
+                        : this.membershipTicket.assignee
+                // v.id == this.membershipTicket.assignee?.id
+                //     ? {
+                //           name: v.center_user_name,
+                //           value: v,
+                //           id: v.id,
+                //       }
+                //     : this.membershipTicket.assignee
                 this.staffSelect_list.push({
                     name: v.center_user_name,
                     value: v,
+                    id: v.id,
                 })
             })
         }
