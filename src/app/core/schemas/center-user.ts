@@ -24,7 +24,7 @@ export interface CenterUser {
     center_user_picture: string
     center_user_background: string
     created_at: string
-    user_membership_count: number
-    user_membership_end_date: string
-    total_unpaid: number
+    user_membership_count: number // 모든 회원권 수
+    user_membership_end_date: string // 회원권 중 가장 빠른 end_date
+    total_unpaid: number // 미납금
 }

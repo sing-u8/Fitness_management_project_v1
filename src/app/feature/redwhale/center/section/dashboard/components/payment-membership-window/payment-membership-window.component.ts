@@ -45,21 +45,13 @@ export class PaymentMembershipWindowComponent implements OnInit, AfterViewInit, 
 
             this.staffSelect_list = []
             this.instructors.forEach((v) => {
-                this.membershipTicket.assignee =
-                    v.id == user.id
-                        ? {
-                              name: v.center_user_name,
-                              value: v,
-                              id: v.id,
-                          }
-                        : this.membershipTicket.assignee
-                // v.id == this.membershipTicket.assignee?.id
-                //     ? {
-                //           name: v.center_user_name,
-                //           value: v,
-                //           id: v.id,
-                //       }
-                //     : this.membershipTicket.assignee
+                if (v.id == user.id) {
+                    this.membershipTicket.assignee = {
+                        name: v.center_user_name,
+                        value: v,
+                        id: v.id,
+                    }
+                }
                 this.staffSelect_list.push({
                     name: v.center_user_name,
                     value: v,
@@ -67,10 +59,6 @@ export class PaymentMembershipWindowComponent implements OnInit, AfterViewInit, 
                 })
             })
         }
-    }
-
-    onStaffSelectChange() {
-        this.onSelectChange.emit(this.membershipTicket)
     }
 
     // input medthod

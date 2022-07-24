@@ -170,6 +170,7 @@ export class ModifyPaymentFullModalStore extends ComponentStore<State> {
                 this.centerUserListService.getCenterInstructorList(centerId).pipe(
                     tap({
                         next: (instructors) => {
+                            console.log('getInstructorsEffect : ', instructors)
                             this.setInstructors(instructors)
                         },
                         error: (err) => {

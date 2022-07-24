@@ -115,8 +115,8 @@ export class RegisterMembershipLockerFullmodalComponent implements OnInit, OnCha
     ngOnInit(): void {
         this.center = this.storageService.getCenter()
         // this.cmpStore.setState(stateInit)
-        this.cmpStore.checkLockerItemsExist(this.center.id)
-        this.cmpStore.checkMembershipItemsExist(this.center.id)
+        // this.cmpStore.checkLockerItemsExist(this.center.id)
+        // this.cmpStore.checkMembershipItemsExist(this.center.id)
         this.cmpStore.getInstructorsEffect(this.center.id)
         this.cmpStore.getmembershipItemsEffect(this.center.id)
     }
@@ -127,7 +127,6 @@ export class RegisterMembershipLockerFullmodalComponent implements OnInit, OnCha
         this.mieSubscriber.unsubscribe()
     }
     ngOnChanges(changes: SimpleChanges): void {
-        console.log('ngOnChanges ;;; ', changes)
         if (changes['visible'] && !changes['visible'].firstChange) {
             if (changes['visible'].previousValue != changes['visible'].currentValue) {
                 this.changed = true
@@ -139,6 +138,8 @@ export class RegisterMembershipLockerFullmodalComponent implements OnInit, OnCha
             this.changed = false
 
             if (this.visible) {
+                this.cmpStore.checkLockerItemsExist(this.center.id)
+                this.cmpStore.checkMembershipItemsExist(this.center.id)
                 this.renderer.addClass(this.modalWrapperElement.nativeElement, 'display-flex')
                 setTimeout(() => {
                     this.renderer

@@ -60,6 +60,7 @@ export class LockerSelectModalComponent implements AfterViewChecked, OnChanges, 
     public categList: LockerCategory[]
     public selectedCateg: LockerCategory
     public itemList: Array<LockerItem>
+    public originItemList: Array<LockerItem>
 
     constructor(
         private el: ElementRef,
@@ -82,7 +83,8 @@ export class LockerSelectModalComponent implements AfterViewChecked, OnChanges, 
 
             if (this.selectedCateg?.id) {
                 this.CenterLockerService.getItemList(this.center.id, this.selectedCateg.id).subscribe((items) => {
-                    this.itemList = items
+                    this.itemList = _.cloneDeep(items)
+                    this.originItemList = items
                 })
             }
         })
@@ -100,6 +102,19 @@ export class LockerSelectModalComponent implements AfterViewChecked, OnChanges, 
             this.CenterLockerService.getItemList(this.center.id, this.selectedCateg.id).subscribe((items) => {
                 this.itemList = items
             })
+        }
+        if (changes['choseLockers'] && !changes['choseLockers'].firstChange) {
+            this.itemList = _.cloneDeep(this.originItemList)
+            if (!_.isEmpty(this.selectedCateg)) {
+                const choseCategLockers = this.choseLockers.get(this.selectedCateg.id)
+                if (choseCategLockers) {
+                    this.itemList.forEach((lockerItem, idx) => {
+                        if (choseCategLockers[lockerItem.id]) {
+                            this.itemList[idx].state_code = 'locker_item_state_in_use'
+                        }
+                    })
+                }
+            }
         }
     }
 
@@ -164,24 +179,8 @@ export class LockerSelectModalComponent implements AfterViewChecked, OnChanges, 
 
     onSelectChange(categ) {
         this.CenterLockerService.getItemList(this.center.id, categ.id).subscribe((items) => {
-            this.itemList = items
-
-            const choseCategLockers = this.choseLockers.get(this.selectedCateg.id)
-            if (choseCategLockers) {
-                this.itemList.forEach((lockerItem, idx) => {
-                    if (choseCategLockers[lockerItem.id]) {
-                        this.itemList[idx].state_code = 'locker_item_state_in_use'
-                    }
-                })
-            }
-            console.log('item list: ', this.itemList)
-        })
-    }
-
-    getLockerCategoryOnStateSelect() {
-        if (!this.selectedCateg) return
-        this.CenterLockerService.getItemList(this.center.id, this.selectedCateg.id).subscribe((items) => {
-            this.itemList = items
+            this.itemList = _.cloneDeep(items)
+            this.originItemList = items
 
             const choseCategLockers = this.choseLockers.get(this.selectedCateg.id)
             if (choseCategLockers) {

@@ -47,6 +47,11 @@
                     text-overflow: ellipsis;
                     overflow: hidden;
                     width: 65%;
+
+                    display: -webkit-box;
+                    -webkit-box-orient: vertical;
+                    -webkit-line-clamp: 1;
+                    word-wrap: break-word;
                 }
                 .card-desc1 {
                     width: 35%;

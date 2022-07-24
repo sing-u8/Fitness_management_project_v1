@@ -32,7 +32,6 @@
                             [membershipTicket]="(membershipTicket$ | async)"
                             [instructors]="(instructors$ | async)"
                             (onPriceChange)="onMemershipTicketChange($event)"
-                            (onSelectChange)="onMemershipTicketChange($event)"
                         ></db-payment-membership-window>
                     </ng-template>
 
@@ -41,7 +40,6 @@
                             [lockerTicket]="(lockerTicket$ | async)"
                             [instructors]="(instructors$ | async)"
                             (onPriceChange)="onLockerTicketChange($event)"
-                            (onSelectChange)="onLockerTicketChange($event)"
                         ></db-payment-locker-window>
                     </ng-template>
 

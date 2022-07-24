@@ -172,6 +172,7 @@
             [class.start-date]="isStartDate(weekCol)"
             [class.end-date]="isEndDate(weekCol)"
             [class.selected]="isEdgeDate(weekCol)"
+            [class.same-date]="isSameDate(weekCol)"
             [class.between]="isBetween(weekCol)"
             [class.avaliable-date]="regML_IsAvailableDate(weekCol)"
             (click)="regMLSelectDate(weekCol); $event.stopPropagation()"

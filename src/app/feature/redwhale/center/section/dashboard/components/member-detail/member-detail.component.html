@@ -68,7 +68,7 @@
                         <div class="content">
                             <span *ngIf="!curUserData.user">-</span>
                             <span *ngIf="curUserData.user">
-                                {{(curUserData.user.birth_date | dashToDot)}} ({{(curUserData.user.birth_date | birthDate:'세')}}, {{curUserData.user.sex == 'male' ? '남성' : '여성'}})
+                                {{(curUserData.user.birth_date | dashToDot) ?? '-'}} ({{(curUserData.user.birth_date | birthDate:'세') ?? '-세'}}, {{curUserData.user.sex == 'male' ? '남성' : curUserData.user.sex == 'female' ? '여성' : '-'}})
                             </span>
                         </div>
                     </div>

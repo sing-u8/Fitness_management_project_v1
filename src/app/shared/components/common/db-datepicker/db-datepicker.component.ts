@@ -558,7 +558,7 @@ export class DbDatepickerComponent implements OnInit, OnChanges, AfterViewChecke
             this.lineSelectedDateObj.startDate = weekCol.date
             this.dataChange.emit(this.lineSelectedDateObj)
         } else if (
-            !moment(weekCol.date).isSameOrBefore(moment(this.lineSelectedDateObj.startDate).format('YYYY-MM-DD'), 'day')
+            !moment(weekCol.date).isBefore(moment(this.lineSelectedDateObj.startDate).format('YYYY-MM-DD'), 'day')
         ) {
             this.lineSelectedDateObj.endDate = weekCol.date
             this.dataChange.emit(this.lineSelectedDateObj)
@@ -577,7 +577,7 @@ export class DbDatepickerComponent implements OnInit, OnChanges, AfterViewChecke
             this.lineSelectedDateObj.startDate = weekCol.date
             this.dataChange.emit(this.lineSelectedDateObj)
         } else if (
-            !moment(weekCol.date).isSameOrBefore(moment(this.lineSelectedDateObj.startDate).format('YYYY-MM-DD'), 'day')
+            !moment(weekCol.date).isBefore(moment(this.lineSelectedDateObj.startDate).format('YYYY-MM-DD'), 'day')
         ) {
             this.lineSelectedDateObj.endDate = weekCol.date
             this.dataChange.emit(this.lineSelectedDateObj)

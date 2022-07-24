@@ -40,21 +40,13 @@ export class PaymentLockerWindowComponent implements OnInit, AfterViewInit, OnCh
 
             this.staffSelect_list = []
             this.instructors.forEach((v) => {
-                this.lockerTicket.assignee =
-                    v.id == user.id
-                        ? {
-                              name: v.center_user_name,
-                              value: v,
-                              id: v.id,
-                          }
-                        : this.lockerTicket.assignee
-                // v.id == this.lockerTicket.assignee?.id
-                //     ? {
-                //           name: v.center_user_name,
-                //           value: v,
-                //           id: v.id,
-                //       }
-                //     : this.lockerTicket.assignee
+                if (v.id == user.id) {
+                    this.lockerTicket.assignee = {
+                        name: v.center_user_name,
+                        value: v,
+                        id: v.id,
+                    }
+                }
                 this.staffSelect_list.push({
                     name: v.center_user_name,
                     value: v,
@@ -62,10 +54,6 @@ export class PaymentLockerWindowComponent implements OnInit, AfterViewInit, OnCh
                 })
             })
         }
-    }
-
-    nStaffSelectChange() {
-        this.onSelectChange.emit(this.lockerTicket)
     }
 
     // input medthod

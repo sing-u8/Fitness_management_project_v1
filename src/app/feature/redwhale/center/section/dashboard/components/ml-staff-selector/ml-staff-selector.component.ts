@@ -100,6 +100,7 @@ export class MlStaffSelectorComponent implements AfterViewInit, ControlValueAcce
 
     writeValue(value: any): void {
         this.value = value
+        // this.onChanged(value)
     }
 
     registerOnChange(fn: any): void {

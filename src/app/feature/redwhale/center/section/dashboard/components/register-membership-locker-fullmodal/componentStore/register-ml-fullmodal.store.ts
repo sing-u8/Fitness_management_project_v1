@@ -61,7 +61,7 @@ export class RegisterMembershipLockerFullmodalStore extends ComponentStore<State
     public readonly instructors$ = this.select((s) => s.instructors)
     public readonly membershipItems$ = this.select((s) => s.membershipItems)
     public readonly doLockerItemsExist$ = this.select((s) => s.doLockerItemsExist)
-    public readonly doMembershipItemsExist$ = this.select((s) => s.doLockerItemsExist)
+    public readonly doMembershipItemsExist$ = this.select((s) => s.doMembershipItemsExist)
 
     public readonly totalPrice$ = this.select((s) => {
         const total: TotalPrice = {
@@ -101,16 +101,18 @@ export class RegisterMembershipLockerFullmodalStore extends ComponentStore<State
     }
     // set check membership locker items
     setLockerItemsExist = this.updater((state, doExist: boolean) => {
-        state.doLockerItemsExist = doExist
+        // state.doLockerItemsExist = doExist
         return {
             ...state,
+            doLockerItemsExist: doExist,
         }
     })
 
     setMembershipItemExist = this.updater((state, doExist: boolean) => {
-        state.doMembershipItemsExist = doExist
+        // state.doMembershipItemsExist = doExist
         return {
             ...state,
+            doMembershipItemsExist: doExist,
         }
     })
 
@@ -152,10 +154,12 @@ export class RegisterMembershipLockerFullmodalStore extends ComponentStore<State
             const newCategLockers = state.choseLockers.get(removedItem.lockerCategory.id)
             delete newCategLockers[removedItem.locker.id]
             state.choseLockers.set(removedItem.lockerCategory.id, newCategLockers)
+            state.choseLockers = new Map(state.choseLockers)
         } else {
             const removedItem = state.mlItems[index] as MembershipTicket
         }
         const newMlList = _.filter(state.mlItems, (v, i) => i != index)
+
         return {
             ...state,
             mlItems: newMlList,
@@ -219,7 +223,7 @@ export class RegisterMembershipLockerFullmodalStore extends ComponentStore<State
                 this.centerMembershipApi.getAllMemberships(centerId).pipe(
                     tap({
                         next: (membershipItemList) => {
-                            this.setMembershipItems(membershipItemList)
+                            this.setMembershipItems(_.reverse(membershipItemList))
                         },
                         error: (err) => {
                             console.log('register-ml-fullmodal store - getmembershipItemsEffect err: ', err)
@@ -299,7 +303,6 @@ export class RegisterMembershipLockerFullmodalStore extends ComponentStore<State
                         delete createMLPaymentReqBody.user_memberships
                     }
 
-                    console.log('createMembershipAndLockerPayment reqbody : ', createMLPaymentReqBody)
                     this.centerUsersPaymentApi
                         .createMembershipAndLockerPayment(reqBody.centerId, reqBody.user.id, createMLPaymentReqBody)
                         .pipe(
@@ -371,8 +374,8 @@ export class RegisterMembershipLockerFullmodalStore extends ComponentStore<State
                 this.centerMembershipApi.getCategoryList(centerId).pipe(
                     tap({
                         next: (membershipCategs) => {
-                            // const doExist = _.some(membershipCategs, (v) => v.items.length != 0)
-                            // this.setMembershipItemExist(doExist)
+                            const doExist = _.some(membershipCategs, (v) => v.item_count != 0)
+                            this.setMembershipItemExist(doExist)
                         },
                         error: (err) => {
                             console.log('register-ml-fullmodal store - checkMembershipItemsExist err: ', err)
