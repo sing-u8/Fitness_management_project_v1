@@ -2,6 +2,8 @@ import { Component, OnInit, Input, AfterViewInit, Output, EventEmitter, OnChange
 import { Subject, Subscription } from 'rxjs'
 import { distinctUntilChanged, debounceTime } from 'rxjs/operators'
 
+import dayjs from 'dayjs'
+
 import { GlobalService } from '@services/global.service'
 import { TimeService } from '@services/helper/time.service'
 
@@ -60,11 +62,32 @@ export class UserListCardComponent implements OnInit, AfterViewInit, OnChanges, 
     }
     ngAfterViewInit(): void {
         this.initAttendanceTime()
+        this.findEndDateToExpired(7)
     }
     ngOnDestroy(): void {
         this.searchSubscription.unsubscribe()
     }
 
+    //
+    public imminentDateObj = {
+        isImminent: false,
+        imminentDate: 0,
+    }
+    findEndDateToExpired(dateToExpired: number) {
+        const remainDate = dayjs(this.cardItem.user.user_membership_end_date).diff(dayjs(), 'day')
+        if (remainDate <= dateToExpired) {
+            this.imminentDateObj = {
+                isImminent: true,
+                imminentDate: remainDate,
+            }
+        } else {
+            this.imminentDateObj = {
+                isImminent: false,
+                imminentDate: 0,
+            }
+        }
+    }
+    //
     initAttendanceTime() {
         // if (this.cardItem.user.attended_datetime) {
         //     this.attendanceTime = this.timeService.getTodayRegisteredTime(this.cardItem.user.attended_datetime)

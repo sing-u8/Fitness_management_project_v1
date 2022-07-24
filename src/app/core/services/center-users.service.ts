@@ -8,6 +8,7 @@ import { environment } from '@environments/environment'
 
 import { Response } from '@schemas/response'
 import { CenterUser } from '@schemas/center-user'
+import { CenterUsersByCategory, CenterUsersCategory } from '@schemas/center/community/center-users-by-category'
 
 @Injectable({
     providedIn: 'root',
@@ -16,6 +17,23 @@ export class CenterUsersService {
     private SERVER = `${environment.protocol}${environment.subDomain}${environment.domain}${environment.port}${environment.version}/center`
 
     constructor(private http: HttpClient) {}
+
+    getUsersByCategory(centerId: string): Observable<Array<CenterUsersByCategory>> {
+        const url = this.SERVER + `/${centerId}/users_category`
+
+        const options = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json',
+            }),
+        }
+
+        return this.http.get<Response>(url, options).pipe(
+            map((res) => {
+                return res.dataset
+            }),
+            catchError(handleError)
+        )
+    }
 
     createUser(centerId: string, requestBody: CreateUserRequestBody): Observable<CenterUser> {
         const url = this.SERVER + `/${centerId}/users`
@@ -36,6 +54,7 @@ export class CenterUsersService {
 
     getUserList(
         centerId: string,
+        category_code: CenterUsersCategory | '' = '',
         search = '',
         role_code = '',
         created_date = '',
@@ -47,14 +66,13 @@ export class CenterUsersService {
             this.SERVER +
             `/${centerId}/users` +
             `?` +
+            (category_code ? `category_code=${category_code}` : '') +
             (search ? `search=${search}&` : '') +
             (role_code ? `role_code=${role_code}` : '') +
             (created_date ? `created_date=${created_date}&` : '') +
             (page ? `page=${page}&` : '') +
             (role_code ? `role_code=${role_code}&` : '') +
             (pageSize ? `pageSize=${pageSize}` : '')
-        // `search=${search}&role_code=${role_code}&created_date=${created_date}&page=${page}&pageSize=${pageSize}`
-        // `/${centerId}/users?search=${search}&role_code=${role_code}&created_date=${created_date}&page=${page}&pageSize=${pageSize}`
 
         const options = {
             headers: new HttpHeaders({

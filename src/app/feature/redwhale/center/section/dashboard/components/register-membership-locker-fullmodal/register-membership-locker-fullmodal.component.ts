@@ -115,8 +115,8 @@ export class RegisterMembershipLockerFullmodalComponent implements OnInit, OnCha
     ngOnInit(): void {
         this.center = this.storageService.getCenter()
         // this.cmpStore.setState(stateInit)
-        // this.cmpStore.checkLockerItemsExist(this.center.id)
-        // this.cmpStore.checkMembershipItemsExist(this.center.id)
+        this.cmpStore.checkLockerItemsExist(this.center.id)
+        this.cmpStore.checkMembershipItemsExist(this.center.id)
         this.cmpStore.getInstructorsEffect(this.center.id)
         this.cmpStore.getmembershipItemsEffect(this.center.id)
     }
