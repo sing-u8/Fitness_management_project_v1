@@ -2,12 +2,14 @@ import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChange
 import { FormBuilder, FormControl, Validators } from '@angular/forms'
 import { Router, ActivatedRoute } from '@angular/router'
 import _ from 'lodash'
+import dayjs from 'dayjs'
 
 import { StorageService } from '@services/storage.service'
 import { NgxSpinnerService } from 'ngx-spinner'
 import { WordService } from '@services/helper/word.service'
 import { UsersCenterService } from '@services/users-center.service'
 import { CenterService } from '@services/center.service'
+import { TimeService } from '@services/helper/time.service'
 
 import { Center } from '@schemas/center'
 import { Loading } from '@schemas/componentStore/loading'
@@ -54,7 +56,8 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
         private usersCenterService: UsersCenterService,
         private centerService: CenterService,
         private router: Router,
-        private activatedRoute: ActivatedRoute
+        private activatedRoute: ActivatedRoute,
+        private timeService: TimeService
     ) {
         this.center = this.storageService.getCenter()
         this.user = this.storageService.getUser()
@@ -101,8 +104,38 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
                     this.userRole[key] = key == this.curUserData?.user?.role_code ? true : false
                 })
             }
+            if (
+                changes['curUserData'].previousValue['user']?.user_membership_end_date !=
+                changes['curUserData'].currentValue['user']?.user_membership_end_date
+            ) {
+                this.findEndDateToExpired(7)
+            }
         }
     }
+
+    //
+    public imminentDateObj = {
+        isImminent: false,
+        imminentDate: 0,
+    }
+    findEndDateToExpired(dateToExpired: number) {
+        const remainDate = this.timeService.getRestPeriod(
+            dayjs().format(),
+            this.curUserData.user.user_membership_end_date
+        )
+        if (remainDate <= dateToExpired) {
+            this.imminentDateObj = {
+                isImminent: true,
+                imminentDate: remainDate,
+            }
+        } else {
+            this.imminentDateObj = {
+                isImminent: false,
+                imminentDate: 0,
+            }
+        }
+    }
+    //
 
     updateUserMemo(memoValue: string) {
         if (this.curUserData.user.center_user_memo != memoValue) {

@@ -9,15 +9,17 @@ import { UserMembership } from '@schemas/user-membership'
 import { Payment } from '@schemas/payment'
 import { Loading } from '@schemas/store/loading'
 import { Booking } from '@schemas/booking'
+import { CenterUsersCategory } from '@schemas/center/community/center-users-by-category'
 
 import * as DashboardActions from '../actions/sec.dashboard.actions'
 
-export type MemberSelectCateg = 'member' | 'attendance' | 'valid' | 'unpaid' | 'imminent' | 'expired' | 'employee'
+export type MemberSelectCateg = 'member' | 'valid' | 'unpaid' | 'imminent' | 'expired' | 'employee' //  | 'attendance'
 export type MemberManageCategory = 'membershipLocker' | 'reservation' | 'payment'
+export type UsersListValue = Array<{ user: CenterUser; holdSelected: boolean }>
 // !! export type Manager
 export type UsersSelectCateg = Record<MemberSelectCateg, { name: string; userSize: number }>
 export type UserListSelect = { key: MemberSelectCateg; value: { name: string; userSize: number } }
-export type UsersLists = Record<MemberSelectCateg, Array<{ user: CenterUser; holdSelected: boolean }>>
+export type UsersLists = Record<MemberSelectCateg, UsersListValue>
 // export type ManagersLists = Record<any, Array<{ user: CenterUser; holdSelected: boolean }>>
 export type CurUseData = {
     user: CenterUser
@@ -33,7 +35,7 @@ export const UserDetailTagInit: UserDetailTag = 'membership'
 export const MemberManageCategoryInit = 'membershipLocker'
 export const UsersSelectCategInit: UsersSelectCateg = {
     member: { name: '전체 회원', userSize: 0 },
-    attendance: { name: '오늘 출석한 회원', userSize: 0 },
+    // attendance: { name: '오늘 출석한 회원', userSize: 0 },
     valid: { name: '유효한 회원', userSize: 0 },
     unpaid: { name: '미수금이 있는 회원', userSize: 0 },
     imminent: { name: '만료 예정인 회원', userSize: 0 },
@@ -46,7 +48,7 @@ export const UserListSelectInit: UserListSelect = {
 }
 export const UsersListInit: UsersLists = {
     member: [],
-    attendance: [],
+    // attendance: [],
     valid: [],
     unpaid: [],
     imminent: [],
@@ -74,7 +76,6 @@ export interface State {
     // main
     usersSelectCategs: UsersSelectCateg
     usersLists: UsersLists
-    // managersLists: ManagersLists
     curMemberManageCateg: MemberManageCategory
     curUserListSelect: UserListSelect
     curUserData: CurUseData
@@ -99,26 +100,41 @@ export const initialState: State = {
 export const dashboardReducer = createImmerReducer(
     initialState,
     // async
-    on(DashboardActions.startLoadMemberList, (state, { centerId }) => {
+    on(DashboardActions.startLoadMemberList, (state) => {
         state = { ...state, ...initialState }
         state.isLoading = 'pending'
         return state
     }),
-    on(DashboardActions.finishLoadMemberList, (state, { usersList, usersSelectCateg }) => {
-        state.usersLists = usersList
-        state.usersSelectCategs = usersSelectCateg
+    on(DashboardActions.finishLoadMemberList, (state, { categ_type, userListValue }) => {
+        state.usersLists[categ_type] = userListValue
+        state.isLoading = 'done'
+        return state
+    }),
+    on(DashboardActions.finishGetUsersByCategory, (state, { userSelectCateg }) => {
+        state.usersSelectCategs = userSelectCateg
         state.curUserListSelect = {
             key: state.curUserListSelect.key,
             value: {
-                name: usersSelectCateg[state.curUserListSelect.key].name,
-                userSize: usersSelectCateg[state.curUserListSelect.key].userSize,
+                name: state.usersSelectCategs[state.curUserListSelect.key].name,
+                userSize: state.usersSelectCategs[state.curUserListSelect.key].userSize,
             },
         }
+        return state
+    }),
+    on(DashboardActions.startGetUserList, (state, { userListSelect }) => {
+        state.curUserListSelect = userListSelect
+        state.isLoading = 'pending'
+        return state
+    }),
+    on(DashboardActions.finishGetUserList, (state, { categ_type, userListValue }) => {
+        state.usersLists[categ_type] = userListValue
         state.isLoading = 'done'
         return state
     }),
     on(DashboardActions.finishDirectRegisterMember, (state, { createdUser }) => {
+        // !! 필요 시에 API에서 새 유저 받아오기 !!
         state.usersLists.member.unshift({ user: createdUser, holdSelected: false })
+        state.usersSelectCategs.member.userSize++
         return state
     }),
     on(DashboardActions.startGetUserData, (state, { centerUser }) => {
@@ -141,6 +157,16 @@ export const dashboardReducer = createImmerReducer(
             memberships,
         }
         state.isUserDeatilLoading = 'done'
+        return state
+    }),
+    on(DashboardActions.finishRefreshCenterUser, (state, { categ_type, refreshCenterUser, isUserInCurCateg }) => {
+        if (isUserInCurCateg) {
+            const refreshUserIdx = _.findIndex(state.usersLists[categ_type], (v) => v.user.id == refreshCenterUser.id)
+            state.usersLists[categ_type][refreshUserIdx].user = refreshCenterUser
+        } else {
+            _.remove(state.usersLists[categ_type], (v) => v.user.id == refreshCenterUser.id)
+        }
+        state.curUserData.user = _.assign(state.curUserData.user, refreshCenterUser)
         return state
     }),
     on(DashboardActions.startSetCurUserData, (state, { userId, reqBody }) => {
@@ -202,10 +228,6 @@ export const dashboardReducer = createImmerReducer(
     // sync
     on(DashboardActions.setUserSearchInput, (state, { searchInput }) => {
         state.curSearchInput = searchInput
-        return state
-    }),
-    on(DashboardActions.setUsersSelectCateg, (state, { usersSelectCateg }) => {
-        state.usersSelectCategs = usersSelectCateg
         return state
     }),
     on(DashboardActions.setUserListSelect, (state, { userListSelect }) => {
@@ -287,4 +309,38 @@ export const selectSearchedUsersLists = (state: State) => {
         })
     })
     return searchUserList
+}
+
+// helper functions
+export const matchUsersCategoryTo = (categType: CenterUsersCategory): MemberSelectCateg => {
+    switch (categType) {
+        case 'all':
+            return 'member'
+        case 'valid':
+            return 'valid'
+        case 'unpaid':
+            return 'unpaid'
+        case 'to_expire':
+            return 'imminent'
+        case 'expired':
+            return 'expired'
+        case 'employee':
+            return 'employee'
+    }
+}
+export const matchMemberSelectCategTo = (categType: MemberSelectCateg): CenterUsersCategory => {
+    switch (categType) {
+        case 'member':
+            return 'all'
+        case 'valid':
+            return 'valid'
+        case 'unpaid':
+            return 'unpaid'
+        case 'imminent':
+            return 'to_expire'
+        case 'expired':
+            return 'expired'
+        case 'employee':
+            return 'employee'
+    }
 }

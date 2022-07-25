@@ -178,7 +178,14 @@ export class MemberListComponent implements OnInit, OnDestroy {
 
     // -------------------------------------- selectedUserList method --------------------------------------
     onSelectedUserListChange(type: string) {
-        this.nxStore.dispatch(DashboardActions.setUserListSelect({ userListSelect: this.selectedUserList }))
+        this.nxStore.dispatch(
+            DashboardActions.startGetUserList({
+                centerId: this.center.id,
+                categ_type: type as FromDashboard.MemberSelectCateg,
+                userListSelect: this.selectedUserList,
+            })
+        )
+        // this.nxStore.dispatch(DashboardActions.setUserListSelect({ userListSelect: this.selectedUserList }))
         // 해당 타입 userList 초기화 하기
     }
 
@@ -204,10 +211,10 @@ export class MemberListComponent implements OnInit, OnDestroy {
                 },
             },
         },
-        attendance: {
-            today: this.today,
-            title: '아직 출석한 회원이 없어요.',
-        },
+        // attendance: {
+        //     today: this.today,
+        //     title: '아직 출석한 회원이 없어요.',
+        // },
         valid: {
             title: '유효한 회원이 없어요.',
             desc: ['센터에 회원을 등록해보세요!'],
@@ -265,9 +272,9 @@ export class MemberListComponent implements OnInit, OnDestroy {
                 },
             },
         },
-        attendance: {
-            texts: ['[오늘 출석한 회원] 내역에서 ', '검색하신 회원을 찾을 수 없습니다.'],
-        },
+        // attendance: {
+        //     texts: ['[오늘 출석한 회원] 내역에서 ', '검색하신 회원을 찾을 수 없습니다.'],
+        // },
         valid: {
             showTopImage: true,
             texts: ['[유효한 회원] 내역에서 ', '검색하신 회원을 찾을 수 없습니다.'],

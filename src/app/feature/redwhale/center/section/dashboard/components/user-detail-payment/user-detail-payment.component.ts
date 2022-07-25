@@ -10,6 +10,7 @@ import {
 } from '@services/center-users-locker.service.service'
 import { StorageService } from '@services/storage.service'
 import { WordService } from '@services/helper/word.service'
+import { DashboardHelperService } from '@services/center/dashboard-helper.service'
 
 import { Payment } from '@schemas/payment'
 import { Center } from '@schemas/center'
@@ -38,7 +39,8 @@ export class UserDetailPaymentComponent implements OnInit {
         private centerUsersMembershipService: CenterUsersMembershipService,
         private centerUsersLockerService: CenterUsersLockerService,
         private storageService: StorageService,
-        private wordService: WordService
+        private wordService: WordService,
+        private dashboardHelper: DashboardHelperService
     ) {}
 
     ngOnInit(): void {}
@@ -145,12 +147,13 @@ export class UserDetailPaymentComponent implements OnInit {
                     )}' ${text} 수정되었습니다.`
 
                     this.nxStore.dispatch(showToast({ text: toastText }))
-                    this.nxStore.dispatch(
-                        DashboardActions.startGetUserData({
-                            centerId: this.center.id,
-                            centerUser: this.curUserData.user,
-                        })
-                    )
+                    // this.nxStore.dispatch(
+                    //     DashboardActions.startGetUserData({
+                    //         centerId: this.center.id,
+                    //         centerUser: this.curUserData.user,
+                    //     })
+                    // )
+                    this.dashboardHelper.refreshCurUser(this.center.id, this.curUserData.user)
                     cb ? cb() : null
                 })
         } else {
@@ -181,12 +184,13 @@ export class UserDetailPaymentComponent implements OnInit {
                     )}' ${text} 수정되었습니다.`
 
                     this.nxStore.dispatch(showToast({ text: toastText }))
-                    this.nxStore.dispatch(
-                        DashboardActions.startGetUserData({
-                            centerId: this.center.id,
-                            centerUser: this.curUserData.user,
-                        })
-                    )
+                    // this.nxStore.dispatch(
+                    //     DashboardActions.startGetUserData({
+                    //         centerId: this.center.id,
+                    //         centerUser: this.curUserData.user,
+                    //     })
+                    // )
+                    this.dashboardHelper.refreshCurUser(this.center.id, this.curUserData.user)
                     cb ? cb() : null
                 })
         }

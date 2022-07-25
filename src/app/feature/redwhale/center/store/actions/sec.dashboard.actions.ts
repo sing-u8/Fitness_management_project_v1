@@ -5,6 +5,7 @@ import {
     UsersSelectCateg,
     UserListSelect,
     UsersLists,
+    UsersListValue,
     CurUseData,
     UserDetailTag,
 } from '../reducers/sec.dashboard.reducer'
@@ -20,6 +21,7 @@ import { CenterUser } from '@schemas/center-user'
 import { UserLocker } from '@schemas/user-locker'
 import { UserMembership } from '@schemas/user-membership'
 import { Payment } from '@schemas/payment'
+import { CenterUsersCategory } from '@schemas/center/community/center-users-by-category'
 
 const FeatureKey = 'Center/Dashboard'
 
@@ -28,10 +30,27 @@ export const startLoadMemberList = createAction(
     `[${FeatureKey}] Start Loading Member List`,
     props<{ centerId: string }>()
 )
-
 export const finishLoadMemberList = createAction(
     `[${FeatureKey}] Finish Loading Member List`,
-    props<{ usersList: UsersLists; usersSelectCateg: UsersSelectCateg }>()
+    props<{ categ_type: MemberSelectCateg; userListValue: UsersListValue }>()
+)
+
+export const startGetUsersByCategory = createAction(
+    `[${FeatureKey}] Start Get Users By Category`,
+    props<{ centerId: string }>()
+)
+export const finishGetUsersByCategory = createAction(
+    `[${FeatureKey}] Finish Get Users By Category`,
+    props<{ userSelectCateg: UsersSelectCateg }>()
+)
+
+export const startGetUserList = createAction(
+    `[${FeatureKey}] Start Get User List By Type`,
+    props<{ centerId: string; categ_type: MemberSelectCateg; userListSelect: UserListSelect }>()
+)
+export const finishGetUserList = createAction(
+    `[${FeatureKey}] Finish Get User List By Type`,
+    props<{ centerId: string; categ_type: MemberSelectCateg; userListValue: UsersListValue }>()
 )
 
 export const startDirectRegisterMember = createAction(
@@ -50,6 +69,15 @@ export const startGetUserData = createAction(
 export const finishGetUserData = createAction(
     `[${FeatureKey}] Finish Get User Data`,
     props<{ lockers: UserLocker[]; memberships: UserMembership[]; payments: Payment[]; reservations?: any[] }>()
+)
+
+export const startRefreshCenterUser = createAction(
+    `[${FeatureKey}] Start Refresh Center User`,
+    props<{ centerId: string; centerUser: CenterUser }>()
+)
+export const finishRefreshCenterUser = createAction(
+    `[${FeatureKey}] Finish Refresh Center User`,
+    props<{ categ_type: MemberSelectCateg; refreshCenterUser: CenterUser; isUserInCurCateg: boolean }>()
 )
 
 export const startSetCurUserData = createAction(
@@ -86,10 +114,6 @@ export const finishRegisterCurUserProfile = createAction(
 
 // sync
 // usersSelectcateg
-export const setUsersSelectCateg = createAction(
-    `[${FeatureKey}] Set UsersSelect Categ`,
-    props<{ usersSelectCateg: UsersSelectCateg }>()
-)
 
 // userListSelect
 export const setUserListSelect = createAction(

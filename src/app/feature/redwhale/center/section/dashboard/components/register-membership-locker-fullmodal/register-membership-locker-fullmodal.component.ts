@@ -20,6 +20,7 @@ import dayjs from 'dayjs'
 import { originalOrder } from '@helpers/pipe/keyvalue'
 
 import { StorageService } from '@services/storage.service'
+import { DashboardHelperService } from '@services/center/dashboard-helper.service'
 
 // components
 import { ClickEmitterType } from '@shared/components/common/button/button.component'
@@ -109,7 +110,8 @@ export class RegisterMembershipLockerFullmodalComponent implements OnInit, OnCha
         private storageService: StorageService,
         private nxStore: Store,
         private router: Router,
-        private activatedRoute: ActivatedRoute
+        private activatedRoute: ActivatedRoute,
+        private dashboardHelper: DashboardHelperService
     ) {}
 
     ngOnInit(): void {
@@ -282,12 +284,13 @@ export class RegisterMembershipLockerFullmodalComponent implements OnInit, OnCha
             user: this.curUser,
             callback: () => {
                 btLoadingFns.hideLoading()
-                this.nxStore.dispatch(
-                    DashboardActions.startGetUserData({
-                        centerId: this.center.id,
-                        centerUser: this.curUser,
-                    })
-                )
+                // this.nxStore.dispatch(
+                //     DashboardActions.startGetUserData({
+                //         centerId: this.center.id,
+                //         centerUser: this.curUser,
+                //     })
+                // )
+                this.dashboardHelper.refreshCurUser(this.center.id, this.curUser)
                 this.closeModal()
             },
             errCallback: () => {

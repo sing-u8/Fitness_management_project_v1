@@ -10,6 +10,7 @@ import {
 } from '@services/center-users-locker.service.service'
 import { StorageService } from '@services/storage.service'
 import { TimeService } from '@services/helper/time.service'
+import { DashboardHelperService } from '@services/center/dashboard-helper.service'
 
 import { Center } from '@schemas/center'
 import { UserLocker } from '@schemas/user-locker'
@@ -44,7 +45,8 @@ export class UserDetailLockerComponent implements OnInit {
         private wordService: WordService,
         private centerUsersLockerService: CenterUsersLockerService,
         private storageService: StorageService,
-        private timeService: TimeService
+        private timeService: TimeService,
+        private dashboardHelper: DashboardHelperService
     ) {}
 
     ngOnInit(): void {}
@@ -318,9 +320,10 @@ export class UserDetailLockerComponent implements OnInit {
                         )}] ${this.wordService.ellipsis(this.selectedUserLocker.name, 6)}' 기간이 연장되었습니다.`,
                     })
                 )
-                this.nxStore.dispatch(
-                    DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.curUserData.user })
-                )
+                // this.nxStore.dispatch(
+                //     DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.curUserData.user })
+                // )
+                this.dashboardHelper.refreshCurUser(this.center.id, this.curUserData.user)
                 cb ? cb() : null
             })
     }
@@ -342,9 +345,10 @@ export class UserDetailLockerComponent implements OnInit {
                           10
                       )}] ${this.wordService.ellipsis(this.selectedUserLocker.name, 6)}' 락커 홀딩이 예약되었습니다.`
                 this.nxStore.dispatch(showToast({ text: toastText }))
-                this.nxStore.dispatch(
-                    DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.curUserData.user })
-                )
+                // this.nxStore.dispatch(
+                //     DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.curUserData.user })
+                // )
+                this.dashboardHelper.refreshCurUser(this.center.id, this.curUserData.user)
                 cb ? cb() : null
             })
     }
@@ -371,9 +375,10 @@ export class UserDetailLockerComponent implements OnInit {
                         )}] ${this.wordService.ellipsis(this.selectedUserLocker.name, 6)}' 비우기가 완료되었습니다.`,
                     })
                 )
-                this.nxStore.dispatch(
-                    DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.curUserData.user })
-                )
+                // this.nxStore.dispatch(
+                //     DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.curUserData.user })
+                // )
+                this.dashboardHelper.refreshCurUser(this.center.id, this.curUserData.user)
                 cb ? cb() : null
             })
     }
@@ -400,12 +405,13 @@ export class UserDetailLockerComponent implements OnInit {
                         )}] ${this.wordService.ellipsis(this.selectedUserLocker.name, 6)}' 비우기가 완료되었습니다.`,
                     })
                 )
-                this.nxStore.dispatch(
-                    DashboardActions.startGetUserData({
-                        centerId: this.center.id,
-                        centerUser: this.curUserData.user,
-                    })
-                )
+                this.dashboardHelper.refreshCurUser(this.center.id, this.curUserData.user)
+                // this.nxStore.dispatch(
+                //     DashboardActions.startGetUserData({
+                //         centerId: this.center.id,
+                //         centerUser: this.curUserData.user,
+                //     })
+                // )
                 cb ? cb() : null
             })
     }
@@ -432,9 +438,10 @@ export class UserDetailLockerComponent implements OnInit {
                         )}] ${this.wordService.ellipsis(this.selectedUserLocker.name, 6)}' 락커가 환불되었습니다.`,
                     })
                 )
-                this.nxStore.dispatch(
-                    DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.curUserData.user })
-                )
+                this.dashboardHelper.refreshCurUser(this.center.id, this.curUserData.user)
+                // this.nxStore.dispatch(
+                //     DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.curUserData.user })
+                // )
                 cb ? cb() : null
             })
     }
@@ -450,9 +457,10 @@ export class UserDetailLockerComponent implements OnInit {
                         )}] ${this.wordService.ellipsis(this.selectedUserLocker.name, 6)}' 락커가 삭제되었습니다.`,
                     })
                 )
-                this.nxStore.dispatch(
-                    DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.curUserData.user })
-                )
+                this.dashboardHelper.refreshCurUser(this.center.id, this.curUserData.user)
+                // this.nxStore.dispatch(
+                //     DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.curUserData.user })
+                // )
                 cb ? cb() : null
             })
     }
@@ -470,9 +478,10 @@ export class UserDetailLockerComponent implements OnInit {
                 )}] ${this.wordService.ellipsis(this.selectedUserLocker.name, 6)}' 홀딩 기간이 수정되었습니다.`
 
                 this.nxStore.dispatch(showToast({ text: toastText }))
-                this.nxStore.dispatch(
-                    DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.curUserData.user })
-                )
+                // this.nxStore.dispatch(
+                //     DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.curUserData.user })
+                // )
+                this.dashboardHelper.refreshCurUser(this.center.id, this.curUserData.user)
                 cb ? cb() : null
             })
     }
@@ -486,9 +495,10 @@ export class UserDetailLockerComponent implements OnInit {
                 )}] ${this.wordService.ellipsis(this.selectedUserLocker.name, 6)}' 홀딩 정보가 삭제되었습니다.`
 
                 this.nxStore.dispatch(showToast({ text: toastText }))
-                this.nxStore.dispatch(
-                    DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.curUserData.user })
-                )
+                // this.nxStore.dispatch(
+                //     DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.curUserData.user })
+                // )
+                this.dashboardHelper.refreshCurUser(this.center.id, this.curUserData.user)
                 cb ? cb() : null
             })
     }

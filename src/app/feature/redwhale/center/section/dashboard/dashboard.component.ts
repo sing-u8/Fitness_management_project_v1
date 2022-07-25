@@ -195,6 +195,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.nxStore.dispatch(DashboardActions.startLoadMemberList({ centerId: this.center.id }))
             }
         })
+        this.nxStore.dispatch(DashboardActions.startGetUsersByCategory({ centerId: this.center.id }))
 
         this.nxStore.dispatch(DashboardActions.setCurCenterId({ centerId: this.center.id }))
     }

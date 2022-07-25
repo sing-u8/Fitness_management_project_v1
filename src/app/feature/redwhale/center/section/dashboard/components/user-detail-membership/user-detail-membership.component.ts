@@ -9,6 +9,7 @@ import {
     StopMembershipTicketReqBody,
 } from '@services/center-users-membership.service'
 import { StorageService } from '@services/storage.service'
+import { DashboardHelperService } from '@services/center/dashboard-helper.service'
 
 import { Center } from '@schemas/center'
 import { UserMembership } from '@schemas/user-membership'
@@ -42,7 +43,8 @@ export class UserDetailMembershipComponent implements OnInit {
         private nxStore: Store,
         private centerUsersMembershipService: CenterUsersMembershipService,
         private storageService: StorageService,
-        private wordService: WordService
+        private wordService: WordService,
+        private dashboardHelper: DashboardHelperService
     ) {}
     // //
     ngOnInit(): void {}
@@ -293,9 +295,10 @@ export class UserDetailMembershipComponent implements OnInit {
                         )}' 회원권 기간/횟수가 연장되었습니다.`,
                     })
                 )
-                this.nxStore.dispatch(
-                    DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.curUserData.user })
-                )
+                // this.nxStore.dispatch(
+                //     DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.curUserData.user })
+                // )
+                this.dashboardHelper.refreshCurUser(this.center.id, this.curUserData.user)
                 cb ? cb() : null
             })
     }
@@ -314,9 +317,10 @@ export class UserDetailMembershipComponent implements OnInit {
                           6
                       )}' 회원권이 홀딩이 예약되었습니다.`
                 this.nxStore.dispatch(showToast({ text: toastText }))
-                this.nxStore.dispatch(
-                    DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.curUserData.user })
-                )
+                // this.nxStore.dispatch(
+                //     DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.curUserData.user })
+                // )
+                this.dashboardHelper.refreshCurUser(this.center.id, this.curUserData.user)
                 cb ? cb() : null
             })
     }
@@ -346,9 +350,10 @@ export class UserDetailMembershipComponent implements OnInit {
                         )}' 회원권이 양도되었습니다.`,
                     })
                 )
-                this.nxStore.dispatch(
-                    DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.curUserData.user })
-                )
+                // this.nxStore.dispatch(
+                //     DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.curUserData.user })
+                // )
+                this.dashboardHelper.refreshCurUser(this.center.id, this.curUserData.user)
                 cb ? cb() : null
             })
     }
@@ -375,9 +380,10 @@ export class UserDetailMembershipComponent implements OnInit {
                         )}' 회원권이 환불되었습니다.`,
                     })
                 )
-                this.nxStore.dispatch(
-                    DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.curUserData.user })
-                )
+                // this.nxStore.dispatch(
+                //     DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.curUserData.user })
+                // )
+                this.dashboardHelper.refreshCurUser(this.center.id, this.curUserData.user)
                 cb ? cb() : null
             })
     }
@@ -393,9 +399,10 @@ export class UserDetailMembershipComponent implements OnInit {
                         )}' 회원권이 삭제되었습니다.`,
                     })
                 )
-                this.nxStore.dispatch(
-                    DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.curUserData.user })
-                )
+                // this.nxStore.dispatch(
+                //     DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.curUserData.user })
+                // )
+                this.dashboardHelper.refreshCurUser(this.center.id, this.curUserData.user)
                 cb ? cb() : null
             })
     }
@@ -414,9 +421,10 @@ export class UserDetailMembershipComponent implements OnInit {
                 )}' 홀딩 기간이 수정되었습니다.`
 
                 this.nxStore.dispatch(showToast({ text: toastText }))
-                this.nxStore.dispatch(
-                    DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.curUserData.user })
-                )
+                // this.nxStore.dispatch(
+                //     DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.curUserData.user })
+                // )
+                this.dashboardHelper.refreshCurUser(this.center.id, this.curUserData.user)
                 cb ? cb() : null
             })
     }
@@ -430,9 +438,10 @@ export class UserDetailMembershipComponent implements OnInit {
                 )}' 홀딩 정보가 삭제되었습니다.`
 
                 this.nxStore.dispatch(showToast({ text: toastText }))
-                this.nxStore.dispatch(
-                    DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.curUserData.user })
-                )
+                // this.nxStore.dispatch(
+                //     DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.curUserData.user })
+                // )
+                this.dashboardHelper.refreshCurUser(this.center.id, this.curUserData.user)
                 cb ? cb() : null
             })
     }

@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core'
-import { createEffect, Actions, ofType } from '@ngrx/effects'
+import { createEffect, Actions, ofType, concatLatestFrom } from '@ngrx/effects'
 import { Store } from '@ngrx/store'
 import { of, forkJoin } from 'rxjs'
-import { catchError, switchMap, tap, map } from 'rxjs/operators'
+import { catchError, switchMap, tap, map, find } from 'rxjs/operators'
 
 import _ from 'lodash'
 
 import * as DashboardActions from '../actions/sec.dashboard.actions'
 import * as DashboardReducer from '../reducers/sec.dashboard.reducer'
+import * as DashboardSelector from '../selectors/sec.dashoboard.selector'
 
 import { showToast } from '@appStore/actions/toast.action'
 
@@ -39,21 +40,89 @@ export class DashboardEffect {
         this.actions$.pipe(
             ofType(DashboardActions.startLoadMemberList),
             switchMap(({ centerId }) =>
-                this.centerUsersApi.getUserList(centerId).pipe(
+                this.centerUsersApi.getUserList(centerId, 'all').pipe(
                     map((memberlist) => {
-                        const usersSelectCateg = _.cloneDeep(DashboardReducer.UsersSelectCategInit)
-                        const usersList = _.cloneDeep(DashboardReducer.UsersListInit)
-                        usersList['member'] = memberlist.map((v) => ({
+                        const userListValue: DashboardReducer.UsersListValue = memberlist.map((v) => ({
                             user: v,
                             holdSelected: false,
                         }))
-                        usersSelectCateg.member.userSize = usersList['member'].length
+                        // usersSelectCateg.member.userSize = usersList['member'].length
                         return DashboardActions.finishLoadMemberList({
-                            usersList,
-                            usersSelectCateg,
+                            categ_type: 'member',
+                            userListValue,
                         })
                     }),
                     catchError((err: string) => of(DashboardActions.error({ error: err })))
+                )
+            )
+        )
+    )
+
+    getUsersByCategory$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(DashboardActions.startGetUsersByCategory),
+            switchMap(({ centerId }) =>
+                this.centerUsersApi.getUsersByCategory(centerId).pipe(
+                    map((usersByCategs) => {
+                        const userSelectCateg = {} as DashboardReducer.UsersSelectCateg
+                        usersByCategs.forEach((usersByCateg) => {
+                            const type = DashboardReducer.matchUsersCategoryTo(usersByCateg.category_code)
+                            userSelectCateg[type] = {
+                                name: usersByCateg.category_name,
+                                userSize: usersByCateg.user_count,
+                            }
+                        })
+                        return DashboardActions.finishGetUsersByCategory({ userSelectCateg })
+                    })
+                )
+            )
+        )
+    )
+
+    getUserList$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(DashboardActions.startGetUserList),
+            switchMap(({ centerId, categ_type }) =>
+                this.centerUsersApi.getUserList(centerId, DashboardReducer.matchMemberSelectCategTo(categ_type)).pipe(
+                    map((memberlist) => {
+                        const userListValue: DashboardReducer.UsersListValue = memberlist.map((v) => ({
+                            user: v,
+                            holdSelected: false,
+                        }))
+                        // usersSelectCateg.member.userSize = usersList['member'].length
+                        return DashboardActions.finishLoadMemberList({
+                            categ_type: categ_type,
+                            userListValue,
+                        })
+                    }),
+                    catchError((err: string) => of(DashboardActions.error({ error: err })))
+                )
+            )
+        )
+    )
+
+    public refreshCenterUser = createEffect(() =>
+        this.actions$.pipe(
+            ofType(DashboardActions.startRefreshCenterUser),
+            concatLatestFrom(() => [this.store.select(DashboardSelector.curUserListSelect)]),
+            switchMap(([{ centerId, centerUser }, userListSelect]) =>
+                forkJoin({
+                    userInCategory: this.centerUsersApi
+                        .getUserList(centerId, DashboardReducer.matchMemberSelectCategTo(userListSelect.key))
+                        .pipe(map((users) => _.find(users, (user) => user.id == centerUser.id))),
+                    userInAll: this.centerUsersApi
+                        .getUserList(centerId, '', centerUser.center_user_name)
+                        .pipe(map((users) => _.find(users, (user) => user.id == centerUser.id))),
+                }).pipe(
+                    switchMap(({ userInCategory, userInAll }) => {
+                        return [
+                            DashboardActions.finishRefreshCenterUser({
+                                categ_type: userListSelect.key,
+                                refreshCenterUser: userInAll,
+                                isUserInCurCateg: !_.isEmpty(userInCategory),
+                            }),
+                        ]
+                    })
                 )
             )
         )

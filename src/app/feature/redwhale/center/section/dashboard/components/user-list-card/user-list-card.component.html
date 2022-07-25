@@ -29,7 +29,7 @@
 
       <div
         *ngIf="type == 'member' && ( cardItem.user.total_unpaid != 0
-              || imminentDateObj.isImminent == true); else attendance "
+              || imminentDateObj.isImminent == true); else unpaid "
         class="member-right"
       >
         <img *ngIf="imminentDateObj.isImminent == true" src="assets/icons/etc/exceed_period.svg">
@@ -46,11 +46,11 @@
         </div>
       </div>
 
-      <ng-template #attendance>
+      <!-- <ng-template #attendance>
         <div *ngIf="type == 'attendance' ; else unpaid" class="member-right">
           <span class="rw-typo-subtext0-regular">{{attendanceTime}} 출석</span>
         </div>
-      </ng-template>
+      </ng-template> -->
 
       <ng-template #unpaid>
         <div *ngIf="type == 'unpaid' ; else imminent" class="member-right">

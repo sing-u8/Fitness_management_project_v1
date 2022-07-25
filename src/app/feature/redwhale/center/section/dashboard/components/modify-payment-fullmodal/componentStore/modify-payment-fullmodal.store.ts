@@ -18,6 +18,7 @@ import {
     UpdateMembershipTicketPaymentReqBody,
     CenterUsersMembershipService,
 } from '@services/center-users-membership.service'
+import { DashboardHelperService } from '@services/center/dashboard-helper.service'
 
 import {
     MembershipTicket,
@@ -121,7 +122,8 @@ export class ModifyPaymentFullModalStore extends ComponentStore<State> {
         private centerMembershipApi: CenterMembershipService,
         private centerUsersLockerApi: CenterUsersLockerService,
         private centerUsersMembershipApi: CenterUsersMembershipService,
-        private nxStore: Store
+        private nxStore: Store,
+        private dashboardHelper: DashboardHelperService
     ) {
         super(_.cloneDeep(stateInit))
     }
@@ -239,12 +241,13 @@ export class ModifyPaymentFullModalStore extends ComponentStore<State> {
                         .pipe(
                             tap((result) => {
                                 param.callback()
-                                this.nxStore.dispatch(
-                                    DashboardActions.startGetUserData({
-                                        centerId: param.centerId,
-                                        centerUser: param.curUser,
-                                    })
-                                )
+                                // this.nxStore.dispatch(
+                                //     DashboardActions.startGetUserData({
+                                //         centerId: param.centerId,
+                                //         centerUser: param.curUser,
+                                //     })
+                                // )
+                                this.dashboardHelper.refreshCurUser(param.centerId, param.curUser)
                                 this.nxStore.dispatch(
                                     showToast({
                                         text: `'${param.payment.user_membership_name}' 결제 정보가 수정되었습니다.`,
@@ -292,12 +295,13 @@ export class ModifyPaymentFullModalStore extends ComponentStore<State> {
                         .pipe(
                             tap((result) => {
                                 param.callback()
-                                this.nxStore.dispatch(
-                                    DashboardActions.startGetUserData({
-                                        centerId: param.centerId,
-                                        centerUser: param.curUser,
-                                    })
-                                )
+                                // this.nxStore.dispatch(
+                                //     DashboardActions.startGetUserData({
+                                //         centerId: param.centerId,
+                                //         centerUser: param.curUser,
+                                //     })
+                                // )
+                                this.dashboardHelper.refreshCurUser(param.centerId, param.curUser)
                                 this.nxStore.dispatch(
                                     showToast({
                                         text: `'${param.payment.user_locker_name}' 결제 정보가 수정되었습니다.`,

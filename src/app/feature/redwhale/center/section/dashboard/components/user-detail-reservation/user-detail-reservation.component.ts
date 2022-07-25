@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
 import { WordService } from '@services/helper/word.service'
 import { CenterUsersBookingService } from '@services/center-users-booking.service'
 import { StorageService } from '@services/storage.service'
+import { DashboardHelperService } from '@services/center/dashboard-helper.service'
 
 import _ from 'lodash'
 
@@ -28,7 +29,8 @@ export class UserDetailReservationComponent implements OnInit {
         private nxStore: Store,
         private wordService: WordService,
         private centerUsersBookingService: CenterUsersBookingService,
-        private storageService: StorageService
+        private storageService: StorageService,
+        private dashboardHelper: DashboardHelperService
     ) {}
 
     ngOnInit(): void {}

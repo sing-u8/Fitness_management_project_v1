@@ -47,15 +47,16 @@ section.member-detail__body {
                 justify-content: space-between;
 
                 .member-information__top-left {
-                    padding: 25px 0px 0px;
+                    padding: 25px 16px 0px 0px;
                     width: 139px;
                     height: 100%;
                     display: flex;
                     flex-direction: column;
                     align-items: flex-start;
-                    justify-content:flex-start;
+                    align-items: center;
+
                     .l-avater {
-                        margin-left: 20px;
+                        // margin-left: 20px;
                         position: relative;
                         display: flex;
                         flex-direction: column;
@@ -146,6 +147,50 @@ section.member-detail__body {
                                 width: 21px;
                                 height: 21px;
                                 display: none;
+                            }
+                        }
+
+                        .l-user-status-tag {
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            flex-direction: column;
+                            margin-top: 4px;
+
+                            .user-status-tag {
+                                &:first-of-type{
+                                    margin-bottom: 5px;
+                                }
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                background: rgba(33, 33, 33, 0.05);
+                                border-radius: 50px;
+                                padding: 1px 8px;
+
+                            }
+
+                            span {
+                                margin-left: 2px;
+                                font-size: 1.2rem;
+                                font-weight: 400;
+                                line-height: 19px;
+                                letter-spacing: -0.17px;
+                                text-align: center;
+                                color: var(--font-color) !important;
+                            }
+
+                            .unpaid-icon {
+                                width: 18px;
+                                height: 18px;
+                                background-size: cover;
+                                background-image: url('/assets/icons/etc/unpaid_amount.svg');
+                            }
+                            .expire-icon {
+                                width: 18px;
+                                height: 18px;
+                                background-size: cover;
+                                background-image: url('/assets/icons/etc/exceed_period_black.svg');
                             }
                         }
 
