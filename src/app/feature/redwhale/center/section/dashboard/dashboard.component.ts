@@ -172,7 +172,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     public selectedUserList$ = this.nxStore.select(DashboardSelector.curUserListSelect)
     public isLoading$ = this.nxStore.select(DashboardSelector.isLoading)
 
-    public unsubscribe$ = new Subject<void>()
+    public unsubscribe$ = new Subject<boolean>()
 
     constructor(
         private centerService: CenterService,
@@ -183,7 +183,9 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
         private router: Router,
         private activatedRoute: ActivatedRoute,
         private renderer: Renderer2
-    ) {
+    ) {}
+
+    ngOnInit(): void {
         this.centerStaff = this.storageService.getUser()
         this.center = this.storageService.getCenter()
 
@@ -199,11 +201,9 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
         this.nxStore.dispatch(DashboardActions.setCurCenterId({ centerId: this.center.id }))
     }
-
-    ngOnInit(): void {}
     ngAfterViewInit(): void {}
     ngOnDestroy(): void {
-        this.unsubscribe$.next()
+        this.unsubscribe$.next(true)
         this.unsubscribe$.complete()
     }
 

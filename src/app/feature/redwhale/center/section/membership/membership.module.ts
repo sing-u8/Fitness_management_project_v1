@@ -6,6 +6,8 @@ import { SharedModule } from '@shared/shared.module'
 
 import { MembershipComponent } from './membership.component'
 
+import { MembershipRoutingModule } from './membership-routing.module'
+
 // components
 import { MembershipCategoryComponent } from './components/membership-category/membership-category.component'
 
@@ -22,6 +24,7 @@ import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader'
         MembershipCategoryComponent,
     ],
     imports: [
+        MembershipRoutingModule,
         AngularCommonModule,
         SharedModule,
         ReactiveFormsModule,

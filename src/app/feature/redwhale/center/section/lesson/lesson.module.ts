@@ -6,6 +6,8 @@ import { SharedModule } from '@shared/shared.module'
 
 import { LessonComponent } from './lesson.component'
 
+import { LessonRoutingModule } from './lesson-routing.module'
+
 // components
 import { LessonSelectComponent } from './components/lesson-select/lesson-select.component'
 import { LessonCategoryComponent } from './components/lesson-category/lesson-category.component'
@@ -26,6 +28,7 @@ import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader'
         LessonIconComponent,
     ],
     imports: [
+        LessonRoutingModule,
         AngularCommonModule,
         SharedModule,
         ReactiveFormsModule,

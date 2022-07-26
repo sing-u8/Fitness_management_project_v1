@@ -20,14 +20,37 @@ const routes: Routes = [
         component: CenterComponent,
         children: [
             { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
-            { path: 'dashboard', component: DashboardComponent, canActivate: [CenterMemberBlockGuard] },
-            { path: 'schedule', component: ScheduleComponent, canActivate: [CenterMemberBlockGuard] },
-            { path: 'membership', component: MembershipComponent, canActivate: [CenterMemberBlockGuard] },
-            { path: 'lesson', component: LessonComponent, canActivate: [CenterMemberBlockGuard] },
-            { path: 'locker', component: LockerComponent, canActivate: [CenterMemberBlockGuard] },
+            {
+                path: 'dashboard',
+                canActivate: [CenterMemberBlockGuard],
+                loadChildren: () => import('./section/dashboard/dashboard.module').then((m) => m.DashboardModule),
+            },
+            {
+                path: 'schedule',
+                canActivate: [CenterMemberBlockGuard],
+                loadChildren: () => import('./section/schedule/schedule.module').then((m) => m.ScheduleModule),
+            },
+            {
+                path: 'membership',
+                canActivate: [CenterMemberBlockGuard],
+                loadChildren: () => import('./section/membership/membership.module').then((m) => m.MembershipModule),
+            },
+            {
+                path: 'lesson',
+                canActivate: [CenterMemberBlockGuard],
+                loadChildren: () => import('./section/lesson/lesson.module').then((m) => m.LessonModule),
+            },
+            {
+                path: 'locker',
+                canActivate: [CenterMemberBlockGuard],
+                loadChildren: () => import('./section/locker/locker.module').then((m) => m.LockerModule),
+            },
             { path: 'community', component: CommunityComponent },
-            { path: 'sale', component: SaleComponent, canActivate: [CenterMemberBlockGuard] },
-            // { path: 'schedule-reservation', component: ReserveScheduleComponent },
+            {
+                path: 'sale',
+                canActivate: [CenterMemberBlockGuard],
+                loadChildren: () => import('./section/sale/sale.module').then((m) => m.SaleModule),
+            },
         ],
     },
     // {

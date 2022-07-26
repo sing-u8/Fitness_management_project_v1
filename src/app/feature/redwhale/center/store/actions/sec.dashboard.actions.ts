@@ -22,6 +22,7 @@ import { UserLocker } from '@schemas/user-locker'
 import { UserMembership } from '@schemas/user-membership'
 import { Payment } from '@schemas/payment'
 import { CenterUsersCategory } from '@schemas/center/community/center-users-by-category'
+import { User } from '@schemas/user'
 
 const FeatureKey = 'Center/Dashboard'
 
@@ -77,6 +78,15 @@ export const startRefreshCenterUser = createAction(
 )
 export const finishRefreshCenterUser = createAction(
     `[${FeatureKey}] Finish Refresh Center User`,
+    props<{ categ_type: MemberSelectCateg; refreshCenterUser: CenterUser; isUserInCurCateg: boolean }>()
+)
+
+export const startRefreshMyCenterUser = createAction(
+    `[${FeatureKey}] Start Refresh My Center User`,
+    props<{ centerId: string; user: User }>()
+)
+export const finishRefreshMyCenterUser = createAction(
+    `[${FeatureKey}] Finish Refresh My Center User`,
     props<{ categ_type: MemberSelectCateg; refreshCenterUser: CenterUser; isUserInCurCateg: boolean }>()
 )
 

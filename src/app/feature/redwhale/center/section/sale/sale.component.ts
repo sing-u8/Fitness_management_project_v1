@@ -59,7 +59,9 @@ export class SaleComponent implements OnInit, OnDestroy {
     public resizeUnlistener: () => void
     @ViewChild('sale') sale: ElementRef
 
-    constructor(private renderer: Renderer2, private nxStore: Store, private storageService: StorageService) {
+    constructor(private renderer: Renderer2, private nxStore: Store, private storageService: StorageService) {}
+
+    ngOnInit(): void {
         this.showEmptyTableFlag = 'none'
         this.filterTagList = []
         this.center = this.storageService.getCenter()
@@ -81,9 +83,7 @@ export class SaleComponent implements OnInit, OnDestroy {
             this.inputs = _.cloneDeep(inputs)
         })
         this.selectIsFiltered()
-    }
 
-    ngOnInit(): void {
         this.nxStore.dispatch(SaleActions.startGetSaleSummary({ centerId: this.center.id }))
     }
     ngOnDestroy(): void {

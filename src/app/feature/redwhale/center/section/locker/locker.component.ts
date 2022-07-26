@@ -95,7 +95,7 @@ export class LockerComponent implements OnInit, AfterViewInit, OnDestroy {
         confirmButtonText: '확인',
     }
 
-    public unSubscriber$ = new Subject<void>()
+    public unSubscriber$ = new Subject<boolean>()
 
     public originOrder = originalOrder
 
@@ -104,13 +104,9 @@ export class LockerComponent implements OnInit, AfterViewInit, OnDestroy {
     @ViewChildren(LockerCategoryComponent) lockerCategories!: QueryList<LockerCategoryComponent>
     @ViewChild('l_locker_category') l_locker_category: ElementRef
 
-    constructor(
-        private nxStore: Store,
-        private storageService: StorageService,
-        private centerLockerApi: CenterLockerService,
-        private fb: FormBuilder
-    ) {
-        // input formcontrol
+    constructor(private nxStore: Store, private storageService: StorageService, private fb: FormBuilder) {}
+
+    ngOnInit(): void {
         this.categInput = this.fb.control('')
         this.lockerItemCountInput = this.fb.control('0')
 
@@ -123,7 +119,7 @@ export class LockerComponent implements OnInit, AfterViewInit, OnDestroy {
             }
         })
         this.nxStore
-            .pipe(select(LockerSelector.curLockerCateg), takeUntil(this.unSubscriber$))
+            .pipe(takeUntil(this.unSubscriber$), select(LockerSelector.curLockerCateg))
             .subscribe((curLockerCateg) => {
                 if (!curLockerCateg) {
                     this.nxStore.dispatch(LockerActions.resetCurLockerItem())
@@ -137,7 +133,7 @@ export class LockerComponent implements OnInit, AfterViewInit, OnDestroy {
         this.nxStore.dispatch(LockerActions.setCurCenterId({ centerId: this.center.id }))
 
         this.nxStore
-            .pipe(select(LockerSelector.curLockerItemList), takeUntil(this.unSubscriber$))
+            .pipe(takeUntil(this.unSubscriber$), select(LockerSelector.curLockerItemList))
             .subscribe((curLockerItemList) => {
                 if (this.categoryChanged) {
                     // when lcoker category changed
@@ -163,39 +159,39 @@ export class LockerComponent implements OnInit, AfterViewInit, OnDestroy {
 
                 this.checkIsLockerCountItemEnable()
             })
-        this.nxStore.pipe(select(LockerSelector.LockerGlobalMode), takeUntil(this.unSubscriber$)).subscribe((lgm) => {
+        this.nxStore.pipe(takeUntil(this.unSubscriber$), select(LockerSelector.LockerGlobalMode)).subscribe((lgm) => {
             this.LockerGlobalMode = lgm
         })
         this.nxStore
-            .pipe(select(LockerSelector.willBeMovedLockerItem), takeUntil(this.unSubscriber$))
+            .pipe(takeUntil(this.unSubscriber$), select(LockerSelector.willBeMovedLockerItem))
             .subscribe((willBeMovedLockerItem) => {
                 this.willBeMovedLockerItem = willBeMovedLockerItem
             })
         this.nxStore
-            .pipe(select(LockerSelector.curLockerItem), takeUntil(this.unSubscriber$))
+            .pipe(takeUntil(this.unSubscriber$), select(LockerSelector.curLockerItem))
             .subscribe((curLockerItem) => {
                 this.curLockerItem = curLockerItem
             })
         this.nxStore
-            .pipe(select(LockerSelector.lockerCategLength), takeUntil(this.unSubscriber$))
+            .pipe(takeUntil(this.unSubscriber$), select(LockerSelector.lockerCategLength))
             .subscribe((lcLength) => {
                 this.lockerCategLength = lcLength
             })
 
-        this.nxStore.pipe(select(LockerSelector.LockerCategList), takeUntil(this.unSubscriber$)).subscribe((lcList) => {
+        this.nxStore.pipe(takeUntil(this.unSubscriber$), select(LockerSelector.LockerCategList)).subscribe((lcList) => {
             this.lockerCategList = lcList
         })
-        this.nxStore.pipe(select(LockerSelector.curUserLocker), takeUntil(this.unSubscriber$)).subscribe((cul) => {
+        this.nxStore.pipe(takeUntil(this.unSubscriber$), select(LockerSelector.curUserLocker)).subscribe((cul) => {
             this.curUserLocker = cul
         })
-    }
 
-    ngOnInit(): void {
         this.initGridster()
     }
     ngAfterViewInit(): void {}
+
     ngOnDestroy(): void {
-        this.unSubscriber$.next()
+        console.log('ng on destroy in locker component : ')
+        this.unSubscriber$.next(true)
         this.unSubscriber$.complete()
     }
 

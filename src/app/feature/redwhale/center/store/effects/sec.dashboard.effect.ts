@@ -101,7 +101,7 @@ export class DashboardEffect {
         )
     )
 
-    public refreshCenterUser = createEffect(() =>
+    public refreshCenterUser$ = createEffect(() =>
         this.actions$.pipe(
             ofType(DashboardActions.startRefreshCenterUser),
             concatLatestFrom(() => [this.store.select(DashboardSelector.curUserListSelect)]),
@@ -128,7 +128,41 @@ export class DashboardEffect {
         )
     )
 
-    public directRegisterMember = createEffect(() =>
+    public refreshMyCenterUser$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(DashboardActions.startRefreshMyCenterUser),
+            concatLatestFrom(() => [
+                this.store.select(DashboardSelector.curUserListSelect),
+                this.store.select(DashboardSelector.isLoading),
+            ]),
+            switchMap(([{ centerId, user }, userListSelect, isLoading]) => {
+                if (isLoading == 'idle' || _.isEmpty(centerId)) {
+                    return []
+                } else {
+                    return forkJoin({
+                        userInCategory: this.centerUsersApi
+                            .getUserList(centerId, DashboardReducer.matchMemberSelectCategTo(userListSelect.key))
+                            .pipe(map((users) => _.find(users, (user) => user.id == user.id))),
+                        userInAll: this.centerUsersApi
+                            .getUserList(centerId, '', user.name)
+                            .pipe(map((users) => _.find(users, (user) => user.id == user.id))),
+                    }).pipe(
+                        switchMap(({ userInCategory, userInAll }) => {
+                            return [
+                                DashboardActions.finishRefreshMyCenterUser({
+                                    categ_type: userListSelect.key,
+                                    refreshCenterUser: userInAll,
+                                    isUserInCurCateg: !_.isEmpty(userInCategory),
+                                }),
+                            ]
+                        })
+                    )
+                }
+            })
+        )
+    )
+
+    public directRegisterMember$ = createEffect(() =>
         this.actions$.pipe(
             ofType(DashboardActions.startDirectRegisterMember),
             switchMap(({ centerId, reqBody, imageFile, callback }) =>

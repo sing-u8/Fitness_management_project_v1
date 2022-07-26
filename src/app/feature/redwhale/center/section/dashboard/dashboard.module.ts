@@ -50,6 +50,8 @@ import { PaymentMembershipWindowComponent } from './components/payment-membershi
 import { DashboardChargeModalComponent } from './components/dashboard-charge-modal/dashboard-charge-modal.component'
 import { MemberRoleSelectComponent } from './components/member-role-select/member-role-select.component'
 
+import { DashboardRoutingModule } from './dashboard-routing.module'
+
 // section module
 import { CommonModule as SectionCommonModule } from '../common/common.module'
 
@@ -103,6 +105,7 @@ import { NgxSpinnerModule } from 'ngx-spinner'
         MemberRoleSelectComponent,
     ],
     imports: [
+        DashboardRoutingModule,
         AngularCommonModule,
         SharedModule,
         ReactiveFormsModule,

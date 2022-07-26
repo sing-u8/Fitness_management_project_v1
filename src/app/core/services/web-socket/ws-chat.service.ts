@@ -39,48 +39,47 @@ export class WsChatService implements OnDestroy {
     }
 
     connect(url: string) {
-        console.log(`WsChatService connect chatWs : `, this.chatWs)
-        this.user = this.storageService.getUser()
-        if (!this.chatWs) {
-            this.chatWs = webSocket(this.wss)
-            console.log('rxjs webSocket connected: ' + url)
-        }
-        if (!_.isEmpty(this.user) && this.user.access_token) {
-            console.log('WsChatService connect subscribe chat ws ')
-            this.subscribeChatWs(this.user.access_token)
-        }
+        // console.log(`WsChatService connect chatWs : `, this.chatWs)
+        // this.user = this.storageService.getUser()
+        // if (!this.chatWs) {
+        //     this.chatWs = webSocket(this.wss)
+        //     console.log('rxjs webSocket connected: ' + url)
+        // }
+        // if (!_.isEmpty(this.user) && this.user.access_token) {
+        //     console.log('WsChatService connect subscribe chat ws ')
+        //     this.subscribeChatWs(this.user.access_token)
+        // }
         // return this.chatWs
     }
 
     subscribeChatWs(accessToken: string) {
-        console.log('subscribeChatWs - ', accessToken)
-
-        this.chatWs.subscribe({
-            next: (ws) => {
-                if (this.isCenterExist() && this.isCenterMessage(ws)) {
-                    this.switchByWsChatBase(ws as wsChat.Base)
-                }
-            },
-            error: (err) => {
-                console.log('web socket chat error : ', err)
-            },
-            complete: () => {
-                console.log('web socket chat complete!')
-                this.connect(this.user.access_token)
-            },
-        })
-        this.chatWs.next({
-            action: 'subscription',
-            accessToken: accessToken,
-        })
+        // console.log('subscribeChatWs - ', accessToken)
+        // this.chatWs.subscribe({
+        //     next: (ws) => {
+        //         if (this.isCenterExist() && this.isCenterMessage(ws)) {
+        //             this.switchByWsChatBase(ws as wsChat.Base)
+        //         }
+        //     },
+        //     error: (err) => {
+        //         console.log('web socket chat error : ', err)
+        //     },
+        //     complete: () => {
+        //         console.log('web socket chat complete!')
+        //         this.connect(this.user.access_token)
+        //     },
+        // })
+        // this.chatWs.next({
+        //     action: 'subscription',
+        //     accessToken: accessToken,
+        // })
     }
 
     closeChatWs() {
-        console.log('close chat ws')
-        this.chatWs.complete()
-        if (this.subscription) {
-            this.subscription.unsubscribe()
-        }
+        // console.log('close chat ws')
+        // this.chatWs.complete()
+        // if (this.subscription) {
+        //     this.subscription.unsubscribe()
+        // }
     }
 
     // helper

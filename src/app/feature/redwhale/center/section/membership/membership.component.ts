@@ -58,7 +58,7 @@ export class MembershipComponent implements OnInit {
     public isCurGymFirstSet = false
     public selectedMembership: SelectedMembership = _.cloneDeep(initialSelectedMembership)
 
-    public unSubscriber$ = new Subject<void>()
+    public unSubscriber$ = new Subject<boolean>()
 
     // screen vars
     public center: Center
@@ -84,10 +84,11 @@ export class MembershipComponent implements OnInit {
         private nxStore: Store,
         private storageService: StorageService,
         private fb: FormBuilder
-    ) {
+    ) {}
+
+    ngOnInit(): void {
         this.center = this.storageService.getCenter()
         this.nxStore.pipe(select(MembershipSelector.currentCenter), take(1)).subscribe((curGym) => {
-            console.log('memberhsip center : ', ' : ', curGym, ' : ', this.center.id)
             if (curGym != this.center.id) {
                 this.nxStore.dispatch(MembershipActions.resetAll())
                 this.nxStore.dispatch(MembershipActions.startLoadMembershipCategs({ centerId: this.center.id }))
@@ -118,11 +119,9 @@ export class MembershipComponent implements OnInit {
                 }
             })
     }
-
-    ngOnInit(): void {}
     ngAfterViewInit(): void {}
     ngOnDestroy(): void {
-        this.unSubscriber$.next()
+        this.unSubscriber$.next(true)
         this.unSubscriber$.complete()
     }
 

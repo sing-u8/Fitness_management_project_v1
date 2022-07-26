@@ -3,6 +3,7 @@ import { CommonModule as AngularCommonModule } from '@angular/common'
 import { ReactiveFormsModule, FormsModule } from '@angular/forms'
 
 import { SharedModule } from '@shared/shared.module'
+import { LockerRoutingModule } from './locker-routing.module'
 
 // components
 import { LockerComponent } from './locker.component'
@@ -37,6 +38,7 @@ import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader'
         LockerDatepickerComponent,
     ],
     imports: [
+        LockerRoutingModule,
         AngularCommonModule,
         SharedModule,
         ReactiveFormsModule,

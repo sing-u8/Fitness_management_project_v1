@@ -72,4 +72,7 @@ export class NavComponent implements OnInit, OnDestroy {
             this.address = this.router.url.split('/')[1]
         }
     }
+    goRouterLink(link: string) {
+        this.router.navigateByUrl(`/${this.address}/${link}`)
+    }
 }

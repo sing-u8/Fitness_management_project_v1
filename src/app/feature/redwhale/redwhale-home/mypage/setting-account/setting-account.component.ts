@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, OnDestroy } from '@angular/core'
 import { Router } from '@angular/router'
 
 import { FileService, CreateFileRequestBody } from '@services/file.service'
@@ -20,6 +20,7 @@ import { originalOrder } from '@helpers/pipe/keyvalue'
 
 // ngrx
 import { Store } from '@ngrx/store'
+import * as DashboardAction from '@centerStore/actions/sec.dashboard.actions'
 import { resetAllState } from '@centerStore/actions/sec.center.all.actions'
 import { showToast } from '@appStore/actions/toast.action'
 
@@ -28,7 +29,7 @@ import { showToast } from '@appStore/actions/toast.action'
     templateUrl: './setting-account.component.html',
     styleUrls: ['./setting-account.component.scss'],
 })
-export class SettingAccountComponent implements OnInit {
+export class SettingAccountComponent implements OnInit, OnDestroy {
     public user: User
 
     public marketing_agree: { email: boolean; sms: boolean } = {
@@ -98,8 +99,12 @@ export class SettingAccountComponent implements OnInit {
         this.changePasswordFlag = false
 
         this.user = this.storageService.getUser()
-        console.log('user in setting account: ', this.user)
         this.initInputList()
+    }
+    ngOnDestroy(): void {
+        const center = this.storageService.getCenter()
+        console.log('SettingAccountComponent destroy : ', center, center?.id)
+        this.nxStore.dispatch(DashboardAction.startRefreshMyCenterUser({ centerId: center?.id, user: this.user }))
     }
 
     initMarktingAgree() {

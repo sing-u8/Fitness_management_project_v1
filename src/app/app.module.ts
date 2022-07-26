@@ -59,12 +59,18 @@ import { RECAPTCHA_V3_SITE_KEY, RecaptchaV3Module } from 'ng-recaptcha'
         AngularFireAuthModule,
         AngularFirestoreModule,
         // ngrx
-        StoreModule.forRoot({ router: routerReducer, [appFeatureKey]: appReducer }, { metaReducers }),
+        StoreModule.forRoot(
+            {
+                router: routerReducer,
+                [appFeatureKey]: appReducer,
+            },
+            { metaReducers }
+        ),
         StoreRouterConnectingModule.forRoot(),
         EffectsModule.forRoot([]),
         StoreDevtoolsModule.instrument({
             maxAge: 25,
-            logOnly: environment.production == false,
+            logOnly: environment.production,
         }),
         // Google reCAPTCHA
         RecaptchaV3Module,

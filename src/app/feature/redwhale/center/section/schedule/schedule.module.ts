@@ -4,6 +4,8 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms'
 
 import { SharedModule } from '@shared/shared.module'
 
+import { ScheduleRoutingModule } from './schedule-routing.module'
+
 // components
 import { ScheduleComponent } from './schedule.component'
 import { SchInstructorDropdownComponent } from './components/sch-instructor-dropdown/sch-instructor-dropdown.component'
@@ -35,6 +37,7 @@ import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader'
         SchReserveMemberModalComponent,
     ],
     imports: [
+        ScheduleRoutingModule,
         AngularCommonModule,
         SharedModule,
         ReactiveFormsModule,

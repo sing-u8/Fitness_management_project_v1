@@ -1,15 +1,16 @@
 import { Injectable } from '@angular/core'
 import { Router, ActivatedRouteSnapshot, RouterStateSnapshot, CanActivate } from '@angular/router'
-import { Observable, of } from 'rxjs'
+import { Observable, of, forkJoin } from 'rxjs'
 import { catchError, map } from 'rxjs/operators'
 
 import { CenterService } from '@services/center.service'
+import { StorageService } from '@services/storage.service'
 
 @Injectable({
     providedIn: 'root',
 })
 export class CenterGuard implements CanActivate {
-    constructor(private router: Router, private CenterService: CenterService) {}
+    constructor(private router: Router, private CenterService: CenterService, private storageService: StorageService) {}
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
         const address = route.params['address']

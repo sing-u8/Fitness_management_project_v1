@@ -53,7 +53,6 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
         private nxStore: Store,
         private spinner: NgxSpinnerService,
         private wordService: WordService,
-        private usersCenterService: UsersCenterService,
         private centerService: CenterService,
         private router: Router,
         private activatedRoute: ActivatedRoute,

@@ -4,6 +4,8 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms'
 
 import { SharedModule } from '@shared/shared.module'
 
+import { SaleRoutingModule } from './sale-routing.module'
+
 // components
 import { SaleComponent } from './sale.component'
 import { SaleDateSelectorComponent } from './components/sale-date-selector/sale-date-selector.component'
@@ -36,6 +38,7 @@ import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader'
         SaleTotalPricePipe,
     ],
     imports: [
+        SaleRoutingModule,
         AngularCommonModule,
         SharedModule,
         ReactiveFormsModule,

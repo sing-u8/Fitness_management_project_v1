@@ -15,7 +15,6 @@ export class AuthGuard implements CanActivate {
         const url = state.url.split('/')
         const user = this.storageService.getUser()
         const isUserEmpty = this.storageService.isUserEmpty()
-        console.log('auth guard ----  ', isUserEmpty)
         if (!isUserEmpty) {
             if (!user.service_terms || !user.privacy) {
                 this.router.navigateByUrl('/auth/terms')

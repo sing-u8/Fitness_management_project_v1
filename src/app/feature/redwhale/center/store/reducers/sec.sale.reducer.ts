@@ -138,8 +138,8 @@ export const saleReducer = createImmerReducer(
                 unpaid: Number(saleSummary.today.unpaid),
             },
         }
-        state.saleTotal.day.prev = _.reduce(_.values(saleSummary.today), (acc, cur) => acc + Number(cur), 0)
-        state.saleTotal.day.cur = _.reduce(_.values(saleSummary.yesterday), (acc, cur) => acc + Number(cur), 0)
+        state.saleTotal.day.prev = _.reduce(_.values(saleSummary.yesterday), (acc, cur) => acc + Number(cur), 0)
+        state.saleTotal.day.cur = _.reduce(_.values(saleSummary.today), (acc, cur) => acc + Number(cur), 0)
 
         state.saleSummary.month = {
             prev: {
@@ -155,8 +155,8 @@ export const saleReducer = createImmerReducer(
                 unpaid: Number(saleSummary.this_month.unpaid),
             },
         }
-        state.saleTotal.month.prev = _.reduce(_.values(saleSummary.this_month), (acc, cur) => acc + Number(cur), 0)
-        state.saleTotal.month.cur = _.reduce(_.values(saleSummary.last_month), (acc, cur) => acc + Number(cur), 0)
+        state.saleTotal.month.prev = _.reduce(_.values(saleSummary.last_month), (acc, cur) => acc + Number(cur), 0)
+        state.saleTotal.month.cur = _.reduce(_.values(saleSummary.this_month), (acc, cur) => acc + Number(cur), 0)
 
         return state
     }),

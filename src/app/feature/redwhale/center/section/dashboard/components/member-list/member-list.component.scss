@@ -188,6 +188,33 @@ section.l-member-list {
 }
 
 .empty-guide {
+    // height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    img {
+        margin-bottom: 10px;
+    }
+
+    .find-text {
+        margin-top: 8px;
+    }
+
+    .grey {
+        color: var(--grey);
+    }
+
+    .top-image {
+        margin-bottom: 20px;
+    }
+
+    &>.empty-guide-button {
+        margin-top: 20px;
+    }
+}
+.empty-guide-search {
     height: 100%;
     display: flex;
     flex-direction: column;

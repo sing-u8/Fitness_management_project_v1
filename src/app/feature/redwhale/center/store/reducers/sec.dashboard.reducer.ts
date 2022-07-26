@@ -169,8 +169,20 @@ export const dashboardReducer = createImmerReducer(
         state.curUserData.user = _.assign(state.curUserData.user, refreshCenterUser)
         return state
     }),
+    on(DashboardActions.finishRefreshMyCenterUser, (state, { categ_type, refreshCenterUser, isUserInCurCateg }) => {
+        if (isUserInCurCateg) {
+            const refreshUserIdx = _.findIndex(state.usersLists[categ_type], (v) => v.user.id == refreshCenterUser.id)
+            state.usersLists[categ_type][refreshUserIdx].user = refreshCenterUser
+        } else {
+            _.remove(state.usersLists[categ_type], (v) => v.user.id == refreshCenterUser.id)
+        }
+        if (state.curUserData?.user?.id == refreshCenterUser.id) {
+            state.curUserData.user = _.assign(state.curUserData.user, refreshCenterUser)
+        }
+        return state
+    }),
     on(DashboardActions.startSetCurUserData, (state, { userId, reqBody }) => {
-        const { role_code, center_user_name, center_user_memo } = reqBody
+        // const { role_code, center_user_name, center_user_memo } = reqBody
 
         // ! role_code가 포함되었을 때, role_name도 바꿔줘야함
         state.curUserData.user = _.assign(state.curUserData.user, reqBody)
