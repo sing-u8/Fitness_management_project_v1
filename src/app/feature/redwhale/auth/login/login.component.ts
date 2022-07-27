@@ -66,11 +66,9 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.signInMethod = 'google'
         signInWithPopup(this.fireAuth, new GoogleAuthProvider())
             .then((userCredential) => {
-                console.log('signInWithGoogle -- ', userCredential)
                 this.loginWithSocial(userCredential, btLoadingFns)
             })
             .finally(() => {
-                console.log('finally --- google login : ', this.storageService.getUser())
                 btLoadingFns.hideLoading()
             })
     }
@@ -80,7 +78,6 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.signInMethod = 'apple'
         signInWithPopup(this.fireAuth, new OAuthProvider('apple.com'))
             .then((userCredential) => {
-                console.log('signInWithApple -- ', userCredential)
                 this.loginWithSocial(userCredential, btLoadingFns)
             })
             .finally(() => {
@@ -129,7 +126,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     loginWithSocial(uc: UserCredential, btLoadingFns?: ClickEmitterType) {
         console.log('loginWithSocial start -- ', uc, ' ;; ', btLoadingFns)
         uc.user.getIdToken().then((accessToken) => {
-            console.log('loginWithSocial access token : ', accessToken)
             this.authService.signInWithFirebase({ accessToken }).subscribe({
                 next: (user) => {
                     this.storageService.setSignInMethod(this.signInMethod)
