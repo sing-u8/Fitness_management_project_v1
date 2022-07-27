@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core'
 import { Router, ActivatedRoute } from '@angular/router'
 
 import { UsersService } from '@services/users.service'
@@ -18,6 +18,8 @@ export class RemoveAccountComponent implements OnInit {
 
     public removeModalVisible: boolean
 
+    @ViewChild('remove_input_el') remove_input_el: ElementRef
+
     constructor(
         private usersService: UsersService,
         private storageService: StorageService,
@@ -32,6 +34,7 @@ export class RemoveAccountComponent implements OnInit {
     ngOnInit(): void {}
 
     toggleRemoveModal() {
+        this.remove_input_el.nativeElement.blur()
         this.removeModalVisible = !this.removeModalVisible
     }
 

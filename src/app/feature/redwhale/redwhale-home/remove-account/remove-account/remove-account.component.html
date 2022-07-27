@@ -20,11 +20,24 @@
 
     <div class="remove-input">
       <p class="rw-typo-subtext1">안내 사항에 동의하신다면, 아래 문구를 입력해주세요.</p>
-      <input class="rw-input" type="text" placeholder="영구 삭제" [(ngModel)]=removeInput #remove_input=ngModel>
+      <input
+        class="rw-input"
+        type="text"
+        placeholder="영구 삭제"
+        [(ngModel)]=removeInput
+        #remove_input=ngModel
+        #remove_input_el
+        (keyup.enter)=" remove_input.value == '영구 삭제' && toggleRemoveModal()"
+      >
     </div>
 
-    <div class='remove-button rw-typo-title2' rw-button rwButtonHeight="55" rwButtonColor="var(--red)"
-      [rwButtonDisabled]="remove_input.value != '영구 삭제'" (click)=" remove_input.value == '영구 삭제' &&toggleRemoveModal()">
+    <div
+      class='remove-button rw-typo-title2'
+      rw-button rwButtonHeight="55"
+      rwButtonColor="var(--red)"
+      [rwButtonDisabled]="remove_input.value != '영구 삭제'"
+      (click)=" remove_input.value == '영구 삭제' && toggleRemoveModal()"
+    >
       계정을 영구 삭제할게요.
     </div>
   </div>
@@ -32,6 +45,8 @@
 </section>
 
 
-<remove-account-modal [(visible)]="removeModalVisible" (cancel)='onRemoveAccountCancel()'
-  (confirm)='onRemoveAccountConfirm()'>
-</remove-account-modal>
+<remove-account-modal
+  [(visible)]="removeModalVisible"
+  (cancel)='onRemoveAccountCancel()'
+  (confirm)='onRemoveAccountConfirm()'
+></remove-account-modal>
