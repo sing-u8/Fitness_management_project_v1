@@ -24,6 +24,7 @@
                 [selectedUserList]="(selectedUserList$ | async)"
                 [searchedUsersLists]="(searchedUsersLists$ | async)"
                 [isLoading]="(isLoading$ | async)"
+                (onDirectRegisterMember) = "toggleDirectRegisterMemberFullModal()"
             ></db-member-list>
         </section>
 

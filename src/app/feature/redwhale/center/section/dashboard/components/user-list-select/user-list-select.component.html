@@ -16,10 +16,10 @@
     <div class="items" #itemsElement (click)="$event.stopPropagation()">
         <div
             class="item d-flex align-items-center"
-            [class.active]="items?.member.name == value?.value.name"
+            [class.active]="items?.member?.name == value?.value.name"
             (click)="onSelect(items.member, 'member')"
         >
-            <span class="rw-typo-title2-medium">{{ items?.member.name }} <span class="grey item-member-count">{{items?.member.userSize}}</span></span>
+            <span class="rw-typo-title2-medium">{{ items?.member?.name }} <span class="grey item-member-count">{{items?.member?.userSize}}</span></span>
         </div>
         <!-- <div
             class="item d-flex align-items-center"
@@ -30,38 +30,38 @@
         </div> -->
         <div
             class="item d-flex align-items-center"
-            [class.active]="items?.valid.name == value?.value.name"
+            [class.active]="items?.valid?.name == value?.value.name"
             (click)="onSelect(items.valid, 'valid')"
         >
-            <span class="rw-typo-title2-medium">{{ items?.valid.name }} <span class="grey item-member-count">{{items?.valid.userSize}}</span></span>
+            <span class="rw-typo-title2-medium">{{ items?.valid?.name }} <span class="grey item-member-count">{{items?.valid?.userSize}}</span></span>
         </div>
         <div
             class="item d-flex align-items-center"
-            [class.active]="items?.unpaid.name == value?.value.name"
+            [class.active]="items?.unpaid?.name == value?.value.name"
             (click)="onSelect(items.unpaid, 'unpaid')"
         >
-            <span class="rw-typo-title2-medium">{{ items?.unpaid.name }} <span class="grey item-member-count">{{items?.unpaid.userSize}}</span></span>
+            <span class="rw-typo-title2-medium">{{ items?.unpaid?.name }} <span class="grey item-member-count">{{items?.unpaid?.userSize}}</span></span>
         </div>
         <div
             class="item d-flex align-items-center"
-            [class.active]="items?.imminent.name == value?.value.name"
+            [class.active]="items?.imminent?.name == value?.value.name"
             (click)="onSelect(items.imminent, 'imminent')"
         >
-            <span class="rw-typo-title2-medium">{{ items?.imminent.name }} <span class="grey item-member-count">{{items?.imminent.userSize}}</span></span>
+            <span class="rw-typo-title2-medium">{{ items?.imminent?.name }} <span class="grey item-member-count">{{items?.imminent?.userSize}}</span></span>
         </div>
         <div
             class="item d-flex align-items-center"
-            [class.active]="items?.expired.name == value?.value.name"
+            [class.active]="items?.expired?.name == value?.value.name"
             (click)="onSelect(items.expired, 'expired')"
         >
-            <span class="rw-typo-title2-medium">{{ items?.expired.name }} <span class="grey item-member-count">{{items?.expired.userSize}}</span></span>
+            <span class="rw-typo-title2-medium">{{ items?.expired?.name }} <span class="grey item-member-count">{{items?.expired?.userSize}}</span></span>
         </div>
         <div
             class="item d-flex align-items-center"
-            [class.active]="items?.employee.name == value?.value.name"
+            [class.active]="items?.employee?.name == value?.value.name"
             (click)="onSelect(items.employee, 'employee')"
         >
-            <span class="rw-typo-title2-medium">{{ items?.employee.name }} <span class="grey item-member-count">{{items?.employee.userSize}}</span></span>
+            <span class="rw-typo-title2-medium">{{ items?.employee?.name }} <span class="grey item-member-count">{{items?.employee?.userSize}}</span></span>
         </div>
     </div>
 </div>

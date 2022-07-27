@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, OnDestroy } from '@angular/core'
+import { Component, OnInit, Input, Output, OnDestroy, EventEmitter } from '@angular/core'
 import { FormBuilder, FormControl, ValidationErrors, AsyncValidatorFn, AbstractControl } from '@angular/forms'
 import { Router, ActivatedRoute } from '@angular/router'
 
@@ -35,6 +35,8 @@ export class MemberListComponent implements OnInit, OnDestroy {
     @Input() usersSelectCateg: FromDashboard.UsersSelectCateg = _.cloneDeep(FromDashboard.UsersSelectCategInit)
     @Input() selectedUserList: FromDashboard.UserListSelect = _.cloneDeep(FromDashboard.UserListSelectInit)
     @Input() isLoading: Loading = 'idle'
+
+    @Output() onDirectRegisterMember = new EventEmitter<void>()
 
     public center: Center
 
@@ -116,9 +118,7 @@ export class MemberListComponent implements OnInit, OnDestroy {
         this.unsubscribe$.complete()
     }
     goToRegisterNewMember() {
-        this.router.navigate([`../register-member`], {
-            relativeTo: this.activatedRoute,
-        })
+        this.onDirectRegisterMember.emit()
     }
 
     // holding modal vars & method

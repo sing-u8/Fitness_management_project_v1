@@ -94,8 +94,8 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     ngOnChanges(changes: SimpleChanges): void {
-        if (!changes['curUserData'].firstChange) {
-            if (changes['curUserData'].previousValue['user']?.id != changes['curUserData'].currentValue['user']?.id) {
+        if (!_.isEmpty(changes['curUserData'])) {
+            if (changes['curUserData'].previousValue?.user?.id != changes['curUserData'].currentValue['user']?.id) {
                 this.memoForm.setValue(changes['curUserData'].currentValue['user']['center_user_memo'] ?? '')
                 this.userNameForModal = this.curUserData.user.center_user_name
 
@@ -104,7 +104,7 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
                 })
             }
             if (
-                changes['curUserData'].previousValue['user']?.user_membership_end_date !=
+                changes['curUserData'].previousValue?.user?.user_membership_end_date !=
                 changes['curUserData'].currentValue['user']?.user_membership_end_date
             ) {
                 this.findEndDateToExpired(7)

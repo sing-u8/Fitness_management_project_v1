@@ -37,7 +37,10 @@ export class UserListSelectComponent implements AfterViewInit, ControlValueAcces
     @ViewChild('selectedElement') selectedElement
     @ViewChild('itemsElement') itemsElement
 
-    value: { key: string; value: { name: string; userSize: number } }
+    value: { key: string; value: { name: string; userSize: number } } = {
+        key: '',
+        value: { name: '', userSize: 0 },
+    }
     isOpen: boolean
 
     constructor(private el: ElementRef, private renderer: Renderer2) {
@@ -74,6 +77,7 @@ export class UserListSelectComponent implements AfterViewInit, ControlValueAcces
     }
 
     onSelect(item: { name: string; userSize: number }, type: string) {
+        console.log('user list select onSelect : ', this.items)
         this.close()
         this.onChanged(item, type)
     }

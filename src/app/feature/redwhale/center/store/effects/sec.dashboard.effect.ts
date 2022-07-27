@@ -72,6 +72,12 @@ export class DashboardEffect {
                                 userSize: usersByCateg.user_count,
                             }
                         })
+                        console.log(
+                            ' DashboardActions.startGetUsersByCategory effect : ',
+                            userSelectCateg,
+                            ' - ',
+                            usersByCategs
+                        )
                         return DashboardActions.finishGetUsersByCategory({ userSelectCateg })
                     })
                 )

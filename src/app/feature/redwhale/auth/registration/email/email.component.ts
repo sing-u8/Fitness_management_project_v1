@@ -90,7 +90,7 @@ export class EmailComponent implements OnInit, AfterViewInit, OnDestroy {
         this.veriNumberSubscription = this.veriNumberSelector.subscribe({
             next: (v) => {
                 this.verficationCode = Number(v)
-                console.log('veri Number : ', this.verficationCode)
+                // console.log('veri Number : ', this.verficationCode)
                 this.authService
                     .checkVerificationCodeMail({
                         email: this.email,
@@ -139,7 +139,6 @@ export class EmailComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     checkDigit(event) {
-        console.log('email keycheck: ', event.keyCode, ' - ', event.which)
         const code = event.keyCode
         if (code < 48 || code > 57) {
             return false
@@ -232,17 +231,17 @@ export class EmailComponent implements OnInit, AfterViewInit, OnDestroy {
             }
         }
 
-        console.log(
-            'prevNumber - **** : ',
-            this.verificationCodeOne,
-            ' ',
-            this.verificationCodeTwo,
-            ' ',
-            this.verificationCodeThree,
-            ' ',
-            this.verificationCodeFour
-        )
-        console.log('prev code nubmers : ', this.prevCodeNumbers)
+        // console.log(
+        //     'prevNumber - **** : ',
+        //     this.verificationCodeOne,
+        //     ' ',
+        //     this.verificationCodeTwo,
+        //     ' ',
+        //     this.verificationCodeThree,
+        //     ' ',
+        //     this.verificationCodeFour
+        // )
+        // console.log('prev code nubmers : ', this.prevCodeNumbers)
     }
 
     formCheck() {
