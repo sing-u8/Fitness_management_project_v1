@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core'
 import { Router } from '@angular/router'
-import { Observable, of, Subscription } from 'rxjs'
-import { catchError } from 'rxjs/operators'
+import { Observable, Subject } from 'rxjs'
+import { catchError, takeUntil } from 'rxjs/operators'
 
 declare let Kakao: any
 
@@ -12,6 +12,7 @@ import {
     OAuthProvider,
     authState,
     signInWithCustomToken,
+    UserCredential,
 } from '@angular/fire/auth'
 
 import { environment } from '@environments/environment'
@@ -27,6 +28,7 @@ import { removeRegistration } from '@appStore/actions/registration.action'
 
 // components
 import { ClickEmitterType } from '@shared/components/common/button/button.component'
+import _ from 'lodash'
 
 @Component({
     selector: 'rw-login',
@@ -36,7 +38,7 @@ import { ClickEmitterType } from '@shared/components/common/button/button.compon
 export class LoginComponent implements OnInit, OnDestroy {
     public TAG = '로그인'
     public signInMethod: string
-    public subscription: Subscription
+    public unsubscriber$ = new Subject<boolean>()
 
     constructor(
         private fireAuth: Auth,
@@ -49,41 +51,23 @@ export class LoginComponent implements OnInit, OnDestroy {
     ngOnInit() {
         this.nxStore.dispatch(removeRegistration())
 
-        this.subscription = authState(this.fireAuth).subscribe((user) => {
-            if (user) {
-                if (this.signInMethod == 'google' || this.signInMethod == 'apple') {
-                    user.getIdToken().then((accessToken) => {
-                        this.authService.signInWithFirebase({ accessToken }).subscribe({
-                            next: (user) => {
-                                this.storageService.setSignInMethod(this.signInMethod)
-                                this.router.navigateByUrl('/redwhale-home')
-                            },
-                            error: (e) => {
-                                this.nxStore.dispatch(showModal({ data: { text: this.TAG, subText: e.message } }))
-                            },
-                        })
-                    })
-                } else {
-                    this.storageService.setSignInMethod(this.signInMethod)
-                    this.router.navigateByUrl('/redwhale-home')
-                }
-            }
-        })
         if (!Kakao.isInitialized()) {
             Kakao.init(`${environment.kakao['appKey']['javascript']}`)
         }
     }
 
     ngOnDestroy() {
-        this.subscription.unsubscribe()
+        this.unsubscriber$.next(true)
+        this.unsubscriber$.complete()
     }
 
     signInWithGoogle(btLoadingFns: ClickEmitterType) {
         btLoadingFns.showLoading()
         this.signInMethod = 'google'
         signInWithPopup(this.fireAuth, new GoogleAuthProvider())
-            .then((res) => {
-                console.log('then --- google login : ', res)
+            .then((userCredential) => {
+                console.log('signInWithGoogle -- ', userCredential)
+                this.loginWithSocial(userCredential, btLoadingFns)
             })
             .finally(() => {
                 console.log('finally --- google login : ', this.storageService.getUser())
@@ -94,9 +78,14 @@ export class LoginComponent implements OnInit, OnDestroy {
     signInWithApple(btLoadingFns: ClickEmitterType) {
         btLoadingFns.showLoading()
         this.signInMethod = 'apple'
-        signInWithPopup(this.fireAuth, new OAuthProvider('apple.com')).finally(() => {
-            btLoadingFns.hideLoading()
-        })
+        signInWithPopup(this.fireAuth, new OAuthProvider('apple.com'))
+            .then((userCredential) => {
+                console.log('signInWithApple -- ', userCredential)
+                this.loginWithSocial(userCredential, btLoadingFns)
+            })
+            .finally(() => {
+                btLoadingFns.hideLoading()
+            })
     }
 
     signInWithKakao(btLoadingFns: ClickEmitterType) {
@@ -123,6 +112,8 @@ export class LoginComponent implements OnInit, OnDestroy {
 
                 this.authService.signInWithKakao({ accessToken }).subscribe((user) => {
                     signInWithCustomToken(this.fireAuth, String(user.custom_token)).then(() => {
+                        this.storageService.setSignInMethod(this.signInMethod)
+                        this.router.navigateByUrl('/redwhale-home')
                         // btLoadingFns.hideLoading()
                     })
                 })
@@ -133,4 +124,52 @@ export class LoginComponent implements OnInit, OnDestroy {
             },
         })
     }
+
+    // helper
+    loginWithSocial(uc: UserCredential, btLoadingFns?: ClickEmitterType) {
+        console.log('loginWithSocial start -- ', uc, ' ;; ', btLoadingFns)
+        uc.user.getIdToken().then((accessToken) => {
+            console.log('loginWithSocial access token : ', accessToken)
+            this.authService.signInWithFirebase({ accessToken }).subscribe({
+                next: (user) => {
+                    this.storageService.setSignInMethod(this.signInMethod)
+                    this.router.navigateByUrl('/redwhale-home')
+                    if (!_.isEmpty(btLoadingFns)) {
+                        btLoadingFns.hideLoading()
+                    }
+                },
+                error: (e) => {
+                    this.nxStore.dispatch(showModal({ data: { text: this.TAG, subText: e.message } }))
+                    if (!_.isEmpty(btLoadingFns)) {
+                        btLoadingFns.hideLoading()
+                    }
+                },
+            })
+        })
+    }
 }
+
+/*
+        authState(this.fireAuth)
+            .pipe(takeUntil(this.unsubscriber$))
+            .subscribe((user) => {
+                if (user) {
+                    if (this.signInMethod == 'google' || this.signInMethod == 'apple') {
+                        user.getIdToken().then((accessToken) => {
+                            this.authService.signInWithFirebase({ accessToken }).subscribe({
+                                next: (user) => {
+                                    this.storageService.setSignInMethod(this.signInMethod)
+                                    this.router.navigateByUrl('/redwhale-home')
+                                },
+                                error: (e) => {
+                                    this.nxStore.dispatch(showModal({ data: { text: this.TAG, subText: e.message } }))
+                                },
+                            })
+                        })
+                    } else {
+                        this.storageService.setSignInMethod(this.signInMethod)
+                        this.router.navigateByUrl('/redwhale-home')
+                    }
+                }
+            })
+            */
