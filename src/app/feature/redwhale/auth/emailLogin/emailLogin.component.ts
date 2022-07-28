@@ -31,7 +31,6 @@ export class EmailLoginComponent implements OnInit, OnDestroy {
     passwordVisible: boolean
 
     signInMethod: string
-    subscription: Subscription
 
     // button loading status
     @ViewChild('login_button_el') login_button_el: ButtonComponent
@@ -52,22 +51,9 @@ export class EmailLoginComponent implements OnInit, OnDestroy {
             this.emailChecked = true
         }
         this.password = ''
-
-        this.subscription = authState(this.fireAuth).subscribe({
-            next: (firebaseUser) => {
-                const user = this.storageService.getUser()
-                const isUserEmpty = this.storageService.isUserEmpty()
-                if (firebaseUser && !isUserEmpty) {
-                    this.storageService.setSignInMethod(this.signInMethod)
-                    this.router.navigateByUrl('/redwhale-home')
-                }
-            },
-        })
     }
 
-    ngOnDestroy() {
-        this.subscription.unsubscribe()
-    }
+    ngOnDestroy() {}
 
     signInWithEmail() {
         // const isBot = await this.systemService.isBot('emailLogin')
@@ -85,9 +71,14 @@ export class EmailLoginComponent implements OnInit, OnDestroy {
                 } else {
                     localStorage.removeItem('email')
                 }
-                signInWithCustomToken(this.fireAuth, user.custom_token).finally(() => {
-                    this.login_button_el.hideLoading()
-                })
+                signInWithCustomToken(this.fireAuth, user.custom_token)
+                    .then((userCredential) => {
+                        this.storageService.setSignInMethod(this.signInMethod)
+                        this.router.navigateByUrl('/redwhale-home')
+                    })
+                    .finally(() => {
+                        this.login_button_el.hideLoading()
+                    })
             },
             error: (e) => {
                 this.nxStore.dispatch(showToast({ text: '입력하신 정보를 다시 확인해주세요.' }))
@@ -137,3 +128,17 @@ export class EmailLoginComponent implements OnInit, OnDestroy {
         return isValid
     }
 }
+
+/*
+    authState(this.fireAuth).subscribe({
+             next: (firebaseUser) => {
+                 const user = this.storageService.getUser()
+                 const isUserEmpty = this.storageService.isUserEmpty()
+                 if (firebaseUser && !isUserEmpty) {
+                     this.storageService.setSignInMethod(this.signInMethod)
+                     this.router.navigateByUrl('/redwhale-home')
+                 }
+             },
+         })
+
+*/
