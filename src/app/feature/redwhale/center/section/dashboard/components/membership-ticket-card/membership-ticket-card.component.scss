@@ -5,8 +5,8 @@
 .card-outer-container {
     cursor: pointer;
     padding: 14px 14px 11px 14px;
-    height: 70px;
-    min-height: 30px;
+
+    min-height: 70px;
     width: 545px;
     position: relative;
     display: flex;
@@ -46,7 +46,7 @@
                 .card-title {
                     text-overflow: ellipsis;
                     overflow: hidden;
-                    width: 65%;
+                    width: 95%;
 
                     display: -webkit-box;
                     -webkit-box-orient: vertical;

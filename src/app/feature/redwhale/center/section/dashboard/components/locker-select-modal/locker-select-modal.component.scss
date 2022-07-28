@@ -72,6 +72,16 @@
             // 수정 필요
             width: 563px;
             height: 330px;
+
+            &.loading-item {
+                display: grid;
+                gap: 10px;
+                padding: 10px;
+                justify-content: flex-start;
+                align-items: initial;
+                grid-template-rows: repeat(2, 50px);
+                grid-template-columns: repeat(3, 50px);
+            }
         }
     }
 }

@@ -156,7 +156,7 @@ export class UserDetailLockerItemComponent implements OnInit, AfterViewInit {
         this.checkIsExpired()
         this.restDate = this.timeService.getRestPeriod(dayjs().format(), this.locker.end_date)
         this.restDate = this.restDate < 1 || this.isExpired ? 0 : this.restDate
-        this.isHolding = this.locker.pause_start_date && this.locker.pause_end_date ? true : false
+        this.isHolding = this.locker.pause_start_date && this.locker.pause_end_date && !this.isExpired ? true : false
         this.isHoldingReservaed =
             this.isHolding && dayjs(this.locker.pause_start_date).isAfter(dayjs(), 'day') ? true : false
     }

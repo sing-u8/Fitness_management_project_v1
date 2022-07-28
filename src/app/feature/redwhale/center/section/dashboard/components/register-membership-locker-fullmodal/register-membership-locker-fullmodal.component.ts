@@ -117,10 +117,10 @@ export class RegisterMembershipLockerFullmodalComponent implements OnInit, OnCha
     ngOnInit(): void {
         this.center = this.storageService.getCenter()
         // this.cmpStore.setState(stateInit)
-        this.cmpStore.checkLockerItemsExist(this.center.id)
-        this.cmpStore.checkMembershipItemsExist(this.center.id)
-        this.cmpStore.getInstructorsEffect(this.center.id)
-        this.cmpStore.getmembershipItemsEffect(this.center.id)
+        // this.cmpStore.checkLockerItemsExist(this.center.id)
+        // this.cmpStore.checkMembershipItemsExist(this.center.id)
+        // this.cmpStore.getInstructorsEffect(this.center.id)
+        // this.cmpStore.getmembershipItemsEffect(this.center.id)
     }
     ngOnDestroy(): void {
         this.TotalPriceSumSubscriber.unsubscribe()
@@ -142,13 +142,13 @@ export class RegisterMembershipLockerFullmodalComponent implements OnInit, OnCha
             if (this.visible) {
                 this.cmpStore.checkLockerItemsExist(this.center.id)
                 this.cmpStore.checkMembershipItemsExist(this.center.id)
+                this.cmpStore.getInstructorsEffect(this.center.id)
+                this.cmpStore.getmembershipItemsEffect(this.center.id)
                 this.renderer.addClass(this.modalWrapperElement.nativeElement, 'display-flex')
                 setTimeout(() => {
                     this.renderer
                     this.renderer.addClass(this.modalWrapperElement.nativeElement, 'rw-modal-wrapper-show')
                 }, 0)
-                this.cmpStore.getInstructorsEffect(this.center.id)
-                this.cmpStore.getmembershipItemsEffect(this.center.id)
             } else {
                 this.renderer.removeClass(this.modalWrapperElement.nativeElement, 'rw-modal-wrapper-show')
                 setTimeout(() => {

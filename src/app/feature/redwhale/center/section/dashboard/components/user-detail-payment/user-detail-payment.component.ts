@@ -140,21 +140,26 @@ export class UserDetailPaymentComponent implements OnInit {
                     this.selectedPayment.id,
                     reqBody
                 )
-                .subscribe(() => {
-                    const toastText = `'${this.wordService.ellipsis(
-                        this.selectedPayment.user_membership_name,
-                        6
-                    )}' ${text} 수정되었습니다.`
+                .subscribe({
+                    next: () => {
+                        const toastText = `'${this.wordService.ellipsis(
+                            this.selectedPayment.user_membership_name,
+                            6
+                        )}' ${text} 수정되었습니다.`
 
-                    this.nxStore.dispatch(showToast({ text: toastText }))
-                    // this.nxStore.dispatch(
-                    //     DashboardActions.startGetUserData({
-                    //         centerId: this.center.id,
-                    //         centerUser: this.curUserData.user,
-                    //     })
-                    // )
-                    this.dashboardHelper.refreshCurUser(this.center.id, this.curUserData.user)
-                    cb ? cb() : null
+                        this.nxStore.dispatch(showToast({ text: toastText }))
+                        // this.nxStore.dispatch(
+                        //     DashboardActions.startGetUserData({
+                        //         centerId: this.center.id,
+                        //         centerUser: this.curUserData.user,
+                        //     })
+                        // )
+                        this.dashboardHelper.refreshCurUser(this.center.id, this.curUserData.user)
+                        cb ? cb() : null
+                    },
+                    error: () => {
+                        cb ? cb() : null
+                    },
                 })
         } else {
             const reqBody: UpdateLockerTicektPaymentReqBody = {
@@ -177,21 +182,26 @@ export class UserDetailPaymentComponent implements OnInit {
                     this.selectedPayment.id,
                     reqBody
                 )
-                .subscribe(() => {
-                    const toastText = `'${this.wordService.ellipsis(
-                        this.selectedPayment.user_locker_name,
-                        6
-                    )}' ${text} 수정되었습니다.`
+                .subscribe({
+                    next: () => {
+                        const toastText = `'${this.wordService.ellipsis(
+                            this.selectedPayment.user_locker_name,
+                            6
+                        )}' ${text} 수정되었습니다.`
 
-                    this.nxStore.dispatch(showToast({ text: toastText }))
-                    // this.nxStore.dispatch(
-                    //     DashboardActions.startGetUserData({
-                    //         centerId: this.center.id,
-                    //         centerUser: this.curUserData.user,
-                    //     })
-                    // )
-                    this.dashboardHelper.refreshCurUser(this.center.id, this.curUserData.user)
-                    cb ? cb() : null
+                        this.nxStore.dispatch(showToast({ text: toastText }))
+                        // this.nxStore.dispatch(
+                        //     DashboardActions.startGetUserData({
+                        //         centerId: this.center.id,
+                        //         centerUser: this.curUserData.user,
+                        //     })
+                        // )
+                        this.dashboardHelper.refreshCurUser(this.center.id, this.curUserData.user)
+                        cb ? cb() : null
+                    },
+                    error: () => {
+                        cb ? cb() : null
+                    },
                 })
         }
     }

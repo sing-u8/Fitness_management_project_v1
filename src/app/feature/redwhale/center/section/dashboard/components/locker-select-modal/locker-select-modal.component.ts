@@ -55,6 +55,7 @@ export class LockerSelectModalComponent implements AfterViewChecked, OnChanges, 
 
     // gridster vars
     public gridsterOptions: GridsterConfig
+    public lockerLoaded: boolean
 
     // locker variables
     public categList: LockerCategory[]
@@ -80,11 +81,13 @@ export class LockerSelectModalComponent implements AfterViewChecked, OnChanges, 
         this.CenterLockerService.getCategoryList(this.center.id).subscribe((categs) => {
             this.categList = categs
             this.selectedCateg = this.categList[0]
+            this.lockerLoaded = false
 
             if (this.selectedCateg?.id) {
                 this.CenterLockerService.getItemList(this.center.id, this.selectedCateg.id).subscribe((items) => {
                     this.itemList = _.cloneDeep(items)
                     this.originItemList = items
+                    this.lockerLoaded = true
                 })
             }
         })
@@ -178,6 +181,7 @@ export class LockerSelectModalComponent implements AfterViewChecked, OnChanges, 
     }
 
     onSelectChange(categ) {
+        this.lockerLoaded = false
         this.CenterLockerService.getItemList(this.center.id, categ.id).subscribe((items) => {
             this.itemList = _.cloneDeep(items)
             this.originItemList = items
@@ -190,6 +194,7 @@ export class LockerSelectModalComponent implements AfterViewChecked, OnChanges, 
                     }
                 })
             }
+            this.lockerLoaded = true
         })
     }
 

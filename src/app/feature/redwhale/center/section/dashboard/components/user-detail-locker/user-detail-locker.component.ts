@@ -311,20 +311,25 @@ export class UserDetailLockerComponent implements OnInit {
 
         this.centerUsersLockerService
             .extendLockerTicket(this.center.id, this.curUserData.user.id, this.selectedUserLocker.id, reqBody)
-            .subscribe((userMembership) => {
-                this.nxStore.dispatch(
-                    showToast({
-                        text: `'[${this.wordService.ellipsis(
-                            this.selectedUserLocker.category_name,
-                            10
-                        )}] ${this.wordService.ellipsis(this.selectedUserLocker.name, 6)}' 기간이 연장되었습니다.`,
-                    })
-                )
-                // this.nxStore.dispatch(
-                //     DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.curUserData.user })
-                // )
-                this.dashboardHelper.refreshCurUser(this.center.id, this.curUserData.user)
-                cb ? cb() : null
+            .subscribe({
+                next: (userMembership) => {
+                    this.nxStore.dispatch(
+                        showToast({
+                            text: `'[${this.wordService.ellipsis(
+                                this.selectedUserLocker.category_name,
+                                10
+                            )}] ${this.wordService.ellipsis(this.selectedUserLocker.name, 6)}' 기간이 연장되었습니다.`,
+                        })
+                    )
+                    // this.nxStore.dispatch(
+                    //     DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.curUserData.user })
+                    // )
+                    this.dashboardHelper.refreshCurUser(this.center.id, this.curUserData.user)
+                    cb ? cb() : null
+                },
+                error: () => {
+                    cb ? cb() : null
+                },
             })
     }
     callHodingApi(cb?: () => void) {
@@ -334,22 +339,30 @@ export class UserDetailLockerComponent implements OnInit {
         }
         this.centerUsersLockerService
             .pauseLockerTicket(this.center.id, this.curUserData.user.id, this.selectedUserLocker.id, reqBody)
-            .subscribe((_) => {
-                const toastText = dayjs(this.holdData.startDate).isSameOrBefore(dayjs())
-                    ? `'[${this.wordService.ellipsis(
-                          this.selectedUserLocker.category_name,
-                          10
-                      )}] ${this.wordService.ellipsis(this.selectedUserLocker.name, 6)}' 락커 홀딩되었습니다.`
-                    : `'[${this.wordService.ellipsis(
-                          this.selectedUserLocker.category_name,
-                          10
-                      )}] ${this.wordService.ellipsis(this.selectedUserLocker.name, 6)}' 락커 홀딩이 예약되었습니다.`
-                this.nxStore.dispatch(showToast({ text: toastText }))
-                // this.nxStore.dispatch(
-                //     DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.curUserData.user })
-                // )
-                this.dashboardHelper.refreshCurUser(this.center.id, this.curUserData.user)
-                cb ? cb() : null
+            .subscribe({
+                next: (_) => {
+                    const toastText = dayjs(this.holdData.startDate).isSameOrBefore(dayjs())
+                        ? `'[${this.wordService.ellipsis(
+                              this.selectedUserLocker.category_name,
+                              10
+                          )}] ${this.wordService.ellipsis(this.selectedUserLocker.name, 6)}' 락커 홀딩되었습니다.`
+                        : `'[${this.wordService.ellipsis(
+                              this.selectedUserLocker.category_name,
+                              10
+                          )}] ${this.wordService.ellipsis(
+                              this.selectedUserLocker.name,
+                              6
+                          )}' 락커 홀딩이 예약되었습니다.`
+                    this.nxStore.dispatch(showToast({ text: toastText }))
+                    // this.nxStore.dispatch(
+                    //     DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.curUserData.user })
+                    // )
+                    this.dashboardHelper.refreshCurUser(this.center.id, this.curUserData.user)
+                    cb ? cb() : null
+                },
+                error: () => {
+                    cb ? cb() : null
+                },
             })
     }
     callEmptyRefund(cb?: () => void) {
@@ -366,20 +379,28 @@ export class UserDetailLockerComponent implements OnInit {
         }
         this.centerUsersLockerService
             .refundLockerTicket(this.center.id, this.curUserData.user.id, this.selectedUserLocker.id, reqBody)
-            .subscribe((_) => {
-                this.nxStore.dispatch(
-                    showToast({
-                        text: `'[${this.wordService.ellipsis(
-                            this.selectedUserLocker.category_name,
-                            10
-                        )}] ${this.wordService.ellipsis(this.selectedUserLocker.name, 6)}' 비우기가 완료되었습니다.`,
-                    })
-                )
-                // this.nxStore.dispatch(
-                //     DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.curUserData.user })
-                // )
-                this.dashboardHelper.refreshCurUser(this.center.id, this.curUserData.user)
-                cb ? cb() : null
+            .subscribe({
+                next: (_) => {
+                    this.nxStore.dispatch(
+                        showToast({
+                            text: `'[${this.wordService.ellipsis(
+                                this.selectedUserLocker.category_name,
+                                10
+                            )}] ${this.wordService.ellipsis(
+                                this.selectedUserLocker.name,
+                                6
+                            )}' 비우기가 완료되었습니다.`,
+                        })
+                    )
+                    // this.nxStore.dispatch(
+                    //     DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.curUserData.user })
+                    // )
+                    this.dashboardHelper.refreshCurUser(this.center.id, this.curUserData.user)
+                    cb ? cb() : null
+                },
+                error: () => {
+                    cb ? cb() : null
+                },
             })
     }
     callEmptyPaymentApi(cb?: () => void) {
@@ -396,23 +417,31 @@ export class UserDetailLockerComponent implements OnInit {
         }
         this.centerUsersLockerService
             .expireLockerTicket(this.center.id, this.curUserData.user.id, this.selectedUserLocker.id, reqBody)
-            .subscribe((_) => {
-                this.nxStore.dispatch(
-                    showToast({
-                        text: `'[${this.wordService.ellipsis(
-                            this.selectedUserLocker.category_name,
-                            10
-                        )}] ${this.wordService.ellipsis(this.selectedUserLocker.name, 6)}' 비우기가 완료되었습니다.`,
-                    })
-                )
-                this.dashboardHelper.refreshCurUser(this.center.id, this.curUserData.user)
-                // this.nxStore.dispatch(
-                //     DashboardActions.startGetUserData({
-                //         centerId: this.center.id,
-                //         centerUser: this.curUserData.user,
-                //     })
-                // )
-                cb ? cb() : null
+            .subscribe({
+                next: (_) => {
+                    this.nxStore.dispatch(
+                        showToast({
+                            text: `'[${this.wordService.ellipsis(
+                                this.selectedUserLocker.category_name,
+                                10
+                            )}] ${this.wordService.ellipsis(
+                                this.selectedUserLocker.name,
+                                6
+                            )}' 비우기가 완료되었습니다.`,
+                        })
+                    )
+                    this.dashboardHelper.refreshCurUser(this.center.id, this.curUserData.user)
+                    // this.nxStore.dispatch(
+                    //     DashboardActions.startGetUserData({
+                    //         centerId: this.center.id,
+                    //         centerUser: this.curUserData.user,
+                    //     })
+                    // )
+                    cb ? cb() : null
+                },
+                error: () => {
+                    cb ? cb() : null
+                },
             })
     }
     callRefundApi(cb?: () => void) {
@@ -429,39 +458,49 @@ export class UserDetailLockerComponent implements OnInit {
         }
         this.centerUsersLockerService
             .refundLockerTicket(this.center.id, this.curUserData.user.id, this.selectedUserLocker.id, reqBody)
-            .subscribe((_) => {
-                this.nxStore.dispatch(
-                    showToast({
-                        text: `'[${this.wordService.ellipsis(
-                            this.selectedUserLocker.category_name,
-                            10
-                        )}] ${this.wordService.ellipsis(this.selectedUserLocker.name, 6)}' 락커가 환불되었습니다.`,
-                    })
-                )
-                this.dashboardHelper.refreshCurUser(this.center.id, this.curUserData.user)
-                // this.nxStore.dispatch(
-                //     DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.curUserData.user })
-                // )
-                cb ? cb() : null
+            .subscribe({
+                next: (_) => {
+                    this.nxStore.dispatch(
+                        showToast({
+                            text: `'[${this.wordService.ellipsis(
+                                this.selectedUserLocker.category_name,
+                                10
+                            )}] ${this.wordService.ellipsis(this.selectedUserLocker.name, 6)}' 락커가 환불되었습니다.`,
+                        })
+                    )
+                    this.dashboardHelper.refreshCurUser(this.center.id, this.curUserData.user)
+                    // this.nxStore.dispatch(
+                    //     DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.curUserData.user })
+                    // )
+                    cb ? cb() : null
+                },
+                error: () => {
+                    cb ? cb() : null
+                },
             })
     }
     callRemoveApi(cb?: () => void) {
         this.centerUsersLockerService
             .deleteLockerTicket(this.center.id, this.curUserData.user.id, this.selectedUserLocker.id)
-            .subscribe((_) => {
-                this.nxStore.dispatch(
-                    showToast({
-                        text: `'[${this.wordService.ellipsis(
-                            this.selectedUserLocker.category_name,
-                            10
-                        )}] ${this.wordService.ellipsis(this.selectedUserLocker.name, 6)}' 락커가 삭제되었습니다.`,
-                    })
-                )
-                this.dashboardHelper.refreshCurUser(this.center.id, this.curUserData.user)
-                // this.nxStore.dispatch(
-                //     DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.curUserData.user })
-                // )
-                cb ? cb() : null
+            .subscribe({
+                next: (_) => {
+                    this.nxStore.dispatch(
+                        showToast({
+                            text: `'[${this.wordService.ellipsis(
+                                this.selectedUserLocker.category_name,
+                                10
+                            )}] ${this.wordService.ellipsis(this.selectedUserLocker.name, 6)}' 락커가 삭제되었습니다.`,
+                        })
+                    )
+                    this.dashboardHelper.refreshCurUser(this.center.id, this.curUserData.user)
+                    // this.nxStore.dispatch(
+                    //     DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.curUserData.user })
+                    // )
+                    cb ? cb() : null
+                },
+                error: () => {
+                    cb ? cb() : null
+                },
             })
     }
     callUpdateHoldingApi(cb?: () => void) {
@@ -471,35 +510,44 @@ export class UserDetailLockerComponent implements OnInit {
         }
         this.centerUsersLockerService
             .pauseLockerTicket(this.center.id, this.curUserData.user.id, this.selectedUserLocker.id, reqBody)
-            .subscribe((_) => {
-                const toastText = `'[${this.wordService.ellipsis(
-                    this.selectedUserLocker.category_name,
-                    10
-                )}] ${this.wordService.ellipsis(this.selectedUserLocker.name, 6)}' 홀딩 기간이 수정되었습니다.`
+            .subscribe({
+                next: (_) => {
+                    const toastText = `'[${this.wordService.ellipsis(
+                        this.selectedUserLocker.category_name,
+                        10
+                    )}] ${this.wordService.ellipsis(this.selectedUserLocker.name, 6)}' 홀딩 기간이 수정되었습니다.`
 
-                this.nxStore.dispatch(showToast({ text: toastText }))
-                // this.nxStore.dispatch(
-                //     DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.curUserData.user })
-                // )
-                this.dashboardHelper.refreshCurUser(this.center.id, this.curUserData.user)
-                cb ? cb() : null
+                    this.nxStore.dispatch(showToast({ text: toastText }))
+                    // this.nxStore.dispatch(
+                    //     DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.curUserData.user })
+                    // )
+                    this.dashboardHelper.refreshCurUser(this.center.id, this.curUserData.user)
+                },
+                error: () => {
+                    cb ? cb() : null
+                },
             })
     }
     callRemoveHoldingApi(cb?: () => void) {
         this.centerUsersLockerService
             .resumeLockerTicket(this.center.id, this.curUserData.user.id, this.selectedUserLocker.id)
-            .subscribe((_) => {
-                const toastText = `'[${this.wordService.ellipsis(
-                    this.selectedUserLocker.category_name,
-                    10
-                )}] ${this.wordService.ellipsis(this.selectedUserLocker.name, 6)}' 홀딩 정보가 삭제되었습니다.`
+            .subscribe({
+                next: (_) => {
+                    const toastText = `'[${this.wordService.ellipsis(
+                        this.selectedUserLocker.category_name,
+                        10
+                    )}] ${this.wordService.ellipsis(this.selectedUserLocker.name, 6)}' 홀딩 정보가 삭제되었습니다.`
 
-                this.nxStore.dispatch(showToast({ text: toastText }))
-                // this.nxStore.dispatch(
-                //     DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.curUserData.user })
-                // )
-                this.dashboardHelper.refreshCurUser(this.center.id, this.curUserData.user)
-                cb ? cb() : null
+                    this.nxStore.dispatch(showToast({ text: toastText }))
+                    // this.nxStore.dispatch(
+                    //     DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.curUserData.user })
+                    // )
+                    this.dashboardHelper.refreshCurUser(this.center.id, this.curUserData.user)
+                    cb ? cb() : null
+                },
+                error: () => {
+                    cb ? cb() : null
+                },
             })
     }
 }

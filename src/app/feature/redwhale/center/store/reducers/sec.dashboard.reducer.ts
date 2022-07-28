@@ -111,7 +111,7 @@ export const dashboardReducer = createImmerReducer(
         return state
     }),
     on(DashboardActions.finishGetUsersByCategory, (state, { userSelectCateg }) => {
-        state.usersSelectCategs = userSelectCateg
+        state.usersSelectCategs = _.assign(state.usersSelectCategs, userSelectCateg)
         state.curUserListSelect = {
             key: state.curUserListSelect.key,
             value: {

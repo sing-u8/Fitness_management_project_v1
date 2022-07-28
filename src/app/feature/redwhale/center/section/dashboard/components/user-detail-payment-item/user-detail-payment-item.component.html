@@ -13,7 +13,7 @@
     <div class="rw-typo-bodytext0-bold col5">
         <div class="d-flex align-items-center flex-column">
             <div class="rw-typo-bodytext0-bold total-price">
-                {{payment.type_code == 'payment_type_refund' ? '-' : ''}}{{total | numberWithCommas}}원
+                {{(payment.type_code == 'payment_type_refund' && total > 0) ? '-' : ''}}{{total | numberWithCommas}}원
             </div>
             <div class="l-prices">
                 <div
