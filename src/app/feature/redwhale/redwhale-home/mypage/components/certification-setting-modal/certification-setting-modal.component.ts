@@ -15,6 +15,7 @@ import {
 
 import { modalType } from '@schemas/home/setting-account-modal'
 import { User } from '@schemas/user'
+import { AuthErrors } from '@schemas/errors/auth-errors'
 
 import { AuthService } from '@services/auth.service'
 import { StorageService } from '@services/storage.service'
@@ -184,14 +185,15 @@ export class CertificationSettingModalComponent implements OnChanges, AfterViewC
 
         this.authService.sendVerificationCodeSMSChange({ phone_number: this.newInfoStr }).subscribe({
             next: (v) => {
-                this.nxStore.dispatch(showToast({ text: '인증번호 문자가 전송되었습니다.' }))
+                this.nxStore.dispatch(showToast({ text: '인증번호가 카톡 또는 문자로 전송되었습니다.' }))
                 if (this.interval) {
                     this.stopTimer()
                 }
                 this.startTimer()
             },
             error: (e) => {
-                this.nxStore.dispatch(showToast({ text: e.message }))
+                console.log('sendVerificationCodeSMSChange : ', e)
+                this.nxStore.dispatch(showToast({ text: AuthErrors[e.code].message }))
             },
         })
     }
