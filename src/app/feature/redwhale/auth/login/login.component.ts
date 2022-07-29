@@ -124,7 +124,6 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     // helper
     loginWithSocial(uc: UserCredential, btLoadingFns?: ClickEmitterType) {
-        console.log('loginWithSocial start -- ', uc, ' ;; ', btLoadingFns)
         uc.user.getIdToken().then((accessToken) => {
             this.authService.signInWithFirebase({ accessToken }).subscribe({
                 next: (user) => {

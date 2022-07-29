@@ -43,7 +43,7 @@
     [userLocker]="selectedUserLocker"
     [curUser] = "curUserData?.user"
     (close)="toggleModifyPaymentFullModal()"
-    (confirm) = "confirmModifyPayment()"
+    (finishModify) = "confirmModifyPayment()"
 ></db-modify-payment-fullmodal>
 
 <rw-dashboard-charge-modal
