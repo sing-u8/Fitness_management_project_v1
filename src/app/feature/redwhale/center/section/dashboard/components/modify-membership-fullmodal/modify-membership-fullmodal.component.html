@@ -45,14 +45,14 @@
                                 (click)="onStartDateBtClick($event)">
                                 {{date.startDate | dateFormat:'YYYY.MM.DD'}}
                             </div>
-                            <rw-datepicker
+                            <db-datepicker
                                 [class.display-none]="!datepickFlag.start"
                                 (rwClickOutside)="startDatepickClickOutside($event)"
                                 mode="reg-ml"
                                 [option]="'looseOnlyStart'"
                                 [(data)]="date"
                                 (dataChange)="onDatePickRangeChange($event, 'start')"
-                            > </rw-datepicker>
+                            > </db-datepicker>
                         </div>
 
                         <div class="date-picker">

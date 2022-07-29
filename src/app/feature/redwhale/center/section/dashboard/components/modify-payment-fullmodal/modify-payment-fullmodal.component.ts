@@ -168,7 +168,7 @@ export class ModifyPaymentFullmodalComponent implements OnInit, OnChanges, After
                 payment: this.userPayment,
                 callback: () => {
                     btLoadingFns.hideLoading()
-                    this.closeModal()
+                    this.finishModify.emit()
                 },
             })
         } else {
@@ -179,7 +179,7 @@ export class ModifyPaymentFullmodalComponent implements OnInit, OnChanges, After
                 payment: this.userPayment,
                 callback: () => {
                     btLoadingFns.hideLoading()
-                    this.closeModal()
+                    this.finishModify.emit()
                 },
             })
         }
