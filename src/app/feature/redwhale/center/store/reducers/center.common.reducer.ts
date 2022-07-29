@@ -6,6 +6,7 @@ import { Center } from '@schemas/center'
 import { CenterUser } from '@schemas/center-user'
 
 import * as CenterCommonActions from '../actions/center.common.actions'
+import * as CommunitydActions from '@centerStore/actions/sec.community.actions'
 
 export const intialState: State = {
     curCenter: null,
@@ -21,10 +22,17 @@ export const centerCommonReducer = createImmerReducer(
     intialState,
     // sync
     on(CenterCommonActions.setCurCenter, (state, { center }) => {
+        state.curCenter = center
         return state
     }),
     // async
-    on(CenterCommonActions.finishGetInstructors, (state, {}) => {
+    on(CenterCommonActions.finishGetInstructors, (state, { instructors }) => {
+        state.instructors = instructors
+        return state
+    }),
+
+    // common
+    on(CenterCommonActions.error, (state, { err }) => {
         return state
     })
 )

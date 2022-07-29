@@ -12,6 +12,8 @@ export const setCurCenter = createAction(`[${FeatureKey}] Set Cur Center`, props
 
 export const startGetInstructors = createAction(`[${FeatureKey}] Start Get Instructors`, props<{ centerId: string }>())
 export const finishGetInstructors = createAction(
-    `[${FeatureKey}] Start Get Instructors`,
+    `[${FeatureKey}] Finish Get Instructors`,
     props<{ instructors: Array<CenterUser> }>()
 )
+
+export const error = createAction(`[${FeatureKey}] error`, props<{ err: string }>())

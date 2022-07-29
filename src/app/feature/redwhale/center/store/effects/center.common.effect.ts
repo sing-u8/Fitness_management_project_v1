@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core'
 import { createEffect, Actions, ofType, concatLatestFrom } from '@ngrx/effects'
 import { Store } from '@ngrx/store'
-import { of, forkJoin } from 'rxjs'
+import { of, forkJoin, EMPTY } from 'rxjs'
 import { catchError, switchMap, tap, map, find } from 'rxjs/operators'
 
 import _ from 'lodash'
@@ -24,6 +24,9 @@ export class CenterCommonEffect {
                 this.centerUserListApi.getCenterInstructorList(centerId).pipe(
                     map((instructors) => {
                         return centerCommonActions.finishGetInstructors({ instructors })
+                    }),
+                    catchError((err: string) => {
+                        return of(centerCommonActions.error({ err }))
                     })
                 )
             )

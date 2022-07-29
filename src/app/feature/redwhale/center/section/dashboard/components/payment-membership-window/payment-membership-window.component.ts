@@ -5,8 +5,6 @@ import _ from 'lodash'
 import { StorageService } from '@services/storage.service'
 
 import { CenterUser } from '@schemas/center-user'
-import { Center } from '@schemas/center'
-import { Payment } from '@schemas/payment'
 
 // component store
 import { MembershipTicket, PriceType } from '@schemas/center/dashboard/modify-payment-fullmodal'
@@ -19,6 +17,7 @@ import { MembershipTicket, PriceType } from '@schemas/center/dashboard/modify-pa
 export class PaymentMembershipWindowComponent implements OnInit, AfterViewInit, OnChanges {
     @Input() membershipTicket: MembershipTicket
     @Input() instructors: Array<CenterUser>
+    @Input() changeTicketMethod: (arg: MembershipTicket) => void
 
     @Output() onPriceChange = new EventEmitter<MembershipTicket>()
     @Output() onSelectChange = new EventEmitter<MembershipTicket>()
@@ -27,31 +26,28 @@ export class PaymentMembershipWindowComponent implements OnInit, AfterViewInit, 
 
     public staffSelect_list: Array<{ name: string; value: CenterUser; id: string }> = []
 
-    public center: Center
-
     constructor(private storageService: StorageService) {}
 
-    ngOnInit(): void {
-        this.center = this.storageService.getCenter()
-    }
+    ngOnInit(): void {}
     ngAfterViewInit(): void {
         // this.getSelectedLessonList()
     }
     ngOnChanges(changes: SimpleChanges): void {
+        if (
+            !_.isEmpty(changes['membershipTicket']) &&
+            changes['membershipTicket'].currentValue.status == 'done' &&
+            _.isEmpty(changes['membershipTicket'].currentValue.assignee.value)
+        ) {
+            this.membershipTicket.assignee.value = _.find(
+                this.instructors,
+                (v) => v.id == this.membershipTicket.assignee.id
+            )
+            this.changeTicketMethod(this.membershipTicket)
+            console.log('changes in membershipTicket : ', changes)
+        }
         if (changes['instructors']) {
-            // console.log('changes in payment-membership-window : ', changes) // !! 생각보다 자주 바뀜 문제시 수정 필요, 상태를음좀 더 나눠야할 수 있음
-            this.center = this.storageService.getCenter()
-            const user = this.storageService.getUser()
-
             this.staffSelect_list = []
             this.instructors.forEach((v) => {
-                if (v.id == user.id) {
-                    this.membershipTicket.assignee = {
-                        name: v.center_user_name,
-                        value: v,
-                        id: v.id,
-                    }
-                }
                 this.staffSelect_list.push({
                     name: v.center_user_name,
                     value: v,

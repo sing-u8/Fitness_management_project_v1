@@ -1,4 +1,4 @@
-import { createSelector, createFeatureSelector } from '@ngrx/store'
+import { createSelector } from '@ngrx/store'
 import { GymFeature, GymState } from './sec.selector'
 import * as FromCommon from '@centerStore/reducers/center.common.reducer'
 

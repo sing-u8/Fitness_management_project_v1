@@ -70,7 +70,7 @@ section.register-ml-fullmodal-wrapper {
                 padding-top: 30px;
                 padding-bottom: 35px;
 
-                & article.membership-and-locker{
+                & article.membership-and-locker {
                     margin-right: 20px;
                     width: 585px;
                     position: relative;
@@ -176,7 +176,7 @@ section.register-ml-fullmodal-wrapper {
                     }
                 }
 
-                & aside.l-payment-information{
+                & aside.l-payment-information {
                     width: 238px;
                     position: relative;
                     display: flex;
@@ -227,7 +227,7 @@ section.register-ml-fullmodal-wrapper {
                                 border-bottom: 1px solid var(--border-color);
                                 border-top: 1px solid var(--border-color);
 
-                                &>.input-title {
+                                & > .input-title {
                                     display: flex;
                                     justify-content: space-between;
                                     align-items: center;
@@ -239,7 +239,6 @@ section.register-ml-fullmodal-wrapper {
                                         margin-top: 20px;
                                     }
                                 }
-
                             }
 
                             .date-text {
@@ -258,16 +257,9 @@ section.register-ml-fullmodal-wrapper {
                             line-height: 22px !important;
                             letter-spacing: -0.225px !important;
                         }
-
                     }
-
-
-
                 }
             }
         }
-
     }
-
-
 }

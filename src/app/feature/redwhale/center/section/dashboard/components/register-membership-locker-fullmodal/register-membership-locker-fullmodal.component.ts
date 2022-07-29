@@ -38,7 +38,6 @@ import { LockerCategory } from '@schemas/locker-category'
 import {
     MembershipLockerItem,
     ChoseLockers,
-    Instructor,
     Locker,
     MembershipTicket,
     UpdateChoseLocker,
@@ -47,6 +46,7 @@ import {
 
 // ngrx
 import { Store } from '@ngrx/store'
+import * as CenterCommonSelector from '@centerStore/selectors/center.common.selector'
 import * as DashboardActions from '@centerStore/actions/sec.dashboard.actions'
 
 @Component({
@@ -74,10 +74,13 @@ export class RegisterMembershipLockerFullmodalComponent implements OnInit, OnCha
 
     public originalOrder = originalOrder
 
+    // center common vars
+    public instructors$ = this.nxStore.select(CenterCommonSelector.instructors)
+
     // registration membership locker vars
 
     public mlItems$: Observable<Array<MembershipLockerItem>> = this.cmpStore.mlItems$
-    public instructors$: Observable<Array<CenterUser>> = this.cmpStore.instructors$
+    // public instructors$: Observable<Array<CenterUser>> = this.cmpStore.instructors$
     public choseLocker$: Observable<ChoseLockers> = this.cmpStore.choseLockers$
     public membershipItems$: Observable<Array<MembershipItem>> = this.cmpStore.membershipItems$
 
@@ -142,11 +145,10 @@ export class RegisterMembershipLockerFullmodalComponent implements OnInit, OnCha
             if (this.visible) {
                 this.cmpStore.checkLockerItemsExist(this.center.id)
                 this.cmpStore.checkMembershipItemsExist(this.center.id)
-                this.cmpStore.getInstructorsEffect(this.center.id)
+                // this.cmpStore.getInstructorsEffect(this.center.id)
                 this.cmpStore.getmembershipItemsEffect(this.center.id)
                 this.renderer.addClass(this.modalWrapperElement.nativeElement, 'display-flex')
                 setTimeout(() => {
-                    this.renderer
                     this.renderer.addClass(this.modalWrapperElement.nativeElement, 'rw-modal-wrapper-show')
                 }, 0)
             } else {

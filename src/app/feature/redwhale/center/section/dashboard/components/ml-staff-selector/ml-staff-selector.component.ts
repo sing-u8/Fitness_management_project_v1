@@ -113,7 +113,6 @@ export class MlStaffSelectorComponent implements AfterViewInit, ControlValueAcce
 
     onChanged(value: any) {
         this.value = value
-
         this.onChange(value)
     }
 }

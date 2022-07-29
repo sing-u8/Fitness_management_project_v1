@@ -24,8 +24,6 @@ import { takeUntil, take } from 'rxjs/operators'
 
 // ngrx
 import { Store, select } from '@ngrx/store'
-import { drawerSelector } from '@appStore/selectors'
-import { showToast } from '@appStore/actions/toast.action'
 
 import * as FromDashboard from '@centerStore/reducers/sec.dashboard.reducer'
 import * as DashboardSelector from '@centerStore/selectors/sec.dashoboard.selector'

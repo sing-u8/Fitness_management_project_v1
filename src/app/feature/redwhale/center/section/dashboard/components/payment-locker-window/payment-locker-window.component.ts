@@ -3,8 +3,6 @@ import _ from 'lodash'
 
 import { StorageService } from '@services/storage.service'
 
-import { User } from '@schemas/user'
-import { Center } from '@schemas/center'
 import { CenterUser } from '@schemas/center-user'
 
 // component store
@@ -18,35 +16,30 @@ import { LockerTicket, PriceType } from '@schemas/center/dashboard/modify-paymen
 export class PaymentLockerWindowComponent implements OnInit, AfterViewInit, OnChanges {
     @Input() lockerTicket: LockerTicket
     @Input() instructors: Array<CenterUser>
+    @Input() changeTicketMethod: (arg: LockerTicket) => void
 
     @Output() onPriceChange = new EventEmitter<LockerTicket>()
     @Output() onSelectChange = new EventEmitter<LockerTicket>()
 
     public staffSelect_list: Array<{ name: string; value: CenterUser; id: string }> = []
-    public center: Center
 
     constructor(private storageService: StorageService) {}
 
-    ngOnInit(): void {
-        this.center = this.storageService.getCenter()
-    }
-    ngAfterViewInit(): void {
-        // this.getSelectedLessonList()
-    }
+    ngOnInit(): void {}
+    ngAfterViewInit(): void {}
     ngOnChanges(changes: SimpleChanges): void {
+        if (
+            !_.isEmpty(changes['lockerTicket']) &&
+            changes['lockerTicket'].currentValue.status == 'done' &&
+            _.isEmpty(changes['lockerTicket'].currentValue.assignee.value)
+        ) {
+            this.lockerTicket.assignee.value = _.find(this.instructors, (v) => v.id == this.lockerTicket.assignee.id)
+            this.changeTicketMethod(this.lockerTicket)
+            console.log('changes in membershipTicket : ', changes)
+        }
         if (changes['instructors']) {
-            this.center = this.storageService.getCenter()
-            const user = this.storageService.getUser()
-
             this.staffSelect_list = []
             this.instructors.forEach((v) => {
-                if (v.id == user.id) {
-                    this.lockerTicket.assignee = {
-                        name: v.center_user_name,
-                        value: v,
-                        id: v.id,
-                    }
-                }
                 this.staffSelect_list.push({
                     name: v.center_user_name,
                     value: v,

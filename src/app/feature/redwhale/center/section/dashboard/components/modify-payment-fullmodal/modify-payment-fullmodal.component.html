@@ -29,6 +29,7 @@
 
                     <ng-template #payment_membership [ngIf]="userPayment?.user_membership_id" [ngIfElse]="payment_locker">
                         <db-payment-membership-window
+                            [changeTicketMethod] = "cmpStore.setMembershipTicket"
                             [membershipTicket]="(membershipTicket$ | async)"
                             [instructors]="(instructors$ | async)"
                             (onPriceChange)="onMemershipTicketChange($event)"
@@ -37,6 +38,7 @@
 
                     <ng-template #payment_locker>
                         <db-payment-locker-window
+                            [changeTicketMethod]="cmpStore.setLockerTicket"
                             [lockerTicket]="(lockerTicket$ | async)"
                             [instructors]="(instructors$ | async)"
                             (onPriceChange)="onLockerTicketChange($event)"

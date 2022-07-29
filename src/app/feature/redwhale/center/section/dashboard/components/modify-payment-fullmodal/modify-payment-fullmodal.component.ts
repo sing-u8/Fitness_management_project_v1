@@ -13,7 +13,6 @@ import {
     AfterViewChecked,
 } from '@angular/core'
 
-import _ from 'lodash'
 import dayjs from 'dayjs'
 
 import { originalOrder } from '@helpers/pipe/keyvalue'
@@ -24,25 +23,16 @@ import { ClickEmitterType } from '@shared/components/common/button/button.compon
 
 import { CenterUser } from '@schemas/center-user'
 import { Center } from '@schemas/center'
-import { MembershipItem } from '@schemas/membership-item'
-import { LockerItem } from '@schemas/locker-item'
-import { LockerCategory } from '@schemas/locker-category'
 import { Payment } from '@schemas/payment'
 import { UserLocker } from '@schemas/user-locker'
 import { UserMembership } from '@schemas/user-membership'
 
 // ngrx
 import { Store } from '@ngrx/store'
-import * as DashboardActions from '@centerStore/actions/sec.dashboard.actions'
+import * as CenterCommonSelector from '@centerStore/selectors/center.common.selector'
 
 // component store
-import {
-    MembershipTicket,
-    LockerTicket,
-    Instructor,
-    TotalPrice,
-    Price,
-} from '@schemas/center/dashboard/modify-payment-fullmodal'
+import { MembershipTicket, LockerTicket, TotalPrice } from '@schemas/center/dashboard/modify-payment-fullmodal'
 import { ModifyPaymentFullModalStore } from './componentStore/modify-payment-fullmodal.store'
 import { Observable } from 'rxjs'
 
@@ -58,7 +48,6 @@ export class ModifyPaymentFullmodalComponent implements OnInit, OnChanges, After
     @Input() userPayment: Payment
     @Input() userLocker: UserLocker
     @Input() userMembership: UserMembership
-    @Input() instructors: Array<CenterUser>
 
     @Output() visibleChange = new EventEmitter<boolean>()
     @Output() close = new EventEmitter<any>()
@@ -75,20 +64,21 @@ export class ModifyPaymentFullmodalComponent implements OnInit, OnChanges, After
     // component store vars
     public membershipTicket$: Observable<MembershipTicket> = this.cmpStore.membershipTicket$
     public lockerTicket$: Observable<LockerTicket> = this.cmpStore.lockerTicket$
-    public instructors$: Observable<Array<CenterUser>> = this.cmpStore.instructors$
     public totalPrice$: Observable<TotalPrice> = this.cmpStore.totalPrice$
     public totalPriceSum$: Observable<number> = this.cmpStore.totalPriceSum$
+
+    // center common store vars
+    public instructors$ = this.nxStore.select(CenterCommonSelector.instructors) // this.cmpStore.instructors$
 
     constructor(
         private renderer: Renderer2,
         private storageService: StorageService,
         private nxStore: Store,
-        private cmpStore: ModifyPaymentFullModalStore
+        public cmpStore: ModifyPaymentFullModalStore
     ) {}
 
     ngOnInit(): void {
         this.center = this.storageService.getCenter()
-        this.cmpStore.getInstructorsEffect(this.center.id)
     }
     ngOnDestroy(): void {}
     ngOnChanges(changes: SimpleChanges): void {
@@ -106,11 +96,9 @@ export class ModifyPaymentFullmodalComponent implements OnInit, OnChanges, After
             if (this.visible) {
                 this.renderer.addClass(this.modalWrapperElement.nativeElement, 'display-flex')
                 setTimeout(() => {
-                    this.renderer
                     this.renderer.addClass(this.modalWrapperElement.nativeElement, 'rw-modal-wrapper-show')
                 }, 0)
 
-                this.cmpStore.getInstructorsEffect(this.center.id)
                 this.initCompVars(this.userPayment, this.userLocker, this.userMembership)
                 this.getMembershipItem()
             } else {
@@ -127,7 +115,7 @@ export class ModifyPaymentFullmodalComponent implements OnInit, OnChanges, After
     // comp vars funcs
     initCompVars(payment: Payment, userLocker: UserLocker, userMembership: UserMembership) {
         if (payment?.user_membership_id && userMembership != undefined) {
-            this.cmpStore.setmembershipTicket(this.cmpStore.initMembershipTicket(payment, userMembership))
+            this.cmpStore.setMembershipTicket(this.cmpStore.initMembershipTicket(payment, userMembership))
         } else if (payment?.user_locker_id && userLocker != undefined) {
             this.cmpStore.setLockerTicket(this.cmpStore.initLockerTicket(payment, userLocker))
         }
@@ -144,7 +132,7 @@ export class ModifyPaymentFullmodalComponent implements OnInit, OnChanges, After
     }
 
     onMemershipTicketChange(membershipTicket: MembershipTicket) {
-        this.cmpStore.setmembershipTicket(membershipTicket)
+        this.cmpStore.setMembershipTicket(membershipTicket)
     }
 
     onLockerTicketChange(lockerTicket: LockerTicket) {

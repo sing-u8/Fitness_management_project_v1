@@ -2,11 +2,9 @@ import { Injectable } from '@angular/core'
 import { ComponentStore } from '@ngrx/component-store'
 
 import { EMPTY, Observable, forkJoin } from 'rxjs'
-import { filter, switchMap, tap, catchError, map, withLatestFrom } from 'rxjs/operators'
+import { filter, switchMap, tap, catchError, map, withLatestFrom, take } from 'rxjs/operators'
 
 import _ from 'lodash'
-import dayjs from 'dayjs'
-
 import { CenterUserListService } from '@services/helper/center-user-list.service'
 import { CenterMembershipService } from '@services/center-membership.service'
 import { CenterLockerService } from '@services/center-locker.service'
@@ -29,8 +27,6 @@ import {
 } from '@schemas/center/dashboard/modify-payment-fullmodal'
 
 import { MembershipItem } from '@schemas/membership-item'
-import { LockerItem } from '@schemas/locker-item'
-import { LockerCategory } from '@schemas/locker-category'
 import { CenterUser } from '@schemas/center-user'
 import { Payment } from '@schemas/payment'
 import { UserLocker } from '@schemas/user-locker'
@@ -38,14 +34,11 @@ import { UserMembership } from '@schemas/user-membership'
 
 // ngrx
 import { Store } from '@ngrx/store'
-import * as DashboardActions from '@centerStore/actions/sec.dashboard.actions'
-import * as LockerActions from '@centerStore/actions/sec.locker.actions'
 import { showToast } from '@appStore/actions/toast.action'
 
 export interface State {
     membershipTicket: MembershipTicket
     lockerTicket: LockerTicket
-    instructors: CenterUser[]
 }
 export const stateInit: State = {
     membershipTicket: {
@@ -76,16 +69,12 @@ export const stateInit: State = {
         userLocker: {} as UserLocker,
         status: 'none',
     },
-    instructors: [],
 }
 
 @Injectable()
 export class ModifyPaymentFullModalStore extends ComponentStore<State> {
     public readonly membershipTicket$ = this.select((s) => s.membershipTicket)
     public readonly lockerTicket$ = this.select((s) => s.lockerTicket)
-    public readonly instructors$ = this.select((s) => {
-        return s.instructors
-    })
     public readonly totalPrice$ = this.select((s) => {
         const total: TotalPrice = {
             cash: { price: 0, name: '현금' },
@@ -139,52 +128,18 @@ export class ModifyPaymentFullModalStore extends ComponentStore<State> {
         return _.cloneDeep(state)
     })
     // membership
-    setmembershipTicket = this.updater((state, membershipTicket: MembershipTicket) => {
+    setMembershipTicket = this.updater((state, membershipTicket: MembershipTicket) => {
         state.membershipTicket = membershipTicket
         state.membershipTicket.status = 'done'
         return _.cloneDeep(state)
     })
     setMembershipTicketMembershipItem = this.updater((state, membershipItem: MembershipItem) => {
         state.membershipTicket.membershipItem = membershipItem
-        // state.membershipTicket.lessonList = membershipItem.class_items.map((v) => ({
-        //     selected: true,
-        //     item: v,
-        // }))
         state.membershipTicket.amount.normalAmount = String(membershipItem.price).replace(/\B(?=(\d{3})+(?!\d))/g, ',')
         return _.cloneDeep(state)
     })
 
-    // instructors methods
-    setInstructors(instructors: CenterUser[]) {
-        this.setState((state) => {
-            return {
-                ...state,
-                instructors: instructors,
-            }
-        })
-    }
-
     // effects
-
-    readonly getInstructorsEffect = this.effect((centerId$: Observable<string>) =>
-        centerId$.pipe(
-            switchMap((centerId) =>
-                this.centerUserListService.getCenterInstructorList(centerId).pipe(
-                    tap({
-                        next: (instructors) => {
-                            console.log('getInstructorsEffect : ', instructors)
-                            this.setInstructors(instructors)
-                        },
-                        error: (err) => {
-                            console.log('register-ml-fullmodal store - getInstructorEffect err: ', err)
-                        },
-                    }),
-                    catchError(() => EMPTY)
-                )
-            )
-        )
-    )
-
     readonly getMembershipItemEffect = this.effect(
         (param$: Observable<{ centerId: string; categoryId: string; itemId: string }>) =>
             param$.pipe(

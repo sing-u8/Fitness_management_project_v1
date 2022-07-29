@@ -39,7 +39,7 @@ export interface State {
     mlItems: MembershipLockerItem[]
     choseLockers: ChoseLockers
     membershipItems: MembershipItem[]
-    instructors: CenterUser[]
+    // instructors: CenterUser[]
     doLockerItemsExist: boolean
     doMembershipItemsExist: boolean
 }
@@ -47,7 +47,7 @@ export const stateInit: State = {
     mlItems: [],
     choseLockers: new Map(),
     membershipItems: [],
-    instructors: [],
+    // instructors: [],
     doLockerItemsExist: false,
     doMembershipItemsExist: false,
 }
@@ -58,7 +58,7 @@ export class RegisterMembershipLockerFullmodalStore extends ComponentStore<State
         return s.mlItems
     })
     public readonly choseLockers$ = this.select((s) => s.choseLockers)
-    public readonly instructors$ = this.select((s) => s.instructors)
+    // public readonly instructors$ = this.select((s) => s.instructors)
     public readonly membershipItems$ = this.select((s) => s.membershipItems)
     public readonly doLockerItemsExist$ = this.select((s) => s.doLockerItemsExist)
     public readonly doMembershipItemsExist$ = this.select((s) => s.doMembershipItemsExist)
@@ -182,32 +182,32 @@ export class RegisterMembershipLockerFullmodalStore extends ComponentStore<State
     )
 
     // instructors methods
-    setInstructors(instructors: CenterUser[]) {
-        this.setState((state) => {
-            return {
-                ...state,
-                instructors: instructors,
-            }
-        })
-    }
-
-    readonly getInstructorsEffect = this.effect((centerId$: Observable<string>) =>
-        centerId$.pipe(
-            switchMap((centerId) =>
-                this.centerUserListService.getCenterInstructorList(centerId).pipe(
-                    tap({
-                        next: (instructors) => {
-                            this.setInstructors(instructors)
-                        },
-                        error: (err) => {
-                            console.log('register-ml-fullmodal store - getInstructorEffect err: ', err)
-                        },
-                    }),
-                    catchError(() => EMPTY)
-                )
-            )
-        )
-    )
+    // setInstructors(instructors: CenterUser[]) {
+    //     this.setState((state) => {
+    //         return {
+    //             ...state,
+    //             instructors: instructors,
+    //         }
+    //     })
+    // }
+    //
+    // readonly getInstructorsEffect = this.effect((centerId$: Observable<string>) =>
+    //     centerId$.pipe(
+    //         switchMap((centerId) =>
+    //             this.centerUserListService.getCenterInstructorList(centerId).pipe(
+    //                 tap({
+    //                     next: (instructors) => {
+    //                         this.setInstructors(instructors)
+    //                     },
+    //                     error: (err) => {
+    //                         console.log('register-ml-fullmodal store - getInstructorEffect err: ', err)
+    //                     },
+    //                 }),
+    //                 catchError(() => EMPTY)
+    //             )
+    //         )
+    //     )
+    // )
 
     setMembershipItems(membershipItems: MembershipItem[]) {
         this.setState((state) => {

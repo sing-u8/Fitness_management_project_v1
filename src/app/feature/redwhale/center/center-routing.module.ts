@@ -2,15 +2,8 @@ import { NgModule } from '@angular/core'
 import { Routes, RouterModule } from '@angular/router'
 
 import { CenterComponent } from './center.component'
-import { DashboardComponent } from './section/dashboard/dashboard.component'
-import { ScheduleComponent } from './section/schedule/schedule.component'
-import { MembershipComponent } from './section/membership/membership.component'
-import { LessonComponent } from './section/lesson/lesson.component'
-import { LockerComponent } from './section/locker/locker.component'
 import { CommunityComponent } from './section/community/community.component'
-import { SaleComponent } from './section/sale/sale.component'
 import { TouchPadComponent } from './touch-pad/touch-pad.component'
-// import { ReserveScheduleComponent } from './section/reserve-schedule/reserve-schedule.component'
 
 import { CenterMemberBlockGuard } from '@guards/center-member-block.guard'
 
