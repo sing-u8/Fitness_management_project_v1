@@ -1,5 +1,5 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges, OnDestroy } from '@angular/core'
-import { FormBuilder, FormControl, Validators } from '@angular/forms'
+import { Component, OnInit, Input, OnChanges, SimpleChanges, OnDestroy } from '@angular/core'
+import { FormBuilder, FormControl } from '@angular/forms'
 import { Router, ActivatedRoute } from '@angular/router'
 import _ from 'lodash'
 import dayjs from 'dayjs'
@@ -7,7 +7,6 @@ import dayjs from 'dayjs'
 import { StorageService } from '@services/storage.service'
 import { NgxSpinnerService } from 'ngx-spinner'
 import { WordService } from '@services/helper/word.service'
-import { UsersCenterService } from '@services/users-center.service'
 import { CenterService } from '@services/center.service'
 import { TimeService } from '@services/helper/time.service'
 
@@ -24,6 +23,7 @@ import { Store, select } from '@ngrx/store'
 import * as DashboardReducer from '@centerStore/reducers/sec.dashboard.reducer'
 import * as DashboardActions from '@centerStore/actions/sec.dashboard.actions'
 import * as DashboardSelector from '@centerStore/selectors/sec.dashoboard.selector'
+import * as CenterCommonActions from '@centerStore/actions/center.common.actions'
 import { showToast } from '@appStore/actions/toast.action'
 
 @Component({
@@ -323,16 +323,17 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
                                 }로 변경되었습니다.`,
                             })
                         )
+                        this.nxStore.dispatch(CenterCommonActions.startGetInstructors({ centerId: this.center.id }))
+                        this.nxStore.dispatch(CenterCommonActions.startGetMembers({ centerId: this.center.id }))
                         this.centerService.getCenter(this.center.id).subscribe((center) => {
                             const newCenter = center
                             this.storageService.setCenter(newCenter)
                         })
-                        this.router.navigate(['./community'], { relativeTo: this.activatedRoute })
+                        this.router.navigate(['./sale'], { relativeTo: this.activatedRoute })
                     },
                 })
             )
         } else {
-            console.log('update member role : ', roleKey, ' - ')
             this.nxStore.dispatch(
                 DashboardActions.startSetCurUserData({
                     centerId: this.center.id,
@@ -349,6 +350,8 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
                                 }으로 변경되었습니다.`,
                             })
                         )
+                        this.nxStore.dispatch(CenterCommonActions.startGetInstructors({ centerId: this.center.id }))
+                        this.nxStore.dispatch(CenterCommonActions.startGetMembers({ centerId: this.center.id }))
                     },
                 })
             )

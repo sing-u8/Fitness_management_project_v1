@@ -29,6 +29,7 @@ import { ClickEmitterType } from '@shared/components/common/button/button.compon
 
 // ngrx
 import * as DashboardActions from '@centerStore/actions/sec.dashboard.actions'
+import * as CenterCommonActions from '@centerStore/actions/center.common.actions'
 import { Store } from '@ngrx/store'
 import _ from 'lodash'
 
@@ -270,12 +271,6 @@ export class DirectRegisterMemberFullmodalComponent implements OnInit, OnChanges
             phone_number: this.phone_number.value as string,
         }
 
-        console.log(
-            'this.localFileData ? _.assign({ length: 1 }, this.localFileData.file) : undefined : ',
-            this.localFileData,
-            this.localFileData ? _.assign({ length: 1 }, this.localFileData.file) : undefined
-        )
-
         this.nxStore.dispatch(
             DashboardActions.startDirectRegisterMember({
                 centerId: this.center.id,
@@ -284,6 +279,7 @@ export class DirectRegisterMemberFullmodalComponent implements OnInit, OnChanges
                 callback: () => {
                     this.finishRegister.emit()
                     btLoadingFns.hideLoading()
+                    this.nxStore.dispatch(CenterCommonActions.startGetMembers({ centerId: this.center.id }))
                 },
             })
         )
