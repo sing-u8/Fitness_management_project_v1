@@ -63,7 +63,7 @@ export class MemberListModalComponent implements AfterViewChecked, OnChanges, Af
 
     ngAfterViewInit(): void {
         this.center = this.storageService.getCenter()
-        this.centerUsersService.getUserList(this.center.id, '').subscribe((memberList) => {
+        this.centerUsersService.getUserList(this.center.id, '', '').subscribe((memberList) => {
             this.centerUsers = memberList.reverse()
         })
     }
@@ -119,7 +119,7 @@ export class MemberListModalComponent implements AfterViewChecked, OnChanges, Af
             return control.valueChanges.pipe(
                 distinctUntilChanged(),
                 debounceTime(500),
-                switchMap((v) => this.centerUsersService.getUserList(this.center.id, v, '')),
+                switchMap((v) => this.centerUsersService.getUserList(this.center.id, '', v)),
                 map((memberList) => {
                     this.centerUsers = memberList.reverse()
                     return null

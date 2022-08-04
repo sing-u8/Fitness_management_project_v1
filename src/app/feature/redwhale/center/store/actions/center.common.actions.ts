@@ -16,4 +16,10 @@ export const finishGetInstructors = createAction(
     props<{ instructors: Array<CenterUser> }>()
 )
 
+export const startGetMembers = createAction(`[${FeatureKey}] Start Get Members`, props<{ centerId: string }>())
+export const finishGetMembers = createAction(
+    `[${FeatureKey}] Finish Get Members`,
+    props<{ members: Array<CenterUser> }>()
+)
+
 export const error = createAction(`[${FeatureKey}] error`, props<{ err: string }>())

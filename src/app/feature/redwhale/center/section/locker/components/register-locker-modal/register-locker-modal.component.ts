@@ -9,13 +9,13 @@ import {
     SimpleChanges,
     AfterViewChecked,
     ViewChild,
-    OnInit,
+    OnDestroy,
     AfterViewInit,
 } from '@angular/core'
 import { FormBuilder, FormControl, ValidationErrors, AsyncValidatorFn, AbstractControl } from '@angular/forms'
 import { Observable } from 'rxjs'
-import { distinctUntilChanged, debounceTime, map, switchMap } from 'rxjs/operators'
-import * as _ from 'lodash'
+import { distinctUntilChanged, debounceTime, map, switchMap, takeUntil } from 'rxjs/operators'
+import _ from 'lodash'
 
 import { CenterUsersService } from '@services/center-users.service'
 import { StorageService } from '@services/storage.service'
@@ -23,12 +23,19 @@ import { StorageService } from '@services/storage.service'
 import { CenterUser } from '@schemas/center-user'
 import { Center } from '@schemas/center'
 
+// rxjs
+import { Subject } from 'rxjs'
+
+// ngrx
+import { Store, select } from '@ngrx/store'
+import * as CenterCommonSelector from '@centerStore/selectors/center.common.selector'
+
 @Component({
     selector: 'rw-register-locker-modal',
     templateUrl: './register-locker-modal.component.html',
     styleUrls: ['./register-locker-modal.component.scss'],
 })
-export class RegisterLockerModalComponent implements AfterViewChecked, OnChanges, AfterViewInit {
+export class RegisterLockerModalComponent implements AfterViewChecked, OnChanges, AfterViewInit, OnDestroy {
     @Input() visible: boolean
 
     @ViewChild('modalBackgroundElement') modalBackgroundElement
@@ -47,8 +54,11 @@ export class RegisterLockerModalComponent implements AfterViewChecked, OnChanges
 
     public isMouseModalDown: boolean
 
+    public unsubscrib$ = new Subject<boolean>()
+
     constructor(
         private el: ElementRef,
+        private nxStore: Store,
         private renderer: Renderer2,
         private centerUsersService: CenterUsersService,
         private storageService: StorageService,
@@ -57,14 +67,15 @@ export class RegisterLockerModalComponent implements AfterViewChecked, OnChanges
         this.isMouseModalDown = false
         this.centerUsers = []
         this.memberSearchInput = this.fb.control('', { asyncValidators: [this.searchMemberValidator()] })
-    }
-
-    ngAfterViewInit(): void {
         this.center = this.storageService.getCenter()
-        this.centerUsersService.getUserList(this.center.id, '', '', '').subscribe((memberList) => {
-            this.centerUsers = memberList.reverse()
+
+        this.nxStore.pipe(select(CenterCommonSelector.members), takeUntil(this.unsubscrib$)).subscribe((members) => {
+            const membersClone = _.cloneDeep(members)
+            this.centerUsers = membersClone.reverse()
         })
     }
+
+    ngAfterViewInit(): void {}
 
     ngOnChanges(changes: SimpleChanges) {
         if (!changes['visible'].firstChange) {
@@ -72,6 +83,11 @@ export class RegisterLockerModalComponent implements AfterViewChecked, OnChanges
                 this.changed = true
             }
         }
+    }
+
+    ngOnDestroy(): void {
+        this.unsubscrib$.next(true)
+        this.unsubscrib$.complete()
     }
 
     ngAfterViewChecked() {
@@ -88,6 +104,7 @@ export class RegisterLockerModalComponent implements AfterViewChecked, OnChanges
             } else {
                 this.renderer.removeClass(this.modalBackgroundElement.nativeElement, 'rw-modal-background-show')
                 this.renderer.removeClass(this.modalWrapperElement.nativeElement, 'rw-modal-wrapper-show')
+                this.memberSearchInput.setValue('')
                 setTimeout(() => {
                     this.renderer.removeClass(this.modalBackgroundElement.nativeElement, 'display-block')
                     this.renderer.removeClass(this.modalWrapperElement.nativeElement, 'display-flex')
@@ -117,7 +134,18 @@ export class RegisterLockerModalComponent implements AfterViewChecked, OnChanges
             return control.valueChanges.pipe(
                 distinctUntilChanged(),
                 debounceTime(500),
-                switchMap((v) => this.centerUsersService.getUserList(this.center.id, v, '')),
+                switchMap((v) =>
+                    this.nxStore.select(CenterCommonSelector.members).pipe(
+                        map((members) =>
+                            _.filter(members, (member) => {
+                                const input = _.trim(v)
+                                return (
+                                    _.includes(member.center_user_name, input) || _.includes(member.phone_number, input)
+                                )
+                            })
+                        )
+                    )
+                ),
                 map((memberList) => {
                     this.centerUsers = memberList.reverse()
                     return null

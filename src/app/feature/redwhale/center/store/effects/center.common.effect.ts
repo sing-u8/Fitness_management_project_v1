@@ -32,4 +32,22 @@ export class CenterCommonEffect {
             )
         )
     )
+
+    public getMembers$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(centerCommonActions.startGetMembers),
+            switchMap(({ centerId }) =>
+                this.centerUserListApi
+                    .getCenterUserList(centerId, (v) => true)
+                    .pipe(
+                        map((members) => {
+                            return centerCommonActions.finishGetMembers({ members })
+                        }),
+                        catchError((err: string) => {
+                            return of(centerCommonActions.error({ err }))
+                        })
+                    )
+            )
+        )
+    )
 }

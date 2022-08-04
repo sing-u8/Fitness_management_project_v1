@@ -10,11 +10,13 @@ import * as CommunitydActions from '@centerStore/actions/sec.community.actions'
 
 export const intialState: State = {
     curCenter: null,
+    members: [],
     instructors: [],
 }
 
 export interface State {
     curCenter: Center
+    members: Array<CenterUser>
     instructors: Array<CenterUser>
 }
 
@@ -30,6 +32,10 @@ export const centerCommonReducer = createImmerReducer(
         state.instructors = instructors
         return state
     }),
+    on(CenterCommonActions.finishGetMembers, (state, { members }) => {
+        state.members = members
+        return state
+    }),
 
     // common
     on(CenterCommonActions.error, (state, { err }) => {
@@ -39,3 +45,4 @@ export const centerCommonReducer = createImmerReducer(
 
 export const selectCurCenter = (state: State) => state.curCenter
 export const selectInstructors = (state: State) => state.instructors
+export const selectMembers = (state: State) => state.members

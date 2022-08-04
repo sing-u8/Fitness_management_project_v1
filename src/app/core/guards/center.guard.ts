@@ -42,6 +42,7 @@ export class CenterGuard implements CanActivate {
                     console.log('CenterGuard center : ', center)
                     this.nxStore.dispatch(CenterCommonActions.setCurCenter({ center }))
                     this.nxStore.dispatch(CenterCommonActions.startGetInstructors({ centerId: center.id }))
+                    this.nxStore.dispatch(CenterCommonActions.startGetMembers({ centerId: center.id }))
                     return true
                 }),
                 catchError((error: any) => {
