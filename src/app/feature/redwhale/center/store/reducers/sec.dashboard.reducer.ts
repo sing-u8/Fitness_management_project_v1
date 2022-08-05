@@ -27,9 +27,10 @@ export type CurUseData = {
     memberships: UserMembership[]
     payments: Payment[]
     reservations: Booking[]
+    contract: any[] // !!
 }
 
-export type UserDetailTag = 'membership' | 'locker' | 'reservation' | 'payment'
+export type UserDetailTag = 'membership' | 'locker' | 'reservation' | 'payment' | 'contract'
 export const UserDetailTagInit: UserDetailTag = 'membership'
 
 export const MemberManageCategoryInit = 'membershipLocker'
@@ -61,6 +62,7 @@ export const CurUseDataInit: CurUseData = {
     memberships: [],
     payments: [], // !! user paymnet
     reservations: [], // !! user reservation
+    contract: [],
 }
 export const CurSearchInputInit = ''
 
@@ -144,6 +146,7 @@ export const dashboardReducer = createImmerReducer(
             memberships: [],
             reservations: [],
             payments: [],
+            contract: [],
         }
         state.isUserDeatilLoading = 'pending'
         return state

@@ -8,24 +8,32 @@ import {
     ElementRef,
     Output,
     EventEmitter,
+    OnDestroy,
 } from '@angular/core'
 
 import { Router } from '@angular/router'
 
 import { StorageService } from '@services/storage.service'
-
 import { GymConfirmModalService } from '@services/home/gym-confirm-modal.service'
+import { CenterRolePermissionService } from '@services/center-role-permission.service'
 
 import { Center } from '@schemas/center'
+import { PermissionCategory } from '@schemas/permission-category'
 
 import _ from 'lodash'
+
+import { showRoleModal } from '@appStore/actions/modal.action'
+import { roleModalSelector } from '@appStore/selectors'
+import { Store, select } from '@ngrx/store'
+import { Subject } from 'rxjs'
+import { takeUntil } from 'rxjs/operators'
 
 @Component({
     selector: 'center-list-item',
     templateUrl: './center-list-item.component.html',
     styleUrls: ['./center-list-item.component.scss'],
 })
-export class CenterListItemComponent implements OnInit, AfterViewInit {
+export class CenterListItemComponent implements OnInit, AfterViewInit, OnDestroy {
     @Input() userId: string
     @Input() center: Center
     @Input() centerList: Array<Center>
@@ -45,12 +53,17 @@ export class CenterListItemComponent implements OnInit, AfterViewInit {
     public doShowDropDown: boolean
     public doShowModal: boolean
     public centerModalData
+    public centerPermission: Array<PermissionCategory> = []
+
+    public unSubscriber$ = new Subject<void>()
 
     constructor(
         private centerModalService: GymConfirmModalService,
         private storageService: StorageService,
         private renderer: Renderer2,
-        private router: Router
+        private router: Router,
+        private nxStore: Store,
+        private centerRolePermissionService: CenterRolePermissionService
     ) {
         this.doShowDropDown = false
         this.doShowModal = false
@@ -58,11 +71,34 @@ export class CenterListItemComponent implements OnInit, AfterViewInit {
     }
 
     ngOnInit(): void {}
+    ngOnDestroy(): void {
+        this.unSubscriber$.next()
+        this.unSubscriber$.complete()
+    }
 
     ngAfterViewInit(): void {
         this.initCenterRoleName()
         this.initCenterAvatar()
         this.initCenterBackground()
+
+        this.centerRolePermissionService
+            .getCenterRolePermission(this.center.id, 'instructor')
+            .subscribe((permissionCategs) => {
+                this.centerPermission = permissionCategs
+            })
+        this.nxStore.pipe(select(roleModalSelector), takeUntil(this.unSubscriber$)).subscribe((roleModal) => {
+            if (roleModal.center?.id == this.center.id) {
+                this.centerPermission = _.cloneDeep(roleModal).permissionCateg
+            }
+        })
+        // this.centerRolePermissionService.getCenterRoles(this.center.id).subscribe((role) => {
+        //     console.log('center - ', this.center, ' -- ', 'role : ', role)
+        // })
+        // this.centerRolePermissionService
+        //     .modifyCenterRolePermission(this.center.id, 'instructor', 'read_stats_sales', {
+        //         approved: false,
+        //     })
+        //     .subscribe()
     }
     initCenterAvatar() {
         if (!this.center.picture) {
@@ -92,6 +128,14 @@ export class CenterListItemComponent implements OnInit, AfterViewInit {
         }
     }
 
+    public showSettingDropdown = false
+    toggleSettingDropdown() {
+        this.showSettingDropdown = !this.showSettingDropdown
+    }
+    closeSettingDropdown() {
+        this.showSettingDropdown = false
+    }
+
     // ---------------------center service------------------>//
     leaveGym() {
         this.handleModalConfirm()
@@ -108,6 +152,12 @@ export class CenterListItemComponent implements OnInit, AfterViewInit {
         event.stopPropagation()
         event.preventDefault()
         this.router.navigate(['redwhale-home', 'set-center', this.center.id])
+    }
+
+    openRoleModal(event) {
+        event.stopPropagation()
+        event.preventDefault()
+        this.nxStore.dispatch(showRoleModal({ center: this.center, instPermissionCategs: this.centerPermission }))
     }
     // <---------------------center service------------------//
 

@@ -1,15 +1,7 @@
 <router-outlet></router-outlet>
 
-<rw-modal
-  type="type2"
-  [(visible)]="modalState.isVisible"
-  [data]="modalState.data"
-  (confirm)="hideModal()"
-></rw-modal>
+<rw-modal type="type2" [(visible)]="modalState.isVisible" [data]="modalState.data" (confirm)="hideModal()"></rw-modal>
 
-<rw-toast
-  [(visible)]="toastState.visible"
-  [text]="toastState.text"
-  [delay]="3000"
-  (cancel)="hideToast()"
-></rw-toast>
+<rw-toast [(visible)]="toastState.visible" [text]="toastState.text" [delay]="3000" (cancel)="hideToast()"></rw-toast>
+
+<rw-rolemodal [(visible)]="roleModalState.visible" [roleModal]="roleModalState"></rw-rolemodal>

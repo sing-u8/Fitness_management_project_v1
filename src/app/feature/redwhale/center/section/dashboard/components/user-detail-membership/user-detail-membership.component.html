@@ -1,6 +1,5 @@
 <section class="user-detail-membership">
-
-    <header class='rw-typo-subtext1'>
+    <header class="rw-typo-subtext1">
         <div class="col1">회원권</div>
         <div class="col2">기간</div>
         <!-- <div class="col3">잔여일/횟수</div> -->
@@ -8,52 +7,46 @@
         <!-- <div class="col4">예약 가능한 수업</div> -->
     </header>
     <main class="thin-scroll-y-overlay2">
-        <ng-template
-            #membership_emtpy
-            [ngIf] = "curUserData.memberships.length == 0"
-            [ngIfElse]="membership_exist"
-        >
+        <ng-template #membership_emtpy [ngIf]="curUserData.memberships.length == 0" [ngIfElse]="membership_exist">
             <div class="center-empty-guide">
-                <img src="assets/icons/etc/empty_screen.svg">
-                <p>아직  등록된 회원권이 없어요.</p>
+                <img src="assets/icons/etc/empty_screen.svg" />
+                <p>아직 등록된 회원권이 없어요.</p>
                 <p>회원님에 회원권 / 락커를 등록해주세요!</p>
                 <div class="center-empty-button" (click)="onRegisterML.emit()">
                     <p>회원권 / 락커 등록하기</p>
-                    <img src="assets/icons/etc/short_right_arrow_grey.svg">
+                    <img src="assets/icons/etc/short_right_arrow_grey.svg" />
                 </div>
             </div>
         </ng-template>
         <ng-template #membership_exist>
             <db-user-detail-membership-item
-                *ngFor = "let item of curUserData.memberships"
+                *ngFor="let item of curUserData.memberships"
                 [membership]="item"
-                (onUpdateInfo) = 'setSelectedUserMembership(item);toggleModifyMembershipFullModal()'
-                (onExtendPeriodCount) = 'toggleExtensionModal();setSelectedUserMembership(item)'
-                (onHold) = 'toggleHoldModal();setSelectedUserMembership(item) '
-                (onTransfer) = 'setSelectedUserMembership(item);toggleShowTransferModal()'
-                (onRefund) = 'setSelectedUserMembership(item); toggleShowRefundModal()'
-                (onRemoveRecord) = 'setSelectedUserMembership(item); toggleRemoveModal()'
-                (onUpdateHolding)="setSelectedUserMembership(item);toggleUpdateHoldModal()"
+                (onUpdateInfo)="setSelectedUserMembership(item); toggleModifyMembershipFullModal()"
+                (onExtendPeriodCount)="toggleExtensionModal(); setSelectedUserMembership(item)"
+                (onHold)="toggleHoldModal(); setSelectedUserMembership(item)"
+                (onTransfer)="setSelectedUserMembership(item); toggleShowTransferModal()"
+                (onRefund)="setSelectedUserMembership(item); toggleShowRefundModal()"
+                (onRemoveRecord)="setSelectedUserMembership(item); toggleRemoveModal()"
+                (onUpdateHolding)="setSelectedUserMembership(item); toggleUpdateHoldModal()"
                 (onRemoveHolding)="setSelectedUserMembership(item); toggleRemoveHoldingModal()"
             ></db-user-detail-membership-item>
         </ng-template>
-
     </main>
-
 </section>
 
 <db-membership-extension-modal
-    [(visible)] = "showExtensionModal"
-    [userMembership] = "selectedUserMembership"
-    (cancel) = "toggleExtensionModal()"
-    (confirm) = "onExtensionConfirm($event)"
+    [(visible)]="showExtensionModal"
+    [userMembership]="selectedUserMembership"
+    (cancel)="toggleExtensionModal()"
+    (confirm)="onExtensionConfirm($event)"
 ></db-membership-extension-modal>
 
 <rw-dashboard-charge-modal
-    [(visible)] = "showChargeModal"
-    [chargeMode] = "chargeMode"
-    (cancel) = "toggleChargeModal()"
-    (confirm) = "onChargeConfirm($event)"
+    [(visible)]="showChargeModal"
+    [chargeMode]="chargeMode"
+    (cancel)="toggleChargeModal()"
+    (confirm)="onChargeConfirm($event)"
 ></rw-dashboard-charge-modal>
 
 <db-hold-modal
@@ -94,9 +87,9 @@
 <db-modify-membership-fullmodal
     [(visible)]="showModifyMembershipFullModal"
     [userMembership]="selectedUserMembership"
-    [centerUser] = "curUserData?.user"
+    [centerUser]="curUserData?.user"
     (close)="toggleModifyMembershipFullModal()"
-    (confirm) = "confirmModifyMembership()"
+    (confirm)="confirmModifyMembership()"
 ></db-modify-membership-fullmodal>
 
 <rw-modal

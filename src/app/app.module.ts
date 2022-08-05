@@ -23,6 +23,7 @@ import { routerReducer, StoreRouterConnectingModule } from '@ngrx/router-store'
 // - // store
 import { appFeatureKey, appReducer } from '@appStore/reducers/reducers'
 import { metaReducers } from '@appStore/reducers/metaReducers'
+import { AppEffect } from '@appStore/effects'
 
 // Firebase
 import { provideFirebaseApp, getApp, initializeApp } from '@angular/fire/app'
@@ -67,7 +68,7 @@ import { RECAPTCHA_V3_SITE_KEY, RecaptchaV3Module } from 'ng-recaptcha'
             { metaReducers }
         ),
         StoreRouterConnectingModule.forRoot(),
-        EffectsModule.forRoot([]),
+        EffectsModule.forRoot([AppEffect]),
         StoreDevtoolsModule.instrument({
             maxAge: 25,
             logOnly: environment.production,

@@ -11,3 +11,4 @@ export const toastSelector = createSelector(appFeatureSelector, (appState) => ap
 export const modalSelector = createSelector(appFeatureSelector, (appState) => appState.modal)
 export const registrationSelector = createSelector(appFeatureSelector, (appState) => appState.registration)
 export const scheduleIsResetSelector = createSelector(appFeatureSelector, (appState) => appState.scheduleDrawerIsReset)
+export const roleModalSelector = createSelector(appFeatureSelector, (appState) => appState.roleModal)

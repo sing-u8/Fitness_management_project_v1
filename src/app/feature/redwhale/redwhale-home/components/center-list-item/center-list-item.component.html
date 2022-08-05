@@ -1,71 +1,63 @@
-<div id="_center-list-container" class="center-list-container" (click)="goGym($event)" >
+<div id="_center-list-container" class="center-list-container" (click)="goGym($event)">
     <div #list_header class="list-header"></div>
 
     <div #list_avatar class="list-avatar rw-typo-title2">
-      <ng-template [ngIf]="centerAvatar && centerAvatar.length < 2">{{centerAvatar}}</ng-template>
+        <ng-template [ngIf]="centerAvatar && centerAvatar.length < 2">{{ centerAvatar }}</ng-template>
     </div>
     <div class="list-contents">
         <p class="contents-top">
-          <span class="rw-typo-title2">{{center.name}}</span>
-          <span class="rw-typo-subtext3">  {{centerRoleName}} </span>
+            <span class="rw-typo-title2">{{ center.name }}</span>
+            <span class="rw-typo-subtext3"> {{ centerRoleName }} </span>
         </p>
-        <p class="rw-typo-subtext4 ">
-          redwhale.xyz/{{center.address}}
-        </p>
+        <p class="rw-typo-subtext4">redwhale.xyz/{{ center.address }}</p>
     </div>
     <div class="list-bottom-toolbar">
         <div
-          *ngIf=" center.role_code == 'owner' "
-          class="toolbar-left"
-          id="_toolbar-left"
-          (click)="goGymSetting($event)"
+            *ngIf="center.role_code == 'owner'"
+            class="toolbar-left"
+            id="_toolbar-left"
+            (click)="toggleSettingDropdown(); $event.stopPropagation()"
         >
-            <img src="assets/icons/header/settings.svg">
-            <span class="rw-typo-subtext3">센터 설정</span>
+            <div class="setting-center">
+                <img src="assets/icons/header/settings.svg" />
+                <span class="rw-typo-subtext3">센터 설정</span>
+            </div>
+            <div *ngIf="showSettingDropdown" class="setting-dropdown" (rwClickOutside)="closeSettingDropdown()">
+                <div class="setting-dropdown-item rw-typo-bodytext2" (click)="goGymSetting($event)">기본 정보 수정</div>
+                <div class="setting-dropdown-item rw-typo-bodytext2" (click)="openRoleModal($event)">권한 관리</div>
+                <div class="setting-dropdown-item rw-typo-bodytext2" (click)="(false)">약관 설정</div>
+            </div>
         </div>
-        <div
-          (rwClickOutside) = 'hideDropDown()'
-          class="toolbar-right"
-          id="_toolbar-right"
-        >
-          <div
-            class="icon-container"
-            (click) = "toggleDropDown($event);"
-          >
-              <img src="assets/icons/etc/more-grey.svg">
-          </div>
-          <div
-            class='exit-dropdown'
-            [class.dropdown-up] = "dropDownUp == true"
-            *ngIf="doShowDropDown"
-            (click) = "toggleDropDown($event); toggleConfirmModal(true);"
-          >
-              <img src="assets/icons/etc/leave.svg">
-              <span
-                  class="rw-typo-subtext3"
-              >
-                  이 센터에서 나가기
-              </span>
-          </div>
+        <div (rwClickOutside)="hideDropDown()" class="toolbar-right" id="_toolbar-right">
+            <div class="icon-container" (click)="toggleDropDown($event)">
+                <img src="assets/icons/etc/more-grey.svg" />
+            </div>
+            <div
+                class="exit-dropdown"
+                [class.dropdown-up]="dropDownUp == true"
+                *ngIf="doShowDropDown"
+                (click)="toggleDropDown($event); toggleConfirmModal(true)"
+            >
+                <img src="assets/icons/etc/leave.svg" />
+                <span class="rw-typo-subtext3"> 이 센터에서 나가기 </span>
+            </div>
         </div>
     </div>
 </div>
 
-
 <rw-modal
-  [(visible)]="doShowModal"
-  [data]="centerModalData"
-  (cancel)="handleModalCancel()"
-  (confirm)="leaveGymIfNotOnwer();">
+    [(visible)]="doShowModal"
+    [data]="centerModalData"
+    (cancel)="handleModalCancel()"
+    (confirm)="leaveGymIfNotOnwer()"
+>
 </rw-modal>
 
 <rw-modal
-  [(visible)]="doShowOwnerModal"
-  [data]="onwerModaldata"
-  [type]="'type2'"
-  (cancel)="hideOwnerModal()"
-  (confirm)="hideOwnerModal();">
+    [(visible)]="doShowOwnerModal"
+    [data]="onwerModaldata"
+    [type]="'type2'"
+    (cancel)="hideOwnerModal()"
+    (confirm)="hideOwnerModal()"
+>
 </rw-modal>
-
-
-

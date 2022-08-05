@@ -49,6 +49,8 @@ import { PaymentLockerWindowComponent } from './components/payment-locker-window
 import { PaymentMembershipWindowComponent } from './components/payment-membership-window/payment-membership-window.component'
 import { DashboardChargeModalComponent } from './components/dashboard-charge-modal/dashboard-charge-modal.component'
 import { MemberRoleSelectComponent } from './components/member-role-select/member-role-select.component'
+import { UserDetailContractComponent } from './components/user-detail-contract/user-detail-contract.component'
+import { UserDetailContractItemComponent } from './components/user-detail-contract-item/user-detail-contract-item.component'
 
 import { DashboardRoutingModule } from './dashboard-routing.module'
 
@@ -103,6 +105,8 @@ import { NgxSpinnerModule } from 'ngx-spinner'
         PaymentMembershipWindowComponent,
         DashboardChargeModalComponent,
         MemberRoleSelectComponent,
+        UserDetailContractComponent,
+        UserDetailContractItemComponent,
     ],
     imports: [
         DashboardRoutingModule,

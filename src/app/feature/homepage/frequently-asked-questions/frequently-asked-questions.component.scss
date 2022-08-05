@@ -5,7 +5,6 @@
 }
 
 article.l-faq {
-
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -13,7 +12,6 @@ article.l-faq {
     hp-faq-list-section {
         margin-top: 46px;
     }
-
 
     .inquiry-card {
         display: flex;
@@ -54,7 +52,6 @@ article.l-faq {
     }
 
     @media (min-width: 768px) {
-
         hp-faq-list-section {
             margin-top: 73px;
         }
@@ -86,7 +83,6 @@ article.l-faq {
         }
     }
     @media (min-width: 1280px) {
-
         hp-faq-list-section {
             margin-top: 113px;
         }
@@ -113,9 +109,7 @@ article.l-faq {
         }
     }
     @media (min-width: 1440px) {
-
     }
     @media (min-width: 1920px) {
-
     }
 }

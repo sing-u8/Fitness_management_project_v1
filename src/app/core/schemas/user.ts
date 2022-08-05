@@ -1,4 +1,5 @@
 import { Center } from './center'
+import { PermissionCategory } from '@schemas/permission-category'
 
 export interface User {
     // default information

@@ -27,6 +27,7 @@ import { MemberListModalComponent } from './components/common/member-list-modal/
 import { ChargeModalComponent } from './components/common/charge-modal/charge-modal.component'
 import { DatepickModalComponent } from './components/common/datepick-modal/datepick-modal.component'
 import { DbDatepickerComponent } from './components/common/db-datepicker/db-datepicker.component'
+import { RolemodalComponent } from './components/common/rolemodal/rolemodal.component'
 
 // -drawer- //
 import { LessonFlipListComponent } from './components/redwhale/drawer/lesson-flip-list/lesson-flip-list.component'
@@ -133,6 +134,7 @@ FullCalendarModule.registerPlugins([
         SmallModalComponent,
         MemberListModalComponent,
         LessonFlipListComponent,
+        RolemodalComponent,
         // -- //drawer
         DrawerLessonCardComponent,
         SchDayRepeatSelectComponent,
@@ -214,6 +216,7 @@ FullCalendarModule.registerPlugins([
         SmallModalComponent,
         MemberListModalComponent,
         LessonFlipListComponent,
+        RolemodalComponent,
         // -- //drawer
         DrawerLessonCardComponent,
         SchDayRepeatSelectComponent,

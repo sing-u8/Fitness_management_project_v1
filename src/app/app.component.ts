@@ -7,13 +7,16 @@ import { DeeplinkService } from '@services/deeplink.service'
 
 // ngrx
 import { Store, select } from '@ngrx/store'
-import { modalSelector, toastSelector } from '@appStore/selectors'
+import { modalSelector, toastSelector, roleModalSelector } from '@appStore/selectors'
 import { hideModal } from '@appStore/actions/modal.action'
 import { hideToast } from '@appStore/actions/toast.action'
 
 // schemas
 import { Modal } from '@schemas/store/app/modal.interface'
 import { Toast } from '@schemas/store/app/toast.interface'
+import { RoleModal } from '@schemas/store/app/modal.interface'
+
+import _ from 'lodash'
 
 @Component({
     selector: 'app-root',
@@ -25,6 +28,7 @@ export class AppComponent implements OnDestroy, OnInit {
 
     public modalState: Modal
     public toastState: Toast
+    public roleModalState: RoleModal
 
     constructor(private nxStore: Store, private deepLink: DeeplinkService, private fireAuth: Auth) {
         this.nxStore.pipe(select(modalSelector), takeUntil(this.unSubscriber$)).subscribe((modal) => {
@@ -33,7 +37,9 @@ export class AppComponent implements OnDestroy, OnInit {
         this.nxStore.pipe(select(toastSelector), takeUntil(this.unSubscriber$)).subscribe((toast) => {
             this.toastState = toast
         })
-
+        this.nxStore.pipe(select(roleModalSelector), takeUntil(this.unSubscriber$)).subscribe((roleModal) => {
+            this.roleModalState = _.cloneDeep(roleModal)
+        })
         // this.deepLink.launchAppWhenInMobile();
     }
 

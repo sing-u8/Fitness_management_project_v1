@@ -5,8 +5,16 @@ import { AppStateInterface } from '@schemas/store/app/appState.interface'
 
 import { showToast, hideToast } from '@appStore/actions/toast.action'
 import { openDrawer, closeDrawer, setScheduleDrawerIsReset } from '@appStore/actions/drawer.action'
-import { showModal, hideModal } from '@appStore/actions/modal.action'
+import {
+    showModal,
+    hideModal,
+    showRoleModal,
+    closeRoleModal,
+    startCloseRoleModal,
+    finishCloseRoleModal,
+} from '@appStore/actions/modal.action'
 import { setRegistration, removeRegistration } from '@appStore/actions/registration.action'
+
 import { debugLog } from '@appStore/actions/log.action'
 
 import { environment } from '@environments/environment'
@@ -39,6 +47,12 @@ const initialState: AppStateInterface = {
     },
     // schedule is reset
     scheduleDrawerIsReset: false,
+    // role
+    roleModal: {
+        center: null,
+        visible: false,
+        permissionCateg: [],
+    },
 }
 
 export const appReducer = createImmerReducer(
@@ -94,6 +108,28 @@ export const appReducer = createImmerReducer(
     }),
     on(setScheduleDrawerIsReset, (state, action) => {
         state.scheduleDrawerIsReset = action.isReset
+        return state
+    }),
+    on(showRoleModal, (state, action) => {
+        state.roleModal.center = action.center
+        state.roleModal.visible = true
+        state.roleModal.permissionCateg = action.instPermissionCategs
+        return state
+    }),
+    on(closeRoleModal, (state, action) => {
+        state.roleModal.center = null
+        state.roleModal.visible = false
+        state.roleModal.permissionCateg = []
+        return state
+    }),
+    on(startCloseRoleModal, (state, action) => {
+        state.roleModal.permissionCateg = action.instPermissionCategs
+        return state
+    }),
+    on(finishCloseRoleModal, (state, action) => {
+        state.roleModal.center = null
+        state.roleModal.visible = false
+        state.roleModal.permissionCateg = []
         return state
     }),
     // -------------------------------------------------------------------------------------//

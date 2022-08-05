@@ -16,8 +16,8 @@ import { PermissionItem } from '@schemas/permission-item'
 @Injectable({
     providedIn: 'root',
 })
-export class CenterRolePermission {
-    private SERVER = `${environment.protocol}${environment.subDomain}${environment.domain}${environment.port}${environment.version}/center`
+export class CenterRolePermissionService {
+    private SERVER = `${environment.protocol}${environment.subDomain}${environment.domain}${environment.port}${environment.version}/center/`
     private options = {
         headers: new HttpHeaders({
             'Content-Type': 'application/json',
@@ -38,12 +38,12 @@ export class CenterRolePermission {
         )
     }
 
-    getCenterRolePermission(centerId: string, roleCode: string): Observable<PermissionCategory> {
+    getCenterRolePermission(centerId: string, roleCode: string): Observable<Array<PermissionCategory>> {
         const url = this.SERVER + `${centerId}/role/${roleCode}/permission`
 
         return this.http.get<Response>(url, this.options).pipe(
             map((res) => {
-                return res.dataset[0]
+                return res.dataset
             }),
             catchError(handleError)
         )
@@ -78,12 +78,12 @@ export class CenterRolePermission {
         roleCode: string,
         permissionCode: string,
         reqBody: ModifyCenterRolePermissionReqBody
-    ): Observable<PermissionItem> {
+    ): Observable<Array<PermissionItem>> {
         const url = this.SERVER + `${centerId}/role/${roleCode}/permission/${permissionCode}`
 
         return this.http.put<Response>(url, reqBody, this.options).pipe(
             map((res) => {
-                return res.dataset[0]
+                return res.dataset
             }),
             catchError(handleError)
         )
