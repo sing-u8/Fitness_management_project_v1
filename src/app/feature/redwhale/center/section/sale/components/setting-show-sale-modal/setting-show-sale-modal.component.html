@@ -2,28 +2,41 @@
 <div
     class="rw-modal-wrapper"
     (mouseup)="!isMouseModalDown && onCancel()"
-    (mousedown)='resetMouseModalDown()'
+    (mousedown)="resetMouseModalDown()"
     #modalWrapperElement
 >
-    <div class="rw-modal push-size user-select-none" (mousedown)='onMouseModalDown(); $event.stopPropagation()'>
+    <div class="rw-modal push-size user-select-none" (mousedown)="onMouseModalDown(); $event.stopPropagation()">
         <div class="title-container">
-            <div class="text rw-typo-title1 ">{{ data?.text }}</div>
+            <div class="text rw-typo-title1">{{ data?.text }}</div>
             <div class="sub-text rw-typo-subtext1">{{ data?.subText }}</div>
-            <div id='push-notice' class="input">
+            <div id="push-notice" class="input">
                 <div class="push-notice-container">
-                    <rw-switch [text]="value  ? '강사에게도 매출 공개  🙉' :'강사에게 매출 비공개  🙈'" [(ngModel)]="value"></rw-switch>
+                    <rw-switch
+                        [text]="value ? '강사에게도 매출 공개  🙉' : '강사에게 매출 비공개  🙈'"
+                        [(ngModel)]="value.value"
+                    ></rw-switch>
                 </div>
             </div>
         </div>
 
         <div class="button-group">
-            <div class="cancel " rw-button (click)="onCancel()">
+            <div class="cancel" rw-button (click)="onCancel()">
                 {{ data?.cancelButtonText || '취소' }}
             </div>
-            <div class="confirm " rw-button rwButtonColor="var(--red)" (click)="onConfirm()">
-                {{ data?.confirmButtonText || '확인' }}
+            <div class="confirm">
+                <rw-button
+                    [height]="'49'"
+                    [width]="'347.44'"
+                    [color]="'var(--red)'"
+                    [borderRadius]="'0'"
+                    [loadingName]="'showSale'"
+                    (onClick)="onConfirm($event)"
+                >
+                    <span>
+                        {{ data?.confirmButtonText || '확인' }}
+                    </span>
+                </rw-button>
             </div>
         </div>
     </div>
-
 </div>

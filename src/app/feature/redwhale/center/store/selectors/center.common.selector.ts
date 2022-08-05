@@ -8,3 +8,4 @@ export const CommonFeature = createSelector(GymFeature, (state: GymState) => sta
 export const curCenter = createSelector(CommonFeature, FromCommon.selectCurCenter)
 export const instructors = createSelector(CommonFeature, FromCommon.selectInstructors)
 export const members = createSelector(CommonFeature, FromCommon.selectMembers)
+export const centerPermission = createSelector(CommonFeature, FromCommon.selectCenterPemission)

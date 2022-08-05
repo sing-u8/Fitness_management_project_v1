@@ -10,7 +10,6 @@ import { CenterRolePermissionService } from '@services/center-role-permission.se
 import { User } from '@schemas/user'
 import { Center } from '@schemas/center'
 import { Drawer } from '@schemas/store/app/drawer.interface'
-import { PermissionCategory } from '@schemas/permission-category'
 
 import _ from 'lodash'
 
@@ -21,11 +20,13 @@ import { Observable, Subscription } from 'rxjs'
 import { Store, select } from '@ngrx/store'
 import { resetAllState } from '@centerStore/actions/sec.center.all.actions'
 import { drawerSelector } from '@appStore/selectors'
-import { showModal, showRoleModal } from '@appStore/actions/modal.action'
 import { openDrawer, closeDrawer } from '@appStore/actions/drawer.action'
-import { roleModalSelector } from '@appStore/selectors'
+import { setCenterPermissionModal } from '@centerStore/actions/center.common.actions'
+import { PermissionObj } from '@centerStore/reducers/center.common.reducer'
+import { centerPermission } from '@centerStore/selectors/center.common.selector'
 import { Subject } from 'rxjs'
 import { takeUntil } from 'rxjs/operators'
+import { showModal } from '@appStore/actions/modal.action'
 
 @Component({
     selector: 'rw-header',
@@ -43,7 +44,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     centerList: Array<Center> = []
     invitedGymList: Array<Center>
 
-    centerPermission: Array<PermissionCategory> = []
+    centerPermissionObj: PermissionObj
 
     popupGymListVisible: boolean
     avatarMenuVisible: boolean
@@ -68,11 +69,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
         this.center = this.storageService.getCenter()
 
         this.getCenterList()
-        this.getCenterPermission()
-        this.nxStore.pipe(select(roleModalSelector), takeUntil(this.unSubscriber$)).subscribe((roleModal) => {
-            if (roleModal.center?.id == this.center.id) {
-                this.centerPermission = _.cloneDeep(roleModal).permissionCateg
-            }
+
+        this.nxStore.pipe(select(centerPermission), takeUntil(this.unSubscriber$)).subscribe((po) => {
+            this.centerPermissionObj = po
         })
     }
     ngOnDestroy(): void {
@@ -101,17 +100,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
         })
     }
 
-    getCenterPermission() {
-        const center = this.storageService.getCenter()
-        this.centerRolePermissionService
-            .getCenterRolePermission(center.id, 'instructor')
-            .subscribe((permissionCategs) => {
-                this.centerPermission = permissionCategs
-            })
-    }
     openRoleModal() {
-        const center = this.storageService.getCenter()
-        this.nxStore.dispatch(showRoleModal({ center: center, instPermissionCategs: this.centerPermission }))
+        this.nxStore.dispatch(setCenterPermissionModal({ visible: true }))
         this.closeSettingDropdown()
         this.hidePopupGymList()
     }

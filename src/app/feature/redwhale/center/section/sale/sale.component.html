@@ -4,14 +4,19 @@
             <span class="title rw-typo-headline1">매출</span>
             <span class="title-desc rw-typo-subtext1">원하는 조건을 설정하여 매출을 간편하게 확인해보세요.</span>
         </div>
-        <div class="setting-show-sale-button" rw-button rwButtonColor="var(--white)" (click)="openSettingShowSaleModal()">
-            <img src="assets/icons/header/settings-darkgrey.svg">
+        <div
+            *ngIf="showSettingSale"
+            class="setting-show-sale-button"
+            rw-button
+            rwButtonColor="var(--white)"
+            (click)="openSettingShowSaleModal()"
+        >
+            <img src="assets/icons/header/settings-darkgrey.svg" />
             <span class="rw-typo-bodytext0-bold">매출 공개 설정</span>
         </div>
     </header>
 
     <article class="content-container thin-scroll-y">
-
         <aside class="left-content">
             <p class="rw-typo-title1 content-title-margin">통계</p>
 
@@ -29,13 +34,12 @@
                     <div class="filter-tag-container sale-scroll-x">
                         <div *ngFor="let item of filterTagList" class="filter-tag">
                             <div class="rw-typo-bodytext2 tag-texts">
-                                <span class='rw-typo-bodytext2-regular tag-type'>{{item.type}} &nbsp;:&nbsp;</span>
-                                {{item.value}}
+                                <span class="rw-typo-bodytext2-regular tag-type">{{ item.type }} &nbsp;:&nbsp;</span>
+                                {{ item.value }}
                             </div>
-                            <img (click)="item.cancelFn()" src="assets/icons/etc/close_grey.svg">
+                            <img (click)="item.cancelFn()" src="assets/icons/etc/close_grey.svg" />
                         </div>
                     </div>
-
                 </div>
                 <rw-sale-date-selector
                     [selectedDate]="selectedDate"
@@ -43,21 +47,18 @@
                 ></rw-sale-date-selector>
             </div>
             <rw-sale-table
-                [saleData]="(saleData$ | async)"
-                [saleStatistics]="( saleStatistics$ | async)"
+                [saleData]="saleData$ | async"
+                [saleStatistics]="saleStatistics$ | async"
                 [showEmptyTableFlag]="showEmptyTableFlag"
             ></rw-sale-table>
         </main>
-
     </article>
-
 </section>
 
 <rw-setting-show-sale-modal
-    [(visible)] = "doSettingShowSaleModal"
-    [data] = "settingShowSaleData"
-    [value] = "showSale"
-    (valueChange)="showSale=$event"
-    (cancel) = 'onSettingShowSaleModalCancel()'
-    (confirm) = 'onSettingShowSaleModalConfirm($event)'
+    [(visible)]="doSettingShowSaleModal"
+    [data]="settingShowSaleData"
+    [value]="showSale"
+    (cancel)="onSettingShowSaleModalCancel()"
+    (confirm)="onSettingShowSaleModalConfirm($event)"
 ></rw-setting-show-sale-modal>

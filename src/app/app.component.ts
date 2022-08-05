@@ -8,6 +8,8 @@ import { DeeplinkService } from '@services/deeplink.service'
 // ngrx
 import { Store, select } from '@ngrx/store'
 import { modalSelector, toastSelector, roleModalSelector } from '@appStore/selectors'
+import * as CenterCommonSelector from '@centerStore/selectors/center.common.selector'
+
 import { hideModal } from '@appStore/actions/modal.action'
 import { hideToast } from '@appStore/actions/toast.action'
 
@@ -15,6 +17,7 @@ import { hideToast } from '@appStore/actions/toast.action'
 import { Modal } from '@schemas/store/app/modal.interface'
 import { Toast } from '@schemas/store/app/toast.interface'
 import { RoleModal } from '@schemas/store/app/modal.interface'
+import { PermissionObj } from '@centerStore/reducers/center.common.reducer'
 
 import _ from 'lodash'
 
@@ -29,6 +32,7 @@ export class AppComponent implements OnDestroy, OnInit {
     public modalState: Modal
     public toastState: Toast
     public roleModalState: RoleModal
+    public centerPermissionState: PermissionObj
 
     constructor(private nxStore: Store, private deepLink: DeeplinkService, private fireAuth: Auth) {
         this.nxStore.pipe(select(modalSelector), takeUntil(this.unSubscriber$)).subscribe((modal) => {
@@ -40,6 +44,11 @@ export class AppComponent implements OnDestroy, OnInit {
         this.nxStore.pipe(select(roleModalSelector), takeUntil(this.unSubscriber$)).subscribe((roleModal) => {
             this.roleModalState = _.cloneDeep(roleModal)
         })
+        this.nxStore
+            .pipe(select(CenterCommonSelector.centerPermission), takeUntil(this.unSubscriber$))
+            .subscribe((cp) => {
+                this.centerPermissionState = _.cloneDeep(cp)
+            })
         // this.deepLink.launchAppWhenInMobile();
     }
 
@@ -59,4 +68,5 @@ export class AppComponent implements OnDestroy, OnInit {
     hideToast() {
         this.nxStore.dispatch(hideToast())
     }
+    //
 }

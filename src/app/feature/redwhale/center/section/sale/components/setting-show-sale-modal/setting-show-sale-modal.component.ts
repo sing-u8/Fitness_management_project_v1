@@ -12,10 +12,18 @@ import {
     ViewChild,
 } from '@angular/core'
 
+import _ from 'lodash'
 import { UsersService } from '@services/users.service'
 import { StorageService } from '@services/storage.service'
 
+import { ClickEmitterType } from '@shared/components/common/button/button.component'
 import { User } from '@schemas/user'
+
+// ngrx
+import { Store, select } from '@ngrx/store'
+import { roleModalSelector } from '@appStore/selectors'
+import { Subject } from 'rxjs'
+import { takeUntil } from 'rxjs/operators'
 
 export interface modalData {
     text: string
@@ -32,15 +40,19 @@ export interface modalData {
 export class SettingShowSaleModalComponent implements OnChanges, AfterViewChecked, OnInit {
     @Input() visible: boolean
     @Input() data: modalData
-    @Input() value!: boolean
-    @Output() valueChange = new EventEmitter<boolean>()
+    @Input() value: {
+        value: boolean
+    }
+    @Output() valueChange = new EventEmitter<{
+        value: boolean
+    }>()
 
     @ViewChild('modalBackgroundElement') modalBackgroundElement
     @ViewChild('modalWrapperElement') modalWrapperElement
 
     @Output() visibleChange = new EventEmitter<boolean>()
     @Output() cancel = new EventEmitter<any>()
-    @Output() confirm = new EventEmitter<any>()
+    @Output() confirm = new EventEmitter<{ openSale: boolean; clickEmitter: ClickEmitterType }>()
 
     public user: User
 
@@ -54,12 +66,7 @@ export class SettingShowSaleModalComponent implements OnChanges, AfterViewChecke
 
     changed: boolean
 
-    constructor(
-        private el: ElementRef,
-        private renderer: Renderer2,
-        private usersService: UsersService,
-        private storageService: StorageService
-    ) {
+    constructor(private el: ElementRef, private renderer: Renderer2, private storageService: StorageService) {
         this.user = this.storageService.getUser()
         this.isMouseModalDown = false
         this.nameValid = false
@@ -96,12 +103,13 @@ export class SettingShowSaleModalComponent implements OnChanges, AfterViewChecke
 
     onCancel(): void {
         this.cancel.emit({})
+        // this.valueChange.emit(this.value)
     }
 
-    onConfirm(): void {
-        console.log('onConfirm : ', this.value)
-        this.confirm.emit(this.value)
-        this.valueChange.emit(this.value)
+    onConfirm(ClickEmitter: ClickEmitterType): void {
+        ClickEmitter.showLoading()
+        this.confirm.emit({ clickEmitter: ClickEmitter, openSale: this.value.value })
+        // this.valueChange.emit(this.value)
     }
     // on mouse rw-modal down
     onMouseModalDown() {

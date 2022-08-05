@@ -16,25 +16,26 @@ import _ from 'lodash'
 
 import { ClickEmitterType } from '@shared/components/common/button/button.component'
 import { Center } from '@schemas/center'
+import { StorageService } from '@services/storage.service'
 import { CenterRolePermissionService } from '@services/center-role-permission.service'
 
-import { closeRoleModal, startCloseRoleModal } from '@appStore/actions/modal.action'
+import { setCenterPermissionModal, startUpdateCenterPermission } from '@centerStore/actions/center.common.actions'
+import { PermissionObj } from '@centerStore/reducers/center.common.reducer'
 import { RoleModal } from '@schemas/store/app/modal.interface'
 import { Store } from '@ngrx/store'
 
 @Component({
-    selector: 'rw-rolemodal',
-    templateUrl: './rolemodal.component.html',
-    styleUrls: ['./rolemodal.component.scss'],
+    selector: 'rw-center-rolemodal',
+    templateUrl: './center-rolemodal.component.html',
+    styleUrls: ['./center-rolemodal.component.scss'],
 })
-export class RolemodalComponent implements OnChanges, AfterViewChecked, OnDestroy {
+export class CenterRolemodalComponent implements OnChanges, AfterViewChecked, OnDestroy {
     @Input() visible = false
     @Output() visibleChange = new EventEmitter<boolean>()
 
-    @Input() roleModal: RoleModal = {
+    @Input() permissionObj: PermissionObj = {
         visible: false,
-        center: undefined,
-        permissionCateg: [],
+        instructor: [],
     }
 
     @ViewChild('modalBackgroundElement') modalBackgroundElement
@@ -42,8 +43,9 @@ export class RolemodalComponent implements OnChanges, AfterViewChecked, OnDestro
 
     public changed: boolean
     public isMouseModalDown = false
+    public center: Center
 
-    constructor(private renderer: Renderer2, private nxStore: Store) {}
+    constructor(private renderer: Renderer2, private nxStore: Store, private storageService: StorageService) {}
 
     ngOnChanges(changes: SimpleChanges) {
         if (!changes['visible']?.firstChange) {
@@ -64,6 +66,7 @@ export class RolemodalComponent implements OnChanges, AfterViewChecked, OnDestro
                     this.renderer.addClass(this.modalBackgroundElement.nativeElement, 'rw-modal-background-show')
                     this.renderer.addClass(this.modalWrapperElement.nativeElement, 'rw-modal-wrapper-show')
                 }, 0)
+                this.center = this.storageService.getCenter()
             } else {
                 this.renderer.removeClass(this.modalBackgroundElement.nativeElement, 'rw-modal-background-show')
                 this.renderer.removeClass(this.modalWrapperElement.nativeElement, 'rw-modal-wrapper-show')
@@ -78,15 +81,21 @@ export class RolemodalComponent implements OnChanges, AfterViewChecked, OnDestro
     ngOnDestroy(): void {}
 
     onCancel(): void {
-        this.nxStore.dispatch(closeRoleModal())
+        this.nxStore.dispatch(setCenterPermissionModal({ visible: false }))
     }
     onSave(clickEmitter: ClickEmitterType): void {
         clickEmitter.showLoading()
         this.nxStore.dispatch(
-            startCloseRoleModal({
-                clickEmitter,
-                instPermissionCategs: this.roleModal.permissionCateg,
-                center: this.roleModal.center,
+            startUpdateCenterPermission({
+                centerId: this.center.id,
+                roleCode: 'instructor',
+                permmissionKeyCode: 'stats_sales',
+                permissionCode: 'read_stats_sales',
+                permissionCategoryList: this.permissionObj.instructor,
+                cb: () => {
+                    clickEmitter.hideLoading()
+                    this.onCancel()
+                },
             })
         )
     }

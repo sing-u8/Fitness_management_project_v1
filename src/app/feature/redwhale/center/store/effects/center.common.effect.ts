@@ -10,12 +10,18 @@ import { Center } from '@schemas/center'
 import { CenterUser } from '@schemas/center-user'
 
 import { CenterUserListService } from '@services/helper/center-user-list.service'
+import { CenterRolePermissionService } from '@services/center-role-permission.service'
 
 import * as centerCommonActions from '@centerStore/actions/center.common.actions'
 
 @Injectable()
 export class CenterCommonEffect {
-    constructor(private centerUserListApi: CenterUserListService, private store: Store, private actions$: Actions) {}
+    constructor(
+        private centerUserListApi: CenterUserListService,
+        private store: Store,
+        private actions$: Actions,
+        private centerRolePermissionApi: CenterRolePermissionService
+    ) {}
 
     public getInstructors$ = createEffect(() =>
         this.actions$.pipe(
@@ -49,5 +55,44 @@ export class CenterCommonEffect {
                     )
             )
         )
+    )
+
+    public getCenterPermission$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(centerCommonActions.startGetCenterPermission),
+            switchMap(({ roleCode, centerId }) =>
+                this.centerRolePermissionApi.getCenterRolePermission(centerId, roleCode).pipe(
+                    switchMap((permissionCategoryList) => {
+                        return [
+                            centerCommonActions.finishGetCenterPermission({
+                                roleCode,
+                                permissionCategoryList,
+                            }),
+                        ]
+                    })
+                )
+            )
+        )
+    )
+
+    public updateCenterPermission$ = createEffect(
+        () =>
+            this.actions$.pipe(
+                ofType(centerCommonActions.startUpdateCenterPermission),
+                switchMap(({ roleCode, centerId, permissionCode, permmissionKeyCode, permissionCategoryList, cb }) =>
+                    this.centerRolePermissionApi
+                        .modifyCenterRolePermission(centerId, roleCode, permissionCode, {
+                            approved: permissionCategoryList
+                                .find((v) => v.code == permmissionKeyCode)
+                                .items.find((v) => v.code == permissionCode).approved,
+                        })
+                        .pipe(
+                            tap(() => {
+                                cb ? cb() : null
+                            })
+                        )
+                )
+            ),
+        { dispatch: false }
     )
 }

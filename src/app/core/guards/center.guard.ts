@@ -30,7 +30,11 @@ export class CenterGuard implements CanActivate {
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
         const address = route.params['address']
+        const center: Center = this.storageService.getCenter()
         if (address == this.addrData.addr && this.addrData.isChecked) {
+            this.nxStore.dispatch(
+                CenterCommonActions.startGetCenterPermission({ roleCode: 'instructor', centerId: center.id })
+            )
             return of(true)
         } else {
             return this.CenterService.checkMemeber(address).pipe(
@@ -38,11 +42,12 @@ export class CenterGuard implements CanActivate {
                     this.addrData.addr = address
                     this.addrData.isChecked = true
 
-                    const center: Center = this.storageService.getCenter()
-                    console.log('CenterGuard center : ', center)
                     this.nxStore.dispatch(CenterCommonActions.setCurCenter({ center }))
                     this.nxStore.dispatch(CenterCommonActions.startGetInstructors({ centerId: center.id }))
                     this.nxStore.dispatch(CenterCommonActions.startGetMembers({ centerId: center.id }))
+                    this.nxStore.dispatch(
+                        CenterCommonActions.startGetCenterPermission({ roleCode: 'instructor', centerId: center.id })
+                    )
                     return true
                 }),
                 catchError((error: any) => {

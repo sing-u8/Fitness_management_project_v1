@@ -6,59 +6,85 @@ export interface PermissionCategory {
     items: Array<PermissionItem>
 }
 
-export interface PermissionCategoryCodes {
-    center: ['read_center', 'update_center']
-    role: ['create_role', 'read_role', 'update_role', 'delete_role']
-    permission: ['create_permission', 'read_permission', 'update_permission', 'delete_permission']
-    user: ['create_user', 'read_user', 'update_user']
-    class: [
-        'create_class_category',
-        'read_class_category',
-        'update_class_category',
-        'delete_class_category',
-        'create_class_item',
-        'read_class_item',
-        'update_class_item',
-        'delete_class_item'
-    ]
-    membership: [
-        'create_membership_category',
-        'read_membership_category',
-        'update_membership_category',
-        'delete_membership_category',
-        'create_membership_item',
-        'read_membership_item',
-        'update_membership_item',
-        'delete_membership_item'
-    ]
-    locker: [
-        'create_locker_category',
-        'read_locker_category',
-        'update_locker_category',
-        'delete_locker_category',
-        'create_locker_item',
-        'read_locker_item',
-        'update_locker_item',
-        'delete_locker_item'
-    ]
-    calendar: [
-        'create_calendar',
-        'read_calendar',
-        'update_calendar',
-        'delete_calendar',
-        'create_calendar_task',
-        'read_calendar_task',
-        'update_calendar_task',
-        'delete_calendar_task'
-    ]
-    user_membership: [
-        'create_user_membership',
-        'read_user_membership',
-        'update_user_membership',
-        'delete_user_membership'
-    ]
-    user_locker: ['create_user_locker', 'read_user_locker', 'update_user_locker', 'delete_user_locker']
-    stats_sales: ['read_stats_sales']
-}
+export type CenterPermissionCode = 'read_center' | 'update_center'
+export type RolePermissionCode = 'create_role' | 'read_role' | 'update_role' | 'delete_role'
+export type PermissionPermissionCode =
+    | 'create_permission'
+    | 'read_permission'
+    | 'update_permission'
+    | 'delete_permission'
+export type UserPermissionCode = 'create_user' | 'read_user' | 'update_user'
+export type ClassPermissionCode =
+    | 'create_class_category'
+    | 'read_class_category'
+    | 'update_class_category'
+    | 'delete_class_category'
+    | 'create_class_item'
+    | 'read_class_item'
+    | 'update_class_item'
+    | 'delete_class_item'
+export type MembershipPermissionCode =
+    | 'create_membership_category'
+    | 'read_membership_category'
+    | 'update_membership_category'
+    | 'delete_membership_category'
+    | 'create_membership_item'
+    | 'read_membership_item'
+    | 'update_membership_item'
+    | 'delete_membership_item'
+export type LockerPermissionCode =
+    | 'create_locker_category'
+    | 'read_locker_category'
+    | 'update_locker_category'
+    | 'delete_locker_category'
+    | 'create_locker_item'
+    | 'read_locker_item'
+    | 'update_locker_item'
+    | 'delete_locker_item'
+export type CalendarPermissionCode =
+    | 'create_calendar'
+    | 'read_calendar'
+    | 'update_calendar'
+    | 'delete_calendar'
+    | 'create_calendar_task'
+    | 'read_calendar_task'
+    | 'update_calendar_task'
+    | 'delete_calendar_task'
+export type UserMembershipPermissionCode =
+    | 'create_user_membership'
+    | 'read_user_membership'
+    | 'update_user_membership'
+    | 'delete_user_membership'
+export type UserLockerPermissionCode =
+    | 'create_user_locker'
+    | 'read_user_locker'
+    | 'update_user_locker'
+    | 'delete_user_locker'
+export type StatsSalesPermissionCode = 'read_stats_sales'
 
-export type Role = 'instructor'
+export type PermissionKeys =
+    | 'center'
+    | 'role'
+    | 'permission'
+    | 'user'
+    | 'class'
+    | 'membership'
+    | 'locker'
+    | 'calendar'
+    | 'user_membership'
+    | 'user_locker'
+    | 'stats_sales'
+export type PermissionCode =
+    | StatsSalesPermissionCode
+    | UserLockerPermissionCode
+    | UserMembershipPermissionCode
+    | CalendarPermissionCode
+    | LockerPermissionCode
+    | MembershipPermissionCode
+    | ClassPermissionCode
+    | UserPermissionCode
+    | PermissionPermissionCode
+    | RolePermissionCode
+    | CenterPermissionCode
+
+export type RoleCode = 'instructor'

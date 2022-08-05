@@ -19,10 +19,15 @@ import { takeUntil } from 'rxjs/operators'
 // ngrx and store
 import { Store, select } from '@ngrx/store'
 import { showToast } from '@appStore/actions/toast.action'
+import { setCenterPermissionModal } from '@centerStore/actions/center.common.actions'
+import { PermissionObj } from '@centerStore/reducers/center.common.reducer'
+import { centerPermission } from '@centerStore/selectors/center.common.selector'
 
 import * as FromSale from '@centerStore/reducers/sec.sale.reducer'
 import * as SaleSelector from '@centerStore/selectors/sec.sale.selector'
 import * as SaleActions from '@centerStore/actions/sec.sale.actions'
+import { ClickEmitterType } from '@shared/components/common/button/button.component'
+import { startUpdateCenterPermission } from '../../store/actions/center.common.actions'
 
 @Component({
     selector: 'sale',
@@ -54,6 +59,7 @@ export class SaleComponent implements OnInit, OnDestroy {
     }>
 
     public center: Center
+    public showSettingSale = false
     public tableOption: getStatsSaleOption
 
     public resizeUnlistener: () => void
@@ -65,6 +71,10 @@ export class SaleComponent implements OnInit, OnDestroy {
         this.showEmptyTableFlag = 'none'
         this.filterTagList = []
         this.center = this.storageService.getCenter()
+        this.showSettingSale =
+            this.center.role_code == 'owner' || this.center.permissions.find((v) => v == 'read_stats_sales')
+                ? true
+                : false
 
         this.nxStore
             .pipe(select(SaleSelector.selectedDate), takeUntil(this.unsubscriber$))
@@ -85,6 +95,15 @@ export class SaleComponent implements OnInit, OnDestroy {
         this.selectIsFiltered()
 
         this.nxStore.dispatch(SaleActions.startGetSaleSummary({ centerId: this.center.id }))
+
+        this.nxStore.pipe(select(centerPermission), takeUntil(this.unsubscriber$)).subscribe((po) => {
+            this.centerPermissionObj = _.cloneDeep(po)
+            if (!_.isEmpty(po.instructor)) {
+                this.showSale = {
+                    value: this.centerPermissionObj.instructor[10].items[0].approved,
+                }
+            }
+        })
     }
     ngOnDestroy(): void {
         // this.isFilteredSubscription.unsubscribe()
@@ -109,17 +128,41 @@ export class SaleComponent implements OnInit, OnDestroy {
         confirmButtonText: '저장하기',
     }
 
-    // ! 이후에 API로 수정 필요
-    public showSale = true
+    public showSale = {
+        value: false,
+    }
+    centerPermissionObj: PermissionObj
     public doSettingShowSaleModal = false
     openSettingShowSaleModal() {
         this.doSettingShowSaleModal = true
     }
     onSettingShowSaleModalCancel() {
+        this.showSale = {
+            value: this.centerPermissionObj.instructor[10].items[0].approved,
+        }
         this.doSettingShowSaleModal = false
     }
-    onSettingShowSaleModalConfirm(Return: boolean) {
-        this.doSettingShowSaleModal = false
+    onSettingShowSaleModalConfirm(Return: { clickEmitter: ClickEmitterType; openSale: boolean }) {
+        this.centerPermissionObj.instructor[10].items[0].approved = Return.openSale
+        console.log(
+            'onSettingShowSaleModalConfirm ---- ',
+            this.centerPermissionObj.instructor[10],
+            this.centerPermissionObj.instructor[10].items[0],
+            Return.openSale
+        )
+        this.nxStore.dispatch(
+            startUpdateCenterPermission({
+                centerId: this.center.id,
+                roleCode: 'instructor',
+                permmissionKeyCode: 'stats_sales',
+                permissionCode: 'read_stats_sales',
+                permissionCategoryList: this.centerPermissionObj.instructor,
+                cb: () => {
+                    Return.clickEmitter.hideLoading()
+                    this.doSettingShowSaleModal = false
+                },
+            })
+        )
     }
 
     // sale-date-selector vars and funcs

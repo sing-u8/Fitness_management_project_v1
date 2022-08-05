@@ -5,3 +5,7 @@
 <rw-toast [(visible)]="toastState.visible" [text]="toastState.text" [delay]="3000" (cancel)="hideToast()"></rw-toast>
 
 <rw-rolemodal [(visible)]="roleModalState.visible" [roleModal]="roleModalState"></rw-rolemodal>
+<rw-center-rolemodal
+    [(visible)]="centerPermissionState.visible"
+    [permissionObj]="centerPermissionState"
+></rw-center-rolemodal>
