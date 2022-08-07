@@ -60,8 +60,8 @@ export const CurUseDataInit: CurUseData = {
     user: undefined,
     lockers: [],
     memberships: [],
-    payments: [], // !! user paymnet
-    reservations: [], // !! user reservation
+    payments: [],
+    reservations: [],
     contract: [],
 }
 export const CurSearchInputInit = ''
@@ -257,6 +257,12 @@ export const dashboardReducer = createImmerReducer(
         state.usersLists[memberSelectCateg][index].holdSelected = holdFlag
         return state
     }),
+    on(DashboardActions.setAllUserListHold, (state, { memberSelectCateg, holdFlag }) => {
+        state.usersLists[memberSelectCateg].forEach((v) => {
+            v.holdSelected = holdFlag
+        })
+        return state
+    }),
     on(DashboardActions.resetUsersListsHoldSelected, (state, { memberSelectCateg }) => {
         const usersLists = state.usersLists
         usersLists[memberSelectCateg].forEach((item, index) => {
@@ -313,6 +319,8 @@ export const selectCurUserLockerData = (state: State) => state.curUserData.locke
 export const selectCurUserPaymentData = (state: State) => state.curUserData.payments
 export const selectCurUserReservationData = (state: State) => state.curUserData.reservations
 
+export const selectedUserListsHolding = (state: State) =>
+    state.usersLists[state.curUserListSelect.key].filter((v) => v.holdSelected).length
 // additional
 export const selectSearchedUsersLists = (state: State) => {
     const searchUserList: UsersLists = _.cloneDeep(UsersListInit)

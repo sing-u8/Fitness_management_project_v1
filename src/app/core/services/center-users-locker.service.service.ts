@@ -11,6 +11,7 @@ import { UserLocker } from '@schemas/user-locker'
 import { Unpaid } from '@schemas/unpaid'
 import { Payment } from '@schemas/payment'
 import { UserLockerHistory } from '@schemas/user-locker-history'
+import { Holding } from '@schemas/holding'
 
 @Injectable({
     providedIn: 'root',
@@ -99,36 +100,6 @@ export class CenterUsersLockerService {
     // 락커 이용권 - 락커 연결 해제
     stopLockerTicket(centerId: string, userId: string, lockerId: string): Observable<Response> {
         const url = this.SERVER + `/${centerId}/users/${userId}/locker/${lockerId}/stop`
-        const reqBody = {}
-
-        return this.http.post<Response>(url, reqBody, this.options).pipe(
-            map((res) => {
-                return res
-            }),
-            catchError(handleError)
-        )
-    }
-
-    // 락커 이용권 - 일시정지
-    pauseLockerTicket(
-        centerId: string,
-        userId: string,
-        lockerId: string,
-        reqBody: PauseLockerTicketReqBody
-    ): Observable<Response> {
-        const url = this.SERVER + `/${centerId}/users/${userId}/locker/${lockerId}/pause`
-
-        return this.http.post<Response>(url, reqBody, this.options).pipe(
-            map((res) => {
-                return res
-            }),
-            catchError(handleError)
-        )
-    }
-
-    // 락커 이용권 - 재개
-    resumeLockerTicket(centerId: string, userId: string, lockerId: string): Observable<Response> {
-        const url = this.SERVER + `/${centerId}/users/${userId}/locker/${lockerId}/resume`
         const reqBody = {}
 
         return this.http.post<Response>(url, reqBody, this.options).pipe(
@@ -254,7 +225,59 @@ export class CenterUsersLockerService {
         )
     }
 
-    // 락커 이용권 사용내역 조회
+    //  락커 - 홀딩
+    holdingLockerTicket(
+        centerId: string,
+        userId: string,
+        lockerId: string,
+        reqBody: HoldingLockerTicketReqBody
+    ): Observable<Holding> {
+        const url = this.SERVER + `/${centerId}/users/${userId}/Locker/${lockerId}/holding`
+
+        return this.http.post<Response>(url, reqBody, this.options).pipe(
+            map((res) => {
+                return res.dataset[0]
+            }),
+            catchError(handleError)
+        )
+    }
+
+    //  락커 - 홀딩수정
+    modifyHoldingLockerTicket(
+        centerId: string,
+        userId: string,
+        lockerId: string,
+        holdingId: string,
+        reqBody: UpdateHoldingLockerTicketReqBody
+    ): Observable<Response> {
+        const url = this.SERVER + `/${centerId}/users/${userId}/Locker/${lockerId}/holding/${holdingId}`
+
+        return this.http.put<Response>(url, reqBody, this.options).pipe(
+            map((res) => {
+                return res.dataset[0]
+            }),
+            catchError(handleError)
+        )
+    }
+
+    //  락커 - 홀딩 삭제
+    removeHoldingLockerTicket(
+        centerId: string,
+        userId: string,
+        lockerId: string,
+        holdingId: string
+    ): Observable<Response> {
+        const url = this.SERVER + `/${centerId}/users/${userId}/Locker/${lockerId}/holding/${holdingId}`
+
+        return this.http.delete<Response>(url, this.options).pipe(
+            map((res) => {
+                return res.dataset[0]
+            }),
+            catchError(handleError)
+        )
+    }
+
+    // 락커 이용권 사용내역 조회  // !!
     getLockerHistory(centerId: string, userId: string, lockerId: string): Observable<Array<UserLockerHistory>> {
         const url = this.SERVER + `/${centerId}/users/${userId}/locker/${lockerId}/history`
 
@@ -290,11 +313,6 @@ export interface UpdateLockerTicketReqBody {
 
 export interface StartLockerTicketReqBody {
     locker_item_id: string
-}
-
-export interface PauseLockerTicketReqBody {
-    pause_start_date: string
-    pause_end_date: string
 }
 
 export interface ExtendLockerTicketReqBody {
@@ -359,4 +377,13 @@ export interface UpdateLockerTicektPaymentReqBody {
         unpaid: number
         responsibility_user_id: string
     }
+}
+
+export interface HoldingLockerTicketReqBody {
+    start_date: string
+    end_date: string
+}
+export interface UpdateHoldingLockerTicketReqBody {
+    start_date: string
+    end_date: string
 }

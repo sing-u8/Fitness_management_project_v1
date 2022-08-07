@@ -10,6 +10,7 @@ import { UserMembership } from '@schemas/user-membership'
 import { ClassItem } from '@schemas/class-item'
 import { Payment } from '@schemas/payment'
 import { UserMembershipHistory } from '@schemas/user-membership-history'
+import { Holding } from '@schemas/holding'
 
 @Injectable({
     providedIn: 'root',
@@ -77,33 +78,33 @@ export class CenterUsersMembershipService {
             catchError(handleError)
         )
     }
-    // 회원권 일시정지
-    stopMembershipTicket(
-        centerId: string,
-        userId: string,
-        membershipId: string,
-        reqBody: StopMembershipTicketReqBody
-    ): Observable<Response> {
-        const url = this.SERVER + `/${centerId}/users/${userId}/membership/${membershipId}/pause`
+    // // 회원권 일시정지       // !!
+    // stopMembershipTicket(
+    //     centerId: string,
+    //     userId: string,
+    //     membershipId: string,
+    //     reqBody: StopMembershipTicketReqBody
+    // ): Observable<Response> {
+    //     const url = this.SERVER + `/${centerId}/users/${userId}/membership/${membershipId}/pause`
 
-        return this.http.post<Response>(url, reqBody, this.options).pipe(
-            map((res) => {
-                return res.dataset[0]
-            }),
-            catchError(handleError)
-        )
-    }
-    // 회원권 재개
-    resumeMembershipTicket(centerId: string, userId: string, membershipId: string): Observable<Response> {
-        const url = this.SERVER + `/${centerId}/users/${userId}/membership/${membershipId}/resume`
+    //     return this.http.post<Response>(url, reqBody, this.options).pipe(
+    //         map((res) => {
+    //             return res.dataset[0]
+    //         }),
+    //         catchError(handleError)
+    //     )
+    // }
+    // // 회원권 재개       // !!
+    // resumeMembershipTicket(centerId: string, userId: string, membershipId: string): Observable<Response> {
+    //     const url = this.SERVER + `/${centerId}/users/${userId}/membership/${membershipId}/resume`
 
-        return this.http.post<Response>(url, {}, this.options).pipe(
-            map((res) => {
-                return res.dataset[0]
-            }),
-            catchError(handleError)
-        )
-    }
+    //     return this.http.post<Response>(url, {}, this.options).pipe(
+    //         map((res) => {
+    //             return res.dataset[0]
+    //         }),
+    //         catchError(handleError)
+    //     )
+    // }
     // 회원권 연장
     extendMembershipTicket(
         centerId: string,
@@ -212,24 +213,62 @@ export class CenterUsersMembershipService {
             catchError(handleError)
         )
     }
-    // 회원권 수업 조회
-    getMembershipTicketClasses(centerId: string, userId: string, membershipId: string): Observable<Array<ClassItem>> {
-        const url = this.SERVER + `/${centerId}/users/${userId}/membership/${membershipId}/class`
-        return this.http.get<Response>(url, this.options).pipe(
+
+    //  회원권 - 홀딩
+    holdingMembershipTicket(
+        centerId: string,
+        userId: string,
+        membershipId: string,
+        reqBody: HoldingMembershipTicketReqBody
+    ): Observable<Holding> {
+        const url = this.SERVER + `/${centerId}/users/${userId}/membership/${membershipId}/holding`
+
+        return this.http.post<Response>(url, reqBody, this.options).pipe(
             map((res) => {
-                return res.dataset
+                return res.dataset[0]
             }),
             catchError(handleError)
         )
     }
-    // 회원권 사용내역 조회
-    getMembershipTicketHistory(
+
+    //  회원권 - 홀딩수정
+    modifyHoldingMembershipTicket(
         centerId: string,
         userId: string,
-        membershipId: string
-    ): Observable<Array<UserMembershipHistory>> {
-        const url = this.SERVER + `/${centerId}/users/${userId}/membership/${membershipId}/history`
+        membershipId: string,
+        holdingId: string,
+        reqBody: UpdateHoldingMembershipTicketReqBody
+    ): Observable<Response> {
+        const url = this.SERVER + `/${centerId}/users/${userId}/membership/${membershipId}/holding/${holdingId}`
 
+        return this.http.put<Response>(url, reqBody, this.options).pipe(
+            map((res) => {
+                return res.dataset[0]
+            }),
+            catchError(handleError)
+        )
+    }
+
+    //  회원권 - 홀딩 삭제
+    removeHoldingMembershipTicket(
+        centerId: string,
+        userId: string,
+        membershipId: string,
+        holdingId: string
+    ): Observable<Response> {
+        const url = this.SERVER + `/${centerId}/users/${userId}/membership/${membershipId}/holding/${holdingId}`
+
+        return this.http.delete<Response>(url, this.options).pipe(
+            map((res) => {
+                return res.dataset[0]
+            }),
+            catchError(handleError)
+        )
+    }
+
+    // 회원권 수업 조회
+    getMembershipTicketClasses(centerId: string, userId: string, membershipId: string): Observable<Array<ClassItem>> {
+        const url = this.SERVER + `/${centerId}/users/${userId}/membership/${membershipId}/class`
         return this.http.get<Response>(url, this.options).pipe(
             map((res) => {
                 return res.dataset
@@ -268,11 +307,6 @@ export interface UpdateMembershipTicketReqBody {
     unlimited?: boolean
     color?: string
     class_item_ids?: string[]
-}
-
-export interface StopMembershipTicketReqBody {
-    pause_start_date: string
-    pause_end_date: string
 }
 
 // export interface ResumeMembershipTicketReqBody {}
@@ -343,4 +377,13 @@ export interface UpdateMembershipTicketPaymentReqBody {
         memo: string
         responsibility_user_id: string
     }
+}
+
+export interface HoldingMembershipTicketReqBody {
+    start_date: string
+    end_date: string
+}
+export interface UpdateHoldingMembershipTicketReqBody {
+    start_date: string
+    end_date: string
 }

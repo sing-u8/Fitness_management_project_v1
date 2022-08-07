@@ -1,13 +1,12 @@
-<div
-    class="item"
-    [class.isExpired] = "isExpired"
->
-
+<div class="item" [class.isExpired]="isExpired">
     <div rwEllipsisDropdown [lineClamp]="2" class="col1 two-line-ellipsis">
-        {{membership.name}}
+        {{ membership.name }}
     </div>
     <div class="col2" [class.notification]="isHolding">
-        {{membership.start_date | dateFormat:'YYYY.MM.DD'}} - {{membership.end_date | dateFormat:'YYYY.MM.DD'}} ({{membership.start_date | period : membership.end_date}}일)
+        {{ membership.start_date | dateFormat: 'YYYY.MM.DD' }} -
+        {{ membership.end_date | dateFormat: 'YYYY.MM.DD' }} ({{
+            membership.start_date | period: membership.end_date
+        }}일)
     </div>
     <!-- <div class="col3" [class.notification]="isHolding">
         {{restDate}}일 / {{membership.unlimited ? '무제한' : membership.count < 1 || isExpired ? 0 : membership.count + '회' }} 남음
@@ -30,57 +29,56 @@
         </div> -->
 
         <div class="col4__content">
-            {{restDate}}일 / {{membership.unlimited ? '무제한' : membership.count < 1 || isExpired ? 0 : membership.count + '회' }} 남음
+            {{ restDate }}일 /
+            {{ membership.unlimited ? '무제한' : membership.count < 1 || isExpired ? 0 : membership.count + '회' }} 남음
         </div>
-        <div
-            class="col4__menu"
-            (click)="toggleMenuDropDown(); "
-            (rwClickOutside)="hideMenuDropDown()"
-        >
-            <div
-                class="l-menu-items"
-                [class.show-items]="showMenuDropDown"
-            >
+        <div class="col4__menu" (click)="toggleMenuDropDown()" (rwClickOutside)="hideMenuDropDown()">
+            <div class="l-menu-items" [class.show-items]="showMenuDropDown">
                 <div
                     class="menu-item"
-                    *ngFor="let item of menuDropDownItemObj | keyvalue : originalOrder"
-                    [ngStyle]="{color: item.value.color}"
-                    [class.none] = "!item.value.visible"
-                    (click) = "item.value.func()"
+                    *ngFor="let item of menuDropDownItemObj | keyvalue: originalOrder"
+                    [ngStyle]="{ color: item.value.color }"
+                    [class.none]="!item.value.visible"
+                    (click)="item.value.func()"
                 >
-                    {{item.value.name}}
+                    {{ item.value.name }}
                 </div>
             </div>
         </div>
     </div>
-    <div *ngIf="!isExpired && isHolding" class="rw-typo-subtext0-regular col-notification" [class.show-notification]="isHolding">
 
-        <div class="d-flex align-items-center">
-            <div class="alert-icon"></div>
-            {{membership.pause_start_date | dateFormat:'YYYY.MM.DD'}} - {{membership.pause_end_date | dateFormat:'YYYY.MM.DD'}} ({{membership.pause_start_date | period :
-            membership.pause_end_date}}일) {{isHoldingReservaed ? '홀딩 예약' : '홀딩중'}}
-        </div>
-
+    <ng-container *ngIf="!isExpired && isHolding">
         <div
-            class="notification-menu"
-            (click)="toggleNotificationDropDown();"
-            (rwClickOutside)="hideNotificationDropDown()"
+            *ngFor="let item of membership.holding"
+            class="rw-typo-subtext0-regular col-notification"
+            [class.show-notification]="isHolding"
         >
+            <div class="d-flex align-items-center">
+                <div class="alert-icon"></div>
+                {{ item.start_date | dateFormat: 'YYYY.MM.DD' }} - {{ item.end_date | dateFormat: 'YYYY.MM.DD' }} ({{
+                    item.start_date | period: item.end_date
+                }}일) {{ (item.start_date | isAfter) ? '홀딩 예약' : '홀딩중' }}
+            </div>
+
             <div
-                class="l-menu-items"
-                [class.show-items]="showNotificationDropDown"
+                class="notification-menu"
+                (click)="toggleNotificationDropDown()"
+                (rwClickOutside)="hideNotificationDropDown()"
             >
-                <div
-                    class="menu-item"
-                    *ngFor="let item of holdingMenuDropDownItemObj | keyvalue : originalOrder"
-                    [ngStyle]="{color: item.value.color}"
-                    [class.none] = "!item.value.visible"
-                    (click) = "item.value.func()"
-                >
-                    {{item.value.name}}
+                <div class="l-menu-items" [class.show-items]="showNotificationDropDown">
+                    <div
+                        class="menu-item"
+                        *ngFor="let item of holdingMenuDropDownItemObj | keyvalue: originalOrder"
+                        [ngStyle]="{ color: item.value.color }"
+                        [class.none]="!item.value.visible"
+                        (click)="item.value.func()"
+                    >
+                        {{ item.value.name }}
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </ng-container>
+
     <div class="border-bottom"></div>
 </div>

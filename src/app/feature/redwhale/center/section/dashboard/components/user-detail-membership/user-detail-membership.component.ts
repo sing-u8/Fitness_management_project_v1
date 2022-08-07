@@ -6,7 +6,8 @@ import {
     ExtendMembershipTicketReqBody,
     RefundMembershipTicketReqBody,
     TransferMembershipTicketReqBody,
-    StopMembershipTicketReqBody,
+    UpdateHoldingMembershipTicketReqBody,
+    HoldingMembershipTicketReqBody,
 } from '@services/center-users-membership.service'
 import { StorageService } from '@services/storage.service'
 import { DashboardHelperService } from '@services/center/dashboard-helper.service'
@@ -228,10 +229,10 @@ export class UserDetailMembershipComponent implements OnInit {
             this.selectedUserMembership.name,
             15
         )}' 홀딩 기간을 수정하시겠어요?`
-        this.updateHoldDateInput = _.cloneDeep({
-            startDate: this.selectedUserMembership.pause_start_date,
-            endDate: this.selectedUserMembership.pause_end_date,
-        })
+        // this.updateHoldDateInput = _.cloneDeep({
+        //     startDate: this.selectedUserMembership.pause_start_date,
+        //     endDate: this.selectedUserMembership.pause_end_date,
+        // })
         console.log('toggleUpdateHoldModal : ', this.updateHoldDateInput)
         this.showUpdateHoldModal = !this.showUpdateHoldModal
     }
@@ -308,12 +309,12 @@ export class UserDetailMembershipComponent implements OnInit {
             })
     }
     callHodingApi(cb?: () => void) {
-        const reqBody: StopMembershipTicketReqBody = {
-            pause_start_date: this.holdData.startDate,
-            pause_end_date: this.holdData.endDate,
+        const reqBody: HoldingMembershipTicketReqBody = {
+            start_date: this.holdData.startDate,
+            end_date: this.holdData.endDate,
         }
         this.centerUsersMembershipService
-            .stopMembershipTicket(this.center.id, this.curUserData.user.id, this.selectedUserMembership.id, reqBody)
+            .holdingMembershipTicket(this.center.id, this.curUserData.user.id, this.selectedUserMembership.id, reqBody)
             .subscribe({
                 next: (_) => {
                     const toastText = dayjs(this.holdData.startDate).isSameOrBefore(dayjs())
@@ -433,51 +434,55 @@ export class UserDetailMembershipComponent implements OnInit {
     }
 
     callUpdateHoldingApi(cb?: () => void) {
-        const reqBody: StopMembershipTicketReqBody = {
-            pause_start_date: this.updateHoldData.startDate,
-            pause_end_date: this.updateHoldData.endDate,
+        const reqBody: UpdateHoldingMembershipTicketReqBody = {
+            start_date: this.updateHoldData.startDate,
+            end_date: this.updateHoldData.endDate,
         }
-        this.centerUsersMembershipService
-            .stopMembershipTicket(this.center.id, this.curUserData.user.id, this.selectedUserMembership.id, reqBody)
-            .subscribe({
-                next: (_) => {
-                    const toastText = `'${this.wordService.ellipsis(
-                        this.selectedUserMembership.name,
-                        6
-                    )}' 홀딩 기간이 수정되었습니다.`
+        // this.centerUsersMembershipService
+        //     .modifyHoldingMembershipTicket(
+        //         this.center.id,
+        //         this.curUserData.user.id,
+        //         this.selectedUserMembership.id,
+        //         reqBody
+        //     )
+        //     .subscribe({
+        //         next: (_) => {
+        //             const toastText = `'${this.wordService.ellipsis(
+        //                 this.selectedUserMembership.name,
+        //                 6
+        //             )}' 홀딩 기간이 수정되었습니다.`
 
-                    this.nxStore.dispatch(showToast({ text: toastText }))
-                    // this.nxStore.dispatch(
-                    //     DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.curUserData.user })
-                    // )
-                    this.dashboardHelper.refreshCurUser(this.center.id, this.curUserData.user)
-                    cb ? cb() : null
-                },
-                error: () => {
-                    cb ? cb() : null
-                },
-            })
+        //             this.nxStore.dispatch(showToast({ text: toastText }))
+        //             // this.nxStore.dispatch(
+        //             //     DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.curUserData.user })
+        //             // )
+        //             this.dashboardHelper.refreshCurUser(this.center.id, this.curUserData.user)
+        //             cb ? cb() : null
+        //         },
+        //         error: () => {
+        //             cb ? cb() : null
+        //         },
+        //     })
     }
     callRemoveHoldingApi(cb?: () => void) {
-        this.centerUsersMembershipService
-            .resumeMembershipTicket(this.center.id, this.curUserData.user.id, this.selectedUserMembership.id)
-            .subscribe({
-                next: (_) => {
-                    const toastText = `'${this.wordService.ellipsis(
-                        this.selectedUserMembership.name,
-                        6
-                    )}' 홀딩 정보가 삭제되었습니다.`
-
-                    this.nxStore.dispatch(showToast({ text: toastText }))
-                    // this.nxStore.dispatch(
-                    //     DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.curUserData.user })
-                    // )
-                    this.dashboardHelper.refreshCurUser(this.center.id, this.curUserData.user)
-                    cb ? cb() : null
-                },
-                error: () => {
-                    cb ? cb() : null
-                },
-            })
+        // this.centerUsersMembershipService
+        //     .resumeMembershipTicket(this.center.id, this.curUserData.user.id, this.selectedUserMembership.id)
+        //     .subscribe({
+        //         next: (_) => {
+        //             const toastText = `'${this.wordService.ellipsis(
+        //                 this.selectedUserMembership.name,
+        //                 6
+        //             )}' 홀딩 정보가 삭제되었습니다.`
+        //             this.nxStore.dispatch(showToast({ text: toastText }))
+        //             // this.nxStore.dispatch(
+        //             //     DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.curUserData.user })
+        //             // )
+        //             this.dashboardHelper.refreshCurUser(this.center.id, this.curUserData.user)
+        //             cb ? cb() : null
+        //         },
+        //         error: () => {
+        //             cb ? cb() : null
+        //         },
+        //     })
     }
 }

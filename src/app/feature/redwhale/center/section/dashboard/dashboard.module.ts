@@ -51,6 +51,7 @@ import { DashboardChargeModalComponent } from './components/dashboard-charge-mod
 import { MemberRoleSelectComponent } from './components/member-role-select/member-role-select.component'
 import { UserDetailContractComponent } from './components/user-detail-contract/user-detail-contract.component'
 import { UserDetailContractItemComponent } from './components/user-detail-contract-item/user-detail-contract-item.component'
+import { HoldAllModalComponent } from './components/hold-all-modal/hold-all-modal.component'
 
 import { DashboardRoutingModule } from './dashboard-routing.module'
 
@@ -107,6 +108,7 @@ import { NgxSpinnerModule } from 'ngx-spinner'
         MemberRoleSelectComponent,
         UserDetailContractComponent,
         UserDetailContractItemComponent,
+        HoldAllModalComponent,
     ],
     imports: [
         DashboardRoutingModule,

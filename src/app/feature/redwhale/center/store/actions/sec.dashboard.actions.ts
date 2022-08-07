@@ -1,7 +1,6 @@
 import { createAction, props } from '@ngrx/store'
 import {
     MemberSelectCateg,
-    MemberManageCategory,
     UsersSelectCateg,
     UserListSelect,
     UsersLists,
@@ -13,15 +12,13 @@ import {
 import { CreateUserRequestBody, UpdateUserRequestBody } from '@services/center-users.service'
 import { CreateFileRequestBody } from '@services/file.service'
 import { DelegateRequestBody } from '@services/center.service'
-import { ModifyCenterRoleReqBody } from '@services/center-role-permission.service'
-
+import { CenterHoldingReqBody } from '@services/center-holding.service'
 import { ImageFile } from '@services/helper/picture-management.service'
 
 import { CenterUser } from '@schemas/center-user'
 import { UserLocker } from '@schemas/user-locker'
 import { UserMembership } from '@schemas/user-membership'
 import { Payment } from '@schemas/payment'
-import { CenterUsersCategory } from '@schemas/center/community/center-users-by-category'
 import { User } from '@schemas/user'
 
 const FeatureKey = 'Center/Dashboard'
@@ -122,6 +119,11 @@ export const finishRegisterCurUserProfile = createAction(
     props<{ userId: string; profileUrl: string }>()
 )
 
+export const startCenterHolding = createAction(
+    `[${FeatureKey}] Start Center Hold`,
+    props<{ centerId: string; reqBody: Omit<CenterHoldingReqBody, 'user_ids'>; cb?: () => void }>()
+)
+
 // sync
 // usersSelectcateg
 
@@ -136,6 +138,10 @@ export const setUsersLists = createAction(`[${FeatureKey}] Set Users Lists`, pro
 export const setUsersListsHoldSelected = createAction(
     `[${FeatureKey}] Set UsersLists HoldSelected`,
     props<{ memberSelectCateg: MemberSelectCateg; index: number; holdFlag: boolean }>()
+)
+export const setAllUserListHold = createAction(
+    `[${FeatureKey}] Set All UsersLists Hold`,
+    props<{ memberSelectCateg: MemberSelectCateg; holdFlag: boolean }>()
 )
 export const resetUsersListsHoldSelected = createAction(
     `[${FeatureKey}] Reset UsersLists HoldSelected`,

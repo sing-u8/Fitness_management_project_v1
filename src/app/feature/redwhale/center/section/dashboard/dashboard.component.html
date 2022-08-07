@@ -7,7 +7,10 @@
 
         <div
             class="register-member-button"
-            rw-button rwButtonWidth="130" rwButtonHeight="43" rwButtonColor="var(--red)"
+            rw-button
+            rwButtonWidth="130"
+            rwButtonHeight="43"
+            rwButtonColor="var(--red)"
             rwButtonFontColor="var(--white)"
             (click)="toggleDirectRegisterMemberFullModal()"
         >
@@ -16,26 +19,21 @@
     </header>
 
     <main class="l-main thin-scroll-y2 thin-scroll-x2">
-
         <section class="l-entire-member">
             <db-member-list
-                [usersLists]="(usersLists$ | async)"
-                [usersSelectCateg]="(usersSelectCateg$ | async)"
-                [selectedUserList]="(selectedUserList$ | async)"
-                [searchedUsersLists]="(searchedUsersLists$ | async)"
-                [isLoading]="(isLoading$ | async)"
-                (onDirectRegisterMember) = "toggleDirectRegisterMemberFullModal()"
+                [usersLists]="usersLists$ | async"
+                [usersSelectCateg]="usersSelectCateg$ | async"
+                [selectedUserList]="selectedUserList$ | async"
+                [searchedUsersLists]="searchedUsersLists$ | async"
+                [selectedUserListsHolding]="selectedUserListsHolding$ | async"
+                [isLoading]="isLoading$ | async"
+                (onDirectRegisterMember)="toggleDirectRegisterMemberFullModal()"
             ></db-member-list>
         </section>
 
-
         <section class="l-member-detail">
-            <div class="member-detail__header rw-typo-title1">
-                회원 상세 정보
-            </div>
-            <db-member-detail
-                [curUserData]="(curUserData$ | async)"
-            ></db-member-detail>
+            <div class="member-detail__header rw-typo-title1">회원 상세 정보</div>
+            <db-member-detail [curUserData]="curUserData$ | async"></db-member-detail>
         </section>
     </main>
 </article>

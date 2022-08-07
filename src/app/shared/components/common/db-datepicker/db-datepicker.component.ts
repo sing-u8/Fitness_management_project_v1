@@ -521,7 +521,11 @@ export class DbDatepickerComponent implements OnInit, OnChanges, AfterViewChecke
 
     // --------- reg ml method --------------------------------------------------------------------------------------------------
     regMLSelectDate(weekCol) {
-        this.toggleEdge(weekCol) == false ? this.setInitRegML(weekCol) : null
+        if (this.toggleEdge(weekCol) == false) {
+            this.setInitRegML(weekCol)
+        } else {
+            this.dataChange.emit(this.lineSelectedDateObj)
+        }
     }
 
     setInitRegML(weekCol) {

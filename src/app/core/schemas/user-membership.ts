@@ -1,3 +1,4 @@
+import { Holding } from '@schemas/holding'
 export interface UserMembership {
     id: string
     state_code: 'user_membership_state_in_use' | 'user_membership_state_paused' | 'user_membership_state_refund'
@@ -9,8 +10,6 @@ export interface UserMembership {
     name: string
     start_date: string
     end_date: string
-    pause_start_date: string
-    pause_end_date: string
     booked_count: number
     used_count: number
     count: number
@@ -23,4 +22,5 @@ export interface UserMembership {
     total_price: number
     total_refund: number
     total_unpaid: number
+    holding: Array<Holding>
 }

@@ -10,6 +10,7 @@ dayjs.locale('ko')
 import { CenterUser } from '@schemas/center-user'
 import { Center } from '@schemas/center'
 import { Loading } from '@schemas/store/loading'
+import { HoldingConfirmOutput } from '../hold-all-modal/hold-all-modal.component'
 
 import { StorageService } from '@services/storage.service'
 
@@ -34,17 +35,15 @@ export class MemberListComponent implements OnInit, OnDestroy {
     @Input() searchedUsersLists: FromDashboard.UsersLists = _.cloneDeep(FromDashboard.UsersListInit)
     @Input() usersSelectCateg: FromDashboard.UsersSelectCateg = _.cloneDeep(FromDashboard.UsersSelectCategInit)
     @Input() selectedUserList: FromDashboard.UserListSelect = _.cloneDeep(FromDashboard.UserListSelectInit)
+    @Input() selectedUserListsHolding = 0
     @Input() isLoading: Loading = 'idle'
 
     @Output() onDirectRegisterMember = new EventEmitter<void>()
 
     public center: Center
 
-    public showHoldDropdown = false
-    public doShowHoldAllModal = false
     public doShowHoldPartialModal = false
-    public holdModeFlags = { all: false, partial: false }
-    public holdingNumber = 0
+    public holdModeFlags = false
     openPartialHoldModal() {
         this.doShowHoldPartialModal = true
     }
@@ -54,23 +53,30 @@ export class MemberListComponent implements OnInit, OnDestroy {
     onHoldPartialCancel() {
         this.closePartialHoldModal()
     }
-    onHoldPartialConfirm(event: { date: { startDate: string; endDate: string }; holdWithLocker: boolean }) {}
+    onHoldPartialConfirm(event: HoldingConfirmOutput) {
+        this.nxStore.dispatch(
+            DashboardActions.startCenterHolding({
+                centerId: this.center.id,
+                reqBody: {
+                    start_date: event.date.startDate,
+                    end_date: event.date.endDate,
+                    user_locker_included: event.holdWithLocker,
+                },
+                cb: () => {
+                    event.loadingFns.hideLoading()
+                },
+            })
+        )
+    }
     toggleHodlingMode() {
-        this.holdingNumber = 0
-        this.holdModeFlags.partial = !this.holdModeFlags.partial
+        this.holdModeFlags = !this.holdModeFlags
         this.resetSelectedCategListHold()
+        this.holdAll = false
     }
     resetSelectedCategListHold() {
         this.nxStore.dispatch(
             DashboardActions.resetUsersListsHoldSelected({ memberSelectCateg: this.selectedUserList.key })
         )
-    }
-    toggleHoldDropDown() {
-        this.showHoldDropdown = !this.showHoldDropdown
-    }
-    closeHoldDropDown() {
-        // this.getSerachUserList(this.userSearchInput.value)
-        this.showHoldDropdown = false
     }
 
     public today: string = dayjs().format('YYYY.MM.DD (ddd)')
@@ -122,15 +128,6 @@ export class MemberListComponent implements OnInit, OnDestroy {
     }
 
     // holding modal vars & method
-    openAllHoldModal() {
-        this.doShowHoldAllModal = true
-    }
-    closeAllHoldModal() {
-        this.doShowHoldAllModal = false
-    }
-    onHoldAllCancel() {
-        this.closeAllHoldModal()
-    }
     onHoldAllConfirm(event: { date: { startDate: string; endDate: string }; holdWithLocker: boolean }) {
         // this.GymDashboardService.holdAllMember(this.gym.id, {
         //     start_date: event.date.startDate,
@@ -165,7 +162,7 @@ export class MemberListComponent implements OnInit, OnDestroy {
         this.nxStore.dispatch(DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: cardInfo }))
     }
     onPartialHoldClick(holdFlag: boolean, index: number) {
-        // !! 500명으로 제한 해야함
+        console.log('onPartialHoldClick  -- ', holdFlag, ' -- ', index)
         this.nxStore.dispatch(
             DashboardActions.setUsersListsHoldSelected({
                 memberSelectCateg: this.selectedUserList.key,
@@ -173,7 +170,17 @@ export class MemberListComponent implements OnInit, OnDestroy {
                 holdFlag: !holdFlag,
             })
         )
-        this.holdingNumber += !holdFlag ? 1 : -1
+    }
+
+    public holdAll = false
+    onHoldAll() {
+        this.holdAll = !this.holdAll
+        this.nxStore.dispatch(
+            DashboardActions.setAllUserListHold({
+                memberSelectCateg: this.selectedUserList.key,
+                holdFlag: this.holdAll,
+            })
+        )
     }
 
     // -------------------------------------- selectedUserList method --------------------------------------

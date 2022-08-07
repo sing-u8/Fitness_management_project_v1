@@ -1,58 +1,53 @@
 <div class="rw-modal-background" #modalBackgroundElement></div>
-<div class="rw-modal-wrapper justify-content-center align-items-center user-select-none"
-    (mouseup)="!isMouseModalDown && onCancel()" (mousedown)='resetMouseModalDown()'
+<div
+    class="rw-modal-wrapper justify-content-center align-items-center user-select-none"
+    (mouseup)="!isMouseModalDown && onCancel()"
+    (mousedown)="resetMouseModalDown()"
     #modalWrapperElement
 >
-    <div
-        class="rw-modal user-select-none"
-        (mousedown) ='onMouseModalDown(); $event.stopPropagation()'
-    >
+    <div class="rw-modal user-select-none" (mousedown)="onMouseModalDown(); $event.stopPropagation()">
         <div class="l-title">
-            <div class="title rw-typo-title1 ">‘{{userMembership?.name | wordEllipsis:16}}’ 기간 / 횟수를 연장하시겠어요?</div>
-            <div class="sub-title rw-typo-subtext1">기간 / 횟수 변경 후, 다음 단계에서 추가 결제 정보를 입력해주세요.</div>
+            <div class="title rw-typo-title1">
+                ‘{{ userMembership?.name | wordEllipsis: 16 }}’ 기간 / 횟수를 연장하시겠어요?
+            </div>
+            <div class="sub-title rw-typo-subtext1">
+                기간 / 횟수 변경 후, 다음 단계에서 추가 결제 정보를 입력해주세요.
+            </div>
         </div>
 
         <div class="l-datepicker">
-            <div class="rw-typo-subtext0-regular small-title">
-                기간 (시작일 변경 불가)
-            </div>
+            <div class="rw-typo-subtext0-regular small-title">기간 (시작일 변경 불가)</div>
             <div class="datepicker__wrapper">
-                <div
-                    class="datepicker__button disabled"
-                    rw-button
-                >
-                    {{datepick.startDate | dateFormat:'YYYY.MM.DD'}}
+                <div class="datepicker__button disabled" rw-button>
+                    {{ datepick.startDate | dateFormat: 'YYYY.MM.DD' }}
                 </div>
                 <span class="rw-typo-bodytext1">~</span>
                 <div
                     class="datepicker__button"
                     rw-button
                     rwButtonFontColor="var(--font-color)"
-                    (click) = "openShowDatePicker()"
-                    (rwClickOutside) = "closeShowDatePicker();"
+                    (click)="openShowDatePicker()"
+                    (rwClickOutside)="closeShowDatePicker()"
                 >
                     <span *ngIf="datepick.endDate">
-                        {{datepick.endDate | dateFormat:'YYYY.MM.DD'}} ({{datepick.startDate | period:datepick.endDate}}일)
+                        {{ datepick.endDate | dateFormat: 'YYYY.MM.DD' }} ({{
+                            datepick.startDate | period: datepick.endDate
+                        }}일)
                     </span>
-                    <span *ngIf="!datepick.endDate">
-                        날짜를 선택해주세요.
-                    </span>
+                    <span *ngIf="!datepick.endDate"> 날짜를 선택해주세요. </span>
 
                     <db-datepicker
                         *ngIf="doShowDatePick"
                         mode="reg-ml"
-                        [option] ="'looseOnlyEnd'"
+                        [option]="'looseOnlyEnd'"
                         [(data)]="datepick"
                     ></db-datepicker>
-
                 </div>
             </div>
         </div>
 
         <div class="l-count">
-            <div class="rw-typo-subtext0-regular small-title">
-                횟수
-            </div>
+            <div class="rw-typo-subtext0-regular small-title">횟수</div>
             <div class="count__wrapper">
                 <div class="l-input">
                     <input
@@ -60,38 +55,30 @@
                         rw-input
                         placeholder="0"
                         maxlength="8"
-                        [disabled] = "countObj.unlimited"
-                        [(ngModel)] = "countObj.count"
+                        [disabled]="countObj.unlimited"
+                        [(ngModel)]="countObj.count"
                         (keyup)="onCountKeyUp($event)"
-                    >
-                    <div
-                        class="input-text rw-typo-bodytext0"
-                        [class.disabled] = "countObj.unlimited"
-                    >회</div>
+                    />
+                    <div class="input-text rw-typo-bodytext0" [class.disabled]="countObj.unlimited">회</div>
                 </div>
-                <rw-checkbox
-                    text="무제한"
-                    [checked] = "countObj.unlimited"
-                    (click) = toggleUnlimited()
-                ></rw-checkbox>
+                <rw-checkbox text="무제한" [checked]="countObj.unlimited" (click)="toggleUnlimited()"></rw-checkbox>
             </div>
         </div>
 
         <div class="l-button">
-            <div class="cancel " rw-button (click)="onCancel()"> 취소 </div>
+            <div class="cancel" rw-button (click)="onCancel()">취소</div>
             <rw-button
                 #extension_bt
                 class="confirm"
-                [width] = "'362'"
-                [height] = "'50'"
-                [color] = "'var(--red)'"
-                [borderRadius] = "'0'"
-                [disabled] = "!datepick.endDate"
-                (onClick) = "datepick.endDate && onConfirm()"
+                [width]="'362'"
+                [height]="'50'"
+                [color]="'var(--red)'"
+                [borderRadius]="'0 0 5px 0'"
+                [disabled]="!datepick.endDate"
+                (onClick)="datepick.endDate && onConfirm()"
             >
                 <span class="rw-typo-bodytext0-bold confirm__text">연장하기</span>
             </rw-button>
         </div>
-
     </div>
 </div>

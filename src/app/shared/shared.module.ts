@@ -80,6 +80,7 @@ import { TrimTextPipe } from './pipes/trim-text.pipe'
 import { FilesizePipe } from './pipes/filesize.pipe'
 import { PeriodPipe } from './pipes/period.pipe'
 import { RestPeriodPipe } from './pipes/rest-period.pipe'
+import { IsAfterPipe } from './pipes/isAfter.pipe'
 
 // Dragula
 // import { DragulaModule } from 'ng2-dragula'
@@ -185,6 +186,7 @@ FullCalendarModule.registerPlugins([
         FilesizePipe,
         PeriodPipe,
         RestPeriodPipe,
+        IsAfterPipe,
     ],
     imports: [
         CommonModule,
@@ -268,6 +270,7 @@ FullCalendarModule.registerPlugins([
         FilesizePipe,
         PeriodPipe,
         RestPeriodPipe,
+        IsAfterPipe,
 
         // FullCalendar
         FullCalendarModule,

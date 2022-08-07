@@ -19,8 +19,7 @@ import { CenterUsersMembershipService } from '@services/center-users-membership.
 import { CenterUsersPaymentService } from '@services/center-users-payment.service'
 import { CenterUsersBookingService } from '@services/center-users-booking.service'
 import { CenterService, DelegateRequestBody } from '@services/center.service'
-
-import { CenterUser } from '@schemas/center-user'
+import { CenterHoldingService } from '@services/center-holding.service'
 
 @Injectable()
 export class DashboardEffect {
@@ -33,7 +32,8 @@ export class DashboardEffect {
         private centerUsersMembershipApi: CenterUsersMembershipService,
         private centerUsersPaymentApi: CenterUsersPaymentService,
         private centerUsersBookingService: CenterUsersBookingService,
-        private centerService: CenterService
+        private centerService: CenterService,
+        private centerHoldingApi: CenterHoldingService
     ) {}
 
     public loadMemberList$ = createEffect(() =>
@@ -310,6 +310,32 @@ export class DashboardEffect {
                     })
                 )
             ),
+            catchError((err: string) => of(DashboardActions.error({ error: err })))
+        )
+    )
+
+    public centerHolding$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(DashboardActions.startCenterHolding),
+            concatLatestFrom(() => [
+                this.store.select(DashboardSelector.usersLists),
+                this.store.select(DashboardSelector.curUserListSelect),
+                this.store.select(DashboardSelector.curUserData),
+            ]),
+            switchMap(([{ centerId, cb, reqBody }, userLists, curUserListSelect, curUserData]) => {
+                const user_ids = userLists[curUserListSelect.key].filter((v) => v.holdSelected).map((v) => v.user.id)
+                return this.centerHoldingApi
+                    .centerHolding(centerId, {
+                        ...reqBody,
+                        user_ids,
+                    })
+                    .pipe(
+                        switchMap((profile) => {
+                            cb ? cb() : null
+                            return [DashboardActions.startRefreshCenterUser({ centerId, centerUser: curUserData.user })]
+                        })
+                    )
+            }),
             catchError((err: string) => of(DashboardActions.error({ error: err })))
         )
     )

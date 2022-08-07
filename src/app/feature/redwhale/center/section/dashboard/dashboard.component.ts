@@ -169,6 +169,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     public searchedUsersLists$ = this.nxStore.select(DashboardSelector.searchedUsersLists)
     public selectedUserList$ = this.nxStore.select(DashboardSelector.curUserListSelect)
     public isLoading$ = this.nxStore.select(DashboardSelector.isLoading)
+    public selectedUserListsHolding$ = this.nxStore.select(DashboardSelector.selectedUserListsHolding)
 
     public unsubscribe$ = new Subject<boolean>()
 

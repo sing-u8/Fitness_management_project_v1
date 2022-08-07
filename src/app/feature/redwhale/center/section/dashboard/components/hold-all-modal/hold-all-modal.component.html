@@ -1,0 +1,94 @@
+<div class="rw-modal-background" #modalBackgroundElement></div>
+
+<div
+    class="rw-modal-wrapper justify-content-center align-items-center"
+    (mouseup)="!isMouseModalDown && onCancel()"
+    (mousedown)="resetMouseModalDown()"
+    #modalWrapperElement
+>
+    <div class="rw-modal user-select-none" (mousedown)="onMouseModalDown(); $event.stopPropagation()">
+        <div class="d-flex flex-column justify-content-start align-content-center">
+            <div class="title-container">
+                <div class="text rw-typo-title1">{{ holdNumber }}명의 모든 회원권을 홀딩하시겠어요?</div>
+                <div class="sub-text rw-typo-subtext1">홀딩 기간을 선택하신 후, [홀딩하기] 버튼을 클릭해주세요.</div>
+            </div>
+            <div class="l-datepicker">
+                <div class="small-title">
+                    <div class="rw-typo-subtext0-regular title-text">홀딩 시작일</div>
+                    <div class="rw-typo-subtext0-regular title-text">홀딩 종료일</div>
+                </div>
+                <div class="datepicker__wrapper">
+                    <div
+                        class="datepicker__button"
+                        [class.focused]="doShowDatePick['start']"
+                        rw-button
+                        rwButtonFontColor="var(--font-color)"
+                        (click)="openShowDatePicker('start')"
+                        (rwClickOutside)="closeShowDatePicker('start')"
+                    >
+                        <span *ngIf="startDatepick.startDate">
+                            {{ startDatepick.startDate | dateFormat: 'YYYY.MM.DD' }}
+                        </span>
+                        <span *ngIf="!startDatepick.startDate" class="rw-typo-bodytext1_grey"> 홀딩 시작일 선택 </span>
+
+                        <db-datepicker
+                            *ngIf="doShowDatePick.start"
+                            mode="reg-ml"
+                            [option]="'onlyStart'"
+                            [data]="startDatepick"
+                            (dataChange)="onDatePickerChange('start', $event)"
+                        ></db-datepicker>
+                    </div>
+                    <span class="rw-typo-bodytext1">~</span>
+                    <div
+                        class="datepicker__button"
+                        [class.focused]="doShowDatePick['end']"
+                        rw-button
+                        rwButtonFontColor="var(--font-color)"
+                        (click)="openShowDatePicker('end')"
+                        (rwClickOutside)="closeShowDatePicker('end')"
+                    >
+                        <span *ngIf="endDatePick.endDate">
+                            {{ endDatePick.endDate | dateFormat: 'YYYY.MM.DD' }} ({{
+                                endDatePick.startDate | period: endDatePick.endDate
+                            }}일)
+                        </span>
+                        <span *ngIf="!endDatePick.endDate" class="rw-typo-bodytext1_grey"> 홀딩 종료일 선택 </span>
+
+                        <db-datepicker
+                            *ngIf="doShowDatePick.end"
+                            mode="reg-ml"
+                            [option]="'onlyEnd'"
+                            [data]="endDatePick"
+                            (dataChange)="onDatePickerChange('end', $event)"
+                        ></db-datepicker>
+                    </div>
+                </div>
+                <div class="hold-locker-checkbox">
+                    <rw-checkbox
+                        text="락커도 함께 홀딩하기"
+                        [checked]="holdWithLocker"
+                        (click)="toggleHoldWithLocker()"
+                    ></rw-checkbox>
+                </div>
+            </div>
+        </div>
+        <div class="button-group">
+            <div class="cancel" rw-button (click)="onCancel()">취소</div>
+            <rw-button
+                #extension_bt
+                [width]="'367.39'"
+                [height]="'49'"
+                [color]="'var(--red)'"
+                [borderRadius]="'0 0 5px 0'"
+                [loadingName]="'hold-all'"
+                [disabled]="!endDatePick.endDate"
+                (onClick)="endDatePick.endDate && onConfirm($event)"
+            >
+                <span>
+                    홀딩하기
+                </span>
+            </rw-button>
+        </div>
+    </div>
+</div>

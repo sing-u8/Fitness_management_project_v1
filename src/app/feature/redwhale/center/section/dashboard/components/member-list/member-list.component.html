@@ -1,96 +1,85 @@
 <section class="l-member-list">
-
     <div class="member-list-header">
         <rw-user-list-select
             [items]="usersSelectCateg"
-            [holdMode]="holdModeFlags.partial"
+            [holdMode]="holdModeFlags"
             [(ngModel)]="selectedUserList"
             (onTypeChange)="onSelectedUserListChange($event)"
         ></rw-user-list-select>
 
         <div
             class="holding-all-button"
-            *ngIf="usersLists[selectedUserList.key].length > 0
-                    && selectedUserList.key != 'expired'
-                    && selectedUserList.key != 'employee'"
+            *ngIf="
+                usersLists[selectedUserList.key].length > 0 &&
+                selectedUserList.key != 'expired' &&
+                selectedUserList.key != 'employee'
+            "
             rw-button
-            [rwButtonFontColor] = "'var(--darkgrey)'"
-            [rwButtonColor] = "'var(--white)'"
-            (click) = "holdModeFlags.partial ? toggleHodlingMode() : toggleHoldDropDown()"
-            (rwClickOutside) = "closeHoldDropDown()"
+            [rwButtonFontColor]="'var(--darkgrey)'"
+            [rwButtonColor]="'var(--white)'"
+            (click)="toggleHodlingMode()"
         >
-            {{holdModeFlags.partial ? '일괄 홀딩 취소' : '일괄 홀딩' }}
-
-            <div *ngIf="showHoldDropdown" class="hold-dropdown">
-                <div class="rw-typo-subtext0 holding-button"
-                    (click)="toggleHodlingMode();closeHoldDropDown(); $event.stopPropagation()">일부 회원 홀딩</div>
-                <div class="rw-typo-subtext0 holding-button"
-                    (click)="openAllHoldModal();closeHoldDropDown(); $event.stopPropagation()">전체 회원 홀딩</div>
-            </div>
+            {{ holdModeFlags ? '일괄 홀딩 취소' : '일괄 홀딩' }}
         </div>
     </div>
 
     <div class="member-list-body">
-
-        <ng-template
-            #member_list_loading
-            [ngIf] = "isLoading == 'pending'"
-        >
+        <ng-template #member_list_loading [ngIf]="isLoading == 'pending'">
             <form class="l-input">
-                <input
-                    class="rw-input"
-                    type="text"
-                    placeholder="회원명 / 전화번호 검색"
-                    [disabled]="true"
-                >
-                <img src="assets/icons/etc/search_grey.svg">
+                <input class="rw-input" type="text" placeholder="회원명 / 전화번호 검색" [disabled]="true" />
+                <img src="assets/icons/etc/search_grey.svg" />
             </form>
 
             <div class="l-member-card thin-scroll-y-overlay2">
                 <ngx-skeleton-loader
-                    *ngFor="let _ of [1,2,3,4,5,6]"
-                    count = 1
+                    *ngFor="let _ of [1, 2, 3, 4, 5, 6]"
+                    count="1"
                     appearance="circle"
-                    [theme]="{width: '100%', height: '60px', 'border-radius': '5px'
-                            ,'margin':'0px' , 'margin-bottom': '2px'}"
+                    [theme]="{
+                        width: '100%',
+                        height: '60px',
+                        'border-radius': '5px',
+                        margin: '0px',
+                        'margin-bottom': '2px'
+                    }"
                 ></ngx-skeleton-loader>
             </div>
         </ng-template>
 
         <ng-template
             #member_list_x
-            [ngIf]="isLoading != 'pending'
-                    && usersSelectCateg[selectedUserList.key].userSize == 0"
+            [ngIf]="isLoading != 'pending' && usersSelectCateg[selectedUserList.key].userSize == 0"
         >
             <div class="empty-member-list">
-                <img src="assets/icons/etc/empty_screen.svg">
+                <img src="assets/icons/etc/empty_screen.svg" />
                 <div class="empty-guide">
                     <p
                         *ngIf="emptyGuideText[this.selectedUserList.key].today != undefined"
                         class="rw-typo-subtext0-regular"
                     >
-                        {{emptyGuideText[this.selectedUserList.key].today}}
+                        {{ emptyGuideText[this.selectedUserList.key].today }}
                     </p>
                     <p
                         *ngIf="emptyGuideText[this.selectedUserList.key].title != undefined"
                         class="rw-typo-subtext0-regular"
                     >
-                        {{emptyGuideText[this.selectedUserList.key].title}}
+                        {{ emptyGuideText[this.selectedUserList.key].title }}
                     </p>
                     <ng-template *ngIf="emptyGuideText[this.selectedUserList.key].desc != undefined">
                         <p
                             *ngFor="let d of emptyGuideText[this.selectedUserList.key].desc"
                             class="rw-typo-subtext0-regular"
-                        >{{d}}</p>
+                        >
+                            {{ d }}
+                        </p>
                     </ng-template>
                     <div
-                        *ngIf="emptyGuideText[this.selectedUserList.key].emptyButton
-                                != undefined"
+                        *ngIf="emptyGuideText[this.selectedUserList.key].emptyButton != undefined"
                         class="empty-button"
                         (click)="emptyGuideText[this.selectedUserList.key].emptyButton.func()"
                     >
-                        <p>{{emptyGuideText[this.selectedUserList.key].emptyButton.text}}</p>
-                        <img src="assets/icons/etc/short_right_arrow_grey.svg">
+                        <p>{{ emptyGuideText[this.selectedUserList.key].emptyButton.text }}</p>
+                        <img src="assets/icons/etc/short_right_arrow_grey.svg" />
                     </div>
                 </div>
             </div>
@@ -98,77 +87,78 @@
 
         <ng-template
             #member_list_o
-            [ngIf]="isLoading != 'pending'
-                    && usersSelectCateg[selectedUserList.key].userSize != 0"
+            [ngIf]="isLoading != 'pending' && usersSelectCateg[selectedUserList.key].userSize != 0"
         >
             <div class="presence-member-list">
                 <form class="l-input">
                     <input
                         class="rw-input"
-                        type="text" placeholder="회원명 / 전화번호 검색"
+                        type="text"
+                        placeholder="회원명 / 전화번호 검색"
                         [formControl]="userSearchInput"
-                    >
-                    <img src="assets/icons/etc/search_grey.svg">
+                    />
+                    <img src="assets/icons/etc/search_grey.svg" />
                 </form>
             </div>
 
-            <div *ngIf="holdModeFlags.partial" class="hold-mode-menu">
-                <span class="rw-typo-bodytext2-regular">
-                    {{holdingNumber}}명 선택됨
-                </span>
-                <span
-                    *ngIf="holdingNumber > 0"
-                    (click)="openPartialHoldModal()"
-                    class="rw-typo-bodytext2-bold"
-                >선택 완료</span>
+            <div *ngIf="holdModeFlags" class="hold-mode-menu">
+                <div class="d-flex justify-content-start align-content-center">
+                    <span class="rw-typo-bodytext2-regular"> {{ selectedUserListsHolding }}명 선택됨 </span>
+                    <span *ngIf="selectedUserListsHolding > 0">・</span>
+                    <span
+                        *ngIf="selectedUserListsHolding > 0"
+                        (click)="openPartialHoldModal()"
+                        class="rw-typo-bodytext2-bold"
+                    >
+                        선택 완료
+                    </span>
+                </div>
+                <rw-checkbox [checked]="holdAll" (click)="onHoldAll()"></rw-checkbox>
             </div>
 
-            <div
-                class="l-member-card thin-scroll-y-overlay2"
-                [class.l-hold-mode-card]="holdModeFlags.partial"
-            >
-
+            <div class="l-member-card thin-scroll-y-overlay2" [class.l-hold-mode-card]="holdModeFlags">
                 <ng-container *ngIf="usersLists[selectedUserList.key].length > 0">
                     <!-- 퍼미션 추가 후에 더 추가해야함 -->
                     <db-user-list-card
-                        *ngFor = "let item of usersLists[selectedUserList.key]; index as i"
-                        [cardItem] = "item"
-                        [type] = "selectedUserList.key"
-                        [holdMode] = "holdModeFlags.partial"
-                        [search] = "userSearchInput.value"
-                        [holdNumber] = "holdingNumber"
-                        (onCardClick) = "onCardClick($event)"
-                        (onHoldClick) = 'onPartialHoldClick($event, i)'
+                        *ngFor="let item of usersLists[selectedUserList.key]; index as i"
+                        [cardItem]="item"
+                        [type]="selectedUserList.key"
+                        [holdMode]="holdModeFlags"
+                        [search]="userSearchInput.value"
+                        [holdNumber]="selectedUserListsHolding"
+                        (onCardClick)="onCardClick($event)"
+                        (onHoldClick)="onPartialHoldClick($event, i)"
                     ></db-user-list-card>
-
                 </ng-container>
 
-                <ng-container
-                    *ngIf="searchedUsersLists[selectedUserList.key].length == 0
-                            && userSearchInput$_"
-                >
+                <ng-container *ngIf="searchedUsersLists[selectedUserList.key].length == 0 && userSearchInput$_">
                     <div class="empty-guide-search">
                         <img
                             *ngIf="emptySearchText[this.selectedUserList.key].showTopImage"
-                            src="assets/icons/etc/empty_screen.svg" class="top-image"
-                        >
+                            src="assets/icons/etc/empty_screen.svg"
+                            class="top-image"
+                        />
                         <p
                             *ngFor="let text of emptySearchText[this.selectedUserList.key].texts"
                             class="rw-typo-subtext0-regular grey"
                         >
-                            {{text}}
+                            {{ text }}
                         </p>
                         <div
-                            *ngIf="!this.holdModeFlags.partial && emptySearchText[this.selectedUserList.key].button != undefined "
+                            *ngIf="
+                                !this.holdModeFlags && emptySearchText[this.selectedUserList.key].button != undefined
+                            "
                             class="empty-button"
                             (click)="emptySearchText[this.selectedUserList.key].button.func()"
                         >
-                            <p>{{emptySearchText[this.selectedUserList.key].button.text}}</p>
-                            <img src="assets/icons/etc/short_right_arrow_grey.svg">
+                            <p>{{ emptySearchText[this.selectedUserList.key].button.text }}</p>
+                            <img src="assets/icons/etc/short_right_arrow_grey.svg" />
                         </div>
                     </div>
 
-                    <ng-container *ngIf="!holdModeFlags.partial && selectedUserList.key != 'employee' && selectedUserList.key != 'member'">
+                    <ng-container
+                        *ngIf="!holdModeFlags && selectedUserList.key != 'employee' && selectedUserList.key != 'member'"
+                    >
                         <ng-container *ngFor="let item of usersLists | keyvalue">
                             <db-user-flip-list
                                 *ngIf="selectedUserList[item.key] != 0"
@@ -184,14 +174,15 @@
                             </db-user-flip-list>
                         </ng-container>
                     </ng-container>
-
                 </ng-container>
-
-
             </div>
-
         </ng-template>
-
     </div>
-
 </section>
+
+<db-hold-all-modal
+    [(visible)]="doShowHoldPartialModal"
+    [holdNumber]="selectedUserListsHolding"
+    (cancel)="onHoldPartialCancel()"
+    (confirm)="onHoldPartialConfirm($event)"
+></db-hold-all-modal>

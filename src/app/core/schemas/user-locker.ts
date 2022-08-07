@@ -1,3 +1,4 @@
+import { Holding } from '@schemas/holding'
 export interface UserLocker {
     id: string
     state_code: UserLockerStateCode
@@ -30,6 +31,8 @@ export interface UserLocker {
     total_price: number
     total_refund: number
     total_unpaid: number
+
+    holding: Array<Holding>
 }
 
 export type UserLockerStateCode =

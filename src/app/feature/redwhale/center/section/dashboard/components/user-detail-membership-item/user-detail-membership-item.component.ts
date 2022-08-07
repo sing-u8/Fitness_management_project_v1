@@ -187,9 +187,7 @@ export class UserDetailMembershipItemComponent implements OnInit, AfterViewInit 
         this.getReservableClassText()
         this.restDate = this.timeService.getRestPeriod(dayjs().format(), this.membership.end_date)
         this.restDate = this.restDate < 1 || this.isExpired ? 0 : this.restDate
-        this.isHolding =
-            this.membership.pause_start_date && this.membership.pause_end_date && !this.isExpired ? true : false
-        this.isHoldingReservaed =
-            this.isHolding && dayjs(this.membership.pause_start_date).isAfter(dayjs(), 'day') ? true : false
+        this.isHolding = this.membership.holding.length > 0 && !this.isExpired ? true : false
+        // this.isHolding && dayjs(this.membership.pause_start_date).isAfter(dayjs(), 'day') ? true : false
     }
 }

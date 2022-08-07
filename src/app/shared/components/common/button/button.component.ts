@@ -110,7 +110,7 @@ export class ButtonComponent implements OnInit, OnChanges, AfterViewChecked, Aft
         }
 
         if (this.borderRadius) {
-            this.renderer.setStyle(this.button_el.nativeElement, 'borderRadius', `${this.borderRadius}px`)
+            this.renderer.setStyle(this.button_el.nativeElement, 'borderRadius', `${this.borderRadius}`)
         }
     }
     ngOnInit(): void {}

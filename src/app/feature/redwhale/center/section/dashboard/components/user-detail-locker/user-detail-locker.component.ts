@@ -5,8 +5,9 @@ import {
     CenterUsersLockerService,
     ExtendLockerTicketReqBody,
     RefundLockerTicketReqBody,
-    PauseLockerTicketReqBody,
     ExpireLockerTicketReqBody,
+    UpdateHoldingLockerTicketReqBody,
+    HoldingLockerTicketReqBody,
 } from '@services/center-users-locker.service.service'
 import { StorageService } from '@services/storage.service'
 import { TimeService } from '@services/helper/time.service'
@@ -330,12 +331,12 @@ export class UserDetailLockerComponent implements OnInit {
             })
     }
     callHodingApi(cb?: () => void) {
-        const reqBody: PauseLockerTicketReqBody = {
-            pause_start_date: this.holdData.startDate,
-            pause_end_date: this.holdData.endDate,
+        const reqBody: HoldingLockerTicketReqBody = {
+            start_date: this.holdData.startDate,
+            end_date: this.holdData.endDate,
         }
         this.centerUsersLockerService
-            .pauseLockerTicket(this.center.id, this.curUserData.user.id, this.selectedUserLocker.id, reqBody)
+            .holdingLockerTicket(this.center.id, this.curUserData.user.id, this.selectedUserLocker.id, reqBody)
             .subscribe({
                 next: (_) => {
                     const toastText = dayjs(this.holdData.startDate).isSameOrBefore(dayjs())
@@ -501,50 +502,49 @@ export class UserDetailLockerComponent implements OnInit {
             })
     }
     callUpdateHoldingApi(cb?: () => void) {
-        const reqBody: PauseLockerTicketReqBody = {
-            pause_start_date: this.updateHoldData.startDate,
-            pause_end_date: this.updateHoldData.endDate,
+        const reqBody: UpdateHoldingLockerTicketReqBody = {
+            start_date: this.updateHoldData.startDate,
+            end_date: this.updateHoldData.endDate,
         }
-        this.centerUsersLockerService
-            .pauseLockerTicket(this.center.id, this.curUserData.user.id, this.selectedUserLocker.id, reqBody)
-            .subscribe({
-                next: (_) => {
-                    const toastText = `'[${this.wordService.ellipsis(
-                        this.selectedUserLocker.category_name,
-                        10
-                    )}] ${this.wordService.ellipsis(this.selectedUserLocker.name, 6)}' 홀딩 기간이 수정되었습니다.`
+        // this.centerUsersLockerService
+        //     .modifyHoldingLockerTicket(this.center.id, this.curUserData.user.id, this.selectedUserLocker.id, reqBody)
+        //     .subscribe({
+        //         next: (_) => {
+        //             const toastText = `'[${this.wordService.ellipsis(
+        //                 this.selectedUserLocker.category_name,
+        //                 10
+        //             )}] ${this.wordService.ellipsis(this.selectedUserLocker.name, 6)}' 홀딩 기간이 수정되었습니다.`
 
-                    this.nxStore.dispatch(showToast({ text: toastText }))
-                    // this.nxStore.dispatch(
-                    //     DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.curUserData.user })
-                    // )
-                    this.dashboardHelper.refreshCurUser(this.center.id, this.curUserData.user)
-                },
-                error: () => {
-                    cb ? cb() : null
-                },
-            })
+        //             this.nxStore.dispatch(showToast({ text: toastText }))
+        //             // this.nxStore.dispatch(
+        //             //     DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.curUserData.user })
+        //             // )
+        //             this.dashboardHelper.refreshCurUser(this.center.id, this.curUserData.user)
+        //         },
+        //         error: () => {
+        //             cb ? cb() : null
+        //         },
+        //     })
     }
     callRemoveHoldingApi(cb?: () => void) {
-        this.centerUsersLockerService
-            .resumeLockerTicket(this.center.id, this.curUserData.user.id, this.selectedUserLocker.id)
-            .subscribe({
-                next: (_) => {
-                    const toastText = `'[${this.wordService.ellipsis(
-                        this.selectedUserLocker.category_name,
-                        10
-                    )}] ${this.wordService.ellipsis(this.selectedUserLocker.name, 6)}' 홀딩 정보가 삭제되었습니다.`
-
-                    this.nxStore.dispatch(showToast({ text: toastText }))
-                    // this.nxStore.dispatch(
-                    //     DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.curUserData.user })
-                    // )
-                    this.dashboardHelper.refreshCurUser(this.center.id, this.curUserData.user)
-                    cb ? cb() : null
-                },
-                error: () => {
-                    cb ? cb() : null
-                },
-            })
+        // this.centerUsersLockerService
+        //     .removeHoldingLockerTicket(this.center.id, this.curUserData.user.id, this.selectedUserLocker.id)
+        //     .subscribe({
+        //         next: (_) => {
+        //             const toastText = `'[${this.wordService.ellipsis(
+        //                 this.selectedUserLocker.category_name,
+        //                 10
+        //             )}] ${this.wordService.ellipsis(this.selectedUserLocker.name, 6)}' 홀딩 정보가 삭제되었습니다.`
+        //             this.nxStore.dispatch(showToast({ text: toastText }))
+        //             // this.nxStore.dispatch(
+        //             //     DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.curUserData.user })
+        //             // )
+        //             this.dashboardHelper.refreshCurUser(this.center.id, this.curUserData.user)
+        //             cb ? cb() : null
+        //         },
+        //         error: () => {
+        //             cb ? cb() : null
+        //         },
+        //     })
     }
 }
