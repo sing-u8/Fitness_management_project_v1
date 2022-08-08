@@ -25,8 +25,8 @@ export class UserDetailMembershipItemComponent implements OnInit, AfterViewInit 
     @Output() onRefund = new EventEmitter<UserMembership>()
     @Output() onRemoveRecord = new EventEmitter<UserMembership>()
 
-    @Output() onUpdateHolding = new EventEmitter<UserMembership>()
-    @Output() onRemoveHolding = new EventEmitter<UserMembership>()
+    @Output() onUpdateHolding = new EventEmitter<{ item: UserMembership; holdingIdx: number }>()
+    @Output() onRemoveHolding = new EventEmitter<{ item: UserMembership; holdingIdx: number }>()
 
     public originalOrder = originalOrder
 
@@ -98,28 +98,21 @@ export class UserDetailMembershipItemComponent implements OnInit, AfterViewInit 
         })
     }
 
-    public showNotificationDropDown = false
-    toggleNotificationDropDown() {
-        this.showNotificationDropDown = !this.showNotificationDropDown
-    }
-    hideNotificationDropDown() {
-        this.showNotificationDropDown = false
-    }
     public holdingMenuDropDownItemObj = {
         updateHoding: {
             name: '홀딩 기간 수정',
             color: 'var(--font-color)',
             visible: true,
-            func: () => {
-                this.onUpdateHolding.emit(this.membership)
+            func: (idx: number) => {
+                this.onUpdateHolding.emit({ item: this.membership, holdingIdx: idx })
             },
         },
         removeHoding: {
             name: '홀딩 삭제',
             color: 'var(--red)',
             visible: true,
-            func: () => {
-                this.onRemoveHolding.emit(this.membership)
+            func: (idx: number) => {
+                this.onRemoveHolding.emit({ item: this.membership, holdingIdx: idx })
             },
         },
     }
@@ -161,8 +154,6 @@ export class UserDetailMembershipItemComponent implements OnInit, AfterViewInit 
         }
     }
     public isHolding = false
-    public isHoldingReservaed = false
-
     public isExpired = false
     checkIsExpired() {
         if (
@@ -179,6 +170,22 @@ export class UserDetailMembershipItemComponent implements OnInit, AfterViewInit 
 
     public restDate = 0
 
+    public showNotificationDropDownObj = {}
+    toggleNotificationDropDown(index: number) {
+        if (!_.isBoolean(this.showNotificationDropDownObj[index])) {
+            this.showNotificationDropDownObj = _.assign(this.showNotificationDropDownObj, { [index]: true })
+        } else {
+            this.showNotificationDropDownObj[index] = !this.showNotificationDropDownObj[index]
+        }
+    }
+    hideNotificationDropDown(index: number) {
+        if (!_.isBoolean(this.showNotificationDropDownObj[index])) {
+            this.showNotificationDropDownObj = _.assign(this.showNotificationDropDownObj, { [index]: false })
+        } else {
+            this.showNotificationDropDownObj[index] = false
+        }
+    }
+
     constructor(private wordService: WordService, private timeService: TimeService) {}
 
     ngOnInit(): void {}
@@ -187,7 +194,6 @@ export class UserDetailMembershipItemComponent implements OnInit, AfterViewInit 
         this.getReservableClassText()
         this.restDate = this.timeService.getRestPeriod(dayjs().format(), this.membership.end_date)
         this.restDate = this.restDate < 1 || this.isExpired ? 0 : this.restDate
-        this.isHolding = this.membership.holding.length > 0 && !this.isExpired ? true : false
-        // this.isHolding && dayjs(this.membership.pause_start_date).isAfter(dayjs(), 'day') ? true : false
+        this.isHolding = this.membership.holding.length > 0 && !this.isExpired
     }
 }

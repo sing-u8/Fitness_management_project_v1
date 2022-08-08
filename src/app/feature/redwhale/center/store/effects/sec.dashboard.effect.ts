@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core'
 import { createEffect, Actions, ofType, concatLatestFrom } from '@ngrx/effects'
 import { Store } from '@ngrx/store'
-import { of, forkJoin } from 'rxjs'
+import { of, forkJoin, EMPTY } from 'rxjs'
 import { catchError, switchMap, tap, map, find } from 'rxjs/operators'
 
 import _ from 'lodash'
@@ -72,12 +72,6 @@ export class DashboardEffect {
                                 userSize: usersByCateg.user_count,
                             }
                         })
-                        console.log(
-                            ' DashboardActions.startGetUsersByCategory effect : ',
-                            userSelectCateg,
-                            ' - ',
-                            usersByCategs
-                        )
                         return DashboardActions.finishGetUsersByCategory({ userSelectCateg })
                     })
                 )
@@ -112,15 +106,15 @@ export class DashboardEffect {
             ofType(DashboardActions.startRefreshCenterUser),
             concatLatestFrom(() => [this.store.select(DashboardSelector.curUserListSelect)]),
             switchMap(([{ centerId, centerUser }, userListSelect]) =>
-                forkJoin({
-                    userInCategory: this.centerUsersApi
+                forkJoin([
+                    this.centerUsersApi
                         .getUserList(centerId, DashboardReducer.matchMemberSelectCategTo(userListSelect.key))
                         .pipe(map((users) => _.find(users, (user) => user.id == centerUser.id))),
-                    userInAll: this.centerUsersApi
+                    this.centerUsersApi
                         .getUserList(centerId, '', centerUser.center_user_name)
                         .pipe(map((users) => _.find(users, (user) => user.id == centerUser.id))),
-                }).pipe(
-                    switchMap(({ userInCategory, userInAll }) => {
+                ]).pipe(
+                    switchMap(([userInCategory, userInAll]) => {
                         return [
                             DashboardActions.finishRefreshCenterUser({
                                 categ_type: userListSelect.key,
@@ -314,29 +308,33 @@ export class DashboardEffect {
         )
     )
 
-    public centerHolding$ = createEffect(() =>
-        this.actions$.pipe(
-            ofType(DashboardActions.startCenterHolding),
-            concatLatestFrom(() => [
-                this.store.select(DashboardSelector.usersLists),
-                this.store.select(DashboardSelector.curUserListSelect),
-                this.store.select(DashboardSelector.curUserData),
-            ]),
-            switchMap(([{ centerId, cb, reqBody }, userLists, curUserListSelect, curUserData]) => {
-                const user_ids = userLists[curUserListSelect.key].filter((v) => v.holdSelected).map((v) => v.user.id)
-                return this.centerHoldingApi
-                    .centerHolding(centerId, {
-                        ...reqBody,
-                        user_ids,
-                    })
-                    .pipe(
-                        switchMap((profile) => {
-                            cb ? cb() : null
-                            return [DashboardActions.startRefreshCenterUser({ centerId, centerUser: curUserData.user })]
+    public centerHolding$ = createEffect(
+        () =>
+            this.actions$.pipe(
+                ofType(DashboardActions.startCenterHolding),
+                concatLatestFrom(() => [
+                    this.store.select(DashboardSelector.usersLists),
+                    this.store.select(DashboardSelector.curUserListSelect),
+                    this.store.select(DashboardSelector.curUserData),
+                ]),
+                switchMap(([{ centerId, cb, reqBody }, userLists, curUserListSelect, curUserData]) => {
+                    const user_ids = userLists[curUserListSelect.key]
+                        .filter((v) => v.holdSelected)
+                        .map((v) => v.user.id)
+                    return this.centerHoldingApi
+                        .centerHolding(centerId, {
+                            ...reqBody,
+                            user_ids,
                         })
-                    )
-            }),
-            catchError((err: string) => of(DashboardActions.error({ error: err })))
-        )
+                        .pipe(
+                            switchMap((profile) => {
+                                cb ? cb() : null
+                                return [DashboardActions.startGetUserData({ centerId, centerUser: curUserData.user })]
+                            })
+                        )
+                }),
+                catchError((err: string) => of(DashboardActions.error({ error: err })))
+            )
+        // { dispatch: false }
     )
 }

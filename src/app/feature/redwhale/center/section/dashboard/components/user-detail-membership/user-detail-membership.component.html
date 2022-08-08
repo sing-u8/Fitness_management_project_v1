@@ -28,8 +28,8 @@
                 (onTransfer)="setSelectedUserMembership(item); toggleShowTransferModal()"
                 (onRefund)="setSelectedUserMembership(item); toggleShowRefundModal()"
                 (onRemoveRecord)="setSelectedUserMembership(item); toggleRemoveModal()"
-                (onUpdateHolding)="setSelectedUserMembership(item); toggleUpdateHoldModal()"
-                (onRemoveHolding)="setSelectedUserMembership(item); toggleRemoveHoldingModal()"
+                (onUpdateHolding)="setSelectedUserMembership(item, $event.holdingIdx); toggleUpdateHoldModal($event.holdingIdx)"
+                (onRemoveHolding)="setSelectedUserMembership(item, $event.holdingIdx); toggleRemoveHoldingModal()"
             ></db-user-detail-membership-item>
         </ng-template>
     </main>

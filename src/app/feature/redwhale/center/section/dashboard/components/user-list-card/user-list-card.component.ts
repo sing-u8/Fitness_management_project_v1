@@ -47,7 +47,7 @@ export class UserListCardComponent implements OnInit, AfterViewInit, OnChanges, 
     constructor(private globalService: GlobalService, private timeService: TimeService) {
         this.searchSubscription = this.searchSubject
             .asObservable()
-            .pipe(distinctUntilChanged(), debounceTime(200))
+            .pipe(distinctUntilChanged())
             .subscribe((value) => {
                 this.doHide = !(
                     this.cardItem.user.center_user_name.includes(value) ||

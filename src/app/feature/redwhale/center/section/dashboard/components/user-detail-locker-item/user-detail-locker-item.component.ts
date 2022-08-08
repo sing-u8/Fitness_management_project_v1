@@ -8,6 +8,7 @@ import { UserLocker } from '@schemas/user-locker'
 
 import { WordService } from '@services/helper/word.service'
 import { TimeService } from '@services/helper/time.service'
+import { UserMembership } from '@schemas/user-membership'
 @Component({
     selector: 'db-user-detail-locker-item',
     templateUrl: './user-detail-locker-item.component.html',
@@ -24,8 +25,8 @@ export class UserDetailLockerItemComponent implements OnInit, AfterViewInit {
     @Output() onRefund = new EventEmitter<UserLocker>()
     @Output() onRemoveRecord = new EventEmitter<UserLocker>()
 
-    @Output() onUpdateHolding = new EventEmitter<UserLocker>()
-    @Output() onRemoveHolding = new EventEmitter<UserLocker>()
+    @Output() onUpdateHolding = new EventEmitter<{ item: UserLocker; holdingIdx: number }>()
+    @Output() onRemoveHolding = new EventEmitter<{ item: UserLocker; holdingIdx: number }>()
 
     public originalOrder = originalOrder
 
@@ -105,35 +106,26 @@ export class UserDetailLockerItemComponent implements OnInit, AfterViewInit {
         })
     }
 
-    public showNotificationDropDown = false
-    toggleNotificationDropDown() {
-        this.showNotificationDropDown = !this.showNotificationDropDown
-    }
-    hideNotificationDropDown() {
-        this.showNotificationDropDown = false
-    }
     public holdingMenuDropDownItemObj = {
         updateHoding: {
             name: '홀딩 기간 수정',
             color: 'var(--font-color)',
             visible: true,
-            func: () => {
-                this.onUpdateHolding.emit(this.locker)
+            func: (idx: number) => {
+                this.onUpdateHolding.emit({ item: this.locker, holdingIdx: idx })
             },
         },
         removeHoding: {
             name: '홀딩 삭제',
             color: 'var(--red)',
             visible: true,
-            func: () => {
-                this.onRemoveHolding.emit(this.locker)
+            func: (idx: number) => {
+                this.onRemoveHolding.emit({ item: this.locker, holdingIdx: idx })
             },
         },
     }
 
     public isHolding = false
-    public isHoldingReservaed = false
-
     public isExpired = false
     checkIsExpired() {
         if (
@@ -149,6 +141,21 @@ export class UserDetailLockerItemComponent implements OnInit, AfterViewInit {
 
     public restDate = 0
 
+    public showNotificationDropDownObj = {}
+    toggleNotificationDropDown(index: number) {
+        if (!_.isBoolean(this.showNotificationDropDownObj[index])) {
+            this.showNotificationDropDownObj = _.assign(this.showNotificationDropDownObj, { [index]: true })
+        } else {
+            this.showNotificationDropDownObj[index] = !this.showNotificationDropDownObj[index]
+        }
+    }
+    hideNotificationDropDown(index: number) {
+        if (!_.isBoolean(this.showNotificationDropDownObj[index])) {
+            this.showNotificationDropDownObj = _.assign(this.showNotificationDropDownObj, { [index]: false })
+        }
+        this.showNotificationDropDownObj[index] = false
+    }
+
     constructor(private wordService: WordService, private timeService: TimeService) {}
 
     ngOnInit(): void {}
@@ -156,8 +163,6 @@ export class UserDetailLockerItemComponent implements OnInit, AfterViewInit {
         this.checkIsExpired()
         this.restDate = this.timeService.getRestPeriod(dayjs().format(), this.locker.end_date)
         this.restDate = this.restDate < 1 || this.isExpired ? 0 : this.restDate
-        this.isHolding = this.locker.pause_start_date && this.locker.pause_end_date && !this.isExpired ? true : false
-        this.isHoldingReservaed =
-            this.isHolding && dayjs(this.locker.pause_start_date).isAfter(dayjs(), 'day') ? true : false
+        this.isHolding = this.locker.holding.length > 0 && !this.isExpired
     }
 }

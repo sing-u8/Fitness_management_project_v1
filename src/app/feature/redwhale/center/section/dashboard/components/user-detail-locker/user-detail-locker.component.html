@@ -29,8 +29,8 @@
                 (onEmpty) = 'setSelectedUserLocker(item);openEmptyModal()'
                 (onRefund) = 'setSelectedUserLocker(item); toggleShowRefundModal()'
                 (onRemoveRecord) = 'setSelectedUserLocker(item); toggleRemoveModal()'
-                (onUpdateHolding)="setSelectedUserLocker(item);toggleUpdateHoldModal()"
-                (onRemoveHolding)="setSelectedUserLocker(item); toggleRemoveHoldingModal()"
+                (onUpdateHolding)="setSelectedUserLocker(item, $event.holdingIdx);toggleUpdateHoldModal($event.holdingIdx)"
+                (onRemoveHolding)="setSelectedUserLocker(item, $event.holdingIdx); toggleRemoveHoldingModal()"
             ></db-user-detail-locker-item>
         </ng-template>
 

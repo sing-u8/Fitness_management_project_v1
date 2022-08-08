@@ -63,6 +63,8 @@ export class MemberListComponent implements OnInit, OnDestroy {
                     user_locker_included: event.holdWithLocker,
                 },
                 cb: () => {
+                    this.closePartialHoldModal()
+                    this.toggleHodlingMode()
                     event.loadingFns.hideLoading()
                 },
             })
@@ -86,7 +88,6 @@ export class MemberListComponent implements OnInit, OnDestroy {
     searchMemberValidator(): AsyncValidatorFn {
         return (control: AbstractControl): Observable<ValidationErrors | null> => {
             return control.valueChanges.pipe(
-                debounceTime(200),
                 distinctUntilChanged(),
                 map((value) => {
                     this.nxStore.dispatch(DashboardActions.setUserSearchInput({ searchInput: value as string }))
@@ -127,38 +128,8 @@ export class MemberListComponent implements OnInit, OnDestroy {
         this.onDirectRegisterMember.emit()
     }
 
-    // holding modal vars & method
-    onHoldAllConfirm(event: { date: { startDate: string; endDate: string }; holdWithLocker: boolean }) {
-        // this.GymDashboardService.holdAllMember(this.gym.id, {
-        //     start_date: event.date.startDate,
-        //     end_date: event.date.endDate,
-        //     including_locker_ticket_yn: event.holdWithLocker,
-        // }).subscribe((__) => {
-        //     this.getUserList(this.selectedUserList.key, '', '', false, () => {
-        //         this.getAllUserDetail()
-        //         this.closeAllHoldModal()
-        //         if (event.holdWithLocker) {
-        //             this.globalService.showToast(
-        //                 `${this.userLists.member.length}명 회원의 회원권 / 락커 홀딩이 예약되었습니다.`
-        //             )
-        //         } else {
-        //             this.globalService.showToast(
-        //                 `${this.userLists.member.length}명 회원의 회원권 홀딩이 예약되었습니다.`
-        //             )
-        //         }
-        //     })
-        // })
-    }
-
     // user-list-card method
     onCardClick(cardInfo: CenterUser) {
-        // this.userData = cardInfo
-        // this.userMemo = cardInfo.memo
-        // // this.willChangedName = cardInfo.gym_user_name
-        // _.forIn(this.userRole, (value, key) => {
-        //     this.userRole[key] = key == this.userData?.role_code ? true : false
-        // })
-        // this.getAllUserDetail(() => {})
         this.nxStore.dispatch(DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: cardInfo }))
     }
     onPartialHoldClick(holdFlag: boolean, index: number) {

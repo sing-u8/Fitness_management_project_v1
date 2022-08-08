@@ -155,13 +155,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     public holdModeFlags = { all: false, partial: false }
     public holdingNumber = 0
 
-    // public userSearchInput: FormControl
-    // public usersSelectCateg: UsersSelectCateg    // -----
-    // public selectedUserList: SelectedUserList  // ----
-    // public userLists: UsersList  // ----
-    // public searchUserLists: UsersList
-    // public managerLists: Record<Manager, Array<{ user: GetUserReturn; holdSelected: boolean }>>
-
     public userSearchInput: FormControl
     public usersSelectCateg$ = this.nxStore.select(DashboardSelector.usersSelectCategs)
     public curUserData$ = this.nxStore.select(DashboardSelector.curUserData)

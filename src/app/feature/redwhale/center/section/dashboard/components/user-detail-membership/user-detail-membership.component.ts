@@ -56,8 +56,12 @@ export class UserDetailMembershipComponent implements OnInit {
     public chargeMode: ChargeMode = undefined
 
     public selectedUserMembership: UserMembership = undefined
-    setSelectedUserMembership(userMembership: UserMembership) {
+    public selectedUserMembershipHoldingIdx: number
+    setSelectedUserMembership(userMembership: UserMembership, holdingIdx?: number) {
         this.selectedUserMembership = userMembership
+        if (_.isNumber(holdingIdx)) {
+            this.selectedUserMembershipHoldingIdx = holdingIdx
+        }
     }
     public showExtensionModal = false
     toggleExtensionModal() {
@@ -224,16 +228,15 @@ export class UserDetailMembershipComponent implements OnInit {
         startDate: '',
         endDate: '',
     }
-    toggleUpdateHoldModal() {
+    toggleUpdateHoldModal(holdingIdx: number) {
         this.updateHoldModalText.text = `'${this.wordService.ellipsis(
             this.selectedUserMembership.name,
             15
         )}' 홀딩 기간을 수정하시겠어요?`
-        // this.updateHoldDateInput = _.cloneDeep({
-        //     startDate: this.selectedUserMembership.pause_start_date,
-        //     endDate: this.selectedUserMembership.pause_end_date,
-        // })
-        console.log('toggleUpdateHoldModal : ', this.updateHoldDateInput)
+        this.updateHoldDateInput = _.cloneDeep({
+            startDate: this.selectedUserMembership.holding[holdingIdx].start_date,
+            endDate: this.selectedUserMembership.holding[holdingIdx].end_date,
+        })
         this.showUpdateHoldModal = !this.showUpdateHoldModal
     }
     hideUpdateHoldModal() {
@@ -438,51 +441,57 @@ export class UserDetailMembershipComponent implements OnInit {
             start_date: this.updateHoldData.startDate,
             end_date: this.updateHoldData.endDate,
         }
-        // this.centerUsersMembershipService
-        //     .modifyHoldingMembershipTicket(
-        //         this.center.id,
-        //         this.curUserData.user.id,
-        //         this.selectedUserMembership.id,
-        //         reqBody
-        //     )
-        //     .subscribe({
-        //         next: (_) => {
-        //             const toastText = `'${this.wordService.ellipsis(
-        //                 this.selectedUserMembership.name,
-        //                 6
-        //             )}' 홀딩 기간이 수정되었습니다.`
+        this.centerUsersMembershipService
+            .modifyHoldingMembershipTicket(
+                this.center.id,
+                this.curUserData.user.id,
+                this.selectedUserMembership.id,
+                this.selectedUserMembership.holding[this.selectedUserMembershipHoldingIdx].id,
+                reqBody
+            )
+            .subscribe({
+                next: (_) => {
+                    const toastText = `'${this.wordService.ellipsis(
+                        this.selectedUserMembership.name,
+                        6
+                    )}' 홀딩 기간이 수정되었습니다.`
 
-        //             this.nxStore.dispatch(showToast({ text: toastText }))
-        //             // this.nxStore.dispatch(
-        //             //     DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.curUserData.user })
-        //             // )
-        //             this.dashboardHelper.refreshCurUser(this.center.id, this.curUserData.user)
-        //             cb ? cb() : null
-        //         },
-        //         error: () => {
-        //             cb ? cb() : null
-        //         },
-        //     })
+                    this.nxStore.dispatch(showToast({ text: toastText }))
+                    // this.nxStore.dispatch(
+                    //     DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.curUserData.user })
+                    // )
+                    this.dashboardHelper.refreshCurUser(this.center.id, this.curUserData.user)
+                    cb ? cb() : null
+                },
+                error: () => {
+                    cb ? cb() : null
+                },
+            })
     }
     callRemoveHoldingApi(cb?: () => void) {
-        // this.centerUsersMembershipService
-        //     .resumeMembershipTicket(this.center.id, this.curUserData.user.id, this.selectedUserMembership.id)
-        //     .subscribe({
-        //         next: (_) => {
-        //             const toastText = `'${this.wordService.ellipsis(
-        //                 this.selectedUserMembership.name,
-        //                 6
-        //             )}' 홀딩 정보가 삭제되었습니다.`
-        //             this.nxStore.dispatch(showToast({ text: toastText }))
-        //             // this.nxStore.dispatch(
-        //             //     DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.curUserData.user })
-        //             // )
-        //             this.dashboardHelper.refreshCurUser(this.center.id, this.curUserData.user)
-        //             cb ? cb() : null
-        //         },
-        //         error: () => {
-        //             cb ? cb() : null
-        //         },
-        //     })
+        this.centerUsersMembershipService
+            .removeHoldingMembershipTicket(
+                this.center.id,
+                this.curUserData.user.id,
+                this.selectedUserMembership.id,
+                this.selectedUserMembership.holding[this.selectedUserMembershipHoldingIdx].id
+            )
+            .subscribe({
+                next: (_) => {
+                    const toastText = `'${this.wordService.ellipsis(
+                        this.selectedUserMembership.name,
+                        6
+                    )}' 홀딩 정보가 삭제되었습니다.`
+                    this.nxStore.dispatch(showToast({ text: toastText }))
+                    // this.nxStore.dispatch(
+                    //     DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.curUserData.user })
+                    // )
+                    this.dashboardHelper.refreshCurUser(this.center.id, this.curUserData.user)
+                    cb ? cb() : null
+                },
+                error: () => {
+                    cb ? cb() : null
+                },
+            })
     }
 }

@@ -54,8 +54,12 @@ export class UserDetailLockerComponent implements OnInit {
     public chargeMode: ChargeMode = undefined
 
     public selectedUserLocker: UserLocker = undefined
-    setSelectedUserLocker(userLocker: UserLocker) {
+    public selectedUserLockerHoldingIdx: number
+    setSelectedUserLocker(userLocker: UserLocker, holdingIdx?: number) {
         this.selectedUserLocker = userLocker
+        if (_.isNumber(holdingIdx)) {
+            this.selectedUserLockerHoldingIdx = holdingIdx
+        }
     }
     public showExtensionModal = false
     toggleExtensionModal() {
@@ -245,14 +249,14 @@ export class UserDetailLockerComponent implements OnInit {
         startDate: '',
         endDate: '',
     }
-    toggleUpdateHoldModal() {
+    toggleUpdateHoldModal(holdingIdx: number) {
         this.updateHoldModalText.text = `'[${this.wordService.ellipsis(
             this.selectedUserLocker.category_name,
             10
         )}] ${this.wordService.ellipsis(this.selectedUserLocker.name, 15)}' 홀딩 기간을 수정하시겠어요?`
         this.updateHoldDateInput = _.cloneDeep({
-            startDate: this.selectedUserLocker.pause_start_date,
-            endDate: this.selectedUserLocker.pause_end_date,
+            startDate: this.selectedUserLocker.holding[holdingIdx].start_date,
+            endDate: this.selectedUserLocker.holding[holdingIdx].end_date,
         })
         this.showUpdateHoldModal = !this.showUpdateHoldModal
     }
@@ -506,45 +510,56 @@ export class UserDetailLockerComponent implements OnInit {
             start_date: this.updateHoldData.startDate,
             end_date: this.updateHoldData.endDate,
         }
-        // this.centerUsersLockerService
-        //     .modifyHoldingLockerTicket(this.center.id, this.curUserData.user.id, this.selectedUserLocker.id, reqBody)
-        //     .subscribe({
-        //         next: (_) => {
-        //             const toastText = `'[${this.wordService.ellipsis(
-        //                 this.selectedUserLocker.category_name,
-        //                 10
-        //             )}] ${this.wordService.ellipsis(this.selectedUserLocker.name, 6)}' 홀딩 기간이 수정되었습니다.`
+        this.centerUsersLockerService
+            .modifyHoldingLockerTicket(
+                this.center.id,
+                this.curUserData.user.id,
+                this.selectedUserLocker.id,
+                this.selectedUserLocker.holding[this.selectedUserLockerHoldingIdx].id,
+                reqBody
+            )
+            .subscribe({
+                next: (_) => {
+                    const toastText = `'[${this.wordService.ellipsis(
+                        this.selectedUserLocker.category_name,
+                        10
+                    )}] ${this.wordService.ellipsis(this.selectedUserLocker.name, 6)}' 홀딩 기간이 수정되었습니다.`
 
-        //             this.nxStore.dispatch(showToast({ text: toastText }))
-        //             // this.nxStore.dispatch(
-        //             //     DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.curUserData.user })
-        //             // )
-        //             this.dashboardHelper.refreshCurUser(this.center.id, this.curUserData.user)
-        //         },
-        //         error: () => {
-        //             cb ? cb() : null
-        //         },
-        //     })
+                    this.nxStore.dispatch(showToast({ text: toastText }))
+                    // this.nxStore.dispatch(
+                    //     DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.curUserData.user })
+                    // )
+                    this.dashboardHelper.refreshCurUser(this.center.id, this.curUserData.user)
+                },
+                error: () => {
+                    cb ? cb() : null
+                },
+            })
     }
     callRemoveHoldingApi(cb?: () => void) {
-        // this.centerUsersLockerService
-        //     .removeHoldingLockerTicket(this.center.id, this.curUserData.user.id, this.selectedUserLocker.id)
-        //     .subscribe({
-        //         next: (_) => {
-        //             const toastText = `'[${this.wordService.ellipsis(
-        //                 this.selectedUserLocker.category_name,
-        //                 10
-        //             )}] ${this.wordService.ellipsis(this.selectedUserLocker.name, 6)}' 홀딩 정보가 삭제되었습니다.`
-        //             this.nxStore.dispatch(showToast({ text: toastText }))
-        //             // this.nxStore.dispatch(
-        //             //     DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.curUserData.user })
-        //             // )
-        //             this.dashboardHelper.refreshCurUser(this.center.id, this.curUserData.user)
-        //             cb ? cb() : null
-        //         },
-        //         error: () => {
-        //             cb ? cb() : null
-        //         },
-        //     })
+        this.centerUsersLockerService
+            .removeHoldingLockerTicket(
+                this.center.id,
+                this.curUserData.user.id,
+                this.selectedUserLocker.id,
+                this.selectedUserLocker.holding[this.selectedUserLockerHoldingIdx].id
+            )
+            .subscribe({
+                next: (_) => {
+                    const toastText = `'[${this.wordService.ellipsis(
+                        this.selectedUserLocker.category_name,
+                        10
+                    )}] ${this.wordService.ellipsis(this.selectedUserLocker.name, 6)}' 홀딩 정보가 삭제되었습니다.`
+                    this.nxStore.dispatch(showToast({ text: toastText }))
+                    // this.nxStore.dispatch(
+                    //     DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.curUserData.user })
+                    // )
+                    this.dashboardHelper.refreshCurUser(this.center.id, this.curUserData.user)
+                    cb ? cb() : null
+                },
+                error: () => {
+                    cb ? cb() : null
+                },
+            })
     }
 }
