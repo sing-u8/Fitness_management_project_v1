@@ -16,6 +16,7 @@ export type FileTypeCode =
     | 'file_type_center_background'
     | 'file_type_center_user_picture'
     | 'file_type_center_user_background'
+    | 'file_type_center_contract'
     | 'file_type_center_chat'
 
 @Injectable({
@@ -26,22 +27,15 @@ export class FileService {
 
     constructor(private http: HttpClient) {}
 
-    getFile(
-        type_code: FileTypeCode,
-        center_id = undefined,
-        center_user_id = undefined,
-        chat_room_id = undefined,
-        page = undefined,
-        pageSize = undefined
-    ): Observable<Array<File>> {
+    getFile(param: GetFileParam): Observable<Array<File>> {
         const url =
             this.SERVER +
-            `/files?type_code=${type_code}` +
-            (center_id ? `&center_id=${center_id}` : ``) +
-            (center_user_id ? `&center_user_id=${center_user_id}` : ``) +
-            (chat_room_id ? `&chat_room_id=${chat_room_id}` : ``) +
-            (page ? `&page=${page}` : ``) +
-            (pageSize ? `&pageSize=${pageSize}` : ``)
+            `/files?type_code=${param.type_code}` +
+            (param.center_id ? `&center_id=${param.center_id}` : ``) +
+            (param.center_user_id ? `&center_user_id=${param.center_user_id}` : ``) +
+            (param.center_chat_room_id ? `&chat_room_id=${param.center_chat_room_id}` : ``) +
+            (param.page ? `&page=${param.page}` : ``) +
+            (param.pageSize ? `&pageSize=${param.pageSize}` : ``)
 
         const options = {
             headers: new HttpHeaders({
@@ -144,5 +138,16 @@ export interface CreateFileRequestBody {
     center_id?: string
     center_user_id?: string
     center_chat_room_id?: string
+    center_contract_id?: string
     // files  : FileList   -- is already in other param
+}
+
+export interface GetFileParam {
+    type_code: FileTypeCode
+    center_id?: string
+    center_user_id?: string
+    center_chat_room_id?: string
+    center_contract_id?: string
+    page?: number
+    pageSize?: number
 }

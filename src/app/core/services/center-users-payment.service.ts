@@ -7,6 +7,7 @@ import handleError from './handleError'
 import { environment } from '@environments/environment'
 import { Response } from '@schemas/response'
 import { Payment } from '@schemas/payment'
+import { Contract } from '@schemas/contract'
 
 @Injectable({
     providedIn: 'root',
@@ -25,7 +26,7 @@ export class CenterUsersPaymentService {
         centerId: string,
         userId: string,
         reqBody: CreateMLPaymentReqBody
-    ): Observable<Response> {
+    ): Observable<Contract> {
         const url = this.SERVER + `/${centerId}/users/${userId}/payment`
 
         return this.http.post<Response>(url, reqBody, this.options).pipe(

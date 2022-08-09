@@ -274,13 +274,19 @@ export class DashboardEffect {
             switchMap(({ profileUrl, centerId, userId, callback }) =>
                 this.fileApi.deleteFile(profileUrl).pipe(
                     switchMap(() =>
-                        this.fileApi.getFile('file_type_center_user_picture', centerId, userId).pipe(
-                            switchMap((profiles) => {
-                                const profileUrl = profiles.length == 0 ? null : profiles[0].url
-                                callback ? callback() : null
-                                return [DashboardActions.finishRemoveCurUserProfile({ userId, profileUrl })]
+                        this.fileApi
+                            .getFile({
+                                type_code: 'file_type_center_user_picture',
+                                center_id: centerId,
+                                center_user_id: userId,
                             })
-                        )
+                            .pipe(
+                                switchMap((profiles) => {
+                                    const profileUrl = profiles.length == 0 ? null : profiles[0].url
+                                    callback ? callback() : null
+                                    return [DashboardActions.finishRemoveCurUserProfile({ userId, profileUrl })]
+                                })
+                            )
                     )
                 )
             ),

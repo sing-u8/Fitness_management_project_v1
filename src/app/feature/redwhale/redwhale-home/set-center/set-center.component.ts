@@ -81,8 +81,8 @@ export class SetCenterComponent implements OnInit {
             .getCenter(centerId)
             .pipe(
                 combineLatestWith(
-                    this.fileService.getFile('file_type_center_picture', centerId),
-                    this.fileService.getFile('file_type_center_background', centerId)
+                    this.fileService.getFile({ type_code: 'file_type_center_picture', center_id: centerId }),
+                    this.fileService.getFile({ type_code: 'file_type_center_background', center_id: centerId })
                 )
             )
             .subscribe(([center, cp, cbg]) => {
