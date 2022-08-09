@@ -39,7 +39,7 @@ export class SaleComponent implements OnInit, OnDestroy {
     public saleData$ = this.nxStore.select(SaleSelector.saleData)
     public saleStatistics$ = this.nxStore.select(SaleSelector.saleStatistics)
     // ngrx copy vars
-    public unsubscriber$ = new Subject<void>()
+    public unsubscribe$ = new Subject<void>()
     public selectedDate: FromSale.SelectedDate
     public isFiltered: FromSale.IsFiltered
     public typeCheck: FromSale.TypeCheck
@@ -71,54 +71,41 @@ export class SaleComponent implements OnInit, OnDestroy {
         this.showEmptyTableFlag = 'none'
         this.filterTagList = []
         this.center = this.storageService.getCenter()
-        this.showSettingSale =
+        this.showSettingSale = !!(
             this.center.role_code == 'owner' || this.center.permissions.find((v) => v == 'read_stats_sales')
-                ? true
-                : false
+        )
 
-        this.nxStore
-            .pipe(select(SaleSelector.selectedDate), takeUntil(this.unsubscriber$))
-            .subscribe((selectedDate) => {
-                this.selectedDate = _.cloneDeep(selectedDate)
-            })
-        this.nxStore.pipe(select(SaleSelector.typeCheck), takeUntil(this.unsubscriber$)).subscribe((typeCheck) => {
+        this.nxStore.pipe(select(SaleSelector.selectedDate), takeUntil(this.unsubscribe$)).subscribe((selectedDate) => {
+            this.selectedDate = _.cloneDeep(selectedDate)
+        })
+        this.nxStore.pipe(select(SaleSelector.typeCheck), takeUntil(this.unsubscribe$)).subscribe((typeCheck) => {
             this.typeCheck = _.cloneDeep(typeCheck)
         })
-        this.nxStore
-            .pipe(select(SaleSelector.productCheck), takeUntil(this.unsubscriber$))
-            .subscribe((productCheck) => {
-                this.productCheck = _.cloneDeep(productCheck)
-            })
-        this.nxStore.pipe(select(SaleSelector.inputs), takeUntil(this.unsubscriber$)).subscribe((inputs) => {
+        this.nxStore.pipe(select(SaleSelector.productCheck), takeUntil(this.unsubscribe$)).subscribe((productCheck) => {
+            this.productCheck = _.cloneDeep(productCheck)
+        })
+        this.nxStore.pipe(select(SaleSelector.inputs), takeUntil(this.unsubscribe$)).subscribe((inputs) => {
             this.inputs = _.cloneDeep(inputs)
         })
         this.selectIsFiltered()
 
         this.nxStore.dispatch(SaleActions.startGetSaleSummary({ centerId: this.center.id }))
 
-        this.nxStore.pipe(select(centerPermission), takeUntil(this.unsubscriber$)).subscribe((po) => {
-            this.centerPermissionObj = _.cloneDeep(po)
-            if (!_.isEmpty(po.instructor)) {
-                this.showSale = {
-                    value: this.centerPermissionObj.instructor[10].items[0].approved,
-                }
-            }
-        })
-    }
-    ngOnDestroy(): void {
-        // this.isFilteredSubscription.unsubscribe()
-        this.unsubscriber$.next()
-        this.unsubscriber$.complete()
-        // this.resizeUnlistener()
-    }
-
-    ngAfterViewInit(): void {
-        // this.resizeUnlistener = this.renderer.listen('window', 'resize', (event) => {
-        //     if (event.target.innerWidth >= 1180 && event.target.innerWidth <= 1440) {
-        //         this.renderer.setStyle(this.sale.nativeElement, 'minWidth', `${event.target.innerWidth - 64}px`)
+        // this.nxStore.pipe(select(centerPermission), takeUntil(this.unsubscriber$)).subscribe((po) => {
+        //     this.centerPermissionObj = _.cloneDeep(po)
+        //     if (!_.isEmpty(po.instructor)) {
+        //         this.showSale = {
+        //             value: this.centerPermissionObj.instructor[10].items[0].approved,
+        //         }
         //     }
         // })
     }
+    ngOnDestroy(): void {
+        this.unsubscribe$.next()
+        this.unsubscribe$.complete()
+    }
+
+    ngAfterViewInit(): void {}
     // setting show sale vars and funcs
     public settingShowSaleData: modalData = {
         text: '매출 공개 여부를 설정해주세요.',
@@ -128,42 +115,42 @@ export class SaleComponent implements OnInit, OnDestroy {
         confirmButtonText: '저장하기',
     }
 
-    public showSale = {
-        value: false,
-    }
-    centerPermissionObj: PermissionObj
-    public doSettingShowSaleModal = false
-    openSettingShowSaleModal() {
-        this.doSettingShowSaleModal = true
-    }
-    onSettingShowSaleModalCancel() {
-        this.showSale = {
-            value: this.centerPermissionObj.instructor[10].items[0].approved,
-        }
-        this.doSettingShowSaleModal = false
-    }
-    onSettingShowSaleModalConfirm(Return: { clickEmitter: ClickEmitterType; openSale: boolean }) {
-        this.centerPermissionObj.instructor[10].items[0].approved = Return.openSale
-        console.log(
-            'onSettingShowSaleModalConfirm ---- ',
-            this.centerPermissionObj.instructor[10],
-            this.centerPermissionObj.instructor[10].items[0],
-            Return.openSale
-        )
-        this.nxStore.dispatch(
-            startUpdateCenterPermission({
-                centerId: this.center.id,
-                roleCode: 'instructor',
-                permmissionKeyCode: 'stats_sales',
-                permissionCode: 'read_stats_sales',
-                permissionCategoryList: this.centerPermissionObj.instructor,
-                cb: () => {
-                    Return.clickEmitter.hideLoading()
-                    this.doSettingShowSaleModal = false
-                },
-            })
-        )
-    }
+    // public showSale = {
+    //     value: false,
+    // }
+    // centerPermissionObj: PermissionObj
+    // public doSettingShowSaleModal = false
+    // openSettingShowSaleModal() {
+    //     this.doSettingShowSaleModal = true
+    // }
+    // onSettingShowSaleModalCancel() {
+    //     this.showSale = {
+    //         value: this.centerPermissionObj.instructor[10].items[0].approved,
+    //     }
+    //     this.doSettingShowSaleModal = false
+    // }
+    // onSettingShowSaleModalConfirm(Return: { clickEmitter: ClickEmitterType; openSale: boolean }) {
+    //     this.centerPermissionObj.instructor[10].items[0].approved = Return.openSale
+    //     console.log(
+    //         'onSettingShowSaleModalConfirm ---- ',
+    //         this.centerPermissionObj.instructor[10],
+    //         this.centerPermissionObj.instructor[10].items[0],
+    //         Return.openSale
+    //     )
+    //     this.nxStore.dispatch(
+    //         startUpdateCenterPermission({
+    //             centerId: this.center.id,
+    //             roleCode: 'instructor',
+    //             permmissionKeyCode: 'stats_sales',
+    //             permissionCode: 'read_stats_sales',
+    //             permissionCategoryList: this.centerPermissionObj.instructor,
+    //             cb: () => {
+    //                 Return.clickEmitter.hideLoading()
+    //                 this.doSettingShowSaleModal = false
+    //             },
+    //         })
+    //     )
+    // }
 
     // sale-date-selector vars and funcs
     onDateSeleted(date: FromSale.SelectedDate) {
@@ -175,7 +162,7 @@ export class SaleComponent implements OnInit, OnDestroy {
 
     // sale isFiltered vars and func
     selectIsFiltered() {
-        this.nxStore.pipe(select(SaleSelector.isFiltered), takeUntil(this.unsubscriber$)).subscribe((_isFiltered) => {
+        this.nxStore.pipe(select(SaleSelector.isFiltered), takeUntil(this.unsubscribe$)).subscribe((_isFiltered) => {
             console.log('select is filtered : ', _isFiltered)
             // make filter tag list
             _.forEach(_.keys(_isFiltered), (filterType) => {
