@@ -348,10 +348,7 @@ export class RegisterMembershipLockerFullmodalStore extends ComponentStore<State
                                     }
                                 }
                                 if (!_.isEmpty(reqBody.signData)) {
-                                    this.fileService.urlToFile(reqBody.signData, 'signData').then((file) => {
-                                        const dt = new DataTransfer()
-                                        dt.items.add(file)
-
+                                    this.fileService.urlToFileList(reqBody.signData, 'signData').then((fileList) => {
                                         this.fileService
                                             .createFile(
                                                 {
@@ -360,7 +357,7 @@ export class RegisterMembershipLockerFullmodalStore extends ComponentStore<State
                                                     center_contract_id: contract.id,
                                                     center_user_id: reqBody.user.id,
                                                 },
-                                                dt.files
+                                                fileList
                                             )
                                             .subscribe(() => {
                                                 func()

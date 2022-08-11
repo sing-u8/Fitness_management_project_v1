@@ -20,7 +20,17 @@
             <db-user-detail-contract-item
                 *ngFor="let item of curUserData.contracts"
                 [contract]="item"
+                (onSign)="setSelectedPayment(item); openSignaturePad()"
+                (onContractDetail)="setSelectedPayment(item);"
             ></db-user-detail-contract-item>
         </ng-template>
     </main>
 </section>
+
+<rw-signature-pad-modal
+    [(visible)]="isSignaturePadVisible"
+    [contractorName]="curUserData?.user?.center_user_name"
+    [blockClickOutside]="true"
+    (cancel)="onCancelSignaturePad()"
+    (confirm)="onConfirmSignaturePad($event)"
+></rw-signature-pad-modal>

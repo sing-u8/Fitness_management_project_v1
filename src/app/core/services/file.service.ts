@@ -34,6 +34,7 @@ export class FileService {
             (param.center_id ? `&center_id=${param.center_id}` : ``) +
             (param.center_user_id ? `&center_user_id=${param.center_user_id}` : ``) +
             (param.center_chat_room_id ? `&chat_room_id=${param.center_chat_room_id}` : ``) +
+            (param.center_contract_id ? `&center_contract_id=${param.center_contract_id}` : ``) +
             (param.page ? `&page=${param.page}` : ``) +
             (param.pageSize ? `&pageSize=${param.pageSize}` : ``)
 
@@ -141,6 +142,19 @@ export class FileService {
             })
             .then(function (buf) {
                 return new File([buf], filename, { type: mimeType })
+            })
+    }
+
+    urlToFileList(url: string, filename = 'file', mimeType = '') {
+        mimeType = mimeType || (url.match(/^data:([^;]+);/) || '')[1]
+        return fetch(url)
+            .then(function (res) {
+                return res.arrayBuffer()
+            })
+            .then(function (buf) {
+                const dt = new DataTransfer()
+                dt.items.add(new File([buf], filename, { type: mimeType }))
+                return dt.files
             })
     }
 }

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core'
 import { createEffect, Actions, ofType, concatLatestFrom } from '@ngrx/effects'
 import { Store } from '@ngrx/store'
-import { of, forkJoin, EMPTY } from 'rxjs'
+import { of, forkJoin, EMPTY, from } from 'rxjs'
 import { catchError, switchMap, tap, map, find } from 'rxjs/operators'
 
 import _ from 'lodash'
@@ -353,4 +353,59 @@ export class DashboardEffect {
             )
         // { dispatch: false }
     )
+
+    // api가 이상해서 임의로 짠 코드  -- 수정 필요
+    public signContract$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(DashboardActions.startContractSign),
+            switchMap(({ centerId, centerContractId, centerUserId, signUrl, cb }) =>
+                from(this.fileApi.urlToFileList(signUrl, 'signData')).pipe(
+                    switchMap((fileList) => {
+                        return this.fileApi
+                            .createFile(
+                                {
+                                    type_code: 'file_type_center_contract',
+                                    center_id: centerId,
+                                    center_user_id: centerUserId,
+                                    center_contract_id: centerContractId,
+                                },
+                                fileList
+                            )
+                            .pipe(
+                                switchMap((files) => {
+                                    cb ? cb() : null
+                                    return [DashboardActions.finishContractSign({ file: files[0], centerContractId })]
+                                })
+                            )
+                    })
+                )
+            ),
+            catchError((err: string) => of(DashboardActions.error({ error: err })))
+        )
+    )
 }
+
+/*
+
+.pipe(
+                        switchMap(
+                            (_) => {
+                                cb ? cb() : null
+                                return [DashboardActions.startGetUserData({ centerId, centerUser })]
+                            }
+                            // this.fileApi
+                            //     .getFile({
+                            //         type_code: 'file_type_center_contract',
+                            //         center_id: centerId,
+                            //         center_user_id: centerUserId,
+                            //         center_contract_id: centerContractId,
+                            //     })
+                            //     .pipe(
+                            //         map((files) => {
+                            //             cb ? cb() : null
+                            //             return DashboardActions.finishContractSign({ file: files[0], centerContractId })
+                            //         })
+                            //     )
+                        )
+                    )
+ */

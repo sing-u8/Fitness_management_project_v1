@@ -9,8 +9,9 @@
     </div>
     <div class="bar"></div>
 
-    <div class="sign-box" [class.signed]="signData" (click)="openSignaturePad()">
+    <div class="sign-box" [class.signed]="signData" [class.read-mode]="type == 'r'" (click)="openSignaturePad()">
         <img *ngIf="signData" alt="'signature-pad'" src="{{signData}}">
+        <img *ngIf="signedUrl" alt="'signed-url'" src="{{signedUrl}}">
         <span class="rw-typo-bodytext1_grey">{{contractor?.center_user_name}} (인)</span>
     </div>
 

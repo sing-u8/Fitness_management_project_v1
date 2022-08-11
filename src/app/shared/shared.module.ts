@@ -30,6 +30,7 @@ import { DbDatepickerComponent } from './components/common/db-datepicker/db-date
 import { RolemodalComponent } from './components/common/rolemodal/rolemodal.component'
 import { CenterRolemodalComponent } from './components/common/center-rolemodal/center-rolemodal.component'
 import { SignaturePadModalComponent } from './components/common/signature-pad-modal/signature-pad-modal.component'
+import { SettingTermsModalComponent } from './components/common/setting-terms-modal/setting-terms-modal.component'
 
 // -drawer- //
 import { LessonFlipListComponent } from './components/redwhale/drawer/lesson-flip-list/lesson-flip-list.component'
@@ -142,6 +143,7 @@ FullCalendarModule.registerPlugins([
         RolemodalComponent,
         CenterRolemodalComponent,
         SignaturePadModalComponent,
+        SettingTermsModalComponent,
         // -- //drawer
         DrawerLessonCardComponent,
         SchDayRepeatSelectComponent,
@@ -227,6 +229,7 @@ FullCalendarModule.registerPlugins([
         RolemodalComponent,
         CenterRolemodalComponent,
         SignaturePadModalComponent,
+        SettingTermsModalComponent,
         // -- //drawer
         DrawerLessonCardComponent,
         SchDayRepeatSelectComponent,

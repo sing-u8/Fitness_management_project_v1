@@ -52,5 +52,7 @@ export class UserDetailContractItemComponent implements OnInit, AfterViewInit {
     constructor(private wordService: WordService) {}
 
     ngOnInit(): void {}
-    ngAfterViewInit() {}
+    ngAfterViewInit() {
+        this.menuDropDownItemObj.sign.visible = !this.contract.user_sign
+    }
 }

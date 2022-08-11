@@ -16,9 +16,11 @@ import { Router } from '@angular/router'
 import { StorageService } from '@services/storage.service'
 import { GymConfirmModalService } from '@services/home/gym-confirm-modal.service'
 import { CenterRolePermissionService } from '@services/center-role-permission.service'
+import { CenterService } from '@services/center.service'
 
 import { Center } from '@schemas/center'
 import { PermissionCategory } from '@schemas/permission-category'
+import { SettingTermConfirmOutput } from '@shared/components/common/setting-terms-modal/setting-terms-modal.component'
 
 import _ from 'lodash'
 
@@ -54,6 +56,7 @@ export class CenterListItemComponent implements OnInit, AfterViewInit, OnDestroy
     public doShowModal: boolean
     public centerModalData
     public centerPermission: Array<PermissionCategory> = []
+    public centerTerms: string = undefined
 
     public unSubscriber$ = new Subject<void>()
 
@@ -63,7 +66,8 @@ export class CenterListItemComponent implements OnInit, AfterViewInit, OnDestroy
         private renderer: Renderer2,
         private router: Router,
         private nxStore: Store,
-        private centerRolePermissionService: CenterRolePermissionService
+        private centerRolePermissionService: CenterRolePermissionService,
+        private centerService: CenterService
     ) {
         this.doShowDropDown = false
         this.doShowModal = false
@@ -80,6 +84,7 @@ export class CenterListItemComponent implements OnInit, AfterViewInit, OnDestroy
         this.initCenterRoleName()
         this.initCenterAvatar()
         this.initCenterBackground()
+        this.centerTerms = _.cloneDeep(this.center.contract_terms)
 
         this.centerRolePermissionService
             .getCenterRolePermission(this.center.id, 'instructor')
@@ -136,6 +141,26 @@ export class CenterListItemComponent implements OnInit, AfterViewInit, OnDestroy
         this.showSettingDropdown = false
     }
 
+    // set terms vars and methods
+    public showSettingTermsModal = false
+    openSettingTermsModal() {
+        this.showSettingTermsModal = true
+    }
+    cancelSettingTermsModal() {
+        this.showSettingTermsModal = false
+        this.centerTerms = this.center.contract_terms
+    }
+    confirmSettingTermsModal(e: SettingTermConfirmOutput) {
+        e.loadingFns.showLoading()
+        this.centerService.updateCenter(this.center.id, { contract_terms: this.centerTerms }).subscribe((center) => {
+            console.log('update center : ', center)
+            this.center = center
+            this.centerTerms = center.contract_terms
+            this.showSettingTermsModal = false
+            e.loadingFns.hideLoading()
+        })
+    }
+
     // ---------------------center service------------------>//
     leaveGym() {
         this.handleModalConfirm()
@@ -185,7 +210,7 @@ export class CenterListItemComponent implements OnInit, AfterViewInit, OnDestroy
     }
 
     isSideToolbarPressed(event) {
-        return this.doShowDropDown == true ? true : false
+        return this.doShowDropDown == true
     }
 
     // owner modal
@@ -218,3 +243,10 @@ export class CenterListItemComponent implements OnInit, AfterViewInit, OnDestroy
     // STAFF: 'staff',  - 직원
     Member: 'member',  - 회원
 */
+
+/*
+
+이용약관 입니다.이용약관 입니다.이용약관 입니다.이용약관 입니다.이용약관 입니다.이용약관 입니다.이용약관 입니다.이용약관 입니다.이용약관 입니다.이용약관 입니다.이용약관 입니다.이용약관 입니다.이용약관 입니다.이용약관 입니다.이용약관 입니다.이용약관 입니다.이용약관 입니다.
+
+이용약관 입니다.이용약관 입니다.이용약관 입니다.이용약관 입니다.이용약관 입니다.이용약관 입니다.이용약관 입니다.이용약관 입니다.이용약관 입니다.이용약관 입니다.이용약관 입니다.이용약관 입니다.이용약관 입니다.이용약관 입니다.이용약관 입니다.이용약관 입니다.
+ */

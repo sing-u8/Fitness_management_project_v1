@@ -72,6 +72,12 @@ section.l-contract-sign-box {
       border-color: var(--lightgrey);
       background-color: var(--background-color);
     }
+    
+    &.read-mode {
+      border-color: var(--lightgrey) !important;
+      background-color: var(--background-color) !important;
+      cursor: auto !important;
+    }
   }
 
   .sign-guide-text {

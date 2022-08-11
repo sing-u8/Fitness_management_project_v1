@@ -21,6 +21,7 @@ import { UserMembership } from '@schemas/user-membership'
 import { Payment } from '@schemas/payment'
 import { User } from '@schemas/user'
 import { Contract } from '@schemas/contract'
+import { File } from '@schemas/file'
 
 const FeatureKey = 'Center/Dashboard'
 
@@ -129,6 +130,15 @@ export const finishRegisterCurUserProfile = createAction(
 export const startCenterHolding = createAction(
     `[${FeatureKey}] Start Center Hold`,
     props<{ centerId: string; reqBody: Omit<CenterHoldingReqBody, 'user_ids'>; cb?: () => void }>()
+)
+
+export const startContractSign = createAction(
+    `[${FeatureKey}] Start Contract Sign`,
+    props<{ centerId: string; centerUserId: string; centerContractId: string; signUrl: string; cb?: () => void }>()
+)
+export const finishContractSign = createAction(
+    `[${FeatureKey}] Finish Contract Sign`,
+    props<{ file: File; centerContractId: string }>()
 )
 
 // sync

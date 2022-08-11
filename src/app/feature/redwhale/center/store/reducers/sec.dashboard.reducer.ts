@@ -241,7 +241,12 @@ export const dashboardReducer = createImmerReducer(
         })
         return state
     }),
-
+    on(DashboardActions.finishContractSign, (state, { file, centerContractId }) => {
+        console.log('finishContractSign : ', file)
+        const contractIdx = state.curUserData.contracts.findIndex((v) => v.id == centerContractId)
+        state.curUserData.contracts[contractIdx].user_sign = file.url
+        return state
+    }),
     // sync
     on(DashboardActions.setUserSearchInput, (state, { searchInput }) => {
         state.curSearchInput = searchInput

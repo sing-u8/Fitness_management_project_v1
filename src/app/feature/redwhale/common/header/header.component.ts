@@ -27,6 +27,7 @@ import { centerPermission } from '@centerStore/selectors/center.common.selector'
 import { Subject } from 'rxjs'
 import { takeUntil } from 'rxjs/operators'
 import { showModal } from '@appStore/actions/modal.action'
+import { SettingTermConfirmOutput } from '@shared/components/common/setting-terms-modal/setting-terms-modal.component'
 
 @Component({
     selector: 'rw-header',
@@ -67,6 +68,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         this.drawer$ = this.nxStore.pipe(select(drawerSelector))
         this.user = this.storageService.getUser()
         this.center = this.storageService.getCenter()
+        this.centerTerms = _.cloneDeep(this.center.contract_terms)
 
         this.getCenterList()
 
@@ -200,5 +202,30 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     resetCenterState() {
         resetAllState(this.nxStore)
+    }
+
+    // setting terms vars and methods
+    public centerTerms = ''
+    public showSettingTermsModal = false
+    openSettingTermsModal() {
+        this.closeSettingDropdown()
+        this.hidePopupGymList()
+        this.showSettingTermsModal = true
+    }
+    cancelSettingTermsModal() {
+        this.showSettingTermsModal = false
+        this.centerTerms = this.center.contract_terms
+    }
+    confirmSettingTermsModal(e: SettingTermConfirmOutput) {
+        e.loadingFns.showLoading()
+        console.log('confirmSettingTermsModal : ', this.center)
+        this.centerService.updateCenter(this.center.id, { contract_terms: this.centerTerms }).subscribe((center) => {
+            console.log('update center : ', center)
+            this.center = center
+            this.storageService.setCenter(this.center)
+            this.centerTerms = center.contract_terms
+            this.showSettingTermsModal = false
+            e.loadingFns.hideLoading()
+        })
     }
 }

@@ -12,6 +12,9 @@ export class ContractSignBoxComponent implements OnInit {
     @Input() contractDate: string
     @Input() contractor: CenterUser
 
+    @Input() type: 'rw' | 'r' = 'rw'
+    @Input() signedUrl: string // type : 'r' only
+
     @Output() onSign = new EventEmitter<string>()
 
     constructor() {}
@@ -22,6 +25,7 @@ export class ContractSignBoxComponent implements OnInit {
     public signData: string = undefined
     public isSignaturePadVisible = false
     openSignaturePad() {
+        if (this.type == 'r') return
         this.isSignaturePadVisible = true
     }
     onCancelSignaturePad() {

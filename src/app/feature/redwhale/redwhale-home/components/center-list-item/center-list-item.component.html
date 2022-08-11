@@ -25,7 +25,7 @@
             <div *ngIf="showSettingDropdown" class="setting-dropdown" (rwClickOutside)="closeSettingDropdown()">
                 <div class="setting-dropdown-item rw-typo-bodytext2" (click)="goGymSetting($event)">기본 정보 수정</div>
                 <div class="setting-dropdown-item rw-typo-bodytext2" (click)="openRoleModal($event)">권한 관리</div>
-                <div class="setting-dropdown-item rw-typo-bodytext2" (click)="(false)">약관 설정</div>
+                <div class="setting-dropdown-item rw-typo-bodytext2" (click)="openSettingTermsModal()">약관 설정</div>
             </div>
         </div>
         <div (rwClickOutside)="hideDropDown()" class="toolbar-right" id="_toolbar-right">
@@ -61,3 +61,11 @@
     (confirm)="hideOwnerModal()"
 >
 </rw-modal>
+
+<rw-setting-terms-modal
+    [(visible)] = "showSettingTermsModal"
+    [(centerTerm)]="centerTerms"
+    [center] = "center"
+    (cancel)="cancelSettingTermsModal()"
+    (confirm)="confirmSettingTermsModal($event)"
+></rw-setting-terms-modal>

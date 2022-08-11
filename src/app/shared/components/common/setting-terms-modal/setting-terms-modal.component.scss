@@ -28,11 +28,11 @@
   z-index: 10000;
 
   .rw-modal {
-    height: 395px;
-    width: 457px;
+    height: 514px;
+    width: 646px;
     border-radius: 6px;
     background: #FFFFFF;
-    box-shadow: 0 0 10px rgba(181, 181, 181, 0.109804);
+    box-shadow: 0px 0px 10px rgba(181, 181, 181, 0.109804);
 
     opacity: 0;
     transition: opacity 0s;
@@ -57,44 +57,18 @@
       }
     }
 
-    .sign-box {
-      width: 360px;
-      height: 174px;
-      position: relative;
-      background: rgba(227, 74, 94, 0.05);
-      border: 3px dashed #E34A5E;
-      border-radius: 4px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      canvas {
-        //width: 354px;
-        //height: 168px;
-        position: absolute;
-        left: 0;
-        top: 0;
-        background-color: transparent;
-      }
-    }
-
-    .erase-sign {
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    textarea {
+      min-width: 585px;
+      min-height: 330px;
       background: #FFFFFF;
-      border: 1px solid #F1F1F1;
-      border-radius: 4px;
-      margin-top: 10px;
-      align-self: flex-start;
-
-      .trash-icon {
-        background-image: url('/assets/icons/etc/trash_darkgrey.svg');
-        background-size: contain;
-        background-repeat: no-repeat;
-        width: 14px;
-        height: 14px;
-        z-index: 5;
-      }
+      /* gray/03 border */
+      border: 1px solid #E9E9E9 !important;
+      border-radius: 7px !important;
+      padding: 17px 20px 13px 20px !important;
+      font-weight: 400 !important;
+      font-size: 14px !important;
+      line-height: 20px !important;
+      letter-spacing: -0.196px !important;
     }
 
     .button-group {
@@ -130,7 +104,7 @@
         align-items: center;
 
         height: 100%;
-        width: calc(457px - 95px);
+        width: 551px;
         border-radius: 0 !important;
 
         font-size: 1.4rem;
