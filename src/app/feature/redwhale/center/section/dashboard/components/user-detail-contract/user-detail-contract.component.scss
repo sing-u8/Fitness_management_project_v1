@@ -1,6 +1,6 @@
 * {
-    padding: 0px;
-    margin: 0px;
+    padding: 0;
+    margin: 0;
     text-align: initial;
 }
 
@@ -33,7 +33,7 @@ section.user-detail-contract {
             height: 70px;
             // padding: 0px 13px;
             position: relative;
-            padding: 0px 25px;
+            padding: 0 25px;
             position: relative;
 
             .border-bottom {
@@ -41,7 +41,7 @@ section.user-detail-contract {
                 height: 1px;
                 border-bottom: 1px solid var(--border-color);
                 position: absolute;
-                bottom: 0px;
+                bottom: 0;
                 left: 12px;
             }
 

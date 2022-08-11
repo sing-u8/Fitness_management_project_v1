@@ -1,0 +1,21 @@
+<div class="item">
+    <div class="rw-typo-bodytext1 col1">{{contract.date | dateFormat:'YYYY.MM.DD'}}</div>
+    <div class="rw-typo-bodytext1 col2">{{contract.responsibility}}</div>
+    <div class="rw-typo-bodytext0-bold col3">
+        {{contract.user_sign ? '완료' : '미완료'}}
+        <div class="col3__menu" (click)="toggleMenuDropDown(); " (rwClickOutside)="hideMenuDropDown()">
+            <div class="l-menu-items" [class.show-items]="showMenuDropDown">
+                <div
+                    class="menu-item"
+                    *ngFor="let item of menuDropDownItemObj | keyvalue : originalOrder"
+                    [ngStyle]="{color: item.value.color}"
+                    [class.none] = "!item.value.visible"
+                    (click)="item.value.func()"
+                >
+                    {{item.value.name}}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="border-bottom"></div>
+</div>

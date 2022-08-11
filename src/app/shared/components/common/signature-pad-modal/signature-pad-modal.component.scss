@@ -1,0 +1,155 @@
+.rw-modal-background {
+  display: none;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: var(--font-color);
+  opacity: 0;
+  transition: opacity 0.3s cubic-bezier(0.25, 0.8, 0.25, 0.8);
+  -moz-transition: opacity 0.3s cubic-bezier(0.25, 0.8, 0.25, 0.8);
+  -webkit-transition: opacity 0.3s cubic-bezier(0.25, 0.8, 0.25, 0.8);
+  -o-transition: opacity 0.3s cubic-bezier(0.25, 0.8, 0.25, 0.8);
+  z-index: 9999;
+}
+
+.rw-modal-background-show {
+  opacity: 0.3;
+}
+
+.rw-modal-wrapper {
+  display: none;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 10000;
+
+  .rw-modal {
+    height: 395px;
+    width: 457px;
+    border-radius: 6px;
+    background: #FFFFFF;
+    box-shadow: 0 0 10px rgba(181, 181, 181, 0.109804);
+
+    opacity: 0;
+    transition: opacity 0s;
+    -moz-transition: opacity 0s;
+    -webkit-transition: opacity 0s;
+    -o-transition: opacity 0s;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+
+    .title {
+      display: flex;
+      flex-direction: column;
+      margin: 35px 0 20px;
+      span {
+        text-align: center;
+      }
+      span:first-of-type {
+        margin-bottom: 2px;
+      }
+    }
+
+    .sign-box {
+      width: 360px;
+      height: 174px;
+      position: relative;
+      background: rgba(227, 74, 94, 0.05);
+      border: 3px dashed #E34A5E;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      canvas {
+        //width: 354px;
+        //height: 168px;
+        position: absolute;
+        left: 0;
+        top: 0;
+        background-color: transparent;
+      }
+    }
+
+    .erase-sign {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #FFFFFF;
+      border: 1px solid #F1F1F1;
+      border-radius: 4px;
+      margin-top: 10px;
+      align-self: flex-start;
+
+      .trash-icon {
+        background-image: url('/assets/icons/etc/trash_darkgrey.svg');
+        background-size: contain;
+        background-repeat: no-repeat;
+        width: 14px;
+        height: 14px;
+        z-index: 5;
+      }
+    }
+
+    .button-group {
+      display: flex;
+      height: 50px;
+      width: 100%;
+      border-top: 1px solid var(--border-color);
+      align-items: center;
+      justify-content: space-between;
+
+      .cancel {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+
+        height: 100%;
+        width: 95px;
+        border-radius: 0 !important;
+
+        border-right: 1px solid var(--border-color);
+        color: var(--grey) !important;
+
+        font-size: 1.4rem;
+        font-weight: 700;
+        line-height: 1.43;
+        letter-spacing: -0.2px;
+      }
+
+      .confirm {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        height: 100%;
+        width: 80%;
+        border-radius: 0 !important;
+
+        font-size: 1.4rem;
+        font-weight: 700;
+        line-height: 1.43;
+        letter-spacing: -0.2px;
+        color: var(--white);
+        background-color: #e9e9e9;
+
+        &.enable {
+          background-color: var(--red);
+        }
+      }
+    }
+  }
+}
+
+.rw-modal-wrapper-show {
+  .rw-modal {
+    opacity: 1;
+  }
+}

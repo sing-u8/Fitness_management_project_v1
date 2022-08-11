@@ -49,6 +49,8 @@ import { Store } from '@ngrx/store'
 import * as CenterCommonSelector from '@centerStore/selectors/center.common.selector'
 import * as DashboardActions from '@centerStore/actions/sec.dashboard.actions'
 
+type Progress = 'one' | 'two'
+
 @Component({
     selector: 'db-register-membership-locker-fullmodal',
     templateUrl: './register-membership-locker-fullmodal.component.html',
@@ -57,6 +59,7 @@ import * as DashboardActions from '@centerStore/actions/sec.dashboard.actions'
 })
 export class RegisterMembershipLockerFullmodalComponent implements OnInit, OnChanges, AfterViewChecked, OnDestroy {
     // modal vars and funcs
+    @Input() curUser: CenterUser
     @Input() visible: boolean
     @Output() visibleChange = new EventEmitter<boolean>()
     @Output() close = new EventEmitter<any>()
@@ -64,21 +67,13 @@ export class RegisterMembershipLockerFullmodalComponent implements OnInit, OnCha
 
     @ViewChild('modalWrapperElement') modalWrapperElement: ElementRef
     public changed: boolean
-
-    //
-    @Input() curUser: CenterUser
-
     public today = dayjs().format('YYYY.MM.DD')
-
     public center: Center
-
     public originalOrder = originalOrder
 
     // center common vars
     public instructors$ = this.nxStore.select(CenterCommonSelector.instructors)
-
     // registration membership locker vars
-
     public mlItems$: Observable<Array<MembershipLockerItem>> = this.cmpStore.mlItems$
     // public instructors$: Observable<Array<CenterUser>> = this.cmpStore.instructors$
     public choseLocker$: Observable<ChoseLockers> = this.cmpStore.choseLockers$
@@ -106,6 +101,11 @@ export class RegisterMembershipLockerFullmodalComponent implements OnInit, OnCha
     public mieSubscriber = this.cmpStore.doMembershipItemsExist$.subscribe((doExist) => {
         this.membershipItemsExist = doExist
     })
+
+    public progress: Progress = 'one'
+    setProgress(progress: Progress) {
+        this.progress = progress
+    }
 
     constructor(
         private renderer: Renderer2,
@@ -157,6 +157,7 @@ export class RegisterMembershipLockerFullmodalComponent implements OnInit, OnCha
                     this.renderer.removeClass(this.modalWrapperElement.nativeElement, 'display-flex')
                 }, 200)
 
+                this.progress = 'one'
                 this.cmpStore.setState(
                     _.cloneDeep({
                         ...stateInit,
@@ -169,6 +170,14 @@ export class RegisterMembershipLockerFullmodalComponent implements OnInit, OnCha
             }
         }
     }
+
+    // contract sign box vars and methods
+    public signData: string = undefined
+    onContractSign(signData: string) {
+        this.signData = signData
+        console.log('onContractSign : ', signData)
+    }
+
     // ml list method
     onMLItemRemove(idx: number) {
         this.cmpStore.removeMlItem(idx)
@@ -284,14 +293,9 @@ export class RegisterMembershipLockerFullmodalComponent implements OnInit, OnCha
         this.cmpStore.registerMlItems({
             centerId: this.center.id,
             user: this.curUser,
+            signData: this.signData,
             callback: () => {
                 btLoadingFns.hideLoading()
-                // this.nxStore.dispatch(
-                //     DashboardActions.startGetUserData({
-                //         centerId: this.center.id,
-                //         centerUser: this.curUser,
-                //     })
-                // )
                 this.dashboardHelper.refreshCurUser(this.center.id, this.curUser)
                 this.closeModal()
             },

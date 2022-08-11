@@ -201,6 +201,14 @@
           (cancel)="handleCancel2()"
           (confirm)="handleOk2()"
       ></rw-modal>
+
+      <div rw-button (click)="showModal3()">Open Signature Modal</div>
+      <rw-signature-pad-modal
+        [(visible)]="isVisible3"
+        [contractorName]="'강신호'"
+        (cancel)="handleOk3()"
+        (confirm)="handleCancel3()"
+      ></rw-signature-pad-modal>
   </div>
 
   <div class="title">> Toast</div>

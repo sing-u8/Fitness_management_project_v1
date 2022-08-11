@@ -13,7 +13,7 @@ import { Contract } from '@schemas/contract'
 @Injectable({
     providedIn: 'root',
 })
-export class CenterUsersCenterService {
+export class CenterContractService {
     private SERVER = `${environment.protocol}${environment.subDomain}${environment.domain}${environment.port}${environment.version}/center`
 
     constructor(private http: HttpClient) {}

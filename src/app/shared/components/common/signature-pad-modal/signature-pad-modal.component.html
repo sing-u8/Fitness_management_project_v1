@@ -1,0 +1,52 @@
+<div class="rw-modal-background" #modalBackgroundElement></div>
+<div
+    class="rw-modal-wrapper justify-content-center align-items-center"
+    (mouseup)="!isMouseModalDown && !blockClickOutside && onCancel()"
+    (mousedown) = 'resetMouseModalDown()'
+    #modalWrapperElement
+>
+    <div
+        class="rw-modal user-select-none"
+        (mousedown) ='onMouseModalDown(); $event.stopPropagation()'
+    >
+        <div class="d-flex flex-column align-items-center">
+            <div class="title">
+                <span class="rw-typo-title1">전자 서명하기</span>
+                <span class="rw-typo-subtext1">네모 위에 사인을 그려주세요.</span>
+            </div>
+            <div class="sign-box rw-typo-bodytext1_darkgrey user-select-none">
+                <canvas id="rw-signature-pad" #signature_pad width=354 height=168></canvas>
+                {{contractorName}} (인)
+            </div>
+
+            <div
+                class="erase-sign rw-typo-bodytext2-normal_darkgrey"
+                rw-button
+                rwButtonWidth="108"
+                rwButtonHeight="35"
+                (click)="onEraseSignature()"
+            >
+                <span class="trash-icon"></span>
+                모두 지우기
+            </div>
+        </div>
+
+        <div class="button-group">
+            <div class="cancel" rw-button (click)="onCancel()">취소</div>
+            <rw-button
+                #extension_bt
+                [width]="'362'"
+                [height]="'50'"
+                [color]="'var(--red)'"
+                [borderRadius]="'0 0 5px 0'"
+                [loadingName]="'hold-all'"
+                [disabled]="!isSignStrokeOnce"
+                (onClick)="isSignStrokeOnce && onConfirm($event)"
+            >
+                <span>
+                    입력하기
+                </span>
+            </rw-button>
+        </div>
+    </div>
+</div>

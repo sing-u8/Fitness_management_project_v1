@@ -52,6 +52,9 @@ import { MemberRoleSelectComponent } from './components/member-role-select/membe
 import { UserDetailContractComponent } from './components/user-detail-contract/user-detail-contract.component'
 import { UserDetailContractItemComponent } from './components/user-detail-contract-item/user-detail-contract-item.component'
 import { HoldAllModalComponent } from './components/hold-all-modal/hold-all-modal.component'
+import { ContractSignBoxComponent } from './components/contract-sign-box/contract-sign-box.component'
+import { MembershipTicketWindowRegisteredComponent } from './components/membership-ticket-window-registered/membership-ticket-window-registered.component'
+import { LockerWindowRegisteredComponent } from './components/locker-window-registered/locker-window-registered.component'
 
 import { DashboardRoutingModule } from './dashboard-routing.module'
 
@@ -109,6 +112,9 @@ import { NgxSpinnerModule } from 'ngx-spinner'
         UserDetailContractComponent,
         UserDetailContractItemComponent,
         HoldAllModalComponent,
+        ContractSignBoxComponent,
+        MembershipTicketWindowRegisteredComponent,
+        LockerWindowRegisteredComponent,
     ],
     imports: [
         DashboardRoutingModule,

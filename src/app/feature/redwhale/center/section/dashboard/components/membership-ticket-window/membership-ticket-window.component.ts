@@ -6,7 +6,7 @@ import dayjs from 'dayjs'
 
 import { StorageService } from '@services/storage.service'
 
-import { MembershipTicket, PriceType, MembershipLockerItem } from '@schemas/center/dashboard/register-ml-fullmodal'
+import { MembershipTicket, PriceType } from '@schemas/center/dashboard/register-ml-fullmodal'
 import { User } from '@schemas/user'
 import { Center } from '@schemas/center'
 import { CenterUser } from '@schemas/center-user'
@@ -136,7 +136,7 @@ export class MembershipTicketWindowComponent implements OnInit, AfterViewInit, O
         // return this.membershipState.amount.normalAmount == this.membershipState.amount.paymentAmount ? true : false
     }
     checkDateIsSet(): boolean {
-        return this.membershipState.date.startDate && this.membershipState.date.endDate ? true : false
+        return !!(this.membershipState.date.startDate && this.membershipState.date.endDate)
     }
     isLessonSelected() {
         return true
@@ -144,12 +144,10 @@ export class MembershipTicketWindowComponent implements OnInit, AfterViewInit, O
     }
 
     checkCount() {
-        if (
+        return !(
             (this.membershipState.count.count == '0' || !this.membershipState.count.count) &&
             !this.membershipState.count.infinite
         )
-            return false
-        return true
     }
     statusToDone() {
         if (this.checkMatchTotalPrice() && this.checkDateIsSet() && this.isLessonSelected() && this.checkCount()) {

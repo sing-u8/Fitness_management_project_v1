@@ -131,13 +131,11 @@ export interface CreateCenterRequestBody {
 export interface UpdateCenterRequestBody {
     name?: string
     address?: string
-    color?: string
-    // timezone?: string
-    // picture?: string
-    // background?: string
-    day_of_the_week?: Array<number> // [0sun ~ 0sat]
     open_time?: string
     close_time?: string
+    day_of_the_week?: Array<number> // [0sun ~ 0sat]
+    color?: string
+    contract_terms?: string
 }
 
 export interface DelegateRequestBody {

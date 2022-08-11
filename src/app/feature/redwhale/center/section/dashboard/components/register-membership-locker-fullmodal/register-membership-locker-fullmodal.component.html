@@ -2,8 +2,28 @@
     <section class="register-membership-locker user-select-none thin-scroll-x-overlay thin-scroll-y">
         <header>
             <div class="header-text-container">
-                <p class="rw-typo-headline1">{{ curUser?.center_user_name }}님의</p>
-                <p class="rw-typo-headline1">회원권과 락커를 등록해주세요.</p>
+                <ng-container *ngIf="progress == 'one'">
+                    <p class="rw-typo-headline1">{{ curUser?.center_user_name }}님의</p>
+                    <p class="rw-typo-headline1">회원권과 락커를 등록해주세요.</p>
+                </ng-container>
+                <ng-container *ngIf="progress == 'two'">
+                    <p class="rw-typo-headline1">[{{ center.name }}]</p>
+                    <p class="rw-typo-headline1">회원 계약서</p>
+                </ng-container>
+
+                <div class="register-ml-progress">
+                    <div class="progress">
+                        <span class="circle_one_on" [class.hide]="progress == 'two'"></span>
+                        <span class="circle_one_off" [class.hide]="progress == 'one'"></span>
+                        <div class="rw-typo-subtext0" [class.not-in-progress]="progress == 'two'">회원권 / 락커 등록</div>
+                    </div>
+                    <div class="progress__line"></div>
+                    <div class="progress">
+                        <span class="circle_two_on" [class.hide]="progress == 'one'"></span>
+                        <span class="circle_two_off" [class.hide]="progress == 'two'"></span>
+                        <div class="rw-typo-subtext0" [class.not-in-progress]="progress == 'one'">계약서 작성</div>
+                    </div>
+                </div>
             </div>
 
             <div
@@ -19,7 +39,7 @@
             </div>
         </header>
 
-        <main id="l-main">
+        <main id="progress-one" *ngIf="progress == 'one'">
             <div class="main-wrapper">
                 <article class="membership-and-locker">
                     <ng-template
@@ -83,7 +103,7 @@
                                 </div>
                             </div>
 
-                            <div class="window-item" *ngFor="let item of mlItems$ | async; let idx = index">
+                            <div class="window-item" *ngFor="let item of (mlItems$ | async); let idx = index">
                                 <ng-container class="window-item" *ngIf="item.type == 'membership'">
                                     <db-membership-ticket-window
                                         [membershipState]="item"
@@ -135,21 +155,145 @@
                         </div>
 
                         <rw-button
-                            #register_ml_bt
+                            #next_bt
                             [width]="'238'"
                             [height]="'50'"
                             [color]="'var(--red)'"
-                            [loadingName]="'register_ml'"
+                            [loadingName]="'next_bt'"
                             [borderRadius]="'5px'"
                             [disabled]="!isAllMlItemDone"
-                            (onClick)="isAllMlItemDone && registerMLs($event)"
+                            (onClick)="isAllMlItemDone && setProgress('two')"
                         >
-                            <span class="register-ml-button"> 모두 등록하기 </span>
+                            <span class="register-ml-button"> 다음 </span>
                         </rw-button>
                     </div>
                 </aside>
             </div>
         </main>
+
+        <main id="progress-two" *ngIf="progress == 'two'">
+            <div class="main-wrapper">
+                <article class="contract-body">
+                    <div class="l-user-basic-info-box">
+                        <p class="rw-typo-title2 contract__title">회원 기본 정보</p>
+                        <div class="user-basic-info-box">
+                            <div class="l-avatar">
+                                <rw-avatar
+                                    size="83"
+                                    fontSize="16"
+                                    [image]="curUser?.center_user_picture"
+                                    [backgroundColor]="curUser?.color"
+                                    [text]="curUser?.center_user_name"
+                                ></rw-avatar>
+                                <p class="rw-typo-title1 ">{{curUser?.center_user_name}}</p>
+                            </div>
+                            <div class="user-basic-info">
+                                <div class="l-info">
+                                    <div class="title">회원번호</div>
+                                    <div class="content">{{ curUser?.membership_number }}</div>
+                                </div>
+                                <div class="l-info">
+                                    <div class="title">이메일</div>
+                                    <div class="content">{{ curUser?.email }}</div>
+                                </div>
+                                <div class="l-info">
+                                    <div class="title">전화번호</div>
+                                    <div class="content">
+                                        {{ curUser?.phone_number | phoneNumber }}
+                                    </div>
+                                </div>
+                                <div class="l-info">
+                                    <div class="title">생년월일</div>
+                                    <div class="content">
+                                        <span>
+                                            {{ (curUser?.birth_date | dashToDot) ?? '-' }}
+                                            ({{(curUser?.birth_date | birthDate: '세') ?? '-세'}},
+                                            {{curUser?.sex == 'male' ? '남성' : curUser?.sex == 'female' ? '여성' : '-'}})
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="l-ml-registered">
+                        <p class="rw-typo-title2 contract__title">회원 기본 정보</p>
+                        <div class="ml-registered" *ngFor="let item of (mlItems$ | async); let idx =index">
+                            <ng-container class="window-item" *ngIf="item.type == 'membership'">
+                                <db-membership-ticket-window-registered
+                                    [membershipState]="item"
+                                ></db-membership-ticket-window-registered>
+                            </ng-container>
+                            <ng-container class="window-item" *ngIf="item.type == 'locker'">
+                                <db-locker-window-registered
+                                    [lockerState]="item"
+                                ></db-locker-window-registered>
+                            </ng-container>
+                        </div>
+                    </div>
+                    <div class="l-payment-info">
+                        <p class="rw-typo-title2 contract__title">결제 정보</p>
+                        <div class="payment-info">
+                            <p class="payment-info__total-price rw-typo-title2">총 {{totalSum | numberWithCommas}}원 결제</p>
+                            <div class="bar"></div>
+                            <div class="payment-info__l-price-item">
+                                <div class="payment-info__price-item" *ngFor="let item of totalPrice$ | async | keyvalue: originalOrder">
+                                    <p class="rw-typo-subtext0-regular">{{ item.value.name }}</p>
+                                    <p class="rw-typo-bodytext0-regular">{{ item.value.price | numberWithCommas }}원</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="l-terms">
+                        <p class="rw-typo-title2 contract__title">이용 약관</p>
+                        <div *ngIf="center.contract_terms" class="terms rw-typo-bodytext0-regular">
+                            {{center.contract_terms}}
+                        </div>
+                        <div *ngIf="!center.contract_terms" class="no-terms rw-typo-bodytext0-regular">
+                            [센터 설정 > 약관 설정]에서 이용 약관을 작성해주세요.
+                        </div>
+                    </div>
+                </article>
+
+                <aside class="l-contract-sign">
+                    <div class="contract-sign-wrapper">
+                        <p class="rw-typo-title2 contract__title">서명</p>
+                        <db-contract-sign-box
+                            [contractDate]="today"
+                            [contractor]="curUser"
+                            (onSign)="onContractSign($event)"
+                        ></db-contract-sign-box>
+                        <div class="l-button">
+                            <rw-button
+                                #prev_bt
+                                [width]="'70'"
+                                [height]="'50'"
+                                [color]="'transparent'"
+                                [fontColor]="'var(--darkgrey)'"
+                                [borderRadius]="'5px'"
+                                (onClick)="setProgress('one')"
+                            >
+                                <div class="register-ml-button">
+                                    <span class="left-arrow"></span>
+                                    <span>뒤로</span>
+                                </div>
+                            </rw-button><rw-button
+                            #register_ml_bt
+                            [width]="'158'"
+                            [height]="'50'"
+                            [color]="'var(--red)'"
+                            [loadingName]="'register_ml'"
+                            [borderRadius]="'5px'"
+                            (onClick)="registerMLs($event)"
+                        >
+                            <span class="register-ml-button"> 모두 등록하기 </span>
+                        </rw-button>
+                        </div>
+                    </div>
+
+                </aside>
+            </div>
+        </main>
+
     </section>
 </section>
 

@@ -14,6 +14,7 @@ import { CreateLockerTicketReqBody, CenterUsersLockerService } from '@services/c
 import { CreateMembershipTicketReqBody, CenterUsersMembershipService } from '@services/center-users-membership.service'
 import { CenterUsersPaymentService, CreateMLPaymentReqBody } from '@services/center-users-payment.service'
 import { CenterLockerService } from '@services/center-locker.service'
+import { FileService } from '@services/file.service'
 
 import {
     MembershipTicket,
@@ -91,7 +92,8 @@ export class RegisterMembershipLockerFullmodalStore extends ComponentStore<State
         private centerLockerApi: CenterLockerService,
         private centerUsersPaymentApi: CenterUsersPaymentService,
         private storageService: StorageService,
-        private nxStore: Store
+        private nxStore: Store,
+        private fileService: FileService
     ) {
         super(_.cloneDeep(stateInit))
     }
@@ -237,7 +239,13 @@ export class RegisterMembershipLockerFullmodalStore extends ComponentStore<State
 
     registerMlItems = this.effect(
         (
-            reqBody$: Observable<{ centerId: string; user: CenterUser; callback: () => void; errCallback?: () => void }>
+            reqBody$: Observable<{
+                centerId: string
+                user: CenterUser
+                signData: string
+                callback: () => void
+                errCallback?: () => void
+            }>
         ) =>
             reqBody$.pipe(
                 withLatestFrom(this.mlItems$),
@@ -306,33 +314,63 @@ export class RegisterMembershipLockerFullmodalStore extends ComponentStore<State
                     this.centerUsersPaymentApi
                         .createMembershipAndLockerPayment(reqBody.centerId, reqBody.user.id, createMLPaymentReqBody)
                         .pipe(
-                            tap(() => {
+                            tap((contract) => {
+                                let func: () => void = () => {}
                                 if (lockerItems.length > 0 && membershipItems.length > 0) {
-                                    this.nxStore.dispatch(
-                                        LockerActions.startUpdateStateAfterRegisterLockerInDashboard()
-                                    )
-                                    this.nxStore.dispatch(
-                                        showToast({
-                                            text: `${reqBody.user.center_user_name}님의 회원권 / 락커 등록이 완료되었습니다. `,
-                                        })
-                                    )
+                                    func = () => {
+                                        this.nxStore.dispatch(
+                                            LockerActions.startUpdateStateAfterRegisterLockerInDashboard()
+                                        )
+                                        this.nxStore.dispatch(
+                                            showToast({
+                                                text: `${reqBody.user.center_user_name}님의 회원권 / 락커 등록이 완료되었습니다. `,
+                                            })
+                                        )
+                                    }
                                 } else if (lockerItems.length > 0) {
-                                    this.nxStore.dispatch(
-                                        LockerActions.startUpdateStateAfterRegisterLockerInDashboard()
-                                    )
-                                    this.nxStore.dispatch(
-                                        showToast({
-                                            text: `${reqBody.user.center_user_name}님의 락커 등록이 완료되었습니다. `,
-                                        })
-                                    )
+                                    func = () => {
+                                        this.nxStore.dispatch(
+                                            LockerActions.startUpdateStateAfterRegisterLockerInDashboard()
+                                        )
+                                        this.nxStore.dispatch(
+                                            showToast({
+                                                text: `${reqBody.user.center_user_name}님의 락커 등록이 완료되었습니다. `,
+                                            })
+                                        )
+                                    }
                                 } else if (membershipItems.length > 0) {
-                                    this.nxStore.dispatch(
-                                        showToast({
-                                            text: `${reqBody.user.center_user_name}님의 회원권 등록이 완료되었습니다. `,
-                                        })
-                                    )
+                                    func = () => {
+                                        this.nxStore.dispatch(
+                                            showToast({
+                                                text: `${reqBody.user.center_user_name}님의 회원권 등록이 완료되었습니다. `,
+                                            })
+                                        )
+                                    }
                                 }
-                                reqBody.callback()
+                                if (!_.isEmpty(reqBody.signData)) {
+                                    this.fileService.urlToFile(reqBody.signData, 'signData').then((file) => {
+                                        const dt = new DataTransfer()
+                                        dt.items.add(file)
+
+                                        this.fileService
+                                            .createFile(
+                                                {
+                                                    type_code: 'file_type_center_contract',
+                                                    center_id: reqBody.centerId,
+                                                    center_contract_id: contract.id,
+                                                    center_user_id: reqBody.user.id,
+                                                },
+                                                dt.files
+                                            )
+                                            .subscribe(() => {
+                                                func()
+                                                reqBody.callback()
+                                            })
+                                    })
+                                } else {
+                                    func()
+                                    reqBody.callback()
+                                }
                             })
                         )
                         .pipe(

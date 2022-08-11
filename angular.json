@@ -47,7 +47,8 @@
               "lodash",
               "dayjs",
               "file-saver",
-              "moment-timezone"
+              "moment-timezone",
+              "signature_pad"
             ]
           },
           "configurations": {

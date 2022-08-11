@@ -113,7 +113,7 @@ export class LockerWindowComponent implements OnInit, AfterViewInit, OnChanges {
         // return this.lockerState.amount.normalAmount == this.lockerState.amount.paymentAmount ? true : false
     }
     checkDateIsSet(): boolean {
-        return this.lockerState.date.startDate && this.lockerState.date.endDate ? true : false
+        return !!(this.lockerState.date.startDate && this.lockerState.date.endDate)
     }
     statusToDone() {
         if (this.checkDateIsSet() && this.checkMatchTotalPrice()) {

@@ -20,6 +20,7 @@ import { UserLocker } from '@schemas/user-locker'
 import { UserMembership } from '@schemas/user-membership'
 import { Payment } from '@schemas/payment'
 import { User } from '@schemas/user'
+import { Contract } from '@schemas/contract'
 
 const FeatureKey = 'Center/Dashboard'
 
@@ -66,7 +67,13 @@ export const startGetUserData = createAction(
 )
 export const finishGetUserData = createAction(
     `[${FeatureKey}] Finish Get User Data`,
-    props<{ lockers: UserLocker[]; memberships: UserMembership[]; payments: Payment[]; reservations?: any[] }>()
+    props<{
+        lockers: UserLocker[]
+        memberships: UserMembership[]
+        payments: Payment[]
+        reservations?: any[]
+        contracts: Contract[]
+    }>()
 )
 
 export const startRefreshCenterUser = createAction(

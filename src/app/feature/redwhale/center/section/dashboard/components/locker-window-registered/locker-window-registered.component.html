@@ -1,0 +1,20 @@
+<section class="locker-done-card">
+    <div class="top">
+        <div class="locker-name">
+            <div class="icon">
+                <img src="assets/icons/etc/locker-white.svg">
+            </div>
+            <span class="rw-typo-title2">[{{lockerState.lockerCategory.name}}] {{lockerState.locker.name}}</span>
+        </div>
+    </div>
+    <div class="bottom">
+        <div class="date">
+            <span class="rw-typo-subtext0-regular small-title2">기간</span>
+            <span class="rw-typo-bodytext1">{{lockerState.date.startDate | dateFormat:"YYYY.MM.DD"}} - {{lockerState.date.endDate | dateFormat:"YYYY.MM.DD"}} ({{lockerState.date | dayDiff}}일)</span>
+        </div>
+        <div class="pay">
+            <span class="rw-typo-subtext0-regular small-title2">결제 금액 / 담당자</span>
+            <span class="rw-typo-bodytext1">￦{{lockerState.amount.paymentAmount ?? 0}} / {{lockerState.assignee.name}}</span>
+        </div>
+    </div>
+</section>

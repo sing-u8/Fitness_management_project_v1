@@ -8,7 +8,6 @@ import { UserLocker } from '@schemas/user-locker'
 
 import { WordService } from '@services/helper/word.service'
 import { TimeService } from '@services/helper/time.service'
-import { UserMembership } from '@schemas/user-membership'
 @Component({
     selector: 'db-user-detail-locker-item',
     templateUrl: './user-detail-locker-item.component.html',

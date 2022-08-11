@@ -10,6 +10,7 @@ import { Payment } from '@schemas/payment'
 import { Loading } from '@schemas/store/loading'
 import { Booking } from '@schemas/booking'
 import { CenterUsersCategory } from '@schemas/center/community/center-users-by-category'
+import { Contract } from '@schemas/contract'
 
 import * as DashboardActions from '../actions/sec.dashboard.actions'
 
@@ -27,7 +28,7 @@ export type CurUseData = {
     memberships: UserMembership[]
     payments: Payment[]
     reservations: Booking[]
-    contract: any[] // !!
+    contracts: Contract[] // !!
 }
 
 export type UserDetailTag = 'membership' | 'locker' | 'reservation' | 'payment' | 'contract'
@@ -62,7 +63,7 @@ export const CurUseDataInit: CurUseData = {
     memberships: [],
     payments: [],
     reservations: [],
-    contract: [],
+    contracts: [],
 }
 export const CurSearchInputInit = ''
 
@@ -146,18 +147,19 @@ export const dashboardReducer = createImmerReducer(
             memberships: [],
             reservations: [],
             payments: [],
-            contract: [],
+            contracts: [],
         }
         state.isUserDeatilLoading = 'pending'
         return state
     }),
-    on(DashboardActions.finishGetUserData, (state, { memberships, lockers, payments, reservations }) => {
+    on(DashboardActions.finishGetUserData, (state, { memberships, lockers, payments, reservations, contracts }) => {
         state.curUserData = {
             ...state.curUserData,
             reservations,
             payments,
             lockers,
             memberships,
+            contracts,
         }
         state.isUserDeatilLoading = 'done'
         return state

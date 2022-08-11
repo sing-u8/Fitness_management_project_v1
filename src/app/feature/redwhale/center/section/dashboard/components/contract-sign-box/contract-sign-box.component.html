@@ -1,0 +1,39 @@
+<section class="l-contract-sign-box">
+    <div class="l-sign-text">
+        <span class="rw-typo-bodytext1_darkgrey">계약일</span>
+        <span class="rw-typo-bodytext0-darkgrey-bold">{{contractDate | dateFormat:'YYYY년 MM월 DD일'}}</span>
+    </div>
+    <div class="l-sign-text">
+        <span class="rw-typo-bodytext1_darkgrey">계약자</span>
+        <span class="rw-typo-bodytext0-darkgrey-bold">{{contractor?.center_user_name}}</span>
+    </div>
+    <div class="bar"></div>
+
+    <div class="sign-box" [class.signed]="signData" (click)="openSignaturePad()">
+        <img *ngIf="signData" alt="'signature-pad'" src="{{signData}}">
+        <span class="rw-typo-bodytext1_grey">{{contractor?.center_user_name}} (인)</span>
+    </div>
+
+    <div class="sign-guide-text rw-typo-subtext2" >
+        지금 서명을 받을 수 없으신가요?
+
+        <div class="guide-text-dropdown">
+            <span class="rw-typo-subtext0-regular">
+                지금 서명을 받을 수 없는 상황이라면,<br>
+                서명없이 저장하기 버튼 눌러주세요.
+            </span>
+            <span class="rw-typo-subtext0-regular">
+                추후 <span class="red">[회원 관리 > 계약서 > 더보기]</span>에서<br>
+                전자 서명을 추가할 수 있어요.
+            </span>
+        </div>
+    </div>
+</section>
+
+<rw-signature-pad-modal
+    [(visible)] = isSignaturePadVisible
+    [contractorName]="contractor?.center_user_name"
+    [blockClickOutside]="true"
+    (cancel)="onCancelSignaturePad()"
+    (confirm)="onConfirmSignaturePad($event)"
+></rw-signature-pad-modal>

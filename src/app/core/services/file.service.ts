@@ -121,6 +121,7 @@ export class FileService {
         )
     }
 
+    // helper
     async getUploadedFile(url: string, option?: RequestInit): Promise<Blob> {
         const _option = option ?? {
             method: 'GET',
@@ -130,6 +131,17 @@ export class FileService {
         return fetch(url, _option).then((res) => {
             return res.blob()
         })
+    }
+
+    urlToFile(url: string, filename = 'file', mimeType = '') {
+        mimeType = mimeType || (url.match(/^data:([^;]+);/) || '')[1]
+        return fetch(url)
+            .then(function (res) {
+                return res.arrayBuffer()
+            })
+            .then(function (buf) {
+                return new File([buf], filename, { type: mimeType })
+            })
     }
 }
 

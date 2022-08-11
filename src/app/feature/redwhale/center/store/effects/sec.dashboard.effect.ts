@@ -20,6 +20,7 @@ import { CenterUsersPaymentService } from '@services/center-users-payment.servic
 import { CenterUsersBookingService } from '@services/center-users-booking.service'
 import { CenterService, DelegateRequestBody } from '@services/center.service'
 import { CenterHoldingService } from '@services/center-holding.service'
+import { CenterContractService } from '@services/center-users-contract.service'
 
 @Injectable()
 export class DashboardEffect {
@@ -33,7 +34,8 @@ export class DashboardEffect {
         private centerUsersPaymentApi: CenterUsersPaymentService,
         private centerUsersBookingService: CenterUsersBookingService,
         private centerService: CenterService,
-        private centerHoldingApi: CenterHoldingService
+        private centerHoldingApi: CenterHoldingService,
+        private centerContractApi: CenterContractService
     ) {}
 
     public loadMemberList$ = createEffect(() =>
@@ -209,19 +211,21 @@ export class DashboardEffect {
         this.actions$.pipe(
             ofType(DashboardActions.startGetUserData),
             switchMap(({ centerId, centerUser }) =>
-                forkJoin({
-                    lockers: this.centerUsersLockerApi.getLockerTickets(centerId, centerUser.id),
-                    memberships: this.centerUsersMembershipApi.getMembershipTickets(centerId, centerUser.id),
-                    payments: this.centerUsersPaymentApi.getPayments(centerId, centerUser.id),
+                forkJoin([
+                    this.centerUsersLockerApi.getLockerTickets(centerId, centerUser.id),
+                    this.centerUsersMembershipApi.getMembershipTickets(centerId, centerUser.id),
+                    this.centerUsersPaymentApi.getPayments(centerId, centerUser.id),
                     // reservations: this.centerUsersBookingService.getBookings(centerId, centerUser.id),
-                }).pipe(
-                    switchMap(({ memberships, lockers, payments }) => {
+                    this.centerContractApi.getContract(centerId, centerUser.id),
+                ]).pipe(
+                    switchMap(([lockers, memberships, payments, contracts]) => {
                         return [
                             DashboardActions.finishGetUserData({
                                 memberships,
                                 lockers,
                                 payments,
                                 reservations: [],
+                                contracts,
                             }),
                         ]
                     })
@@ -230,7 +234,13 @@ export class DashboardEffect {
             catchError((err: string) =>
                 of(
                     DashboardActions.error({ error: err }),
-                    DashboardActions.finishGetUserData({ memberships: [], lockers: [], payments: [], reservations: [] })
+                    DashboardActions.finishGetUserData({
+                        memberships: [],
+                        lockers: [],
+                        payments: [],
+                        reservations: [],
+                        contracts: [],
+                    })
                 )
             )
         )

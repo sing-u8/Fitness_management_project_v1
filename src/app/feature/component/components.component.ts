@@ -203,6 +203,18 @@ export class ComponentsComponent implements OnInit {
         this.isVisible2 = false
     }
 
+    isVisible3 = false
+    showModal3() {
+        this.isVisible3 = true
+    }
+    handleOk3(): void {
+        this.isVisible3 = false
+    }
+
+    handleCancel3(): void {
+        this.isVisible3 = false
+    }
+
     // Toast
     toastVisible = false
     toastText = '초대가 거절되었습니다.'

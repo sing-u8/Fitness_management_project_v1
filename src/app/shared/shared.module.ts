@@ -29,6 +29,7 @@ import { DatepickModalComponent } from './components/common/datepick-modal/datep
 import { DbDatepickerComponent } from './components/common/db-datepicker/db-datepicker.component'
 import { RolemodalComponent } from './components/common/rolemodal/rolemodal.component'
 import { CenterRolemodalComponent } from './components/common/center-rolemodal/center-rolemodal.component'
+import { SignaturePadModalComponent } from './components/common/signature-pad-modal/signature-pad-modal.component'
 
 // -drawer- //
 import { LessonFlipListComponent } from './components/redwhale/drawer/lesson-flip-list/lesson-flip-list.component'
@@ -96,6 +97,8 @@ import resourceTimeGridPlugin from '@fullcalendar/resource-timegrid'
 // Angular-Gridster2
 import { GridsterModule } from 'angular-gridster2'
 
+// Angular signature
+
 // // ngx libraries
 import { NgxGaugeModule } from 'ngx-gauge'
 import { NgxSpinnerModule } from 'ngx-spinner'
@@ -138,6 +141,7 @@ FullCalendarModule.registerPlugins([
         LessonFlipListComponent,
         RolemodalComponent,
         CenterRolemodalComponent,
+        SignaturePadModalComponent,
         // -- //drawer
         DrawerLessonCardComponent,
         SchDayRepeatSelectComponent,
@@ -222,6 +226,7 @@ FullCalendarModule.registerPlugins([
         LessonFlipListComponent,
         RolemodalComponent,
         CenterRolemodalComponent,
+        SignaturePadModalComponent,
         // -- //drawer
         DrawerLessonCardComponent,
         SchDayRepeatSelectComponent,

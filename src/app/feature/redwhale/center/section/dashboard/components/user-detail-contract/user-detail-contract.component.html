@@ -5,7 +5,7 @@
         <div class="col3">서명</div>
     </header>
     <main class="thin-scroll-y-overlay2">
-        <ng-template #contract_emtpy [ngIf]="curUserData.contract.length == 0" [ngIfElse]="contract_exist">
+        <ng-template #contract_emtpy [ngIf]="curUserData.contracts.length == 0" [ngIfElse]="contract_exist">
             <div class="center-empty-guide">
                 <img src="assets/icons/etc/empty_screen.svg" />
                 <p>아직 등록된 계약서가 없어요.</p>
@@ -17,7 +17,10 @@
             </div>
         </ng-template>
         <ng-template #contract_exist>
-            <db-user-detail-contract-item *ngFor="let item of curUserData.contract"></db-user-detail-contract-item>
+            <db-user-detail-contract-item
+                *ngFor="let item of curUserData.contracts"
+                [contract]="item"
+            ></db-user-detail-contract-item>
         </ng-template>
     </main>
 </section>
