@@ -24,12 +24,10 @@ export class MemberRoleSelectComponent implements OnInit, OnChanges {
 
     public role_limit: Omit<Role, 'member'> // 'employee' | 'administrator' | 'owner'
     public showArrow = true
-
     // ! 추후에 센터별 권한을 API에서 불러오기
     public roleNameObj = {
         owner: '운영자',
-        administrator: '관리 직원',
-        employee: '직원',
+        instructor: '강사',
         member: '회원',
     }
 
@@ -57,11 +55,9 @@ export class MemberRoleSelectComponent implements OnInit, OnChanges {
         if (this.employeeRole == 'owner' && this.userRole.owner == true && this.staffId == this.member.id) {
             return false
         } else if (
-            this.employeeRole == 'administrator' &&
-            (this.userRole.owner == true || this.userRole.administrator == true)
+            this.employeeRole == 'instructor' &&
+            (this.userRole.owner == true || this.userRole.instructor == true)
         ) {
-            return false
-        } else if (this.employeeRole == 'employee') {
             return false
         }
         return true

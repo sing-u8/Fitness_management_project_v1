@@ -1,7 +1,6 @@
 import {
     Component,
     Input,
-    ElementRef,
     Renderer2,
     Output,
     EventEmitter,
@@ -12,12 +11,8 @@ import {
     ViewChild,
 } from '@angular/core'
 
-import _ from 'lodash'
 
 import { ClickEmitterType } from '@shared/components/common/button/button.component'
-import { Center } from '@schemas/center'
-import { CenterRolePermissionService } from '@services/center-role-permission.service'
-
 import { closeRoleModal, startCloseRoleModal } from '@appStore/actions/modal.action'
 import { RoleModal } from '@schemas/store/app/modal.interface'
 import { Store } from '@ngrx/store'

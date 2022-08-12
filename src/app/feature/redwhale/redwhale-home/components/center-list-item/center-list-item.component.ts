@@ -84,7 +84,7 @@ export class CenterListItemComponent implements OnInit, AfterViewInit, OnDestroy
         this.initCenterRoleName()
         this.initCenterAvatar()
         this.initCenterBackground()
-        this.centerTerms = _.cloneDeep(this.center.contract_terms)
+        this.centerTerms = this.center.contract_terms
 
         this.centerRolePermissionService
             .getCenterRolePermission(this.center.id, 'instructor')
@@ -152,8 +152,7 @@ export class CenterListItemComponent implements OnInit, AfterViewInit, OnDestroy
     }
     confirmSettingTermsModal(e: SettingTermConfirmOutput) {
         e.loadingFns.showLoading()
-        this.centerService.updateCenter(this.center.id, { contract_terms: this.centerTerms }).subscribe((center) => {
-            console.log('update center : ', center)
+        this.centerService.updateCenter(this.center.id, { contract_terms: e.centerTerm }).subscribe((center) => {
             this.center = center
             this.centerTerms = center.contract_terms
             this.showSettingTermsModal = false

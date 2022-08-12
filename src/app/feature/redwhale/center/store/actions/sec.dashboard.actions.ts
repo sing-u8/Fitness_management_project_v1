@@ -96,7 +96,7 @@ export const finishRefreshMyCenterUser = createAction(
 )
 
 export const startSetCurUserData = createAction(
-    `[${FeatureKey}] Start Set Current User Data Memo`,
+    `[${FeatureKey}] Start Set Current User Data`,
     props<{ centerId: string; userId: string; reqBody: UpdateUserRequestBody; callback?: () => void }>()
 )
 

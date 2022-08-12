@@ -142,7 +142,7 @@ export class SettingModalComponent implements OnChanges, AfterViewChecked, OnIni
                 return { sms_marketing: userData.sms, email_marketing: userData.email }
             case 'PUSH_NOTICE':
                 this.toast_menu_text = '푸시 알림 설정이'
-                const onOffFlag = userData ? true : false
+                const onOffFlag = !!userData
                 return { push_notification: onOffFlag }
             case 'BIRTH_DATE':
                 this.toast_menu_text = '생년월일이'
@@ -177,10 +177,8 @@ export class SettingModalComponent implements OnChanges, AfterViewChecked, OnIni
     }
     nameCheck(event) {
         const reg = /^[가-힣|a-z|A-Z]$/
-        if (!reg.test(event.key)) {
-            return false
-        }
-        return true
+        return reg.test(event.key);
+
     }
 
     // matching check

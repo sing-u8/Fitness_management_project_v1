@@ -65,41 +65,60 @@
                     </div>
                     <div class="l-ml-registered">
                         <p class="rw-typo-title2 contract__title">회원 기본 정보</p>
-                        <div class="ml-registered" *ngFor="let membership of (contractUserMembershipItems$ | async)">
-                            <ng-container class="window-item">
-                                <db-membership-ticket-window-registered
-                                    [type]="'contract'"
-                                    [contractUserMembership]="membership"
-                                ></db-membership-ticket-window-registered>
-                            </ng-container>
-                        </div>
-                        <div class="ml-registered" *ngFor="let locker of (contractUserLockerItems$ | async)">
-                            <ng-container class="window-item">
-                                <db-locker-window-registered
-                                    [type]="'contract'"
-                                    [contractUserLocker]="locker"
-                                ></db-locker-window-registered>
-                            </ng-container>
-                        </div>
+                        <ng-container *ngIf="(loading$ | async) != 'done'">
+                            <ngx-skeleton-loader
+                              count=1
+                              appearance="line"
+                              [theme]="{width:'585px', height: '130px', 'border-radius':'7px'}"
+                            ></ngx-skeleton-loader>
+                        </ng-container>
+                        <ng-container *ngIf="(loading$ | async) == 'done'">
+                            <div class="ml-registered" *ngFor="let membership of (contractUserMembershipItems$ | async)">
+                                <ng-container class="window-item">
+                                    <db-membership-ticket-window-registered
+                                      [type]="'contract'"
+                                      [contractUserMembership]="membership"
+                                    ></db-membership-ticket-window-registered>
+                                </ng-container>
+                            </div>
+                            <div class="ml-registered" *ngFor="let locker of (contractUserLockerItems$ | async)">
+                                <ng-container class="window-item">
+                                    <db-locker-window-registered
+                                      [type]="'contract'"
+                                      [contractUserLocker]="locker"
+                                    ></db-locker-window-registered>
+                                </ng-container>
+                            </div>
+                        </ng-container>
                     </div>
                     <div class="l-payment-info">
                         <p class="rw-typo-title2 contract__title">결제 정보</p>
-                        <div class="payment-info">
-                            <p class="payment-info__total-price rw-typo-title2">총 {{totalSum$ | async | numberWithCommas}}원 결제</p>
-                            <div class="bar"></div>
-                            <div class="payment-info__l-price-item">
-                                <div class="payment-info__price-item" *ngFor="let item of totalPrice$ | async | keyvalue: originalOrder">
-                                    <p class="rw-typo-subtext0-regular">{{ item.value.name }}</p>
-                                    <p class="rw-typo-bodytext0-regular">{{ item.value.price | numberWithCommas }}원</p>
+                        <ng-container *ngIf="(loading$ | async) != 'done'">
+                            <ngx-skeleton-loader
+                              count=1
+                              appearance="line"
+                              [theme]="{width:'585px', height: '130px', 'border-radius':'5px'}"
+                            ></ngx-skeleton-loader>
+                        </ng-container>
+                        <ng-container *ngIf="(loading$ | async) == 'done'">
+                            <div class="payment-info">
+                                <p class="payment-info__total-price rw-typo-title2">총 {{totalSum$ | async | numberWithCommas}}원 결제</p>
+                                <div class="bar"></div>
+                                <div class="payment-info__l-price-item">
+                                    <div class="payment-info__price-item" *ngFor="let item of totalPrice$ | async | keyvalue: originalOrder">
+                                        <p class="rw-typo-subtext0-regular">{{ item.value.name }}</p>
+                                        <p class="rw-typo-bodytext0-regular">{{ item.value.price | numberWithCommas }}원</p>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        </ng-container>
+
                     </div>
                     <div class="l-terms">
                         <p class="rw-typo-title2 contract__title">이용 약관</p>
-                        <div *ngIf="center.contract_terms" class="terms rw-typo-bodytext0-regular">
+                        <textarea #terms [readonly]="true" *ngIf="center.contract_terms" class="terms rw-typo-bodytext0-regular">
                             {{center.contract_terms}}
-                        </div>
+                        </textarea>
                         <div *ngIf="!center.contract_terms" class="no-terms rw-typo-bodytext0-regular">
                             [센터 설정 > 약관 설정]에서 이용 약관을 작성해주세요.
                         </div>
@@ -110,6 +129,7 @@
                     <div class="contract-sign-wrapper">
                         <p class="rw-typo-title2 contract__title">서명</p>
                         <db-contract-sign-box
+                            [signedUrl]="curContract?.user_sign"
                             [contractDate]="today"
                             [type]="'r'"
                             [contractor]="curUser"

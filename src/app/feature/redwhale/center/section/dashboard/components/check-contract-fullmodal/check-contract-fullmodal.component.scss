@@ -225,6 +225,10 @@ section.register-ml-fullmodal-wrapper {
           div.l-terms {
             display: flex;
             flex-direction: column;
+            .terms{
+              resize: none;
+              outline: none;
+            }
             .terms, .no-terms {
               width: 100%;
               min-height: 54px;

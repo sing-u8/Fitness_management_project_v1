@@ -109,12 +109,12 @@ export class CheckContractFullmodalStore extends ComponentStore<State> {
                 ]).pipe(
                     map(([lockers, memberships, payments]) => {
                         this.setState((state) => {
-                            console.log('end get data ----- ', {
+                            console.log('end get data ----- ',reqbody , {
                                 ...state,
                                 loading: 'done',
                                 contractUserLockerItems: lockers,
                                 contractUserMembershipItems: memberships,
-                                contractPayment: payments[0],
+                                contractPayment: payments,
                             })
                             return {
                                 ...state,

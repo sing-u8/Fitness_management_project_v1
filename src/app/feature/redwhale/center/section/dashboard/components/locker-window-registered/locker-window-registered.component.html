@@ -31,7 +31,7 @@
     <div class="bottom">
         <div class="date">
             <span class="rw-typo-subtext0-regular small-title2">기간</span>
-            <span class="rw-typo-bodytext1">{{contractUserLocker?.start_date | dateFormat:"YYYY.MM.DD"}} - {{contractUserLocker?.end_date | dateFormat:"YYYY.MM.DD"}} ({{lockerState.date | dayDiff}}일)</span>
+            <span class="rw-typo-bodytext1">{{contractUserLocker?.start_date | dateFormat:"YYYY.MM.DD"}} - {{contractUserLocker?.end_date | dateFormat:"YYYY.MM.DD"}} ({{contractUserLocker?.start_date | period : contractUserLocker?.end_date}}일)</span>
         </div>
         <div class="pay">
             <span class="rw-typo-subtext0-regular small-title2">결제 금액 / 담당자</span>

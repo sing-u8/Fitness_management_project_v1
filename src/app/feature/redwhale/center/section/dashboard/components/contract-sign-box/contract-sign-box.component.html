@@ -15,7 +15,7 @@
         <span class="rw-typo-bodytext1_grey">{{contractor?.center_user_name}} (인)</span>
     </div>
 
-    <div class="sign-guide-text rw-typo-subtext2" >
+    <div *ngIf="type == 'rw'" class="sign-guide-text rw-typo-subtext2" >
         지금 서명을 받을 수 없으신가요?
 
         <div class="guide-text-dropdown">

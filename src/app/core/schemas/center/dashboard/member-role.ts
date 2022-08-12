@@ -1,1 +1,1 @@
-export type MemberRole = 'member' | 'employee' | 'administrator' | 'owner'
+export type MemberRole = 'member' | 'instructor' | 'owner'

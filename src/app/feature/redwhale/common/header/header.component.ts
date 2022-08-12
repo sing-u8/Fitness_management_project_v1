@@ -68,7 +68,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         this.drawer$ = this.nxStore.pipe(select(drawerSelector))
         this.user = this.storageService.getUser()
         this.center = this.storageService.getCenter()
-        this.centerTerms = _.cloneDeep(this.center.contract_terms)
+        this.centerTerms = this.center?.contract_terms
 
         this.getCenterList()
 
@@ -219,7 +219,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     confirmSettingTermsModal(e: SettingTermConfirmOutput) {
         e.loadingFns.showLoading()
         console.log('confirmSettingTermsModal : ', this.center)
-        this.centerService.updateCenter(this.center.id, { contract_terms: this.centerTerms }).subscribe((center) => {
+        this.centerService.updateCenter(this.center.id, { contract_terms: e.centerTerm }).subscribe((center) => {
             console.log('update center : ', center)
             this.center = center
             this.storageService.setCenter(this.center)

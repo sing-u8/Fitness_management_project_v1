@@ -18,21 +18,12 @@
     </div>
 
     <div
-      *ngIf="employeeRole == 'owner' || employeeRole == 'administrator'"
+      *ngIf="employeeRole == 'owner' || employeeRole == 'instructor'"
       class="manager"
     >
-      <rw-radio-button text="관리 직원" textSize="13" [checked]="userRole.administrator" (click)="emitSetUserRole('administrator')">
+      <rw-radio-button text="강사" textSize="13" [checked]="userRole.instructor" (click)="emitSetUserRole('instructor')">
       </rw-radio-button>
     </div>
-
-    <div
-      *ngIf="employeeRole == 'employee' || employeeRole == 'administrator' || employeeRole == 'owner'"
-      class="staff"
-    >
-      <rw-radio-button text="일반 직원" textSize="13" [checked]="userRole.employee" (click)="emitSetUserRole('employee')">
-      </rw-radio-button>
-    </div>
-
     <div class="member">
       <rw-radio-button text="회원" textSize="13" [checked]="userRole.member" (click)="emitSetUserRole('member')">
       </rw-radio-button>

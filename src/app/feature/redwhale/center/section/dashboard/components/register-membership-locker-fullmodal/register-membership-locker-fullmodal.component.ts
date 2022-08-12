@@ -65,6 +65,8 @@ export class RegisterMembershipLockerFullmodalComponent implements OnInit, OnCha
     @Output() finishRegister = new EventEmitter<any>()
 
     @ViewChild('modalWrapperElement') modalWrapperElement: ElementRef
+    @ViewChild('terms') termsElement: ElementRef
+
     public changed: boolean
     public today = dayjs().format('YYYY.MM.DD')
     public center: Center
@@ -150,6 +152,11 @@ export class RegisterMembershipLockerFullmodalComponent implements OnInit, OnCha
                 setTimeout(() => {
                     this.renderer.addClass(this.modalWrapperElement.nativeElement, 'rw-modal-wrapper-show')
                 }, 0)
+                this.renderer.setStyle(
+                    this.termsElement.nativeElement,
+                    'height',
+                    `${this.termsElement.nativeElement.scrollHeight + 10}px`
+                )
             } else {
                 this.renderer.removeClass(this.modalWrapperElement.nativeElement, 'rw-modal-wrapper-show')
                 setTimeout(() => {

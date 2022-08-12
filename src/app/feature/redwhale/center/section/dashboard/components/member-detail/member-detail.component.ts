@@ -1,6 +1,6 @@
-import { Component, OnInit, Input, OnChanges, SimpleChanges, OnDestroy } from '@angular/core'
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core'
 import { FormBuilder, FormControl } from '@angular/forms'
-import { Router, ActivatedRoute } from '@angular/router'
+import { ActivatedRoute, Router } from '@angular/router'
 import _ from 'lodash'
 import dayjs from 'dayjs'
 
@@ -19,7 +19,7 @@ import { Subject } from 'rxjs'
 import { takeUntil } from 'rxjs/operators'
 
 // ngrx
-import { Store, select } from '@ngrx/store'
+import { select, Store } from '@ngrx/store'
 import * as DashboardReducer from '@centerStore/reducers/sec.dashboard.reducer'
 import * as DashboardActions from '@centerStore/actions/sec.dashboard.actions'
 import * as DashboardSelector from '@centerStore/selectors/sec.dashoboard.selector'
@@ -230,18 +230,15 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
         }
         return true
     }
-
     // user role -----------------------
     public userRole: Record<Role, boolean> = {
         owner: false,
-        administrator: false,
-        employee: false,
+        instructor: false,
         member: false,
     }
     public roleName: Record<Role, string> = {
         owner: '운영자',
-        administrator: '관리 직원',
-        employee: '직원',
+        instructor: '강사',
         member: '회원',
     }
     public staffRole: Role = undefined
@@ -267,18 +264,18 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
     closeRoleSelect() {
         this.doShowRoleSelect = false
         _.forIn(this.userRole, (value, key) => {
-            this.userRole[key] = key == this.curUserData?.user?.role_code ? true : false
+            this.userRole[key] = key == this.curUserData?.user?.role_code
         })
     }
     setUserRole(role: Role) {
         _.forIn(this.userRole, (value, key) => {
-            this.userRole[key] = key == role ? true : false
+            this.userRole[key] = key == role
         })
     }
 
     openChangeRoleModal() {
         const changedRole: Role = _.findKey(this.userRole, (item) => item) as Role
-        const isSameRole = this.curUserData?.user?.role_code == changedRole ? true : false
+        const isSameRole = this.curUserData?.user?.role_code == changedRole
         this.changeRoleModalText.text =
             changedRole == 'owner'
                 ? `${this.wordService.ellipsis(this.curUserData.user.center_user_name, 4)}님에게 ${
@@ -294,13 +291,13 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
                   양도된 권한은 복구가 불가능합니다.`
                 : `권한 변경 시, 새로운 접근 권한이 주어지므로
                   꼭 신중하게 선택해주세요. 🙏`
-        this.doShowChangeRoleModal = isSameRole ? false : true
+        this.doShowChangeRoleModal = !isSameRole
         this.doShowRoleSelect = false
     }
     closeChangeRoleModal() {
         this.doShowChangeRoleModal = false
         _.forIn(this.userRole, (value, key) => {
-            this.userRole[key] = key == this.curUserData?.user?.role_code ? true : false
+            this.userRole[key] = key == this.curUserData?.user?.role_code
         })
     }
     confirmChangeRoleModal() {
@@ -326,8 +323,7 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
                         this.nxStore.dispatch(CenterCommonActions.startGetInstructors({ centerId: this.center.id }))
                         this.nxStore.dispatch(CenterCommonActions.startGetMembers({ centerId: this.center.id }))
                         this.centerService.getCenter(this.center.id).subscribe((center) => {
-                            const newCenter = center
-                            this.storageService.setCenter(newCenter)
+                            this.storageService.setCenter(center)
                         })
                         this.router.navigate(['./sale'], { relativeTo: this.activatedRoute })
                     },
