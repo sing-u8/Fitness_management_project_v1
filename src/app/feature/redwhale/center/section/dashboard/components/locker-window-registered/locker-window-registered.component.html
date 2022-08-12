@@ -1,4 +1,4 @@
-<section class="locker-done-card">
+<section *ngIf="type =='register'" class="locker-done-card">
     <div class="top">
         <div class="locker-name">
             <div class="icon">
@@ -15,6 +15,30 @@
         <div class="pay">
             <span class="rw-typo-subtext0-regular small-title2">결제 금액 / 담당자</span>
             <span class="rw-typo-bodytext1">￦{{lockerState.amount.paymentAmount ?? 0}} / {{lockerState.assignee.name}}</span>
+        </div>
+    </div>
+</section>
+
+<section *ngIf="type =='contract'" class="locker-done-card">
+    <div class="top">
+        <div class="locker-name">
+            <div class="icon">
+                <img src="assets/icons/etc/locker-white.svg">
+            </div>
+            <span class="rw-typo-title2">[{{contractUserLocker.category_name}}] {{contractUserLocker.name}}</span>
+        </div>
+    </div>
+    <div class="bottom">
+        <div class="date">
+            <span class="rw-typo-subtext0-regular small-title2">기간</span>
+            <span class="rw-typo-bodytext1">{{contractUserLocker.start_date | dateFormat:"YYYY.MM.DD"}} - {{contractUserLocker.end_date | dateFormat:"YYYY.MM.DD"}} ({{lockerState.date | dayDiff}}일)</span>
+        </div>
+        <div class="pay">
+            <span class="rw-typo-subtext0-regular small-title2">결제 금액 / 담당자</span>
+            <span class="rw-typo-bodytext1">
+                ￦{{contractUserLocker.card + contractUserLocker.trans + contractUserLocker.cash + contractUserLocker.unpaid?? 0}}
+                / {{contractUserLocker.responsibility}}
+            </span>
         </div>
     </div>
 </section>

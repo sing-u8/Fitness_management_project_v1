@@ -32,9 +32,9 @@ import { CenterUser } from '@schemas/center-user'
 
 // ngrx
 import { Store } from '@ngrx/store'
-import * as DashboardActions from '@centerStore/actions/sec.dashboard.actions'
-import * as LockerActions from '@centerStore/actions/sec.locker.actions'
 import { showToast } from '@appStore/actions/toast.action'
+import * as LockerActions from '@centerStore/actions/sec.locker.actions'
+import * as DashboardActions from '@centerStore/actions/sec.dashboard.actions'
 
 export interface State {
     mlItems: MembershipLockerItem[]

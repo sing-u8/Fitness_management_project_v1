@@ -4,6 +4,7 @@ import { ClassItem } from '@schemas/class-item'
 import _ from 'lodash'
 
 import { MembershipTicket } from '@schemas/center/dashboard/register-ml-fullmodal'
+import { ContractUserMembership } from '@schemas/contract-user-membership'
 
 @Component({
     selector: 'db-membership-ticket-window-registered',
@@ -11,7 +12,9 @@ import { MembershipTicket } from '@schemas/center/dashboard/register-ml-fullmoda
     styleUrls: ['./membership-ticket-window-registered.component.scss'],
 })
 export class MembershipTicketWindowRegisteredComponent implements OnInit, AfterViewInit, OnChanges {
+    @Input() type: 'register' | 'contract' = 'register'
     @Input() membershipState: MembershipTicket
+    @Input() contractUserMembership: ContractUserMembership
 
     public selectedLessons: Array<ClassItem> = []
     public selectedLessonText = ''

@@ -27,7 +27,7 @@ import { ClickEmitterType } from '@shared/components/common/button/button.compon
 
 // component Store
 import { RegisterMembershipLockerFullmodalStore, stateInit } from './componentStore/register-ml-fullmodal.store'
-import { Observable, Subscription } from 'rxjs'
+import { Observable } from 'rxjs'
 //
 
 import { CenterUser } from '@schemas/center-user'
@@ -47,7 +47,6 @@ import {
 // ngrx
 import { Store } from '@ngrx/store'
 import * as CenterCommonSelector from '@centerStore/selectors/center.common.selector'
-import * as DashboardActions from '@centerStore/actions/sec.dashboard.actions'
 
 type Progress = 'one' | 'two'
 

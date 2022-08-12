@@ -55,7 +55,7 @@ import { HoldAllModalComponent } from './components/hold-all-modal/hold-all-moda
 import { ContractSignBoxComponent } from './components/contract-sign-box/contract-sign-box.component'
 import { MembershipTicketWindowRegisteredComponent } from './components/membership-ticket-window-registered/membership-ticket-window-registered.component'
 import { LockerWindowRegisteredComponent } from './components/locker-window-registered/locker-window-registered.component'
-import { ModifyContractFullmodalComponent } from './components/modify-contract-fullmodal/modify-contract-fullmodal.component'
+import { CheckContractFullmodalComponent } from './components/check-contract-fullmodal/check-contract-fullmodal.component'
 
 import { DashboardRoutingModule } from './dashboard-routing.module'
 
@@ -116,7 +116,7 @@ import { NgxSpinnerModule } from 'ngx-spinner'
         ContractSignBoxComponent,
         MembershipTicketWindowRegisteredComponent,
         LockerWindowRegisteredComponent,
-        ModifyContractFullmodalComponent,
+        CheckContractFullmodalComponent,
     ],
     imports: [
         DashboardRoutingModule,

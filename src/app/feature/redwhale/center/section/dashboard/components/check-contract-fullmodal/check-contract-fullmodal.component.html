@@ -1,0 +1,122 @@
+<section class="register-ml-fullmodal-wrapper user-select-none" #modalWrapperElement>
+    <section class="register-membership-locker user-select-none thin-scroll-x-overlay thin-scroll-y-overlay">
+        <header>
+            <div class="header-text-container">
+                <p class="rw-typo-headline1">[{{ center.name }}]</p>
+                <p class="rw-typo-headline1">회원 계약서</p>
+            </div>
+
+            <div
+                class="cg-typo-subtext close-button"
+                rw-button
+                rwButtonWidth="85"
+                rwButtonHeight="40"
+                rwButtonBorderColor="var(--font-color)"
+                (click)="closeModal()"
+            >
+                <span class="mdi mdi-close"></span>
+                <span>닫기</span>
+            </div>
+        </header>
+
+        <main >
+            <div class="main-wrapper">
+                <article class="contract-body">
+                    <div class="l-user-basic-info-box">
+                        <p class="rw-typo-title2 contract__title">회원 기본 정보</p>
+                        <div class="user-basic-info-box">
+                            <div class="l-avatar">
+                                <rw-avatar
+                                    size="83"
+                                    fontSize="16"
+                                    [image]="curUser?.center_user_picture"
+                                    [backgroundColor]="curUser?.color"
+                                    [text]="curUser?.center_user_name"
+                                ></rw-avatar>
+                                <p class="rw-typo-title1 ">{{curUser?.center_user_name}}</p>
+                            </div>
+                            <div class="user-basic-info">
+                                <div class="l-info">
+                                    <div class="title">회원번호</div>
+                                    <div class="content">{{ curUser?.membership_number }}</div>
+                                </div>
+                                <div class="l-info">
+                                    <div class="title">이메일</div>
+                                    <div class="content">{{ curUser?.email }}</div>
+                                </div>
+                                <div class="l-info">
+                                    <div class="title">전화번호</div>
+                                    <div class="content">
+                                        {{ curUser?.phone_number | phoneNumber }}
+                                    </div>
+                                </div>
+                                <div class="l-info">
+                                    <div class="title">생년월일</div>
+                                    <div class="content">
+                                        <span>
+                                            {{ (curUser?.birth_date | dashToDot) ?? '-' }}
+                                            ({{(curUser?.birth_date | birthDate: '세') ?? '-세'}},
+                                            {{curUser?.sex == 'male' ? '남성' : curUser?.sex == 'female' ? '여성' : '-'}})
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="l-ml-registered">
+                        <p class="rw-typo-title2 contract__title">회원 기본 정보</p>
+                        <div class="ml-registered" *ngFor="let membership of (contractUserMembershipItems$ | async)">
+                            <ng-container class="window-item">
+                                <db-membership-ticket-window-registered
+                                    [contractUserMembership]="membership"
+                                ></db-membership-ticket-window-registered>
+                            </ng-container>
+                        </div>
+                        <div class="ml-registered" *ngFor="let locker of (contractUserLockerItems$ | async)">
+                            <ng-container class="window-item">
+                                <db-locker-window-registered
+                                    [contractUserLocker]="locker"
+                                ></db-locker-window-registered>
+                            </ng-container>
+                        </div>
+                    </div>
+                    <div class="l-payment-info">
+                        <p class="rw-typo-title2 contract__title">결제 정보</p>
+                        <div class="payment-info">
+                            <p class="payment-info__total-price rw-typo-title2">총 {{totalSum$ | async | numberWithCommas}}원 결제</p>
+                            <div class="bar"></div>
+                            <div class="payment-info__l-price-item">
+                                <div class="payment-info__price-item" *ngFor="let item of totalPrice$ | async | keyvalue: originalOrder">
+                                    <p class="rw-typo-subtext0-regular">{{ item.value.name }}</p>
+                                    <p class="rw-typo-bodytext0-regular">{{ item.value.price | numberWithCommas }}원</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="l-terms">
+                        <p class="rw-typo-title2 contract__title">이용 약관</p>
+                        <div *ngIf="center.contract_terms" class="terms rw-typo-bodytext0-regular">
+                            {{center.contract_terms}}
+                        </div>
+                        <div *ngIf="!center.contract_terms" class="no-terms rw-typo-bodytext0-regular">
+                            [센터 설정 > 약관 설정]에서 이용 약관을 작성해주세요.
+                        </div>
+                    </div>
+                </article>
+
+                <aside class="l-contract-sign">
+                    <div class="contract-sign-wrapper">
+                        <p class="rw-typo-title2 contract__title">서명</p>
+                        <db-contract-sign-box
+                            [contractDate]="today"
+                            [type]="'r'"
+                            [contractor]="curUser"
+                        ></db-contract-sign-box>
+                    </div>
+
+                </aside>
+            </div>
+        </main>
+
+    </section>
+</section>
