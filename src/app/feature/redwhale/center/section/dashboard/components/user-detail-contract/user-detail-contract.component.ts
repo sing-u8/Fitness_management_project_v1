@@ -68,4 +68,13 @@ export class UserDetailContractComponent implements OnInit {
     setSelectedPayment(contract: Contract) {
         this.selectedContract = contract
     }
+
+    // check contract modal vars and methods
+    public isCCFullModalVisible = false
+    openCCFullModal() {
+        this.isCCFullModalVisible = true
+    }
+    closeCCFullModal() {
+        this.isCCFullModalVisible = false
+    }
 }

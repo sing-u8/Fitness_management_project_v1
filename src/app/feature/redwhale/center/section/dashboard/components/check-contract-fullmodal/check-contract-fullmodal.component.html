@@ -68,6 +68,7 @@
                         <div class="ml-registered" *ngFor="let membership of (contractUserMembershipItems$ | async)">
                             <ng-container class="window-item">
                                 <db-membership-ticket-window-registered
+                                    [type]="'contract'"
                                     [contractUserMembership]="membership"
                                 ></db-membership-ticket-window-registered>
                             </ng-container>
@@ -75,6 +76,7 @@
                         <div class="ml-registered" *ngFor="let locker of (contractUserLockerItems$ | async)">
                             <ng-container class="window-item">
                                 <db-locker-window-registered
+                                    [type]="'contract'"
                                     [contractUserLocker]="locker"
                                 ></db-locker-window-registered>
                             </ng-container>

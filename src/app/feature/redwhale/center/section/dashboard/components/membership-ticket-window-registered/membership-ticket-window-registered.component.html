@@ -32,7 +32,7 @@
             <div class="icon">
                 <img src="assets/icons/etc/ticket-white.svg">
             </div>
-            <span class="rw-typo-title2">{{contractUserMembership.name}}</span>
+            <span class="rw-typo-title2">{{contractUserMembership?.name}}</span>
         </div>
     </div>
     <!-- <div class="rw-typo-bodytext0 middle">
@@ -41,17 +41,17 @@
     <div class="bottom">
         <div class="date">
             <span class="rw-typo-subtext0-regular small-title2">기간</span>
-            <span class="rw-typo-bodytext1">{{contractUserMembership.start_date | dateFormat:"YYYY.MM.DD"}} - {{contractUserMembership.end_date | dateFormat:"YYYY.MM.DD"}} ({{membershipState.date | dayDiff}}일)</span>
+            <span class="rw-typo-bodytext1">{{contractUserMembership?.start_date | dateFormat:"YYYY.MM.DD"}} - {{contractUserMembership?.end_date | dateFormat:"YYYY.MM.DD"}} ({{contractUserMembership?.start_date | period: contractUserMembership?.end_date  }}일)</span>
         </div>
         <div class="count">
             <span class="rw-typo-subtext0-regular small-title2">횟수</span>
-            <span class="rw-typo-bodytext1">{{contractUserMembership.unlimited ? '무제한' : (contractUserMembership.count+'회')}}</span>
+            <span class="rw-typo-bodytext1">{{contractUserMembership?.unlimited ? '무제한' : (contractUserMembership?.count+'회')}}</span>
         </div>
         <div class="pay">
             <span class="rw-typo-subtext0-regular small-title2">결제 금액 / 담당자</span>
             <span class="rw-typo-bodytext1">
-                ￦{{contractUserMembership.card + contractUserMembership.trans + contractUserMembership.cash + contractUserMembership.unpaid?? 0}}
-                / {{contractUserMembership.responsibility}}
+                ￦{{contractUserMembership?.card + contractUserMembership?.trans + contractUserMembership?.cash + contractUserMembership?.unpaid?? 0}}
+                / {{contractUserMembership?.responsibility}}
             </span>
         </div>
     </div>

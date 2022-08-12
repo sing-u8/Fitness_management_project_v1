@@ -29,7 +29,14 @@ export const stateInit: State = {
     loading: 'idle',
     contractUserMembershipItems: [],
     contractUserLockerItems: [],
-    contractPayment: undefined,
+    contractPayment: {
+        card: 0,
+        trans: 0,
+        vbank: 0,
+        phone: 0,
+        cash: 0,
+        unpaid: 0,
+    },
 }
 
 @Injectable()
@@ -102,6 +109,13 @@ export class CheckContractFullmodalStore extends ComponentStore<State> {
                 ]).pipe(
                     map(([lockers, memberships, payments]) => {
                         this.setState((state) => {
+                            console.log('end get data ----- ', {
+                                ...state,
+                                loading: 'done',
+                                contractUserLockerItems: lockers,
+                                contractUserMembershipItems: memberships,
+                                contractPayment: payments[0],
+                            })
                             return {
                                 ...state,
                                 loading: 'done',
