@@ -1,6 +1,6 @@
 * {
-    padding: 0px;
-    margin: 0px;
+    padding: 0;
+    margin: 0;
 }
 
 :host {
@@ -13,10 +13,9 @@
     padding: 35px;
 
     // 나중에 수정하기 -  1440 부터는 사이드바가 밀고 나오지 않고, 한 레이어 위로 나오게
-
     min-width: 1213px;
 
-    @media (min-widh: 1440px) {
+    @media (min-width: 1440px) {
         min-width: 1440px;
     }
 
@@ -43,7 +42,7 @@
         }
 
         .setting-show-sale-button {
-            padding: 0px !important;
+            padding: 0 !important;
             width: 130px;
             height: 44px;
             display: flex;
@@ -99,7 +98,7 @@
                     align-items: center;
                     width: 220px;
                     height: 46px;
-                    box-shadow: 0px 0px 10px #b5b5b51c;
+                    box-shadow: 0 0 10px #b5b5b51c;
                     border-radius: 5px;
                     background-color: var(--white);
                     padding-left: 18px;
@@ -166,7 +165,7 @@
                             height: 33px;
                             border-radius: 27px;
                             background-color: var(--white);
-                            padding: 0px 13px;
+                            padding: 0 13px;
 
                             .tag-texts {
                                 display: flex;

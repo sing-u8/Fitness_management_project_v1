@@ -21,6 +21,7 @@ import { LockerModule } from './section/locker/locker.module'
 import { ScheduleModule } from './section/schedule/schedule.module'
 import { DashboardModule } from './section/dashboard/dashboard.module'
 import { SaleModule } from './section/sale/sale.module'
+import {MessageModule} from './section/message/message.module'
 
 // ngrx
 import { StoreModule } from '@ngrx/store'
@@ -60,7 +61,7 @@ import { communityReducer } from '@centerStore/reducers/sec.community.reducer'
 import { CommunityEffect } from '@centerStore/effects/sec.community.effect'
 
 import { centerCommonReducer } from '@centerStore/reducers/center.common.reducer'
-import { CenterCommonEffect } from '@centerStore/effects/center.common.effect'
+import { CenterCommonEffect } from '@centerStore/effects/center.common.effect';
 
 @NgModule({
     declarations: [
@@ -86,6 +87,7 @@ import { CenterCommonEffect } from '@centerStore/effects/center.common.effect'
         ScheduleModule,
         DashboardModule,
         SaleModule,
+        MessageModule,
         // <-- ngrx     //
         StoreModule.forFeature(GymFeatureKey, {
             [LessonFeatureKey]: lessonReducer,

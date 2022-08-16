@@ -44,6 +44,11 @@ const routes: Routes = [
                 canActivate: [CenterMemberBlockGuard],
                 loadChildren: () => import('./section/sale/sale.module').then((m) => m.SaleModule),
             },
+            {
+                path: 'message',
+                canActivate: [CenterMemberBlockGuard],
+                loadChildren: () => import('./section/message/message.module').then((m) => m.MessageModule),
+            },
         ],
     },
     // {
