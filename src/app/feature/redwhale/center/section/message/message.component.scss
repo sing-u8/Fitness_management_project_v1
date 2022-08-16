@@ -22,6 +22,8 @@
         padding-bottom: 15px;
         margin-bottom: 14px;
 
+        position: relative;
+
         .header-text {
             display: flex;
             align-items: baseline;
@@ -31,7 +33,211 @@
             .title-desc {
                 color: var(--font-color);
             }
+            .help-icon {
+                align-self: flex-end;
+                margin-top: 10px;
+                cursor: pointer;
+                width: 23px;
+                height: 23px;
+                margin-left: 3px;
+
+                background-image: url("/assets/icons/etc/help.svg");
+                background-repeat: no-repeat;
+                background-size: contain;
+
+                &:hover {
+                    .help-text-container {
+                        z-index: 10 !important;
+                        opacity: 1 !important;
+                        visibility: visible !important;
+                    }
+                }
+                .help {
+                    position: relative;
+                    width: 27px;
+                    height: 27px;
+                    .help-text-container {
+                        width: 259px;
+                        height: 277px;
+                        position: absolute;
+                        z-index: -5;
+                        display: flex;
+                        align-items: flex-end;
+                        top: 0;
+                        left: 5px;
+                        visibility: hidden;
+                        opacity: 0;
+                        transition: visibility 0s, opacity 0.4s;
+                        -moz-transition: visibility 0s, opacity 0.4s;
+                        -webkit-transition: visibility 0s, opacity 0.4s;
+                        -o-transition: visibility 0s, opacity 0.4s;
+
+                        &:hover {
+                            opacity: 1;
+                            visibility: visible;
+                            z-index: 10;
+                        }
+
+                        .help-text {
+                            width: 259px;
+                            height: 250px;
+
+                            box-shadow: 0 0 10px #b5b5b51c;
+                            background-color: var(--white);
+                            border-radius: 5px;
+                            overflow: hidden;
+                            margin-top: 6px;
+
+                        .help-text-title {
+                            width: 259px;
+                            height: 40px;
+                            background-color: #212121;
+                            color: var(--white);
+
+                            display: flex;
+                            justify-content: flex-start;
+                            align-items: center;
+                            padding: 0 15px;
+
+                            font-size: 1.2rem;
+                            line-height: 1.42;
+                            letter-spacing: -0.14px;
+                            font-weight: 500;
+                        }
+
+                        .help-text-content {
+                            padding: 15px 13px;
+                            & div {
+                                display: flex;
+                                margin-bottom: 10px;
+
+                                &:last-child {
+                                    margin-bottom: 0;
+                                }
+                                & p {
+                                    color: var(--lightgrey);
+                                    margin-right: 9px;
+                                    }
+                                }
+                                & div.help-text-item {
+                                    display: flex;
+                                    flex-direction: column;
+                                    align-items: flex-start;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
 
+        .l-message-route {
+            display: flex;
+            align-items: center;
+            position: absolute;
+            right: 0;
+            bottom: 5px;
+            .message-route {
+                position: relative;
+                min-width: 62px;
+                min-height: 32px;
+                cursor: pointer;
+                color: var(--darkgrey) !important;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+
+                &:not(:last-of-type) {
+                    margin-right: 23px;
+                }
+                &.selected {
+                    color: var(--font-color) !important;
+                    .under-bar {
+                        display: block;
+                    }
+                }
+                .under-bar {
+                    display: none;
+                    position: absolute;
+                    bottom: -6px;
+                    left: 0;
+                    width: 100%;
+                    height: 3px;
+                    border-radius: 50px;
+                    background-color: var(--font-color);
+                }
+            }
+        }
+
+
+    }
+
+    .content-container {
+        display: flex;
+        height: calc(100vh - 200px);
+        width: 100%;
+        position: relative;
+        justify-content: center;
+
+        .l-message {
+            display: flex;
+            margin-top: 16px;
+            .general-right {
+                margin-left: 63px;
+                .general-right__header{
+                    display: flex;
+                    justify-content: flex-start;
+                    width: 100%;
+                    margin-bottom: 15px;
+                }
+                .general-right__content{
+                    display: flex;
+
+                    .general-setting-box {
+                        width: 268px;
+                        margin-left : 15px;
+                        .setting-transmission-time {
+                            background-color: var(--white);
+                            box-shadow: 0 0 10px rgba(181, 181, 181, 0.109804);
+                            border-radius: 5px;
+                            padding: 23px;
+                            display: flex;
+                            flex-direction: column;
+                            p {
+                                text-align: start;
+                                margin-bottom: 11px;
+                            }
+                            rw-radio-button {
+                                &:first-of-type {
+                                    margin-right: 25px;
+                                }
+                            }
+                        }
+                        .deduction-box {
+                            display: flex;
+                            flex-direction: column;
+                            padding: 23px;
+                            margin: 15px 0;
+                            background:  var(--white);
+                            box-shadow: 0 0 10px rgba(181, 181, 181, 0.109804);
+                            border-radius: 5px;
+                            p {
+                                text-align: start;
+                                &:first-of-type{
+                                    margin-bottom: 4px;
+                                }
+                            }
+                        }
+                    }
+
+
+                }
+            }
+
+        }
+        .l-message-history {
+            margin-top: 16px;
+        }
     }
 }
