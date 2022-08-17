@@ -81,7 +81,7 @@
                                     (click)="onGeneralTransmissionTimeClick('book')"
                                 ></rw-radio-button>
                             </div>
-                            <div class="l-booking-setting">
+                            <div class="l-booking-setting" *ngIf="this.generalTransmissionTime.book">
                                 <div class="booking-setting-item">
                                     <p class="rw-typo-subtext1">일자</p>
                                     <div
@@ -93,13 +93,19 @@
                                         <db-datepicker
                                             *ngIf="showBookDate"
                                             mode="date"
-                                            [(data)] = "bookDateText"
+                                            [(data)] = "bookDate"
+                                            (dataChange)="onBookDateChange($event)"
                                         ></db-datepicker>
                                     </div>
                                 </div>
                                 <div class="booking-setting-item">
                                     <p class="rw-typo-subtext1">시각</p>
-                                    <rw-time-picker2></rw-time-picker2>
+                                    <rw-time-picker2
+                                        [width]="'222'"
+                                        [textAlign]="'start'"
+                                        [time]="bookTime"
+                                        (onTimeClick)="onBookTimeClick($event)"
+                                    ></rw-time-picker2>
                                 </div>
                             </div>
                         </div>
@@ -120,7 +126,9 @@
             </div>
         </div>
 
-        <div *ngIf="messageRoute == 'auto-transmission'" class="l-message"></div>
+        <div *ngIf="messageRoute == 'auto-transmission'" class="l-message">
+
+        </div>
 
         <div *ngIf="messageRoute == 'history'" class="l-message-history"></div>
     </article>

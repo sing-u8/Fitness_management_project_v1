@@ -33,12 +33,21 @@ export class MessageComponent implements OnInit {
     }
 
     public bookDateText: string = dayjs().format('YYYY.MM.DD (ddd)')
+    public bookDate = { date: dayjs().format('YYYY-MM-DD') }
     public showBookDate = false
     closeBookDate() {
         this.showBookDate = false
     }
     toggleBookDate() {
         this.showBookDate = !this.showBookDate
+    }
+    onBookDateChange(data: { date: string }) {
+        this.bookDateText = dayjs(data.date).format('YYYY.MM.DD (ddd)')
+    }
+
+    public bookTime = '10:00:00'
+    onBookTimeClick(time: { key: string; name: string }) {
+        this.bookTime = time.key
     }
 
     // message route : auto-transmission

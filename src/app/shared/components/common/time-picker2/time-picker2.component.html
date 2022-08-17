@@ -6,7 +6,7 @@
         (click)="toggle()"
         (rwClickOutside)="close();initSelectedTime()"
     >
-        <span class="text flex-fill">{{selectedTime.name}}</span>
+        <span #timeTextElement class="text flex-fill">{{selectedTime.name}}</span>
         <span class="mdi mdi-chevron-down"></span>
     </div>
     <div

@@ -31,6 +31,7 @@ export class TimePicker2Component implements OnInit, AfterViewInit, OnChanges {
     @ViewChild('selectElement') selectElement: ElementRef
     @ViewChild('selectedElement') selectedElement: ElementRef
     @ViewChild('itemsElement') itemsElement: ElementRef
+    @ViewChild('timeTextElement') timeTextElement: ElementRef
 
     @ViewChildren('item') items: QueryList<any>
 
@@ -41,6 +42,7 @@ export class TimePicker2Component implements OnInit, AfterViewInit, OnChanges {
     @Input() startTime: string // 00:00:00
     @Input() endTime: string // 00:00:00
     @Input() disableTimeUntil: string // 00:00:00
+    @Input() textAlign: string
 
     @Output() onTimeClick = new EventEmitter<Pick<Time, 'key' | 'name'>>()
 
@@ -57,6 +59,7 @@ export class TimePicker2Component implements OnInit, AfterViewInit, OnChanges {
         this.initWidth()
         this.initTimeList()
         this.initSelectedTime()
+        this.initTextAlign()
 
         this.isViewInitEnd = true
     }
@@ -73,6 +76,12 @@ export class TimePicker2Component implements OnInit, AfterViewInit, OnChanges {
         if (changes['disableTimeUntil'] && this.isViewInitEnd) {
             this.initTimeList()
             this.initSelectedTime()
+        }
+    }
+
+    initTextAlign() {
+        if (this.textAlign) {
+            this.renderer.setStyle(this.timeTextElement.nativeElement, 'textAlign', `${this.textAlign}`)
         }
     }
 
