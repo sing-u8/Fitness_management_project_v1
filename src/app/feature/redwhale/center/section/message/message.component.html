@@ -69,15 +69,38 @@
                             <p class="rw-typo-subtext1 ">전송 시점</p>
                             <div class="d-flex align-items-center">
                                 <rw-radio-button
-                                    [checked]="true"
+                                    [checked]="generalTransmissionTime.immediate"
                                     [text] = "'즉시 전송'"
                                     [textSize]="'14'"
+                                    (click)="onGeneralTransmissionTimeClick('immediate')"
                                 ></rw-radio-button>
                                 <rw-radio-button
-                                    [checked]="false"
+                                    [checked]="generalTransmissionTime.book"
                                     [text] = "'예약 전송'"
                                     [textSize]="'14'"
+                                    (click)="onGeneralTransmissionTimeClick('book')"
                                 ></rw-radio-button>
+                            </div>
+                            <div class="l-booking-setting">
+                                <div class="booking-setting-item">
+                                    <p class="rw-typo-subtext1">일자</p>
+                                    <div
+                                        class="date-picker rw-typo-bodytext0"
+                                        (rwClickOutside)="closeBookDate()"
+                                        (click)="toggleBookDate()"
+                                    >
+                                        {{bookDateText}}
+                                        <db-datepicker
+                                            *ngIf="showBookDate"
+                                            mode="date"
+                                            [(data)] = "bookDateText"
+                                        ></db-datepicker>
+                                    </div>
+                                </div>
+                                <div class="booking-setting-item">
+                                    <p class="rw-typo-subtext1">시각</p>
+                                    <rw-time-picker2></rw-time-picker2>
+                                </div>
                             </div>
                         </div>
                         <div class="deduction-box">
