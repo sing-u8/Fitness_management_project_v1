@@ -54,7 +54,7 @@
       </div>
       <db-datepicker
         *ngIf = "datepickFlag.end"
-        (rwClickOutside) = "(!isStartDateClicked && datepickFlag.end = false); $event.stopPropagation()"
+        (rwClickOutside) = "(!isStartDateClicked && datepickFlag.end=false); $event.stopPropagation()"
         mode="reg-ml" [option]="'onlyEnd'" [data]="membershipState.date" (dataChange) = "onDatePickRangeChange($event, 'end')"
       ></db-datepicker>
     </div>

@@ -94,6 +94,21 @@ export class RegisterMembershipLockerFullmodalComponent implements OnInit, OnCha
         })
     })
 
+    public contractorName = ''
+    public contractorNameSubscriber = this.mlItems$.subscribe((items) => {
+        const contractors = _.sortBy(
+            _.uniqBy(
+                _.map(items, (v) => v.assignee.value),
+                (v) => v.id
+            ),
+            (v) => v.id
+        )
+        this.contractorName =
+            contractors.length == 1
+                ? `${contractors[0]?.center_user_name}`
+                : `${contractors[0]?.center_user_name} 외 ${contractors.length - 1}명`
+    })
+
     public lockerItemsExist = false
     public membershipItemsExist = false
     public lieSubscriber = this.cmpStore.doLockerItemsExist$.subscribe((doExist) => {
@@ -106,7 +121,9 @@ export class RegisterMembershipLockerFullmodalComponent implements OnInit, OnCha
     public progress: Progress = 'one'
     setProgress(progress: Progress) {
         this.progress = progress
+        this.progressChanged = true
     }
+    public progressChanged = false
 
     constructor(
         private renderer: Renderer2,
@@ -131,6 +148,7 @@ export class RegisterMembershipLockerFullmodalComponent implements OnInit, OnCha
         this.isAllMlItemDoneSubscriber.unsubscribe()
         this.lieSubscriber.unsubscribe()
         this.mieSubscriber.unsubscribe()
+        this.contractorNameSubscriber.unsubscribe()
     }
     ngOnChanges(changes: SimpleChanges): void {
         if (changes['visible'] && !changes['visible'].firstChange) {
@@ -140,8 +158,18 @@ export class RegisterMembershipLockerFullmodalComponent implements OnInit, OnCha
         }
     }
     ngAfterViewChecked(): void {
+        if (this.progressChanged) {
+            this.progressChanged = false
+            this.renderer.setStyle(
+                this.termsElement.nativeElement,
+                'height',
+                `${this.termsElement.nativeElement.scrollHeight + 10}px`
+            )
+        }
         if (this.changed) {
             this.changed = false
+
+            this.center = this.storageService.getCenter()
 
             if (this.visible) {
                 this.cmpStore.checkLockerItemsExist(this.center.id)
@@ -152,11 +180,6 @@ export class RegisterMembershipLockerFullmodalComponent implements OnInit, OnCha
                 setTimeout(() => {
                     this.renderer.addClass(this.modalWrapperElement.nativeElement, 'rw-modal-wrapper-show')
                 }, 0)
-                this.renderer.setStyle(
-                    this.termsElement.nativeElement,
-                    'height',
-                    `${this.termsElement.nativeElement.scrollHeight + 10}px`
-                )
             } else {
                 this.renderer.removeClass(this.modalWrapperElement.nativeElement, 'rw-modal-wrapper-show')
                 setTimeout(() => {

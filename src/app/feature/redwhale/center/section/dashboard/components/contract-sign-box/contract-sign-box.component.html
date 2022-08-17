@@ -5,14 +5,14 @@
     </div>
     <div class="l-sign-text">
         <span class="rw-typo-bodytext1_darkgrey">계약자</span>
-        <span class="rw-typo-bodytext0-darkgrey-bold">{{contractor?.center_user_name}}</span>
+        <span class="rw-typo-bodytext0-darkgrey-bold">{{contractorName}}</span>
     </div>
     <div class="bar"></div>
 
     <div class="sign-box" [class.signed]="signData" [class.read-mode]="type == 'r'" (click)="openSignaturePad()">
         <img *ngIf="signData" alt="'signature-pad'" src="{{signData}}">
         <img *ngIf="signedUrl" alt="'signed-url'" src="{{signedUrl}}">
-        <span class="rw-typo-bodytext1_grey">{{contractor?.center_user_name}} (인)</span>
+        <span class="rw-typo-bodytext1_grey">{{contractorName}} (인)</span>
     </div>
 
     <div *ngIf="type == 'rw'" class="sign-guide-text rw-typo-subtext2" >
@@ -33,7 +33,7 @@
 
 <rw-signature-pad-modal
     [(visible)] = isSignaturePadVisible
-    [contractorName]="contractor?.center_user_name"
+    [contractorName]="contractorName"
     [blockClickOutside]="true"
     (cancel)="onCancelSignaturePad()"
     (confirm)="onConfirmSignaturePad($event)"

@@ -1,6 +1,6 @@
 <div class="item">
     <div class="rw-typo-bodytext1 col1">{{contract.date | dateFormat:'YYYY.MM.DD'}}</div>
-    <div class="rw-typo-bodytext1 col2">{{contract.responsibility}}</div>
+    <div class="rw-typo-bodytext1 col2">{{contractorName}}</div>
     <div class="rw-typo-bodytext0-bold col3">
         {{contract.user_sign ? '완료' : '미완료'}}
         <div class="col3__menu" (click)="toggleMenuDropDown(); " (rwClickOutside)="hideMenuDropDown()">

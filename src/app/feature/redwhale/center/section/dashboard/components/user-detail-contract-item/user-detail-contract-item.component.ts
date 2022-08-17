@@ -54,5 +54,13 @@ export class UserDetailContractItemComponent implements OnInit, AfterViewInit {
     ngOnInit(): void {}
     ngAfterViewInit() {
         this.menuDropDownItemObj.sign.visible = !this.contract.user_sign
+        this.initContractorName()
+    }
+
+    public contractorName = ''
+    initContractorName() {
+        const contractors = _.split(this.contract.responsibility, ',').map((v) => v.trim())
+        this.contractorName =
+            contractors.length == 1 ? `${contractors[0]}` : `${contractors[0]} 외 ${contractors.length - 1}명`
     }
 }

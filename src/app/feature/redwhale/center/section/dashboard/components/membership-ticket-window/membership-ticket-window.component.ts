@@ -56,6 +56,7 @@ export class MembershipTicketWindowComponent implements OnInit, AfterViewInit, O
         if (changes['instructors']) {
             this.center = this.storageService.getCenter()
             this.user = this.storageService.getUser()
+            this.staffSelect_list = []
             this.instructors.forEach((v) => {
                 this.staffSelect_list.push({
                     name: v.center_user_name,
@@ -63,7 +64,9 @@ export class MembershipTicketWindowComponent implements OnInit, AfterViewInit, O
                 })
 
                 if (!this.membershipState.assignee) {
-                    if (this.user.id == v.id) this.membershipState.assignee = { name: v.center_user_name, value: v }
+                    if (this.user.id == v.id) {
+                        this.membershipState.assignee = { name: v.center_user_name, value: v }
+                    }
                 }
             })
         }
@@ -74,11 +77,7 @@ export class MembershipTicketWindowComponent implements OnInit, AfterViewInit, O
     onDatePickRangeChange(event: { startDate: string; endDate: string }, type: 'start' | 'end') {
         this.membershipState.date = event
         this.dayDiff = String(this.getDayDiff(this.membershipState.date))
-        if (type == 'start') {
-            this.isStartDateClicked = true
-        } else {
-            this.isStartDateClicked = false
-        }
+        this.isStartDateClicked = type == 'start'
     }
     getDayDiff(date: { startDate: string; endDate: string }) {
         const date1 = dayjs(date.startDate)

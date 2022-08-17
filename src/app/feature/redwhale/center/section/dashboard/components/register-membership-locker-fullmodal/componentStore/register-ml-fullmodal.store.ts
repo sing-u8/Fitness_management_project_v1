@@ -177,9 +177,7 @@ export class RegisterMembershipLockerFullmodalStore extends ComponentStore<State
             }
         ) => {
             state.mlItems[data.index] = data.item
-            return {
-                ...state,
-            }
+            return _.cloneDeep(state)
         }
     )
 

@@ -10,7 +10,7 @@ import { SignatureConfirmOutput } from '@shared/components/common/signature-pad-
 })
 export class ContractSignBoxComponent implements OnInit {
     @Input() contractDate: string
-    @Input() contractor: CenterUser
+    @Input() contractorName: string
 
     @Input() type: 'rw' | 'r' = 'rw'
     @Input() signedUrl: string // type : 'r' only

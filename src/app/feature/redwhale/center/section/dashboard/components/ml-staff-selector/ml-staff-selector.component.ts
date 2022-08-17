@@ -52,7 +52,7 @@ export class MlStaffSelectorComponent implements AfterViewInit, ControlValueAcce
 
     ngAfterViewInit(): void {
         // filtering init
-        this.onChanged(this.items[0])
+        // this.onChanged(this.items[0])
 
         // setting elements style
         this.renderer.setStyle(this.selectedElement.nativeElement, 'width', this.width)
