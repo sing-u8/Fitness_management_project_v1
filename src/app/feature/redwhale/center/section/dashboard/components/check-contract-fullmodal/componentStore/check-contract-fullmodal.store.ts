@@ -1,18 +1,16 @@
 import { Inject, Injectable } from '@angular/core'
 import { ComponentStore } from '@ngrx/component-store'
 
-import { EMPTY, Observable, firstValueFrom, forkJoin } from 'rxjs'
-import { filter, switchMap, tap, catchError, map, withLatestFrom } from 'rxjs/operators'
+import { EMPTY, Observable, forkJoin } from 'rxjs'
+import { switchMap, catchError, map } from 'rxjs/operators'
 
 import _ from 'lodash'
-import dayjs from 'dayjs'
 
 import { CenterContractService } from '@services/center-users-contract.service'
 
 import { ContractPayment } from '@schemas/contract-payment'
 import { ContractUserLocker } from '@schemas/contract-user-locker'
 import { ContractUserMembership } from '@schemas/contract-user-membership'
-import { CenterUser } from '@schemas/center-user'
 import { Loading } from '@schemas/componentStore/loading'
 
 // ngrx
@@ -109,13 +107,6 @@ export class CheckContractFullmodalStore extends ComponentStore<State> {
                 ]).pipe(
                     map(([lockers, memberships, payments]) => {
                         this.setState((state) => {
-                            console.log('end get data ----- ',reqbody , {
-                                ...state,
-                                loading: 'done',
-                                contractUserLockerItems: lockers,
-                                contractUserMembershipItems: memberships,
-                                contractPayment: payments,
-                            })
                             return {
                                 ...state,
                                 loading: 'done',

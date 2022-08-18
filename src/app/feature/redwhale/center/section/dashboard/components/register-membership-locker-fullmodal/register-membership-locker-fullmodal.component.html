@@ -263,7 +263,7 @@
                         <p class="rw-typo-title2 contract__title">서명</p>
                         <db-contract-sign-box
                             [contractDate]="today"
-                            [contractorName]="contractorName"
+                            [contractorName]="curUser?.center_user_name"
                             (onSign)="onContractSign($event)"
                         ></db-contract-sign-box>
                         <div class="l-button">
