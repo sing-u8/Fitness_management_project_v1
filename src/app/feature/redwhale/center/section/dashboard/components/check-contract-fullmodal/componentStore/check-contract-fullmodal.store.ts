@@ -45,7 +45,11 @@ export class CheckContractFullmodalStore extends ComponentStore<State> {
     public readonly contractPayment$ = this.select((s) => s.contractPayment)
 
     public readonly totalSum$ = this.select(
-        (s) => s.contractPayment.card + s.contractPayment.cash + s.contractPayment.unpaid + s.contractPayment.trans
+        (s) =>
+            Number(s.contractPayment.card) +
+            Number(s.contractPayment.cash) +
+            Number(s.contractPayment.unpaid) +
+            Number(s.contractPayment.trans)
     )
     public readonly totalPrice$ = this.select((s) => {
         return {

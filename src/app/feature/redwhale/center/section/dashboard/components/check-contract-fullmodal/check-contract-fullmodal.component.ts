@@ -91,11 +91,13 @@ export class CheckContractFullmodalComponent implements OnInit, OnChanges, After
                     userId: this.curUser.id,
                     contractId: this.curContract.id,
                 })
-                this.renderer.setStyle(
-                    this.termsElement.nativeElement,
-                    'height',
-                    `${this.termsElement.nativeElement.scrollHeight + 10}px`
-                )
+                if (this.termsElement) {
+                    this.renderer.setStyle(
+                        this.termsElement.nativeElement,
+                        'height',
+                        `${this.termsElement.nativeElement.scrollHeight + 10}px`
+                    )
+                }
             } else {
                 this.renderer.removeClass(this.modalWrapperElement.nativeElement, 'rw-modal-wrapper-show')
                 setTimeout(() => {
