@@ -1,5 +1,9 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
 
+import { InputHelperService } from '@services/helper/input-helper.service'
+
+import _ from 'lodash'
+
 @Component({
     selector: 'msg-auto-trans-setting-box',
     templateUrl: './auto-trans-setting-box.component.html',
@@ -17,7 +21,8 @@ export class AutoTransSettingBoxComponent implements OnInit {
     @Output() OnAutoTransmitChange = new EventEmitter<boolean>()
     @Output() OnAutoTransmitDayChange = new EventEmitter<string>()
     @Output() OnAutoTransmitTimeChange = new EventEmitter<string>()
-    constructor() {}
+
+    constructor(public inputhelperService: InputHelperService) {}
     ngOnInit(): void {}
 
     public checkBoxText = {
@@ -27,5 +32,20 @@ export class AutoTransSettingBoxComponent implements OnInit {
     onCheckBoxClick() {
         this.autoTransmit = !this.autoTransmit
         this.OnAutoTransmitChange.emit(this.autoTransmit)
+    }
+
+    // autoTransmitDay method
+    updateAutoTransmitDayKeyUp(event) {
+        if (event.code == 'Enter' || _.includes(event.code, 'Arrow')) return
+        this.autoTransmitDay.replace(/[^0-9]/gi, '')
+    }
+    updateAutoTransmitDay() {
+        this.OnAutoTransmitDayChange.emit(this.autoTransmitDay)
+    }
+
+    // autoTransmitTime method
+    onAutoTransmitTimeClick(v: { key: string; name: string }) {
+        this.autoTransmitTime = v.key
+        this.OnAutoTransmitTimeChange.emit(this.autoTransmitTime)
     }
 }

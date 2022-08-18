@@ -43,6 +43,7 @@ export class TimePicker2Component implements OnInit, AfterViewInit, OnChanges {
     @Input() endTime: string // 00:00:00
     @Input() disableTimeUntil: string // 00:00:00
     @Input() textAlign: string
+    @Input() disabled = false
 
     @Output() onTimeClick = new EventEmitter<Pick<Time, 'key' | 'name'>>()
 

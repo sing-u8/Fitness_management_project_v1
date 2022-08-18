@@ -11,6 +11,10 @@
         background-color: var(--white);
         cursor: pointer;
 
+        &.disable {
+            cursor: not-allowed;
+        }
+
         .text {
             font-weight: 500;
             overflow: hidden;

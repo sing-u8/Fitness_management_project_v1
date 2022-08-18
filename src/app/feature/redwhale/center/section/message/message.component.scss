@@ -264,9 +264,45 @@
                 }
             }
 
+          .l-message__ticket {
+            display: flex;
+            flex-direction: column;
+            &:first-of-type {
+              margin-right: 85px;
+            }
+            p {
+              text-align: start;
+              margin-bottom: 15px;
+            }
+            .message__ticket {
+              display: flex;
+              msg-text-field {
+                margin-right: 15px;
+              }
+            }
+          }
+
         }
         .l-message-history {
             margin-top: 16px;
+            display: flex;
+            flex-direction: column;
+            .message-history__header {
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              margin-bottom: 5px; // 15px
+              .message-history__header-left {
+                display: flex;
+                align-items: baseline;
+                span {
+                  &:first-of-type{
+                    margin-right: 6px;
+                  }
+                }
+              }
+            }
+
         }
     }
 }

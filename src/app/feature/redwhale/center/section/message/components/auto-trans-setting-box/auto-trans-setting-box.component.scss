@@ -29,19 +29,46 @@
     width: 100%;
     height: 1px;
     border: 1px solid var(--border-color);
+    margin: 23px 0;
   }
 
   .auto-trans-time {
     padding: 0 5px;
+    width: 100%;
     display: flex;
     flex-direction: column;
+    &.disabled {
+      opacity: 0.5;
+    }
     p{
       &:nth-child(2) {
         margin-bottom: 5px;
       }
     }
     .time-inputs {
-
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      .l-input {
+        height: 48px;
+        width: 85px;
+        position: relative;
+        input {
+          text-align: end;
+          width: 100% !important;
+          height: 100% !important;
+          padding: 14.5px 48px 14px 10px !important;
+          &:disabled {
+            color: var(--font-color) !important;
+            background-color: var(--white) !important;
+          }
+        }
+        span {
+          right: 16px;
+          top: 13.5px;
+          position: absolute;
+        }
+      }
     }
   }
 

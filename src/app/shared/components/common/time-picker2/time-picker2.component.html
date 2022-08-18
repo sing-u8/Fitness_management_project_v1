@@ -1,9 +1,10 @@
 <div class="rw-timepicker2 user-select-none" #selectElement>
     <div
         class="selected rw-typo-bodytext1 d-flex justify-content-center align-items-center"
+        [class.disable] = "disabled"
         [class.open]="isOpen"
         #selectedElement
-        (click)="toggle()"
+        (click)="!disabled && toggle()"
         (rwClickOutside)="close();initSelectedTime()"
     >
         <span #timeTextElement class="text flex-fill">{{selectedTime.name}}</span>

@@ -1382,7 +1382,16 @@ gridster-item {
     height: $line-height * $line-cnt;
     /* line-height 가 1.2em 이고 3라인을 자르기 때문에 height는 1.2em * 3 = 3.6em */
 }
-
+.line-ellipsis-one {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    word-wrap: break-word;
+    white-space: nowrap;
+    // line-break: anywhere;
+}
 .line-ellipsis {
     text-overflow: ellipsis;
     overflow: hidden;

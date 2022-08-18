@@ -8,16 +8,28 @@
     ></rw-checkbox>
   </div>
   <div class="bar"></div>
-  <div class="auto-trans-time">
+  <div class="auto-trans-time" [class.disabled]="!autoTransmit">
     <p class="title">자동 전송 시점</p>
     <p class="rw-typo-bodytext0">{{autoTransmitTextObj.transType}} 만기일로부터</p>
     <div class="time-inputs">
-      <input>
+      <div class="l-input">
+        <input
+          class="rw-input"
+          [(ngModel)]="autoTransmitDay"
+          (beforeinput)="inputhelperService.restrictToNumber($event)"
+          (keyup)="updateAutoTransmitDayKeyUp($event)"
+          (keyup.enter)="updateAutoTransmitDay()"
+          (rwClickOutside)="updateAutoTransmitDay()"
+          [disabled]="!autoTransmit"
+        >
+        <span class="rw-typo-bodytext0">일 전</span>
+      </div>
       <rw-time-picker2
-        [time]=""
+        [disabled]="!autoTransmit"
+        [time]="autoTransmitTime"
         [width]="'129'"
         [textAlign]="'start'"
-        (onTimeClick)="false"
+        (onTimeClick)="onAutoTransmitTimeClick($event)"
       ></rw-time-picker2>
     </div>
   </div>
