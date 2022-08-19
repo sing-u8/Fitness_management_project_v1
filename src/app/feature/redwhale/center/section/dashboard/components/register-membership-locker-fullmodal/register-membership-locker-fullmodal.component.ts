@@ -180,14 +180,17 @@ export class RegisterMembershipLockerFullmodalComponent implements OnInit, OnCha
                         },
                     })
                 )
+                this.inputSignData = undefined
             }
         }
     }
 
     // contract sign box vars and methods
+    public inputSignData = undefined
     public signData: string = undefined
     onContractSign(signData: string) {
         this.signData = signData
+        this.inputSignData = signData
     }
 
     // ml list method

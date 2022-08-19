@@ -29,34 +29,34 @@
                                 <rw-avatar
                                     size="83"
                                     fontSize="16"
-                                    [image]="curUser?.center_user_picture"
+                                    [image]="curContract?.user_picture"
                                     [backgroundColor]="curUser?.color"
-                                    [text]="curUser?.center_user_name"
+                                    [text]="curContract?.user_name"
                                 ></rw-avatar>
-                                <p class="rw-typo-title1 ">{{curUser?.center_user_name}}</p>
+                                <p class="rw-typo-title1 ">{{curContract?.user_name}}</p>
                             </div>
                             <div class="user-basic-info">
                                 <div class="l-info">
                                     <div class="title">회원번호</div>
-                                    <div class="content">{{ curUser?.membership_number }}</div>
+                                    <div class="content">{{ curContract?.user_membership_number}}</div>
                                 </div>
                                 <div class="l-info">
                                     <div class="title">이메일</div>
-                                    <div class="content">{{ curUser?.email }}</div>
+                                    <div class="content">{{ curContract?.user_email }}</div>
                                 </div>
                                 <div class="l-info">
                                     <div class="title">전화번호</div>
                                     <div class="content">
-                                        {{ curUser?.phone_number | phoneNumber }}
+                                        {{ curContract?.user_phone_number | phoneNumber }}
                                     </div>
                                 </div>
                                 <div class="l-info">
                                     <div class="title">생년월일</div>
                                     <div class="content">
                                         <span>
-                                            {{ (curUser?.birth_date | dashToDot) ?? '-' }}
-                                            ({{(curUser?.birth_date | birthDate: '세') ?? '-세'}},
-                                            {{curUser?.sex == 'male' ? '남성' : curUser?.sex == 'female' ? '여성' : '-'}})
+                                            {{ (curContract?.user_birth_date | dashToDot) ?? '-' }}
+                                            ({{(curContract?.user_birth_date | birthDate: '세') ?? '-세'}},
+                                            {{curContract?.user_sex == 'male' ? '남성' : curContract?.user_sex == 'female' ? '여성' : '-'}})
                                         </span>
                                     </div>
                                 </div>
@@ -130,7 +130,7 @@
                             [signedUrl]="curContract?.user_sign"
                             [contractDate]="today"
                             [type]="'r'"
-                            [contractorName]="curUser?.center_user_name"
+                            [contractorName]="curContract?.user_name"
                         ></db-contract-sign-box>
                     </div>
 

@@ -9,6 +9,7 @@ import { SignatureConfirmOutput } from '@shared/components/common/signature-pad-
     styleUrls: ['./contract-sign-box.component.scss'],
 })
 export class ContractSignBoxComponent implements OnInit {
+    @Input() signData: string = undefined
     @Input() contractDate: string
     @Input() contractorName: string
 
@@ -22,7 +23,6 @@ export class ContractSignBoxComponent implements OnInit {
     ngOnInit(): void {}
 
     // signature pad vars and methods
-    public signData: string = undefined
     public isSignaturePadVisible = false
     openSignaturePad() {
         if (this.type == 'r') return
