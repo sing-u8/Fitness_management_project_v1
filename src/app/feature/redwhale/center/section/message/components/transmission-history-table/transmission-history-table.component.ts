@@ -32,4 +32,12 @@ export class TransmissionHistoryTableComponent implements OnInit, AfterViewInit,
             this.contentWidth = (410 / 1745) * (this.historyTableEl.nativeElement.offsetWidth - 45)
         }
     }
+
+    public showHistoryDetailModal = false
+    public openHistoryDetailModal(hd?: any) {
+        this.showHistoryDetailModal = true
+    }
+    public closeHistoryDetailModal() {
+        this.showHistoryDetailModal = false
+    }
 }

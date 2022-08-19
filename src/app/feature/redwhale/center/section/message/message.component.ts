@@ -106,4 +106,14 @@ export class MessageComponent implements OnInit {
     public lockerTransmitTime = '10:00:00'
 
     // message route : history
+    public selectedDate: [string, string] = [
+        dayjs().subtract(3, 'month').format('YYYY-MM-DD'),
+        dayjs().format('YYYY-MM-DD'),
+    ]
+    // onDateSeleted(date: [string, string]) {
+    //     // this.nxStore.dispatch(SaleActions.setSelectedDate({ selectedDate: date }))
+    //     this.selectedDate = date
+    //     this.getSaleTableWrpper(this.selectedDate, this.tableOption)
+    //     this.nxStore.dispatch(showToast({ text: '매출 조회 기간이 변경되었습니다.' }))
+    // }
 }

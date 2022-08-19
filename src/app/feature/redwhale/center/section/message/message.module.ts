@@ -15,7 +15,10 @@ import { MemberListComponent } from './components/member-list/member-list.compon
 import { TextFieldComponent } from './components/text-field/text-field.component'
 import { AutoTransSettingBoxComponent } from './components/auto-trans-setting-box/auto-trans-setting-box.component'
 import { MemberListCardComponent } from './components/member-list-card/member-list-card.component'
-import { TransmissionHistoryTableComponent } from './components/transmission-history-table/transmission-history-table.component'
+import { TransmissionHistoryTableComponent } from './components/transmission-history-table/transmission-history-table.component';
+import { TransmissionHistoryDateSelectorComponent } from './components/transmission-history-date-selector/transmission-history-date-selector.component';
+import { HistoryDatePipe } from './pipes/history-date.pipe';
+import { TransmissionHistoryDetailModalComponent } from './components/transmission-history-detail-modal/transmission-history-detail-modal.component'
 
 @NgModule({
     declarations: [
@@ -26,6 +29,9 @@ import { TransmissionHistoryTableComponent } from './components/transmission-his
         AutoTransSettingBoxComponent,
         MemberListCardComponent,
         TransmissionHistoryTableComponent,
+        TransmissionHistoryDateSelectorComponent,
+        HistoryDatePipe,
+        TransmissionHistoryDetailModalComponent,
     ],
     imports: [
         MessageRoutingModule,

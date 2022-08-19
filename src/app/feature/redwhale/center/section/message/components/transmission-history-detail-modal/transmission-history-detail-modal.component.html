@@ -1,0 +1,58 @@
+<div class="rw-modal-background" #modalBackgroundElement></div>
+<div
+	class="rw-modal-wrapper justify-content-center align-items-center"
+	(mouseup)="!isMouseModalDown && !blockClickOutside && onClose()"
+	(mousedown) = 'resetMouseModalDown()'
+	#modalWrapperElement
+>
+	<div
+		class="rw-modal user-select-none"
+		[class.ready-for-transmission]="false"
+		(mousedown) ='onMouseModalDown(); $event.stopPropagation()'
+	>
+		<div class="header">
+			<span class="rw-typo-bodytext0-bold">{{'22.08.01 00:25:14'}} | 상세 내역</span>
+			<div class="close-icon" (click)="onClose()"></div>
+		</div>
+		<div class="body">
+			<div class="l-message">
+				<textarea
+					[readonly]="true"
+					class="rw-textarea rw-typo-bodytext0 thin-scroll-y"
+				>문자 내용</textarea>
+				<span class="byte">{{'5 / 90 byte'}}</span>
+			</div>
+
+			<ng-container *ngIf="true">
+				<div class="l-transmission-fail">
+					<div class="transmission-header">
+						<span class="rw-typo-bodytext0-bold">전송 실패</span>
+						<span class="rw-typo-bodytext0-bold fail">{{'2'}}건</span>
+					</div>
+					<div class="transmission-body thin-scroll-y-overlay2">
+					</div>
+				</div>
+				<div class="l-transmission-success">
+					<div class="transmission-header">
+						<span class="rw-typo-bodytext0-bold">전송 성공</span>
+						<span class="rw-typo-bodytext0-bold success">{{'2'}}건</span>
+					</div>
+					<div class="transmission-body thin-scroll-y-overlay2">
+					</div>
+				</div>
+			</ng-container>
+
+			<ng-container *ngIf="false">
+				<div class="l-transmission-ready">
+					<div class="transmission-header">
+						<span class="rw-typo-bodytext0-bold">전송 대기</span>
+						<span class="rw-typo-bodytext0-bold success">{{'2'}}건</span>
+					</div>
+					<div class="transmission-body thin-scroll-y-overlay2">
+					</div>
+				</div>
+			</ng-container>
+
+		</div>
+	</div>
+</div>

@@ -1,0 +1,107 @@
+* {
+	padding: 0;
+	margin: 0;
+	text-align: initial;
+}
+
+div.transmission-history-date-selector {
+	position: relative;
+	display: inline-flex;
+	width: 222px;
+	height: 42px;
+
+	& > .selected {
+		height: 100%;
+		width: 100%;
+		padding: 15px;
+		border: 1px solid var(--border-color);
+		border-radius: 5px;
+		background-color: transparent;
+		cursor: pointer;
+
+		.text {
+			font-weight: 500;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
+
+		.mdi {
+			transform: rotateX(0deg);
+			transition: transform 0.2s linear;
+			-moz-transition: transform 0.2s linear;
+			-webkit-transition: transform 0.2s linear;
+			-o-transition: transform 0.2s linear;
+			font-size: 2.2rem;
+			color: var(--font-color);
+		}
+	}
+
+	.open {
+		border: 1px solid var(--border-color);
+		background-color: var(--white);
+
+		.mdi {
+			transform: rotateX(180deg);
+			transition: transform 0.2s linear;
+			-moz-transition: transform 0.2s linear;
+			-webkit-transition: transform 0.2s linear;
+			-o-transition: transform 0.2s linear;
+		}
+	}
+
+	.drop-down-container {
+		z-index: 1;
+		position: absolute;
+		top: 46px;
+		right: 0;
+		width: 263px;
+		min-height: 276px;
+		background-color: var(--white);
+		border-radius: 5px;
+		box-shadow: 0 0 10px 0 rgba(181, 181, 181, 0.15);
+		border: solid 1px #f1f1f1;
+
+		.date-picker {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+
+			db-datepicker {
+				margin: 15px 4px 7px;
+			}
+
+			.date-picker-bottom {
+				width: 235px;
+				height: 50px;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				border-top: 1px solid var(--border-color);
+				background-color: var(--white);
+				border-radius: 0 0 5px 5px;
+				padding: 0 0;
+
+				& .guide-text {
+					color: var(--darkgrey);
+				}
+				& .date-viewer {
+					width: 100%;
+					display: flex;
+					justify-content: space-between;
+					margin: 7px 0;
+
+					& .date-text {
+						display: flex;
+						align-items: center;
+					}
+					& .date-none {
+						font-weight: 400;
+						color: var(--lightgrey);
+					}
+				}
+			}
+		}
+	}
+}

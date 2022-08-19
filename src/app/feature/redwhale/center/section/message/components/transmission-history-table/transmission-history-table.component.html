@@ -14,15 +14,15 @@
 		</tr>
 	</thead>
 	<tbody>
-		<tr>
+		<tr (click)="openHistoryDetailModal()">
 			<td></td>
 			<td>22.08.11  00:25:14</td>
 			<td>전송 대기</td>
 			<td>단문</td>
 			<td [style.maxWidth.px]="contentWidth">
-				<span class="line-ellipsis-one">
+				<div class="line-ellipsis-one">
 					[더요가 필라테스 부산 본점] 안녕하세요? 더요가 필라테스입니다. 이번주 레슨 일정을 알려드릴려고 이렇게 연락을 드립니다.
-				</span>
+				</div>
 			</td>
 			<td>91</td>
 			<td>100</td>
@@ -39,9 +39,9 @@
 			<td>전송 대기</td>
 			<td>단문</td>
 			<td [style.maxWidth.px]="contentWidth">
-				<span class="line-ellipsis-one">
+				<div class="line-ellipsis-one">
 					[더요가 필라테스 부산 본점] 안녕하세요? 더요가 필라테스
-				</span>
+				</div>
 			</td>
 			<td>91</td>
 			<td>100</td>
@@ -54,3 +54,8 @@
 		</tr>
 	</tbody>
 </table>
+
+<msg-transmission-history-detail-modal
+	[(visible)]="showHistoryDetailModal"
+	(close)="closeHistoryDetailModal()"
+></msg-transmission-history-detail-modal>
