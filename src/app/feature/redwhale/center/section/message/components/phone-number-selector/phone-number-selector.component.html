@@ -1,0 +1,34 @@
+<div class="msg-phone-number-selector user-select-none" #selectElement>
+	<div
+		class="selected rw-typo-bodytext1"
+		[class.open]="isOpen"
+		[class.disabled]="disabled !== false"
+		#selectedElement
+		(click)="toggle()"
+		(rwClickOutside)="close()"
+	>
+		<div class="d-flex align-items-center">
+			<span class="text">{{ value?.number }}</span>
+			<div class="verification-icon" [class.verified]="value?.verified">{{value?.verified ? '인증' : '미인증' }}</div>
+		</div>
+		<span class="mdi mdi-chevron-down"></span>
+	</div>
+
+	<div
+		class="items select-scroll-y"
+		[class.drop-up] = "dropUp"
+		#itemsElement
+		(click)="$event.stopPropagation()"
+	>
+		<div
+			class="item d-flex align-items-center"
+			*ngFor="let item of items"
+			[class.active]="item.value.id == value?.value?.id"
+			(click)="onSelect(item)"
+		>
+			<span class="rw-typo-bodytext0">{{ item.number }}</span>
+			<div class="verification-icon" [class.verified]="item.verified">{{item.verified ? '인증' : '미인증' }}</div>
+		</div>
+	</div>
+
+</div>
