@@ -10,11 +10,12 @@ import { SMSCaller } from '@schemas/sms-caller'
 import { SMSPoint } from '@schemas/sms-point'
 import { SMSHistoryGroup } from '@schemas/sms-history-group'
 import { SMSHistory } from '@schemas/sms-history'
+import { SMSAutoSend } from '@schemas/sms-auto-send'
 
 @Injectable({
     providedIn: 'root',
 })
-export class CenterUsersService {
+export class CenterSMSService {
     private SERVER = `${environment.protocol}${environment.subDomain}${environment.domain}${environment.port}${environment.version}/center`
     private options = {
         headers: new HttpHeaders({
@@ -25,6 +26,7 @@ export class CenterUsersService {
     constructor(private http: HttpClient) {}
 
     /**
+     * 포인트 조회
      * @param centerId
      * @returns
      */
@@ -40,6 +42,7 @@ export class CenterUsersService {
     }
 
     /**
+     * 포인트 수정
      * for test
      * @param centerId
      * @param reqBody
@@ -56,6 +59,7 @@ export class CenterUsersService {
     }
 
     /**
+     * 발신 조회
      * @param centerId
      */
     getSMSCallerId(centerId: string): Observable<Array<SMSCaller>> {
@@ -70,6 +74,7 @@ export class CenterUsersService {
     }
 
     /**
+     * 발신번호 등록
      * for test
      * @param centerId
      * @param reqBody
@@ -86,6 +91,7 @@ export class CenterUsersService {
     }
 
     /**
+     * 문자 전송
      * @param centerId
      * @param reqBody
      */
@@ -101,6 +107,7 @@ export class CenterUsersService {
     }
 
     /**
+     * 문자 전송 내역 그룹 조회
      * @param centerId
      * @param page
      * @param pageSize
@@ -121,6 +128,7 @@ export class CenterUsersService {
     }
 
     /**
+     * 문자 전송 내역 조회
      * @param centerId
      * @param historyGroupId
      * @param page
@@ -145,6 +153,48 @@ export class CenterUsersService {
             catchError(handleError)
         )
     }
+
+    updateMembershipAutoSend(centerId: string, reqBody: UpdateMLAutoSend): Observable<Response> {
+        const url = this.SERVER + `/${centerId}/sms/auto_send/membership_to_expire`
+
+        return this.http.put<Response>(url, reqBody, this.options).pipe(
+            map((res) => {
+                return res.dataset[0]
+            }),
+            catchError(handleError)
+        )
+    }
+    getMembershipAutoSend(centerId: string): Observable<SMSAutoSend> {
+        const url = this.SERVER + `/${centerId}/sms/auto_send/membership_to_expire`
+
+        return this.http.get<Response>(url, this.options).pipe(
+            map((res) => {
+                return res.dataset[0]
+            }),
+            catchError(handleError)
+        )
+    }
+
+    updateLockerAutoSend(centerId: string, reqBody: UpdateMLAutoSend): Observable<Response> {
+        const url = this.SERVER + `/${centerId}/sms/auto_send/membership_to_expire`
+
+        return this.http.put<Response>(url, reqBody, this.options).pipe(
+            map((res) => {
+                return res.dataset[0]
+            }),
+            catchError(handleError)
+        )
+    }
+    getLockerAutoSend(centerId: string): Observable<SMSAutoSend> {
+        const url = this.SERVER + `/${centerId}/sms/auto_send/membership_to_expire`
+
+        return this.http.get<Response>(url, this.options).pipe(
+            map((res) => {
+                return res.dataset[0]
+            }),
+            catchError(handleError)
+        )
+    }
 }
 
 export interface UpdateSMSPointReqBody {
@@ -159,4 +209,11 @@ export interface SendSMSMessageReqBody {
     reservation_datetime: string
     text: string
     receiver_user_ids: string[]
+}
+export interface UpdateMLAutoSend {
+    phone_number: string
+    text: string
+    auto_send_yn: boolean
+    days: number
+    time: string
 }

@@ -2,7 +2,7 @@
     <header class="header">
         <div class="header-text">
             <span class="title rw-typo-headline1">문자</span>
-            <span class="title-desc rw-typo-subtext1">남은 포인트 : {{'1,000p'}} (단문 {{'00'}}건 / 장문 {{'00'}}건)</span>
+            <span class="title-desc rw-typo-subtext1">남은 포인트 : {{smsPoint$ | async}}p (단문 {{'00'}}건 / 장문 {{'00'}}건)</span>
             <div class="help-icon">
                 <div class="help">
                     <div class="help-text-container">
@@ -40,15 +40,15 @@
             </div>
         </div>
         <div class="l-message-route d-flex align-items-center">
-            <div class="message-route rw-typo-title1" [class.selected] = "messageRoute == 'general'" (click)="setMessageRoute('general')">
+            <div class="message-route rw-typo-title1" [class.selected] = "smsType == 'general'" (click)="setSMSType('general')">
                 일반 전송
                 <div class="under-bar"></div>
             </div>
-            <div class="message-route rw-typo-title1" [class.selected] = "messageRoute == 'auto-transmission'" (click)="setMessageRoute('auto-transmission')">
+            <div class="message-route rw-typo-title1" [class.selected] = "smsType == 'auto-transmission'" (click)="setSMSType('auto-transmission')">
                 자동 전송
                 <div class="under-bar"></div>
             </div>
-            <div class="message-route  rw-typo-title1" [class.selected] = "messageRoute == 'history'" (click)="setMessageRoute('history')">
+            <div class="message-route  rw-typo-title1" [class.selected] = "smsType == 'history'" (click)="setSMSType('history')">
                 전송 내역
                 <div class="under-bar"></div>
             </div>
@@ -56,7 +56,7 @@
     </header>
 
     <article class="content-container thin-scroll-y">
-        <div *ngIf="messageRoute == 'general'" class="l-message">
+        <div *ngIf="smsType == 'general'" class="l-message">
             <msg-member-list
                 [usersLists]="usersLists$ | async"
                 [usersSelectCateg]="usersSelectCateg$ | async"
@@ -133,7 +133,7 @@
             </div>
         </div>
 
-        <div *ngIf="messageRoute == 'auto-transmission'" class="l-message">
+        <div *ngIf="smsType == 'auto-transmission'" class="l-message">
             <div class="l-message__ticket">
                 <p class="rw-typo-title1">회원권 만기 문자</p>
                 <div class="message__ticket">
@@ -161,7 +161,7 @@
             </div>
         </div>
 
-        <div *ngIf="messageRoute == 'history'" class="l-message-history">
+        <div *ngIf="smsType == 'history'" class="l-message-history">
             <div class="message-history__header">
                 <div class="message-history__header-left">
                     <span class="rw-typo-title1">전송 내역</span>

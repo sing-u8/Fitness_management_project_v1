@@ -18,6 +18,7 @@ import { CenterUsersMembershipService } from '@services/center-users-membership.
 import { CenterService } from '@services/center.service'
 import { CenterHoldingService } from '@services/center-holding.service'
 import { CenterContractService } from '@services/center-users-contract.service'
+import { CenterSMSService } from '@services/center-sms.service'
 
 @Injectable()
 export class SMSEffect {
@@ -25,6 +26,7 @@ export class SMSEffect {
         private centerUsersApi: CenterUsersService,
         private store: Store,
         private actions$: Actions,
+        private centerSMSApi: CenterSMSService,
         private centerUsersLockerApi: CenterUsersLockerService,
         private centerUsersMembershipApi: CenterUsersMembershipService,
         private centerService: CenterService,
@@ -90,6 +92,24 @@ export class SMSEffect {
                             categ_type: categ_type,
                             userListValue,
                         })
+                    }),
+                    catchError((err: string) => of(SMSActions.error({ error: err })))
+                )
+            )
+        )
+    )
+
+    getSMSPoint$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(SMSActions.startGetSMSPoint),
+            switchMap(({ centerId }) =>
+                this.centerSMSApi.getSMSPoint(centerId).pipe(
+                    switchMap((v) => {
+                        return [
+                            SMSActions.finishGetSMSPoint({
+                                smsPoint: v.sms_point,
+                            }),
+                        ]
                     }),
                     catchError((err: string) => of(SMSActions.error({ error: err })))
                 )

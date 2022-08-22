@@ -12,7 +12,7 @@ import { StorageService } from '@services/storage.service'
 
 // rxjs
 import { Subject } from 'rxjs'
-import { take } from 'rxjs/operators'
+import { take, takeUntil } from 'rxjs/operators'
 
 // ngrx
 import { Store, select } from '@ngrx/store'
@@ -21,8 +21,7 @@ import { showToast } from '@appStore/actions/toast.action'
 import * as FromSMS from '@centerStore/reducers/sec.sms.reducer'
 import * as SMSSelector from '@centerStore/selectors/sec.sms.selector'
 import * as SMSActions from '@centerStore/actions/sec.sms.actions'
-
-type MessageRoute = 'general' | 'auto-transmission' | 'history'
+import { SMSTypeInit } from '@centerStore/reducers/sec.sms.reducer'
 
 @Component({
     selector: 'rw-message',
@@ -30,10 +29,25 @@ type MessageRoute = 'general' | 'auto-transmission' | 'history'
     styleUrls: ['./message.component.scss'],
 })
 export class MessageComponent implements OnInit, OnDestroy {
-    public messageRoute: MessageRoute = 'general'
-    setMessageRoute(mr: MessageRoute) {
-        this.messageRoute = mr
+    public center: Center
+
+    public selectedNumber = 0
+
+    public userSearchInput: FormControl
+    public usersSelectCateg$ = this.nxStore.select(SMSSelector.usersSelectCategs)
+    public usersLists$ = this.nxStore.select(SMSSelector.usersLists)
+    public searchedUsersLists$ = this.nxStore.select(SMSSelector.searchedUsersLists)
+    public selectedUserList$ = this.nxStore.select(SMSSelector.curUserListSelect)
+    public isLoading$ = this.nxStore.select(SMSSelector.isLoading)
+    public selectedUserListsHolding$ = this.nxStore.select(SMSSelector.selectedUserListsHolding)
+    public selectSMSType$ = this.nxStore.select(SMSSelector.smsType)
+    public smsType: FromSMS.SMSType = FromSMS.SMSTypeInit
+    setSMSType(st: FromSMS.SMSType) {
+        this.nxStore.dispatch(SMSActions.setSMSType({ smsType: st }))
     }
+    public smsPoint$ = this.nxStore.select(SMSSelector.smsPoint)
+
+    public unsubscribe$ = new Subject<boolean>()
 
     constructor(private nxStore: Store, private storageService: StorageService, private fb: FormBuilder) {}
 
@@ -46,28 +60,17 @@ export class MessageComponent implements OnInit, OnDestroy {
                 this.nxStore.dispatch(SMSActions.startLoadMemberList({ centerId: this.center.id }))
             }
         })
-        console.log('ngOnInit in message')
+        this.nxStore.dispatch(SMSActions.startGetSMSPoint({ centerId: this.center.id }))
         this.nxStore.dispatch(SMSActions.startGetUsersByCategory({ centerId: this.center.id }))
         this.nxStore.dispatch(SMSActions.setCurCenterId({ centerId: this.center.id }))
+        this.selectSMSType$.pipe(takeUntil(this.unsubscribe$)).subscribe((smsType) => {
+            this.smsType = smsType
+        })
     }
     ngOnDestroy() {
         this.unsubscribe$.next(true)
         this.unsubscribe$.complete()
     }
-
-    public center: Center
-
-    public selectedNumber = 0
-
-    public userSearchInput: FormControl
-    public usersSelectCateg$ = this.nxStore.select(SMSSelector.usersSelectCategs)
-    public usersLists$ = this.nxStore.select(SMSSelector.usersLists)
-    public searchedUsersLists$ = this.nxStore.select(SMSSelector.searchedUsersLists)
-    public selectedUserList$ = this.nxStore.select(SMSSelector.curUserListSelect)
-    public isLoading$ = this.nxStore.select(SMSSelector.isLoading)
-    public selectedUserListsHolding$ = this.nxStore.select(SMSSelector.selectedUserListsHolding)
-
-    public unsubscribe$ = new Subject<boolean>()
 
     // message route : general
     public generalTransmissionTime = {

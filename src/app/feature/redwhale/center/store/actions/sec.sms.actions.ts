@@ -5,6 +5,7 @@ import {
     UserListSelect,
     UsersLists,
     UsersListValue,
+    SMSType,
 } from '../reducers/sec.sms.reducer'
 
 const FeatureKey = 'Center/SMS'
@@ -37,7 +38,12 @@ export const finishGetUserList = createAction(
     props<{ centerId: string; categ_type: MemberSelectCateg; userListValue: UsersListValue }>()
 )
 
+export const startGetSMSPoint = createAction(`[${FeatureKey}] Strat Get SMS Point`, props<{ centerId: string }>())
+export const finishGetSMSPoint = createAction(`[${FeatureKey}] Finish Get SMS Point`, props<{ smsPoint: number }>())
+
 // sync
+export const setSMSType = createAction(`[${FeatureKey}] Set SMS Type`, props<{ smsType: SMSType }>())
+
 // userListSelect
 export const setUserListSelect = createAction(
     `[${FeatureKey}] Set UserList Select`,

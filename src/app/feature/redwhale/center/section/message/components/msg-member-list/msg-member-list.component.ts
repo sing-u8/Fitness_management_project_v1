@@ -90,6 +90,7 @@ export class MsgMemberListComponent implements OnInit, OnDestroy {
 
     // -------------------------------------- selectedUserList method --------------------------------------
     onSelectedUserListChange(type: string) {
+        this.selectAll = false
         this.nxStore.dispatch(
             SMSActions.startGetUserList({
                 centerId: this.center.id,

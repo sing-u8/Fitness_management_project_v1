@@ -7,6 +7,7 @@ import { SMSCaller } from '@schemas/sms-caller'
 import { SMSPoint } from '@schemas/sms-point'
 import { SMSHistory } from '@schemas/sms-history'
 import { SMSHistoryGroup } from '@schemas/sms-history-group'
+import { SMSAutoSend } from '@schemas/sms-auto-send'
 import { Loading } from '@schemas/store/loading'
 import { CenterUser } from '@schemas/center-user'
 import { CenterUsersCategory } from '@schemas/center/community/center-users-by-category'
@@ -18,18 +19,31 @@ export type UsersListValue = Array<{ user: CenterUser; selected: boolean }>
 export type UsersSelectCateg = Record<MemberSelectCateg, { name: string; userSize: number }>
 export type UserListSelect = { key: MemberSelectCateg; value: { name: string; userSize: number } }
 export type UsersLists = Record<MemberSelectCateg, UsersListValue>
+export type SMSType = 'general' | 'auto-transmission' | 'history'
+export type CurHistoryData = {
+    isLoading: Loading
+    data: SMSHistory
+}
 
 export interface State {
     // common
     curCenterId: string
     isLoading: Loading
     curSearchInput: string
+    smsType: SMSType
+    smsPoint: number
     error: string
-
     // main
+    // general
     usersSelectCategs: UsersSelectCateg
     usersLists: UsersLists
     curUserListSelect: UserListSelect
+    // auto transmission
+    lockerAutoSendSetting: SMSAutoSend
+    membershipAutoSendSetting: SMSAutoSend
+    // history
+    smsHistoryGroupList: Array<SMSHistoryGroup>
+    curHistoryData: CurHistoryData
 }
 
 export const UsersSelectCategInit: UsersSelectCateg = {
@@ -55,17 +69,39 @@ export const UsersListInit: UsersLists = {
     employee: [],
 }
 export const CurSearchInputInit = ''
+export const SMSTypeInit: SMSType = 'general'
+export const SMSAutoSendInit: SMSAutoSend = {
+    phone_number: '',
+    text: '',
+    auto_send_yn: false,
+    days: 7,
+    time: '10:00:00',
+}
+export const SMSHistoryGroupListInit = []
+export const CurHistoryDataInit: CurHistoryData = {
+    isLoading: 'idle',
+    data: undefined,
+}
 
 export const initialState: State = {
-    // main
+    // common
     curCenterId: undefined,
     isLoading: 'idle',
     curSearchInput: CurSearchInputInit,
+    smsType: 'general',
+    smsPoint: 0,
     error: '',
     // main
+    // general
     usersSelectCategs: UsersSelectCategInit,
     usersLists: UsersListInit,
     curUserListSelect: UserListSelectInit,
+    // auto transmission
+    lockerAutoSendSetting: SMSAutoSendInit,
+    membershipAutoSendSetting: SMSAutoSendInit,
+    // history
+    smsHistoryGroupList: SMSHistoryGroupListInit,
+    curHistoryData: CurHistoryDataInit,
 }
 
 export const smsReducer = createImmerReducer(
@@ -102,8 +138,16 @@ export const smsReducer = createImmerReducer(
         state.isLoading = 'done'
         return state
     }),
+    on(SMSActions.finishGetSMSPoint, (state, { smsPoint }) => {
+        state.smsPoint = smsPoint
+        return state
+    }),
 
     // sync
+    on(SMSActions.setSMSType, (state, { smsType }) => {
+        state.smsType = smsType
+        return state
+    }),
     on(SMSActions.setUserSearchInput, (state, { searchInput }) => {
         state.curSearchInput = searchInput
         return state
@@ -133,6 +177,24 @@ export const smsReducer = createImmerReducer(
         })
 
         return state
+    }),
+    // - //curCenterId
+    on(SMSActions.setCurCenterId, (state, { centerId }) => {
+        state.curCenterId = centerId
+        return state
+    }),
+    on(SMSActions.resetCurCenterId, (state) => {
+        state.curCenterId = undefined
+        return state
+    }),
+    // common
+    on(SMSActions.error, (state, { error }) => {
+        state.error = error
+        return state
+    }),
+    on(SMSActions.resetAll, (state) => {
+        state = initialState // { ...state, ...initialState }
+        return state
     })
 )
 
@@ -141,8 +203,10 @@ export const selectCurCenterId = (state: State) => state.curCenterId
 export const selectIsLoading = (state: State) => state.isLoading
 export const selectError = (state: State) => state.error
 export const selectSearchInput = (state: State) => state.curSearchInput
+export const selectSMSPoint = (state: State) => state.smsPoint
 
 // main
+export const selectSMSType = (state: State) => state.smsType
 export const selectUsersSelectCategs = (state: State) => state.usersSelectCategs
 export const selectUsersLists = (state: State) => state.usersLists
 export const selectCurUserListSelect = (state: State) => state.curUserListSelect
