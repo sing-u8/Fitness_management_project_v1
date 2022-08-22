@@ -45,7 +45,7 @@
           </div>
           <div *ngIf="cardItem.user.total_unpaid != 0" class="tooltip-text">
             <img src="assets/icons/etc/unpaid_amount_white.svg">
-            <span class="tooltip-pay">{{cardItem.user.total_unpaid | numberWithCommas}}</span>
+            <p class="tooltip-pay">{{cardItem.user.total_unpaid | numberWithCommas}}원 미수</p>
           </div>
         </div>
       </div>

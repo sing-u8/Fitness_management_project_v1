@@ -40,12 +40,12 @@
           0원
         </p>
       </div>
-      <div *ngIf="!(curTotal == 0 )" class="summary-desc">
+      <div *ngIf="!(curTotal <= 0 || prevTotal <= 0)" class="summary-desc">
         <!-- <p *ngIf="curTotal == 0" class="rw-typo-bodytext2-regular">매출을 입력해주세요.</p> -->
-        <p *ngIf="curTotal != 0" class="rw-typo-bodytext2">
+        <p class="rw-typo-bodytext2">
           {{summaryDescText}}
           <span *ngIf="curTotal - prevTotal > 0" class="plus">{{curTotal | rateOfChange:prevTotal}} 증가</span>
-          <span *ngIf="curTotal != 0 && curTotal - prevTotal < 0" class="minus">{{curTotal | rateOfChange:prevTotal}} 감소</span>
+          <span *ngIf="curTotal - prevTotal < 0" class="minus">{{curTotal | rateOfChange:prevTotal}} 감소</span>
           <span>했어요.</span>
         </p>
       </div>
@@ -62,7 +62,7 @@
         </div>
         <div class="rw-typo-bodytext0 d-flex">
           <div
-
+            *ngIf="!(v.value <= 0 || SaleSummary.prev[v.key] <= 0)"
             class="rw-typo-subtext3 change-ratio"
             [class.plus] = "v.value > SaleSummary.prev[v.key]"
             [class.minus] = "v.value < SaleSummary.prev[v.key]"

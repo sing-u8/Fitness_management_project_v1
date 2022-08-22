@@ -247,6 +247,9 @@ export const dashboardReducer = createImmerReducer(
         state.curUserData.contracts[contractIdx].user_sign = file.url
         return state
     }),
+    // on(DashboardActions.finishRefreshUserList, (state, ) => {
+    //     return state
+    // }),
     // sync
     on(DashboardActions.setUserSearchInput, (state, { searchInput }) => {
         state.curSearchInput = searchInput

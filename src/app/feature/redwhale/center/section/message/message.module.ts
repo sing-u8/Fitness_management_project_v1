@@ -11,10 +11,10 @@ import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader'
 
 // components
 import { MessageComponent } from './message.component'
-import { MemberListComponent } from './components/member-list/member-list.component'
+import { MsgMemberListComponent } from './components/msg-member-list/msg-member-list.component'
 import { TextFieldComponent } from './components/text-field/text-field.component'
 import { AutoTransSettingBoxComponent } from './components/auto-trans-setting-box/auto-trans-setting-box.component'
-import { MemberListCardComponent } from './components/member-list-card/member-list-card.component'
+import { MsgMemberListCardComponent } from './components/msg-member-list-card/msg-member-list-card.component'
 import { TransmissionHistoryTableComponent } from './components/transmission-history-table/transmission-history-table.component'
 import { TransmissionHistoryDateSelectorComponent } from './components/transmission-history-date-selector/transmission-history-date-selector.component'
 import { TransmissionHistoryDetailModalComponent } from './components/transmission-history-detail-modal/transmission-history-detail-modal.component'
@@ -27,10 +27,10 @@ import { HistoryDatePipe } from './pipes/history-date.pipe'
     declarations: [
         // components
         MessageComponent,
-        MemberListComponent,
+        MsgMemberListComponent,
         TextFieldComponent,
         AutoTransSettingBoxComponent,
-        MemberListCardComponent,
+        MsgMemberListCardComponent,
         TransmissionHistoryTableComponent,
         TransmissionHistoryDateSelectorComponent,
         HistoryDatePipe,

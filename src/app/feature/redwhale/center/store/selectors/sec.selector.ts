@@ -8,6 +8,7 @@ import * as FromSchedule from '@centerStore/reducers/sec.schedule.reducer'
 import * as FromSale from '@centerStore/reducers/sec.sale.reducer'
 import * as FromCommunity from '@centerStore/reducers/sec.community.reducer'
 import * as FromCommon from '@centerStore/reducers/center.common.reducer'
+import * as FromSMS from '@centerStore/reducers/sec.sms.reducer'
 
 export interface GymState {
     'Center/Lesson': FromLesson.State
@@ -18,6 +19,7 @@ export interface GymState {
     'Center/Sale': FromSale.State
     'Center/Community': FromCommunity.State
     'Center/Common': FromCommon.State
+    'Center/SMS': FromSMS.State
 }
 
 export const FeatureKey = 'Center'

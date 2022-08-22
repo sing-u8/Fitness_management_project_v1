@@ -5,10 +5,10 @@ import { CenterUser } from '@schemas/center-user'
 
 @Component({
     selector: 'msg-member-list-card',
-    templateUrl: './member-list-card.component.html',
-    styleUrls: ['./member-list-card.component.scss'],
+    templateUrl: './msg-member-list-card.component.html',
+    styleUrls: ['./msg-member-list-card.component.scss'],
 })
-export class MemberListCardComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy {
+export class MsgMemberListCardComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy {
     @Input() cardItem: { user: CenterUser; selected: boolean }
     @Input() search: string
 

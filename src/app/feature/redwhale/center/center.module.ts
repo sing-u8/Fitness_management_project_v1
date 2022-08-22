@@ -21,7 +21,7 @@ import { LockerModule } from './section/locker/locker.module'
 import { ScheduleModule } from './section/schedule/schedule.module'
 import { DashboardModule } from './section/dashboard/dashboard.module'
 import { SaleModule } from './section/sale/sale.module'
-import {MessageModule} from './section/message/message.module'
+import { MessageModule } from './section/message/message.module'
 
 // ngrx
 import { StoreModule } from '@ngrx/store'
@@ -36,6 +36,7 @@ import { FeatureKey as DashboardFeatureKey } from '@centerStore/selectors/sec.da
 import { FeatureKey as ScheduleFeatureKey } from '@centerStore/selectors/sec.schedule.selector'
 import { FeatureKey as SaleFeatureKey } from '@centerStore/selectors/sec.sale.selector'
 import { FeatureKey as CommunityFeatureKey } from '@centerStore/selectors/sec.community.selector'
+import { FeatureKey as SMSFeatureKey } from '@centerStore/selectors/sec.sms.selector'
 import { FeatureKey as CenterCommonFeatureKey } from '@centerStore/selectors/center.common.selector'
 
 // - // states reducer and effect
@@ -60,8 +61,11 @@ import { SaleEffect } from '@centerStore/effects/sec.sale.effect'
 import { communityReducer } from '@centerStore/reducers/sec.community.reducer'
 import { CommunityEffect } from '@centerStore/effects/sec.community.effect'
 
+import { smsReducer } from '@centerStore/reducers/sec.sms.reducer'
+import { SMSEffect } from '@centerStore/effects/sec.sms.effect'
+
 import { centerCommonReducer } from '@centerStore/reducers/center.common.reducer'
-import { CenterCommonEffect } from '@centerStore/effects/center.common.effect';
+import { CenterCommonEffect } from '@centerStore/effects/center.common.effect'
 
 @NgModule({
     declarations: [
@@ -97,6 +101,7 @@ import { CenterCommonEffect } from '@centerStore/effects/center.common.effect';
             [ScheduleFeatureKey]: scheduleReducer,
             [SaleFeatureKey]: saleReducer,
             [CommunityFeatureKey]: communityReducer,
+            [SMSFeatureKey]: smsReducer,
             [CenterCommonFeatureKey]: centerCommonReducer,
         }),
         EffectsModule.forFeature([
@@ -107,6 +112,7 @@ import { CenterCommonEffect } from '@centerStore/effects/center.common.effect';
             DashboardEffect,
             SaleEffect,
             CommunityEffect,
+            SMSEffect,
             CenterCommonEffect,
         ]),
         // ngrx     --> //

@@ -303,6 +303,7 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
     confirmChangeRoleModal() {
         const roleKey = _.findKey(this.userRole, (bool) => bool)
 
+        this.nxStore.dispatch(DashboardActions.startGetUsersByCategory({ centerId: this.center.id }))
         if (roleKey == 'owner') {
             // !! 추후에 수정이 필요 (이전 운영자에 대한 권한 처리 부분)
             this.nxStore.dispatch(

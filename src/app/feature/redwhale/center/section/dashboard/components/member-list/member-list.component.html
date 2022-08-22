@@ -54,27 +54,27 @@
                 <img src="assets/icons/etc/empty_screen.svg" />
                 <div class="empty-guide">
                     <p
-                        *ngIf="emptyGuideText[this.selectedUserList.key].today != undefined"
+                        *ngIf="emptyGuideText[this.selectedUserList.key].today"
                         class="rw-typo-subtext0-regular"
                     >
                         {{ emptyGuideText[this.selectedUserList.key].today }}
                     </p>
                     <p
-                        *ngIf="emptyGuideText[this.selectedUserList.key].title != undefined"
+                        *ngIf="emptyGuideText[this.selectedUserList.key].title"
                         class="rw-typo-subtext0-regular"
                     >
                         {{ emptyGuideText[this.selectedUserList.key].title }}
                     </p>
-                    <ng-template *ngIf="emptyGuideText[this.selectedUserList.key].desc != undefined">
+                    <ng-container *ngIf="emptyGuideText[this.selectedUserList.key].desc">
                         <p
                             *ngFor="let d of emptyGuideText[this.selectedUserList.key].desc"
                             class="rw-typo-subtext0-regular"
                         >
                             {{ d }}
                         </p>
-                    </ng-template>
+                    </ng-container>
                     <div
-                        *ngIf="emptyGuideText[this.selectedUserList.key].emptyButton != undefined"
+                        *ngIf="emptyGuideText[this.selectedUserList.key].emptyButton"
                         class="empty-button"
                         (click)="emptyGuideText[this.selectedUserList.key].emptyButton.func()"
                     >
