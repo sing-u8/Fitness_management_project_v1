@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, AfterViewInit, Output, EventEmitter, OnChanges, OnDestroy } from '@angular/core'
 import { Subject, Subscription } from 'rxjs'
+import { distinctUntilChanged } from 'rxjs/operators'
 
 import { CenterUser } from '@schemas/center-user'
 
@@ -17,7 +18,17 @@ export class MsgMemberListCardComponent implements OnInit, AfterViewInit, OnChan
     public searchSubscription: Subscription
     @Output() onCardClick = new EventEmitter<boolean>()
 
-    constructor() {}
+    constructor() {
+        this.searchSubscription = this.searchSubject
+            .asObservable()
+            .pipe(distinctUntilChanged())
+            .subscribe((value) => {
+                this.doHide = !(
+                    this.cardItem.user.center_user_name.includes(value) ||
+                    this.cardItem.user.phone_number.includes(value)
+                )
+            })
+    }
 
     ngOnInit(): void {}
     ngOnChanges() {

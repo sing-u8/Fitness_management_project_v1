@@ -91,13 +91,11 @@ export class MemberListComponent implements OnInit, OnDestroy {
                 distinctUntilChanged(),
                 map((value) => {
                     this.nxStore.dispatch(DashboardActions.setUserSearchInput({ searchInput: value as string }))
-                    this.getSerachUserList(value)
                     return null
                 })
             )
         }
     }
-    getSerachUserList(search: string) {}
 
     public unsubscribe$ = new Subject<void>()
 
@@ -133,7 +131,6 @@ export class MemberListComponent implements OnInit, OnDestroy {
         this.nxStore.dispatch(DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: cardInfo }))
     }
     onPartialHoldClick(holdFlag: boolean, index: number) {
-        console.log('onPartialHoldClick  -- ', holdFlag, ' -- ', index)
         this.nxStore.dispatch(
             DashboardActions.setUsersListsHoldSelected({
                 memberSelectCateg: this.selectedUserList.key,

@@ -1,9 +1,26 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, AfterViewInit, OnDestroy, Renderer2, ViewChild, ElementRef } from '@angular/core'
+import { FormBuilder, FormControl, ValidationErrors, AsyncValidatorFn, AbstractControl } from '@angular/forms'
 import dayjs from 'dayjs'
 
+// schema
+import { Center } from '@schemas/center'
+import { User } from '@schemas/user'
+import { CenterUser } from '@schemas/center-user'
+
+// services
+import { StorageService } from '@services/storage.service'
+
+// rxjs
+import { Subject } from 'rxjs'
+import { take } from 'rxjs/operators'
+
 // ngrx
-import { Store } from '@ngrx/store'
+import { Store, select } from '@ngrx/store'
 import { showToast } from '@appStore/actions/toast.action'
+
+import * as FromSMS from '@centerStore/reducers/sec.sms.reducer'
+import * as SMSSelector from '@centerStore/selectors/sec.sms.selector'
+import * as SMSActions from '@centerStore/actions/sec.sms.actions'
 
 type MessageRoute = 'general' | 'auto-transmission' | 'history'
 
@@ -12,15 +29,45 @@ type MessageRoute = 'general' | 'auto-transmission' | 'history'
     templateUrl: './message.component.html',
     styleUrls: ['./message.component.scss'],
 })
-export class MessageComponent implements OnInit {
+export class MessageComponent implements OnInit, OnDestroy {
     public messageRoute: MessageRoute = 'general'
     setMessageRoute(mr: MessageRoute) {
         this.messageRoute = mr
     }
 
-    constructor(private nxStore: Store) {}
+    constructor(private nxStore: Store, private storageService: StorageService, private fb: FormBuilder) {}
 
-    ngOnInit(): void {}
+    ngOnInit(): void {
+        this.center = this.storageService.getCenter()
+
+        this.nxStore.pipe(select(SMSSelector.curCenterId), take(1)).subscribe((curCenterId) => {
+            if (curCenterId != this.center.id) {
+                this.nxStore.dispatch(SMSActions.resetAll())
+                this.nxStore.dispatch(SMSActions.startLoadMemberList({ centerId: this.center.id }))
+            }
+        })
+        console.log('ngOnInit in message')
+        this.nxStore.dispatch(SMSActions.startGetUsersByCategory({ centerId: this.center.id }))
+        this.nxStore.dispatch(SMSActions.setCurCenterId({ centerId: this.center.id }))
+    }
+    ngOnDestroy() {
+        this.unsubscribe$.next(true)
+        this.unsubscribe$.complete()
+    }
+
+    public center: Center
+
+    public selectedNumber = 0
+
+    public userSearchInput: FormControl
+    public usersSelectCateg$ = this.nxStore.select(SMSSelector.usersSelectCategs)
+    public usersLists$ = this.nxStore.select(SMSSelector.usersLists)
+    public searchedUsersLists$ = this.nxStore.select(SMSSelector.searchedUsersLists)
+    public selectedUserList$ = this.nxStore.select(SMSSelector.curUserListSelect)
+    public isLoading$ = this.nxStore.select(SMSSelector.isLoading)
+    public selectedUserListsHolding$ = this.nxStore.select(SMSSelector.selectedUserListsHolding)
+
+    public unsubscribe$ = new Subject<boolean>()
 
     // message route : general
     public generalTransmissionTime = {

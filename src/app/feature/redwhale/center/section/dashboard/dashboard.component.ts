@@ -1,5 +1,5 @@
 import { Component, OnInit, AfterViewInit, OnDestroy, Renderer2, ViewChild, ElementRef } from '@angular/core'
-import { FormBuilder, FormControl, ValidationErrors, AsyncValidatorFn, AbstractControl } from '@angular/forms'
+import { FormBuilder, FormControl } from '@angular/forms'
 import { Router, ActivatedRoute } from '@angular/router'
 
 import _ from 'lodash'
@@ -15,12 +15,10 @@ import { UsersCenterService } from '@services/users-center.service'
 // scehma
 import { Center } from '@schemas/center'
 import { User } from '@schemas/user'
-import { CenterUser } from '@schemas/center-user'
-import { UserLocker } from '@schemas/user-locker'
 
 // rxjs
-import { Observable, Subject } from 'rxjs'
-import { takeUntil, take } from 'rxjs/operators'
+import { Subject } from 'rxjs'
+import { take } from 'rxjs/operators'
 
 // ngrx
 import { Store, select } from '@ngrx/store'

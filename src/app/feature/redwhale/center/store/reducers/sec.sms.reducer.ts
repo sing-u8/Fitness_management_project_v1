@@ -70,6 +70,7 @@ export const initialState: State = {
 
 export const smsReducer = createImmerReducer(
     initialState,
+    // async
     on(SMSActions.startLoadMemberList, (state) => {
         state = { ...state, ...initialState }
         state.isLoading = 'pending'
@@ -99,6 +100,38 @@ export const smsReducer = createImmerReducer(
     on(SMSActions.finishGetUserList, (state, { categ_type, userListValue }) => {
         state.usersLists[categ_type] = userListValue
         state.isLoading = 'done'
+        return state
+    }),
+
+    // sync
+    on(SMSActions.setUserSearchInput, (state, { searchInput }) => {
+        state.curSearchInput = searchInput
+        return state
+    }),
+    on(SMSActions.setUserListSelect, (state, { userListSelect }) => {
+        state.curUserListSelect = userListSelect
+        return state
+    }),
+    on(SMSActions.setUsersLists, (state, { usersLists }) => {
+        state.usersLists = usersLists
+        return state
+    }),
+    on(SMSActions.setUsersListsSelected, (state, { memberSelectCateg, index, selected }) => {
+        state.usersLists[memberSelectCateg][index].selected = selected
+        return state
+    }),
+    on(SMSActions.setAllUserListSelected, (state, { memberSelectCateg, selected }) => {
+        state.usersLists[memberSelectCateg].forEach((v) => {
+            v.selected = selected
+        })
+        return state
+    }),
+    on(SMSActions.resetUsersListsSelected, (state, { memberSelectCateg }) => {
+        const usersLists = state.usersLists
+        usersLists[memberSelectCateg].forEach((item, index) => {
+            state.usersLists[memberSelectCateg][index].selected = false
+        })
+
         return state
     })
 )

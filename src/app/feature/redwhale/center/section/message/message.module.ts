@@ -21,7 +21,8 @@ import { TransmissionHistoryDetailModalComponent } from './components/transmissi
 import { PhoneNumberSelectorComponent } from './components/phone-number-selector/phone-number-selector.component'
 
 // pipes
-import { HistoryDatePipe } from './pipes/history-date.pipe'
+import { HistoryDatePipe } from './pipes/history-date.pipe';
+import { MsgUserListSelectComponent } from './components/msg-user-list-select/msg-user-list-select.component'
 
 @NgModule({
     declarations: [
@@ -36,6 +37,7 @@ import { HistoryDatePipe } from './pipes/history-date.pipe'
         HistoryDatePipe,
         TransmissionHistoryDetailModalComponent,
         PhoneNumberSelectorComponent,
+        MsgUserListSelectComponent,
     ],
     imports: [
         MessageRoutingModule,

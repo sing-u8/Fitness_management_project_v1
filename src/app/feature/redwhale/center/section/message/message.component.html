@@ -57,7 +57,14 @@
 
     <article class="content-container thin-scroll-y">
         <div *ngIf="messageRoute == 'general'" class="l-message">
-            <msg-member-list></msg-member-list>
+            <msg-member-list
+                [usersLists]="usersLists$ | async"
+                [usersSelectCateg]="usersSelectCateg$ | async"
+                [selectedUserList]="selectedUserList$ | async"
+                [searchedUsersLists]="searchedUsersLists$ | async"
+                [selectedUserListsHolding]="selectedUserListsHolding$ | async"
+                [isLoading]="isLoading$ | async"
+            ></msg-member-list>
             <div class="general-right">
                 <div class="general-right__header rw-typo-title1 ">
                     내용 작성

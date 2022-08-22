@@ -4,9 +4,6 @@
     text-align: initial;
 }
 
-// 55px  + 60px(wholePaddingTop) + 73px (header height,margin,padding) + (25px + (15px + 23px)[title])
-$innerHeight: calc(100vh - (55px + 60px + 73px + 63px));
-
 // 이 컴포넌트의 부모 태그는 position : relative로 설정되어야함.
 section.l-member-list {
     width: 100%;
@@ -69,7 +66,7 @@ section.l-member-list {
         background-color: var(--white);
         box-shadow: 0px 0px 10px #b5b5b51c;
         border-radius: 5px;
-        height: $innerHeight;
+        height: 660px;
 
         .l-input {
             margin: 20px 20px 5px;
@@ -127,15 +124,12 @@ section.l-member-list {
 
         .l-member-card {
             width: 100%;
-            height: calc(100% - 88px);
+            //height: calc(100% - 88px);
             padding: 8px 14px;
+            height: calc(100% - 135px);
 
             .l-empty-search {
                 height: 100%;
-            }
-
-            &.l-hold-mode-card {
-                height: calc(100% - 135px);
             }
         }
     }

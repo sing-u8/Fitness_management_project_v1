@@ -1,0 +1,143 @@
+.rw-select {
+	position: relative;
+	display: inline-flex;
+
+	.selected {
+		font-size: 1.6rem !important;
+		height: 24px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border-radius: 5px;
+		background-color: transparent;
+		cursor: pointer;
+
+		.text {
+			font-weight: 700;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+			margin-right: 4px;
+
+			.member-count {
+				margin-left: 7px;
+			}
+		}
+
+		.mdi, .fill-down-icon {
+			transform: rotateX(0deg);
+			transition: transform 0.2s linear;
+			-moz-transition: transform 0.2s linear;
+			-webkit-transition: transform 0.2s linear;
+			-o-transition: transform 0.2s linear;
+
+			background-image: url('/assets/icons/etc/arrow-down-fill-darkgrey.svg');
+			background-size: contain;
+			background-repeat: no-repeat;
+			width: 28px;
+			height: 28px;
+			margin-top: 2px;
+		}
+	}
+
+	.open {
+		.mdi ,.fill-down-icon {
+			transform: rotateX(180deg);
+			transition: transform 0.2s linear;
+			-moz-transition: transform 0.2s linear;
+			-webkit-transition: transform 0.2s linear;
+			-o-transition: transform 0.2s linear;
+		}
+	}
+
+	.disabled {
+		border: 1px solid var(--border-color);
+		background-color: var(--background-color);
+		cursor: not-allowed;
+
+		.text,
+		.mdi {
+			color: var(--grey);
+		}
+		.fill-down-icon {
+			background-image: url('/assets/icons/etc/arrow-down-fill-grey.svg');
+		}
+	}
+
+	.items {
+		display: none;
+		position: absolute;
+		top: 30px;
+		padding: 5px 0;
+		box-shadow: 0px 0px 10px #b5b5b526;
+		// border: 1px solid var(--grey);
+		background-color: var(--white);
+		z-index: 50;
+		border-radius: 5px;
+
+		.item {
+			height: 42px;
+			padding: 15px;
+			cursor: pointer;
+
+			display: flex;
+			align-items: center;
+
+			&:hover {
+				width: 100%;
+				background-color: var(--background-color);
+			}
+
+			span {
+				font-weight: 500;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+			}
+
+			.item-member-count {
+				margin-left: 5px;
+			}
+		}
+
+		.active {
+			span {
+				font-weight: 700;
+			}
+		}
+
+		.disabled {
+			border: 1px solid transparent;
+			background-color: var(--white);
+			cursor: not-allowed;
+
+			&:hover {
+				background-color: var(--white);
+			}
+
+			span {
+				color: var(--grey);
+			}
+		}
+	}
+}
+
+.height-small {
+	height: 35px !important;
+}
+
+.items-small {
+	top: 40px !important;
+}
+
+.avatar {
+	margin-right: 5px;
+}
+
+.border-none {
+	border: none !important;
+}
+
+.grey {
+	color: var(--grey);
+}

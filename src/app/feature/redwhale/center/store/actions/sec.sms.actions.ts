@@ -37,6 +37,38 @@ export const finishGetUserList = createAction(
     props<{ centerId: string; categ_type: MemberSelectCateg; userListValue: UsersListValue }>()
 )
 
+// sync
+// userListSelect
+export const setUserListSelect = createAction(
+    `[${FeatureKey}] Set UserList Select`,
+    props<{ userListSelect: UserListSelect }>()
+)
+
+// userLists
+export const setUsersLists = createAction(`[${FeatureKey}] Set Users Lists`, props<{ usersLists: UsersLists }>())
+export const setUsersListsSelected = createAction(
+    `[${FeatureKey}] Set UsersLists Selected`,
+    props<{ memberSelectCateg: MemberSelectCateg; index: number; selected: boolean }>()
+)
+export const setAllUserListSelected = createAction(
+    `[${FeatureKey}] Set All UsersLists selected`,
+    props<{ memberSelectCateg: MemberSelectCateg; selected: boolean }>()
+)
+export const resetUsersListsSelected = createAction(
+    `[${FeatureKey}] Reset UsersLists Selected`,
+    props<{ memberSelectCateg: MemberSelectCateg }>()
+)
+
+// search user input
+export const setUserSearchInput = createAction(
+    `[${FeatureKey}] Set User Search Input`,
+    props<{ searchInput: string }>()
+)
+
+// cur center id
+export const setCurCenterId = createAction(`[${FeatureKey}] Set Current Center Id`, props<{ centerId: string }>())
+export const resetCurCenterId = createAction(`[${FeatureKey}] Reset Current Center Id`)
+
 // common
 export const resetAll = createAction(`[${FeatureKey}] Reset Dashboard All State`)
 export const error = createAction(`[${FeatureKey}] Dashboard State Error`, props<{ error: string }>())
