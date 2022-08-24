@@ -6,7 +6,15 @@ import {
     UsersLists,
     UsersListValue,
     SMSType,
+    selectGeneralTransmissionTime,
+    HistoryDateRange,
 } from '../reducers/sec.sms.reducer'
+import { SMSAutoSend } from '@schemas/sms-auto-send'
+import { SMSHistory } from '@schemas/sms-history'
+import { SMSHistoryGroup } from '@schemas/sms-history-group'
+
+import { UpdateMLAutoSendReqBody } from '@services/center-sms.service'
+import { SMSCaller } from '@schemas/sms-caller'
 
 const FeatureKey = 'Center/SMS'
 
@@ -38,18 +46,72 @@ export const finishGetUserList = createAction(
     props<{ centerId: string; categ_type: MemberSelectCateg; userListValue: UsersListValue }>()
 )
 
-export const startGetSMSPoint = createAction(`[${FeatureKey}] Strat Get SMS Point`, props<{ centerId: string }>())
+export const startGetSMSPoint = createAction(`[${FeatureKey}] Start Get SMS Point`, props<{ centerId: string }>())
 export const finishGetSMSPoint = createAction(`[${FeatureKey}] Finish Get SMS Point`, props<{ smsPoint: number }>())
+
+export const startSendGeneralMessage = createAction(
+    `[${FeatureKey}] Start Send General Message`,
+    props<{ centerId: string; cb?: () => void }>()
+)
+export const finishSendGeneralMessage = createAction(
+    `[${FeatureKey}] Finish Send General Message`,
+    props<{ smsPoint: number }>()
+)
+
+export const startGetMembershipAutoSend = createAction(
+    `[${FeatureKey}] Start Get Membership Auto Send`,
+    props<{ centerId: string }>()
+)
+export const finishGetMembershipAutoSend = createAction(
+    `[${FeatureKey}] Finish Get Membership Auto Send`,
+    props<{ smsAutoSend: SMSAutoSend }>()
+)
+export const startGetLockerAutoSend = createAction(
+    `[${FeatureKey}] Start Get Locker Auto Send`,
+    props<{ centerId: string }>()
+)
+export const finishGetLockerAutoSend = createAction(
+    `[${FeatureKey}] Finish Get Locker Auto Send`,
+    props<{ smsAutoSend: SMSAutoSend }>()
+)
+export const startGetCallerList = createAction(`[${FeatureKey}] Start Get Caller List`, props<{ centerId: string }>())
+export const finishGetCallerList = createAction(
+    `[${FeatureKey}] Finish Get Caller List`,
+    props<{ callerList: SMSCaller[] }>()
+)
+
+export const startUpdateAutoSend = createAction(
+    `[${FeatureKey}] Start Update Auto Send`,
+    props<{ centerId: string; reqBody: UpdateMLAutoSendReqBody; autoSendType: 'membership' | 'locker' }>()
+)
+
+export const startGetHistoryGroup = createAction(
+    `[${FeatureKey}] Start Get History Group`,
+    props<{ centerId: string; start_date: string; end_date: string; cb?: () => void }>()
+)
+export const finishGetHistoryGroup = createAction(
+    `[${FeatureKey}] Finish Get History Group`,
+    props<{ smsHistoryGroupList: SMSHistoryGroup[] }>()
+)
+
+export const startGetHistoryGroupDetail = createAction(
+    `[${FeatureKey}] Start Get History Group Detail`,
+    props<{ centerId: string; historyGroupId: string }>()
+)
+export const finishGetHistoryGroupDetail = createAction(
+    `[${FeatureKey}] Finish Get History Group Detail`,
+    props<{ smsHistoryList: SMSHistory[] }>()
+)
 
 // sync
 export const setSMSType = createAction(`[${FeatureKey}] Set SMS Type`, props<{ smsType: SMSType }>())
 
+// // general
 // userListSelect
 export const setUserListSelect = createAction(
     `[${FeatureKey}] Set UserList Select`,
     props<{ userListSelect: UserListSelect }>()
 )
-
 // userLists
 export const setUsersLists = createAction(`[${FeatureKey}] Set Users Lists`, props<{ usersLists: UsersLists }>())
 export const setUsersListsSelected = createAction(
@@ -64,17 +126,44 @@ export const resetUsersListsSelected = createAction(
     `[${FeatureKey}] Reset UsersLists Selected`,
     props<{ memberSelectCateg: MemberSelectCateg }>()
 )
-
 // search user input
 export const setUserSearchInput = createAction(
     `[${FeatureKey}] Set User Search Input`,
     props<{ searchInput: string }>()
 )
+// text vars
+export const setGeneralText = createAction(`[${FeatureKey}] Set General texts`, props<{ text: string }>())
 
+export const setBookTime = createAction(`[${FeatureKey}] Set Book Time`, props<{ bookTime: string }>())
+export const setBookDate = createAction(`[${FeatureKey}] Set Book Date`, props<{ bookDate: { date: string } }>())
+export const setGeneralTransmissionTime = createAction(
+    `[${FeatureKey}] Set General Transmission Time`,
+    props<{
+        generalTransmissionTime: {
+            immediate: boolean
+            book: boolean
+        }
+    }>()
+)
+
+export const setGeneralCaller = createAction(`[${FeatureKey}] Set General Caller`, props<{ caller: SMSCaller }>())
+export const setLockerCaller = createAction(`[${FeatureKey}] Set Locker Caller`, props<{ caller: SMSCaller }>())
+export const setMembershipCaller = createAction(`[${FeatureKey}] Set Membership Caller`, props<{ caller: SMSCaller }>())
+
+export const setHistoryDateRange = createAction(
+    `[${FeatureKey}] Set History Date Range`,
+    props<{ historyDateRange: HistoryDateRange }>()
+)
+
+export const setSMSHistoryGroup = createAction(
+    `[${FeatureKey}] Set SMS History Group`,
+    props<{ smsHistoryGroup: SMSHistoryGroup }>()
+)
+
+// common
 // cur center id
 export const setCurCenterId = createAction(`[${FeatureKey}] Set Current Center Id`, props<{ centerId: string }>())
 export const resetCurCenterId = createAction(`[${FeatureKey}] Reset Current Center Id`)
 
-// common
 export const resetAll = createAction(`[${FeatureKey}] Reset Dashboard All State`)
 export const error = createAction(`[${FeatureKey}] Dashboard State Error`, props<{ error: string }>())

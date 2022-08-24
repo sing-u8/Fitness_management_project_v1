@@ -2,15 +2,16 @@
     <div class="text-field__header">
         <span>발신번호</span>
         <msg-phone-number-selector
-            [items]="phoneNumberItems"
+            [items]="callerList"
             [(ngModel)]="selectedPhoneNumberItem"
+            (onSelectChange)="onSelectChange.emit($event)"
         ></msg-phone-number-selector>
     </div>
     <div class="text-field__content">
-        <textarea class="rw-textarea" placeholder="문자 내용을 입력해주세요."></textarea>
+        <textarea class="rw-textarea" placeholder="문자 내용을 입력해주세요." [(ngModel)]="text" (ngModelChange)="textChange.emit($event)"></textarea>
     </div>
     <div class="text-field__footer">
         <span class="rw-typo-bodytext1 ">{{'단문'}}</span>
-        <span class="rw-typo-bodytext1 ">{{'0 / 90'}} byte</span>
+        <span class="rw-typo-bodytext1 ">{{textByte}} {{textByte > 90 ? '/ 2000' : '/ 90'}} byte</span>
     </div>
 </div>

@@ -1,0 +1,143 @@
+* {
+	padding: 0px;
+	margin: 0px;
+}
+
+.user-list-card {
+	width: 100%;
+	height: 55px;
+	padding: 10px 10px 10px 13px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+
+	.card-left {
+		display: flex;
+		align-items: center;
+
+		.index {
+			margin-right: 15px;
+		}
+
+		.user-avatar {
+			margin-right: 10px;
+			position: relative;
+
+			.expired-avatar {
+				width: 45px;
+				height: 45px;
+				border-radius: 50%;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				overflow: hidden;
+				position: absolute;
+				background-color: rgba(0, 0, 0, 0.5);
+
+				left: 0px;
+				top: 0px;
+
+				span {
+					font-weight: 700;
+					color: var(--white);
+				}
+			}
+		}
+
+		.user-info {
+			display: flex;
+			flex-direction: column;
+			span {
+				text-align: start;
+			}
+			&:first-of-type {
+				margin-bottom: 2px;
+			}
+		}
+	}
+
+	.card-right {
+		.member-right {
+			display: flex;
+			align-items: center;
+			position: relative;
+
+			span {
+				color: var(--grey);
+			}
+
+			&:hover {
+				.tooltip {
+					opacity: 1;
+					z-index: 999;
+				}
+			}
+			.tooltip {
+				display: flex;
+				justify-content: center;
+				flex-direction: column;
+				position: absolute;
+				max-width: 200px;
+				padding: 6px 10px;
+
+				overflow-wrap: break-word;
+				background-color: var(--font-color);
+				border-radius: 6px;
+				z-index: -1;
+				opacity: 0;
+				transition: opacity 0.2s;
+				-moz-transition: opacity 0.2s;
+				-webkit-transition: opacity 0.2s;
+				-o-transition: opacity 0.2s;
+
+				top: 30px;
+				right: -5px;
+				min-width: 100px;
+
+				&:after {
+					content: '';
+					position: absolute;
+					top: 4px;
+					left: 83%;
+					width: 0;
+					height: 0;
+					border: 9px solid transparent;
+					border-bottom-color: var(--font-color);
+					border-top: 0;
+					margin-left: -9px;
+					margin-top: -9px;
+				}
+
+				.tooltip-text {
+					display: flex;
+					align-items: center;
+
+					span, p {
+						font-size: 1.2rem;
+						font-weight: 500;
+						line-height: 1.42;
+						letter-spacing: -0.14px;
+						text-align: center;
+						color: var(--white) !important;
+					}
+				}
+
+				.tooltip-pay {
+					text-align: center;
+					min-width: 56px;
+					white-space: nowrap;
+					text-overflow: ellipsis;
+					overflow: hidden;
+				}
+			}
+			.unpaid-price {
+				color: var(--grey);
+				margin-left: 3px;
+			}
+		}
+		img {
+			width: 24px;
+			height: 24px;
+		}
+	}
+}

@@ -62,7 +62,7 @@
                 [usersSelectCateg]="usersSelectCateg$ | async"
                 [selectedUserList]="selectedUserList$ | async"
                 [searchedUsersLists]="searchedUsersLists$ | async"
-                [selectedUserListsHolding]="selectedUserListsHolding$ | async"
+                [selectedUserListsSelected]="selectedUserListSelected$ | async"
                 [isLoading]="isLoading$ | async"
             ></msg-member-list>
             <div class="general-right">
@@ -70,7 +70,13 @@
                     내용 작성
                 </div>
                 <div class="general-right__content">
-                    <msg-text-field></msg-text-field>
+                    <msg-text-field
+                        [callerList]="(callerList$ | async)"
+                        [text]="(generalText$ | async)"
+                        [textByte]="generalTextByte"
+                        (textChange)="updateGeneralText($event)"
+                        (onSelectChange)="onGeneralCallerChange($event)"
+                    ></msg-text-field>
                     <div class="general-setting-box">
                         <div class="setting-transmission-time">
                             <p class="rw-typo-subtext1 ">전송 시점</p>
@@ -117,13 +123,21 @@
                             </div>
                         </div>
                         <div class="deduction-box">
-                            <p class="rw-typo-bodytext0-bold ">{{0}}p 차감 예정</p>
-                            <p class="rw-typo-bodytext2-regular_darkgrey ">수신자 {{0}}명 * 단문 {{11}}P</p>
+                            <p class="rw-typo-bodytext0-bold ">{{subtractPoint}}p 차감 예정</p>
+                            <p class="rw-typo-bodytext2-regular_darkgrey ">수신자 {{selectedUserListSelected$ | async}}명 * {{subtractText}}</p>
+                            <ng-container *ngIf="!isPointEnough">
+                                <div class="rw-typo-subtext0-regular error">
+                                    <span class="error-icon"></span>
+                                    보유한 포인트가 차감 예정 포인트보다<br>
+                                    적어서 문자를 전송할 수 없어요.
+                                </div>
+                            </ng-container>
                         </div>
                         <rw-button
                             [color]="'var(--red)'"
                             [fontColor]="'var(--white)'"
-                            [disabled]="true"
+                            [disabled]="!isMsgAbleToBeSent"
+                            (click)="isMsgAbleToBeSent && openTransmitMsgModal()"
                         >
                             문자 전송하기
                         </rw-button>
@@ -137,24 +151,33 @@
             <div class="l-message__ticket">
                 <p class="rw-typo-title1">회원권 만기 문자</p>
                 <div class="message__ticket">
-                    <msg-text-field></msg-text-field>
+                    <msg-text-field
+                        [callerList]="(callerList$ | async)"
+                        [text]="lockerAutoSendSetting.text"
+                        [textByte]="0"
+                        (textChange)="false"
+                    ></msg-text-field>
                     <msg-auto-trans-setting-box
                         [autoTransmitTextObj]="membershipSettingObj"
-                        [autoTransmit]="membershipTransmitAvailable"
-                        [autoTransmitDay]="membershipTransmitDay"
-                        [autoTransmitTime]="membershipTransmitTime"
+                        [smsAutoSend]="membershipAutoSendSetting"
+                        (OnAutoTransmitChange)="updateTransmitChange($event,'membership')"
+                        (OnAutoTransmitDayChange)="updateTransmitDay($event, 'membership')"
+                        (OnAutoTransmitTimeChange)="updateTransmitTime($event, 'membership')"
                     ></msg-auto-trans-setting-box>
                 </div>
             </div>
             <div class="l-message__ticket">
                 <p class="rw-typo-title1">락커 만기 문자</p>
                 <div class="message__ticket">
-                    <msg-text-field></msg-text-field>
+                    <msg-text-field
+                        [callerList]="(callerList$ | async)"
+                    ></msg-text-field>
                     <msg-auto-trans-setting-box
-                      [autoTransmitTextObj]="lockerSettingObj"
-                      [autoTransmit]="lockerTransmitAvailable"
-                      [autoTransmitDay]="lockerTransmitDay"
-                      [autoTransmitTime]="lockerTransmitTime"
+                        [autoTransmitTextObj]="lockerSettingObj"
+                        [smsAutoSend]="lockerAutoSendSetting"
+                        (OnAutoTransmitChange)="updateTransmitChange($event,'locker')"
+                        (OnAutoTransmitDayChange)="updateTransmitDay($event, 'locker')"
+                        (OnAutoTransmitTimeChange)="updateTransmitTime($event, 'locker')"
                     ></msg-auto-trans-setting-box>
                 </div>
 
@@ -168,10 +191,17 @@
                     <span class="rw-typo-subtext1">3개월이 지난 내역은 자동으로 삭제됩니다.</span>
                 </div>
                 <msg-transmission-history-date-selector
-                    [selectedDate]="selectedDate"
+                    [selectedDate]="selectedHistoryDate"
+                    (onChangeDate)="onDateSelected($event)"
                 ></msg-transmission-history-date-selector>
             </div>
             <msg-transmission-history-table
+                [historyGroupLoading]="(historyGroupLoading$ | async)"
+                [historyLoading]="(historyLoading$ | async)"
+                [smsHistoryGroupList]="(smsHistoryGroupList$ | async)"
+                [smsHistoryList]="(smsHistoryList$ | async)"
+                [curHistoryGroup]="(curHistoryGroup$ | async)"
+                (onHistoryGroupClick)="onHistoryGroupItemClick($event)"
             ></msg-transmission-history-table>
         </div>
     </article>

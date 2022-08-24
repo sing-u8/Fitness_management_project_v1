@@ -2,31 +2,31 @@
   <div class="auto-trans-setting">
     <p class="title">{{autoTransmitTextObj.settingTitle}}</p>
     <rw-checkbox
-      [checked]="autoTransmit"
-      [text]="autoTransmit ? checkBoxText.on : checkBoxText.off"
+      [checked]="smsAutoSend.auto_send_yn"
+      [text]="smsAutoSend.auto_send_yn ? checkBoxText.on : checkBoxText.off"
       (click)="onCheckBoxClick()"
     ></rw-checkbox>
   </div>
   <div class="bar"></div>
-  <div class="auto-trans-time" [class.disabled]="!autoTransmit">
+  <div class="auto-trans-time" [class.disabled]="!smsAutoSend.auto_send_yn">
     <p class="title">자동 전송 시점</p>
     <p class="rw-typo-bodytext0">{{autoTransmitTextObj.transType}} 만기일로부터</p>
     <div class="time-inputs">
       <div class="l-input">
         <input
           class="rw-input"
-          [(ngModel)]="autoTransmitDay"
-          (beforeinput)="inputhelperService.restrictToNumber($event)"
+          [(ngModel)]="smsAutoSend.days"
+          (keydown)="inputhelperService.restrictToNumber($event)"
           (keyup)="updateAutoTransmitDayKeyUp($event)"
           (keyup.enter)="updateAutoTransmitDay()"
-          (rwClickOutside)="updateAutoTransmitDay()"
-          [disabled]="!autoTransmit"
+          (rwClickOutside)="updateAutoTransmitDayClickOutSide()"
+          [disabled]="!smsAutoSend.auto_send_yn"
         >
         <span class="rw-typo-bodytext0">일 전</span>
       </div>
       <rw-time-picker2
-        [disabled]="!autoTransmit"
-        [time]="autoTransmitTime"
+        [disabled]="!smsAutoSend.auto_send_yn"
+        [time]="smsAutoSend.time"
         [width]="'129'"
         [textAlign]="'start'"
         (onTimeClick)="onAutoTransmitTimeClick($event)"

@@ -11,12 +11,19 @@ import {
     ViewChild,
 } from '@angular/core'
 
+import { Loading } from '@schemas/store/loading'
+import { SMSHistory } from '@schemas/sms-history'
+import { SMSHistoryGroup } from '@schemas/sms-history-group'
+
 @Component({
     selector: 'msg-transmission-history-detail-modal',
     templateUrl: './transmission-history-detail-modal.component.html',
     styleUrls: ['./transmission-history-detail-modal.component.scss'],
 })
 export class TransmissionHistoryDetailModalComponent implements OnChanges, AfterViewChecked {
+    @Input() smsHistoryList: Array<SMSHistory>
+    @Input() curHistoryGroup: SMSHistoryGroup
+    @Input() Loading: Loading
     @Input() visible: boolean
     @Output() visibleChange = new EventEmitter<boolean>()
 
@@ -32,7 +39,7 @@ export class TransmissionHistoryDetailModalComponent implements OnChanges, After
 
     constructor(private el: ElementRef, private renderer: Renderer2) {}
     ngOnChanges(changes: SimpleChanges) {
-        if (!changes['visible'].firstChange) {
+        if (changes['visible'] && !changes['visible'].firstChange) {
             if (changes['visible'].previousValue != changes['visible'].currentValue) {
                 this.changed = true
             }
@@ -70,5 +77,13 @@ export class TransmissionHistoryDetailModalComponent implements OnChanges, After
     }
     resetMouseModalDown() {
         this.isMouseModalDown = false
+    }
+
+    // filter
+    filterTransmitFailure(item: SMSHistory) {
+        return !item.success_yn
+    }
+    filterTransmitSuccess(item: SMSHistory) {
+        return item.success_yn
     }
 }

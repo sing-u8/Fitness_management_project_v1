@@ -19,9 +19,10 @@ import { TransmissionHistoryTableComponent } from './components/transmission-his
 import { TransmissionHistoryDateSelectorComponent } from './components/transmission-history-date-selector/transmission-history-date-selector.component'
 import { TransmissionHistoryDetailModalComponent } from './components/transmission-history-detail-modal/transmission-history-detail-modal.component'
 import { PhoneNumberSelectorComponent } from './components/phone-number-selector/phone-number-selector.component'
+import { TransmissionHistoryItemComponent } from './components/transmission-history-item/transmission-history-item.component'
 
 // pipes
-import { HistoryDatePipe } from './pipes/history-date.pipe';
+import { HistoryDatePipe } from './pipes/history-date.pipe'
 import { MsgUserListSelectComponent } from './components/msg-user-list-select/msg-user-list-select.component'
 
 @NgModule({
@@ -38,6 +39,7 @@ import { MsgUserListSelectComponent } from './components/msg-user-list-select/ms
         TransmissionHistoryDetailModalComponent,
         PhoneNumberSelectorComponent,
         MsgUserListSelectComponent,
+        TransmissionHistoryItemComponent,
     ],
     imports: [
         MessageRoutingModule,

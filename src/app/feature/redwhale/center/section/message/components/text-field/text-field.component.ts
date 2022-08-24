@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
+import { SMSCaller } from '@schemas/sms-caller'
 
 @Component({
     selector: 'msg-text-field',
@@ -6,18 +7,14 @@ import { Component, OnInit } from '@angular/core'
     styleUrls: ['./text-field.component.scss'],
 })
 export class TextFieldComponent implements OnInit {
+    @Input() callerList: SMSCaller[] = []
+    @Input() text = ''
+    @Input() textByte = 0
+    @Output() textChange = new EventEmitter<string>()
+    @Output() onSelectChange = new EventEmitter<SMSCaller>()
     constructor() {}
 
     ngOnInit(): void {}
 
-    public phoneNumberItems = [
-        { number: '010-1234-5678', value: { id: 1 }, verified: true },
-        { number: '010-1234-5678', value: { id: 2 }, verified: false },
-        { number: '010-1234-5678', value: { id: 3 }, verified: true },
-    ]
-    public selectedPhoneNumberItem = {
-        number: '010-1234-5678',
-        value: { id: 1 },
-        verified: true,
-    }
+    public selectedPhoneNumberItem: SMSCaller = undefined
 }

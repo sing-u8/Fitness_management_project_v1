@@ -33,7 +33,7 @@ export class MsgMemberListComponent implements OnInit, OnDestroy {
     @Input() searchedUsersLists: FromSMS.UsersLists = _.cloneDeep(FromSMS.UsersListInit)
     @Input() usersSelectCateg: FromSMS.UsersSelectCateg = _.cloneDeep(FromSMS.UsersSelectCategInit)
     @Input() selectedUserList: FromSMS.UserListSelect = _.cloneDeep(FromSMS.UserListSelectInit)
-    @Input() selectedUserListsHolding = 0
+    @Input() selectedUserListsSelected = 0
     @Input() isLoading: Loading = 'idle'
 
     public userSearchInput: FormControl

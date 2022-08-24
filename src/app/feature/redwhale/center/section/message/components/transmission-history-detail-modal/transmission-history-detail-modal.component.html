@@ -7,11 +7,11 @@
 >
 	<div
 		class="rw-modal user-select-none"
-		[class.ready-for-transmission]="false"
+		[class.ready-for-transmission]="curHistoryGroup?.state_code == 'sms_state_ready'"
 		(mousedown) ='onMouseModalDown(); $event.stopPropagation()'
 	>
 		<div class="header">
-			<span class="rw-typo-bodytext0-bold">{{'22.08.01 00:25:14'}} | 상세 내역</span>
+			<span class="rw-typo-bodytext0-bold">{{curHistoryGroup?.datetime}} | 상세 내역</span>
 			<div class="close-icon" (click)="onClose()"></div>
 		</div>
 		<div class="body">
@@ -19,36 +19,76 @@
 				<textarea
 					[readonly]="true"
 					class="rw-textarea rw-typo-bodytext0 thin-scroll-y"
-				>문자 내용</textarea>
+				>{{curHistoryGroup?.text}}</textarea>
 				<span class="byte">{{'5 / 90 byte'}}</span>
 			</div>
 
-			<ng-container *ngIf="true">
+			<ng-container *ngIf="curHistoryGroup?.state_code == 'sms_state_sent'">
 				<div class="l-transmission-fail">
 					<div class="transmission-header">
 						<span class="rw-typo-bodytext0-bold">전송 실패</span>
-						<span class="rw-typo-bodytext0-bold fail">{{'2'}}건</span>
+						<span class="rw-typo-bodytext0-bold fail">{{curHistoryGroup?.failure}}건</span>
 					</div>
-					<div class="transmission-body thin-scroll-y-overlay2">
+					<div *ngIf="Loading == 'pending'" class="transmission-body loading thin-scroll-y-overlay2">
+						<ngx-skeleton-loader
+							*ngFor="let _ of [1,2,3]"
+							count=1
+							appearance="line"
+							[theme]="{width:'95%', height: '55px', 'border-radius':'7px', 'margin-top': '10px', 'margin-bottom': '0px'}"
+						></ngx-skeleton-loader>
+					</div>
+					<div *ngIf="Loading != 'pending'" class="transmission-body thin-scroll-y-overlay2">
+						<msg-transmission-history-item
+							*ngFor="let item of (smsHistoryList | callback: filterTransmitFailure); let idx = index"
+							[index]="smsHistoryList.length - idx"
+							[smsHistory]="item"
+						></msg-transmission-history-item>
 					</div>
 				</div>
 				<div class="l-transmission-success">
 					<div class="transmission-header">
 						<span class="rw-typo-bodytext0-bold">전송 성공</span>
-						<span class="rw-typo-bodytext0-bold success">{{'2'}}건</span>
+						<span class="rw-typo-bodytext0-bold success">{{curHistoryGroup?.success}}건</span>
 					</div>
-					<div class="transmission-body thin-scroll-y-overlay2">
+					<div *ngIf="Loading == 'pending'" class="transmission-body loading thin-scroll-y-overlay2">
+						<ngx-skeleton-loader
+							*ngFor="let _ of [1,2,3]"
+							count=1
+							appearance="line"
+							[theme]="{width:'95%', height: '55px', 'border-radius':'7px', 'margin-top': '10px', 'margin-bottom': '0px'}"
+						></ngx-skeleton-loader>
+					</div>
+					<div *ngIf="Loading != 'pending'" class="transmission-body thin-scroll-y-overlay2">
+						<msg-transmission-history-item
+							*ngFor="let item of (smsHistoryList | callback: filterTransmitSuccess); let idx = index"
+							[index]="smsHistoryList.length - idx"
+							[smsHistory]="item"
+						></msg-transmission-history-item>
 					</div>
 				</div>
 			</ng-container>
 
-			<ng-container *ngIf="false">
+			<ng-container *ngIf="curHistoryGroup?.state_code == 'sms_state_ready'">
 				<div class="l-transmission-ready">
 					<div class="transmission-header">
 						<span class="rw-typo-bodytext0-bold">전송 대기</span>
-						<span class="rw-typo-bodytext0-bold success">{{'2'}}건</span>
+						<span class="rw-typo-bodytext0-bold success">{{curHistoryGroup?.request}}건</span>
 					</div>
-					<div class="transmission-body thin-scroll-y-overlay2">
+					<div *ngIf="Loading == 'pending'" class="transmission-body loading thin-scroll-y-overlay2">
+						<ngx-skeleton-loader
+							*ngFor="let _ of [1,2,3]"
+							count=1
+							appearance="line"
+							[theme]="{width:'95%', height: '55px', 'border-radius':'7px', 'margin-top': '10px', 'margin-bottom': '0px'}"
+						></ngx-skeleton-loader>
+					</div>
+					<div *ngIf="Loading != 'pending'" class="transmission-body thin-scroll-y-overlay2">
+						<ng-container *ngFor="let item of smsHistoryList; let idx = index">
+							<msg-transmission-history-item
+								[index]="smsHistoryList.length - idx"
+								[smsHistory]="item"
+							></msg-transmission-history-item>
+						</ng-container>
 					</div>
 				</div>
 			</ng-container>

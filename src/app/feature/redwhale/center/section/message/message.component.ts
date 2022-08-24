@@ -1,6 +1,7 @@
 import { Component, OnInit, AfterViewInit, OnDestroy, Renderer2, ViewChild, ElementRef } from '@angular/core'
 import { FormBuilder, FormControl, ValidationErrors, AsyncValidatorFn, AbstractControl } from '@angular/forms'
 import dayjs from 'dayjs'
+import _ from 'lodash'
 
 // schema
 import { Center } from '@schemas/center'
@@ -9,10 +10,12 @@ import { CenterUser } from '@schemas/center-user'
 
 // services
 import { StorageService } from '@services/storage.service'
+import { WordService } from '@services/helper/word.service'
+import { SendSMSMessageReqBody } from '@services/center-sms.service'
 
 // rxjs
 import { Subject } from 'rxjs'
-import { take, takeUntil } from 'rxjs/operators'
+import { take, takeUntil, debounceTime, distinctUntilChanged } from 'rxjs/operators'
 
 // ngrx
 import { Store, select } from '@ngrx/store'
@@ -22,6 +25,18 @@ import * as FromSMS from '@centerStore/reducers/sec.sms.reducer'
 import * as SMSSelector from '@centerStore/selectors/sec.sms.selector'
 import * as SMSActions from '@centerStore/actions/sec.sms.actions'
 import { SMSTypeInit } from '@centerStore/reducers/sec.sms.reducer'
+import { Loading } from '@schemas/store/loading'
+import { SMSAutoSend } from '@schemas/sms-auto-send'
+import {
+    setGeneralTransmissionTime,
+    startGetLockerAutoSend,
+    startGetMembershipAutoSend,
+} from '@centerStore/actions/sec.sms.actions'
+import { selectedUserListsSelected } from '@centerStore/selectors/sec.sms.selector'
+import { SMSCaller } from '@schemas/sms-caller'
+import { SMSHistoryGroup } from '@schemas/sms-history-group'
+
+type AutoTransmitType = 'membership' | 'locker'
 
 @Component({
     selector: 'rw-message',
@@ -31,25 +46,83 @@ import { SMSTypeInit } from '@centerStore/reducers/sec.sms.reducer'
 export class MessageComponent implements OnInit, OnDestroy {
     public center: Center
 
-    public selectedNumber = 0
-
-    public userSearchInput: FormControl
+    // ngrx -- common
+    public smsPoint$ = this.nxStore.select(SMSSelector.smsPoint)
+    public smsPoint = 0
+    public textCountForSMSPoint = {
+        short: 0,
+        long: 0,
+    }
+    public isLoading$ = this.nxStore.select(SMSSelector.isLoading)
+    public selectSMSType$ = this.nxStore.select(SMSSelector.smsType)
+    // ngrx -- general
     public usersSelectCateg$ = this.nxStore.select(SMSSelector.usersSelectCategs)
     public usersLists$ = this.nxStore.select(SMSSelector.usersLists)
     public searchedUsersLists$ = this.nxStore.select(SMSSelector.searchedUsersLists)
     public selectedUserList$ = this.nxStore.select(SMSSelector.curUserListSelect)
-    public isLoading$ = this.nxStore.select(SMSSelector.isLoading)
-    public selectedUserListsHolding$ = this.nxStore.select(SMSSelector.selectedUserListsHolding)
-    public selectSMSType$ = this.nxStore.select(SMSSelector.smsType)
+    public selectedUserListSelected$ = this.nxStore.select(SMSSelector.selectedUserListsSelected)
+    public selectedUserListSelected = 0
     public smsType: FromSMS.SMSType = FromSMS.SMSTypeInit
     setSMSType(st: FromSMS.SMSType) {
         this.nxStore.dispatch(SMSActions.setSMSType({ smsType: st }))
     }
-    public smsPoint$ = this.nxStore.select(SMSSelector.smsPoint)
+    public callerList$ = this.nxStore.select(SMSSelector.callerList)
+    public generalText$ = this.nxStore.select(SMSSelector.generalText)
+    public generalText = ''
+    public generalTextByte = 0
+    public subtractText = ''
+    public subtractPoint = 0
+    updateGeneralText(v: string) {
+        this.nxStore.dispatch(SMSActions.setGeneralText({ text: v }))
+    }
+    public bookTime$ = this.nxStore.select(SMSSelector.bookTime)
+    public bookDate$ = this.nxStore.select(SMSSelector.bookDate)
+    public generalTransmissionTime$ = this.nxStore.select(SMSSelector.generalTransmissionTime)
+
+    public generalCaller$ = this.nxStore.select(SMSSelector.generalCaller)
+    public generalCaller: SMSCaller = undefined
+    onGeneralCallerChange(caller: SMSCaller) {
+        this.nxStore.dispatch(SMSActions.setGeneralCaller({ caller }))
+    }
+
+    // ngrx -- auto transmission
+    public membershipAutoSendSetting$ = this.nxStore.select(SMSSelector.membershipAutoSendSetting)
+    public lockerAutoSendSetting$ = this.nxStore.select(SMSSelector.lockerAutoSendSetting)
+    public membershipAutoSendSetting: SMSAutoSend = FromSMS.SMSAutoSendInit
+    public lockerAutoSendSetting: SMSAutoSend = FromSMS.SMSAutoSendInit
+    public membershipCaller$ = this.nxStore.select(SMSSelector.membershipCaller)
+    public membershipCaller: SMSCaller = undefined
+    public lockerCaller$ = this.nxStore.select(SMSSelector.lockerCaller)
+    public lockerCaller: SMSCaller = undefined
+    onLockerCallerChange(caller: SMSCaller) {
+        this.nxStore.dispatch(SMSActions.setLockerCaller({ caller }))
+    }
+    onMembershipCallerChange(caller: SMSCaller) {
+        this.nxStore.dispatch(SMSActions.setMembershipCaller({ caller }))
+    }
+
+    // ngrx -- history
+    public historyGroupLoading: Loading = 'idle'
+    public historyLoading: Loading = 'idle'
+    public historyGroupLoading$ = this.nxStore.select(SMSSelector.historyGroupLoading)
+    public historyLoading$ = this.nxStore.select(SMSSelector.historyLoading)
+    public smsHistoryGroupList$ = this.nxStore.select(SMSSelector.smsHistoryGroupList)
+    public smsHistoryList$ = this.nxStore.select(SMSSelector.smsHistoryList)
+    public historyDateRange$ = this.nxStore.select(SMSSelector.historyDateRange)
+    public selectedHistoryDate: [string, string] = [
+        dayjs().subtract(3, 'month').format('YYYY-MM-DD'),
+        dayjs().format('YYYY-MM-DD'),
+    ]
+    public curHistoryGroup$ = this.nxStore.select(SMSSelector.curHistoryGroup)
 
     public unsubscribe$ = new Subject<boolean>()
 
-    constructor(private nxStore: Store, private storageService: StorageService, private fb: FormBuilder) {}
+    constructor(
+        private nxStore: Store,
+        private storageService: StorageService,
+        private fb: FormBuilder,
+        private wordService: WordService
+    ) {}
 
     ngOnInit(): void {
         this.center = this.storageService.getCenter()
@@ -58,14 +131,84 @@ export class MessageComponent implements OnInit, OnDestroy {
             if (curCenterId != this.center.id) {
                 this.nxStore.dispatch(SMSActions.resetAll())
                 this.nxStore.dispatch(SMSActions.startLoadMemberList({ centerId: this.center.id }))
+
+                this.nxStore.dispatch(SMSActions.startGetMembershipAutoSend({ centerId: this.center.id }))
+                this.nxStore.dispatch(SMSActions.startGetLockerAutoSend({ centerId: this.center.id }))
             }
         })
         this.nxStore.dispatch(SMSActions.startGetSMSPoint({ centerId: this.center.id }))
         this.nxStore.dispatch(SMSActions.startGetUsersByCategory({ centerId: this.center.id }))
         this.nxStore.dispatch(SMSActions.setCurCenterId({ centerId: this.center.id }))
+        this.nxStore.dispatch(SMSActions.startGetCallerList({ centerId: this.center.id }))
+
+        this.historyDateRange$.pipe(takeUntil(this.unsubscribe$)).subscribe((dateRange) => {
+            this.selectedHistoryDate = _.cloneDeep(dateRange)
+        })
+        this.nxStore.dispatch(
+            SMSActions.startGetHistoryGroup({
+                centerId: this.center.id,
+                start_date: this.selectedHistoryDate[0],
+                end_date: this.selectedHistoryDate[1],
+            })
+        )
+
+        this.smsPoint$.pipe(takeUntil(this.unsubscribe$)).subscribe((smsPoint) => {
+            this.smsPoint = smsPoint
+            this.checkIsMsgAbleToBeSent()
+            // this.textCountForSMSPoint = {
+            //     short:  ,
+            //     long:
+            // }
+        })
         this.selectSMSType$.pipe(takeUntil(this.unsubscribe$)).subscribe((smsType) => {
             this.smsType = smsType
         })
+        this.selectedUserListSelected$.pipe(takeUntil(this.unsubscribe$)).subscribe((selectedNumber) => {
+            this.selectedUserListSelected = selectedNumber
+            this.calculateSubtractPoint(this.generalTextByte, this.selectedUserListSelected)
+            this.checkIsMsgAbleToBeSent()
+        })
+        this.generalText$.pipe(takeUntil(this.unsubscribe$)).subscribe((gt) => {
+            this.generalText = gt
+            this.generalTextByte = this.wordService.getTextByte(gt)
+            this.calculateSubtractPoint(this.generalTextByte, this.selectedUserListSelected)
+            this.checkIsMsgAbleToBeSent()
+        })
+        this.historyLoading$.pipe(takeUntil(this.unsubscribe$)).subscribe((hl) => {
+            this.historyLoading = hl
+        })
+        this.historyGroupLoading$.pipe(takeUntil(this.unsubscribe$)).subscribe((hgl) => {
+            this.historyGroupLoading = hgl
+        })
+        this.membershipAutoSendSetting$.pipe(takeUntil(this.unsubscribe$)).subscribe((mass) => {
+            this.membershipAutoSendSetting = _.cloneDeep({ ...mass, time: mass.time + ':00' })
+        })
+        this.lockerAutoSendSetting$.pipe(takeUntil(this.unsubscribe$)).subscribe((lass) => {
+            this.lockerAutoSendSetting = _.cloneDeep({ ...lass, time: lass.time + ':00' })
+        })
+        this.bookDate$.pipe(takeUntil(this.unsubscribe$)).subscribe((bd) => {
+            this.bookDate = bd
+            this.bookDateText = dayjs(bd.date).format('YYYY.MM.DD (ddd)')
+        })
+        this.bookTime$.pipe(takeUntil(this.unsubscribe$)).subscribe((bt) => {
+            this.bookTime = bt
+        })
+        this.generalTransmissionTime$.pipe(takeUntil(this.unsubscribe$)).subscribe((gtt) => {
+            this.generalTransmissionTime = _.cloneDeep(gtt)
+        })
+        this.generalCaller$.pipe(takeUntil(this.unsubscribe$)).subscribe((gc) => {
+            this.generalCaller = _.cloneDeep(gc)
+            this.checkIsMsgAbleToBeSent()
+        })
+
+        // auto transmission
+        this.lockerCaller$.pipe(takeUntil(this.unsubscribe$)).subscribe((lc) => {
+            this.lockerCaller = _.cloneDeep(lc)
+        })
+        this.membershipCaller$.pipe(takeUntil(this.unsubscribe$)).subscribe((mc) => {
+            this.membershipCaller = _.cloneDeep(mc)
+        })
+        // history
     }
     ngOnDestroy() {
         this.unsubscribe$.next(true)
@@ -73,17 +216,54 @@ export class MessageComponent implements OnInit, OnDestroy {
     }
 
     // message route : general
+    public isMsgAbleToBeSent = true
+    checkIsMsgAbleToBeSent() {
+        this.isMsgAbleToBeSent =
+            this.checkIsPointEnough() &&
+            this.selectedUserListSelected > 0 &&
+            !_.isEmpty(this.generalCaller) &&
+            _.trim(this.generalText).length > 0
+    }
+
+    public isPointEnough = true
+    checkIsPointEnough() {
+        this.isPointEnough = this.smsPoint - this.subtractPoint >= 0
+        return this.isPointEnough
+    }
+
+    calculateSubtractPoint(gtb: number, selectedUsers: number) {
+        if (gtb <= 90) {
+            this.subtractText = '단문 11P'
+            this.subtractPoint = gtb * 11 * selectedUsers
+        } else {
+            this.subtractText = '장문 33P'
+            this.subtractPoint = gtb * 33 * selectedUsers
+        }
+    }
+
     public generalTransmissionTime = {
         immediate: true,
         book: false,
     }
     onGeneralTransmissionTimeClick(type: 'immediate' | 'book') {
         if (type == 'immediate') {
-            this.generalTransmissionTime.immediate = true
-            this.generalTransmissionTime.book = false
+            this.nxStore.dispatch(
+                setGeneralTransmissionTime({
+                    generalTransmissionTime: {
+                        immediate: true,
+                        book: false,
+                    },
+                })
+            )
         } else if (type == 'book') {
-            this.generalTransmissionTime.immediate = false
-            this.generalTransmissionTime.book = true
+            this.nxStore.dispatch(
+                setGeneralTransmissionTime({
+                    generalTransmissionTime: {
+                        immediate: false,
+                        book: true,
+                    },
+                })
+            )
         }
     }
 
@@ -97,12 +277,12 @@ export class MessageComponent implements OnInit, OnDestroy {
         this.showBookDate = !this.showBookDate
     }
     onBookDateChange(data: { date: string }) {
-        this.bookDateText = dayjs(data.date).format('YYYY.MM.DD (ddd)')
+        this.nxStore.dispatch(SMSActions.setBookDate({ bookDate: data }))
     }
 
-    public bookTime = '10:00:00'
+    public bookTime
     onBookTimeClick(time: { key: string; name: string }) {
-        this.bookTime = time.key
+        this.nxStore.dispatch(SMSActions.setBookTime({ bookTime: time.key }))
     }
 
     public showResetModal = false
@@ -125,17 +305,29 @@ export class MessageComponent implements OnInit, OnDestroy {
 
     public showTransmitMsgModal = false
     public showTransmitMsgModalData = {
-        text: `문자 ${'100'}건을 전송하시겠어요?`,
+        text: `문자 ${this.selectedUserListSelected}건을 전송하시겠어요?`,
         subText: `전송하기 버튼을 클릭하시면
                 문자가 즉시 또는 예약한 일시에 전송됩니다.`,
         cancelButtonText: '취소',
         confirmButtonText: '전송하기',
+    }
+    openTransmitMsgModal() {
+        this.showTransmitMsgModal = true
+        this.showTransmitMsgModalData.text = `문자 ${this.selectedUserListSelected}건을 전송하시겠어요?`
     }
     onCancelTransmitMsg() {
         this.showTransmitMsgModal = false
     }
     onConfirmTransmitMsg() {
         this.showTransmitMsgModal = false
+        this.nxStore.dispatch(
+            SMSActions.startSendGeneralMessage({
+                centerId: this.center.id,
+                cb: () => {
+                    this.nxStore.dispatch(showToast({ text: '문자 전송이 완료되었습니다.' }))
+                },
+            })
+        )
         // this.nxStore.dispatch(showToast({text:'문자 전송이 완료되었습니다.'}))
     }
 
@@ -144,26 +336,89 @@ export class MessageComponent implements OnInit, OnDestroy {
         settingTitle: '회원권 만기 시, 자동 전송 사용 여부',
         transType: '회원권',
     }
-    public membershipTransmitAvailable = false
-    public membershipTransmitDay = '7'
-    public membershipTransmitTime = '10:00:00'
     public lockerSettingObj = {
         settingTitle: '락커 만기 시, 자동 전송 사용 여부',
         transType: '락커',
     }
-    public lockerTransmitAvailable = false
-    public lockerTransmitDay = '7'
-    public lockerTransmitTime = '10:00:00'
+    updateTransmitChange(isOn: boolean, type: AutoTransmitType) {
+        if (type == 'membership') {
+            this.nxStore.dispatch(
+                SMSActions.startUpdateAutoSend({
+                    centerId: this.center.id,
+                    reqBody: { auto_send_yn: isOn },
+                    autoSendType: 'membership',
+                })
+            )
+        } else if (type == 'locker') {
+            this.nxStore.dispatch(
+                SMSActions.startUpdateAutoSend({
+                    centerId: this.center.id,
+                    reqBody: { auto_send_yn: isOn },
+                    autoSendType: 'locker',
+                })
+            )
+        }
+    }
+    updateTransmitDay(day: string, type: AutoTransmitType) {
+        if (type == 'membership') {
+            this.nxStore.dispatch(
+                SMSActions.startUpdateAutoSend({
+                    centerId: this.center.id,
+                    reqBody: { days: Number(day) },
+                    autoSendType: 'membership',
+                })
+            )
+        } else {
+            this.nxStore.dispatch(
+                SMSActions.startUpdateAutoSend({
+                    centerId: this.center.id,
+                    reqBody: { days: Number(day) },
+                    autoSendType: 'locker',
+                })
+            )
+        }
+    }
+    updateTransmitTime(time: string, type: AutoTransmitType) {
+        if (type == 'membership') {
+            this.nxStore.dispatch(
+                SMSActions.startUpdateAutoSend({
+                    centerId: this.center.id,
+                    reqBody: { time: time.slice(0, 5) },
+                    autoSendType: 'membership',
+                })
+            )
+        } else {
+            this.nxStore.dispatch(
+                SMSActions.startUpdateAutoSend({
+                    centerId: this.center.id,
+                    reqBody: { time: time.slice(0, 5) },
+                    autoSendType: 'locker',
+                })
+            )
+        }
+    }
 
     // message route : history
-    public selectedDate: [string, string] = [
-        dayjs().subtract(3, 'month').format('YYYY-MM-DD'),
-        dayjs().format('YYYY-MM-DD'),
-    ]
-    // onDateSeleted(date: [string, string]) {
-    //     // this.nxStore.dispatch(SaleActions.setSelectedDate({ selectedDate: date }))
-    //     this.selectedDate = date
-    //     this.getSaleTableWrpper(this.selectedDate, this.tableOption)
-    //     this.nxStore.dispatch(showToast({ text: '매출 조회 기간이 변경되었습니다.' }))
-    // }
+
+    onDateSelected(date: [string, string]) {
+        console.log('onDateSelected : ', date)
+        this.nxStore.dispatch(SMSActions.setHistoryDateRange({ historyDateRange: date }))
+        this.nxStore.dispatch(
+            SMSActions.startGetHistoryGroup({
+                centerId: this.center.id,
+                start_date: _.replace(date[0], '.', '-'),
+                end_date: _.replace(date[1], '.', '-'),
+                cb: () => {
+                    this.nxStore.dispatch(showToast({ text: '매출 조회 기간이 변경되었습니다.' }))
+                },
+            })
+        )
+    }
+
+    onHistoryGroupItemClick(hd: SMSHistoryGroup) {
+        this.nxStore.dispatch(SMSActions.setSMSHistoryGroup({ smsHistoryGroup: hd }))
+        this.nxStore.dispatch(
+            SMSActions.startGetHistoryGroupDetail({ centerId: this.center.id, historyGroupId: hd.id })
+        )
+    }
 }

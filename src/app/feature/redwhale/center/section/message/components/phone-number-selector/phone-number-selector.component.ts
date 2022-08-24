@@ -13,7 +13,7 @@ import {
 } from '@angular/core'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
 
-type PhoneNumber = { number: string; value: any; verified?: boolean }
+import { SMSCaller } from '@schemas/sms-caller'
 
 @Component({
     selector: 'msg-phone-number-selector',
@@ -28,12 +28,14 @@ type PhoneNumber = { number: string; value: any; verified?: boolean }
     ],
 })
 export class PhoneNumberSelectorComponent implements AfterViewInit, ControlValueAccessor {
-    @Input() items: Array<PhoneNumber>
+    @Input() items: Array<SMSCaller>
     @Input() disabled = false
     @Input() width: string
     @Input() height: string
     @Input() closeBgColor: string
     @Input() dropUp = false
+
+    @Input() errMsg = ''
 
     @Output() onSelectChange = new EventEmitter<any>()
 
@@ -41,7 +43,7 @@ export class PhoneNumberSelectorComponent implements AfterViewInit, ControlValue
     @ViewChild('selectedElement') selectedElement
     @ViewChild('itemsElement') itemsElement
 
-    public value: PhoneNumber
+    public value: SMSCaller
     public isOpen: boolean
 
     constructor(private el: ElementRef, private renderer: Renderer2) {

@@ -1,4 +1,18 @@
-import { Component, OnInit, Renderer2, AfterViewInit, ViewChild, ElementRef, OnDestroy } from '@angular/core'
+import {
+    Component,
+    OnInit,
+    Renderer2,
+    AfterViewInit,
+    ViewChild,
+    ElementRef,
+    OnDestroy,
+    Input,
+    Output,
+    EventEmitter,
+} from '@angular/core'
+import { SMSHistoryGroup } from '@schemas/sms-history-group'
+import { SMSHistory } from '@schemas/sms-history'
+import { Loading } from '@schemas/store/loading'
 
 @Component({
     selector: 'msg-transmission-history-table',
@@ -6,6 +20,13 @@ import { Component, OnInit, Renderer2, AfterViewInit, ViewChild, ElementRef, OnD
     styleUrls: ['./transmission-history-table.component.scss'],
 })
 export class TransmissionHistoryTableComponent implements OnInit, AfterViewInit, OnDestroy {
+    @Input() smsHistoryGroupList: Array<SMSHistoryGroup>
+    @Input() smsHistoryList: Array<SMSHistory>
+    @Input() historyGroupLoading: Loading
+    @Input() historyLoading: Loading
+    @Input() curHistoryGroup: SMSHistoryGroup
+
+    @Output() onHistoryGroupClick = new EventEmitter<SMSHistoryGroup>()
     @ViewChild('history_table') historyTableEl: ElementRef
     public resizeUnlistener: () => void
     public contentWidth = 0
@@ -34,8 +55,9 @@ export class TransmissionHistoryTableComponent implements OnInit, AfterViewInit,
     }
 
     public showHistoryDetailModal = false
-    public openHistoryDetailModal(hd?: any) {
+    public openHistoryDetailModal(hd: SMSHistoryGroup) {
         this.showHistoryDetailModal = true
+        this.onHistoryGroupClick.emit(hd)
     }
     public closeHistoryDetailModal() {
         this.showHistoryDetailModal = false

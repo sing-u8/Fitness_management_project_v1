@@ -257,6 +257,12 @@
                                     margin-bottom: 4px;
                                 }
                             }
+                            .error {
+                                display: flex;
+                                margin-top: 5px;
+                                color: var(--red);
+
+                            }
                         }
                     }
 
@@ -305,4 +311,12 @@
 
         }
     }
+}
+
+.error-icon {
+    width: 20px;
+    height: 20px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-image: url("/assets/icons/etc/warning-red.svg");
 }

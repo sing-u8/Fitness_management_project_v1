@@ -8,10 +8,14 @@
 		(rwClickOutside)="close()"
 	>
 		<div class="d-flex align-items-center">
-			<span class="text">{{ value?.number }}</span>
-			<div class="verification-icon" [class.verified]="value?.verified">{{value?.verified ? '인증' : '미인증' }}</div>
+			<span class="text">{{ value?.phone_number }}</span>
+<!--			<div class="verification-icon" [class.verified]="value?.verified">{{value?.verified ? '인증' : '미인증' }}</div>-->
 		</div>
 		<span class="mdi mdi-chevron-down"></span>
+	</div>
+	<div *ngIf="errMsg" class="l-err-msg rw-typo-subtext0-regular">
+		<span class="error-icon"></span>
+		{{errMsg}}
 	</div>
 
 	<div
@@ -23,11 +27,11 @@
 		<div
 			class="item d-flex align-items-center"
 			*ngFor="let item of items"
-			[class.active]="item.value.id == value?.value?.id"
+			[class.active]="item.phone_number == value?.phone_number"
 			(click)="onSelect(item)"
 		>
-			<span class="rw-typo-bodytext0">{{ item.number }}</span>
-			<div class="verification-icon" [class.verified]="item.verified">{{item.verified ? '인증' : '미인증' }}</div>
+			<span class="rw-typo-bodytext0">{{ item.phone_number }}</span>
+<!--			<div class="verification-icon" [class.verified]="item.verified">{{item.verified ? '인증' : '미인증' }}</div>-->
 		</div>
 	</div>
 

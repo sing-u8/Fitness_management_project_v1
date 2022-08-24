@@ -1,6 +1,7 @@
 import { on } from '@ngrx/store'
 import { createImmerReducer } from 'ngrx-immer/store'
 import _ from 'lodash'
+import dayjs from 'dayjs'
 
 // schema
 import { SMSCaller } from '@schemas/sms-caller'
@@ -13,6 +14,7 @@ import { CenterUser } from '@schemas/center-user'
 import { CenterUsersCategory } from '@schemas/center/community/center-users-by-category'
 
 import * as SMSActions from '../actions/sec.sms.actions'
+import { setGeneralTransmissionTime, setHistoryDateRange } from '../actions/sec.sms.actions'
 
 export type MemberSelectCateg = 'member' | 'valid' | 'unpaid' | 'imminent' | 'expired' | 'employee' //  | 'attendance'
 export type UsersListValue = Array<{ user: CenterUser; selected: boolean }>
@@ -20,10 +22,7 @@ export type UsersSelectCateg = Record<MemberSelectCateg, { name: string; userSiz
 export type UserListSelect = { key: MemberSelectCateg; value: { name: string; userSize: number } }
 export type UsersLists = Record<MemberSelectCateg, UsersListValue>
 export type SMSType = 'general' | 'auto-transmission' | 'history'
-export type CurHistoryData = {
-    isLoading: Loading
-    data: SMSHistory
-}
+export type HistoryDateRange = [string, string]
 
 export interface State {
     // common
@@ -33,17 +32,32 @@ export interface State {
     smsType: SMSType
     smsPoint: number
     error: string
+    callerList: SMSCaller[]
     // main
     // general
     usersSelectCategs: UsersSelectCateg
     usersLists: UsersLists
     curUserListSelect: UserListSelect
+    generalText: string
+    bookTime: string // HH:mm:ss
+    bookDate: { date: string } // YYYY-MM-DD
+    generalTransmissionTime: {
+        immediate: boolean
+        book: boolean
+    }
+    generalCaller: SMSCaller
     // auto transmission
     lockerAutoSendSetting: SMSAutoSend
     membershipAutoSendSetting: SMSAutoSend
+    lockerCaller: SMSCaller
+    membershipCaller: SMSCaller
     // history
+    historyGroupLoading: Loading
+    historyLoading: Loading
+    curSMSHistoryGroup: SMSHistoryGroup
     smsHistoryGroupList: Array<SMSHistoryGroup>
-    curHistoryData: CurHistoryData
+    smsHistoryList: Array<SMSHistory>
+    historyDateRange: HistoryDateRange
 }
 
 export const UsersSelectCategInit: UsersSelectCateg = {
@@ -78,10 +92,7 @@ export const SMSAutoSendInit: SMSAutoSend = {
     time: '10:00:00',
 }
 export const SMSHistoryGroupListInit = []
-export const CurHistoryDataInit: CurHistoryData = {
-    isLoading: 'idle',
-    data: undefined,
-}
+export const SMSHistoryListInit = []
 
 export const initialState: State = {
     // common
@@ -96,12 +107,27 @@ export const initialState: State = {
     usersSelectCategs: UsersSelectCategInit,
     usersLists: UsersListInit,
     curUserListSelect: UserListSelectInit,
+    callerList: [],
+    generalText: '',
+    bookTime: '10:00:00',
+    bookDate: { date: dayjs().format('YYYY-MM-DD') },
+    generalTransmissionTime: {
+        immediate: true,
+        book: false,
+    },
+    generalCaller: undefined,
     // auto transmission
     lockerAutoSendSetting: SMSAutoSendInit,
     membershipAutoSendSetting: SMSAutoSendInit,
+    membershipCaller: undefined,
+    lockerCaller: undefined,
     // history
+    historyGroupLoading: 'idle',
+    historyLoading: 'idle',
+    curSMSHistoryGroup: undefined,
     smsHistoryGroupList: SMSHistoryGroupListInit,
-    curHistoryData: CurHistoryDataInit,
+    smsHistoryList: SMSHistoryListInit,
+    historyDateRange: [dayjs().subtract(3, 'month').format('YYYY-MM-DD'), dayjs().format('YYYY-MM-DD')],
 }
 
 export const smsReducer = createImmerReducer(
@@ -142,6 +168,56 @@ export const smsReducer = createImmerReducer(
         state.smsPoint = smsPoint
         return state
     }),
+    on(SMSActions.finishGetCallerList, (state, { callerList }) => {
+        state.callerList = callerList
+        return state
+    }),
+    on(SMSActions.finishGetMembershipAutoSend, (state, { smsAutoSend }) => {
+        state.membershipAutoSendSetting = smsAutoSend
+        return state
+    }),
+    on(SMSActions.finishGetLockerAutoSend, (state, { smsAutoSend }) => {
+        state.lockerAutoSendSetting = smsAutoSend
+        return state
+    }),
+    on(SMSActions.startUpdateAutoSend, (state, { reqBody, autoSendType }) => {
+        if (autoSendType == 'membership') {
+            state.membershipAutoSendSetting = _.assign(state.membershipAutoSendSetting, reqBody)
+        } else if (autoSendType == 'locker') {
+            state.lockerAutoSendSetting = _.assign(state.lockerAutoSendSetting, reqBody)
+        }
+        return state
+    }),
+    on(SMSActions.startGetHistoryGroup, (state) => {
+        state.historyGroupLoading = 'pending'
+        return state
+    }),
+    on(SMSActions.finishGetHistoryGroup, (state, { smsHistoryGroupList }) => {
+        state.historyGroupLoading = 'done'
+        state.smsHistoryGroupList = smsHistoryGroupList
+        return state
+    }),
+    on(SMSActions.startGetHistoryGroupDetail, (state) => {
+        state.historyLoading = 'pending'
+        return state
+    }),
+    on(SMSActions.finishGetHistoryGroupDetail, (state, { smsHistoryList }) => {
+        state.historyLoading = 'done'
+        state.smsHistoryList = smsHistoryList
+        return state
+    }),
+    on(SMSActions.finishSendGeneralMessage, (state, { smsPoint }) => {
+        state.smsPoint = smsPoint
+
+        // reset cur Caeteg selected userList
+        const usersLists = state.usersLists
+        usersLists[state.curUserListSelect.key].forEach((item, index) => {
+            state.usersLists[state.curUserListSelect.key][index].selected = false
+        })
+        // reset general text
+        state.generalText = ''
+        return state
+    }),
 
     // sync
     on(SMSActions.setSMSType, (state, { smsType }) => {
@@ -178,6 +254,42 @@ export const smsReducer = createImmerReducer(
 
         return state
     }),
+    on(SMSActions.setGeneralText, (state, { text }) => {
+        state.generalText = text
+        return state
+    }),
+    on(SMSActions.setBookTime, (state, { bookTime }) => {
+        state.bookTime = bookTime
+        return state
+    }),
+    on(SMSActions.setBookDate, (state, { bookDate }) => {
+        state.bookDate = bookDate
+        return state
+    }),
+    on(SMSActions.setGeneralTransmissionTime, (state, { generalTransmissionTime }) => {
+        state.generalTransmissionTime = generalTransmissionTime
+        return state
+    }),
+    on(SMSActions.setGeneralCaller, (state, { caller }) => {
+        state.generalCaller = caller
+        return state
+    }),
+    on(SMSActions.setLockerCaller, (state, { caller }) => {
+        state.lockerCaller = caller
+        return state
+    }),
+    on(SMSActions.setMembershipCaller, (state, { caller }) => {
+        state.membershipCaller = caller
+        return state
+    }),
+    on(SMSActions.setHistoryDateRange, (state, { historyDateRange }) => {
+        state.historyDateRange = historyDateRange
+        return state
+    }),
+    on(SMSActions.setSMSHistoryGroup, (state, { smsHistoryGroup }) => {
+        state.curSMSHistoryGroup = smsHistoryGroup
+        return state
+    }),
     // - //curCenterId
     on(SMSActions.setCurCenterId, (state, { centerId }) => {
         state.curCenterId = centerId
@@ -201,17 +313,39 @@ export const smsReducer = createImmerReducer(
 // common
 export const selectCurCenterId = (state: State) => state.curCenterId
 export const selectIsLoading = (state: State) => state.isLoading
-export const selectError = (state: State) => state.error
 export const selectSearchInput = (state: State) => state.curSearchInput
+export const selectSMSType = (state: State) => state.smsType
 export const selectSMSPoint = (state: State) => state.smsPoint
+export const selectError = (state: State) => state.error
 
 // main
-export const selectSMSType = (state: State) => state.smsType
+// // general
 export const selectUsersSelectCategs = (state: State) => state.usersSelectCategs
 export const selectUsersLists = (state: State) => state.usersLists
 export const selectCurUserListSelect = (state: State) => state.curUserListSelect
 export const selectedUserListsSelected = (state: State) =>
     state.usersLists[state.curUserListSelect.key].filter((v) => v.selected).length
+export const selectedUserListIds = (state: State) =>
+    state.usersLists[state.curUserListSelect.key].filter((v) => v.selected).map((v) => v.user.id)
+export const selectCallerList = (state: State) => state.callerList.filter((v) => v.verified)
+export const selectGeneralText = (state: State) => state.generalText
+export const selectBookTime = (state: State) => state.bookTime
+export const selectBookDate = (state: State) => state.bookDate
+export const selectGeneralTransmissionTime = (state: State) => state.generalTransmissionTime
+export const selectGeneralCaller = (state: State) => state.generalCaller
+// // auto transmission
+export const selectMembershipAutoSend = (state: State) => state.membershipAutoSendSetting
+export const selectLockerAutoSend = (state: State) => state.lockerAutoSendSetting
+export const selectLockerCaller = (state: State) => state.lockerCaller
+export const selectMembershipCaller = (state: State) => state.membershipCaller
+// // history
+export const selectHistoryGroupLoading = (state: State) => state.historyGroupLoading
+export const selectHistoryLoading = (state: State) => state.historyLoading
+export const selectCurHistoryGroup = (state: State) => state.curSMSHistoryGroup
+export const selectSMSHistoryGroupList = (state: State) => state.smsHistoryGroupList
+export const selectSMSHistoryList = (state: State) => state.smsHistoryList
+export const selectHistoryDateRange = (state: State) => state.historyDateRange
+
 // additional
 export const selectSearchedUsersLists = (state: State) => {
     const searchUserList: UsersLists = _.cloneDeep(UsersListInit)
