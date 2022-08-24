@@ -1,8 +1,10 @@
 <section class="l-member-list">
 	<div class="member-list-header">
+		<div class="rw-typo-title1">수신자 선택</div>
+		<div class="bar"></div>
 		<msg-user-list-select
 			[items]="usersSelectCateg"
-			[(ngModel)]="selectedUserList"
+			[ngModel]="selectedUserList"
 			(onTypeChange)="onSelectedUserListChange($event)"
 		></msg-user-list-select>
 	</div>
@@ -130,3 +132,10 @@
 		</ng-template>
 	</div>
 </section>
+
+<rw-modal
+	[(visible)]="showResetModal"
+	[data]="showResetModalData"
+	(cancel)="onCancelResetModal()"
+	(confirm)="onConfirmResetModal()"
+></rw-modal>

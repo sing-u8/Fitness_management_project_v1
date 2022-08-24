@@ -159,8 +159,8 @@ export const smsReducer = createImmerReducer(
         }
         return state
     }),
-    on(SMSActions.startGetUserList, (state, { userListSelect }) => {
-        state.curUserListSelect = userListSelect
+    on(SMSActions.startGetUserList, (state, { categ_type }) => {
+        state.curUserListSelect = { key: categ_type, value: state.usersSelectCategs[categ_type] }
         state.isLoading = 'pending'
         return state
     }),

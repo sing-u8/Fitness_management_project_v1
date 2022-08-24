@@ -87,14 +87,43 @@ export class MsgMemberListComponent implements OnInit, OnDestroy {
             })
         )
     }
+    // ---- reset member selected vars and methods ------------
+    public showResetModal = false
+    public showResetModalData = {
+        text: '선택한 인원을 초기화하시겠어요?',
+        subText: `다른 카테고리로 이동 할 경우,
+                현재 선택한 인원이 모두 초기화됩니다.`,
+        cancelButtonText: '취소',
+        confirmButtonText: '초기화 후 이동하기',
+    }
+    openShowResetModal() {
+        this.showResetModal = true
+    }
+    onCancelResetModal() {
+        this.showResetModal = false
+    }
+    onConfirmResetModal() {
+        this.showResetModal = false
+        this.changeSelectedUserList()
+    }
 
     // -------------------------------------- selectedUserList method --------------------------------------
+    public selectedUserListType: FromSMS.MemberSelectCateg = undefined
     onSelectedUserListChange(type: string) {
+        this.selectedUserListType = type as FromSMS.MemberSelectCateg
+        if (this.selectedUserListsSelected > 0) {
+            this.openShowResetModal()
+        } else {
+            this.changeSelectedUserList()
+        }
+    }
+
+    changeSelectedUserList() {
         this.selectAll = false
         this.nxStore.dispatch(
             SMSActions.startGetUserList({
                 centerId: this.center.id,
-                categ_type: type as FromSMS.MemberSelectCateg,
+                categ_type: this.selectedUserListType,
                 userListSelect: this.selectedUserList,
             })
         )

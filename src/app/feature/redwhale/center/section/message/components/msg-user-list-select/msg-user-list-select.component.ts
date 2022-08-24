@@ -76,7 +76,6 @@ export class MsgUserListSelectComponent implements AfterViewInit, ControlValueAc
     }
 
     onSelect(item: { name: string; userSize: number }, type: string) {
-        console.log('user list select onSelect : ', this.items)
         this.close()
         this.onChanged(item, type)
     }
@@ -99,7 +98,7 @@ export class MsgUserListSelectComponent implements AfterViewInit, ControlValueAc
     }
 
     onChanged(value: { name: string; userSize: number }, type: string) {
-        this.value = { key: type, value: value }
+        // this.value = { key: type, value: value }
         this.onChange(value, type)
         this.onTypeChange.emit(type)
     }

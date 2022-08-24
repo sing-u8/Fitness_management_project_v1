@@ -285,24 +285,6 @@ export class MessageComponent implements OnInit, OnDestroy {
         this.nxStore.dispatch(SMSActions.setBookTime({ bookTime: time.key }))
     }
 
-    public showResetModal = false
-    public showResetModalData = {
-        text: '선택한 인원을 초기화하시겠어요?',
-        subText: `다른 카테고리로 이동 할 경우,
-                현재 선택한 인원이 모두 초기화됩니다.`,
-        cancelButtonText: '취소',
-        confirmButtonText: '초기화 후 이동하기',
-    }
-    openShowResetModal() {
-        this.showResetModal = true
-    }
-    onCancelResetModal() {
-        this.showResetModal = false
-    }
-    onConfirmResetModal() {
-        this.showResetModal = false
-    }
-
     public showTransmitMsgModal = false
     public showTransmitMsgModalData = {
         text: `문자 ${this.selectedUserListSelected}건을 전송하시겠어요?`,
@@ -324,6 +306,13 @@ export class MessageComponent implements OnInit, OnDestroy {
             SMSActions.startSendGeneralMessage({
                 centerId: this.center.id,
                 cb: () => {
+                    this.nxStore.dispatch(
+                        SMSActions.startGetHistoryGroup({
+                            centerId: this.center.id,
+                            start_date: this.selectedHistoryDate[0],
+                            end_date: this.selectedHistoryDate[1],
+                        })
+                    )
                     this.nxStore.dispatch(showToast({ text: '문자 전송이 완료되었습니다.' }))
                 },
             })
