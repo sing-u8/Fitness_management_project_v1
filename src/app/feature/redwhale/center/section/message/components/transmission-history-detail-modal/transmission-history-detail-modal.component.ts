@@ -15,6 +15,8 @@ import { Loading } from '@schemas/store/loading'
 import { SMSHistory } from '@schemas/sms-history'
 import { SMSHistoryGroup } from '@schemas/sms-history-group'
 
+import { WordService } from '@services/helper/word.service'
+
 @Component({
     selector: 'msg-transmission-history-detail-modal',
     templateUrl: './transmission-history-detail-modal.component.html',
@@ -36,8 +38,9 @@ export class TransmissionHistoryDetailModalComponent implements OnChanges, After
 
     changed: boolean
     public isMouseModalDown: boolean
+    public textByte = 0
 
-    constructor(private el: ElementRef, private renderer: Renderer2) {}
+    constructor(private el: ElementRef, private renderer: Renderer2, private wordService: WordService) {}
     ngOnChanges(changes: SimpleChanges) {
         if (changes['visible'] && !changes['visible'].firstChange) {
             if (changes['visible'].previousValue != changes['visible'].currentValue) {
@@ -57,6 +60,7 @@ export class TransmissionHistoryDetailModalComponent implements OnChanges, After
                     this.renderer.addClass(this.modalBackgroundElement.nativeElement, 'rw-modal-background-show')
                     this.renderer.addClass(this.modalWrapperElement.nativeElement, 'rw-modal-wrapper-show')
                 }, 0)
+                this.textByte = this.wordService.getTextByte(this.curHistoryGroup.text)
             } else {
                 this.renderer.removeClass(this.modalBackgroundElement.nativeElement, 'rw-modal-background-show')
                 this.renderer.removeClass(this.modalWrapperElement.nativeElement, 'rw-modal-wrapper-show')

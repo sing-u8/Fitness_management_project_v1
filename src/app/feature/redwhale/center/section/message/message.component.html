@@ -2,7 +2,7 @@
     <header class="header">
         <div class="header-text">
             <span class="title rw-typo-headline1">문자</span>
-            <span class="title-desc rw-typo-subtext1">남은 포인트 : {{smsPoint$ | async}}p (단문 {{'00'}}건 / 장문 {{'00'}}건)</span>
+            <span class="title-desc rw-typo-subtext1">남은 포인트 : {{smsPoint$ | async}}p (단문 {{textCountForSMSPoint.short}}건 / 장문 {{textCountForSMSPoint.long}}건)</span>
             <div class="help-icon">
                 <div class="help">
                     <div class="help-text-container">
@@ -155,7 +155,7 @@
                         [callerList]="(callerList$ | async)"
                         [curCaller]="{phone_number: membershipAutoSendSetting.phone_number, verified: true}"
                         [text]="membershipAutoSendSetting.text"
-                        [textByte]="0"
+                        [textByte]="membershipAutoSendSettingTextByte"
                         (textChange)="onMLTextChange($event, 'membership')"
                         (onSelectChange)="onMLCallerChange($event,'membership')"
                     ></msg-text-field>
@@ -176,7 +176,7 @@
                         [callerList]="(callerList$ | async)"
                         [curCaller]="{phone_number: lockerAutoSendSetting.phone_number, verified: true}"
                         [text]="lockerAutoSendSetting.text"
-                        [textByte]="0"
+                        [textByte]="lockerAutoSendSettingTextByte"
                         (textChange)="onMLTextChange($event, 'locker')"
                         (onSelectChange)="onMLCallerChange($event,'locker')"
                     ></msg-text-field>

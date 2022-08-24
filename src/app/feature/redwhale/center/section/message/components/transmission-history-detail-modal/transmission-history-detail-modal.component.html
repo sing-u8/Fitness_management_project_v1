@@ -20,7 +20,7 @@
 					[readonly]="true"
 					class="rw-textarea rw-typo-bodytext0 thin-scroll-y"
 				>{{curHistoryGroup?.text}}</textarea>
-				<span class="byte">{{'5 / 90 byte'}}</span>
+				<span class="byte">{{textByte}} / {{textByte > 90 ? '2000' : '90'}} byte</span>
 			</div>
 
 			<ng-container *ngIf="curHistoryGroup?.state_code == 'sms_state_sent'">

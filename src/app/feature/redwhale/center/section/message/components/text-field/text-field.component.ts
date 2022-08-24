@@ -16,4 +16,8 @@ export class TextFieldComponent implements OnInit {
     constructor() {}
 
     ngOnInit(): void {}
+
+    checkTextIsOver(event) {
+        return this.textByte <= 2000
+    }
 }

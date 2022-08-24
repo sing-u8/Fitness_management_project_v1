@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core'
 import { createEffect, Actions, ofType, concatLatestFrom } from '@ngrx/effects'
 import { Store } from '@ngrx/store'
-import { of, forkJoin, EMPTY, from, iif } from 'rxjs'
+import { of } from 'rxjs'
 import { catchError, switchMap, tap, map, find, debounceTime } from 'rxjs/operators'
 
 import _ from 'lodash'
@@ -10,8 +10,6 @@ import * as SMSActions from '../actions/sec.sms.actions'
 import * as SMSReducer from '../reducers/sec.sms.reducer'
 import * as SMSSelector from '../selectors/sec.sms.selector'
 
-import { showToast } from '@appStore/actions/toast.action'
-
 import { CenterUsersService } from '@services/center-users.service'
 import { CenterUsersLockerService } from '@services/center-users-locker.service.service'
 import { CenterUsersMembershipService } from '@services/center-users-membership.service'
@@ -19,9 +17,7 @@ import { CenterService } from '@services/center.service'
 import { CenterHoldingService } from '@services/center-holding.service'
 import { CenterContractService } from '@services/center-users-contract.service'
 import { CenterSMSService, SendSMSMessageReqBody, UpdateMLAutoSendReqBody } from '@services/center-sms.service'
-import { curUserListSelect, userListIds } from '../selectors/sec.sms.selector'
 import { SMSAutoSend } from '@schemas/sms-auto-send'
-import { startUpdateLockerAutoSend, startUpdateMembershipAutoSend } from '../actions/sec.sms.actions'
 
 @Injectable()
 export class SMSEffect {
@@ -29,12 +25,7 @@ export class SMSEffect {
         private centerUsersApi: CenterUsersService,
         private store: Store,
         private actions$: Actions,
-        private centerSMSApi: CenterSMSService,
-        private centerUsersLockerApi: CenterUsersLockerService,
-        private centerUsersMembershipApi: CenterUsersMembershipService,
-        private centerService: CenterService,
-        private centerHoldingApi: CenterHoldingService,
-        private centerContractApi: CenterContractService
+        private centerSMSApi: CenterSMSService
     ) {}
 
     public loadMemberList$ = createEffect(() =>

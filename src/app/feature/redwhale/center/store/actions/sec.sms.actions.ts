@@ -6,7 +6,6 @@ import {
     UsersLists,
     UsersListValue,
     SMSType,
-    selectGeneralTransmissionTime,
     HistoryDateRange,
 } from '../reducers/sec.sms.reducer'
 import { SMSAutoSend } from '@schemas/sms-auto-send'

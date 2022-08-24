@@ -11,11 +11,10 @@ import { CenterUser } from '@schemas/center-user'
 // services
 import { StorageService } from '@services/storage.service'
 import { WordService } from '@services/helper/word.service'
-import { SendSMSMessageReqBody } from '@services/center-sms.service'
 
 // rxjs
 import { Subject } from 'rxjs'
-import { take, takeUntil, debounceTime, distinctUntilChanged } from 'rxjs/operators'
+import { take, takeUntil } from 'rxjs/operators'
 
 // ngrx
 import { Store, select } from '@ngrx/store'
@@ -24,15 +23,9 @@ import { showToast } from '@appStore/actions/toast.action'
 import * as FromSMS from '@centerStore/reducers/sec.sms.reducer'
 import * as SMSSelector from '@centerStore/selectors/sec.sms.selector'
 import * as SMSActions from '@centerStore/actions/sec.sms.actions'
-import { SMSTypeInit } from '@centerStore/reducers/sec.sms.reducer'
 import { Loading } from '@schemas/store/loading'
 import { SMSAutoSend } from '@schemas/sms-auto-send'
-import {
-    setGeneralTransmissionTime,
-    startGetLockerAutoSend,
-    startGetMembershipAutoSend,
-} from '@centerStore/actions/sec.sms.actions'
-import { selectedUserListsSelected } from '@centerStore/selectors/sec.sms.selector'
+import { setGeneralTransmissionTime } from '@centerStore/actions/sec.sms.actions'
 import { SMSCaller } from '@schemas/sms-caller'
 import { SMSHistoryGroup } from '@schemas/sms-history-group'
 
@@ -90,6 +83,8 @@ export class MessageComponent implements OnInit, OnDestroy {
     public lockerAutoSendSetting$ = this.nxStore.select(SMSSelector.lockerAutoSendSetting)
     public membershipAutoSendSetting: SMSAutoSend = FromSMS.SMSAutoSendInit
     public lockerAutoSendSetting: SMSAutoSend = FromSMS.SMSAutoSendInit
+    public membershipAutoSendSettingTextByte = 0
+    public lockerAutoSendSettingTextByte = 0
     public membershipCaller$ = this.nxStore.select(SMSSelector.membershipCaller)
     public membershipCaller: SMSCaller = undefined
     public lockerCaller$ = this.nxStore.select(SMSSelector.lockerCaller)
@@ -155,10 +150,10 @@ export class MessageComponent implements OnInit, OnDestroy {
         this.smsPoint$.pipe(takeUntil(this.unsubscribe$)).subscribe((smsPoint) => {
             this.smsPoint = smsPoint
             this.checkIsMsgAbleToBeSent()
-            // this.textCountForSMSPoint = {
-            //     short:  ,
-            //     long:
-            // }
+            this.textCountForSMSPoint = {
+                short: Math.floor(this.smsPoint / 11),
+                long: Math.floor(this.smsPoint / 33),
+            }
         })
         this.selectSMSType$.pipe(takeUntil(this.unsubscribe$)).subscribe((smsType) => {
             this.smsType = smsType
@@ -182,9 +177,11 @@ export class MessageComponent implements OnInit, OnDestroy {
         })
         this.membershipAutoSendSetting$.pipe(takeUntil(this.unsubscribe$)).subscribe((mass) => {
             this.membershipAutoSendSetting = _.cloneDeep(mass)
+            this.membershipAutoSendSettingTextByte = this.wordService.getTextByte(this.membershipAutoSendSetting.text)
         })
         this.lockerAutoSendSetting$.pipe(takeUntil(this.unsubscribe$)).subscribe((lass) => {
             this.lockerAutoSendSetting = _.cloneDeep(lass)
+            this.lockerAutoSendSettingTextByte = this.wordService.getTextByte(this.lockerAutoSendSetting.text)
         })
         this.bookDate$.pipe(takeUntil(this.unsubscribe$)).subscribe((bd) => {
             this.bookDate = bd
@@ -234,10 +231,10 @@ export class MessageComponent implements OnInit, OnDestroy {
     calculateSubtractPoint(gtb: number, selectedUsers: number) {
         if (gtb <= 90) {
             this.subtractText = '단문 11P'
-            this.subtractPoint = gtb * 11 * selectedUsers
+            this.subtractPoint = 11 * selectedUsers
         } else {
             this.subtractText = '장문 33P'
-            this.subtractPoint = gtb * 33 * selectedUsers
+            this.subtractPoint = 33 * selectedUsers
         }
     }
 

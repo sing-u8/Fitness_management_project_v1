@@ -5,7 +5,6 @@ import dayjs from 'dayjs'
 
 // schema
 import { SMSCaller } from '@schemas/sms-caller'
-import { SMSPoint } from '@schemas/sms-point'
 import { SMSHistory } from '@schemas/sms-history'
 import { SMSHistoryGroup } from '@schemas/sms-history-group'
 import { SMSAutoSend } from '@schemas/sms-auto-send'
@@ -14,12 +13,6 @@ import { CenterUser } from '@schemas/center-user'
 import { CenterUsersCategory } from '@schemas/center/community/center-users-by-category'
 
 import * as SMSActions from '../actions/sec.sms.actions'
-import {
-    setGeneralTransmissionTime,
-    setHistoryDateRange,
-    startUpdateLockerAutoSend,
-    startUpdateMembershipAutoSend,
-} from '../actions/sec.sms.actions'
 
 export type MemberSelectCateg = 'member' | 'valid' | 'unpaid' | 'imminent' | 'expired' | 'employee' //  | 'attendance'
 export type UsersListValue = Array<{ user: CenterUser; selected: boolean }>
