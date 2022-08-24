@@ -181,10 +181,10 @@ export class MessageComponent implements OnInit, OnDestroy {
             this.historyGroupLoading = hgl
         })
         this.membershipAutoSendSetting$.pipe(takeUntil(this.unsubscribe$)).subscribe((mass) => {
-            this.membershipAutoSendSetting = _.cloneDeep({ ...mass, time: mass.time + ':00' })
+            this.membershipAutoSendSetting = _.cloneDeep(mass)
         })
         this.lockerAutoSendSetting$.pipe(takeUntil(this.unsubscribe$)).subscribe((lass) => {
-            this.lockerAutoSendSetting = _.cloneDeep({ ...lass, time: lass.time + ':00' })
+            this.lockerAutoSendSetting = _.cloneDeep(lass)
         })
         this.bookDate$.pipe(takeUntil(this.unsubscribe$)).subscribe((bd) => {
             this.bookDate = bd
@@ -343,37 +343,33 @@ export class MessageComponent implements OnInit, OnDestroy {
     updateTransmitChange(isOn: boolean, type: AutoTransmitType) {
         if (type == 'membership') {
             this.nxStore.dispatch(
-                SMSActions.startUpdateAutoSend({
+                SMSActions.startUpdateMembershipAutoSend({
                     centerId: this.center.id,
                     reqBody: { auto_send_yn: isOn },
-                    autoSendType: 'membership',
                 })
             )
-        } else if (type == 'locker') {
+        } else {
             this.nxStore.dispatch(
-                SMSActions.startUpdateAutoSend({
+                SMSActions.startUpdateLockerAutoSend({
                     centerId: this.center.id,
                     reqBody: { auto_send_yn: isOn },
-                    autoSendType: 'locker',
                 })
             )
         }
     }
     updateTransmitDay(day: string, type: AutoTransmitType) {
-        if (type == 'membership') {
+        if (type == 'membership' && this.membershipAutoSendSetting.days != Number(day)) {
             this.nxStore.dispatch(
-                SMSActions.startUpdateAutoSend({
+                SMSActions.startUpdateMembershipAutoSend({
                     centerId: this.center.id,
                     reqBody: { days: Number(day) },
-                    autoSendType: 'membership',
                 })
             )
-        } else {
+        } else if (type == 'locker' && this.lockerAutoSendSetting.days != Number(day)) {
             this.nxStore.dispatch(
-                SMSActions.startUpdateAutoSend({
+                SMSActions.startUpdateLockerAutoSend({
                     centerId: this.center.id,
                     reqBody: { days: Number(day) },
-                    autoSendType: 'locker',
                 })
             )
         }
@@ -381,18 +377,51 @@ export class MessageComponent implements OnInit, OnDestroy {
     updateTransmitTime(time: string, type: AutoTransmitType) {
         if (type == 'membership') {
             this.nxStore.dispatch(
-                SMSActions.startUpdateAutoSend({
+                SMSActions.startUpdateMembershipAutoSend({
                     centerId: this.center.id,
-                    reqBody: { time: time.slice(0, 5) },
-                    autoSendType: 'membership',
+                    reqBody: { time },
                 })
             )
         } else {
             this.nxStore.dispatch(
-                SMSActions.startUpdateAutoSend({
+                SMSActions.startUpdateLockerAutoSend({
                     centerId: this.center.id,
-                    reqBody: { time: time.slice(0, 5) },
-                    autoSendType: 'locker',
+                    reqBody: { time },
+                })
+            )
+        }
+    }
+    onMLCallerChange(caller: SMSCaller, type: AutoTransmitType) {
+        if (type == 'membership') {
+            this.nxStore.dispatch(
+                SMSActions.startUpdateMembershipAutoSend({
+                    centerId: this.center.id,
+                    reqBody: { phone_number: caller.phone_number },
+                })
+            )
+        } else {
+            this.nxStore.dispatch(
+                SMSActions.startUpdateLockerAutoSend({
+                    centerId: this.center.id,
+                    reqBody: { phone_number: caller.phone_number },
+                })
+            )
+        }
+    }
+    onMLTextChange(text: string, type: AutoTransmitType) {
+        if (_.isEmpty(_.trim(text))) return
+        if (type == 'membership') {
+            this.nxStore.dispatch(
+                SMSActions.startUpdateMembershipAutoSend({
+                    centerId: this.center.id,
+                    reqBody: { text },
+                })
+            )
+        } else {
+            this.nxStore.dispatch(
+                SMSActions.startUpdateLockerAutoSend({
+                    centerId: this.center.id,
+                    reqBody: { text },
                 })
             )
         }

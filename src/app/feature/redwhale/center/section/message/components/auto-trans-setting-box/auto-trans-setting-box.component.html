@@ -15,11 +15,12 @@
       <div class="l-input">
         <input
           class="rw-input"
-          [(ngModel)]="smsAutoSend.days"
+          [(ngModel)]="smsAutoSendDays"
           (keydown)="inputhelperService.restrictToNumber($event)"
           (keyup)="updateAutoTransmitDayKeyUp($event)"
           (keyup.enter)="updateAutoTransmitDay()"
-          (rwClickOutside)="updateAutoTransmitDayClickOutSide()"
+          (keydown.tab)="updateAutoTransmitDay()"
+          (rwClickOutside)="updateAutoTransmitDay()"
           [disabled]="!smsAutoSend.auto_send_yn"
         >
         <span class="rw-typo-bodytext0">일 전</span>

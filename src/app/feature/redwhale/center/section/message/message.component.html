@@ -153,13 +153,16 @@
                 <div class="message__ticket">
                     <msg-text-field
                         [callerList]="(callerList$ | async)"
-                        [text]="lockerAutoSendSetting.text"
+                        [curCaller]="{phone_number: membershipAutoSendSetting.phone_number, verified: true}"
+                        [text]="membershipAutoSendSetting.text"
                         [textByte]="0"
-                        (textChange)="false"
+                        (textChange)="onMLTextChange($event, 'membership')"
+                        (onSelectChange)="onMLCallerChange($event,'membership')"
                     ></msg-text-field>
                     <msg-auto-trans-setting-box
                         [autoTransmitTextObj]="membershipSettingObj"
                         [smsAutoSend]="membershipAutoSendSetting"
+                        [smsAutoSendDays]="membershipAutoSendSetting.days"
                         (OnAutoTransmitChange)="updateTransmitChange($event,'membership')"
                         (OnAutoTransmitDayChange)="updateTransmitDay($event, 'membership')"
                         (OnAutoTransmitTimeChange)="updateTransmitTime($event, 'membership')"
@@ -171,10 +174,16 @@
                 <div class="message__ticket">
                     <msg-text-field
                         [callerList]="(callerList$ | async)"
+                        [curCaller]="{phone_number: lockerAutoSendSetting.phone_number, verified: true}"
+                        [text]="lockerAutoSendSetting.text"
+                        [textByte]="0"
+                        (textChange)="onMLTextChange($event, 'locker')"
+                        (onSelectChange)="onMLCallerChange($event,'locker')"
                     ></msg-text-field>
                     <msg-auto-trans-setting-box
                         [autoTransmitTextObj]="lockerSettingObj"
                         [smsAutoSend]="lockerAutoSendSetting"
+                        [smsAutoSendDays]="lockerAutoSendSetting.days"
                         (OnAutoTransmitChange)="updateTransmitChange($event,'locker')"
                         (OnAutoTransmitDayChange)="updateTransmitDay($event, 'locker')"
                         (OnAutoTransmitTimeChange)="updateTransmitTime($event, 'locker')"

@@ -21,6 +21,7 @@ import { CenterContractService } from '@services/center-users-contract.service'
 import { CenterSMSService, SendSMSMessageReqBody, UpdateMLAutoSendReqBody } from '@services/center-sms.service'
 import { curUserListSelect, userListIds } from '../selectors/sec.sms.selector'
 import { SMSAutoSend } from '@schemas/sms-auto-send'
+import { startUpdateLockerAutoSend, startUpdateMembershipAutoSend } from '../actions/sec.sms.actions'
 
 @Injectable()
 export class SMSEffect {
@@ -202,23 +203,40 @@ export class SMSEffect {
             catchError((err: string) => of(SMSActions.error({ error: err })))
         )
     )
-    updateAutoSend$ = createEffect(
+    updateMembershipAutoSend$ = createEffect(
         () =>
             this.actions$.pipe(
-                ofType(SMSActions.startUpdateAutoSend),
-                concatLatestFrom(() => [
-                    this.store.select(SMSSelector.membershipAutoSendSetting),
-                    this.store.select(SMSSelector.lockerAutoSendSetting),
-                ]),
-                tap(([{ centerId, reqBody, autoSendType }, mass, lass]) => {
-                    console.log('SMSActions.startUpdateAutoSend : ', autoSendType, reqBody)
-                    if (autoSendType == 'membership') {
-                        console.log('SMSActions.startUpdateAutoSend -- membership update call')
-                        this.centerSMSApi.updateMembershipAutoSend(centerId, reqBody).subscribe()
-                    } else if (autoSendType == 'locker') {
-                        console.log('SMSActions.startUpdateAutoSend -- locker update call')
-                        this.centerSMSApi.updateLockerAutoSend(centerId, reqBody).subscribe()
-                    }
+                ofType(SMSActions.startUpdateMembershipAutoSend),
+                concatLatestFrom(() => [this.store.select(SMSSelector.membershipAutoSendSetting)]),
+                debounceTime(1000),
+                tap(([{ centerId, reqBody }, mass]) => {
+                    this.centerSMSApi
+                        .updateMembershipAutoSend(centerId, {
+                            ...mass,
+                            ...reqBody,
+                            time: _.has(reqBody, 'time') ? reqBody.time.slice(0, 5) : mass.time.slice(0, 5),
+                        })
+                        .subscribe()
+                }),
+                catchError((err: string) => of(SMSActions.error({ error: err })))
+            ),
+        { dispatch: false }
+    )
+
+    updateLockerAutoSend$ = createEffect(
+        () =>
+            this.actions$.pipe(
+                ofType(SMSActions.startUpdateLockerAutoSend),
+                concatLatestFrom(() => [this.store.select(SMSSelector.lockerAutoSendSetting)]),
+                debounceTime(1000),
+                tap(([{ centerId, reqBody }, lass]) => {
+                    this.centerSMSApi
+                        .updateLockerAutoSend(centerId, {
+                            ...lass,
+                            ...reqBody,
+                            time: _.has(reqBody, 'time') ? reqBody.time.slice(0, 5) : lass.time.slice(0, 5),
+                        })
+                        .subscribe()
                 }),
                 catchError((err: string) => of(SMSActions.error({ error: err })))
             ),

@@ -20,22 +20,15 @@ export class AutoTransSettingBoxComponent implements OnInit, OnDestroy {
         transType: string
     }
     @Input() smsAutoSend: SMSAutoSend
+    @Input() smsAutoSendDays: number
 
     @Output() OnAutoTransmitChange = new EventEmitter<boolean>()
     @Output() OnAutoTransmitDayChange = new EventEmitter<string>()
     @Output() OnAutoTransmitTimeChange = new EventEmitter<string>()
 
-    public clickOutSideDaySubject = new Subject<string>()
-
     constructor(public inputhelperService: InputHelperService) {}
-    ngOnInit(): void {
-        this.clickOutSideDaySubject.pipe(distinctUntilChanged()).subscribe((v) => {
-            this.OnAutoTransmitDayChange.emit(v)
-        })
-    }
-    ngOnDestroy() {
-        this.clickOutSideDaySubject.complete()
-    }
+    ngOnInit(): void {}
+    ngOnDestroy() {}
 
     public checkBoxText = {
         on: '자동 전송 사용함',
@@ -52,10 +45,7 @@ export class AutoTransSettingBoxComponent implements OnInit, OnDestroy {
         String(this.smsAutoSend.days).replace(/[^0-9]/gi, '')
     }
     updateAutoTransmitDay() {
-        this.OnAutoTransmitDayChange.emit(String(this.smsAutoSend.days))
-    }
-    updateAutoTransmitDayClickOutSide() {
-        this.clickOutSideDaySubject.next(String(this.smsAutoSend.days))
+        this.OnAutoTransmitDayChange.emit(String(this.smsAutoSendDays))
     }
 
     // autoTransmitTime method

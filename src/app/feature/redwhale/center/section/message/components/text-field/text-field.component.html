@@ -3,7 +3,7 @@
         <span>발신번호</span>
         <msg-phone-number-selector
             [items]="callerList"
-            [(ngModel)]="selectedPhoneNumberItem"
+            [(ngModel)]="curCaller"
             (onSelectChange)="onSelectChange.emit($event)"
         ></msg-phone-number-selector>
     </div>

@@ -80,9 +80,13 @@ export const finishGetCallerList = createAction(
     props<{ callerList: SMSCaller[] }>()
 )
 
-export const startUpdateAutoSend = createAction(
-    `[${FeatureKey}] Start Update Auto Send`,
-    props<{ centerId: string; reqBody: UpdateMLAutoSendReqBody; autoSendType: 'membership' | 'locker' }>()
+export const startUpdateMembershipAutoSend = createAction(
+    `[${FeatureKey}] Start Update Membership Auto Send`,
+    props<{ centerId: string; reqBody: UpdateMLAutoSendReqBody }>()
+)
+export const startUpdateLockerAutoSend = createAction(
+    `[${FeatureKey}] Start Update Locker Auto Send`,
+    props<{ centerId: string; reqBody: UpdateMLAutoSendReqBody }>()
 )
 
 export const startGetHistoryGroup = createAction(

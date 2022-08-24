@@ -8,6 +8,7 @@ import { SMSCaller } from '@schemas/sms-caller'
 })
 export class TextFieldComponent implements OnInit {
     @Input() callerList: SMSCaller[] = []
+    @Input() curCaller: SMSCaller = undefined
     @Input() text = ''
     @Input() textByte = 0
     @Output() textChange = new EventEmitter<string>()
@@ -15,6 +16,4 @@ export class TextFieldComponent implements OnInit {
     constructor() {}
 
     ngOnInit(): void {}
-
-    public selectedPhoneNumberItem: SMSCaller = undefined
 }

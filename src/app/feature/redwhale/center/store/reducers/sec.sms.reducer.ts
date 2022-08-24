@@ -14,7 +14,12 @@ import { CenterUser } from '@schemas/center-user'
 import { CenterUsersCategory } from '@schemas/center/community/center-users-by-category'
 
 import * as SMSActions from '../actions/sec.sms.actions'
-import { setGeneralTransmissionTime, setHistoryDateRange } from '../actions/sec.sms.actions'
+import {
+    setGeneralTransmissionTime,
+    setHistoryDateRange,
+    startUpdateLockerAutoSend,
+    startUpdateMembershipAutoSend,
+} from '../actions/sec.sms.actions'
 
 export type MemberSelectCateg = 'member' | 'valid' | 'unpaid' | 'imminent' | 'expired' | 'employee' //  | 'attendance'
 export type UsersListValue = Array<{ user: CenterUser; selected: boolean }>
@@ -89,7 +94,7 @@ export const SMSAutoSendInit: SMSAutoSend = {
     text: '',
     auto_send_yn: false,
     days: 7,
-    time: '10:00:00',
+    time: '',
 }
 export const SMSHistoryGroupListInit = []
 export const SMSHistoryListInit = []
@@ -180,12 +185,14 @@ export const smsReducer = createImmerReducer(
         state.lockerAutoSendSetting = smsAutoSend
         return state
     }),
-    on(SMSActions.startUpdateAutoSend, (state, { reqBody, autoSendType }) => {
-        if (autoSendType == 'membership') {
-            state.membershipAutoSendSetting = _.assign(state.membershipAutoSendSetting, reqBody)
-        } else if (autoSendType == 'locker') {
-            state.lockerAutoSendSetting = _.assign(state.lockerAutoSendSetting, reqBody)
-        }
+    on(SMSActions.startUpdateMembershipAutoSend, (state, { reqBody }) => {
+        const reqBodyCopy = _.cloneDeep(reqBody)
+        state.membershipAutoSendSetting = _.assign(state.membershipAutoSendSetting, reqBodyCopy)
+        return state
+    }),
+    on(SMSActions.startUpdateLockerAutoSend, (state, { reqBody }) => {
+        const reqBodyCopy = _.cloneDeep(reqBody)
+        state.lockerAutoSendSetting = _.assign(state.lockerAutoSendSetting, reqBodyCopy)
         return state
     }),
     on(SMSActions.startGetHistoryGroup, (state) => {
