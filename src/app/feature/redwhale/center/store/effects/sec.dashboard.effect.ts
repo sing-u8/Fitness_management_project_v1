@@ -41,7 +41,7 @@ export class DashboardEffect {
     public loadMemberList$ = createEffect(() =>
         this.actions$.pipe(
             ofType(DashboardActions.startLoadMemberList),
-            switchMap(({ centerId }) =>
+            switchMap(({ centerId, cb }) =>
                 this.centerUsersApi.getUserList(centerId, 'all').pipe(
                     map((memberlist) => {
                         const userListValue: DashboardReducer.UsersListValue = memberlist.map((v) => ({
@@ -49,6 +49,7 @@ export class DashboardEffect {
                             holdSelected: false,
                         }))
                         // usersSelectCateg.member.userSize = usersList['member'].length
+                        cb ? cb(memberlist[0]) : null
                         return DashboardActions.finishLoadMemberList({
                             categ_type: 'member',
                             userListValue,

@@ -28,7 +28,7 @@ const FeatureKey = 'Center/Dashboard'
 // async
 export const startLoadMemberList = createAction(
     `[${FeatureKey}] Start Loading Member List`,
-    props<{ centerId: string }>()
+    props<{ centerId: string; cb?: (cu: CenterUser) => void }>()
 )
 export const finishLoadMemberList = createAction(
     `[${FeatureKey}] Finish Loading Member List`,

@@ -16,7 +16,7 @@
 <!--		</div>-->
 		<div *ngIf="!errMsg && value" class="d-flex align-items-center">
 			<span class="text">{{ value?.phone_number }}</span>
-			<div class="verification-icon" [class.verified]="value?.verified">{{value?.verified ? '인증' : '미인증' }}</div>
+<!--			<div class="verification-icon" [class.verified]="value?.verified">{{value?.verified ? '인증' : '미인증' }}</div>-->
 		</div>
 		<span class="mdi mdi-chevron-down"></span>
 	</div>
@@ -38,7 +38,7 @@
 			(click)="onSelect(item)"
 		>
 			<span class="rw-typo-bodytext0">{{ item.phone_number }}</span>
-			<div class="verification-icon" [class.verified]="item.verified">{{item.verified ? '인증' : '미인증' }}</div>
+<!--			<div class="verification-icon" [class.verified]="item.verified">{{item.verified ? '인증' : '미인증' }}</div>-->
 		</div>
 	</div>
 

@@ -428,7 +428,7 @@ export class MessageComponent implements OnInit, OnDestroy {
                 start_date: _.replace(date[0], '.', '-'),
                 end_date: _.replace(date[1], '.', '-'),
                 cb: () => {
-                    this.nxStore.dispatch(showToast({ text: '매출 조회 기간이 변경되었습니다.' }))
+                    this.nxStore.dispatch(showToast({ text: '내역 조회 기간이 변경되었습니다.' }))
                 },
             })
         )

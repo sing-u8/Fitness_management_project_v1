@@ -11,11 +11,9 @@
     >
         <div *ngIf="value?.value?.membership_number" class="avatar">
           <rw-avatar
-            [image]="value.value.picture"
+            [image]="value.value.center_user_picture"
             [backgroundColor]="value.value.color"
-            text="{{value.value.center_user_name
-                    ? value.value.center_user_name
-                    : value.value.name}}"
+            text="{{value.value.center_user_name}}"
             size="23"
             fontSize="10"
           ></rw-avatar>
@@ -45,11 +43,9 @@
         >
             <div *ngIf="item.value?.membership_number" class="avatar">
               <rw-avatar
-                [image]="item.value.picture"
+                [image]="item.value.center_user_picture"
                 [backgroundColor]="item.value.color"
-                text="{{item.value.center_user_name
-                        ? item.value.center_user_name
-                        : item.value.name}}"
+                text="{{item.value.center_user_name}}"
                 size="23"
                 fontSize="10"
               ></rw-avatar>

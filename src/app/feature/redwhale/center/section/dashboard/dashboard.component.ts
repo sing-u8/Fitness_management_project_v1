@@ -184,7 +184,16 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
             if (curCenterId != this.center.id) {
                 // this.lockerSerState.resetLockerItemList()
                 this.nxStore.dispatch(DashboardActions.resetAll())
-                this.nxStore.dispatch(DashboardActions.startLoadMemberList({ centerId: this.center.id }))
+                this.nxStore.dispatch(
+                    DashboardActions.startLoadMemberList({
+                        centerId: this.center.id,
+                        cb: (cu) => {
+                            this.nxStore.dispatch(
+                                DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: cu })
+                            )
+                        },
+                    })
+                )
             }
         })
         this.nxStore.dispatch(DashboardActions.startGetUsersByCategory({ centerId: this.center.id }))

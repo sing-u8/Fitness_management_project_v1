@@ -55,7 +55,7 @@
 
                     <ng-template #avatar1>
                         <div *ngIf="willRegisteredMember else avatar2" class="avatar-container">
-                            <rw-avatar [image]="willRegisteredMember.picture" [text]="willRegisteredMember.center_user_name"
+                            <rw-avatar [image]="willRegisteredMember.center_user_picture" [text]="willRegisteredMember.center_user_name"
                                 [backgroundColor]="willRegisteredMember.color" size="80" fontSize="18"></rw-avatar>
                             <div class="avatar-texts">
                                 <span class="user-name rw-typo-title2">{{willRegisteredMember.center_user_name}}</span>
