@@ -85,13 +85,17 @@ export class DashboardEffect {
     getUserList$ = createEffect(() =>
         this.actions$.pipe(
             ofType(DashboardActions.startGetUserList),
-            switchMap(({ centerId, categ_type }) =>
+            concatLatestFrom(() => [this.store.select(DashboardSelector.usersLists)]),
+            switchMap(([{ centerId, categ_type }, usersLists]) =>
                 this.centerUsersApi.getUserList(centerId, DashboardReducer.matchMemberSelectCategTo(categ_type)).pipe(
                     map((memberlist) => {
-                        const userListValue: DashboardReducer.UsersListValue = memberlist.map((v) => ({
-                            user: v,
-                            holdSelected: false,
-                        }))
+                        const userListValue: DashboardReducer.UsersListValue = memberlist.map((v) => {
+                            const user = usersLists[categ_type].find((ud) => ud.user.id == v.id)
+                            return {
+                                user: v,
+                                holdSelected: user != undefined ? user.holdSelected : false,
+                            }
+                        })
                         // usersSelectCateg.member.userSize = usersList['member'].length
                         return DashboardActions.finishLoadMemberList({
                             categ_type: categ_type,

@@ -124,8 +124,8 @@ export const dashboardReducer = createImmerReducer(
         }
         return state
     }),
-    on(DashboardActions.startGetUserList, (state, { userListSelect }) => {
-        state.curUserListSelect = userListSelect
+    on(DashboardActions.startGetUserList, (state, { categ_type }) => {
+        state.curUserListSelect = { key: categ_type, value: state.usersSelectCategs[categ_type] }
         state.isLoading = 'pending'
         return state
     }),

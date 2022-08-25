@@ -9,6 +9,7 @@ import { NgxSpinnerService } from 'ngx-spinner'
 import { WordService } from '@services/helper/word.service'
 import { CenterService } from '@services/center.service'
 import { TimeService } from '@services/helper/time.service'
+import { DashboardHelperService } from '@services/center/dashboard-helper.service'
 
 import { Center } from '@schemas/center'
 import { Loading } from '@schemas/componentStore/loading'
@@ -33,6 +34,7 @@ import { showToast } from '@appStore/actions/toast.action'
 })
 export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
     @Input() curUserData: DashboardReducer.CurUseData = _.cloneDeep(DashboardReducer.CurUseDataInit)
+    @Input() curUserListSelect: DashboardReducer.UserListSelect = _.cloneDeep(DashboardReducer.UserListSelectInit)
 
     public memoForm: FormControl = this.fb.control('')
     public center: Center
@@ -56,7 +58,8 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
         private centerService: CenterService,
         private router: Router,
         private activatedRoute: ActivatedRoute,
-        private timeService: TimeService
+        private timeService: TimeService,
+        private dashboardHelperService: DashboardHelperService
     ) {
         this.center = this.storageService.getCenter()
         this.user = this.storageService.getUser()
@@ -164,6 +167,7 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
                     callback: () => {
                         this.toggleShowChangeNameModal()
                         this.nxStore.dispatch(showToast({ text: `회원 이름 변경이 완료되었습니다.` }))
+                        this.nxStore.dispatch(CenterCommonActions.startGetInstructors({ centerId: this.center.id }))
                     },
                 })
             )
@@ -196,6 +200,7 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
                             text: `${this.curUserData.user.center_user_name}님의 프로필 사진이 삭제되었습니다.`,
                         })
                     )
+                    this.nxStore.dispatch(CenterCommonActions.startGetInstructors({ centerId: this.center.id }))
                 },
             })
         )
@@ -220,15 +225,13 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
                             text: `${this.curUserData.user.center_user_name}님의 프로필 사진이 변경되었습니다.`,
                         })
                     )
+                    this.nxStore.dispatch(CenterCommonActions.startGetInstructors({ centerId: this.center.id }))
                 },
             })
         )
     }
     isFileExist(fileList: FileList) {
-        if (fileList && fileList.length == 0) {
-            return false
-        }
-        return true
+        return !(fileList && fileList.length == 0)
     }
     // user role -----------------------
     public userRole: Record<Role, boolean> = {
@@ -326,7 +329,12 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
                         this.centerService.getCenter(this.center.id).subscribe((center) => {
                             this.storageService.setCenter(center)
                         })
-                        this.router.navigate(['./sale'], { relativeTo: this.activatedRoute })
+                        this.dashboardHelperService.refreshUserList(
+                            this.center.id,
+                            this.curUserData.user,
+                            this.curUserListSelect.key
+                        )
+                        // this.router.navigate(['./sale'], { relativeTo: this.activatedRoute })
                     },
                 })
             )
@@ -349,6 +357,15 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
                         )
                         this.nxStore.dispatch(CenterCommonActions.startGetInstructors({ centerId: this.center.id }))
                         this.nxStore.dispatch(CenterCommonActions.startGetMembers({ centerId: this.center.id }))
+                        console.log(
+                            'DashboardActions.startSetCurUserData -- refresh user list before : ',
+                            this.curUserListSelect
+                        )
+                        this.dashboardHelperService.refreshUserList(
+                            this.center.id,
+                            this.curUserData.user,
+                            this.curUserListSelect.key
+                        )
                     },
                 })
             )

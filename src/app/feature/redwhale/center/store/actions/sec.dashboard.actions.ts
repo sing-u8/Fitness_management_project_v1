@@ -46,7 +46,7 @@ export const finishGetUsersByCategory = createAction(
 
 export const startGetUserList = createAction(
     `[${FeatureKey}] Start Get User List By Type`,
-    props<{ centerId: string; categ_type: MemberSelectCateg; userListSelect: UserListSelect }>()
+    props<{ centerId: string; categ_type: MemberSelectCateg }>()
 )
 export const finishGetUserList = createAction(
     `[${FeatureKey}] Finish Get User List By Type`,

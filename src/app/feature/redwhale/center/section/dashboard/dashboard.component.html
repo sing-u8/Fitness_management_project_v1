@@ -33,7 +33,10 @@
 
         <section class="l-member-detail">
             <div class="member-detail__header rw-typo-title1">회원 상세 정보</div>
-            <db-member-detail [curUserData]="curUserData$ | async"></db-member-detail>
+            <db-member-detail
+              [curUserData]="curUserData$ | async"
+              [curUserListSelect]="(curUserListSelect$ | async)"
+            ></db-member-detail>
         </section>
     </main>
 </article>

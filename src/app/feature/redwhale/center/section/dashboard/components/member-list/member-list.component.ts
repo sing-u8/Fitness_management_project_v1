@@ -157,7 +157,6 @@ export class MemberListComponent implements OnInit, OnDestroy {
             DashboardActions.startGetUserList({
                 centerId: this.center.id,
                 categ_type: type as FromDashboard.MemberSelectCateg,
-                userListSelect: this.selectedUserList,
             })
         )
         // this.nxStore.dispatch(DashboardActions.setUserListSelect({ userListSelect: this.selectedUserList }))

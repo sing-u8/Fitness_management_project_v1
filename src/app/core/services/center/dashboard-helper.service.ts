@@ -6,6 +6,7 @@ import { CenterUser } from '@schemas/center-user'
 // ngrx
 import { Store } from '@ngrx/store'
 import * as DashboardActions from '@centerStore/actions/sec.dashboard.actions'
+import { MemberSelectCateg } from '@centerStore/reducers/sec.dashboard.reducer'
 
 @Injectable({
     providedIn: 'root',
@@ -17,5 +18,9 @@ export class DashboardHelperService {
         this.nxStore.dispatch(DashboardActions.startGetUserData({ centerId, centerUser }))
         this.nxStore.dispatch(DashboardActions.startGetUsersByCategory({ centerId }))
         this.nxStore.dispatch(DashboardActions.startRefreshCenterUser({ centerId, centerUser }))
+    }
+    refreshUserList(centerId: string, centerUser: CenterUser, categ_type: MemberSelectCateg) {
+        this.nxStore.dispatch(DashboardActions.startGetUsersByCategory({ centerId }))
+        this.nxStore.dispatch(DashboardActions.startGetUserList({ centerId, categ_type }))
     }
 }

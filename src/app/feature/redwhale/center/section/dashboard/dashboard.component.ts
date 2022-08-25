@@ -1,8 +1,5 @@
-import { Component, OnInit, AfterViewInit, OnDestroy, Renderer2, ViewChild, ElementRef } from '@angular/core'
-import { FormBuilder, FormControl } from '@angular/forms'
-import { Router, ActivatedRoute } from '@angular/router'
+import { Component, OnInit, AfterViewInit, OnDestroy, ViewChild, ElementRef } from '@angular/core'
 
-import _ from 'lodash'
 import dayjs from 'dayjs'
 import 'dayjs/locale/ko'
 dayjs.locale('ko')
@@ -147,13 +144,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     // public doShowChangeNameModal = false
     // public willChangedName = ''
 
-    public showHoldDropdown = false
-    public doShowHoldAllModal = false
-    public doShowHoldPartialModal = false
-    public holdModeFlags = { all: false, partial: false }
-    public holdingNumber = 0
-
-    public userSearchInput: FormControl
     public usersSelectCateg$ = this.nxStore.select(DashboardSelector.usersSelectCategs)
     public curUserData$ = this.nxStore.select(DashboardSelector.curUserData)
     public usersLists$ = this.nxStore.select(DashboardSelector.usersLists)
@@ -161,6 +151,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     public selectedUserList$ = this.nxStore.select(DashboardSelector.curUserListSelect)
     public isLoading$ = this.nxStore.select(DashboardSelector.isLoading)
     public selectedUserListsHolding$ = this.nxStore.select(DashboardSelector.selectedUserListsHolding)
+    public curUserListSelect$ = this.nxStore.select(DashboardSelector.curUserListSelect)
 
     public unsubscribe$ = new Subject<boolean>()
 
@@ -168,11 +159,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
         private centerService: CenterService,
         private storageService: StorageService,
         private usersCenterService: UsersCenterService,
-        private nxStore: Store,
-        private fb: FormBuilder,
-        private router: Router,
-        private activatedRoute: ActivatedRoute,
-        private renderer: Renderer2
+        private nxStore: Store
     ) {}
 
     ngOnInit(): void {
@@ -205,6 +192,4 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
         this.unsubscribe$.next(true)
         this.unsubscribe$.complete()
     }
-
-    goToRegisterNewMember() {}
 }
