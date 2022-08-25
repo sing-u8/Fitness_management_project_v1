@@ -27,6 +27,15 @@ export const finishLoadMemberList = createAction(
     props<{ categ_type: MemberSelectCateg; userListValue: UsersListValue }>()
 )
 
+export const startRefreshMemberList = createAction(
+    `[${FeatureKey}] Start Refresh Member List`,
+    props<{ centerId: string }>()
+)
+export const finishRefreshMemberList = createAction(
+    `[${FeatureKey}] Finish Refresh Member List`,
+    props<{ categ_type: MemberSelectCateg; userListValue: UsersListValue }>()
+)
+
 export const startGetUsersByCategory = createAction(
     `[${FeatureKey}] Start Get Users By Category`,
     props<{ centerId: string }>()
@@ -38,7 +47,7 @@ export const finishGetUsersByCategory = createAction(
 
 export const startGetUserList = createAction(
     `[${FeatureKey}] Start Get User List By Type`,
-    props<{ centerId: string; categ_type: MemberSelectCateg; userListSelect: UserListSelect }>()
+    props<{ centerId: string; categ_type: MemberSelectCateg }>()
 )
 export const finishGetUserList = createAction(
     `[${FeatureKey}] Finish Get User List By Type`,

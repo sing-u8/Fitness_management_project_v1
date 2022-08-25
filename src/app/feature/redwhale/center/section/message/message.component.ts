@@ -60,6 +60,7 @@ export class MessageComponent implements OnInit, OnDestroy {
         this.nxStore.dispatch(SMSActions.setSMSType({ smsType: st }))
     }
     public callerList$ = this.nxStore.select(SMSSelector.callerList)
+    public generalErrText = ''
     public generalText$ = this.nxStore.select(SMSSelector.generalText)
     public generalText = ''
     public generalTextByte = 0
@@ -129,6 +130,8 @@ export class MessageComponent implements OnInit, OnDestroy {
 
                 this.nxStore.dispatch(SMSActions.startGetMembershipAutoSend({ centerId: this.center.id }))
                 this.nxStore.dispatch(SMSActions.startGetLockerAutoSend({ centerId: this.center.id }))
+            } else {
+                this.nxStore.dispatch(SMSActions.startRefreshMemberList({ centerId: this.center.id }))
             }
         })
         this.nxStore.dispatch(SMSActions.startGetSMSPoint({ centerId: this.center.id }))
@@ -163,6 +166,7 @@ export class MessageComponent implements OnInit, OnDestroy {
             this.calculateSubtractPoint(this.generalTextByte, this.selectedUserListSelected)
             this.checkIsMsgAbleToBeSent()
         })
+        this.callerList$.pipe(takeUntil(this.unsubscribe$)).subscribe((cl) => {})
         this.generalText$.pipe(takeUntil(this.unsubscribe$)).subscribe((gt) => {
             this.generalText = gt
             this.generalTextByte = this.wordService.getTextByte(gt)

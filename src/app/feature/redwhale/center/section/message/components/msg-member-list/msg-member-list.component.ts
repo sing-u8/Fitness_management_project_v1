@@ -124,7 +124,6 @@ export class MsgMemberListComponent implements OnInit, OnDestroy {
             SMSActions.startGetUserList({
                 centerId: this.center.id,
                 categ_type: this.selectedUserListType,
-                userListSelect: this.selectedUserList,
             })
         )
     }

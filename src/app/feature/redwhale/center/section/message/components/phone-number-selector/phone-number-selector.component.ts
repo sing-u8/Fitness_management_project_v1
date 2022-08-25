@@ -34,6 +34,7 @@ export class PhoneNumberSelectorComponent implements AfterViewInit, ControlValue
     @Input() height: string
     @Input() closeBgColor: string
     @Input() dropUp = false
+    @Input() type: 'general' | 'auto-transmission' = 'general'
 
     @Input() errMsg = ''
 

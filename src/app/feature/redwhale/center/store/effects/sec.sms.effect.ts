@@ -93,6 +93,37 @@ export class SMSEffect {
         )
     )
 
+    refreshUserList$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(SMSActions.startRefreshMemberList),
+            concatLatestFrom(() => [
+                this.store.select(SMSSelector.curUserListSelect),
+                this.store.select(SMSSelector.usersLists),
+            ]),
+            switchMap(([{ centerId }, curUserListSelect, usersLists]) =>
+                this.centerUsersApi
+                    .getUserList(centerId, SMSReducer.matchMemberSelectCategTo(curUserListSelect.key))
+                    .pipe(
+                        map((memberlist) => {
+                            const userListValue: SMSReducer.UsersListValue = memberlist.map((v) => {
+                                const selectedUser = usersLists[curUserListSelect.key].find((ud) => ud.user.id == v.id)
+                                return {
+                                    user: v,
+                                    selected: selectedUser != undefined ? selectedUser.selected : false,
+                                }
+                            })
+                            // usersSelectCateg.member.userSize = usersList['member'].length
+                            return SMSActions.finishRefreshMemberList({
+                                categ_type: curUserListSelect.key,
+                                userListValue,
+                            })
+                        }),
+                        catchError((err: string) => of(SMSActions.error({ error: err })))
+                    )
+            )
+        )
+    )
+
     getSMSPoint$ = createEffect(() =>
         this.actions$.pipe(
             ofType(SMSActions.startGetSMSPoint),

@@ -162,6 +162,15 @@ export const smsReducer = createImmerReducer(
         state.isLoading = 'done'
         return state
     }),
+    on(SMSActions.startRefreshMemberList, (state) => {
+        state.isLoading = 'pending'
+        return state
+    }),
+    on(SMSActions.finishRefreshMemberList, (state, { categ_type, userListValue }) => {
+        state.usersLists[categ_type] = userListValue
+        state.isLoading = 'done'
+        return state
+    }),
     on(SMSActions.finishGetSMSPoint, (state, { smsPoint }) => {
         state.smsPoint = smsPoint
         return state

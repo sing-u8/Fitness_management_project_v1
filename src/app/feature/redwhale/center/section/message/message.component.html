@@ -72,6 +72,7 @@
                 <div class="general-right__content">
                     <msg-text-field
                         [callerList]="(callerList$ | async)"
+                        [curCaller]="(callerList$ | async)?.[0]"
                         [text]="(generalText$ | async)"
                         [textByte]="generalTextByte"
                         (textChange)="updateGeneralText($event)"

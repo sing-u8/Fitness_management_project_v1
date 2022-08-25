@@ -3,13 +3,20 @@
 		class="selected rw-typo-bodytext1"
 		[class.open]="isOpen"
 		[class.disabled]="disabled !== false"
+		[class.error]="errMsg"
 		#selectedElement
-		(click)="toggle()"
+		(click)="!errMsg && toggle()"
 		(rwClickOutside)="close()"
 	>
-		<div class="d-flex align-items-center">
+<!--		<div *ngIf="errMsg" class="d-flex align-items-center">-->
+<!--			<span>선택할 수 있는 발신번호가 없습니다.</span>-->
+<!--		</div>-->
+<!--		<div *ngIf="!errMsg && !value" class="d-flex align-items-center">-->
+<!--			<span>발신번호를 선택해주세요.</span>-->
+<!--		</div>-->
+		<div *ngIf="!errMsg && value" class="d-flex align-items-center">
 			<span class="text">{{ value?.phone_number }}</span>
-<!--			<div class="verification-icon" [class.verified]="value?.verified">{{value?.verified ? '인증' : '미인증' }}</div>-->
+			<div class="verification-icon" [class.verified]="value?.verified">{{value?.verified ? '인증' : '미인증' }}</div>
 		</div>
 		<span class="mdi mdi-chevron-down"></span>
 	</div>
@@ -31,7 +38,7 @@
 			(click)="onSelect(item)"
 		>
 			<span class="rw-typo-bodytext0">{{ item.phone_number }}</span>
-<!--			<div class="verification-icon" [class.verified]="item.verified">{{item.verified ? '인증' : '미인증' }}</div>-->
+			<div class="verification-icon" [class.verified]="item.verified">{{item.verified ? '인증' : '미인증' }}</div>
 		</div>
 	</div>
 
