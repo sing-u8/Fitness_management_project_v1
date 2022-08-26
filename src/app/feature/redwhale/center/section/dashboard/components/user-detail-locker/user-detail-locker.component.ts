@@ -101,19 +101,27 @@ export class UserDetailLockerComponent implements OnInit {
         if (this.chargeMode == 'extend') {
             this.callExpendApi(() => {
                 output.loadingFns.hideLoading()
+                this.lockerHelperService.synchronizeCurUserLocker(this.center.id, this.curUserData.user.id)
+                this.lockerHelperService.synchronizeLockerItemList(this.center.id)
             })
         } else if (this.chargeMode == 'refund') {
             this.callRefundApi(() => {
                 output.loadingFns.hideLoading()
+                this.lockerHelperService.synchronizeCurUserLocker(this.center.id, this.curUserData.user.id)
+                this.lockerHelperService.synchronizeLockerItemList(this.center.id)
             })
         } else if (this.chargeMode == 'transfer') {
         } else if (this.chargeMode == 'empty_locker_payment') {
             this.callEmptyPaymentApi(() => {
                 output.loadingFns.hideLoading()
+                this.lockerHelperService.synchronizeCurUserLocker(this.center.id, this.curUserData.user.id)
+                this.lockerHelperService.synchronizeLockerItemList(this.center.id)
             })
         } else if (this.chargeMode == 'empty_locker_refund') {
             this.callEmptyRefund(() => {
                 output.loadingFns.hideLoading()
+                this.lockerHelperService.synchronizeCurUserLocker(this.center.id, this.curUserData.user.id)
+                this.lockerHelperService.synchronizeLockerItemList(this.center.id)
             })
         }
     }
@@ -128,6 +136,8 @@ export class UserDetailLockerComponent implements OnInit {
         this.nxStore.dispatch(
             DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.curUserData.user })
         )
+        this.lockerHelperService.synchronizeCurUserLocker(this.center.id, this.curUserData.user.id)
+        this.lockerHelperService.synchronizeLockerItemList(this.center.id)
     }
 
     // hoding function
@@ -223,7 +233,10 @@ export class UserDetailLockerComponent implements OnInit {
         this.showRemoveModal = !this.showRemoveModal
     }
     onConfirmRemove() {
-        this.callRemoveApi()
+        this.callRemoveApi(() => {
+            this.lockerHelperService.synchronizeCurUserLocker(this.center.id, this.curUserData.user.id)
+            this.lockerHelperService.synchronizeLockerItemList(this.center.id)
+        })
         this.showRemoveModal = false
     }
 

@@ -10,8 +10,7 @@ import dayjs from 'dayjs'
 import { CenterUserListService } from '@services/helper/center-user-list.service'
 import { CenterMembershipService } from '@services/center-membership.service'
 import { StorageService } from '@services/storage.service'
-import { CreateLockerTicketReqBody, CenterUsersLockerService } from '@services/center-users-locker.service.service'
-import { CreateMembershipTicketReqBody, CenterUsersMembershipService } from '@services/center-users-membership.service'
+import { LockerHelperService } from '@services/center/locker-helper.service'
 import { CenterUsersPaymentService, CreateMLPaymentReqBody } from '@services/center-users-payment.service'
 import { CenterLockerService } from '@services/center-locker.service'
 import { FileService } from '@services/file.service'
@@ -93,7 +92,8 @@ export class RegisterMembershipLockerFullmodalStore extends ComponentStore<State
         private centerUsersPaymentApi: CenterUsersPaymentService,
         private storageService: StorageService,
         private nxStore: Store,
-        private fileService: FileService
+        private fileService: FileService,
+        private lockerHelperService: LockerHelperService
     ) {
         super(_.cloneDeep(stateInit))
     }
@@ -316,9 +316,11 @@ export class RegisterMembershipLockerFullmodalStore extends ComponentStore<State
                                 let func: () => void = () => {}
                                 if (lockerItems.length > 0 && membershipItems.length > 0) {
                                     func = () => {
-                                        this.nxStore.dispatch(
-                                            LockerActions.startUpdateStateAfterRegisterLockerInDashboard()
+                                        this.lockerHelperService.synchronizeCurUserLocker(
+                                            reqBody.centerId,
+                                            reqBody.user.id
                                         )
+                                        this.lockerHelperService.synchronizeLockerItemList(reqBody.centerId)
                                         this.nxStore.dispatch(
                                             showToast({
                                                 text: `${reqBody.user.center_user_name}님의 회원권 / 락커 등록이 완료되었습니다. `,
@@ -327,9 +329,11 @@ export class RegisterMembershipLockerFullmodalStore extends ComponentStore<State
                                     }
                                 } else if (lockerItems.length > 0) {
                                     func = () => {
-                                        this.nxStore.dispatch(
-                                            LockerActions.startUpdateStateAfterRegisterLockerInDashboard()
+                                        this.lockerHelperService.synchronizeCurUserLocker(
+                                            reqBody.centerId,
+                                            reqBody.user.id
                                         )
+                                        this.lockerHelperService.synchronizeLockerItemList(reqBody.centerId)
                                         this.nxStore.dispatch(
                                             showToast({
                                                 text: `${reqBody.user.center_user_name}님의 락커 등록이 완료되었습니다. `,

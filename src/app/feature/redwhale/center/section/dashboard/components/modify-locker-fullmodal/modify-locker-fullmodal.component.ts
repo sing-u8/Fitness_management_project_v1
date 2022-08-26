@@ -18,6 +18,7 @@ import dayjs from 'dayjs'
 import { StorageService } from '@services/storage.service'
 import { CenterUsersLockerService, UpdateLockerTicketReqBody } from '@services/center-users-locker.service.service'
 import { DashboardHelperService } from '@services/center/dashboard-helper.service'
+import { LockerHelperService } from '@services/center/locker-helper.service'
 
 // components
 import { ClickEmitterType } from '@shared/components/common/button/button.component'
@@ -69,7 +70,8 @@ export class ModifyLockerFullmodalComponent implements OnInit, OnChanges, AfterV
         private centerUsersLockerService: CenterUsersLockerService,
         private storageService: StorageService,
         private nxStore: Store,
-        private dashboardHelperService: DashboardHelperService
+        private dashboardHelperService: DashboardHelperService,
+        private lockerHelperService: LockerHelperService
     ) {}
 
     setUserLockerData() {
@@ -147,6 +149,8 @@ export class ModifyLockerFullmodalComponent implements OnInit, OnChanges, AfterV
                     DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.centerUser })
                 )
                 this.dashboardHelperService.refreshCurUser(this.center.id, this.centerUser)
+                this.lockerHelperService.synchronizeCurUserLocker(this.center.id, this.centerUser.id)
+                this.lockerHelperService.synchronizeLockerItemList(this.center.id)
                 loadingBt.hideLoading()
                 this.confirm.emit()
             })

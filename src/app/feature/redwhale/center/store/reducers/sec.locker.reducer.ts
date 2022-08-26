@@ -8,9 +8,8 @@ import * as LockerActions from '../actions/sec.locker.actions'
 import { LockerCategory } from '@schemas/locker-category'
 import { LockerItem } from '@schemas/locker-item'
 import { Loading } from '@schemas/store/loading'
-import { curLockerCateg } from '../selectors/sec.locker.selector'
 import { UserLocker } from '@schemas/user-locker'
-import { finishSynchronizeCurUserLockerItem, finishSynchronizeLockerItemList } from '../actions/sec.locker.actions'
+import { finishSynchronizeCurLockerItem } from '../actions/sec.locker.actions'
 
 export const initialLockerState: {
     curLockerCateg: LockerCategory
@@ -293,12 +292,10 @@ export const lockerReducer = createImmerReducer(
         }
         return state
     }),
-    on(LockerActions.finishSynchronizeCurUserLockerItem, (state, { success, userLocker }) => {
-        if (success) {
-            state.curUserLocker = userLocker
-        }
+    on(LockerActions.finishSynchronizeCurLockerItem, (state, { success }) => {
         return state
     })
+
     //
 )
 

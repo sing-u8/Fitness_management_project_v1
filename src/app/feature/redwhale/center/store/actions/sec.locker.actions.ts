@@ -267,18 +267,18 @@ export const startUpdateStateAfterRegisterLockerInDashboard = createAction(
 
 export const startSynchronizeLockerItemList = createAction(
     `[${FeatureKey}] Start Synchronize Locker Item List`,
-    props<{ centerId: string }>()
+    props<{ centerId: string; cb?: () => void }>()
 )
 export const finishSynchronizeLockerItemList = createAction(
     `[${FeatureKey}] Finish Synchronize Locker Item List`,
     props<{ success: boolean; lockerItems?: Array<LockerItem> }>()
 )
 
-export const startSynchronizeCurUserLocker = createAction(
-    `[${FeatureKey}] Start Synchronize Cur User Locker`,
+export const startSynchronizeCurLockerItem = createAction(
+    `[${FeatureKey}] Start Synchronize Cur Locker Item`,
     props<{ centerId: string; userId: string }>()
 )
-export const finishSynchronizeCurUserLockerItem = createAction(
-    `[${FeatureKey}] Finish Synchronize Cur User Locker`,
-    props<{ success: boolean; userLocker: UserLocker }>()
+export const finishSynchronizeCurLockerItem = createAction(
+    `[${FeatureKey}] Finish Synchronize Cur Locker Item`,
+    props<{ success: boolean }>()
 )

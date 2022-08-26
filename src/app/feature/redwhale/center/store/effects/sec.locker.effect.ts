@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core'
 import { createEffect, Actions, ofType, concatLatestFrom } from '@ngrx/effects'
 import { Store } from '@ngrx/store'
 import { forkJoin, of } from 'rxjs'
-import { catchError, switchMap, map, exhaustMap, tap, mergeMap } from 'rxjs/operators'
+import { catchError, switchMap, map, mergeMap } from 'rxjs/operators'
 
 import { showToast } from '@appStore/actions/toast.action'
 
@@ -14,8 +14,7 @@ import { CenterUsersLockerService } from '@services/center-users-locker.service.
 import { StorageService } from '@services/storage.service'
 
 import _ from 'lodash'
-import { startSynchronizeCurUserLocker, startSynchronizeLockerItemList } from '../actions/sec.locker.actions'
-import { curLockerItem } from '../selectors/sec.locker.selector'
+import { finishSynchronizeCurLockerItem, startSynchronizeCurLockerItem } from '../actions/sec.locker.actions'
 
 @Injectable()
 export class LockerEffect {
@@ -426,17 +425,6 @@ export class LockerEffect {
     )
     // synchronize
     // // by dashboard
-    public afterRegisterLockerInDashboard = createEffect(() =>
-        this.actions$.pipe(
-            ofType(LockerActions.startUpdateStateAfterRegisterLockerInDashboard),
-            switchMap(() => {
-                const center = this.storageService.getCenter()
-                return [LockerActions.resetAll(), LockerActions.startLoadLockerCategs({ centerId: center.id })]
-            }),
-            catchError((err: string) => of(LockerActions.error({ error: err })))
-        )
-    )
-
     public synchronizeLockerItemList$ = createEffect(() =>
         this.actions$.pipe(
             ofType(LockerActions.startSynchronizeLockerItemList),
@@ -444,15 +432,14 @@ export class LockerEffect {
                 this.store.select(LockerSelector.curCenterId),
                 this.store.select(LockerSelector.curLockerCateg),
             ]),
-            switchMap(([{ centerId }, curCenterId, curLockerCateg]) => {
+            switchMap(([{ centerId, cb }, curCenterId, curLockerCateg]) => {
                 if (!_.isEmpty(curLockerCateg) && centerId == curCenterId) {
-                    return this.centerLokcerApi
-                        .getItemList(centerId, curLockerCateg.id)
-                        .pipe(
-                            switchMap((lockerItems) => [
-                                LockerActions.finishSynchronizeLockerItemList({ success: true, lockerItems }),
-                            ])
-                        )
+                    return this.centerLokcerApi.getItemList(centerId, curLockerCateg.id).pipe(
+                        switchMap((lockerItems) => {
+                            cb ? cb() : null
+                            return [LockerActions.finishSynchronizeLockerItemList({ success: true, lockerItems })]
+                        })
+                    )
                 } else {
                     return [LockerActions.finishSynchronizeLockerItemList({ success: false })]
                 }
@@ -460,12 +447,25 @@ export class LockerEffect {
             catchError((err: string) => of(LockerActions.error({ error: err })))
         )
     )
-    public synchronizeCurUserLocker$ = createEffect(() =>
+    public synchronizeCurLockerItem$ = createEffect(() =>
         this.actions$.pipe(
-            ofType(LockerActions.startSynchronizeCurUserLocker),
-            switchMap(() => {
-                const center = this.storageService.getCenter()
-                return [LockerActions.resetAll(), LockerActions.startLoadLockerCategs({ centerId: center.id })]
+            ofType(LockerActions.startSynchronizeCurLockerItem),
+            concatLatestFrom(() => [
+                this.store.select(LockerSelector.curCenterId),
+                this.store.select(LockerSelector.curLockerCateg),
+                this.store.select(LockerSelector.curLockerItem),
+            ]),
+            switchMap(([{ centerId, userId }, curCenterId, curLockerCateg, curLockerItem]) => {
+                if (!_.isEmpty(curLockerCateg) && !_.isEmpty(curLockerItem) && centerId == curCenterId) {
+                    return this.centerLokcerApi.getItemList(centerId, curLockerCateg.id).pipe(
+                        switchMap((lockerItems) => {
+                            const lockerItem = lockerItems.find((v) => v.id == curLockerItem.id)
+                            return [LockerActions.startSetCurLockerItem({ lockerItem })]
+                        })
+                    )
+                } else {
+                    return [LockerActions.finishSynchronizeCurLockerItem({ success: false })]
+                }
             }),
             catchError((err: string) => of(LockerActions.error({ error: err })))
         )
