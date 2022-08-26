@@ -1,7 +1,8 @@
 <div
-    *ngIf="!doHide"
-    class="user-list-card"
-    (click) ="holdMode ? toggleHold() : clickCard()"
+  *ngIf="!doHide"
+  class="user-list-card"
+  [class.selected-user] = "curUserData.user?.id == cardItem.user.id"
+  (click) ="holdMode ? toggleHold() : clickCard()"
 >
 
   <div class="card-left">
@@ -14,11 +15,9 @@
         fontSize="12"
       ></rw-avatar>
 
-
       <!-- <div *ngIf="cardItem.user.elapsed_days_of_last_expired_membership_ticket" class="expired-avatar">
         <span class="rw-typo-subtext0">만료</span>
       </div> -->
-
     </div>
 
     <div class="user-info">

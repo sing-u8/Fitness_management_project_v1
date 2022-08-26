@@ -9,7 +9,8 @@ import { TimeService } from '@services/helper/time.service'
 
 import * as FromDashboardReducer from '@centerStore/reducers/sec.dashboard.reducer'
 
-import { CenterUser } from '@schemas/center-user' // !! 나중에 다른 스키마로 수정해야할 필요가 있음
+import { CenterUser } from '@schemas/center-user'
+import _ from 'lodash' // !! 나중에 다른 스키마로 수정해야할 필요가 있음
 
 @Component({
     selector: 'db-user-list-card',
@@ -22,6 +23,7 @@ export class UserListCardComponent implements OnInit, AfterViewInit, OnChanges, 
     @Input() holdMode: boolean
     @Input() holdNumber: number
     @Input() search: string
+    @Input() curUserData: FromDashboardReducer.CurUseData = _.cloneDeep(FromDashboardReducer.CurUseDataInit)
 
     public doHide = false
     public searchSubject = new Subject<string>()

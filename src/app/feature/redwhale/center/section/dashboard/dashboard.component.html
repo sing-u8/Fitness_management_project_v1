@@ -26,6 +26,7 @@
                 [selectedUserList]="selectedUserList$ | async"
                 [searchedUsersLists]="searchedUsersLists$ | async"
                 [selectedUserListsHolding]="selectedUserListsHolding$ | async"
+                [curUserData]="curUserData$ | async"
                 [isLoading]="isLoading$ | async"
                 (onDirectRegisterMember)="toggleDirectRegisterMemberFullModal()"
             ></db-member-list>

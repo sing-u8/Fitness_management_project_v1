@@ -357,10 +357,6 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
                         )
                         this.nxStore.dispatch(CenterCommonActions.startGetInstructors({ centerId: this.center.id }))
                         this.nxStore.dispatch(CenterCommonActions.startGetMembers({ centerId: this.center.id }))
-                        console.log(
-                            'DashboardActions.startSetCurUserData -- refresh user list before : ',
-                            this.curUserListSelect
-                        )
                         this.dashboardHelperService.refreshUserList(
                             this.center.id,
                             this.curUserData.user,

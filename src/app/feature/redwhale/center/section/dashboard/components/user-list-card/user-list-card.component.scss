@@ -1,6 +1,6 @@
 * {
-    padding: 0px;
-    margin: 0px;
+    padding: 0;
+    margin: 0;
 }
 
 .user-list-card {
@@ -12,7 +12,10 @@
     justify-content: space-between;
     cursor: pointer;
     border-radius: 5px;
-
+    &.selected-user {
+        border: 1px solid var(--border-color);
+        padding: 9px;
+    }
     &:hover {
         background-color: var(--background-color);
     }
@@ -35,8 +38,8 @@
                 position: absolute;
                 background-color: rgba(0, 0, 0, 0.5);
 
-                left: 0px;
-                top: 0px;
+                left: 0;
+                top: 0;
 
                 span {
                     font-weight: 700;
