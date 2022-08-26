@@ -18,7 +18,7 @@ import { LockerCategoryComponent } from '@redwhale/center/section/locker/compone
 
 // services
 import { StorageService } from '@services/storage.service'
-import { CenterLockerService } from '@services/center-locker.service'
+import { DashboardHelperService } from '@services/center/dashboard-helper.service'
 
 // schemas
 import { LockerCategory } from '@schemas/locker-category'
@@ -104,7 +104,12 @@ export class LockerComponent implements OnInit, AfterViewInit, OnDestroy {
     @ViewChildren(LockerCategoryComponent) lockerCategories!: QueryList<LockerCategoryComponent>
     @ViewChild('l_locker_category') l_locker_category: ElementRef
 
-    constructor(private nxStore: Store, private storageService: StorageService, private fb: FormBuilder) {}
+    constructor(
+        private nxStore: Store,
+        private storageService: StorageService,
+        private fb: FormBuilder,
+        private dashboardHelperService: DashboardHelperService
+    ) {}
 
     ngOnInit(): void {
         this.categInput = this.fb.control('')
@@ -295,6 +300,9 @@ export class LockerComponent implements OnInit, AfterViewInit, OnDestroy {
                 userId: this.curUserLocker.user_id,
                 lockerTicketId: this.curUserLocker.id,
                 startLockerReqBody: { locker_item_id: this.willBeMovedLockerItem.id },
+                cb: () => {
+                    this.dashboardHelperService.synchronizeUserLocker(this.center.id, this.curUserLocker.user_id)
+                },
             })
         )
         this.doShowMoveLockerTicketModal = false

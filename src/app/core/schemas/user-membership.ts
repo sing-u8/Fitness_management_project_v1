@@ -1,7 +1,11 @@
 import { Holding } from '@schemas/holding'
 export interface UserMembership {
     id: string
-    state_code: 'user_membership_state_in_use' | 'user_membership_state_paused' | 'user_membership_state_refund'
+    state_code:
+        | 'user_membership_state_in_use'
+        | 'user_membership_state_paused'
+        | 'user_membership_state_refund'
+        | 'user_membership_state_expired'
     state_code_name: string
     membership_category_id: string
     membership_item_id: string

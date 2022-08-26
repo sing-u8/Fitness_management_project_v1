@@ -8,7 +8,9 @@ export interface UserLocker {
     center_id: string
     center_name: string
     category_name: string
+    category_name_ref: string
     name: string
+    name_ref: string
     start_date: string
     end_date: string
     pause_start_date: string

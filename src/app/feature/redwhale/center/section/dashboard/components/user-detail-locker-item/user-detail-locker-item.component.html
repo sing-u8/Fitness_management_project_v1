@@ -3,9 +3,9 @@
     [class.isExpired] = "isExpired"
 >
 
-    <div rwEllipsisDropdown [lineClamp]="2" class="col1">{{locker.category_name}}</div>
+    <div rwEllipsisDropdown [lineClamp]="2" class="col1">{{locker.category_name ?? locker.category_name_ref}}</div>
     <div rwEllipsisDropdown [lineClamp]="2" class="col2" >
-        {{locker.name}}
+        {{locker.name ?? locker.name_ref}}
     </div>
 
     <div class="holding-layout">

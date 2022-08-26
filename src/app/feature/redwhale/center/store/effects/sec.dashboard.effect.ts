@@ -18,7 +18,7 @@ import { CenterUsersLockerService } from '@services/center-users-locker.service.
 import { CenterUsersMembershipService } from '@services/center-users-membership.service'
 import { CenterUsersPaymentService } from '@services/center-users-payment.service'
 import { CenterUsersBookingService } from '@services/center-users-booking.service'
-import { CenterService, DelegateRequestBody } from '@services/center.service'
+import { CenterService } from '@services/center.service'
 import { CenterHoldingService } from '@services/center-holding.service'
 import { CenterContractService } from '@services/center-users-contract.service'
 
@@ -385,6 +385,46 @@ export class DashboardEffect {
                     })
                 )
             ),
+            catchError((err: string) => of(DashboardActions.error({ error: err })))
+        )
+    )
+
+    // synchronize dashboard data
+    // // by locker
+    public startSynchronizeUserLocker$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(DashboardActions.startSynchronizeUserLocker),
+            concatLatestFrom(() => [
+                this.store.select(DashboardSelector.curCenterId),
+                this.store.select(DashboardSelector.curUserData),
+            ]),
+            switchMap(([{ centerId, userId }, curCenterId, curUserData]) => {
+                if (
+                    !_.isEmpty(curCenterId) &&
+                    !_.isEmpty(curUserData) &&
+                    centerId == curCenterId &&
+                    userId == curUserData.user.id
+                ) {
+                    return forkJoin([
+                        this.centerUsersLockerApi.getLockerTickets(centerId, curUserData.user.id),
+                        this.centerUsersPaymentApi.getPayments(centerId, curUserData.user.id),
+                        this.centerContractApi.getContract(centerId, curUserData.user.id),
+                    ]).pipe(
+                        switchMap(([lockers, payments, contracts]) => {
+                            return [
+                                DashboardActions.finishSynchronizeUserLocker({
+                                    success: true,
+                                    lockers,
+                                    payments,
+                                    contracts,
+                                }),
+                            ]
+                        })
+                    )
+                } else {
+                    return [DashboardActions.finishSynchronizeUserLocker({ success: false })]
+                }
+            }),
             catchError((err: string) => of(DashboardActions.error({ error: err })))
         )
     )

@@ -7,6 +7,7 @@ import dayjs from 'dayjs'
 import { StorageService } from '@services/storage.service'
 import { CenterUsersLockerService, CreateLockerTicketReqBody } from '@services/center-users-locker.service.service'
 import { CenterLockerService } from '@services/center-locker.service'
+import { DashboardHelperService } from '@services/center/dashboard-helper.service'
 
 // schema
 import { CenterUser } from '@schemas/center-user'
@@ -14,10 +15,9 @@ import { LockerItem } from '@schemas/locker-item'
 import { Center } from '@schemas/center'
 import { LockerCategory } from '@schemas/locker-category'
 import { LockerItemHistory } from '@schemas/locker-item-history'
-import { UserLocker, UserLockerStateCode } from '@schemas/user-locker'
-import { Loading } from '@schemas/componentStore/loading'
+import { UserLocker } from '@schemas/user-locker'
 
-import { LockerChargeType, ConfirmOuput, ChargeMode } from '../locker-charge-modal/locker-charge-modal.component'
+import { ConfirmOuput, ChargeMode } from '../locker-charge-modal/locker-charge-modal.component'
 
 // ngrx
 import { Store, select } from '@ngrx/store'
@@ -82,7 +82,8 @@ export class LockerDetailBoxComponent implements OnInit, OnChanges, OnDestroy {
         private storageService: StorageService,
         private centerUserLockerService: CenterUsersLockerService,
         private centerLockerService: CenterLockerService,
-        private nxStore: Store
+        private nxStore: Store,
+        private dashboardHelperService: DashboardHelperService
     ) {
         this.center = this.storageService.getCenter()
         this.nxStore.pipe(select(LockerSelector.LockerGlobalMode), takeUntil(this.unsubscriber$)).subscribe((lgm) => {
@@ -303,6 +304,7 @@ export class LockerDetailBoxComponent implements OnInit, OnChanges, OnDestroy {
                 cb: () => {
                     res.loadingFns.hideLoading()
                     this.closeShowAdditionalChargeModal()
+                    this.dashboardHelperService.synchronizeUserLocker(this.center.id, this.curUserLocker.user_id)
                 },
             })
         )
@@ -402,6 +404,7 @@ export class LockerDetailBoxComponent implements OnInit, OnChanges, OnDestroy {
                 cb: () => {
                     res.loadingFns.hideLoading()
                     this.closeShowChargeModal()
+                    this.dashboardHelperService.synchronizeUserLocker(this.center.id, this.willRegisteredMember.id)
                     this.willRegisteredMember = undefined
                 },
             })
@@ -437,6 +440,7 @@ export class LockerDetailBoxComponent implements OnInit, OnChanges, OnDestroy {
                     cb: () => {
                         res.loadingFns.hideLoading()
                         this.closeShowEmptyLockerModal()
+                        this.dashboardHelperService.synchronizeUserLocker(this.center.id, this.curUserLocker.user_id)
                     },
                 })
             )
@@ -460,6 +464,7 @@ export class LockerDetailBoxComponent implements OnInit, OnChanges, OnDestroy {
                     cb: () => {
                         res.loadingFns.hideLoading()
                         this.closeShowEmptyLockerModal()
+                        this.dashboardHelperService.synchronizeUserLocker(this.center.id, this.curUserLocker.user_id)
                     },
                 })
             )

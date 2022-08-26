@@ -10,6 +10,7 @@ import { LockerItem } from '@schemas/locker-item'
 import { Loading } from '@schemas/store/loading'
 import { curLockerCateg } from '../selectors/sec.locker.selector'
 import { UserLocker } from '@schemas/user-locker'
+import { finishSynchronizeCurUserLockerItem, finishSynchronizeLockerItemList } from '../actions/sec.locker.actions'
 
 export const initialLockerState: {
     curLockerCateg: LockerCategory
@@ -286,9 +287,19 @@ export const lockerReducer = createImmerReducer(
     }),
 
     // reducer called outside
-    on(LockerActions.startUpdateStateAfterRegisterLockerInDashboard, (state) => {
+    on(LockerActions.finishSynchronizeLockerItemList, (state, { success, lockerItems }) => {
+        if (success) {
+            state.curLockerItemList = lockerItems
+        }
+        return state
+    }),
+    on(LockerActions.finishSynchronizeCurUserLockerItem, (state, { success, userLocker }) => {
+        if (success) {
+            state.curUserLocker = userLocker
+        }
         return state
     })
+    //
 )
 
 // selecting fucntion from reducer

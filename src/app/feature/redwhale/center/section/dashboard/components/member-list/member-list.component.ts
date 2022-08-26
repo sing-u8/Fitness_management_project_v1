@@ -24,6 +24,8 @@ import { Store, select } from '@ngrx/store'
 import * as FromDashboard from '@centerStore/reducers/sec.dashboard.reducer'
 import * as DashboardSelector from '@centerStore/selectors/sec.dashoboard.selector'
 import * as DashboardActions from '@centerStore/actions/sec.dashboard.actions'
+import { UserListValueItem } from '@centerStore/reducers/sec.dashboard.reducer'
+import { employeeRoleObj } from '@centerStore/selectors/sec.dashoboard.selector'
 
 @Component({
     selector: 'db-member-list',
@@ -40,6 +42,8 @@ export class MemberListComponent implements OnInit, OnDestroy {
     @Input() isLoading: Loading = 'idle'
 
     @Output() onDirectRegisterMember = new EventEmitter<void>()
+
+    public employeeRoleObj$ = this.nxStore.select(DashboardSelector.employeeRoleObj)
 
     public center: Center
 

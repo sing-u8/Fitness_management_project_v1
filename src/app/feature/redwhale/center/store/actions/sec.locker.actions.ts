@@ -183,7 +183,13 @@ export const finishExtendLockerTicket = createAction(
 
 export const startMoveLockerTicket = createAction(
     `[${FeatureKey}] Start Move Locker Ticket`,
-    props<{ centerId: string; userId: string; lockerTicketId: string; startLockerReqBody: StartLockerTicketReqBody }>()
+    props<{
+        centerId: string
+        userId: string
+        lockerTicketId: string
+        startLockerReqBody: StartLockerTicketReqBody
+        cb?: () => void
+    }>()
 )
 export const finishMoveLockerTicket = createAction(
     `[${FeatureKey}] Finish Refund Locker Ticket`,
@@ -201,9 +207,6 @@ export const startMoveLockerTicketInDashboard = createAction(
     }>()
 )
 
-export const startUpdateStateAfterRegisterLockerInDashboard = createAction(
-    `[${FeatureKey}] Start Update State After Register Locker In Dashboard`
-)
 // -------------------------------------------------------------------------------------------------------------- //
 // cur Locker Categ
 export const setCurLockerCateg = createAction(
@@ -255,3 +258,27 @@ export const resetCurCenterId = createAction(`[${FeatureKey}] Reset Current Cent
 // common
 export const resetAll = createAction(`[${FeatureKey}] Reset Locker All State`)
 export const error = createAction(`[${FeatureKey}] Locker State Error`, props<{ error: string }>())
+
+// synchronize
+// // by dashboard
+export const startUpdateStateAfterRegisterLockerInDashboard = createAction(
+    `[${FeatureKey}] Start Update State After Register Locker In Dashboard`
+)
+
+export const startSynchronizeLockerItemList = createAction(
+    `[${FeatureKey}] Start Synchronize Locker Item List`,
+    props<{ centerId: string }>()
+)
+export const finishSynchronizeLockerItemList = createAction(
+    `[${FeatureKey}] Finish Synchronize Locker Item List`,
+    props<{ success: boolean; lockerItems?: Array<LockerItem> }>()
+)
+
+export const startSynchronizeCurUserLocker = createAction(
+    `[${FeatureKey}] Start Synchronize Cur User Locker`,
+    props<{ centerId: string; userId: string }>()
+)
+export const finishSynchronizeCurUserLockerItem = createAction(
+    `[${FeatureKey}] Finish Synchronize Cur User Locker`,
+    props<{ success: boolean; userLocker: UserLocker }>()
+)

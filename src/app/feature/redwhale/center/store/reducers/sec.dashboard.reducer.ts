@@ -13,10 +13,12 @@ import { CenterUsersCategory } from '@schemas/center/community/center-users-by-c
 import { Contract } from '@schemas/contract'
 
 import * as DashboardActions from '../actions/sec.dashboard.actions'
+import { finishSynchronizeUserLocker } from '../actions/sec.dashboard.actions'
 
 export type MemberSelectCateg = 'member' | 'valid' | 'unpaid' | 'imminent' | 'expired' | 'employee' //  | 'attendance'
 export type MemberManageCategory = 'membershipLocker' | 'reservation' | 'payment'
-export type UsersListValue = Array<{ user: CenterUser; holdSelected: boolean }>
+export type UserListValueItem = { user: CenterUser; holdSelected: boolean }
+export type UsersListValue = Array<UserListValueItem>
 // !! export type Manager
 export type UsersSelectCateg = Record<MemberSelectCateg, { name: string; userSize: number }>
 export type UserListSelect = { key: MemberSelectCateg; value: { name: string; userSize: number } }
@@ -306,6 +308,14 @@ export const dashboardReducer = createImmerReducer(
     on(DashboardActions.resetAll, (state) => {
         state = initialState // { ...state, ...initialState }
         return state
+    }),
+    // synchronize dashboard data
+    // // by locker
+    on(DashboardActions.finishSynchronizeUserLocker, (state, { success, lockers }) => {
+        if (success) {
+            state.curUserData.lockers = lockers
+        }
+        return state
     })
 )
 
@@ -342,6 +352,22 @@ export const selectSearchedUsersLists = (state: State) => {
         })
     })
     return searchUserList
+}
+export const selectEmployeeRoleObj = (state: State) => {
+    return state.usersLists[state.curUserListSelect.key].length > 0
+        ? _.reduce(
+              state.usersLists[state.curUserListSelect.key],
+              (acc, val) => {
+                  if (_.isEmpty(acc[val.user.role_code])) {
+                      acc[val.user.role_code] = [val]
+                  } else {
+                      acc[val.user.role_code].push(val)
+                  }
+                  return acc
+              },
+              {}
+          )
+        : undefined
 }
 
 // helper functions

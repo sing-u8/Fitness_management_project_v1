@@ -10,6 +10,7 @@ import { WordService } from '@services/helper/word.service'
 import { CenterService } from '@services/center.service'
 import { TimeService } from '@services/helper/time.service'
 import { DashboardHelperService } from '@services/center/dashboard-helper.service'
+import { FileService } from '@services/file.service'
 
 import { Center } from '@schemas/center'
 import { Loading } from '@schemas/componentStore/loading'
@@ -59,7 +60,8 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
         private router: Router,
         private activatedRoute: ActivatedRoute,
         private timeService: TimeService,
-        private dashboardHelperService: DashboardHelperService
+        private dashboardHelperService: DashboardHelperService,
+        private fileService: FileService
     ) {
         this.center = this.storageService.getCenter()
         this.user = this.storageService.getUser()
@@ -208,27 +210,49 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
     registerUserProfile(picture: any) {
         if (!this.isFileExist(picture.files)) return
         const files: FileList = _.assign({ length: 1 }, picture.files)
-        console.log('registerUserProfile: ', files)
-
-        this.nxStore.dispatch(
-            DashboardActions.startRegisterCurUserProfile({
-                userId: this.curUserData.user.id,
-                reqBody: {
-                    type_code: 'file_type_center_user_picture',
-                    center_id: this.center.id,
-                    center_user_id: this.curUserData.user.id,
-                },
-                profile: files,
-                callback: () => {
-                    this.nxStore.dispatch(
-                        showToast({
-                            text: `${this.curUserData.user.center_user_name}님의 프로필 사진이 변경되었습니다.`,
-                        })
-                    )
-                    this.nxStore.dispatch(CenterCommonActions.startGetInstructors({ centerId: this.center.id }))
-                },
+        if (!_.isEmpty(this.curUserData.user.center_user_picture)) {
+            this.fileService.deleteFile(this.curUserData.user.center_user_picture).subscribe(() => {
+                this.nxStore.dispatch(
+                    DashboardActions.startRegisterCurUserProfile({
+                        userId: this.curUserData.user.id,
+                        reqBody: {
+                            type_code: 'file_type_center_user_picture',
+                            center_id: this.center.id,
+                            center_user_id: this.curUserData.user.id,
+                        },
+                        profile: files,
+                        callback: () => {
+                            this.nxStore.dispatch(
+                                showToast({
+                                    text: `${this.curUserData.user.center_user_name}님의 프로필 사진이 변경되었습니다.`,
+                                })
+                            )
+                            this.nxStore.dispatch(CenterCommonActions.startGetInstructors({ centerId: this.center.id }))
+                        },
+                    })
+                )
             })
-        )
+        } else {
+            this.nxStore.dispatch(
+                DashboardActions.startRegisterCurUserProfile({
+                    userId: this.curUserData.user.id,
+                    reqBody: {
+                        type_code: 'file_type_center_user_picture',
+                        center_id: this.center.id,
+                        center_user_id: this.curUserData.user.id,
+                    },
+                    profile: files,
+                    callback: () => {
+                        this.nxStore.dispatch(
+                            showToast({
+                                text: `${this.curUserData.user.center_user_name}님의 프로필 사진이 변경되었습니다.`,
+                            })
+                        )
+                        this.nxStore.dispatch(CenterCommonActions.startGetInstructors({ centerId: this.center.id }))
+                    },
+                })
+            )
+        }
     }
     isFileExist(fileList: FileList) {
         return !(fileList && fileList.length == 0)
@@ -286,7 +310,7 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
                   }를 양도하시겠어요?`
                 : `${this.wordService.ellipsis(this.curUserData.user.center_user_name, 4)}님을 ${
                       this.roleName[changedRole]
-                  }으로 변경하시겠어요?`
+                  }(으)로 변경하시겠어요?`
         this.changeRoleModalText.confirmButtonText = changedRole == 'owner' ? '운영자 양도' : '변경'
         this.changeRoleModalText.subText =
             changedRole == 'owner'
@@ -352,7 +376,7 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
                             showToast({
                                 text: `${this.wordService.ellipsis(this.curUserData.user.center_user_name, 4)}님이 ${
                                     this.roleName[roleKey]
-                                }으로 변경되었습니다.`,
+                                }(으)로 변경되었습니다.`,
                             })
                         )
                         this.nxStore.dispatch(CenterCommonActions.startGetInstructors({ centerId: this.center.id }))

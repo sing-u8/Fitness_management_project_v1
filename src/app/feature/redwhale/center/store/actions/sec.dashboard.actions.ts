@@ -188,3 +188,14 @@ export const resetCurCenterId = createAction(`[${FeatureKey}] Reset Current Cent
 export const setUserDetailTag = createAction(`[${FeatureKey}] Set User Detail Tag`, props<{ tag: UserDetailTag }>())
 export const resetAll = createAction(`[${FeatureKey}] Reset Dashboard All State`)
 export const error = createAction(`[${FeatureKey}] Dashboard State Error`, props<{ error: string }>())
+
+// synchronize dashboard data
+// // by locker
+export const startSynchronizeUserLocker = createAction(
+    '[${FeatureKey}] Start Synchronize User Data - Locker',
+    props<{ centerId: string; userId: string }>()
+)
+export const finishSynchronizeUserLocker = createAction(
+    '[${FeatureKey}] Finish Synchronize User Data - Locker',
+    props<{ success: boolean; lockers?: Array<UserLocker>; payments?: Payment[]; contracts?: Contract[] }>()
+)

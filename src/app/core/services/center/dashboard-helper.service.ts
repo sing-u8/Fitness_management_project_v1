@@ -7,6 +7,7 @@ import { CenterUser } from '@schemas/center-user'
 import { Store } from '@ngrx/store'
 import * as DashboardActions from '@centerStore/actions/sec.dashboard.actions'
 import { MemberSelectCateg } from '@centerStore/reducers/sec.dashboard.reducer'
+import { startSynchronizeUserLocker } from '@centerStore/actions/sec.dashboard.actions'
 
 @Injectable({
     providedIn: 'root',
@@ -22,5 +23,11 @@ export class DashboardHelperService {
     refreshUserList(centerId: string, centerUser: CenterUser, categ_type: MemberSelectCateg) {
         this.nxStore.dispatch(DashboardActions.startGetUsersByCategory({ centerId }))
         this.nxStore.dispatch(DashboardActions.startGetUserList({ centerId, categ_type }))
+    }
+
+    // synchronize
+    // // by locker
+    synchronizeUserLocker(centerId: string, userId: string) {
+        this.nxStore.dispatch(DashboardActions.startSynchronizeUserLocker({ centerId, userId }))
     }
 }

@@ -27,3 +27,5 @@ export const curUserMembershipData = createSelector(DashboardFeature, FromDashbo
 export const curUserLockerData = createSelector(DashboardFeature, FromDashboard.selectCurUserLockerData)
 export const curUserReservationData = createSelector(DashboardFeature, FromDashboard.selectCurUserReservationData)
 export const curUserPaymentData = createSelector(DashboardFeature, FromDashboard.selectCurUserPaymentData)
+
+export const employeeRoleObj = createSelector(DashboardFeature, FromDashboard.selectEmployeeRoleObj)

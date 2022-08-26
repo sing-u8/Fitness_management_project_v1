@@ -20,6 +20,7 @@ import { forkJoin } from 'rxjs'
 import { StorageService } from '@services/storage.service'
 import { CenterMembershipService } from '@services/center-membership.service'
 import { CenterUsersMembershipService, UpdateMembershipTicketReqBody } from '@services/center-users-membership.service'
+import { DashboardHelperService } from '@services/center/dashboard-helper.service'
 
 // components
 import { ClickEmitterType } from '@shared/components/common/button/button.component'
@@ -108,7 +109,8 @@ export class ModifyMembershipFullmodalComponent implements OnInit, OnChanges, Af
         private storageService: StorageService,
         private centerMembershipService: CenterMembershipService,
         private centerUsersMembershipService: CenterUsersMembershipService,
-        private nxStore: Store
+        private nxStore: Store,
+        private dashboardHelperService: DashboardHelperService
     ) {}
 
     setUserMembershipData() {
@@ -215,9 +217,7 @@ export class ModifyMembershipFullmodalComponent implements OnInit, OnChanges, Af
             .updateMembershipTicket(this.center.id, this.centerUser.id, this.userMembership.id, reqBody)
             .subscribe((userMembership) => {
                 this.nxStore.dispatch(showToast({ text: `'${this.userMembership.name}' 정보가 수정되었습니다.` }))
-                this.nxStore.dispatch(
-                    DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.centerUser })
-                )
+                this.dashboardHelperService.refreshCurUser(this.center.id, this.centerUser)
                 loadingBt.hideLoading()
                 this.confirm.emit()
             })

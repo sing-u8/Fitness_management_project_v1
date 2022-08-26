@@ -12,6 +12,7 @@ import {
 import { StorageService } from '@services/storage.service'
 import { TimeService } from '@services/helper/time.service'
 import { DashboardHelperService } from '@services/center/dashboard-helper.service'
+import { LockerHelperService } from '@services/center/locker-helper.service'
 
 import { Center } from '@schemas/center'
 import { UserLocker } from '@schemas/user-locker'
@@ -44,7 +45,8 @@ export class UserDetailLockerComponent implements OnInit {
         private centerUsersLockerService: CenterUsersLockerService,
         private storageService: StorageService,
         private timeService: TimeService,
-        private dashboardHelper: DashboardHelperService
+        private dashboardHelper: DashboardHelperService,
+        private lockerHelperService: LockerHelperService
     ) {}
 
     ngOnInit(): void {}
@@ -213,10 +215,10 @@ export class UserDetailLockerComponent implements OnInit {
     }
     toggleRemoveModal() {
         this.removeModalData.text = this.selectedUserLocker
-            ? `'[${this.wordService.ellipsis(this.selectedUserLocker.category_name, 10)}] ${this.wordService.ellipsis(
-                  this.selectedUserLocker.name,
-                  6
-              )}' 락커를 삭제하시겠어요?`
+            ? `'[${this.wordService.ellipsis(
+                  this.selectedUserLocker.category_name ?? this.selectedUserLocker.category_name_ref,
+                  10
+              )}] ${this.wordService.ellipsis(this.selectedUserLocker.name, 6)}' 락커를 삭제하시겠어요?`
             : ''
         this.showRemoveModal = !this.showRemoveModal
     }
@@ -323,9 +325,6 @@ export class UserDetailLockerComponent implements OnInit {
                             )}] ${this.wordService.ellipsis(this.selectedUserLocker.name, 6)}' 기간이 연장되었습니다.`,
                         })
                     )
-                    // this.nxStore.dispatch(
-                    //     DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.curUserData.user })
-                    // )
                     this.dashboardHelper.refreshCurUser(this.center.id, this.curUserData.user)
                     cb ? cb() : null
                 },
@@ -356,9 +355,6 @@ export class UserDetailLockerComponent implements OnInit {
                               6
                           )}' 락커 홀딩이 예약되었습니다.`
                     this.nxStore.dispatch(showToast({ text: toastText }))
-                    // this.nxStore.dispatch(
-                    //     DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.curUserData.user })
-                    // )
                     this.dashboardHelper.refreshCurUser(this.center.id, this.curUserData.user)
                     cb ? cb() : null
                 },
@@ -394,9 +390,6 @@ export class UserDetailLockerComponent implements OnInit {
                             )}' 비우기가 완료되었습니다.`,
                         })
                     )
-                    // this.nxStore.dispatch(
-                    //     DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.curUserData.user })
-                    // )
                     this.dashboardHelper.refreshCurUser(this.center.id, this.curUserData.user)
                     cb ? cb() : null
                 },
@@ -433,12 +426,6 @@ export class UserDetailLockerComponent implements OnInit {
                         })
                     )
                     this.dashboardHelper.refreshCurUser(this.center.id, this.curUserData.user)
-                    // this.nxStore.dispatch(
-                    //     DashboardActions.startGetUserData({
-                    //         centerId: this.center.id,
-                    //         centerUser: this.curUserData.user,
-                    //     })
-                    // )
                     cb ? cb() : null
                 },
                 error: () => {
@@ -471,9 +458,6 @@ export class UserDetailLockerComponent implements OnInit {
                         })
                     )
                     this.dashboardHelper.refreshCurUser(this.center.id, this.curUserData.user)
-                    // this.nxStore.dispatch(
-                    //     DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.curUserData.user })
-                    // )
                     cb ? cb() : null
                 },
                 error: () => {
@@ -495,9 +479,6 @@ export class UserDetailLockerComponent implements OnInit {
                         })
                     )
                     this.dashboardHelper.refreshCurUser(this.center.id, this.curUserData.user)
-                    // this.nxStore.dispatch(
-                    //     DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.curUserData.user })
-                    // )
                     cb ? cb() : null
                 },
                 error: () => {
@@ -526,9 +507,6 @@ export class UserDetailLockerComponent implements OnInit {
                     )}] ${this.wordService.ellipsis(this.selectedUserLocker.name, 6)}' 홀딩 기간이 수정되었습니다.`
 
                     this.nxStore.dispatch(showToast({ text: toastText }))
-                    // this.nxStore.dispatch(
-                    //     DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.curUserData.user })
-                    // )
                     this.dashboardHelper.refreshCurUser(this.center.id, this.curUserData.user)
                 },
                 error: () => {
@@ -551,9 +529,6 @@ export class UserDetailLockerComponent implements OnInit {
                         10
                     )}] ${this.wordService.ellipsis(this.selectedUserLocker.name, 6)}' 홀딩 정보가 삭제되었습니다.`
                     this.nxStore.dispatch(showToast({ text: toastText }))
-                    // this.nxStore.dispatch(
-                    //     DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.curUserData.user })
-                    // )
                     this.dashboardHelper.refreshCurUser(this.center.id, this.curUserData.user)
                     cb ? cb() : null
                 },

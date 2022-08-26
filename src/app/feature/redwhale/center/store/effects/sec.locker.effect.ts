@@ -14,6 +14,8 @@ import { CenterUsersLockerService } from '@services/center-users-locker.service.
 import { StorageService } from '@services/storage.service'
 
 import _ from 'lodash'
+import { startSynchronizeCurUserLocker, startSynchronizeLockerItemList } from '../actions/sec.locker.actions'
+import { curLockerItem } from '../selectors/sec.locker.selector'
 
 @Injectable()
 export class LockerEffect {
@@ -348,7 +350,7 @@ export class LockerEffect {
     public moveLockerTicket = createEffect(() =>
         this.actions$.pipe(
             ofType(LockerActions.startMoveLockerTicket),
-            switchMap(({ centerId, userId, lockerTicketId, startLockerReqBody }) =>
+            switchMap(({ centerId, userId, lockerTicketId, startLockerReqBody, cb }) =>
                 this.centerUsersLockerApi.stopLockerTicket(centerId, userId, lockerTicketId).pipe(
                     switchMap((__) =>
                         this.centerUsersLockerApi
@@ -365,7 +367,7 @@ export class LockerEffect {
                                                 lockerItems,
                                                 (item) => item.id == startLockerReqBody.locker_item_id
                                             )
-
+                                            cb ? cb() : null
                                             return [
                                                 LockerActions.finishMoveLockerTicket({ lockerItems, movedLockerItem }),
                                                 LockerActions.resetWillBeMovedLockerItem(),
@@ -422,42 +424,50 @@ export class LockerEffect {
             )
         )
     )
-
+    // synchronize
+    // // by dashboard
     public afterRegisterLockerInDashboard = createEffect(() =>
         this.actions$.pipe(
             ofType(LockerActions.startUpdateStateAfterRegisterLockerInDashboard),
             switchMap(() => {
                 const center = this.storageService.getCenter()
                 return [LockerActions.resetAll(), LockerActions.startLoadLockerCategs({ centerId: center.id })]
-            })
+            }),
+            catchError((err: string) => of(LockerActions.error({ error: err })))
         )
     )
-    // createEffect(() =>
-    //     this.actions$.pipe(
-    //         ofType(LockerActions.startUpdateStateAfterRegisterLockerInDashboard),
-    //         concatLatestFrom(() => [
-    //             this.store.select(LockerSelector.curLockerCateg),
-    //             this.store.select(LockerSelector.curLockerItem),
-    //             this.store.select(LockerSelector.curCenterId),
-    //         ]),
-    //         switchMap(([curLocerCateg,  curLockerItem, curCenterId]) =>
-    //             iif(
-    //                 () => createLockerTicketUnpaidReqBody.amount > 0,
-    //                 this.centerUsersLockerApi
-    //                     .createLockerTicketUnpaid(
-    //                         centerId,
-    //                         registerMemberId,
-    //                         resUserLocker.id,
-    //                         createLockerTicketUnpaidReqBody
-    //                     )
-    //                     .pipe(map(() => 'nothing')),
-    //                 of('nothing')
-    //             ).pipe(
-    //                 switchMap((__) => {
-    //                 }),
-    //                 catchError((err: string) => of(LockerActions.error({ error: err })))
-    //             )
-    //         )
-    //     )
-    // )
+
+    public synchronizeLockerItemList$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(LockerActions.startSynchronizeLockerItemList),
+            concatLatestFrom(() => [
+                this.store.select(LockerSelector.curCenterId),
+                this.store.select(LockerSelector.curLockerCateg),
+            ]),
+            switchMap(([{ centerId }, curCenterId, curLockerCateg]) => {
+                if (!_.isEmpty(curLockerCateg) && centerId == curCenterId) {
+                    return this.centerLokcerApi
+                        .getItemList(centerId, curLockerCateg.id)
+                        .pipe(
+                            switchMap((lockerItems) => [
+                                LockerActions.finishSynchronizeLockerItemList({ success: true, lockerItems }),
+                            ])
+                        )
+                } else {
+                    return [LockerActions.finishSynchronizeLockerItemList({ success: false })]
+                }
+            }),
+            catchError((err: string) => of(LockerActions.error({ error: err })))
+        )
+    )
+    public synchronizeCurUserLocker$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(LockerActions.startSynchronizeCurUserLocker),
+            switchMap(() => {
+                const center = this.storageService.getCenter()
+                return [LockerActions.resetAll(), LockerActions.startLoadLockerCategs({ centerId: center.id })]
+            }),
+            catchError((err: string) => of(LockerActions.error({ error: err })))
+        )
+    )
 }
