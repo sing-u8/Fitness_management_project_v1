@@ -169,6 +169,7 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
                     callback: () => {
                         this.toggleShowChangeNameModal()
                         this.nxStore.dispatch(showToast({ text: `회원 이름 변경이 완료되었습니다.` }))
+                        this.nxStore.dispatch(CenterCommonActions.startGetMembers({ centerId: this.center.id }))
                         this.nxStore.dispatch(CenterCommonActions.startGetInstructors({ centerId: this.center.id }))
                     },
                 })
@@ -202,6 +203,7 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
                             text: `${this.curUserData.user.center_user_name}님의 프로필 사진이 삭제되었습니다.`,
                         })
                     )
+                    this.nxStore.dispatch(CenterCommonActions.startGetMembers({ centerId: this.center.id }))
                     this.nxStore.dispatch(CenterCommonActions.startGetInstructors({ centerId: this.center.id }))
                 },
             })
@@ -227,6 +229,7 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
                                     text: `${this.curUserData.user.center_user_name}님의 프로필 사진이 변경되었습니다.`,
                                 })
                             )
+                            this.nxStore.dispatch(CenterCommonActions.startGetMembers({ centerId: this.center.id }))
                             this.nxStore.dispatch(CenterCommonActions.startGetInstructors({ centerId: this.center.id }))
                         },
                     })
@@ -248,6 +251,7 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
                                 text: `${this.curUserData.user.center_user_name}님의 프로필 사진이 변경되었습니다.`,
                             })
                         )
+                        this.nxStore.dispatch(CenterCommonActions.startGetMembers({ centerId: this.center.id }))
                         this.nxStore.dispatch(CenterCommonActions.startGetInstructors({ centerId: this.center.id }))
                     },
                 })

@@ -158,10 +158,7 @@ export class CertificationSettingModalComponent implements OnChanges, AfterViewC
 
     checkDigit(event) {
         const code = event.which ? event.which : event.keyCode
-        if (code < 48 || code > 57) {
-            return false
-        }
-        return true
+        return !(code < 48 || code > 57)
     }
 
     phoneFormCheck() {

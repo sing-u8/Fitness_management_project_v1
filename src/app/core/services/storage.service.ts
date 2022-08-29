@@ -56,8 +56,8 @@ export class StorageService {
 
     async logout() {
         await this.removeUser()
+        await this.router.navigateByUrl('/auth/login')
         // this.WsChat.closeChatWs()
-        this.router.navigateByUrl('/auth/login')
     }
 
     setSignInMethod(signInMethod: string): void {
@@ -68,7 +68,7 @@ export class StorageService {
 
     getCenter(): Center {
         const user: User = this.getUser()
-        if (user.selected_center) {
+        if (!_.isEmpty(user) && user.selected_center) {
             return user.selected_center
         } else {
             return null

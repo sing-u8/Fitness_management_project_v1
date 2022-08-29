@@ -94,6 +94,7 @@ export const startUpdateLockerItem = createAction(
         itemId: string
         reqBody: UpdateItemRequestBody
         curLockerItems: LockerItem[]
+        cb?: () => void
     }>()
 )
 

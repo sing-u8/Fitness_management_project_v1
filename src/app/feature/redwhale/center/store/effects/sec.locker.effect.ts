@@ -153,12 +153,14 @@ export class LockerEffect {
         () =>
             this.actions$.pipe(
                 ofType(LockerActions.startUpdateLockerItem),
-                map(({ centerId, categoryId, itemId, reqBody }) => {
+                map(({ centerId, categoryId, itemId, reqBody, cb }) => {
                     console.log('LockerActions.startUpdateLockerItem in effect : ', itemId, ' -- ', reqBody)
                     this.centerLokcerApi
                         .updateItem(centerId, categoryId, itemId, reqBody)
                         .pipe(catchError((err: string) => of(LockerActions.error({ error: err }))))
-                        .subscribe()
+                        .subscribe(() => {
+                            cb ? cb() : null
+                        })
                 })
             ),
         {

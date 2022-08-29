@@ -248,7 +248,7 @@ export class LockerShiftModalComponent implements AfterViewChecked, OnChanges, O
                             text: `${this.curUser.center_user_name}님의 락커가 '[${this.wordService.ellipsis(
                                 this.selectedCateg.name,
                                 10
-                            )}] 락커${this.wordService.ellipsis(this.shiftLocker.name, 13)}'으로 이동되었습니다.`,
+                            )}] 락커 ${this.wordService.ellipsis(this.shiftLocker.name, 13)}'으로 이동되었습니다.`,
                         })
                     )
                 },

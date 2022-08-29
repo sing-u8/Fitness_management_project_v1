@@ -9,6 +9,9 @@ import { LockerCategory } from '@schemas/locker-category'
 import { LockerItem } from '@schemas/locker-item'
 import { Center } from '@schemas/center'
 
+import { DashboardHelperService } from '@services/center/dashboard-helper.service'
+import { CenterLockerService } from '@services/center-locker.service'
+
 // ngrx
 import { Store, select } from '@ngrx/store'
 import * as LockerSelector from '@centerStore/selectors/sec.locker.selector'
@@ -47,7 +50,13 @@ export class LockerItemComponent implements OnInit, OnDestroy, AfterViewInit {
 
     public unSubscriber$ = new Subject<void>()
 
-    constructor(private storageService: StorageService, private nxStore: Store, private fb: FormBuilder) {
+    constructor(
+        private storageService: StorageService,
+        private nxStore: Store,
+        private fb: FormBuilder,
+        private dashboardHelperService: DashboardHelperService,
+        private centerLockerService: CenterLockerService
+    ) {
         this.nameInput = this.fb.control('')
     }
 
@@ -124,6 +133,15 @@ export class LockerItemComponent implements OnInit, OnDestroy, AfterViewInit {
                 itemId: this.lockerItem.id,
                 reqBody: { name: this.nameInput.value },
                 curLockerItems: _.cloneDeep(this.curLockerItems),
+                cb: () => {
+                    this.centerLockerService
+                        .getItemUserLocker(this.center.id, this.curLockerCateg.id, this.lockerItem.id)
+                        .subscribe((v) => {
+                            if (!_.isEmpty(v)) {
+                                this.dashboardHelperService.synchronizeUserLocker(this.center.id, v.user_id)
+                            }
+                        })
+                },
             })
         )
 

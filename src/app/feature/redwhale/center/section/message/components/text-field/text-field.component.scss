@@ -9,7 +9,7 @@ div.l-text-field {
     box-shadow: 0 4px 10px rgba(181, 181, 181, 0.1098);
     border-radius: 35px;
     min-width: 300px;
-    height: 558px;
+    min-height: 558px;
 
     display: flex;
     flex-direction: column;
@@ -17,8 +17,12 @@ div.l-text-field {
 
     .text-field__header{
         display: flex;
-        align-items: center;
         justify-content: space-between;
+        span{
+            &:first-of-type{
+                margin-top: 14px;
+            }
+        }
     }
     .text-field__content{
         textarea {

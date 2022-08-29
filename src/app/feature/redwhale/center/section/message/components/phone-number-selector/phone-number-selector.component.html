@@ -2,10 +2,10 @@
 	<div
 		class="selected rw-typo-bodytext1"
 		[class.open]="isOpen"
-		[class.disabled]="disabled !== false"
+		[class.disabled]="disabled !== false || items.length == 0"
 		[class.error]="errMsg"
 		#selectedElement
-		(click)="!errMsg && toggle()"
+		(click)="toggle()"
 		(rwClickOutside)="close()"
 	>
 <!--		<div *ngIf="errMsg" class="d-flex align-items-center">-->

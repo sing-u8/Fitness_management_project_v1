@@ -71,10 +71,11 @@
                 </div>
                 <div class="general-right__content">
                     <msg-text-field
-                        [callerList]="(callerList$ | async)"
-                        [curCaller]="(callerList$ | async)?.[0]"
+                        [callerList]="(callerList$ | async).callerList"
+                        [curCaller]="generalCaller"
                         [text]="(generalText$ | async)"
                         [textByte]="generalTextByte"
+                        [errText]="callerListErrText"
                         (textChange)="updateGeneralText($event)"
                         (onSelectChange)="onGeneralCallerChange($event)"
                     ></msg-text-field>
@@ -153,10 +154,11 @@
                 <p class="rw-typo-title1">회원권 만기 문자</p>
                 <div class="message__ticket">
                     <msg-text-field
-                        [callerList]="(callerList$ | async)"
+                        [callerList]="(callerList$ | async).callerList"
                         [curCaller]="{phone_number: membershipAutoSendSetting.phone_number, verified: true}"
                         [text]="membershipAutoSendSetting.text"
                         [textByte]="membershipAutoSendSettingTextByte"
+                        [errText]="callerListErrText"
                         (textChange)="onMLTextChange($event, 'membership')"
                         (onSelectChange)="onMLCallerChange($event,'membership')"
                     ></msg-text-field>
@@ -174,10 +176,11 @@
                 <p class="rw-typo-title1">락커 만기 문자</p>
                 <div class="message__ticket">
                     <msg-text-field
-                        [callerList]="(callerList$ | async)"
+                        [callerList]="(callerList$ | async).callerList"
                         [curCaller]="{phone_number: lockerAutoSendSetting.phone_number, verified: true}"
                         [text]="lockerAutoSendSetting.text"
                         [textByte]="lockerAutoSendSettingTextByte"
+                        [errText]="callerListErrText"
                         (textChange)="onMLTextChange($event, 'locker')"
                         (onSelectChange)="onMLCallerChange($event,'locker')"
                     ></msg-text-field>

@@ -1,6 +1,7 @@
 .msg-phone-number-selector {
 	position: relative;
-	display: inline-flex;
+	display: flex;
+	flex-direction: column;
 
 	.selected {
 		height: 48px;

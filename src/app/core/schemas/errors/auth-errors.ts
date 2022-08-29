@@ -24,7 +24,7 @@ export const AuthErrors = {
         message: '만료된 비밀번호 초기화 링크입니다.',
     },
     FUNCTION_AUTH_010: {
-        message: '유효하지 않은 전화번호입니다.',
+        message: '전화번호 양식을 올바르게 입력해주세요.',
     },
     FUNCTION_AUTH_011: {
         message: '유효한 토큰이 아닙니다.',

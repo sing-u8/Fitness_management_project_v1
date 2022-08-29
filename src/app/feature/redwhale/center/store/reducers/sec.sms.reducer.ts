@@ -31,6 +31,7 @@ export interface State {
     smsPoint: number
     error: string
     callerList: SMSCaller[]
+    isCallerListInit: boolean
     // main
     // general
     usersSelectCategs: UsersSelectCateg
@@ -44,6 +45,7 @@ export interface State {
         book: boolean
     }
     generalCaller: SMSCaller
+    isGeneralCallerInit: boolean
     // auto transmission
     lockerAutoSendSetting: SMSAutoSend
     membershipAutoSendSetting: SMSAutoSend
@@ -100,12 +102,13 @@ export const initialState: State = {
     smsType: 'general',
     smsPoint: 0,
     error: '',
+    callerList: [],
+    isCallerListInit: false,
     // main
     // general
     usersSelectCategs: UsersSelectCategInit,
     usersLists: UsersListInit,
     curUserListSelect: UserListSelectInit,
-    callerList: [],
     generalText: '',
     bookTime: '10:00:00',
     bookDate: { date: dayjs().format('YYYY-MM-DD') },
@@ -114,6 +117,7 @@ export const initialState: State = {
         book: false,
     },
     generalCaller: undefined,
+    isGeneralCallerInit: false,
     // auto transmission
     lockerAutoSendSetting: SMSAutoSendInit,
     membershipAutoSendSetting: SMSAutoSendInit,
@@ -175,8 +179,17 @@ export const smsReducer = createImmerReducer(
         state.smsPoint = smsPoint
         return state
     }),
+    on(SMSActions.finishGetCallerList, (state) => {
+        state.isCallerListInit = false
+        return state
+    }),
     on(SMSActions.finishGetCallerList, (state, { callerList }) => {
-        state.callerList = callerList
+        state.callerList = callerList.filter((v) => v.verified)
+        if (!state.isGeneralCallerInit && state.callerList.length > 0) {
+            state.isGeneralCallerInit = true
+            state.generalCaller = state.callerList[0]
+        }
+        state.isCallerListInit = true
         return state
     }),
     on(SMSActions.finishGetMembershipAutoSend, (state, { smsAutoSend }) => {
@@ -326,6 +339,10 @@ export const selectSearchInput = (state: State) => state.curSearchInput
 export const selectSMSType = (state: State) => state.smsType
 export const selectSMSPoint = (state: State) => state.smsPoint
 export const selectError = (state: State) => state.error
+export const selectCallerList = (state: State) => ({
+    callerList: state.callerList,
+    isCallerListInit: state.isCallerListInit,
+})
 
 // main
 // // general
@@ -336,7 +353,6 @@ export const selectedUserListsSelected = (state: State) =>
     state.usersLists[state.curUserListSelect.key].filter((v) => v.selected).length
 export const selectedUserListIds = (state: State) =>
     state.usersLists[state.curUserListSelect.key].filter((v) => v.selected).map((v) => v.user.id)
-export const selectCallerList = (state: State) => state.callerList.filter((v) => v.verified)
 export const selectGeneralText = (state: State) => state.generalText
 export const selectBookTime = (state: State) => state.bookTime
 export const selectBookDate = (state: State) => state.bookDate

@@ -456,7 +456,9 @@ export class RegisterMembershipLockerFullmodalStore extends ComponentStore<State
             type: 'membership',
             date: {
                 startDate: dayjs().format('YYYY-MM-DD'),
-                endDate: dayjs().add(membership.days, 'day').format('YYYY-MM-DD'),
+                endDate: dayjs()
+                    .add(membership.days - 1, 'day')
+                    .format('YYYY-MM-DD'),
             },
             amount: {
                 normalAmount: String(membership.price).replace(/\B(?=(\d{3})+(?!\d))/g, ','),

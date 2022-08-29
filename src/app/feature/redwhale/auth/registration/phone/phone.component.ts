@@ -4,6 +4,7 @@ import { Router } from '@angular/router'
 import { StorageService } from '@services/storage.service'
 import { RouterService } from '@services/auth/router.service'
 import { AuthService } from '@services/auth.service'
+import { AuthErrors } from '@schemas/errors/auth-errors'
 
 import { User } from '@schemas/user'
 import { Registration } from '@schemas/store/app/registration.interface'
@@ -187,7 +188,7 @@ export class PhoneComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.startTimer()
             },
             error: (e) => {
-                this.nxStore.dispatch(showToast({ text: e.message }))
+                this.nxStore.dispatch(showToast({ text: AuthErrors[e.code].message }))
             },
         })
     }

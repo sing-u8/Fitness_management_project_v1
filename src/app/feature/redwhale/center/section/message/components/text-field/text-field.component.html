@@ -3,15 +3,18 @@
         <span>발신번호</span>
         <msg-phone-number-selector
             [items]="callerList"
+            [errMsg]="errText"
             [(ngModel)]="curCaller"
             (onSelectChange)="onSelectChange.emit($event)"
         ></msg-phone-number-selector>
     </div>
     <div class="text-field__content">
         <textarea
-          class="rw-textarea"
-          placeholder="문자 내용을 입력해주세요."
-          [(ngModel)]="text" (ngModelChange)="textChange.emit($event)"
+            class="rw-textarea"
+            placeholder="문자 내용을 입력해주세요."
+            [formControl]="textControl"
+            (ngModelChange)="onTextChange($event)"
+            (keydown)="checkTextIsOver($event)"
         ></textarea>
     </div>
     <div class="text-field__footer">

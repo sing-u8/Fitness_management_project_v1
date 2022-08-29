@@ -60,7 +60,7 @@ export class MessageComponent implements OnInit, OnDestroy {
         this.nxStore.dispatch(SMSActions.setSMSType({ smsType: st }))
     }
     public callerList$ = this.nxStore.select(SMSSelector.callerList)
-    public generalErrText = ''
+    public callerListErrText = ''
     public generalText$ = this.nxStore.select(SMSSelector.generalText)
     public generalText = ''
     public generalTextByte = 0
@@ -166,9 +166,16 @@ export class MessageComponent implements OnInit, OnDestroy {
             this.calculateSubtractPoint(this.generalTextByte, this.selectedUserListSelected)
             this.checkIsMsgAbleToBeSent()
         })
-        this.callerList$.pipe(takeUntil(this.unsubscribe$)).subscribe((cl) => {})
+        this.callerList$.pipe(takeUntil(this.unsubscribe$)).subscribe((v) => {
+            if (v.callerList.length == 0 && v.isCallerListInit) {
+                this.callerListErrText = '선택할 수 있는 발신번호가 없습니다.'
+            } else {
+                this.callerListErrText = ''
+            }
+        })
         this.generalText$.pipe(takeUntil(this.unsubscribe$)).subscribe((gt) => {
             this.generalText = gt
+            console.log('general Text : ', gt)
             this.generalTextByte = this.wordService.getTextByte(gt)
             this.calculateSubtractPoint(this.generalTextByte, this.selectedUserListSelected)
             this.checkIsMsgAbleToBeSent()

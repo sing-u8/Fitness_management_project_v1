@@ -280,6 +280,7 @@ export class DirectRegisterMemberFullmodalComponent implements OnInit, OnChanges
                     this.finishRegister.emit()
                     btLoadingFns.hideLoading()
                     this.nxStore.dispatch(CenterCommonActions.startGetMembers({ centerId: this.center.id }))
+                    this.nxStore.dispatch(DashboardActions.startGetUsersByCategory({ centerId: this.center.id }))
                 },
             })
         )

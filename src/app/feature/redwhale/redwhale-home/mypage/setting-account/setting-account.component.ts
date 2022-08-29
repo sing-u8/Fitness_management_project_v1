@@ -86,7 +86,7 @@ export class SettingAccountComponent implements OnInit, OnDestroy {
         private settingAcountModalService: SettingAccountModalService,
         private usersService: UsersService,
         private nxStore: Store,
-        private fileservice: FileService,
+        private fileService: FileService,
         private globalSettingAccountService: GlobalSettingAccountService,
         private router: Router,
         private wsChatService: WsChatService
@@ -103,10 +103,9 @@ export class SettingAccountComponent implements OnInit, OnDestroy {
     }
     ngOnDestroy(): void {
         const center = this.storageService.getCenter()
-        console.log('SettingAccountComponent destroy : ', center, center?.id)
-        this.nxStore.dispatch(DashboardAction.startRefreshMyCenterUser({ centerId: center?.id, user: this.user }))
+        if (!_.isEmpty(center))
+            this.nxStore.dispatch(DashboardAction.startRefreshMyCenterUser({ centerId: center?.id, user: this.user }))
     }
-
     initMarktingAgree() {
         this.marketing_agree.email = this.user.email_marketing
         this.marketing_agree.sms = this.user.sms_marketing
@@ -209,7 +208,7 @@ export class SettingAccountComponent implements OnInit, OnDestroy {
         this.saveIfRwPicture(this.user.picture)
 
         const reqBody: CreateFileRequestBody = { type_code: 'file_type_user_picture' }
-        this.fileservice.createFile(reqBody, files).subscribe((__) => {
+        this.fileService.createFile(reqBody, files).subscribe((__) => {
             this.usersService.getUser(this.user.id).subscribe({
                 next: (resData) => {
                     this.user.picture = resData['picture']
@@ -231,7 +230,7 @@ export class SettingAccountComponent implements OnInit, OnDestroy {
                     this.nxStore.dispatch(showToast({ text: '프로필 사진이 변경되었습니다.' }))
 
                     if (this.rwPicture) {
-                        this.fileservice.deleteFile(this.rwPicture).subscribe(() => {
+                        this.fileService.deleteFile(this.rwPicture).subscribe(() => {
                             this.rwPicture = undefined
                         })
                     }
@@ -251,14 +250,11 @@ export class SettingAccountComponent implements OnInit, OnDestroy {
     }
 
     isFileExist(fileList: FileList) {
-        if (fileList && fileList.length == 0) {
-            return false
-        }
-        return true
+        return !(fileList && fileList.length == 0)
     }
     removePhoto() {
         const prevPicture = this.user.picture
-        this.fileservice.deleteFile(prevPicture).subscribe({
+        this.fileService.deleteFile(prevPicture).subscribe({
             next: (__) => {
                 this.usersService.getUser(this.user.id).subscribe({
                     next: (resData) => {
@@ -302,10 +298,8 @@ export class SettingAccountComponent implements OnInit, OnDestroy {
     }
 
     async logout() {
-        // await this.storageService.removeUser()
-        // this.router.navigateByUrl('/auth/login')
-        this.resetCenterState()
         await this.storageService.logout()
+        this.resetCenterState()
         this.wsChatService.closeChatWs()
     }
 

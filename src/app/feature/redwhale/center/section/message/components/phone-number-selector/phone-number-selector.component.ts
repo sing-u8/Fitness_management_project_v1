@@ -70,7 +70,7 @@ export class PhoneNumberSelectorComponent implements AfterViewInit, ControlValue
     }
 
     toggle() {
-        if (this.disabled === false) {
+        if (this.disabled === false && !this.errMsg) {
             const display = this.itemsElement.nativeElement.style.display
 
             if (display == 'block') {
