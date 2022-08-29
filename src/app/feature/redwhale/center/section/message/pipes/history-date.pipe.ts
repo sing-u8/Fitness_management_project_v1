@@ -11,7 +11,9 @@ export class HistoryDatePipe implements PipeTransform {
             if (!_.isEmpty(value[1]) && dayjs(value[0]).isSame(dayjs(value[1]))) {
                 return value[0]
             }
-            return !value[1] ? value[0] : value[0] + ' - ' + value[1]
+            return !value[1]
+                ? dayjs(value[0]).format('YYYY.MM.DD')
+                : dayjs(value[0]).format('YYYY.MM.DD') + ' - ' + dayjs(value[1]).format('YYYY.MM.DD')
         } else {
             return ''
         }

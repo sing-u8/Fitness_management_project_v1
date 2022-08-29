@@ -11,7 +11,8 @@
 	<div *ngIf="isOpen" class="drop-down-container" (click)="$event.stopPropagation()">
 		<div class="date-picker">
 			<db-datepicker
-				mode="multiline-component"
+				[mode]="'multiline-component'"
+				[option]="'normal'"
 				width="246"
 				height="244"
 				[(data)]="RangeDateData"

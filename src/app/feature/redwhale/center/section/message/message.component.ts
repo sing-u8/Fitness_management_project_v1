@@ -105,10 +105,7 @@ export class MessageComponent implements OnInit, OnDestroy {
     public smsHistoryGroupList$ = this.nxStore.select(SMSSelector.smsHistoryGroupList)
     public smsHistoryList$ = this.nxStore.select(SMSSelector.smsHistoryList)
     public historyDateRange$ = this.nxStore.select(SMSSelector.historyDateRange)
-    public selectedHistoryDate: [string, string] = [
-        dayjs().subtract(3, 'month').format('YYYY-MM-DD'),
-        dayjs().format('YYYY-MM-DD'),
-    ]
+    public selectedHistoryDate: [string, string] = undefined
     public curHistoryGroup$ = this.nxStore.select(SMSSelector.curHistoryGroup)
 
     public unsubscribe$ = new Subject<boolean>()
@@ -140,7 +137,8 @@ export class MessageComponent implements OnInit, OnDestroy {
         this.nxStore.dispatch(SMSActions.startGetCallerList({ centerId: this.center.id }))
 
         this.historyDateRange$.pipe(takeUntil(this.unsubscribe$)).subscribe((dateRange) => {
-            this.selectedHistoryDate = _.cloneDeep(dateRange)
+            console.log('history date range  selector : ', dateRange)
+            this.selectedHistoryDate = dateRange
         })
         this.nxStore.dispatch(
             SMSActions.startGetHistoryGroup({
@@ -175,7 +173,6 @@ export class MessageComponent implements OnInit, OnDestroy {
         })
         this.generalText$.pipe(takeUntil(this.unsubscribe$)).subscribe((gt) => {
             this.generalText = gt
-            console.log('general Text : ', gt)
             this.generalTextByte = this.wordService.getTextByte(gt)
             this.calculateSubtractPoint(this.generalTextByte, this.selectedUserListSelected)
             this.checkIsMsgAbleToBeSent()
@@ -432,8 +429,8 @@ export class MessageComponent implements OnInit, OnDestroy {
         this.nxStore.dispatch(
             SMSActions.startGetHistoryGroup({
                 centerId: this.center.id,
-                start_date: _.replace(date[0], '.', '-'),
-                end_date: _.replace(date[1], '.', '-'),
+                start_date: date[0],
+                end_date: date[1],
                 cb: () => {
                     this.nxStore.dispatch(showToast({ text: '내역 조회 기간이 변경되었습니다.' }))
                 },

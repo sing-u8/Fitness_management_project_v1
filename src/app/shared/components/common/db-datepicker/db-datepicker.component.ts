@@ -81,8 +81,7 @@ export class DbDatepickerComponent implements OnInit, OnChanges, AfterViewChecke
             this.currentDate = moment(this.data.date)
         } else if (this.mode == 'week' && this.data.startDate) {
             this.currentDate = moment(this.data.startDate)
-        } else if (false) {
-        } else if ((this.mode == 'multiline' || this.mode == 'multiline-component') && this.data.startDate) {
+        } else if (this.mode == 'multiline' || this.mode == 'multiline-component') {
             this.multiLineSelectDate({ date: this.data?.startDate })
             this.multiLineSelectDate({ date: this.data?.endDate })
             this.currentDate = moment()
@@ -386,19 +385,15 @@ export class DbDatepickerComponent implements OnInit, OnChanges, AfterViewChecke
     initNormalDateweekCol(weekCol) {
         if (!this.lineSelectedDateObj.startDate && !this.lineSelectedDateObj.endDate) {
             this.lineSelectedDateObj.startDate = weekCol.date
-            this.dataChange.emit(this.lineSelectedDateObj)
         } else if (!this.lineSelectedDateObj.startDate && this.lineSelectedDateObj.endDate) {
             if (moment(weekCol.date).isSameOrBefore(this.lineSelectedDateObj.endDate)) {
                 this.lineSelectedDateObj.startDate = weekCol.date
-                this.dataChange.emit(this.lineSelectedDateObj)
             }
         } else if (!this.lineSelectedDateObj.endDate) {
             if (moment(weekCol.date).isBefore(this.lineSelectedDateObj.startDate, 'day')) {
                 this.lineSelectedDateObj.startDate = weekCol.date
-                this.dataChange.emit(this.lineSelectedDateObj)
             } else {
                 this.lineSelectedDateObj.endDate = weekCol.date
-                this.dataChange.emit(this.lineSelectedDateObj)
             }
         } else if (this.lineSelectedDateObj.startDate && this.lineSelectedDateObj.endDate) {
             if (moment(weekCol.date).isBefore(this.lineSelectedDateObj.startDate, 'day')) {
@@ -412,9 +407,9 @@ export class DbDatepickerComponent implements OnInit, OnChanges, AfterViewChecke
             } else if (moment(weekCol.date).isAfter(this.lineSelectedDateObj.startDate, 'day')) {
                 this.lineSelectedDateObj.endDate = weekCol.date
             }
-
-            this.dataChange.emit(this.lineSelectedDateObj)
         }
+        this.dataChange.emit(this.lineSelectedDateObj)
+        console.log('set multi component initNormalDateweekCol - ', weekCol, ' -- ', this.lineSelectedDateObj)
     }
     initRegisterDate(weekCol) {
         // 초기 시작일 설정을 수정해야할 수도 있음
