@@ -19,6 +19,7 @@ export interface CenterUser {
     background: string
     role_code: string
     role_name: string
+    center_membership_number: string
     center_user_name: string
     center_user_memo: string
     center_user_picture: string
