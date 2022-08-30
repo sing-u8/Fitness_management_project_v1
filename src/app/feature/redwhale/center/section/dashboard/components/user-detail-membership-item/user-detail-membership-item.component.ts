@@ -9,6 +9,8 @@ import { UserMembership } from '@schemas/user-membership'
 
 import { WordService } from '@services/helper/word.service'
 import { TimeService } from '@services/helper/time.service'
+import { CenterMembershipService } from '@services/center-membership.service'
+import { StorageService } from '@services/storage.service'
 
 @Component({
     selector: 'db-user-detail-membership-item',
@@ -121,27 +123,37 @@ export class UserDetailMembershipItemComponent implements OnInit, AfterViewInit 
     public reservableClassFullText = ''
     public showFullClassArrow = false
     public openFullClass = false
+    public isClassLoaded = false
     getReservableClassText() {
         // !! 기능 숨김 및 스키마 변경으로 수정 필요
-        // if (this.membership.class.length > 1) {
-        //     this.showFullClassArrow = true
-        //     this.reservableClassText = `${this.wordService.ellipsis(this.membership.class[0].name, 11)} 외 ${
-        //         this.membership.class.length - 1
-        //     }개`
-        //     this.reservableClassFullText = _.reduce(
-        //         this.membership.class,
-        //         (acc, cur, idx, list) => {
-        //             return acc + cur.name + (idx != list.length - 1 ? ', ' : '')
-        //         },
-        //         ''
-        //     )
-        // } else {
-        //     this.reservableClassText = `${this.wordService.ellipsis(this.membership.class[0].name, 11)}`
-        //     if (this.membership.class[0].name.length > 11) {
-        //         this.showFullClassArrow = true
-        //         this.reservableClassFullText = this.membership.class[0].name
-        //     }
-        // }
+        this.isClassLoaded = false
+        const center = this.storageService.getCenter()
+        this.centerMembershipService
+            .getLinkedClass(center.id, this.membership.membership_category_id, this.membership.membership_item_id)
+            .subscribe((linkedClasses) => {
+                if (linkedClasses.length == 0) {
+                    this.reservableClassFullText = '-'
+                } else if (linkedClasses.length > 1) {
+                    this.showFullClassArrow = true
+                    this.reservableClassText = `${this.wordService.ellipsis(linkedClasses[0].name, 11)} 외 ${
+                        linkedClasses.length - 1
+                    }개`
+                    this.reservableClassFullText = _.reduce(
+                        linkedClasses,
+                        (acc, cur, idx, list) => {
+                            return acc + cur.name + (idx != list.length - 1 ? ', ' : '')
+                        },
+                        ''
+                    )
+                } else {
+                    this.reservableClassText = `${this.wordService.ellipsis(linkedClasses[0].name, 11)}`
+                    if (linkedClasses[0].name.length > 11) {
+                        this.showFullClassArrow = true
+                        this.reservableClassFullText = linkedClasses[0].name
+                    }
+                }
+                this.isClassLoaded = true
+            })
     }
     openShowFullClass() {
         if (this.showFullClassArrow) {
@@ -187,7 +199,12 @@ export class UserDetailMembershipItemComponent implements OnInit, AfterViewInit 
         }
     }
 
-    constructor(private wordService: WordService, private timeService: TimeService) {}
+    constructor(
+        private wordService: WordService,
+        private timeService: TimeService,
+        private centerMembershipService: CenterMembershipService,
+        private storageService: StorageService
+    ) {}
 
     ngOnInit(): void {}
     ngAfterViewInit(): void {

@@ -88,6 +88,9 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     toggleRegisterMemberModal() {
         this.doShowRegisterMemberModal = !this.doShowRegisterMemberModal
     }
+    closeRegisterMemberModal() {
+        this.doShowRegisterMemberModal = false
+    }
 
     public doShowDirectRegisterMemberFullModal = false
     toggleDirectRegisterMemberFullModal() {
@@ -95,11 +98,11 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     }
     whenFinishRegisterMember() {
         this.toggleDirectRegisterMemberFullModal()
-        // this.toggleRegisterMemberModal()
+        this.toggleRegisterMemberModal()
     }
     closeDirectRegisterMemberFullmodal() {
         this.toggleDirectRegisterMemberFullModal()
-        // this.toggleRegisterMemberModal()
+        this.toggleRegisterMemberModal()
     }
 
     //

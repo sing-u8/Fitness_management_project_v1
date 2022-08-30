@@ -9,30 +9,39 @@
                 {{ membership.start_date | dateFormat: 'YYYY.MM.DD' }} - {{ membership.end_date | dateFormat: 'YYYY.MM.DD' }}
                 ({{membership.start_date | period: membership.end_date}}일)
             </div>
-            <!-- <div class="col3" [class.notification]="isHolding">
+            <div class="col3" [class.notification]="isHolding">
                 {{restDate}}일 / {{membership.unlimited ? '무제한' : membership.count < 1 || isExpired ? 0 : membership.count + '회' }} 남음
-            </div> -->
+            </div>
             <div class="col4" >
-                <!-- <div
+                <div
                     (mousemove)="!isExpired && openShowFullClass()"
                     (mouseleave)="!isExpired && closeShowFullClass()"
                     class="col4__content"
                     [class.pointer-cursor]="!isExpired && showFullClassArrow"
                 >
-                    {{reservableClassText}}
-                    <div
-                        *ngIf="showFullClassArrow"
-                        class="fill-down-icon"
-                        [class.open]="openFullClass"
-                    ></div>
+                    <ng-container *ngIf="isClassLoaded">
+                        <span>{{reservableClassText}}</span>
+                        <div
+                          *ngIf="showFullClassArrow"
+                          class="fill-down-icon"
+                          [class.open]="openFullClass"
+                        ></div>
+                        <div *ngIf="openFullClass" class="ellipsis-dropdown">{{reservableClassFullText}}</div>
+                    </ng-container>
+                    <ng-container *ngIf="!isClassLoaded">
+                        <ngx-skeleton-loader
+                          count = 1
+                          appearance="line"
+                          [theme]="{width: '125px', height: '19px', 'border-radius': '5px', 'margin':'0px'}"
+                        ></ngx-skeleton-loader>
+                    </ng-container>
 
-                    <div *ngIf="openFullClass" class="ellipsis-dropdown">{{reservableClassFullText}}</div>
-                </div> -->
-
-                <div class="col4__content">
-                    {{ restDate }}일 /
-                    {{ membership.unlimited ? '무제한' : membership.count < 1 || isExpired ? 0 : membership.count + '회' }} 남음
                 </div>
+
+<!--                <div class="col4__content">-->
+<!--                    {{ restDate }}일 /-->
+<!--                    {{ membership.unlimited ? '무제한' : membership.count < 1 || isExpired ? 0 : membership.count + '회' }} 남음-->
+<!--                </div>-->
                 <div class="col4__menu" (click)="toggleMenuDropDown()" (rwClickOutside)="hideMenuDropDown()">
                     <div class="l-menu-items" [class.show-items]="showMenuDropDown">
                         <div

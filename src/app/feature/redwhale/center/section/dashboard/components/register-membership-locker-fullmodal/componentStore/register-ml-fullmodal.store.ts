@@ -39,7 +39,6 @@ export interface State {
     mlItems: MembershipLockerItem[]
     choseLockers: ChoseLockers
     membershipItems: MembershipItem[]
-    // instructors: CenterUser[]
     doLockerItemsExist: boolean
     doMembershipItemsExist: boolean
 }
@@ -47,7 +46,6 @@ export const stateInit: State = {
     mlItems: [],
     choseLockers: new Map(),
     membershipItems: [],
-    // instructors: [],
     doLockerItemsExist: false,
     doMembershipItemsExist: false,
 }
@@ -180,35 +178,6 @@ export class RegisterMembershipLockerFullmodalStore extends ComponentStore<State
             return _.cloneDeep(state)
         }
     )
-
-    // instructors methods
-    // setInstructors(instructors: CenterUser[]) {
-    //     this.setState((state) => {
-    //         return {
-    //             ...state,
-    //             instructors: instructors,
-    //         }
-    //     })
-    // }
-    //
-    // readonly getInstructorsEffect = this.effect((centerId$: Observable<string>) =>
-    //     centerId$.pipe(
-    //         switchMap((centerId) =>
-    //             this.centerUserListService.getCenterInstructorList(centerId).pipe(
-    //                 tap({
-    //                     next: (instructors) => {
-    //                         this.setInstructors(instructors)
-    //                     },
-    //                     error: (err) => {
-    //                         console.log('register-ml-fullmodal store - getInstructorEffect err: ', err)
-    //                     },
-    //                 }),
-    //                 catchError(() => EMPTY)
-    //             )
-    //         )
-    //     )
-    // )
-
     setMembershipItems(membershipItems: MembershipItem[]) {
         this.setState((state) => {
             return {
@@ -223,6 +192,7 @@ export class RegisterMembershipLockerFullmodalStore extends ComponentStore<State
                 this.centerMembershipApi.getAllMemberships(centerId).pipe(
                     tap({
                         next: (membershipItemList) => {
+                            console.log('centerMembershipApi.getAllMemberships : ', membershipItemList)
                             this.setMembershipItems(_.reverse(membershipItemList))
                         },
                         error: (err) => {
@@ -449,9 +419,9 @@ export class RegisterMembershipLockerFullmodalStore extends ComponentStore<State
     async initMembershipItem(membership: MembershipItem): Promise<MembershipTicket> {
         const price = membership.price ? membership.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') : '0'
         const center = this.storageService.getCenter()
-        // const linkedClass = await firstValueFrom(
-        //     this.centerMembershipApi.getLinkedClass(center.id, membership.category_id, membership.id)
-        // )
+        const linkedClass = await firstValueFrom(
+            this.centerMembershipApi.getLinkedClass(center.id, membership.category_id, membership.id)
+        )
         return {
             type: 'membership',
             date: {
@@ -473,10 +443,9 @@ export class RegisterMembershipLockerFullmodalStore extends ComponentStore<State
             count: { count: String(membership.count), infinite: membership.unlimited },
             assignee: undefined,
             membershipItem: membership,
-            lessonList: [],
-            // _.map(linkedClass, (value) => {
-            //     return { selected: true, item: value }
-            // })
+            lessonList: _.map(linkedClass, (value) => {
+                return { selected: true, item: value }
+            }),
             status: 'modify' as const,
         }
     }

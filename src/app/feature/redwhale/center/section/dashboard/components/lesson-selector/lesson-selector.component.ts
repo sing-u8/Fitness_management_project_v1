@@ -16,7 +16,7 @@ import _ from 'lodash'
     ],
 })
 export class LessonSelectorComponent implements AfterViewInit, ControlValueAccessor {
-    @Input() items: Array<any>
+    // @Input() items: Array<any>
     @Input() width: string
     @Input() disabled = false
 
@@ -44,6 +44,7 @@ export class LessonSelectorComponent implements AfterViewInit, ControlValueAcces
     }
 
     toggle() {
+        if (this.disabled || this.value.length == 0) return
         const display = this.itemsElement.nativeElement.style.display
 
         if (display == 'flex') {
@@ -55,6 +56,7 @@ export class LessonSelectorComponent implements AfterViewInit, ControlValueAcces
     }
 
     close() {
+        if (this.disabled || this.value.length == 0) return
         this.renderer.setStyle(this.itemsElement.nativeElement, 'display', 'none')
         this.isOpen = false
     }

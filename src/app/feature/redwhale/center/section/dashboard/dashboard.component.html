@@ -12,7 +12,7 @@
             rwButtonHeight="43"
             rwButtonColor="var(--red)"
             rwButtonFontColor="var(--white)"
-            (click)="toggleDirectRegisterMemberFullModal()"
+            (click)="toggleRegisterMemberModal()"
         >
             신규 회원 등록
         </div>
@@ -35,8 +35,8 @@
         <section class="l-member-detail">
             <div class="member-detail__header rw-typo-title1">회원 상세 정보</div>
             <db-member-detail
-              [curUserData]="curUserData$ | async"
-              [curUserListSelect]="(curUserListSelect$ | async)"
+                [curUserData]="curUserData$ | async"
+                [curUserListSelect]="(curUserListSelect$ | async)"
             ></db-member-detail>
         </section>
     </main>
@@ -44,7 +44,7 @@
 
 <db-register-member-modal
     [(visible)]="doShowRegisterMemberModal"
-    (cancel)="toggleRegisterMemberModal()"
+    (cancel)="closeRegisterMemberModal()"
     (onDirectRegister)="toggleDirectRegisterMemberFullModal()"
 ></db-register-member-modal>
 

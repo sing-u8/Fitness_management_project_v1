@@ -90,6 +90,7 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
     onFinishRegisterML() {
         this.toggleRegisterMLFullModal()
     }
+
     //
 
     ngOnInit(): void {}
