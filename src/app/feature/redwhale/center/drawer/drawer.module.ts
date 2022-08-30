@@ -3,6 +3,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { CommonModule } from '@angular/common'
 
 import { SharedModule } from '@shared/shared.module'
+import { DashboardModule } from '@redwhale/center/section/dashboard/dashboard.module'
 
 import { DrawerComponent } from './drawer.component'
 import { MemberComponent } from './contents/member/member.component'
@@ -27,7 +28,7 @@ import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader'
         ModifyGeneralScheduleComponent,
         ModifyLessonScheduleComponent,
     ],
-    imports: [CommonModule, SharedModule, FormsModule, ReactiveFormsModule, NgxSkeletonLoaderModule],
+    imports: [CommonModule, SharedModule, FormsModule, ReactiveFormsModule, NgxSkeletonLoaderModule, DashboardModule],
     exports: [DrawerComponent, FormsModule],
     providers: [],
 })

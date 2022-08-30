@@ -1,8 +1,48 @@
 <div class="member d-flex flex-column">
-    <div class="d-flex justify-content-between align-items-center">
+    <div id="header" class="d-flex justify-content-between align-items-center">
         <span class="rw-typo-title2">회원 리스트</span>
-        <img src="assets/icons/etc/close.svg" (click)="closeDrawer()" />
+        <div class="d-flex align-items-center">
+            <span class="dashboard-icon" rw-tooltip [detailAdj]="-37" [rwTooltipPlacement]="'bottom-right'" [rwTooltipTitle]="'회원관리 페이지로 이동'"></span>
+            <span class="close-icon" (click)="closeDrawer()"></span>
+        </div>
     </div>
     <div class="h-line"></div>
-    <div class="flex-fill"></div>
+    <div id="content">
+        <ng-container *ngIf="true">
+            <div class="member-list">
+                <db-member-list
+                    (onDirectRegisterMember)="toggleDirectRegisterMemberFullModal()"
+                ></db-member-list>
+            </div>
+            <div class="register-member">
+                <div
+                    class="register-member-button"
+                    rw-button
+                    rwButtonWidth="295"
+                    rwButtonHeight="45"
+                    rwButtonColor="var(--red)"
+                    rwButtonFontColor="var(--white)"
+                    (click)="toggleRegisterMemberModal()"
+                >
+                    신규 회원 등록
+                </div>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="false">
+
+        </ng-container>
+    </div>
 </div>
+
+
+<db-register-member-modal
+    [(visible)]="doShowRegisterMemberModal"
+    (cancel)="closeRegisterMemberModal()"
+    (onDirectRegister)="toggleDirectRegisterMemberFullModal()"
+></db-register-member-modal>
+
+<db-direct-register-member-fullmodal
+    [(visible)]="doShowDirectRegisterMemberFullModal"
+    (close)="closeDirectRegisterMemberFullModal()"
+    (finishRegister)="whenFinishRegisterMember()"
+></db-direct-register-member-fullmodal>

@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core'
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
 import { CommonModule as AngularCommonModule } from '@angular/common'
 import { ReactiveFormsModule, FormsModule } from '@angular/forms'
 
@@ -128,5 +128,12 @@ import { NgxSpinnerModule } from 'ngx-spinner'
         SectionCommonModule,
         NgxSpinnerModule,
     ],
+    exports: [
+        RegisterMemberModalComponent,
+        DirectRegisterMemberFullmodalComponent,
+        RegisterMembershipLockerFullmodalComponent,
+        MemberListComponent,
+    ],
+    schemas: [],
 })
 export class DashboardModule {}

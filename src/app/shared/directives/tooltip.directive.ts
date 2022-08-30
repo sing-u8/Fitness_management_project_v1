@@ -5,12 +5,15 @@ import { Directive, ElementRef, HostListener, Input, Renderer2, OnDestroy } from
 })
 export class TooltipDirective implements OnDestroy {
     @Input() rwTooltipTitle: string
-    @Input() rwTooltipPlacement: string
+    @Input() rwTooltipPlacement: 'top' | 'right' | 'bottom' | 'left' | 'bottom-right'
     @Input() rwTooltipDelay: number
     @Input() rwTooltipDisabled: boolean
     @Input() offset = '10'
+    @Input() detailAdj = 0
 
     private tooltip: HTMLElement
+
+    private isInit = false
 
     constructor(private el: ElementRef, private renderer: Renderer2) {
         this.rwTooltipTitle = 'Tooltip'
@@ -20,14 +23,25 @@ export class TooltipDirective implements OnDestroy {
     }
 
     ngOnDestroy(): void {
-        this.onMouseLeave()
+        this.removeTooltip()
+        // this.onMouseLeave()
+    }
+
+    removeTooltip() {
+        if (this.tooltip) {
+            this.renderer.removeChild(document.body, this.tooltip)
+            this.tooltip = null
+        }
     }
 
     @HostListener('mouseenter')
     onMouseEnter() {
         if (!this.rwTooltipDisabled) {
-            this.create()
-            this.setPosition()
+            if (!this.isInit) {
+                this.create()
+                this.setPosition()
+                this.isInit = true
+            }
 
             setTimeout(() => {
                 if (this.tooltip) {
@@ -40,8 +54,8 @@ export class TooltipDirective implements OnDestroy {
     @HostListener('mouseleave')
     onMouseLeave() {
         if (this.tooltip) {
-            this.renderer.removeChild(document.body, this.tooltip)
-            this.tooltip = null
+            this.renderer.removeClass(this.tooltip, 'rw-tooltip-show')
+            // this.tooltip = null
         }
     }
 
@@ -76,14 +90,14 @@ export class TooltipDirective implements OnDestroy {
                     : (toolTipPos.height / 2 - hostPos.height / 2) * -1
             this.renderer.setStyle(this.tooltip, 'top', `${hostPos.top + adjusment}px`)
             this.renderer.setStyle(this.tooltip, 'left', `${hostPos.right + Number(this.offset)}px`)
-        } else if (this.rwTooltipPlacement == 'bottom') {
+        } else if (this.rwTooltipPlacement == 'bottom' || this.rwTooltipPlacement == 'bottom-right') {
             const adjusment =
                 hostPos.width > toolTipPos.width
                     ? hostPos.width / 2 - toolTipPos.width / 2
                     : (toolTipPos.width / 2 - hostPos.width / 2) * -1
             this.renderer.setStyle(this.tooltip, 'top', `${hostPos.bottom + Number(this.offset)}px`)
-            this.renderer.setStyle(this.tooltip, 'left', `${hostPos.left + adjusment}px`)
-        } else {
+            this.renderer.setStyle(this.tooltip, 'left', `${hostPos.left + adjusment + this.detailAdj}px`)
+        } else if (this.rwTooltipPlacement == 'left') {
             const adjusment =
                 hostPos.height > toolTipPos.height
                     ? hostPos.height / 2 - toolTipPos.height / 2

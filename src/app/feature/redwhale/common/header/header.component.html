@@ -106,7 +106,7 @@
         </div>
     </div>
     <div class="right-side-menu col d-flex justify-content-end align-items-center">
-        <!-- <div
+        <div
             class="menu-item d-flex align-items-center"
             [class.menu-item-selected]="(drawer$ | async)?.tabName == 'member'"
             (click)="openDrawer('member')"
@@ -115,27 +115,27 @@
             <span class="rw-typo-bodytext2">회원 리스트</span>
             <div class="menu-item-selected-line" *ngIf="(drawer$ | async)?.tabName == 'member'"></div>
         </div>
-        <div class="empty" *ngIf="url != '/redwhale-home'"></div>
-        <div
-            class="menu-item d-flex align-items-center"
-            [class.menu-item-selected]="(drawer$ | async)?.tabName == 'community'"
-            (click)="openDrawer('community')"
-            *ngIf="url != '/redwhale-home'"
-        >
-            <span class="rw-typo-bodytext2">채팅</span>
-            <div class="menu-item-selected-line" *ngIf="(drawer$ | async)?.tabName == 'community'"></div>
-        </div>
-        <div class="empty" *ngIf="url != '/redwhale-home'"></div>
-        <div
-            class="menu-item d-flex align-items-center"
-            [class.menu-item-selected]="(drawer$ | async)?.tabName == 'notification'"
-            (click)="openDrawer('notification')"
-            *ngIf="url != '/redwhale-home'"
-        >
-            <span class="rw-typo-bodytext2">알림</span>
-            <div class="dot-badge d-flex justify-content-center align-items-center"></div>
-            <div class="menu-item-selected-line" *ngIf="(drawer$ | async)?.tabName == 'notification'"></div>
-        </div> -->
+<!--        <div class="empty" *ngIf="url != '/redwhale-home'"></div>-->
+<!--        <div-->
+<!--            class="menu-item d-flex align-items-center"-->
+<!--            [class.menu-item-selected]="(drawer$ | async)?.tabName == 'community'"-->
+<!--            (click)="openDrawer('community')"-->
+<!--            *ngIf="url != '/redwhale-home'"-->
+<!--        >-->
+<!--            <span class="rw-typo-bodytext2">채팅</span>-->
+<!--            <div class="menu-item-selected-line" *ngIf="(drawer$ | async)?.tabName == 'community'"></div>-->
+<!--        </div>-->
+<!--        <div class="empty" *ngIf="url != '/redwhale-home'"></div>-->
+<!--        <div-->
+<!--            class="menu-item d-flex align-items-center"-->
+<!--            [class.menu-item-selected]="(drawer$ | async)?.tabName == 'notification'"-->
+<!--            (click)="openDrawer('notification')"-->
+<!--            *ngIf="url != '/redwhale-home'"-->
+<!--        >-->
+<!--            <span class="rw-typo-bodytext2">알림</span>-->
+<!--            <div class="dot-badge d-flex justify-content-center align-items-center"></div>-->
+<!--            <div class="menu-item-selected-line" *ngIf="(drawer$ | async)?.tabName == 'notification'"></div>-->
+<!--        </div>-->
         <div class="v-line-center" *ngIf="url != '/redwhale-home'"></div>
         <div class="v-line-home" *ngIf="url == '/redwhale-home'"></div>
         <div

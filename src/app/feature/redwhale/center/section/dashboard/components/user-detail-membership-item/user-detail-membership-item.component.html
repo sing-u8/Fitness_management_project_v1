@@ -22,17 +22,17 @@
                     <ng-container *ngIf="isClassLoaded">
                         <span>{{reservableClassText}}</span>
                         <div
-                          *ngIf="showFullClassArrow"
-                          class="fill-down-icon"
-                          [class.open]="openFullClass"
+                            *ngIf="showFullClassArrow"
+                            class="fill-down-icon"
+                            [class.open]="openFullClass"
                         ></div>
                         <div *ngIf="openFullClass" class="ellipsis-dropdown">{{reservableClassFullText}}</div>
                     </ng-container>
                     <ng-container *ngIf="!isClassLoaded">
                         <ngx-skeleton-loader
-                          count = 1
-                          appearance="line"
-                          [theme]="{width: '125px', height: '19px', 'border-radius': '5px', 'margin':'0px'}"
+                            count = 1
+                            appearance="line"
+                            [theme]="{width: '125px', height: '19px', 'border-radius': '5px', 'margin':'0px'}"
                         ></ngx-skeleton-loader>
                     </ng-container>
 

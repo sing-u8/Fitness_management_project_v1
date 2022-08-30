@@ -25,4 +25,26 @@ export class MemberComponent implements OnInit {
     closeDrawer() {
         this.nxStore.dispatch(closeDrawer())
     }
+
+    // register modal vars
+    public doShowRegisterMemberModal = false
+    toggleRegisterMemberModal() {
+        this.doShowRegisterMemberModal = !this.doShowRegisterMemberModal
+    }
+    closeRegisterMemberModal() {
+        this.doShowRegisterMemberModal = false
+    }
+
+    public doShowDirectRegisterMemberFullModal = false
+    toggleDirectRegisterMemberFullModal() {
+        this.doShowDirectRegisterMemberFullModal = !this.doShowDirectRegisterMemberFullModal
+    }
+    whenFinishRegisterMember() {
+        this.toggleDirectRegisterMemberFullModal()
+        this.toggleRegisterMemberModal()
+    }
+    closeDirectRegisterMemberFullModal() {
+        this.toggleDirectRegisterMemberFullModal()
+        this.toggleRegisterMemberModal()
+    }
 }
