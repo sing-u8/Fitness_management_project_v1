@@ -1,12 +1,15 @@
 import { Component, OnInit } from '@angular/core'
 
 import { Drawer } from '@schemas/store/app/drawer.interface'
+import { OutputType } from '@schemas/components/direct-register-member-fullmodal'
 // rxjs
 import { Observable } from 'rxjs'
 // ngrx
 import { Store, select } from '@ngrx/store'
 import { drawerSelector } from '@appStore/selectors'
 import { closeDrawer } from '@appStore/actions/drawer.action'
+import * as DashboardActions from '@centerStore/actions/sec.dashboard.actions'
+import * as CenterCommonActions from '@centerStore/actions/center.common.actions'
 
 @Component({
     selector: 'dr-member',
@@ -39,7 +42,21 @@ export class MemberComponent implements OnInit {
     toggleDirectRegisterMemberFullModal() {
         this.doShowDirectRegisterMemberFullModal = !this.doShowDirectRegisterMemberFullModal
     }
-    whenFinishRegisterMember() {
+    whenFinishRegisterMember(value: OutputType) {
+        // this.nxStore.dispatch(
+        //   DashboardActions.startDirectRegisterMember({
+        //       centerId: this.center.id,
+        //       reqBody: value.reqBody,
+        //       imageFile: value.file,
+        //       callback: () => {
+        //           this.nxStore.dispatch(CenterCommonActions.startGetMembers({ centerId: this.center.id }))
+        //           this.nxStore.dispatch(DashboardActions.startGetUsersByCategory({ centerId: this.center.id }))
+        //           value.cb ? value.cb() : null
+        //           this.toggleDirectRegisterMemberFullModal()
+        //           this.toggleRegisterMemberModal()
+        //       },
+        //   })
+        // )
         this.toggleDirectRegisterMemberFullModal()
         this.toggleRegisterMemberModal()
     }

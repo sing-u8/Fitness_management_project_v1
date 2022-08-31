@@ -56,6 +56,8 @@ import { ContractSignBoxComponent } from './components/contract-sign-box/contrac
 import { MembershipTicketWindowRegisteredComponent } from './components/membership-ticket-window-registered/membership-ticket-window-registered.component'
 import { LockerWindowRegisteredComponent } from './components/locker-window-registered/locker-window-registered.component'
 import { CheckContractFullmodalComponent } from './components/check-contract-fullmodal/check-contract-fullmodal.component'
+// // drawer
+import { DwMemberListComponent } from './components/dw-member-list/dw-member-list.component'
 
 import { DashboardRoutingModule } from './dashboard-routing.module'
 
@@ -117,6 +119,7 @@ import { NgxSpinnerModule } from 'ngx-spinner'
         MembershipTicketWindowRegisteredComponent,
         LockerWindowRegisteredComponent,
         CheckContractFullmodalComponent,
+        DwMemberListComponent,
     ],
     imports: [
         DashboardRoutingModule,
@@ -133,6 +136,7 @@ import { NgxSpinnerModule } from 'ngx-spinner'
         DirectRegisterMemberFullmodalComponent,
         RegisterMembershipLockerFullmodalComponent,
         MemberListComponent,
+        DwMemberListComponent,
     ],
     schemas: [],
 })

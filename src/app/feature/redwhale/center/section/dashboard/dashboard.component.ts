@@ -12,6 +12,7 @@ import { UsersCenterService } from '@services/users-center.service'
 // scehma
 import { Center } from '@schemas/center'
 import { User } from '@schemas/user'
+import { OutputType } from '@schemas/components/direct-register-member-fullmodal'
 
 // rxjs
 import { Subject } from 'rxjs'
@@ -23,6 +24,7 @@ import { Store, select } from '@ngrx/store'
 import * as FromDashboard from '@centerStore/reducers/sec.dashboard.reducer'
 import * as DashboardSelector from '@centerStore/selectors/sec.dashoboard.selector'
 import * as DashboardActions from '@centerStore/actions/sec.dashboard.actions'
+import * as CenterCommonActions from '@centerStore/actions/center.common.actions'
 
 @Component({
     selector: 'dashboard',
@@ -96,11 +98,23 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     toggleDirectRegisterMemberFullModal() {
         this.doShowDirectRegisterMemberFullModal = !this.doShowDirectRegisterMemberFullModal
     }
-    whenFinishRegisterMember() {
-        this.toggleDirectRegisterMemberFullModal()
-        this.toggleRegisterMemberModal()
+    whenFinishRegisterMember(value: OutputType) {
+        this.nxStore.dispatch(
+            DashboardActions.startDirectRegisterMember({
+                centerId: this.center.id,
+                reqBody: value.reqBody,
+                imageFile: value.file,
+                callback: () => {
+                    this.nxStore.dispatch(CenterCommonActions.startGetMembers({ centerId: this.center.id }))
+                    this.nxStore.dispatch(DashboardActions.startGetUsersByCategory({ centerId: this.center.id }))
+                    value.cb ? value.cb() : null
+                    this.toggleDirectRegisterMemberFullModal()
+                    this.toggleRegisterMemberModal()
+                },
+            })
+        )
     }
-    closeDirectRegisterMemberFullmodal() {
+    closeDirectRegisterMemberFullModal() {
         this.toggleDirectRegisterMemberFullModal()
         this.toggleRegisterMemberModal()
     }

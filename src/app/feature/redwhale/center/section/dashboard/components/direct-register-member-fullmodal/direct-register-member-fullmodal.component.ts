@@ -24,6 +24,7 @@ import { CreateUserRequestBody } from '@services/center-users.service'
 import { PictureManagementService, LocalFileData } from '@services/helper/picture-management.service'
 
 import { Center } from '@schemas/center'
+import { OutputType } from '@schemas/components/direct-register-member-fullmodal'
 // components
 import { ClickEmitterType } from '@shared/components/common/button/button.component'
 
@@ -45,7 +46,7 @@ export class DirectRegisterMemberFullmodalComponent implements OnInit, OnChanges
     @Input() visible: boolean
     @Output() visibleChange = new EventEmitter<boolean>()
     @Output() close = new EventEmitter<any>()
-    @Output() finishRegister = new EventEmitter<any>()
+    @Output() finishRegister = new EventEmitter<OutputType>()
 
     @ViewChild('modalWrapperElement') modalWrapperElement: ElementRef
     public changed: boolean
@@ -237,12 +238,12 @@ export class DirectRegisterMemberFullmodalComponent implements OnInit, OnChanges
     }
     saveLocalFile(localFileData: LocalFileData) {
         this.localFileData = _.cloneDeep(localFileData)
-        console.log(
-            'localfiledata: ',
-            this.localFileData,
-            this.localFileData.file,
-            _.assign({}, this.localFileData.file)
-        )
+        // console.log(
+        //     'localfiledata: ',
+        //     this.localFileData,
+        //     this.localFileData.file,
+        //     _.assign({}, this.localFileData.file)
+        // )
     }
     deletePreviewAvatar() {
         this.pictureService.resetLocalPicData()
@@ -270,19 +271,26 @@ export class DirectRegisterMemberFullmodalComponent implements OnInit, OnChanges
             email: this.email.value as string,
             phone_number: this.phone_number.value as string,
         }
+        this.finishRegister.emit({
+            reqBody: registerBody,
+            file: this.localFileData.file ? _.assign({ length: 1 }, this.localFileData.file) : undefined,
+            cb: () => {
+                btLoadingFns.hideLoading()
+            },
+        })
 
-        this.nxStore.dispatch(
-            DashboardActions.startDirectRegisterMember({
-                centerId: this.center.id,
-                reqBody: registerBody,
-                imageFile: this.localFileData.file ? _.assign({ length: 1 }, this.localFileData.file) : undefined,
-                callback: () => {
-                    this.finishRegister.emit()
-                    btLoadingFns.hideLoading()
-                    this.nxStore.dispatch(CenterCommonActions.startGetMembers({ centerId: this.center.id }))
-                    this.nxStore.dispatch(DashboardActions.startGetUsersByCategory({ centerId: this.center.id }))
-                },
-            })
-        )
+        // this.nxStore.dispatch(
+        //     DashboardActions.startDirectRegisterMember({
+        //         centerId: this.center.id,
+        //         reqBody: registerBody,
+        //         imageFile: this.localFileData.file ? _.assign({ length: 1 }, this.localFileData.file) : undefined,
+        //         callback: () => {
+        //             this.finishRegister.emit()
+        //             btLoadingFns.hideLoading()
+        //             this.nxStore.dispatch(CenterCommonActions.startGetMembers({ centerId: this.center.id }))
+        //             this.nxStore.dispatch(DashboardActions.startGetUsersByCategory({ centerId: this.center.id }))
+        //         },
+        //     })
+        // )
     }
 }

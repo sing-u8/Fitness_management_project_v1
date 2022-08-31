@@ -16,7 +16,7 @@ import { StorageService } from '@services/storage.service'
 
 // rxjs
 import { Subject, Observable } from 'rxjs'
-import { distinctUntilChanged, debounceTime, map, takeUntil } from 'rxjs/operators'
+import { distinctUntilChanged, map, takeUntil } from 'rxjs/operators'
 
 // ngrx
 import { Store, select } from '@ngrx/store'
@@ -24,8 +24,6 @@ import { Store, select } from '@ngrx/store'
 import * as FromDashboard from '@centerStore/reducers/sec.dashboard.reducer'
 import * as DashboardSelector from '@centerStore/selectors/sec.dashoboard.selector'
 import * as DashboardActions from '@centerStore/actions/sec.dashboard.actions'
-import { UserListValueItem } from '@centerStore/reducers/sec.dashboard.reducer'
-import { employeeRoleObj } from '@centerStore/selectors/sec.dashoboard.selector'
 
 @Component({
     selector: 'db-member-list',

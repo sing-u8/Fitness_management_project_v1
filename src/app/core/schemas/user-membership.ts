@@ -6,6 +6,7 @@ export interface UserMembership {
         | 'user_membership_state_paused'
         | 'user_membership_state_refund'
         | 'user_membership_state_expired'
+        | 'user_membership_state_deleted'
     state_code_name: string
     membership_category_id: string
     membership_item_id: string

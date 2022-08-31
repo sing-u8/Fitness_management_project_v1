@@ -42,3 +42,4 @@ export type UserLockerStateCode =
     | 'user_locker_state_paused'
     | 'user_locker_state_refund'
     | 'user_locker_state_expired'
+    | 'user_locker_state_deleted'
