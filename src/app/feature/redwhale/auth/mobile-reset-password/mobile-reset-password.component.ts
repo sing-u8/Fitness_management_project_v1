@@ -7,7 +7,8 @@ import { AuthService } from '@services/auth.service'
 import { User } from '@schemas/user'
 // components
 import { TextFieldComponent } from './components/text-field/text-field.component'
-import { ButtonComponent, ClickEmitterType } from '@shared/components/common/button/button.component'
+import { ButtonComponent } from '@shared/components/common/button/button.component'
+import { ClickEmitterType } from '@schemas/components/button'
 
 @Component({
     selector: 'rw-mobile-reset-password',

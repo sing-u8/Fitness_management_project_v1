@@ -23,7 +23,7 @@ import { StorageService } from '@services/storage.service'
 import { DashboardHelperService } from '@services/center/dashboard-helper.service'
 
 // components
-import { ClickEmitterType } from '@shared/components/common/button/button.component'
+import { ClickEmitterType } from '@schemas/components/button'
 
 // component Store
 import { RegisterMembershipLockerFullmodalStore, stateInit } from './componentStore/register-ml-fullmodal.store'

@@ -15,7 +15,7 @@ import {
 
 import _ from 'lodash'
 
-import { ClickEmitterType } from '@shared/components/common/button/button.component'
+import { ClickEmitterType } from '@schemas/components/button'
 import SignaturePad from 'signature_pad'
 
 export interface SignatureConfirmOutput {

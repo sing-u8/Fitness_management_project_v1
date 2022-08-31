@@ -19,7 +19,7 @@ import { originalOrder } from '@helpers/pipe/keyvalue'
 import { StorageService } from '@services/storage.service'
 
 // components
-import { ClickEmitterType } from '@shared/components/common/button/button.component'
+import { ClickEmitterType } from '@schemas/components/button'
 
 import { CenterUser } from '@schemas/center-user'
 import { Center } from '@schemas/center'

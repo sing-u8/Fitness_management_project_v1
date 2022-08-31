@@ -9,7 +9,7 @@ import { Error } from '@schemas/error'
 import { CreateCenterErrors } from '@schemas/errors/create-center-errors'
 
 // components
-import { ClickEmitterType } from '@shared/components/common/button/button.component'
+import { ClickEmitterType } from '@schemas/components/button'
 
 // ngrx
 import { Store } from '@ngrx/store'

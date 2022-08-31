@@ -13,11 +13,8 @@ import {
 } from '@angular/core'
 
 import _ from 'lodash'
-import dayjs from 'dayjs'
 
-import { UserMembership } from '@schemas/user-membership'
-import { UserLocker } from '@schemas/user-locker'
-import { ClickEmitterType } from '@shared/components/common/button/button.component'
+import { ClickEmitterType } from '@schemas/components/button'
 
 export interface HoldingOutput {
     startDate: string

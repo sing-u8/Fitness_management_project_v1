@@ -16,7 +16,7 @@ import _ from 'lodash'
 import { UsersService } from '@services/users.service'
 import { StorageService } from '@services/storage.service'
 
-import { ClickEmitterType } from '@shared/components/common/button/button.component'
+import { ClickEmitterType } from '@schemas/components/button'
 import { User } from '@schemas/user'
 
 // ngrx

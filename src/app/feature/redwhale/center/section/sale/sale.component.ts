@@ -26,7 +26,7 @@ import { centerPermission } from '@centerStore/selectors/center.common.selector'
 import * as FromSale from '@centerStore/reducers/sec.sale.reducer'
 import * as SaleSelector from '@centerStore/selectors/sec.sale.selector'
 import * as SaleActions from '@centerStore/actions/sec.sale.actions'
-import { ClickEmitterType } from '@shared/components/common/button/button.component'
+import { ClickEmitterType } from '@schemas/components/button'
 import { startUpdateCenterPermission } from '../../store/actions/center.common.actions'
 
 @Component({

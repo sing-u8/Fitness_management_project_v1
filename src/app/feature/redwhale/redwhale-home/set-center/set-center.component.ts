@@ -7,7 +7,7 @@ import { CenterService } from '@services/center.service'
 import { FileService, FileTypeCode } from '@services/file.service'
 
 // components
-import { ClickEmitterType } from '@shared/components/common/button/button.component'
+import { ClickEmitterType } from '@schemas/components/button'
 
 // ngrx
 import { Store } from '@ngrx/store'

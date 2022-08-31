@@ -11,7 +11,7 @@ import {
     ViewChild,
 } from '@angular/core'
 import { Center } from '@schemas/center'
-import { ClickEmitterType } from '@shared/components/common/button/button.component'
+import { ClickEmitterType } from '@schemas/components/button'
 import _ from 'lodash'
 
 export interface SettingTermConfirmOutput {

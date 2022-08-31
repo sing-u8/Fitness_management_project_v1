@@ -14,7 +14,7 @@ import {
 
 import _ from 'lodash'
 
-import { ClickEmitterType } from '@shared/components/common/button/button.component'
+import { ClickEmitterType } from '@schemas/components/button'
 import { Center } from '@schemas/center'
 import { StorageService } from '@services/storage.service'
 import { CenterRolePermissionService } from '@services/center-role-permission.service'

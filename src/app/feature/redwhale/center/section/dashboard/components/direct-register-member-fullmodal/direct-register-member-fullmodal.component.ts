@@ -26,8 +26,7 @@ import { PictureManagementService, LocalFileData } from '@services/helper/pictur
 import { Center } from '@schemas/center'
 import { OutputType } from '@schemas/components/direct-register-member-fullmodal'
 // components
-import { ClickEmitterType } from '@shared/components/common/button/button.component'
-
+import { ClickEmitterType } from '@schemas/components/button'
 // ngrx
 import * as DashboardActions from '@centerStore/actions/sec.dashboard.actions'
 import * as CenterCommonActions from '@centerStore/actions/center.common.actions'

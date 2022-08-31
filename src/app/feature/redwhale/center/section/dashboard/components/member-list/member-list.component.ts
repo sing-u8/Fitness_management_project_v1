@@ -10,7 +10,7 @@ dayjs.locale('ko')
 import { CenterUser } from '@schemas/center-user'
 import { Center } from '@schemas/center'
 import { Loading } from '@schemas/store/loading'
-import { HoldingConfirmOutput } from '../hold-all-modal/hold-all-modal.component'
+import { HoldingConfirmOutput } from '@schemas/components/hold-all-modal'
 
 import { StorageService } from '@services/storage.service'
 

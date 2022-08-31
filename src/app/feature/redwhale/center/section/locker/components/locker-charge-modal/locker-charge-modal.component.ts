@@ -24,7 +24,7 @@ import { User } from '@schemas/user'
 import { CenterUser } from '@schemas/center-user'
 import { Center } from '@schemas/center'
 
-import { ClickEmitterType } from '@shared/components/common/button/button.component'
+import { ClickEmitterType } from '@schemas/components/button'
 
 export interface LockerChargeType {
     pay_card: number

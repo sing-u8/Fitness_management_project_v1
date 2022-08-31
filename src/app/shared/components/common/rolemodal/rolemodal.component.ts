@@ -11,8 +11,7 @@ import {
     ViewChild,
 } from '@angular/core'
 
-
-import { ClickEmitterType } from '@shared/components/common/button/button.component'
+import { ClickEmitterType } from '@schemas/components/button'
 import { closeRoleModal, startCloseRoleModal } from '@appStore/actions/modal.action'
 import { RoleModal } from '@schemas/store/app/modal.interface'
 import { Store } from '@ngrx/store'

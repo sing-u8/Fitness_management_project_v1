@@ -15,10 +15,7 @@ import {
 } from '@angular/core'
 import { NgxSpinnerService } from 'ngx-spinner'
 
-export type ClickEmitterType = {
-    showLoading: () => void
-    hideLoading: () => void
-}
+import { ClickEmitterType } from '@schemas/components/button'
 
 @Component({
     selector: 'rw-button',

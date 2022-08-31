@@ -27,7 +27,7 @@ import { showModal } from '@appStore/actions/modal.action'
 import { removeRegistration } from '@appStore/actions/registration.action'
 
 // components
-import { ClickEmitterType } from '@shared/components/common/button/button.component'
+import { ClickEmitterType } from '@schemas/components/button'
 import _ from 'lodash'
 
 @Component({
