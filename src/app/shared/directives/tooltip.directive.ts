@@ -24,7 +24,6 @@ export class TooltipDirective implements OnDestroy {
 
     ngOnDestroy(): void {
         this.removeTooltip()
-        // this.onMouseLeave()
     }
 
     removeTooltip() {
@@ -37,12 +36,9 @@ export class TooltipDirective implements OnDestroy {
     @HostListener('mouseenter')
     onMouseEnter() {
         if (!this.rwTooltipDisabled) {
-            if (!this.isInit) {
-                this.create()
-                this.setPosition()
-                this.isInit = true
-            }
-
+            this.create()
+            this.setPosition()
+            this.isInit = true
             setTimeout(() => {
                 if (this.tooltip) {
                     this.renderer.addClass(this.tooltip, 'rw-tooltip-show')
@@ -53,10 +49,12 @@ export class TooltipDirective implements OnDestroy {
 
     @HostListener('mouseleave')
     onMouseLeave() {
-        if (this.tooltip) {
-            this.renderer.removeClass(this.tooltip, 'rw-tooltip-show')
-            // this.tooltip = null
-        }
+        this.removeTooltip()
+        // if (this.tooltip) {
+        //     // this.renderer.removeClass(this.tooltip, 'rw-tooltip-show')
+        //     this.renderer.removeChild(document.body, this.tooltip)
+        //     this.tooltip = null
+        // }
     }
 
     create() {

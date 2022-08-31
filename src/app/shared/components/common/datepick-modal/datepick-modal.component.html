@@ -17,8 +17,8 @@
                 <div class="rw-typo-subtext0-regular title-text">{{textData?.endDateText ?? '종료일'}}</div>
             </div>
             <div class="datepicker__wrapper">
-                <div class="datepicker__button" rw-button rwButtonFontColor="var(--font-color)"
-                    (click)="openShowDatePicker('start')" (rwClickOutside)="closeShowDatePicker('start');">
+                <div class="datepicker__button" [class.disabled]="mode =='end-only'" rw-button rwButtonFontColor="var(--font-color)"
+                    (click)="mode !='end-only' && openShowDatePicker('start')" (rwClickOutside)="mode !='end-only' && closeShowDatePicker('start');">
                     <span *ngIf="startDatepick.startDate">
                         {{startDatepick.startDate | dateFormat:'YYYY.MM.DD'}}
                     </span>
@@ -27,9 +27,9 @@
                     </span>
 
                     <db-datepicker
-                        *ngIf="doShowDatePick.start"
+                        *ngIf="doShowDatePick.start && mode != 'end-only'"
                         mode="reg-ml"
-                        [option]="'looseOnlyStart'"
+                        [option]="mode == 'start-limited' ? 'onlyStart' : 'looseOnlyStart'"
                         [(data)]="startDatepick"
                         (dataChange)="onDatePickerChange('start', $event)"
                     ></db-datepicker>

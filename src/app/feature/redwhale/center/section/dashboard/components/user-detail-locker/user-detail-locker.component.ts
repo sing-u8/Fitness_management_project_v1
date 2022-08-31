@@ -264,6 +264,7 @@ export class UserDetailLockerComponent implements OnInit {
         startDate: '',
         endDate: '',
     }
+    public holdMode: 'holdReserved' | 'holding'
     toggleUpdateHoldModal(holdingIdx: number) {
         this.updateHoldModalText.text = `'[${this.wordService.ellipsis(
             this.selectedUserLocker.category_name,
@@ -273,6 +274,8 @@ export class UserDetailLockerComponent implements OnInit {
             startDate: this.selectedUserLocker.holding[holdingIdx].start_date,
             endDate: this.selectedUserLocker.holding[holdingIdx].end_date,
         })
+        this.holdMode =
+            this.selectedUserLocker.holding[holdingIdx].state_code == 'holding_state_ready' ? 'holdReserved' : 'holding'
         this.showUpdateHoldModal = !this.showUpdateHoldModal
     }
     hideUpdateHoldModal() {
@@ -351,6 +354,7 @@ export class UserDetailLockerComponent implements OnInit {
             start_date: this.holdData.startDate,
             end_date: this.holdData.endDate,
         }
+        console.log('callHolding api : ', this.holdData)
         this.centerUsersLockerService
             .holdingLockerTicket(this.center.id, this.curUserData.user.id, this.selectedUserLocker.id, reqBody)
             .subscribe({

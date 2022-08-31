@@ -108,6 +108,12 @@
                     border: 1px solid var(--border-color) !important;
                     border-radius: 5px !important;
 
+                    &.disabled {
+                        cursor:not-allowed;
+                        color: var(--grey) !important;
+                        background: var(--background-color) !important;
+                    }
+
                     span {
                         margin: 0px;
                     }

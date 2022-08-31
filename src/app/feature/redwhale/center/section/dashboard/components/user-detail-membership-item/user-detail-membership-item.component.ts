@@ -171,7 +171,7 @@ export class UserDetailMembershipItemComponent implements OnInit, AfterViewInit 
         if (
             this.membership.state_code == 'user_membership_state_refund' ||
             this.membership.state_code == 'user_membership_state_expired' ||
-            this.timeService.getRestPeriod(dayjs().format(), this.membership.end_date) < 1 ||
+            // this.timeService.getRestPeriod(dayjs().format(), this.membership.end_date) < 1 ||
             (this.membership.count <= 0 && this.membership.unlimited == false)
         ) {
             this.isExpired = true

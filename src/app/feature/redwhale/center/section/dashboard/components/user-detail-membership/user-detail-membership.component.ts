@@ -228,6 +228,7 @@ export class UserDetailMembershipComponent implements OnInit {
         startDate: '',
         endDate: '',
     }
+    public holdMode: 'holdReserved' | 'holding'
     toggleUpdateHoldModal(holdingIdx: number) {
         this.updateHoldModalText.text = `'${this.wordService.ellipsis(
             this.selectedUserMembership.name,
@@ -237,6 +238,10 @@ export class UserDetailMembershipComponent implements OnInit {
             startDate: this.selectedUserMembership.holding[holdingIdx].start_date,
             endDate: this.selectedUserMembership.holding[holdingIdx].end_date,
         })
+        this.holdMode =
+            this.selectedUserMembership.holding[holdingIdx].state_code == 'holding_state_ready'
+                ? 'holdReserved'
+                : 'holding'
         this.showUpdateHoldModal = !this.showUpdateHoldModal
     }
     hideUpdateHoldModal() {
@@ -316,6 +321,7 @@ export class UserDetailMembershipComponent implements OnInit {
             start_date: this.holdData.startDate,
             end_date: this.holdData.endDate,
         }
+        console.log('callHolding api in membership  : ', this.holdData)
         this.centerUsersMembershipService
             .holdingMembershipTicket(this.center.id, this.curUserData.user.id, this.selectedUserMembership.id, reqBody)
             .subscribe({

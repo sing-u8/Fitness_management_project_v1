@@ -45,6 +45,7 @@ export class DatepickModalComponent implements AfterViewChecked, OnChanges, Afte
         endDateText?: string
     }
     @Input() datepickInput: DatePickOutput
+    @Input() mode: 'normal' | 'start-limited' | 'end-only' = 'normal'
 
     @Output() visibleChange = new EventEmitter<boolean>()
     @Output() cancel = new EventEmitter<any>()

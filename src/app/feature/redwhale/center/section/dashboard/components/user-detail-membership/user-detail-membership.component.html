@@ -103,6 +103,7 @@
     [(visible)]="showUpdateHoldModal"
     [datepickInput]="updateHoldDateInput"
     [textData]="updateHoldModalText"
+    [mode]="holdMode == 'holdReserved' ? 'start-limited' : 'end-only'"
     (cancel)="hideUpdateHoldModal()"
     (confirm)="onUpdateHoldConfirm($event)"
 ></rw-datepick-modal>
