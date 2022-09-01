@@ -59,7 +59,7 @@ export const startDirectRegisterMember = createAction(
 )
 export const finishDirectRegisterMember = createAction(
     `[${FeatureKey}] Finish Direct Register Member`,
-    props<{ createdUser: CenterUser }>()
+    props<{ createdUser: CenterUser; centerId: string }>()
 )
 
 export const startGetUserData = createAction(
@@ -222,15 +222,6 @@ export const finishGetDrawerUserList = createAction(
     props<{ centerId: string; categ_type: MemberSelectCateg; userListValue: UsersListValue }>()
 )
 
-export const startDirectDrawerRegisterMember = createAction(
-    `[${FeatureKey}] Start Direct Drawer Register Member`,
-    props<{ centerId: string; reqBody: CreateUserRequestBody; imageFile: ImageFile; callback?: () => void }>()
-)
-export const finishDirectDrawerRegisterMember = createAction(
-    `[${FeatureKey}] Finish Direct Drawer Register Member`,
-    props<{ createdUser: CenterUser }>()
-)
-
 export const startRemoveDrawerCurUserProfile = createAction(
     `[${FeatureKey}] Start Remove Drawer Current User Profile`,
     props<{ centerId: string; userId: string; profileUrl: string; callback?: () => void }>()
@@ -258,6 +249,16 @@ export const startSetDrawerCurUserData = createAction(
     `[${FeatureKey}] Start Set Drawer Current User Data`,
     props<{ centerId: string; userId: string; reqBody: UpdateUserRequestBody; callback?: () => void }>()
 )
+
+export const startRefreshDrawerCenterUser = createAction(
+    `[${FeatureKey}] Start Drawer Refresh Center User`,
+    props<{ centerId: string; centerUser: CenterUser }>()
+)
+export const finishRefreshDrawerCenterUser = createAction(
+    `[${FeatureKey}] Finish Drawer Refresh Center User`,
+    props<{ categ_type: MemberSelectCateg; refreshCenterUser: CenterUser; isUserInCurCateg: boolean }>()
+)
+
 // sync
 // userLists
 export const setDrawerCurCenterId = createAction(
@@ -281,6 +282,10 @@ export const resetDrawerUsersListsHoldSelected = createAction(
 // curUser
 export const setDrawerCurUser = createAction(
     `[${FeatureKey}] Set Drawer Current User Data`,
+    props<{ centerUser: CenterUser }>()
+)
+export const refreshDrawerCurUser = createAction(
+    `[${FeatureKey}] Refresh Drawer Current User Data`,
     props<{ centerUser: CenterUser }>()
 )
 

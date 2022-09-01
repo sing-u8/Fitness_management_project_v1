@@ -27,7 +27,8 @@ import { ClickEmitterType } from '@schemas/components/button'
 
 // component Store
 import { RegisterMembershipLockerFullmodalStore, stateInit } from './componentStore/register-ml-fullmodal.store'
-import { Observable } from 'rxjs'
+import { Observable, Subject } from 'rxjs'
+import { takeUntil } from 'rxjs/operators'
 //
 
 import { CenterUser } from '@schemas/center-user'
@@ -47,6 +48,7 @@ import {
 // ngrx
 import { Store } from '@ngrx/store'
 import * as CenterCommonSelector from '@centerStore/selectors/center.common.selector'
+import * as DashboardSelector from '@centerStore/selectors/sec.dashoboard.selector'
 
 type Progress = 'one' | 'two'
 
@@ -110,6 +112,13 @@ export class RegisterMembershipLockerFullmodalComponent implements OnInit, OnCha
     }
     public progressChanged = false
 
+    public dbCurCenterId$ = this.nxStore.select(DashboardSelector.curCenterId)
+    public dwCurCenterId$ = this.nxStore.select(DashboardSelector.drawerCurCenterId)
+    public dbCurCenterId = undefined
+    public dwCurCenterId = undefined
+
+    public unSubscribe$ = new Subject<boolean>()
+
     constructor(
         private renderer: Renderer2,
         private readonly cmpStore: RegisterMembershipLockerFullmodalStore,
@@ -127,12 +136,21 @@ export class RegisterMembershipLockerFullmodalComponent implements OnInit, OnCha
         this.cmpStore.checkMembershipItemsExist(this.center.id)
         // this.cmpStore.getInstructorsEffect(this.center.id)
         // this.cmpStore.getmembershipItemsEffect(this.center.id)
+
+        this.dbCurCenterId$.subscribe((dbCurCenterId) => {
+            this.dbCurCenterId = dbCurCenterId
+        })
+        this.dwCurCenterId$.subscribe((dwCurCenterId) => {
+            this.dwCurCenterId = dwCurCenterId
+        })
     }
     ngOnDestroy(): void {
         this.TotalPriceSumSubscriber.unsubscribe()
         this.isAllMlItemDoneSubscriber.unsubscribe()
         this.lieSubscriber.unsubscribe()
         this.mieSubscriber.unsubscribe()
+        this.unSubscribe$.next(true)
+        this.unSubscribe$.complete()
     }
     ngOnChanges(changes: SimpleChanges): void {
         if (changes['visible'] && !changes['visible'].firstChange) {
@@ -311,7 +329,12 @@ export class RegisterMembershipLockerFullmodalComponent implements OnInit, OnCha
             signData: this.signData,
             callback: () => {
                 btLoadingFns.hideLoading()
-                this.dashboardHelper.refreshCurUser(this.center.id, this.curUser)
+                if (!_.isEmpty(this.dbCurCenterId) && this.dbCurCenterId == this.center.id) {
+                    this.dashboardHelper.refreshCurUser(this.center.id, this.curUser)
+                }
+                if (!_.isEmpty(this.dwCurCenterId) && this.dwCurCenterId == this.center.id) {
+                    this.dashboardHelper.refreshDrawerCurUser(this.center.id, this.curUser)
+                }
                 this.closeModal()
             },
             errCallback: () => {

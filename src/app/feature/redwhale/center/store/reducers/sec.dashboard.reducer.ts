@@ -17,6 +17,7 @@ import {
     finishRegisterDrawerCurUserProfile,
     finishRemoveDrawerCurUserProfile,
     finishSynchronizeUserLocker,
+    refreshDrawerCurUser,
     setDrawerCurCenterId,
     setDrawerCurUser,
     setDrawerUserSearchInput,
@@ -159,7 +160,7 @@ export const dashboardReducer = createImmerReducer(
     initialState,
     // async
     on(DashboardActions.startLoadMemberList, (state) => {
-        state = { ...state, ...initialState }
+        state = { ...state, ...MainDashboardInitialState } as State
         state.isLoading = 'pending'
         return state
     }),
@@ -189,10 +190,16 @@ export const dashboardReducer = createImmerReducer(
         state.isLoading = 'done'
         return state
     }),
-    on(DashboardActions.finishDirectRegisterMember, (state, { createdUser }) => {
+    on(DashboardActions.finishDirectRegisterMember, (state, { createdUser, centerId }) => {
         // !! 필요 시에 API에서 새 유저 받아오기 !!
-        state.usersLists.member.unshift({ user: createdUser, holdSelected: false })
-        state.usersSelectCategs.member.userSize++
+        if (state.curCenterId == centerId) {
+            state.usersLists.member.unshift({ user: createdUser, holdSelected: false })
+            state.usersSelectCategs.member.userSize++
+        }
+        if (state.drawerCurCenterId == centerId) {
+            state.drawerUsersLists.member.unshift({ user: createdUser, holdSelected: false })
+            state.drawerUsersSelectCategs.member.userSize++
+        }
         return state
     }),
     on(DashboardActions.startGetUserData, (state, { centerUser }) => {
@@ -241,23 +248,34 @@ export const dashboardReducer = createImmerReducer(
         }
         return state
     }),
-    on(DashboardActions.startSetCurUserData, (state, { userId, reqBody }) => {
-        // const { role_code, center_user_name, center_user_memo } = reqBody
+    on(DashboardActions.startSetCurUserData, (state, { userId, reqBody, centerId }) => {
+        if (state.curCenterId == centerId) {
+            state.curUserData.user = _.assign(state.curUserData.user, reqBody)
 
-        // ! role_code가 포함되었을 때, role_name도 바꿔줘야함
-        state.curUserData.user = _.assign(state.curUserData.user, reqBody)
-
-        const userListsKeys = _.keys(state.usersLists) as MemberSelectCateg[]
-        userListsKeys.forEach((key) => {
-            state.usersLists[key].find((v, i) => {
-                if (v.user.id == userId) {
-                    state.usersLists[key][i].user = _.assign(state.usersLists[key][i].user, reqBody)
-                    return true
-                }
-                return false
+            const userListsKeys = _.keys(state.usersLists) as MemberSelectCateg[]
+            userListsKeys.forEach((key) => {
+                state.usersLists[key].find((v, i) => {
+                    if (v.user.id == userId) {
+                        state.usersLists[key][i].user = _.assign(state.usersLists[key][i].user, reqBody)
+                        return true
+                    }
+                    return false
+                })
             })
-        })
-
+        }
+        if (state.drawerCurCenterId == centerId) {
+            state.drawerCurUserData.user = _.assign(state.drawerCurUserData.user, reqBody)
+            const userListsKeys = _.keys(state.drawerUsersLists) as MemberSelectCateg[]
+            userListsKeys.forEach((key) => {
+                state.drawerUsersLists[key].find((v, i) => {
+                    if (v.user.id == userId) {
+                        state.drawerUsersLists[key][i].user = _.assign(state.drawerUsersLists[key][i].user, reqBody)
+                        return true
+                    }
+                    return false
+                })
+            })
+        }
         return state
     }),
 
@@ -401,11 +419,6 @@ export const dashboardReducer = createImmerReducer(
         state.drawerIsLoading = 'done'
         return state
     }),
-    on(DashboardActions.finishDirectDrawerRegisterMember, (state, { createdUser }) => {
-        state.drawerUsersLists.member.unshift({ user: createdUser, holdSelected: false })
-        state.drawerUsersSelectCategs.member.userSize++
-        return state
-    }),
     on(DashboardActions.finishRemoveDrawerCurUserProfile, (state, { userId, profileUrl }) => {
         state.drawerCurUserData.user.center_user_picture = profileUrl
 
@@ -452,6 +465,19 @@ export const dashboardReducer = createImmerReducer(
 
         return state
     }),
+    on(DashboardActions.finishRefreshDrawerCenterUser, (state, { categ_type, refreshCenterUser, isUserInCurCateg }) => {
+        if (isUserInCurCateg) {
+            const refreshUserIdx = _.findIndex(
+                state.drawerUsersLists[categ_type],
+                (v) => v.user.id == refreshCenterUser.id
+            )
+            state.drawerUsersLists[categ_type][refreshUserIdx].user = refreshCenterUser
+        } else {
+            _.remove(state.drawerUsersLists[categ_type], (v) => v.user.id == refreshCenterUser.id)
+        }
+        state.drawerCurUserData.user = _.assign(state.drawerCurUserData.user, refreshCenterUser)
+        return state
+    }),
     // sync
     on(DashboardActions.setDrawerUsersListsHoldSelected, (state, { memberSelectCateg, index, holdFlag }) => {
         state.drawerUsersLists[memberSelectCateg][index].holdSelected = holdFlag
@@ -472,6 +498,12 @@ export const dashboardReducer = createImmerReducer(
     }),
     on(DashboardActions.setDrawerCurUser, (state, { centerUser }) => {
         state.drawerCurUserData.user = _.assign(state.drawerCurUserData.user, centerUser)
+        return state
+    }),
+    on(DashboardActions.refreshDrawerCurUser, (state, { centerUser }) => {
+        if (!_.isEmpty(state.drawerCurUserData.user) && state.drawerCurUserData.user.id == centerUser.id) {
+            state.drawerCurUserData.user = _.assign(state.drawerCurUserData.user, centerUser)
+        }
         return state
     }),
     on(DashboardActions.setDrawerUserSearchInput, (state, { searchInput }) => {

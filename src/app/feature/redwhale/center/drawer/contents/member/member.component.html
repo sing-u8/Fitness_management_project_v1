@@ -190,6 +190,14 @@
     (confirm)="removeUserProfile()"
 ></rw-modal>
 
+<rw-modal
+    (click)="$event.stopPropagation()"
+    [(visible)]="doShowChangeRoleModal"
+    [data]="changeRoleModalText"
+    (cancel)="closeChangeRoleModal()"
+    (confirm)="confirmChangeRoleModal()"
+></rw-modal>
+
 <db-register-membership-locker-fullmodal
     [(visible)]="doShowRegisterMLFullModal"
     (close)="toggleRegisterMLFullModal()"

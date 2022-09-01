@@ -132,7 +132,7 @@ export class MemberComponent implements OnInit, OnDestroy {
     }
     whenFinishRegisterMember(value: OutputType) {
         this.nxStore.dispatch(
-            DashboardActions.startDirectDrawerRegisterMember({
+            DashboardActions.startDirectRegisterMember({
                 centerId: this.center.id,
                 reqBody: value.reqBody,
                 imageFile: value.file,
@@ -145,8 +145,6 @@ export class MemberComponent implements OnInit, OnDestroy {
                 },
             })
         )
-        this.toggleDirectRegisterMemberFullModal()
-        this.toggleRegisterMemberModal()
     }
     closeDirectRegisterMemberFullModal() {
         this.toggleDirectRegisterMemberFullModal()
@@ -171,7 +169,7 @@ export class MemberComponent implements OnInit, OnDestroy {
     onChangeNameConfirm(changedName: string) {
         if (this.curCenterUser.center_user_name != changedName) {
             this.nxStore.dispatch(
-                DashboardActions.startSetDrawerCurUserData({
+                DashboardActions.startSetCurUserData({
                     centerId: this.center.id,
                     reqBody: { center_user_name: changedName },
                     userId: this.curCenterUser.id,
@@ -193,7 +191,7 @@ export class MemberComponent implements OnInit, OnDestroy {
     updateUserMemo(memoValue: string) {
         if (this.curCenterUser.center_user_memo != memoValue) {
             this.nxStore.dispatch(
-                DashboardActions.startSetDrawerCurUserData({
+                DashboardActions.startSetCurUserData({
                     centerId: this.center.id,
                     reqBody: { center_user_memo: memoValue },
                     userId: this.curCenterUser.id,
@@ -309,7 +307,7 @@ export class MemberComponent implements OnInit, OnDestroy {
             )
         } else {
             this.nxStore.dispatch(
-                DashboardActions.startSetDrawerCurUserData({
+                DashboardActions.startSetCurUserData({
                     centerId: this.center.id,
                     userId: this.curCenterUser.id,
                     reqBody: {

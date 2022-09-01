@@ -21,14 +21,6 @@ import { CenterUsersBookingService } from '@services/center-users-booking.servic
 import { CenterService } from '@services/center.service'
 import { CenterHoldingService } from '@services/center-holding.service'
 import { CenterContractService } from '@services/center-users-contract.service'
-import {
-    finishGetDrawerUserList,
-    finishGetDrawerUsersByCategory,
-    startDrawerCenterHolding,
-    startGetDrawerUserList,
-    startGetDrawerUsersByCategory,
-    startSetDrawerCurUserData,
-} from '../actions/sec.dashboard.actions'
 
 @Injectable()
 export class DashboardEffect {
@@ -200,7 +192,7 @@ export class DashboardEffect {
                                         callback ? callback() : null
                                         return [
                                             showToast({ text: '회원 등록이 완료되었습니다.' }),
-                                            DashboardActions.finishDirectRegisterMember({ createdUser }),
+                                            DashboardActions.finishDirectRegisterMember({ createdUser, centerId }),
                                         ]
                                     })
                                 )
@@ -208,7 +200,7 @@ export class DashboardEffect {
                             callback ? callback() : null
                             return [
                                 showToast({ text: '회원 등록이 완료되었습니다.' }),
-                                DashboardActions.finishDirectRegisterMember({ createdUser }),
+                                DashboardActions.finishDirectRegisterMember({ createdUser, centerId }),
                             ]
                         }
                     }),
@@ -531,48 +523,32 @@ export class DashboardEffect {
         { dispatch: false }
     )
 
-    // public directRegisterMember$ = createEffect(() =>
-    //     this.actions$.pipe(
-    //         ofType(DashboardActions.startDirectRegisterMember),
-    //         switchMap(({ centerId, reqBody, imageFile, callback }) =>
-    //             this.centerUsersApi.createUser(centerId, reqBody).pipe(
-    //                 switchMap((createdUser) => {
-    //                     if (imageFile != undefined) {
-    //                         return this.fileApi
-    //                             .createFile(
-    //                                 {
-    //                                     type_code: 'file_type_center_user_picture',
-    //                                     center_id: centerId,
-    //                                     center_user_id: createdUser.id,
-    //                                 },
-    //                                 imageFile
-    //                             )
-    //                             .pipe(
-    //                                 switchMap((file) => {
-    //                                     createdUser.center_user_picture = file[0].url
-    //                                     callback ? callback() : null
-    //                                     return [
-    //                                         showToast({ text: '회원 등록이 완료되었습니다.' }),
-    //                                         DashboardActions.finishDirectRegisterMember({ createdUser }),
-    //                                     ]
-    //                                 })
-    //                             )
-    //                     } else {
-    //                         callback ? callback() : null
-    //                         return [
-    //                             showToast({ text: '회원 등록이 완료되었습니다.' }),
-    //                             DashboardActions.finishDirectRegisterMember({ createdUser }),
-    //                         ]
-    //                     }
-    //                 }),
-    //                 catchError((err: string) => {
-    //                     callback ? callback() : null
-    //                     return of(DashboardActions.error({ error: err }))
-    //                 })
-    //             )
-    //         )
-    //     )
-    // )
+    public refreshDrawerCenterUser$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(DashboardActions.startRefreshDrawerCenterUser),
+            concatLatestFrom(() => [this.store.select(DashboardSelector.drawerCurUserListSelect)]),
+            switchMap(([{ centerId, centerUser }, userListSelect]) =>
+                forkJoin([
+                    this.centerUsersApi
+                        .getUserList(centerId, DashboardReducer.matchMemberSelectCategTo(userListSelect.key))
+                        .pipe(map((users) => _.find(users, (user) => user.id == centerUser.id))),
+                    this.centerUsersApi
+                        .getUserList(centerId, '', centerUser.center_user_name)
+                        .pipe(map((users) => _.find(users, (user) => user.id == centerUser.id))),
+                ]).pipe(
+                    switchMap(([userInCategory, userInAll]) => {
+                        return [
+                            DashboardActions.finishRefreshDrawerCenterUser({
+                                categ_type: userListSelect.key,
+                                refreshCenterUser: userInAll,
+                                isUserInCurCateg: !_.isEmpty(userInCategory),
+                            }),
+                        ]
+                    })
+                )
+            )
+        )
+    )
 }
 
 /*
