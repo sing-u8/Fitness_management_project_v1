@@ -21,6 +21,14 @@ import { CenterUsersBookingService } from '@services/center-users-booking.servic
 import { CenterService } from '@services/center.service'
 import { CenterHoldingService } from '@services/center-holding.service'
 import { CenterContractService } from '@services/center-users-contract.service'
+import {
+    finishGetDrawerUserList,
+    finishGetDrawerUsersByCategory,
+    startDrawerCenterHolding,
+    startGetDrawerUserList,
+    startGetDrawerUsersByCategory,
+    startSetDrawerCurUserData,
+} from '../actions/sec.dashboard.actions'
 
 @Injectable()
 export class DashboardEffect {
@@ -97,7 +105,8 @@ export class DashboardEffect {
                             }
                         })
                         // usersSelectCateg.member.userSize = usersList['member'].length
-                        return DashboardActions.finishLoadMemberList({
+                        return DashboardActions.finishGetUserList({
+                            centerId,
                             categ_type: categ_type,
                             userListValue,
                         })
@@ -428,6 +437,142 @@ export class DashboardEffect {
             catchError((err: string) => of(DashboardActions.error({ error: err })))
         )
     )
+
+    // // // -- drawer
+    getDrawerUsersByCategory$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(DashboardActions.startGetDrawerUsersByCategory),
+            switchMap(({ centerId }) =>
+                this.centerUsersApi.getUsersByCategory(centerId).pipe(
+                    map((usersByCategs) => {
+                        const userSelectCateg = {} as DashboardReducer.UsersSelectCateg
+                        usersByCategs.forEach((usersByCateg) => {
+                            const type = DashboardReducer.matchUsersCategoryTo(usersByCateg.category_code)
+                            userSelectCateg[type] = {
+                                name: usersByCateg.category_name,
+                                userSize: usersByCateg.user_count,
+                            }
+                        })
+                        return DashboardActions.finishGetDrawerUsersByCategory({ userSelectCateg })
+                    })
+                )
+            )
+        )
+    )
+
+    getDrawerUserList$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(DashboardActions.startGetDrawerUserList),
+            concatLatestFrom(() => [this.store.select(DashboardSelector.drawerUsersLists)]),
+            switchMap(([{ centerId, categ_type }, usersLists]) =>
+                this.centerUsersApi.getUserList(centerId, DashboardReducer.matchMemberSelectCategTo(categ_type)).pipe(
+                    map((memberlist) => {
+                        const userListValue: DashboardReducer.UsersListValue = memberlist.map((v) => {
+                            const user = usersLists[categ_type].find((ud) => ud.user.id == v.id)
+                            return {
+                                user: v,
+                                holdSelected: user != undefined ? user.holdSelected : false,
+                            }
+                        })
+                        // usersSelectCateg.member.userSize = usersList['member'].length
+                        return DashboardActions.finishGetDrawerUserList({
+                            centerId,
+                            categ_type: categ_type,
+                            userListValue,
+                        })
+                    }),
+                    catchError((err: string) => of(DashboardActions.error({ error: err })))
+                )
+            )
+        )
+    )
+
+    public drawerCenterHolding$ = createEffect(
+        () =>
+            this.actions$.pipe(
+                ofType(DashboardActions.startDrawerCenterHolding),
+                concatLatestFrom(() => [
+                    this.store.select(DashboardSelector.drawerUsersLists),
+                    this.store.select(DashboardSelector.drawerCurUserListSelect),
+                ]),
+                switchMap(([{ centerId, cb, reqBody }, userLists, curUserListSelect]) => {
+                    const user_ids = userLists[curUserListSelect.key]
+                        .filter((v) => v.holdSelected)
+                        .map((v) => v.user.id)
+                    return this.centerHoldingApi
+                        .centerHolding(centerId, {
+                            ...reqBody,
+                            user_ids,
+                        })
+                        .pipe(
+                            tap(() => {
+                                cb ? cb() : null
+                            })
+                        )
+                }),
+                catchError((err: string) => of(DashboardActions.error({ error: err })))
+            ),
+        { dispatch: false }
+    )
+
+    public setDrawerCurUserMemo = createEffect(
+        () =>
+            this.actions$.pipe(
+                ofType(DashboardActions.startSetDrawerCurUserData),
+                switchMap(({ centerId, reqBody, userId, callback }) =>
+                    this.centerUsersApi.updateUser(centerId, userId, reqBody).pipe(
+                        tap(() => {
+                            callback ? callback() : null
+                        })
+                    )
+                ),
+                catchError((err: string) => of(DashboardActions.error({ error: err })))
+            ),
+        { dispatch: false }
+    )
+
+    // public directRegisterMember$ = createEffect(() =>
+    //     this.actions$.pipe(
+    //         ofType(DashboardActions.startDirectRegisterMember),
+    //         switchMap(({ centerId, reqBody, imageFile, callback }) =>
+    //             this.centerUsersApi.createUser(centerId, reqBody).pipe(
+    //                 switchMap((createdUser) => {
+    //                     if (imageFile != undefined) {
+    //                         return this.fileApi
+    //                             .createFile(
+    //                                 {
+    //                                     type_code: 'file_type_center_user_picture',
+    //                                     center_id: centerId,
+    //                                     center_user_id: createdUser.id,
+    //                                 },
+    //                                 imageFile
+    //                             )
+    //                             .pipe(
+    //                                 switchMap((file) => {
+    //                                     createdUser.center_user_picture = file[0].url
+    //                                     callback ? callback() : null
+    //                                     return [
+    //                                         showToast({ text: '회원 등록이 완료되었습니다.' }),
+    //                                         DashboardActions.finishDirectRegisterMember({ createdUser }),
+    //                                     ]
+    //                                 })
+    //                             )
+    //                     } else {
+    //                         callback ? callback() : null
+    //                         return [
+    //                             showToast({ text: '회원 등록이 완료되었습니다.' }),
+    //                             DashboardActions.finishDirectRegisterMember({ createdUser }),
+    //                         ]
+    //                     }
+    //                 }),
+    //                 catchError((err: string) => {
+    //                     callback ? callback() : null
+    //                     return of(DashboardActions.error({ error: err }))
+    //                 })
+    //             )
+    //         )
+    //     )
+    // )
 }
 
 /*

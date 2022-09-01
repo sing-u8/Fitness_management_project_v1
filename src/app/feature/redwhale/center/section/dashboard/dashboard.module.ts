@@ -137,6 +137,8 @@ import { NgxSpinnerModule } from 'ngx-spinner'
         RegisterMembershipLockerFullmodalComponent,
         MemberListComponent,
         DwMemberListComponent,
+        ChangeUserNameModalComponent,
+        MemberRoleSelectComponent,
     ],
     schemas: [],
 })

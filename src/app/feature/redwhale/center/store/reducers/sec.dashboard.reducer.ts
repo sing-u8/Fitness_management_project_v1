@@ -13,7 +13,14 @@ import { CenterUsersCategory } from '@schemas/center/community/center-users-by-c
 import { Contract } from '@schemas/contract'
 
 import * as DashboardActions from '../actions/sec.dashboard.actions'
-import { finishSynchronizeUserLocker } from '../actions/sec.dashboard.actions'
+import {
+    finishRegisterDrawerCurUserProfile,
+    finishRemoveDrawerCurUserProfile,
+    finishSynchronizeUserLocker,
+    setDrawerCurCenterId,
+    setDrawerCurUser,
+    setDrawerUserSearchInput,
+} from '../actions/sec.dashboard.actions'
 
 export type MemberSelectCateg = 'member' | 'valid' | 'unpaid' | 'imminent' | 'expired' | 'employee' //  | 'attendance'
 export type MemberManageCategory = 'membershipLocker' | 'reservation' | 'payment'
@@ -75,7 +82,7 @@ export interface State {
     curSearchInput: string
     userDetailTag: UserDetailTag
     isLoading: Loading
-    isUserDeatilLoading: Loading
+    isUserDetailLoading: Loading
     error: string
 
     // main
@@ -84,22 +91,68 @@ export interface State {
     curMemberManageCateg: MemberManageCategory
     curUserListSelect: UserListSelect
     curUserData: CurUseData
+
+    // drawer
+    drawerCurCenterId: string
+    drawerIsLoading: Loading
+    drawerCurSearchInput: string
+    drawerUsersSelectCategs: UsersSelectCateg
+    drawerUsersLists: UsersLists
+    drawerCurMemberManageCateg: MemberManageCategory
+    drawerCurUserListSelect: UserListSelect
+    drawerCurUserData: CurUseData
 }
 
 export const initialState: State = {
     // main
     curCenterId: undefined,
-    curSearchInput: CurSearchInputInit,
     userDetailTag: UserDetailTagInit,
     isLoading: 'idle',
-    isUserDeatilLoading: 'idle',
+    isUserDetailLoading: 'idle',
     error: '',
     // main
+    curSearchInput: CurSearchInputInit,
     usersSelectCategs: UsersSelectCategInit,
     usersLists: UsersListInit,
     curMemberManageCateg: MemberManageCategoryInit,
     curUserListSelect: UserListSelectInit,
     curUserData: CurUseDataInit,
+
+    // drawer
+    drawerCurCenterId: undefined,
+    drawerIsLoading: 'idle',
+    drawerCurSearchInput: CurSearchInputInit,
+    drawerUsersSelectCategs: UsersSelectCategInit,
+    drawerUsersLists: UsersListInit,
+    drawerCurMemberManageCateg: MemberManageCategoryInit,
+    drawerCurUserListSelect: UserListSelectInit,
+    drawerCurUserData: CurUseDataInit,
+}
+export const MainDashboardInitialState = {
+    // main
+    curCenterId: undefined,
+    userDetailTag: UserDetailTagInit,
+    isLoading: 'idle',
+    isUserDetailLoading: 'idle',
+    error: '',
+    // main
+    curSearchInput: CurSearchInputInit,
+    usersSelectCategs: UsersSelectCategInit,
+    usersLists: UsersListInit,
+    curMemberManageCateg: MemberManageCategoryInit,
+    curUserListSelect: UserListSelectInit,
+    curUserData: CurUseDataInit,
+}
+export const DrawerDashboardInitialState = {
+    // drawer
+    drawerCurCenterId: undefined,
+    drawerIsLoading: 'idle',
+    drawerCurSearchInput: CurSearchInputInit,
+    drawerUsersSelectCategs: UsersSelectCategInit,
+    drawerUsersLists: UsersListInit,
+    drawerCurMemberManageCateg: MemberManageCategoryInit,
+    drawerCurUserListSelect: UserListSelectInit,
+    drawerCurUserData: CurUseDataInit,
 }
 
 export const dashboardReducer = createImmerReducer(
@@ -151,7 +204,7 @@ export const dashboardReducer = createImmerReducer(
             payments: [],
             contracts: [],
         }
-        state.isUserDeatilLoading = 'pending'
+        state.isUserDetailLoading = 'pending'
         return state
     }),
     on(DashboardActions.finishGetUserData, (state, { memberships, lockers, payments, reservations, contracts }) => {
@@ -163,7 +216,7 @@ export const dashboardReducer = createImmerReducer(
             memberships,
             contracts,
         }
-        state.isUserDeatilLoading = 'done'
+        state.isUserDetailLoading = 'done'
         return state
     }),
     on(DashboardActions.finishRefreshCenterUser, (state, { categ_type, refreshCenterUser, isUserInCurCateg }) => {
@@ -309,12 +362,124 @@ export const dashboardReducer = createImmerReducer(
         state = initialState // { ...state, ...initialState }
         return state
     }),
+    on(DashboardActions.resetMainDashboardSstate, (state) => {
+        state = { ...state, ...MainDashboardInitialState } as State
+        return state
+    }),
+    on(DashboardActions.resetDrawerDashboardSstate, (state) => {
+        state = { ...state, ...DrawerDashboardInitialState } as State
+        return state
+    }),
     // synchronize dashboard data
     // // by locker
     on(DashboardActions.finishSynchronizeUserLocker, (state, { success, lockers }) => {
         if (success) {
             state.curUserData.lockers = lockers
         }
+        return state
+    }),
+    // // drawer
+    // async
+    on(DashboardActions.finishGetDrawerUsersByCategory, (state, { userSelectCateg }) => {
+        state.drawerUsersSelectCategs = _.assign(state.drawerUsersSelectCategs, userSelectCateg)
+        state.drawerCurUserListSelect = {
+            key: state.drawerCurUserListSelect.key,
+            value: {
+                name: state.drawerUsersSelectCategs[state.drawerCurUserListSelect.key].name,
+                userSize: state.drawerUsersSelectCategs[state.drawerCurUserListSelect.key].userSize,
+            },
+        }
+        return state
+    }),
+    on(DashboardActions.startGetDrawerUserList, (state, { categ_type }) => {
+        state.drawerCurUserListSelect = { key: categ_type, value: state.drawerUsersSelectCategs[categ_type] }
+        state.drawerIsLoading = 'pending'
+        return state
+    }),
+    on(DashboardActions.finishGetDrawerUserList, (state, { categ_type, userListValue }) => {
+        state.drawerUsersLists[categ_type] = userListValue
+        state.drawerIsLoading = 'done'
+        return state
+    }),
+    on(DashboardActions.finishDirectDrawerRegisterMember, (state, { createdUser }) => {
+        state.drawerUsersLists.member.unshift({ user: createdUser, holdSelected: false })
+        state.drawerUsersSelectCategs.member.userSize++
+        return state
+    }),
+    on(DashboardActions.finishRemoveDrawerCurUserProfile, (state, { userId, profileUrl }) => {
+        state.drawerCurUserData.user.center_user_picture = profileUrl
+
+        const userListsKeys = _.keys(state.drawerUsersLists) as MemberSelectCateg[]
+        userListsKeys.forEach((key) => {
+            state.drawerUsersLists[key].find((v, i) => {
+                if (v.user.id == userId) {
+                    state.drawerUsersLists[key][i].user.center_user_picture = profileUrl
+                    return true
+                }
+                return false
+            })
+        })
+        return state
+    }),
+    on(DashboardActions.finishRegisterDrawerCurUserProfile, (state, { userId, profileUrl }) => {
+        state.drawerCurUserData.user.center_user_picture = profileUrl
+
+        const userListsKeys = _.keys(state.drawerUsersLists) as MemberSelectCateg[]
+        userListsKeys.forEach((key) => {
+            state.drawerUsersLists[key].find((v, i) => {
+                if (v.user.id == userId) {
+                    state.drawerUsersLists[key][i].user.center_user_picture = profileUrl
+                    return true
+                }
+                return false
+            })
+        })
+        return state
+    }),
+    on(DashboardActions.startSetDrawerCurUserData, (state, { userId, reqBody }) => {
+        state.drawerCurUserData.user = _.assign(state.drawerCurUserData.user, reqBody)
+
+        const userListsKeys = _.keys(state.drawerUsersLists) as MemberSelectCateg[]
+        userListsKeys.forEach((key) => {
+            state.drawerUsersLists[key].find((v, i) => {
+                if (v.user.id == userId) {
+                    state.drawerUsersLists[key][i].user = _.assign(state.drawerUsersLists[key][i].user, reqBody)
+                    return true
+                }
+                return false
+            })
+        })
+
+        return state
+    }),
+    // sync
+    on(DashboardActions.setDrawerUsersListsHoldSelected, (state, { memberSelectCateg, index, holdFlag }) => {
+        state.drawerUsersLists[memberSelectCateg][index].holdSelected = holdFlag
+        return state
+    }),
+    on(DashboardActions.setDrawerAllUserListHold, (state, { memberSelectCateg, holdFlag }) => {
+        state.drawerUsersLists[memberSelectCateg].forEach((v) => {
+            v.holdSelected = holdFlag
+        })
+        return state
+    }),
+    on(DashboardActions.resetDrawerUsersListsHoldSelected, (state, { memberSelectCateg }) => {
+        const usersLists = state.drawerUsersLists
+        usersLists[memberSelectCateg].forEach((item, index) => {
+            state.drawerUsersLists[memberSelectCateg][index].holdSelected = false
+        })
+        return state
+    }),
+    on(DashboardActions.setDrawerCurUser, (state, { centerUser }) => {
+        state.drawerCurUserData.user = _.assign(state.drawerCurUserData.user, centerUser)
+        return state
+    }),
+    on(DashboardActions.setDrawerUserSearchInput, (state, { searchInput }) => {
+        state.drawerCurSearchInput = searchInput
+        return state
+    }),
+    on(DashboardActions.setDrawerCurCenterId, (state, { centerId }) => {
+        state.drawerCurCenterId = centerId
         return state
     })
 )
@@ -325,7 +490,7 @@ export const selectIsLoading = (state: State) => state.isLoading
 export const selectError = (state: State) => state.error
 export const selectSearchInput = (state: State) => state.curSearchInput
 export const selectUserDetailTag = (state: State) => state.userDetailTag
-export const selectIsUserDeatilLoading = (state: State) => state.isUserDeatilLoading
+export const selectIsUserDetailLoading = (state: State) => state.isUserDetailLoading
 
 // main
 export const selectUsersSelectCategs = (state: State) => state.usersSelectCategs
@@ -357,6 +522,45 @@ export const selectEmployeeRoleObj = (state: State) => {
     return state.usersLists[state.curUserListSelect.key].length > 0
         ? _.reduce(
               state.usersLists[state.curUserListSelect.key],
+              (acc, val) => {
+                  if (_.isEmpty(acc[val.user.role_code])) {
+                      acc[val.user.role_code] = [val]
+                  } else {
+                      acc[val.user.role_code].push(val)
+                  }
+                  return acc
+              },
+              {}
+          )
+        : undefined
+}
+
+// drawer
+export const selectDrawerCurCenterId = (state: State) => state.drawerCurCenterId
+export const selectDrawerSearchInput = (state: State) => state.drawerCurSearchInput
+export const selectDrawerIsLoading = (state: State) => state.drawerIsLoading
+export const selectDrawerUsersSelectCategs = (state: State) => state.drawerUsersSelectCategs
+export const selectDrawerUsersLists = (state: State) => state.drawerUsersLists
+export const selectDrawerCurMemberManageCateg = (state: State) => state.drawerCurMemberManageCateg
+export const selectDrawerCurUserListSelect = (state: State) => state.drawerCurUserListSelect
+export const selectDrawerCurUserData = (state: State) => state.drawerCurUserData
+export const selectedDrawerUserListsHolding = (state: State) =>
+    state.drawerUsersLists[state.drawerCurUserListSelect.key].filter((v) => v.holdSelected).length
+export const selectDrawerSearchedUsersLists = (state: State) => {
+    const searchUserList: UsersLists = _.cloneDeep(UsersListInit)
+    const searchInput = state.drawerCurSearchInput
+    const usersLists = state.drawerUsersLists
+    _.forEach(_.keys(usersLists), (typeKey) => {
+        searchUserList[typeKey] = _.filter(usersLists[typeKey], (item) => {
+            return item.user.center_user_name.includes(searchInput) || item.user.phone_number.includes(searchInput)
+        })
+    })
+    return searchUserList
+}
+export const selectDrawerEmployeeRoleObj = (state: State) => {
+    return state.drawerUsersLists[state.drawerCurUserListSelect.key].length > 0
+        ? _.reduce(
+              state.drawerUsersLists[state.drawerCurUserListSelect.key],
               (acc, val) => {
                   if (_.isEmpty(acc[val.user.role_code])) {
                       acc[val.user.role_code] = [val]

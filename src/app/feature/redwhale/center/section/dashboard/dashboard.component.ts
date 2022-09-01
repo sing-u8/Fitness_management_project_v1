@@ -187,7 +187,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
             console.log('DashboardSelector.curCenterId : ', curCenterId != this.center.id, curCenterId, this.center.id)
             if (curCenterId != this.center.id) {
                 // this.lockerSerState.resetLockerItemList()
-                this.nxStore.dispatch(DashboardActions.resetAll())
+                this.nxStore.dispatch(DashboardActions.resetMainDashboardSstate())
                 this.nxStore.dispatch(
                     DashboardActions.startLoadMemberList({
                         centerId: this.center.id,
@@ -201,7 +201,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
             }
         })
         this.nxStore.dispatch(DashboardActions.startGetUsersByCategory({ centerId: this.center.id }))
-
         this.nxStore.dispatch(DashboardActions.setCurCenterId({ centerId: this.center.id }))
     }
     ngAfterViewInit(): void {}

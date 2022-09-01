@@ -49,5 +49,248 @@
                 font-weight: 700 !important;
             }
         }
+
+        .l-member-detail {
+            height: 100%;
+            .member-detail {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+
+                .info-avatar {
+                    width: calc(100% - 30px);
+                    display: flex;
+                    position: relative;
+                    flex-direction: column;
+                    align-items: center;
+                    margin-top: 27px;
+                    margin-bottom: 21px;
+                    .avatar-wrapper {
+                        border-radius: 50%;
+                        // overflow: hidden;
+                        position: relative;
+                        cursor: pointer;
+
+                        &:hover {
+                            .l-photo-icon {
+                                display: flex;
+                            }
+                        }
+
+                        .l-photo-icon {
+                            display:  none;
+                            flex-direction: column;
+                            position: absolute;
+                            width: 83px;
+                            height: 83px;
+                            top: 0;
+                            border-radius: 50%;
+                            // overflow: hidden;
+                            justify-content: center;
+                            align-items: center;
+                            background-color: rgba(96, 96, 96, .6);
+
+                            .photo-icon {
+                                background-image: url('/assets/icons/etc/camera_white.svg');
+                                background-size: contain;
+                                background-repeat: no-repeat;
+                                width: 24px;
+                                height: 22px;
+                            }
+                            .photo-text {
+                                font-weight: 500;
+                                font-size: 11px;
+                                line-height: 16px;
+                                letter-spacing: -0.121px;
+                                color: var(--white);
+                            }
+
+                            .l-remove-icon {
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                border: 1px solid #C9C9C9;
+                                box-sizing: border-box;
+                                width: 21px;
+                                height: 21px;
+                                border-radius: 50%;
+                                position: absolute;
+                                background-color: white;
+                                left: 0;
+                                top: 0;
+
+                                .remove-icon {
+                                    background-image: url('/assets/icons/etc/trash_darkgrey.svg');
+                                    background-size: contain;
+                                    background-repeat: no-repeat;
+                                    width: 14px;
+                                    height: 14px;
+                                    z-index: 5;
+                                }
+                            }
+                        }
+
+                    }
+
+                    & .user-name {
+                        margin-top: 12px;
+                        cursor: pointer;
+                        position: relative;
+                        &:hover {
+                            img {
+                                display: initial;
+                            }
+                        }
+                        img {
+                            position: absolute;
+                            right: -22px;
+                            top: 3px;
+                            width: 21px;
+                            height: 21px;
+                            display: none;
+                        }
+                    }
+                    rw-member-role-select {
+                        position: absolute;
+                        right: 0;
+                    }
+                }
+
+            }
+            .chat-attend {
+                display: flex;
+                align-items: center;
+                // justify-content: center;
+                width: calc(100% - 30px);
+                padding: 4px 0px;
+                border-top: 1px solid var(--border-color);
+                border-bottom: 1px solid var(--border-color);
+
+                .chat-button,
+                .attend-button {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: calc(50% - 5px);
+                    height: 35px;
+                    background-color: var(--background-color);
+                    border-radius: 4px;
+                    padding: 10px 5px;
+                    img {
+                        width: 21px;
+                        height: 21px;
+                        margin-right: 3px;
+                    }
+                    &:hover {
+                        background-color: var(--background-color) !important;
+                        opacity: 1 !important;
+                    }
+                }
+                .divider {
+                    width: 1px;
+                    height: 20px;
+                    border-right: 1px solid var(--border-color);
+                    margin: 0 4.5px;
+                }
+            }
+            .user-info {
+                display: flex;
+                flex-direction: column;
+                width: calc(100% - 30px);
+                position: relative;
+                margin: 23px 0;
+                .user-data {
+                    display: flex;
+                    align-items: center;
+                    margin-bottom: 18px;
+                    text-align: left;
+                    .prop {
+                        width: 83px;
+                        color: var(--grey);
+                    }
+
+                    &:nth-child(4) {
+                        margin-bottom: 23px !important;
+                    }
+                }
+
+                textarea {
+                    resize: none;
+                    width: 100%;
+                    height: 294px;
+                    max-height: 350px;
+                    // min-height: 100px;
+                    // max-height: 178px;
+                    padding: 15px 15px;
+                    outline: none;
+                    border-radius: 5px;
+                    border: 1px solid var(--border-color);
+                    font-weight: 500;
+                    margin-bottom: 20px;
+                    &:focus {
+                        border: 1px solid var(--grey);
+                        color: var(--font-color);
+                    }
+                    &::placeholder {
+                        font-weight: 400;
+                        color: var(--grey);
+                    }
+                }
+
+                .register-locker-membership-button {
+                    padding: 10px;
+                    width: 100%;
+                    height: 45px;
+                    border: 1px solid var(--red);
+                    background-color: var(--white);
+                    color: var(--red);
+
+                    &:hover {
+                        opacity: 1;
+                        color: var(--white);
+                        background-color: var(--red);
+                    }
+                }
+            }
+            .l-user-detail-button {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                .go-back-button {
+                    padding: 0 !important;
+                    width: 77px;
+                    height: 45px;
+                    border: 1px solid var(--border-color);
+                    background-color: var(--white);
+                    color: var(--grey);
+                    display: flex;
+                    align-items: center;
+                    //justify-content: center;
+                    .back-icon {
+                        background-image: url("/assets/icons/etc/short_left_arrow_grey.svg");
+                        background-size: contain;
+                        background-repeat: no-repeat;
+                        width: 22px;
+                        height: 22px;
+                        margin-right: 2px;
+                    }
+                }
+                .register-locker-membership-button {
+                    padding: 10px;
+                    width: 207px;
+                    height: 45px;
+                    border: 1px solid var(--red);
+                    background-color: var(--white);
+                    color: var(--red);
+
+                    &:hover {
+                        //opacity: 1;
+                        color: var(--white);
+                        background-color: var(--red);
+                    }
+                }
+            }
+        }
+
     }
 }

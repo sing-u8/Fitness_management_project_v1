@@ -187,6 +187,8 @@ export const resetCurCenterId = createAction(`[${FeatureKey}] Reset Current Cent
 // common
 export const setUserDetailTag = createAction(`[${FeatureKey}] Set User Detail Tag`, props<{ tag: UserDetailTag }>())
 export const resetAll = createAction(`[${FeatureKey}] Reset Dashboard All State`)
+export const resetMainDashboardSstate = createAction(`[${FeatureKey}] Reset Main Dashboard All State`)
+export const resetDrawerDashboardSstate = createAction(`[${FeatureKey}] Reset Drawer Dashboard All State`)
 export const error = createAction(`[${FeatureKey}] Dashboard State Error`, props<{ error: string }>())
 
 // synchronize dashboard data
@@ -198,4 +200,92 @@ export const startSynchronizeUserLocker = createAction(
 export const finishSynchronizeUserLocker = createAction(
     '[${FeatureKey}] Finish Synchronize User Data - Locker',
     props<{ success: boolean; lockers?: Array<UserLocker>; payments?: Payment[]; contracts?: Contract[] }>()
+)
+
+// // drawer
+// async
+export const startGetDrawerUsersByCategory = createAction(
+    `[${FeatureKey}] Start Get Drawer Users By Category`,
+    props<{ centerId: string }>()
+)
+export const finishGetDrawerUsersByCategory = createAction(
+    `[${FeatureKey}] Finish Get Drawer Users By Category`,
+    props<{ userSelectCateg: UsersSelectCateg }>()
+)
+
+export const startGetDrawerUserList = createAction(
+    `[${FeatureKey}] Start Get Drawer User List By Type`,
+    props<{ centerId: string; categ_type: MemberSelectCateg }>()
+)
+export const finishGetDrawerUserList = createAction(
+    `[${FeatureKey}] Finish Get Drawer User List By Type`,
+    props<{ centerId: string; categ_type: MemberSelectCateg; userListValue: UsersListValue }>()
+)
+
+export const startDirectDrawerRegisterMember = createAction(
+    `[${FeatureKey}] Start Direct Drawer Register Member`,
+    props<{ centerId: string; reqBody: CreateUserRequestBody; imageFile: ImageFile; callback?: () => void }>()
+)
+export const finishDirectDrawerRegisterMember = createAction(
+    `[${FeatureKey}] Finish Direct Drawer Register Member`,
+    props<{ createdUser: CenterUser }>()
+)
+
+export const startRemoveDrawerCurUserProfile = createAction(
+    `[${FeatureKey}] Start Remove Drawer Current User Profile`,
+    props<{ centerId: string; userId: string; profileUrl: string; callback?: () => void }>()
+)
+export const finishRemoveDrawerCurUserProfile = createAction(
+    `[${FeatureKey}] Finish Remove Drawer Current User Profile`,
+    props<{ userId: string; profileUrl: string }>()
+)
+
+export const startRegisterDrawerCurUserProfile = createAction(
+    `[${FeatureKey}] Start Register Drawer Current User Profile`,
+    props<{ userId: string; profile: FileList; reqBody: CreateFileRequestBody; callback?: () => void }>()
+)
+export const finishRegisterDrawerCurUserProfile = createAction(
+    `[${FeatureKey}] Finish Register Drawer Current User Profile`,
+    props<{ userId: string; profileUrl: string }>()
+)
+
+export const startDrawerCenterHolding = createAction(
+    `[${FeatureKey}] Start Drawer Center Hold`,
+    props<{ centerId: string; reqBody: Omit<CenterHoldingReqBody, 'user_ids'>; cb?: () => void }>()
+)
+
+export const startSetDrawerCurUserData = createAction(
+    `[${FeatureKey}] Start Set Drawer Current User Data`,
+    props<{ centerId: string; userId: string; reqBody: UpdateUserRequestBody; callback?: () => void }>()
+)
+// sync
+// userLists
+export const setDrawerCurCenterId = createAction(
+    `[${FeatureKey}] Set Drawer Current Center Id`,
+    props<{ centerId: string }>()
+)
+
+export const setDrawerUsersListsHoldSelected = createAction(
+    `[${FeatureKey}] Set Drawer UsersLists HoldSelected`,
+    props<{ memberSelectCateg: MemberSelectCateg; index: number; holdFlag: boolean }>()
+)
+
+export const setDrawerAllUserListHold = createAction(
+    `[${FeatureKey}] Set Drawer All UsersLists Hold`,
+    props<{ memberSelectCateg: MemberSelectCateg; holdFlag: boolean }>()
+)
+export const resetDrawerUsersListsHoldSelected = createAction(
+    `[${FeatureKey}] Reset Drawer UsersLists HoldSelected`,
+    props<{ memberSelectCateg: MemberSelectCateg }>()
+)
+// curUser
+export const setDrawerCurUser = createAction(
+    `[${FeatureKey}] Set Drawer Current User Data`,
+    props<{ centerUser: CenterUser }>()
+)
+
+// search user input
+export const setDrawerUserSearchInput = createAction(
+    `[${FeatureKey}] Set Drawer User Search Input`,
+    props<{ searchInput: string }>()
 )

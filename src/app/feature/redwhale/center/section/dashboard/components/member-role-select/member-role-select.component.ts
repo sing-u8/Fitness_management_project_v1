@@ -17,6 +17,8 @@ export class MemberRoleSelectComponent implements OnInit, OnChanges {
     @Input() userRole: Record<Role, boolean>
     @Input() employeeRole: Role
 
+    @Input() mode: 'main' | 'drawer' = 'main'
+
     @Output() onClose = new EventEmitter()
     @Output() onSetUserRole = new EventEmitter<Role>()
     @Output() onToggleSelect = new EventEmitter()
