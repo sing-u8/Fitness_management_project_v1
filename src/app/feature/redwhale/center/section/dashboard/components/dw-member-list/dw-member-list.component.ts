@@ -70,6 +70,14 @@ export class DwMemberListComponent implements OnInit, OnDestroy {
                     this.closePartialHoldModal()
                     this.toggleHodlingMode()
                     event.loadingFns.hideLoading()
+                    if (!_.isEmpty(this.dbCurCenterId) && !_.isEmpty(this.dbCurUserData.user)) {
+                        this.nxStore.dispatch(
+                            DashboardActions.startGetUserData({
+                                centerId: this.center.id,
+                                centerUser: this.dbCurUserData.user,
+                            })
+                        )
+                    }
                 },
             })
         )
@@ -102,6 +110,11 @@ export class DwMemberListComponent implements OnInit, OnDestroy {
     }
     public unsubscribe$ = new Subject<void>()
 
+    public dbCurCenterId$ = this.nxStore.select(DashboardSelector.curCenterId)
+    public dbCurCenterId = undefined
+    public dbCurUserData$ = this.nxStore.select(DashboardSelector.curUserData)
+    public dbCurUserData = FromDashboard.CurUseDataInit
+
     constructor(
         private nxStore: Store,
         private router: Router,
@@ -117,6 +130,13 @@ export class DwMemberListComponent implements OnInit, OnDestroy {
             })
         this.userSearchInput = this.fb.control(this.userSearchInput$_, {
             asyncValidators: [this.searchMemberValidator()],
+        })
+
+        this.dbCurCenterId$.pipe(takeUntil(this.unsubscribe$)).subscribe((dbCurCenterId) => {
+            this.dbCurCenterId = dbCurCenterId
+        })
+        this.dbCurUserData$.pipe(takeUntil(this.unsubscribe$)).subscribe((dbCurUserData) => {
+            this.dbCurUserData = dbCurUserData
         })
     }
 

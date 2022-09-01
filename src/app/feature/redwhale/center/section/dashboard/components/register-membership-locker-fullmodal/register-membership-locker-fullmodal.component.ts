@@ -137,10 +137,10 @@ export class RegisterMembershipLockerFullmodalComponent implements OnInit, OnCha
         // this.cmpStore.getInstructorsEffect(this.center.id)
         // this.cmpStore.getmembershipItemsEffect(this.center.id)
 
-        this.dbCurCenterId$.subscribe((dbCurCenterId) => {
+        this.dbCurCenterId$.pipe(takeUntil(this.unSubscribe$)).subscribe((dbCurCenterId) => {
             this.dbCurCenterId = dbCurCenterId
         })
-        this.dwCurCenterId$.subscribe((dwCurCenterId) => {
+        this.dwCurCenterId$.pipe(takeUntil(this.unSubscribe$)).subscribe((dwCurCenterId) => {
             this.dwCurCenterId = dwCurCenterId
         })
     }
