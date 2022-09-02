@@ -5,6 +5,7 @@ import { of, forkJoin, EMPTY, from } from 'rxjs'
 import { catchError, switchMap, tap, map, find } from 'rxjs/operators'
 
 import _ from 'lodash'
+import dayjs from 'dayjs'
 
 import * as DashboardActions from '../actions/sec.dashboard.actions'
 import * as DashboardReducer from '../reducers/sec.dashboard.reducer'
@@ -351,7 +352,17 @@ export class DashboardEffect {
                         .pipe(
                             switchMap((profile) => {
                                 cb ? cb() : null
-                                return [DashboardActions.startGetUserData({ centerId, centerUser: curUserData.user })]
+                                let toastText =
+                                    `${user_ids.length}명의 회원권` +
+                                    (reqBody.user_locker_included ? '/ 락커' : '') +
+                                    ' 홀딩이 '
+                                toastText =
+                                    toastText +
+                                    (dayjs().isBefore(reqBody.start_date) ? '예약되었습니다.' : '완료되었습니다.')
+                                return [
+                                    DashboardActions.startGetUserData({ centerId, centerUser: curUserData.user }),
+                                    showToast({ text: toastText }),
+                                ]
                             })
                         )
                 }),
@@ -479,32 +490,36 @@ export class DashboardEffect {
         )
     )
 
-    public drawerCenterHolding$ = createEffect(
-        () =>
-            this.actions$.pipe(
-                ofType(DashboardActions.startDrawerCenterHolding),
-                concatLatestFrom(() => [
-                    this.store.select(DashboardSelector.drawerUsersLists),
-                    this.store.select(DashboardSelector.drawerCurUserListSelect),
-                ]),
-                switchMap(([{ centerId, cb, reqBody }, userLists, curUserListSelect]) => {
-                    const user_ids = userLists[curUserListSelect.key]
-                        .filter((v) => v.holdSelected)
-                        .map((v) => v.user.id)
-                    return this.centerHoldingApi
-                        .centerHolding(centerId, {
-                            ...reqBody,
-                            user_ids,
+    public drawerCenterHolding$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(DashboardActions.startDrawerCenterHolding),
+            concatLatestFrom(() => [
+                this.store.select(DashboardSelector.drawerUsersLists),
+                this.store.select(DashboardSelector.drawerCurUserListSelect),
+            ]),
+            switchMap(([{ centerId, cb, reqBody }, userLists, curUserListSelect]) => {
+                const user_ids = userLists[curUserListSelect.key].filter((v) => v.holdSelected).map((v) => v.user.id)
+                return this.centerHoldingApi
+                    .centerHolding(centerId, {
+                        ...reqBody,
+                        user_ids,
+                    })
+                    .pipe(
+                        switchMap(() => {
+                            cb ? cb() : null
+                            let toastText =
+                                `${user_ids.length}명의 회원권` +
+                                (reqBody.user_locker_included ? '/ 락커' : '') +
+                                ' 홀딩이 '
+                            toastText =
+                                toastText +
+                                (dayjs().isBefore(reqBody.start_date) ? '예약되었습니다.' : '완료되었습니다.')
+                            return [showToast({ text: toastText })]
                         })
-                        .pipe(
-                            tap(() => {
-                                cb ? cb() : null
-                            })
-                        )
-                }),
-                catchError((err: string) => of(DashboardActions.error({ error: err })))
-            ),
-        { dispatch: false }
+                    )
+            }),
+            catchError((err: string) => of(DashboardActions.error({ error: err })))
+        )
     )
 
     public setDrawerCurUserMemo = createEffect(
