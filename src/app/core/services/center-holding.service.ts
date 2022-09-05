@@ -6,11 +6,6 @@ import { catchError, map } from 'rxjs/operators'
 import handleError from './handleError'
 import { environment } from '@environments/environment'
 import { Response } from '@schemas/response'
-import { UserMembership } from '@schemas/user-membership'
-import { ClassItem } from '@schemas/class-item'
-import { Payment } from '@schemas/payment'
-import { UserMembershipHistory } from '@schemas/user-membership-history'
-import { Holding } from '@schemas/holding'
 
 @Injectable({
     providedIn: 'root',

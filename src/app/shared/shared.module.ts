@@ -31,6 +31,7 @@ import { RolemodalComponent } from './components/common/rolemodal/rolemodal.comp
 import { CenterRolemodalComponent } from './components/common/center-rolemodal/center-rolemodal.component'
 import { SignaturePadModalComponent } from './components/common/signature-pad-modal/signature-pad-modal.component'
 import { SettingTermsModalComponent } from './components/common/setting-terms-modal/setting-terms-modal.component'
+import { AttendanceToastComponent } from './components/common/attendance-toast/attendance-toast.component'
 
 // -drawer- //
 import { LessonFlipListComponent } from './components/redwhale/drawer/lesson-flip-list/lesson-flip-list.component'
@@ -145,6 +146,7 @@ FullCalendarModule.registerPlugins([
         CenterRolemodalComponent,
         SignaturePadModalComponent,
         SettingTermsModalComponent,
+        AttendanceToastComponent,
         // -- //drawer
         DrawerLessonCardComponent,
         SchDayRepeatSelectComponent,
@@ -232,6 +234,7 @@ FullCalendarModule.registerPlugins([
         CenterRolemodalComponent,
         SignaturePadModalComponent,
         SettingTermsModalComponent,
+        AttendanceToastComponent,
         // -- //drawer
         DrawerLessonCardComponent,
         SchDayRepeatSelectComponent,

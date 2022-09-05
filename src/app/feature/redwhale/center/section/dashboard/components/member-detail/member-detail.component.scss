@@ -271,8 +271,8 @@ section.member-detail__body {
                 border-top: 1px solid var(--border-color);
                 display: flex;
                 align-items: center;
-                // justify-content: space-between;
-                justify-content: flex-start;
+                justify-content: space-between;
+                position: relative;
 
                 .vertical-divider {
                     height: 20px;
@@ -284,6 +284,7 @@ section.member-detail__body {
                 .info-button {
                     display: flex;
                     align-items: center;
+                    width: calc( calc(100% - 22px) / 3) !important;
 
                     &.disabled {
                         opacity: 0.5;

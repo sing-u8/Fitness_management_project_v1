@@ -13,17 +13,8 @@ import { CenterUsersCategory } from '@schemas/center/community/center-users-by-c
 import { Contract } from '@schemas/contract'
 
 import * as DashboardActions from '../actions/sec.dashboard.actions'
-import {
-    finishRegisterDrawerCurUserProfile,
-    finishRemoveDrawerCurUserProfile,
-    finishSynchronizeUserLocker,
-    refreshDrawerCurUser,
-    setDrawerCurCenterId,
-    setDrawerCurUser,
-    setDrawerUserSearchInput,
-} from '../actions/sec.dashboard.actions'
 
-export type MemberSelectCateg = 'member' | 'valid' | 'unpaid' | 'imminent' | 'expired' | 'employee' //  | 'attendance'
+export type MemberSelectCateg = 'member' | 'valid' | 'unpaid' | 'imminent' | 'expired' | 'employee' | 'attendance'
 export type MemberManageCategory = 'membershipLocker' | 'reservation' | 'payment'
 export type UserListValueItem = { user: CenterUser; holdSelected: boolean }
 export type UsersListValue = Array<UserListValueItem>
@@ -31,7 +22,6 @@ export type UsersListValue = Array<UserListValueItem>
 export type UsersSelectCateg = Record<MemberSelectCateg, { name: string; userSize: number }>
 export type UserListSelect = { key: MemberSelectCateg; value: { name: string; userSize: number } }
 export type UsersLists = Record<MemberSelectCateg, UsersListValue>
-// export type ManagersLists = Record<any, Array<{ user: CenterUser; holdSelected: boolean }>>
 export type CurUseData = {
     user: CenterUser
     lockers: UserLocker[]
@@ -47,7 +37,7 @@ export const UserDetailTagInit: UserDetailTag = 'membership'
 export const MemberManageCategoryInit = 'membershipLocker'
 export const UsersSelectCategInit: UsersSelectCateg = {
     member: { name: '전체 회원', userSize: 0 },
-    // attendance: { name: '오늘 출석한 회원', userSize: 0 },
+    attendance: { name: '오늘 출석한 회원', userSize: 0 },
     valid: { name: '유효한 회원', userSize: 0 },
     unpaid: { name: '미수금이 있는 회원', userSize: 0 },
     imminent: { name: '만료 예정인 회원', userSize: 0 },
@@ -60,7 +50,7 @@ export const UserListSelectInit: UserListSelect = {
 }
 export const UsersListInit: UsersLists = {
     member: [],
-    // attendance: [],
+    attendance: [],
     valid: [],
     unpaid: [],
     imminent: [],
@@ -396,6 +386,51 @@ export const dashboardReducer = createImmerReducer(
         }
         return state
     }),
+    // // by check in
+    on(DashboardActions.synchronizeCheckIn, (state, { centerUser, centerId }) => {
+        let curCategCenterUser: CenterUser = undefined
+        if (!_.isEmpty(state.curCenterId) && centerId == state.curCenterId) {
+            curCategCenterUser = state.usersLists[state.curUserListSelect.key].find((v, i) => {
+                if (v.user.id == centerUser.id) {
+                    state.usersLists[state.curUserListSelect.key][i].user = centerUser
+                    return true
+                }
+                return false
+            })?.user
+            if (_.isEmpty(curCategCenterUser) && state.curUserListSelect.key == 'attendance') {
+                state.usersLists[state.curUserListSelect.key].unshift({
+                    user: centerUser,
+                    holdSelected: false,
+                })
+            }
+            if (_.isEmpty(state.curUserData.user) && state.curUserData.user.id == centerUser.id) {
+                state.curUserData.user = centerUser
+            }
+        }
+        return state
+    }),
+    on(DashboardActions.synchronizeCheckInDrawer, (state, { centerUser, centerId }) => {
+        let curCategCenterUser: CenterUser = undefined
+        if (!_.isEmpty(state.drawerCurCenterId) && centerId == state.drawerCurCenterId) {
+            curCategCenterUser = state.drawerUsersLists[state.drawerCurUserListSelect.key].find((v, i) => {
+                if (v.user.id == centerUser.id) {
+                    state.drawerUsersLists[state.drawerCurUserListSelect.key][i].user = centerUser
+                    return true
+                }
+                return false
+            })?.user
+            if (_.isEmpty(curCategCenterUser) && state.drawerCurUserListSelect.key == 'attendance') {
+                state.drawerUsersLists[state.drawerCurUserListSelect.key].unshift({
+                    user: centerUser,
+                    holdSelected: false,
+                })
+            }
+            if (_.isEmpty(state.drawerCurUserData.user) && state.drawerCurUserData.user.id == centerUser.id) {
+                state.drawerCurUserData.user = centerUser
+            }
+        }
+        return state
+    }),
     // // drawer
     // async
     on(DashboardActions.finishGetDrawerUsersByCategory, (state, { userSelectCateg }) => {
@@ -621,6 +656,8 @@ export const matchUsersCategoryTo = (categType: CenterUsersCategory): MemberSele
             return 'expired'
         case 'employee':
             return 'employee'
+        case 'check_in':
+            return 'attendance'
     }
 }
 export const matchMemberSelectCategTo = (categType: MemberSelectCateg): CenterUsersCategory => {
@@ -637,5 +674,7 @@ export const matchMemberSelectCategTo = (categType: MemberSelectCateg): CenterUs
             return 'expired'
         case 'employee':
             return 'employee'
+        case 'attendance':
+            return 'check_in'
     }
 }

@@ -1,0 +1,37 @@
+<div class="rw-attendance align-items-center memberr-select-none" #attendanceElement>
+
+	<div class="avatar-container">
+		<rw-avatar
+			*ngIf="member"
+			[image]="member?.center_user_picture"
+			[text]="member?.center_user_name"
+			[backgroundColor]="member?.color"
+			size="50"
+			fontSize="12"
+		></rw-avatar>
+	</div>
+
+	<div class="content">
+		<div class="rw-typo-title2 top">
+			{{member?.center_user_name}}님({{member?.center_membership_number}})이 출석하셨어요! 👋
+		</div>
+		<div class="bottom rw-typo-subtext0">
+
+			<div *ngIf="true" class="alert-text">
+				<img src="assets/icons/etc/unpaid_amount_lightgrey.svg" alt="unpaid_amount.svg">
+				<span class="rw-typo-subtext0">{{7}}일 후 만료</span>
+			</div>
+			<div *ngIf="true" class="alert-text">
+				<img src="assets/icons/etc/exceed_period_lightgrey.svg" alt="exceed_period.svg">
+				<span class="rw-typo-subtext0">{{5000 | numberWithCommas}}</span>
+			</div>
+
+
+		</div>
+	</div>
+
+	<div class="close" (click) ="onCancel()">
+		<img src="assets/icons/etc/close_white.svg">
+	</div>
+
+</div>

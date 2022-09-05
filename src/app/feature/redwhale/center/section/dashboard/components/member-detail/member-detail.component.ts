@@ -11,6 +11,7 @@ import { CenterService } from '@services/center.service'
 import { TimeService } from '@services/helper/time.service'
 import { DashboardHelperService } from '@services/center/dashboard-helper.service'
 import { FileService } from '@services/file.service'
+import { CenterUsersCheckInService } from '@services/center-users-check-in.service'
 
 import { Center } from '@schemas/center'
 import { Loading } from '@schemas/componentStore/loading'
@@ -50,6 +51,11 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
         this.nxStore.dispatch(DashboardActions.setUserDetailTag({ tag }))
     }
 
+    public dbCurCenterId$ = this.nxStore.select(DashboardSelector.curCenterId)
+    public dwCurCenterId$ = this.nxStore.select(DashboardSelector.drawerCurCenterId)
+    public dbCurCenterId = undefined
+    public dwCurCenterId = undefined
+
     constructor(
         private fb: FormBuilder,
         private storageService: StorageService,
@@ -61,7 +67,8 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
         private activatedRoute: ActivatedRoute,
         private timeService: TimeService,
         private dashboardHelperService: DashboardHelperService,
-        private fileService: FileService
+        private fileService: FileService,
+        private centerUsersCheckInService: CenterUsersCheckInService
     ) {
         this.center = this.storageService.getCenter()
         this.user = this.storageService.getUser()
@@ -80,6 +87,13 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
                     this.spinner.hide('ud_loading')
                 }
             })
+
+        this.dbCurCenterId$.pipe(takeUntil(this.unSubscriber$)).subscribe((dbCurCenterId) => {
+            this.dbCurCenterId = dbCurCenterId
+        })
+        this.dwCurCenterId$.pipe(takeUntil(this.unSubscriber$)).subscribe((dwCurCenterId) => {
+            this.dwCurCenterId = dwCurCenterId
+        })
     }
 
     // register membership locker full modal vars and funcs
@@ -89,6 +103,85 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
     }
     onFinishRegisterML() {
         this.toggleRegisterMLFullModal()
+    }
+
+    // check in
+    public doShowAttendModal = false
+    public doShowCancelAttendModal = false
+    public cancelAttendUserModalText = {
+        text: '',
+        subText: `수동 출석을 취소하실 경우,
+        해당 회원은 미출석 상태로 변경됩니다.`,
+        cancelButtonText: '취소',
+        confirmButtonText: '확인',
+    }
+    public attendUserModalText = {
+        text: '',
+        subText: `수동 출석을 하실 경우,
+        해당 회원은 출석 상태로 변경됩니다.`,
+        cancelButtonText: '취소',
+        confirmButtonText: '확인',
+    }
+    onAttend() {
+        this.attendUserModalText.text = `${this.wordService.ellipsis(
+            this.curUserData.user.center_user_name,
+            4
+        )}님을 출석 처리하시겠어요?`
+        this.doShowAttendModal = true
+    }
+    onAttendModalClose() {
+        this.doShowAttendModal = false
+    }
+    onAttendModalConfirm() {
+        this.centerUsersCheckInService.checkIn(this.center.id, this.curUserData.user.id).subscribe((res) => {
+            const centerUser = this.curUserData.user
+            if (!_.isEmpty(this.dbCurCenterId) && this.dbCurCenterId == this.center.id) {
+                this.dashboardHelperService.synchronizeCheckIn(this.center.id, centerUser)
+            }
+            if (!_.isEmpty(this.dwCurCenterId) && this.dwCurCenterId == this.center.id) {
+                this.dashboardHelperService.synchronizeCheckInDrawer(this.center.id, centerUser)
+            }
+            this.nxStore.dispatch(
+                showToast({
+                    text: `${this.wordService.ellipsis(
+                        this.curUserData.user.center_user_name,
+                        4
+                    )}님이 출석 처리되었습니다.`,
+                })
+            )
+            this.onAttendModalClose()
+        })
+    }
+
+    onCancelAttend() {
+        this.cancelAttendUserModalText.text = `${this.wordService.ellipsis(
+            this.curUserData.user.center_user_name,
+            4
+        )}님을 출석 취소하시겠어요?`
+        this.doShowCancelAttendModal = true
+    }
+    onCancelAttendModalClose() {
+        this.doShowCancelAttendModal = false
+    }
+    onCancelAttendConfirm() {
+        this.centerUsersCheckInService.removeCheckIn(this.center.id, this.curUserData.user.id).subscribe((res) => {
+            const centerUser = this.curUserData.user
+            if (!_.isEmpty(this.dbCurCenterId) && this.dbCurCenterId == this.center.id) {
+                this.dashboardHelperService.synchronizeCheckIn(this.center.id, centerUser)
+            }
+            if (!_.isEmpty(this.dwCurCenterId) && this.dwCurCenterId == this.center.id) {
+                this.dashboardHelperService.synchronizeCheckInDrawer(this.center.id, centerUser)
+            }
+            this.nxStore.dispatch(
+                showToast({
+                    text: `${this.wordService.ellipsis(
+                        this.curUserData.user.center_user_name,
+                        4
+                    )}님이 출석 취소되었습니다.`,
+                })
+            )
+            this.onCancelAttendModalClose()
+        })
     }
 
     //

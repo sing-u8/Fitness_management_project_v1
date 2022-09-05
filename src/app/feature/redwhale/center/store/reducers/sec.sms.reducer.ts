@@ -14,7 +14,7 @@ import { CenterUsersCategory } from '@schemas/center/community/center-users-by-c
 
 import * as SMSActions from '../actions/sec.sms.actions'
 
-export type MemberSelectCateg = 'member' | 'valid' | 'unpaid' | 'imminent' | 'expired' | 'employee' //  | 'attendance'
+export type MemberSelectCateg = 'member' | 'valid' | 'unpaid' | 'imminent' | 'expired' | 'employee' | 'attendance'
 export type UsersListValue = Array<{ user: CenterUser; selected: boolean }>
 export type UsersSelectCateg = Record<MemberSelectCateg, { name: string; userSize: number }>
 export type UserListSelect = { key: MemberSelectCateg; value: { name: string; userSize: number } }
@@ -62,7 +62,7 @@ export interface State {
 
 export const UsersSelectCategInit: UsersSelectCateg = {
     member: { name: '전체 회원', userSize: 0 },
-    // attendance: { name: '오늘 출석한 회원', userSize: 0 },
+    attendance: { name: '오늘 출석한 회원', userSize: 0 },
     valid: { name: '유효한 회원', userSize: 0 },
     unpaid: { name: '미수금이 있는 회원', userSize: 0 },
     imminent: { name: '만료 예정인 회원', userSize: 0 },
@@ -75,7 +75,7 @@ export const UserListSelectInit: UserListSelect = {
 }
 export const UsersListInit: UsersLists = {
     member: [],
-    // attendance: [],
+    attendance: [],
     valid: [],
     unpaid: [],
     imminent: [],
@@ -399,6 +399,8 @@ export const matchUsersCategoryTo = (categType: CenterUsersCategory): MemberSele
             return 'expired'
         case 'employee':
             return 'employee'
+        case 'check_in':
+            return 'attendance'
     }
 }
 export const matchMemberSelectCategTo = (categType: MemberSelectCateg): CenterUsersCategory => {
@@ -415,5 +417,7 @@ export const matchMemberSelectCategTo = (categType: MemberSelectCateg): CenterUs
             return 'expired'
         case 'employee':
             return 'employee'
+        case 'attendance':
+            return 'check_in'
     }
 }

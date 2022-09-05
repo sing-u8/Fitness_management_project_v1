@@ -118,4 +118,5 @@ export interface UpdateUserRequestBody {
     role_code?: string
     center_user_name?: string
     center_user_memo?: string
+    center_membership_number?: string
 }
