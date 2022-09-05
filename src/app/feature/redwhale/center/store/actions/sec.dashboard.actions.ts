@@ -201,6 +201,15 @@ export const finishSynchronizeUserLocker = createAction(
     '[${FeatureKey}] Finish Synchronize User Data - Locker',
     props<{ success: boolean; lockers?: Array<UserLocker>; payments?: Payment[]; contracts?: Contract[] }>()
 )
+// // by check in
+export const synchronizeCheckIn = createAction(
+    '[${FeatureKey}] Synchronize Center User - Check In',
+    props<{ centerUser: CenterUser; centerId: string }>()
+)
+export const synchronizeCheckInDrawer = createAction(
+    '[${FeatureKey}] Synchronize Center User Drawer - Check In',
+    props<{ centerUser: CenterUser; centerId: string }>()
+)
 
 // // drawer
 // async

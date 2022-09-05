@@ -1,13 +1,16 @@
 * {
-    padding: 0px;
-    margin: 0px;
+    padding: 0;
+    margin: 0;
 }
 
 section.touch-pad {
     height: 100vh;
+    min-height: 1024px;
     width: 100vw;
     position: relative;
     display: flex;
+    flex-direction: column;
+    align-items: center;
     background-color: var(--background-color);
 
     -webkit-user-select: none;
@@ -16,8 +19,8 @@ section.touch-pad {
     user-select: none;
 
     section.left {
-        padding: 85px 0px 50px 55px;
-        width: 53%;
+        padding: 55px 50px 0 50px;
+        width: 100%;
         height: 100%;
         background-color: var(--font-color);
 
@@ -27,66 +30,41 @@ section.touch-pad {
             flex-direction: column;
             justify-content: space-between;
 
-            .guide-top {
+            .guide-top, .guide-bottom {
+                display: none;
+            }
+            .guide-top, .guide-top__mobile {
                 p.title {
+                    font-size: 2.3rem;
+                    line-height: 35px;
+                    letter-spacing: -0.529px;
                     font-weight: 400;
-                    font-size: 2.7rem;
-                    line-height: 41px;
-                    letter-spacing: -0.729px;
                     color: var(--white);
                     margin-bottom: 3px;
-
                     u {
                         font-weight: 700;
-                        font-size: 2.7rem;
-                        line-height: 41px;
-                        letter-spacing: -0.729px;
+                        line-height: 35px;
+                        letter-spacing: -0.529px;
                         text-underline-offset: 9px;
                         text-decoration-thickness: 3px;
                     }
                 }
 
-                .guide-text {
-                    padding-left: 35px;
-                    position: relative;
-                    opacity: 0.6;
-
-                    p {
-                        font-size: 1.8rem;
-                        font-weight: 400;
-                        line-height: 27px;
-                        letter-spacing: -0.324px;
-                        color: var(--white);
-                    }
-
-                    img {
-                        position: absolute;
-                        left: 0px;
-                        top: -2px;
-                        width: 30px;
-                        height: 30px;
-                    }
-                }
             }
-
-            .guide-bottom {
-
-                // margin-bottom: 30px;
+            .guide-top__mobile {
+                display: flex;
+                justify-content: space-between;
                 .call-employee-button {
-                    width: 195px;
-                    height: 60px;
+                    width: 166px;
+                    height: 49px;
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    font-size: 2rem;
                     font-weight: 500;
-                    line-height: 27px;
-                    letter-spacing: -0.4px;
+                    font-size: 1.7rem;
+                    line-height: 23px;
+                    letter-spacing: -0.289px;
                     color: var(--white);
-
-                    &>img {
-                        margin-left: 10px;
-                    }
 
                     cursor: pointer;
                     border: 1px solid var(--white);
@@ -94,14 +72,15 @@ section.touch-pad {
                     margin-bottom: 39px;
                 }
             }
-
-            .title-top-margin {
-                margin-top: 25px !important;
+            .guide-top__mobile, .guide-bottom {
+                .spinner {
+                    margin-left: 10px;
+                    width: 25px;
+                    height: 25px;
+                    position: relative;
+                }
             }
 
-            .title-bottom-margin {
-                margin-bottom: 30px !important;
-            }
         }
     }
 
@@ -109,12 +88,24 @@ section.touch-pad {
         display: flex;
         align-items: center;
         justify-content: center; //  수정 필요
-        width: calc(100% - 53%);
-        height: 100%;
+        background-color: #F6F6F6;
+        border-radius: 45px 45px 0px 0px;
+        width: calc(100%);
+        height: calc(100% - 162px);
+        position: absolute;
+        bottom: 0;
+        left:0;
+        right: 0;
 
         .touch-pad-container {
-            width: 402px;
+            width: 352px;
             position: relative;
+
+            .logo_mobile {
+                position: absolute;
+                bottom:-64px;
+                left: calc(50% - 51.5px);
+            }
 
             .touch-pad-display {
                 width: 100%;
@@ -122,25 +113,36 @@ section.touch-pad {
                 align-items: center;
                 flex-direction: column;
 
+                .display-title__mobile {
+                    font-weight: 500;
+                    font-size: 2.3rem;
+                    line-height: 33px;
+                    text-align: center;
+                    letter-spacing: -0.529px;
+                    margin-bottom: 4px;
+                    white-space: nowrap;
+                }
+
                 .display-title {
-                    font-size: 1.8rem;
                     font-weight: 400;
-                    line-height: 26px;
-                    letter-spacing: -0.3242px;
+                    font-size: 1.5rem;
+                    line-height: 22px;
+                    letter-spacing: -0.225px;
                     color: var(--lightgrey);
-                    margin-bottom: 25px;
+                    margin-bottom: 7px;
                 }
 
                 .input-container {
                     input {
                         all: unset;
                         width: 100%;
-                        padding-right: 0px;
-                        padding-left: 0px;
-                        font-size: 4.8rem;
-                        font-weight: bold;
+                        padding-right: 0;
+                        padding-left: 0;
                         text-align: center;
-                        letter-spacing: 15px;
+                        font-weight: 700;
+                        font-size: 4rem;
+                        line-height: 58px;
+                        letter-spacing: 8px;
                         color: var(--font-color);
                     }
                 }
@@ -156,16 +158,17 @@ section.touch-pad {
 
             .touch-pad-grid {
                 width: 100%;
-                height: 540px;
+                height: 467px;
                 display: grid;
 
-                gap: 15px;
-                grid-template-columns: repeat(3, 124px);
-                grid-template-rows: repeat(4, 124px);
+                gap: 13px;
+                grid-template-columns: repeat(3, 107px);
+                grid-template-rows: repeat(4, 107px);
+                justify-content: center;
 
                 .grid-item {
-                    width: 124px;
-                    height: 124px;
+                    width: 107px;
+                    height: 107px;
                     background-color: var(--white);
                     display: flex;
                     align-items: center;
@@ -173,23 +176,579 @@ section.touch-pad {
                     border-radius: 12px;
                     cursor: pointer;
 
-                    font-size: 3.1rem;
                     font-weight: 500;
-                    line-height: 45px;
-                    letter-spacing: -0.961px;
+                    font-size: 2.7rem;
+                    line-height: 39px;
+                    letter-spacing: -0.837px;
                     color: var(--font-color);
 
                     &.confirm {
+                        font-weight: 700;
                         color: var(--white);
-                        font-size: 2.1rem;
+                        font-size: 1.8rem;
+                        line-height: 26px;
+                        letter-spacing: -0.378px;
                         background-color: var(--font-color);
                     }
 
                     &.erase {
-                        font-size: 2.1rem;
+                        font-weight: 500;
+                        font-size: 1.8rem;
+                        line-height: 26px;
+                        letter-spacing: -0.378px;
                     }
                 }
             }
         }
     }
 }
+
+@media (min-width: 834px) {
+    section.touch-pad {
+        height: 100vh;
+        min-height: 1194px;
+        width: 100vw;
+        position: relative;
+        display: flex;
+        background-color: var(--background-color);
+
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+
+        section.left {
+            background-color: var(--font-color);
+
+            .guideline-container {
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                .guide-top, .guide-top__mobile {
+                    p.title {
+                        font-weight: 400;
+                        font-size: 2.7rem;
+                        line-height: 41px;
+                        letter-spacing: -0.729px;
+                        color: var(--white);
+                        margin-bottom: 3px;
+
+                        u {
+                            font-weight: 700;
+                            font-size: 2.7rem;
+                            line-height: 41px;
+                            letter-spacing: -0.729px;
+                            text-underline-offset: 9px;
+                            text-decoration-thickness: 3px;
+                        }
+                    }
+                }
+                .guide-top__mobile {
+                    .call-employee-button {
+                        width: 195px;
+                        height: 60px;
+                        font-size: 2rem;
+                        font-weight: 500;
+                        line-height: 27px;
+                        letter-spacing: -0.4px;
+                        color: var(--white);
+
+                        cursor: pointer;
+                        border: 1px solid var(--white);
+                        border-radius: 5px;
+                        margin-bottom: 39px;
+                    }
+                }
+                .guide-top__mobile, .guide-bottom {
+                    .spinner {
+                        margin-left: 10px;
+                        width: 25px;
+                        height: 25px;
+                        position: relative;
+                    }
+                }
+            }
+        }
+
+        section.right {
+            display: flex;
+            align-items: center;
+            justify-content: center; //  수정 필요
+            width: calc(100%);
+            height: calc(100% - 182px);
+
+            .touch-pad-container {
+                width: 417px;
+                position: relative;
+
+                .logo_mobile {
+                    position: absolute;
+                    bottom: -85px;
+                    left: calc(50% - 51.5px);
+                }
+
+                .touch-pad-display {
+                    width: 100%;
+
+                    .display-title__mobile {
+                        font-weight: 500;
+                        font-size: 2.7rem;
+                        line-height: 39px;
+                        text-align: center;
+                        letter-spacing: -0.729px;
+                    }
+
+                    .display-title {
+                        font-size: 1.8rem;
+                        font-weight: 400;
+                        line-height: 26px;
+                        letter-spacing: -0.3242px;
+                        color: var(--lightgrey);
+                        margin-bottom: 8px;
+                    }
+
+                    .input-container {
+                        input {
+                            all: unset;
+                            width: 100%;
+                            padding-right: 0;
+                            padding-left: 0;
+                            font-size: 4.8rem;
+                            font-weight: 700;
+                            text-align: center;
+                            letter-spacing: 15px;
+                            color: var(--font-color);
+                        }
+                    }
+
+                    .divider {
+                        width: 100%;
+                        height: 2px;
+                        border-top: 2px solid var(--lightgrey);
+                        margin-top: 20px;
+                        margin-bottom: 40px;
+                    }
+                }
+
+                .touch-pad-grid {
+                    width: 100%;
+                    height: 540px;
+                    display: grid;
+
+                    gap: 15px;
+                    grid-template-columns: repeat(3, 124px);
+                    grid-template-rows: repeat(4, 124px);
+
+                    .grid-item {
+                        width: 124px;
+                        height: 124px;
+
+                        font-size: 3.1rem;
+                        font-weight: 500;
+                        line-height: 45px;
+                        letter-spacing: -0.961px;
+                        color: var(--font-color);
+
+                        &.confirm {
+                            color: var(--white);
+                            font-size: 2.1rem;
+                            font-weight: 700;
+                            line-height: 30px;
+                            letter-spacing: -0.441px;
+                            background-color: var(--font-color);
+                            position: relative;
+                            overflow: hidden;
+                        }
+
+                        &.erase {
+                            font-weight: 500;
+                            font-size: 2.1rem;
+                            line-height: 30px;
+                            letter-spacing: -0.441px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media (min-width: 1024px) {
+    section.touch-pad {
+        height: 100vh;
+        min-height: 730px;
+        width: 100vw;
+        position: relative;
+        display: flex;
+        flex-direction: row;
+        background-color: var(--background-color);
+
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+
+        section.left {
+            padding: 65px 0 45px 47px;
+            width: 53%;
+            height: 100%;
+            background-color: var(--font-color);
+
+            .guideline-container {
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+
+                .guide-top__mobile{
+                    display: none;
+                }
+                .guide-top, .guide-bottom {
+                    display: block;
+                }
+                .guide-top {
+                    p.title {
+                        font-size: 2.3rem;
+                        line-height: 35px;
+                        letter-spacing: -0.529px;
+                        font-weight: 400;
+                        color: var(--white);
+                        margin-bottom: 3px;
+                        u {
+                            font-weight: 700;
+                            line-height: 35px;
+                            letter-spacing: -0.529px;
+                            text-underline-offset: 9px;
+                            text-decoration-thickness: 3px;
+                        }
+                    }
+
+                    .guide-text {
+                        padding-left: 35px;
+                        position: relative;
+                        opacity: 0.6;
+                        p {
+                            font-weight: 400;
+                            font-size: 1.5rem;
+                            line-height: 23px;
+                            letter-spacing: -0.225px;
+                            color: var(--white);
+                        }
+
+                        img {
+                            position: absolute;
+                            left: 0;
+                            top: -2px;
+                            width: 30px;
+                            height: 30px;
+                        }
+                    }
+                }
+
+                .guide-bottom {
+                    // margin-bottom: 30px;
+                    .call-employee-button {
+                        width: 166px;
+                        height: 49px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        font-weight: 500;
+                        font-size: 1.7rem;
+                        line-height: 23px;
+                        letter-spacing: -0.289px;
+                        color: var(--white);
+
+                        cursor: pointer;
+                        border: 1px solid var(--white);
+                        border-radius: 5px;
+                        margin-bottom: 39px;
+
+                    }
+                }
+
+                .title-top-margin {
+                    margin-top: 23px !important;
+                }
+
+                .title-bottom-margin {
+                    margin-bottom: 25px !important;
+                }
+            }
+        }
+
+        section.right {
+            display: flex;
+            align-items: center;
+            justify-content: center; //  수정 필요
+            width: calc(100% - 53%);
+            height: 100%;
+            position: initial;
+
+            .touch-pad-container {
+                width: 346.36px;
+                position: relative;
+
+                .logo_mobile {
+                    display: none;
+                }
+
+                .touch-pad-display {
+                    width: 100%;
+                    display: flex;
+                    align-items: center;
+                    flex-direction: column;
+
+                    .display-title__mobile {
+                        display: none;
+                    }
+
+                    .display-title {
+                        font-weight: 400;
+                        font-size: 1.5rem;
+                        line-height: 22px;
+                        letter-spacing: -0.225px;
+                        color: var(--lightgrey);
+                        margin-bottom: 7px;
+                    }
+
+                    .input-container {
+                        input {
+                            all: unset;
+                            width: 100%;
+                            padding-right: 0;
+                            padding-left: 0;
+                            text-align: center;
+                            font-weight: 700;
+                            font-size: 4rem;
+                            line-height: 58px;
+                            letter-spacing: 8px;
+                            color: var(--font-color);
+                        }
+                    }
+
+                    .divider {
+                        width: 100%;
+                        height: 2px;
+                        border-top: 2px solid var(--lightgrey);
+                        margin-top: 20px;
+                        margin-bottom: 40px;
+                    }
+                }
+
+                .touch-pad-grid {
+                    width: 100%;
+                    height: 467px;
+                    display: grid;
+
+                    gap: 13px;
+                    grid-template-columns: repeat(3, 107px);
+                    grid-template-rows: repeat(4, 107px);
+
+                    .grid-item {
+                        width: 107px;
+                        height: 107px;
+                        background-color: var(--white);
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        border-radius: 12px;
+                        cursor: pointer;
+
+                        font-weight: 500;
+                        font-size: 2.7rem;
+                        line-height: 39px;
+                        letter-spacing: -0.837px;
+                        color: var(--font-color);
+
+                        &.confirm {
+                            font-weight: 700;
+                            color: var(--white);
+                            font-size: 1.8rem;
+                            line-height: 26px;
+                            letter-spacing: -0.378px;
+                            background-color: var(--font-color);
+                        }
+
+                        &.erase {
+                            font-weight: 500;
+                            font-size: 1.8rem;
+                            line-height: 26px;
+                            letter-spacing: -0.378px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media (min-width: 1194px) {
+    section.touch-pad {
+        section.left {
+            padding: 85px 0 50px 55px;
+
+            .guideline-container {
+                .guide-top {
+                    p.title {
+                        font-weight: 400;
+                        font-size: 2.7rem;
+                        line-height: 41px;
+                        letter-spacing: -0.729px;
+                        color: var(--white);
+                        margin-bottom: 3px;
+
+                        u {
+                            font-weight: 700;
+                            font-size: 2.7rem;
+                            line-height: 41px;
+                            letter-spacing: -0.729px;
+                            text-underline-offset: 9px;
+                            text-decoration-thickness: 3px;
+                        }
+                    }
+
+                    .guide-text {
+
+                        p {
+                            font-size: 1.8rem;
+                            font-weight: 400;
+                            line-height: 27px;
+                            letter-spacing: -0.324px;
+                            color: var(--white);
+                        }
+
+                        img {
+                            position: absolute;
+                            left: 0;
+                            top: -2px;
+                            width: 30px;
+                            height: 30px;
+                        }
+                    }
+                }
+
+                .guide-bottom {
+
+                    // margin-bottom: 30px;
+                    .call-employee-button {
+                        width: 195px;
+                        height: 60px;
+                        font-size: 2rem;
+                        font-weight: 500;
+                        line-height: 27px;
+                        letter-spacing: -0.4px;
+                        color: var(--white);
+
+                        cursor: pointer;
+                        border: 1px solid var(--white);
+                        border-radius: 5px;
+                        margin-bottom: 39px;
+
+                    }
+                }
+
+                .title-top-margin {
+                    margin-top: 25px !important;
+                }
+
+                .title-bottom-margin {
+                    margin-bottom: 30px !important;
+                }
+            }
+        }
+
+        section.right {
+            .touch-pad-container {
+                width: 402px;
+                .touch-pad-display {
+                    width: 100%;
+
+                    .display-title {
+                        font-size: 1.8rem;
+                        font-weight: 400;
+                        line-height: 26px;
+                        letter-spacing: -0.3242px;
+                        color: var(--lightgrey);
+                        margin-bottom: 8px;
+                    }
+
+                    .input-container {
+                        input {
+                            all: unset;
+                            width: 100%;
+                            padding-right: 0;
+                            padding-left: 0;
+                            font-size: 4.8rem;
+                            font-weight: 700;
+                            text-align: center;
+                            letter-spacing: 15px;
+                            color: var(--font-color);
+                        }
+                    }
+
+                    .divider {
+                        width: 100%;
+                        height: 2px;
+                        border-top: 2px solid var(--lightgrey);
+                        margin-top: 20px;
+                        margin-bottom: 40px;
+                    }
+                }
+
+                .touch-pad-grid {
+                    width: 100%;
+                    height: 540px;
+                    display: grid;
+
+                    gap: 15px;
+                    grid-template-columns: repeat(3, 124px);
+                    grid-template-rows: repeat(4, 124px);
+
+                    .grid-item {
+                        width: 124px;
+                        height: 124px;
+
+                        font-size: 3.1rem;
+                        font-weight: 500;
+                        line-height: 45px;
+                        letter-spacing: -0.961px;
+                        color: var(--font-color);
+
+                        &.confirm {
+                            color: var(--white);
+                            font-size: 2.1rem;
+                            font-weight: 700;
+                            line-height: 30px;
+                            letter-spacing: -0.441px;
+                            background-color: var(--font-color);
+                        }
+
+                        &.erase {
+                            font-weight: 500;
+                            font-size: 2.1rem;
+                            line-height: 30px;
+                            letter-spacing: -0.441px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+//@media (max-device-width: 800px) and (orientation: portrait) {
+//    .title {
+//        color: blue;
+//    }
+//}
+
+//@media (min-device-width: 1194px) and (max-device-width: 1193px) {
+//    section.left {
+//
+//    }
+//    section.right{
+//
+//    }
+//}

@@ -7,9 +7,10 @@ import { SharedModule } from '@shared/shared.module'
 // components
 import { AttendanceModalComponent } from './components/attendance-modal/attendance-modal.component'
 import { TouchPadComponent } from './touch-pad.component'
+import { NgxSpinnerModule } from 'ngx-spinner'
 
 @NgModule({
     declarations: [AttendanceModalComponent, TouchPadComponent],
-    imports: [AngularCommonModule, ReactiveFormsModule, SharedModule, FormsModule],
+    imports: [AngularCommonModule, ReactiveFormsModule, SharedModule, FormsModule, NgxSpinnerModule],
 })
 export class TouchPadModule {}

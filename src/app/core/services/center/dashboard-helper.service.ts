@@ -7,7 +7,11 @@ import { CenterUser } from '@schemas/center-user'
 import { Store } from '@ngrx/store'
 import * as DashboardActions from '@centerStore/actions/sec.dashboard.actions'
 import { MemberSelectCateg } from '@centerStore/reducers/sec.dashboard.reducer'
-import { setDrawerCurUser } from '@centerStore/actions/sec.dashboard.actions'
+import {
+    setDrawerCurUser,
+    synchronizeCheckIn,
+    synchronizeCheckInDrawer,
+} from '@centerStore/actions/sec.dashboard.actions'
 
 @Injectable({
     providedIn: 'root',
@@ -35,5 +39,14 @@ export class DashboardHelperService {
     // // by locker
     synchronizeUserLocker(centerId: string, userId: string) {
         this.nxStore.dispatch(DashboardActions.startSynchronizeUserLocker({ centerId, userId }))
+    }
+    // // by check in
+    synchronizeCheckIn(centerId: string, centerUser: CenterUser) {
+        this.nxStore.dispatch(DashboardActions.startGetUsersByCategory({ centerId }))
+        this.nxStore.dispatch(DashboardActions.synchronizeCheckIn({ centerId, centerUser }))
+    }
+    synchronizeCheckInDrawer(centerId: string, centerUser: CenterUser) {
+        this.nxStore.dispatch(DashboardActions.startGetDrawerUsersByCategory({ centerId }))
+        this.nxStore.dispatch(DashboardActions.synchronizeCheckInDrawer({ centerId, centerUser }))
     }
 }
