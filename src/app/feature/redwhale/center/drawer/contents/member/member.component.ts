@@ -27,6 +27,7 @@ import { UsersCenterService } from '@services/users-center.service'
 import { DashboardHelperService } from '@services/center/dashboard-helper.service'
 import { WordService } from '@services/helper/word.service'
 import { FileService } from '@services/file.service'
+import { CenterUsersCheckInService } from '@services/center-users-check-in.service'
 
 import _ from 'lodash'
 
@@ -56,6 +57,13 @@ export class MemberComponent implements OnInit, OnDestroy {
 
     public showUserDetail = false
 
+    public dbCurCenterId$ = this.nxStore.select(DashboardSelector.curCenterId)
+    public dwCurCenterId$ = this.nxStore.select(DashboardSelector.drawerCurCenterId)
+    public dbCurCenterId = undefined
+    public dwCurCenterId = undefined
+
+    public curUserData: DashboardReducer.CurUseData = undefined
+
     constructor(
         private centerService: CenterService,
         private storageService: StorageService,
@@ -66,7 +74,8 @@ export class MemberComponent implements OnInit, OnDestroy {
         private wordService: WordService,
         private fileService: FileService,
         private router: Router,
-        private activatedRoute: ActivatedRoute
+        private activatedRoute: ActivatedRoute,
+        private centerUsersCheckInService: CenterUsersCheckInService
     ) {}
 
     ngOnInit(): void {
@@ -91,6 +100,16 @@ export class MemberComponent implements OnInit, OnDestroy {
 
         this.curUserListSelect$.pipe(takeUntil(this.unSubscriber$)).subscribe((culs) => {
             this.curUserListSelect = culs
+        })
+
+        this.dbCurCenterId$.pipe(takeUntil(this.unSubscriber$)).subscribe((dbCurCenterId) => {
+            this.dbCurCenterId = dbCurCenterId
+        })
+        this.dwCurCenterId$.pipe(takeUntil(this.unSubscriber$)).subscribe((dwCurCenterId) => {
+            this.dwCurCenterId = dwCurCenterId
+        })
+        this.curUserData$.pipe(takeUntil(this.unSubscriber$)).subscribe((curUserData) => {
+            this.curUserData = curUserData
         })
 
         this.curUserData$.pipe(takeUntil(this.unSubscriber$)).subscribe((curUserData) => {
@@ -417,4 +436,84 @@ export class MemberComponent implements OnInit, OnDestroy {
     isFileExist(fileList: FileList) {
         return !(fileList && fileList.length == 0)
     }
+
+    // check in
+    public doShowAttendModal = false
+    public doShowCancelAttendModal = false
+    public cancelAttendUserModalText = {
+        text: '',
+        subText: `수동 출석을 취소하실 경우,
+        해당 회원은 미출석 상태로 변경됩니다.`,
+        cancelButtonText: '취소',
+        confirmButtonText: '확인',
+    }
+    public attendUserModalText = {
+        text: '',
+        subText: `수동 출석을 하실 경우,
+        해당 회원은 출석 상태로 변경됩니다.`,
+        cancelButtonText: '취소',
+        confirmButtonText: '확인',
+    }
+    onAttend() {
+        this.attendUserModalText.text = `${this.wordService.ellipsis(
+            this.curUserData.user.center_user_name,
+            4
+        )}님을 출석 처리하시겠어요?`
+        this.doShowAttendModal = true
+    }
+    onAttendModalClose() {
+        this.doShowAttendModal = false
+    }
+    onAttendModalConfirm() {
+        this.centerUsersCheckInService.checkIn(this.center.id, this.curUserData.user.id).subscribe((res) => {
+            const centerUser = this.curUserData.user
+            if (!_.isEmpty(this.dbCurCenterId) && this.dbCurCenterId == this.center.id) {
+                this.dashboardHelperService.synchronizeCheckIn(this.center.id, centerUser)
+            }
+            if (!_.isEmpty(this.dwCurCenterId) && this.dwCurCenterId == this.center.id) {
+                this.dashboardHelperService.synchronizeCheckInDrawer(this.center.id, centerUser)
+            }
+            this.nxStore.dispatch(
+                showToast({
+                    text: `${this.wordService.ellipsis(
+                        this.curUserData.user.center_user_name,
+                        4
+                    )}님이 출석 처리되었습니다.`,
+                })
+            )
+            this.onAttendModalClose()
+        })
+    }
+
+    onCancelAttend() {
+        this.cancelAttendUserModalText.text = `${this.wordService.ellipsis(
+            this.curUserData.user.center_user_name,
+            4
+        )}님을 출석 취소하시겠어요?`
+        this.doShowCancelAttendModal = true
+    }
+    onCancelAttendModalClose() {
+        this.doShowCancelAttendModal = false
+    }
+    onCancelAttendConfirm() {
+        this.centerUsersCheckInService.removeCheckIn(this.center.id, this.curUserData.user.id).subscribe((res) => {
+            const centerUser = this.curUserData.user
+            if (!_.isEmpty(this.dbCurCenterId) && this.dbCurCenterId == this.center.id) {
+                this.dashboardHelperService.synchronizeRemoveCheckIn(this.center.id, centerUser)
+            }
+            if (!_.isEmpty(this.dwCurCenterId) && this.dwCurCenterId == this.center.id) {
+                this.dashboardHelperService.synchronizeRemoveCheckInDrawer(this.center.id, centerUser)
+            }
+            this.nxStore.dispatch(
+                showToast({
+                    text: `${this.wordService.ellipsis(
+                        this.curUserData.user.center_user_name,
+                        4
+                    )}님이 출석 취소되었습니다.`,
+                })
+            )
+            this.onCancelAttendModalClose()
+        })
+    }
+    //
 }

@@ -85,6 +85,7 @@ import { PeriodPipe } from './pipes/period.pipe'
 import { RestPeriodPipe } from './pipes/rest-period.pipe'
 import { IsAfterPipe } from './pipes/isAfter.pipe'
 import { CallbackPipe } from './pipes/callback.pipe'
+import { IsTodayPipe } from './pipes/is-today.pipe'
 
 // Dragula
 // import { DragulaModule } from 'ng2-dragula'
@@ -197,6 +198,7 @@ FullCalendarModule.registerPlugins([
         RestPeriodPipe,
         IsAfterPipe,
         CallbackPipe,
+        IsTodayPipe,
     ],
     imports: [
         CommonModule,
@@ -285,6 +287,7 @@ FullCalendarModule.registerPlugins([
         RestPeriodPipe,
         IsAfterPipe,
         CallbackPipe,
+        IsTodayPipe,
         // FullCalendar
         FullCalendarModule,
         // Angular-Gridstar2

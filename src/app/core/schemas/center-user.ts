@@ -28,4 +28,5 @@ export interface CenterUser {
     user_membership_count: number // 모든 회원권 수
     user_membership_end_date: string // 회원권 중 가장 빠른 end_date
     total_unpaid: number // 미납금
+    last_check_in: string // YYYY-MM-DD HH:mm:ss
 }

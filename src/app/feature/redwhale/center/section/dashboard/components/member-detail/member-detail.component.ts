@@ -167,10 +167,10 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
         this.centerUsersCheckInService.removeCheckIn(this.center.id, this.curUserData.user.id).subscribe((res) => {
             const centerUser = this.curUserData.user
             if (!_.isEmpty(this.dbCurCenterId) && this.dbCurCenterId == this.center.id) {
-                this.dashboardHelperService.synchronizeCheckIn(this.center.id, centerUser)
+                this.dashboardHelperService.synchronizeRemoveCheckIn(this.center.id, centerUser)
             }
             if (!_.isEmpty(this.dwCurCenterId) && this.dwCurCenterId == this.center.id) {
-                this.dashboardHelperService.synchronizeCheckInDrawer(this.center.id, centerUser)
+                this.dashboardHelperService.synchronizeRemoveCheckInDrawer(this.center.id, centerUser)
             }
             this.nxStore.dispatch(
                 showToast({

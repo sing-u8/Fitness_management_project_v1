@@ -104,25 +104,25 @@
                     </div>
                     <div class="divider"></div>
                     <div
-                        *ngIf = "true"
+                        *ngIf="!(curUserData?.user?.last_check_in | isToday)"
                         class="attend-button"
                         rw-button
                         [rwButtonColor] = "'var(--white)'"
-                        (click) = "false"
+                        (click) = "curUserData.user && onAttend()"
                     >
                         <img src="assets/icons/etc/attend.svg" >
                         <span class="rw-typo-bodytext0-bold">수동 출석</span>
                     </div>
-                    <!--                <div-->
-                    <!--                    *ngIf = "userData.attendance_id"-->
-                    <!--                    class="attend-button"-->
-                    <!--                    rw-button-->
-                    <!--                    [rwButtonColor] = "'var(&#45;&#45;white)'"-->
-                    <!--                    (click) = "onCancelAttend()"-->
-                    <!--                >-->
-                    <!--                    <img src="assets/icons/etc/leave.svg" >-->
-                    <!--                    <span class="rw-typo-bodytext0-bold">수동 출석 취소</span>-->
-                    <!--                </div>-->
+                    <div
+                        *ngIf = "(curUserData?.user?.last_check_in | isToday)"
+                        class="attend-button"
+                        rw-button
+                        [rwButtonColor] = "'var(--white)'"
+                        (click) = "curUserData.user && onCancelAttend()"
+                    >
+                        <img src="assets/icons/etc/leave.svg" >
+                        <span class="rw-typo-bodytext0-bold">수동 출석 취소</span>
+                    </div>
                 </div>
                 <div class="user-info">
                     <div class="user-data">
@@ -223,3 +223,17 @@
     (cancel)="toggleShowChangeNameModal()"
     (confirm)="onChangeNameConfirm($event)"
 ></db-change-user-name-modal>
+
+<rw-modal
+    [(visible)]="doShowAttendModal"
+    [data]="attendUserModalText"
+    (cancel)="onAttendModalClose()"
+    (confirm)="onAttendModalConfirm()"
+></rw-modal>
+
+<rw-modal
+    [(visible)]="doShowCancelAttendModal"
+    [data]="cancelAttendUserModalText"
+    (cancel)="onCancelAttendModalClose()"
+    (confirm)="onCancelAttendConfirm()"
+></rw-modal>

@@ -62,7 +62,7 @@
                 <div class="member-information__top-right">
                     <div class="l-info">
                         <div class="title">회원번호</div>
-                        <div class="content">{{ !curUserData.user ? '-' : (curUserData.user.center_membership_number ?? curUserData.user.membership_number) }}</div>
+                        <div class="content">{{ !curUserData.user ? '-' : (curUserData.user.center_membership_number ?? '-') }}</div>
                     </div>
                     <div class="l-info">
                         <div class="title">이메일</div>
@@ -138,7 +138,7 @@
                 </div>
                 <div class="vertical-divider"></div>
                 <div
-                    *ngIf="true"
+                    *ngIf="!(curUserData?.user?.last_check_in | isToday)"
                     class="info-button"
                     [class.disabled]="!curUserData.user"
                     rw-button
@@ -150,7 +150,7 @@
                     <span class="rw-typo-bodytext0-bold">수동 출석</span>
                 </div>
                 <div
-                    *ngIf="false"
+                    *ngIf="(curUserData?.user?.last_check_in | isToday)"
                     class="info-button"
                     [class.disabled]="!curUserData.user"
                     rw-button

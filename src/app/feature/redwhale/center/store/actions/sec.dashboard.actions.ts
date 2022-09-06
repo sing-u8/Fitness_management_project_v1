@@ -206,8 +206,17 @@ export const synchronizeCheckIn = createAction(
     '[${FeatureKey}] Synchronize Center User - Check In',
     props<{ centerUser: CenterUser; centerId: string }>()
 )
+export const synchronizeRemoveCheckIn = createAction(
+    '[${FeatureKey}] Synchronize Center User - Remove Check In',
+    props<{ centerUser: CenterUser; centerId: string }>()
+)
+
 export const synchronizeCheckInDrawer = createAction(
     '[${FeatureKey}] Synchronize Center User Drawer - Check In',
+    props<{ centerUser: CenterUser; centerId: string }>()
+)
+export const synchronizeRemoveCheckInDrawer = createAction(
+    '[${FeatureKey}] Synchronize Center User Drawer - Remove Check In',
     props<{ centerUser: CenterUser; centerId: string }>()
 )
 

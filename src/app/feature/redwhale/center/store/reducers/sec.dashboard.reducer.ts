@@ -13,6 +13,8 @@ import { CenterUsersCategory } from '@schemas/center/community/center-users-by-c
 import { Contract } from '@schemas/contract'
 
 import * as DashboardActions from '../actions/sec.dashboard.actions'
+import dayjs from 'dayjs'
+import { synchronizeRemoveCheckIn, synchronizeRemoveCheckInDrawer } from '../actions/sec.dashboard.actions'
 
 export type MemberSelectCateg = 'member' | 'valid' | 'unpaid' | 'imminent' | 'expired' | 'employee' | 'attendance'
 export type MemberManageCategory = 'membershipLocker' | 'reservation' | 'payment'
@@ -389,44 +391,102 @@ export const dashboardReducer = createImmerReducer(
     // // by check in
     on(DashboardActions.synchronizeCheckIn, (state, { centerUser, centerId }) => {
         let curCategCenterUser: CenterUser = undefined
+        const centerUserCopy: CenterUser = _.cloneDeep(centerUser)
+        centerUserCopy.last_check_in = dayjs().format('YYYY-MM-DD HH:mm:ss')
         if (!_.isEmpty(state.curCenterId) && centerId == state.curCenterId) {
             curCategCenterUser = state.usersLists[state.curUserListSelect.key].find((v, i) => {
-                if (v.user.id == centerUser.id) {
-                    state.usersLists[state.curUserListSelect.key][i].user = centerUser
+                if (v.user.id == centerUserCopy.id) {
+                    state.usersLists[state.curUserListSelect.key][i].user = centerUserCopy
                     return true
                 }
                 return false
             })?.user
             if (_.isEmpty(curCategCenterUser) && state.curUserListSelect.key == 'attendance') {
                 state.usersLists[state.curUserListSelect.key].unshift({
-                    user: centerUser,
+                    user: centerUserCopy,
                     holdSelected: false,
                 })
             }
-            if (_.isEmpty(state.curUserData.user) && state.curUserData.user.id == centerUser.id) {
-                state.curUserData.user = centerUser
+            if (!_.isEmpty(state.curUserData.user) && state.curUserData.user.id == centerUserCopy.id) {
+                state.curUserData.user = centerUserCopy
             }
         }
         return state
     }),
     on(DashboardActions.synchronizeCheckInDrawer, (state, { centerUser, centerId }) => {
         let curCategCenterUser: CenterUser = undefined
+        const centerUserCopy: CenterUser = _.cloneDeep(centerUser)
+        centerUserCopy.last_check_in = dayjs().format('YYYY-MM-DD HH:mm:ss')
         if (!_.isEmpty(state.drawerCurCenterId) && centerId == state.drawerCurCenterId) {
             curCategCenterUser = state.drawerUsersLists[state.drawerCurUserListSelect.key].find((v, i) => {
-                if (v.user.id == centerUser.id) {
-                    state.drawerUsersLists[state.drawerCurUserListSelect.key][i].user = centerUser
+                if (v.user.id == centerUserCopy.id) {
+                    state.drawerUsersLists[state.drawerCurUserListSelect.key][i].user = centerUserCopy
                     return true
                 }
                 return false
             })?.user
             if (_.isEmpty(curCategCenterUser) && state.drawerCurUserListSelect.key == 'attendance') {
                 state.drawerUsersLists[state.drawerCurUserListSelect.key].unshift({
-                    user: centerUser,
+                    user: centerUserCopy,
                     holdSelected: false,
                 })
             }
-            if (_.isEmpty(state.drawerCurUserData.user) && state.drawerCurUserData.user.id == centerUser.id) {
-                state.drawerCurUserData.user = centerUser
+            if (!_.isEmpty(state.drawerCurUserData.user) && state.drawerCurUserData.user.id == centerUserCopy.id) {
+                state.drawerCurUserData.user = centerUserCopy
+            }
+        }
+        return state
+    }),
+    on(DashboardActions.synchronizeRemoveCheckIn, (state, { centerUser, centerId }) => {
+        let curCategCenterUser: CenterUser = undefined
+        const centerUserCopy: CenterUser = _.cloneDeep(centerUser)
+        centerUserCopy.last_check_in = null
+        let curCategUserIdx = undefined
+        if (!_.isEmpty(state.curCenterId) && centerId == state.curCenterId) {
+            curCategCenterUser = state.usersLists[state.curUserListSelect.key].find((v, i) => {
+                if (v.user.id == centerUserCopy.id) {
+                    state.usersLists[state.curUserListSelect.key][i].user = centerUserCopy
+                    curCategUserIdx = i
+                    return true
+                }
+                return false
+            })?.user
+            if (
+                !_.isEmpty(curCategCenterUser) &&
+                _.isInteger(curCategUserIdx) &&
+                state.curUserListSelect.key == 'attendance'
+            ) {
+                state.usersLists[state.curUserListSelect.key].splice(curCategUserIdx, 1)
+            }
+            if (!_.isEmpty(state.curUserData.user) && state.curUserData.user.id == centerUserCopy.id) {
+                state.curUserData.user = centerUserCopy
+            }
+        }
+        return state
+    }),
+    on(DashboardActions.synchronizeRemoveCheckInDrawer, (state, { centerUser, centerId }) => {
+        let curCategCenterUser: CenterUser = undefined
+        const centerUserCopy: CenterUser = _.cloneDeep(centerUser)
+        centerUserCopy.last_check_in = null
+        let curCategUserIdx = undefined
+        if (!_.isEmpty(state.drawerCurCenterId) && centerId == state.drawerCurCenterId) {
+            curCategCenterUser = state.drawerUsersLists[state.drawerCurUserListSelect.key].find((v, i) => {
+                if (v.user.id == centerUserCopy.id) {
+                    state.drawerUsersLists[state.drawerCurUserListSelect.key][i].user = centerUserCopy
+                    curCategUserIdx = i
+                    return true
+                }
+                return false
+            })?.user
+            if (
+                !_.isEmpty(curCategCenterUser) &&
+                _.isInteger(curCategUserIdx) &&
+                state.drawerCurUserListSelect.key == 'attendance'
+            ) {
+                state.drawerUsersLists[state.drawerCurUserListSelect.key].splice(curCategUserIdx, 1)
+            }
+            if (!_.isEmpty(state.drawerCurUserData.user) && state.drawerCurUserData.user.id == centerUserCopy.id) {
+                state.drawerCurUserData.user = centerUserCopy
             }
         }
         return state

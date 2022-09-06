@@ -49,4 +49,12 @@ export class DashboardHelperService {
         this.nxStore.dispatch(DashboardActions.startGetDrawerUsersByCategory({ centerId }))
         this.nxStore.dispatch(DashboardActions.synchronizeCheckInDrawer({ centerId, centerUser }))
     }
+    synchronizeRemoveCheckIn(centerId: string, centerUser: CenterUser) {
+        this.nxStore.dispatch(DashboardActions.startGetUsersByCategory({ centerId }))
+        this.nxStore.dispatch(DashboardActions.synchronizeRemoveCheckIn({ centerId, centerUser }))
+    }
+    synchronizeRemoveCheckInDrawer(centerId: string, centerUser: CenterUser) {
+        this.nxStore.dispatch(DashboardActions.startGetDrawerUsersByCategory({ centerId }))
+        this.nxStore.dispatch(DashboardActions.synchronizeRemoveCheckInDrawer({ centerId, centerUser }))
+    }
 }
