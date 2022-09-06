@@ -8,7 +8,7 @@ import { ChatRoomUser } from '@schemas/chat-room-user'
 import { CenterUser } from '@schemas/center-user'
 import { ChatFile } from '@schemas/center/community/chat-file'
 import { Center } from '@schemas/center'
-import * as WS from '@schemas/web-socket/ws-chat'
+import * as WS from '@schemas/web-socket/web-socket'
 
 import * as ChatRoomApi from '@services/center-chat-room.service'
 import { User } from '@schemas/user'

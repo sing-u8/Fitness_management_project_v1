@@ -1,9 +1,16 @@
 import { ChatRoom } from '@schemas/chat-room'
 import { ChatRoomMessage } from '@schemas/chat-room-message'
 import { ChatRoomUser } from '@schemas/chat-room-user'
+import { CenterUser } from '@schemas/center-user'
 
-export type Topic = 'chat_room' | 'chat_room_user' | 'chat_room_message'
-export type Operation = 'create' | 'update' | 'delete' | 'read'
+export type Topic = ChatTopic | TouchPadTopic
+export type Operation = ChatOperation | TouchPadOperation
+
+export type ChatTopic = 'chat_room' | 'chat_room_user' | 'chat_room_message'
+export type ChatOperation = 'create' | 'update' | 'delete' | 'read'
+
+export type TouchPadTopic = 'touchpad'
+export type TouchPadOperation = 'call' | 'check_in'
 
 export interface Base {
     topic: Topic
@@ -61,4 +68,18 @@ export interface DeleteChatRoomMessage extends Base {
     operation: 'delete'
     info: { chat_room_id: string; message_id: string; center_id: string }
     dataset: Array<never>
+}
+
+// -- touch pad
+export interface touchPadCall extends Base {
+    topic: 'touchpad'
+    operation: 'call'
+    info: { center_id: string }
+    dataset: Array<never>
+}
+export interface touchPadCheckIn extends Base {
+    topic: 'touchpad'
+    operation: 'check_in'
+    info: { center_id: string }
+    dataset: Array<CenterUser>
 }

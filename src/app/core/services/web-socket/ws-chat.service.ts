@@ -3,7 +3,7 @@ import { Injectable, OnDestroy } from '@angular/core'
 import { webSocket, WebSocketSubject } from 'rxjs/webSocket'
 import _ from 'lodash'
 
-import * as wsChat from '@schemas/web-socket/ws-chat'
+import * as wsChat from '@schemas/web-socket/web-socket'
 
 import { StorageService } from '@services/storage.service'
 
@@ -39,47 +39,50 @@ export class WsChatService implements OnDestroy {
     }
 
     connect(url: string) {
-        // console.log(`WsChatService connect chatWs : `, this.chatWs)
-        // this.user = this.storageService.getUser()
-        // if (!this.chatWs) {
-        //     this.chatWs = webSocket(this.wss)
-        //     console.log('rxjs webSocket connected: ' + url)
-        // }
-        // if (!_.isEmpty(this.user) && this.user.access_token) {
-        //     console.log('WsChatService connect subscribe chat ws ')
-        //     this.subscribeChatWs(this.user.access_token)
-        // }
-        // return this.chatWs
+        console.log(`WsChatService connect chatWs : `, this.chatWs)
+        this.user = this.storageService.getUser()
+        if (!this.chatWs) {
+            this.chatWs = webSocket(this.wss)
+            console.log('rxjs webSocket connected: ' + url)
+        }
+        if (!_.isEmpty(this.user) && this.user.access_token) {
+            console.log('WsChatService connect subscribe chat ws ')
+            this.subscribeChatWs(this.user.access_token)
+        }
+        return this.chatWs
     }
 
     subscribeChatWs(accessToken: string) {
-        // console.log('subscribeChatWs - ', accessToken)
-        // this.chatWs.subscribe({
-        //     next: (ws) => {
-        //         if (this.isCenterExist() && this.isCenterMessage(ws)) {
-        //             this.switchByWsChatBase(ws as wsChat.Base)
-        //         }
-        //     },
-        //     error: (err) => {
-        //         console.log('web socket chat error : ', err)
-        //     },
-        //     complete: () => {
-        //         console.log('web socket chat complete!')
-        //         this.connect(this.user.access_token)
-        //     },
-        // })
-        // this.chatWs.next({
-        //     action: 'subscription',
-        //     accessToken: accessToken,
-        // })
+        console.log('subscribeChatWs - ', accessToken)
+        this.chatWs.subscribe({
+            next: (ws) => {
+                if (this.isCenterExist() && this.isCenterMessage(ws)) {
+                    this.switchByWsChatBase(ws as wsChat.Base)
+                }
+                if (this.isCenterExist() && this.isCenterTouchPad(ws)) {
+                    this.switchBtWsTouchPad(ws as wsChat.Base)
+                }
+            },
+            error: (err) => {
+                console.log('web socket chat error : ', err)
+            },
+            complete: () => {
+                console.log('web socket chat complete!')
+                this.connect(this.user.access_token)
+            },
+        })
+        this.chatWs.next({
+            action: 'subscription',
+            accessToken: accessToken,
+        })
     }
 
     closeChatWs() {
-        // console.log('close chat ws')
-        // this.chatWs.complete()
-        // if (this.subscription) {
-        //     this.subscription.unsubscribe()
-        // }
+        console.log('close chat ws')
+        this.chatWs.complete()
+        if (this.subscription) {
+            this.subscription.unsubscribe()
+        }
     }
 
     // helper
@@ -87,6 +90,9 @@ export class WsChatService implements OnDestroy {
         return !_.isEmpty(this.storageService.getCenter())
     }
     isCenterMessage(ws: wsChat.Base) {
+        return ws.info.center_id == this.storageService.getCenter()?.id
+    }
+    isCenterTouchPad(ws: wsChat.Base) {
         return ws.info.center_id == this.storageService.getCenter()?.id
     }
 
@@ -111,6 +117,17 @@ export class WsChatService implements OnDestroy {
             this.nxStore.dispatch(
                 CommunityActions.deleteChatRoomMsgByWS({ ws_data: ws as wsChat.DeleteChatRoomMessage })
             )
+        }
+    }
+
+    switchBtWsTouchPad(ws: wsChat.Base) {
+        console.log('switchBtWsTouchPad -- ', ws)
+        if (ws.topic == 'touchpad' && ws.operation == 'call') {
+            console.log('switchBtWsTouchPad -- touchpad : call ', ws)
+            // this.nxStore.dispatch(CommunityActions.createChatRoomByWS({ ws_data: ws as wsChat.touchPadCall }))
+        } else if (ws.topic == 'touchpad' && ws.operation == 'check_in') {
+            console.log('switchBtWsTouchPad -- touchpad : check_in ', ws)
+            // this.nxStore.dispatch(CommunityActions.readChatRoomByWS({ ws_data: ws as wsChat.touchPadCheckIn }))
         }
     }
 }
