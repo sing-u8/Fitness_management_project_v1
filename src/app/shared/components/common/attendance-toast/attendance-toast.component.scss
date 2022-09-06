@@ -5,10 +5,22 @@
 
 .rw-attendance {
 	opacity: 0;
-	transition: opacity 0.3s cubic-bezier(0.25, 0.8, 0.25, 0.8);
-	-moz-transition: opacity 0.3s cubic-bezier(0.25, 0.8, 0.25, 0.8);
-	-webkit-transition: opacity 0.3s cubic-bezier(0.25, 0.8, 0.25, 0.8);
-	-o-transition: opacity 0.3s cubic-bezier(0.25, 0.8, 0.25, 0.8);
+	top: -85px;
+
+	transition-property: opacity, top;
+	transition-duration: 0.3s;
+	transition-timing-function: cubic-bezier(0.25, 0.8, 0.25, 0.8);
+	-moz-transition-property: opacity, top;
+	-moz-transition-duration: 0.3s;
+	-moz-transition-timing-function: cubic-bezier(0.25, 0.8, 0.25, 0.8);
+	-webkit-transition-property: opacity, top;
+	-webkit-transition-duration: 0.3s;
+	-webkit-transition-timing-function: cubic-bezier(0.25, 0.8, 0.25, 0.8);
+	-o-transition-property: opacity, top;
+	-o-transition-duration: 0.3s;
+	-o-transition-timing-function: cubic-bezier(0.25, 0.8, 0.25, 0.8);
+
+
 	z-index: 1000;
 	position: fixed;
 
@@ -48,6 +60,7 @@
 				align-items: center;
 				span {
 					color: var(--lightgrey) !important;
+					margin-bottom: 2px;
 				}
 
 				&:first-of-type {
@@ -78,4 +91,5 @@ img {
 
 .rw-toast-show {
 	opacity: 1;
+	top: 70px;
 }

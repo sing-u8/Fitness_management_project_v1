@@ -13,6 +13,8 @@ import {
 
 import { CenterUser } from '@schemas/center-user'
 
+import _ from 'lodash'
+
 @Component({
     selector: 'rw-attendance-toast',
     templateUrl: './attendance-toast.component.html',
@@ -21,7 +23,7 @@ import { CenterUser } from '@schemas/center-user'
 export class AttendanceToastComponent implements OnChanges, AfterViewChecked {
     @Input() visible: boolean
     @Input() member: CenterUser
-    @Input() delay: number
+    @Input() timeOutCount = 3
 
     @ViewChild('attendanceElement') attendanceElement: ElementRef
 
@@ -29,15 +31,19 @@ export class AttendanceToastComponent implements OnChanges, AfterViewChecked {
     @Output() cancel = new EventEmitter<any>()
 
     changed: boolean
-    timer: any
+    timerId = undefined
+    _timeOutCount = 0
 
-    constructor(private el: ElementRef, private renderer: Renderer2) {
-        this.delay = 2000
-    }
+    constructor(private el: ElementRef, private renderer: Renderer2) {}
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes['visible'] && !changes['visible'].firstChange) {
             if (changes['visible'].previousValue != changes['visible'].currentValue) {
+                this.changed = true
+            }
+        }
+        if (changes['member'] && !changes['member'].firstChange) {
+            if (changes['member'].previousValue != changes['member'].currentValue && this.visible) {
                 this.changed = true
             }
         }
@@ -46,6 +52,7 @@ export class AttendanceToastComponent implements OnChanges, AfterViewChecked {
     ngAfterViewChecked() {
         if (this.changed) {
             this.changed = false
+            clearInterval(this.timerId)
 
             if (this.visible) {
                 this.renderer.addClass(this.attendanceElement.nativeElement, 'display-flex')
@@ -53,14 +60,22 @@ export class AttendanceToastComponent implements OnChanges, AfterViewChecked {
                 setTimeout(() => {
                     this.renderer.addClass(this.attendanceElement.nativeElement, 'rw-toast-show')
                 }, 0)
-                this.timer = setTimeout(() => {
-                    this.onCancel()
-                }, this.delay)
+                this._timeOutCount = this.timeOutCount
+                this.timerId = setInterval(() => {
+                    this._timeOutCount = this._timeOutCount - 1
+                    if (this._timeOutCount <= 0) {
+                        this.onCancel()
+                        clearInterval(this.timerId)
+                    }
+                }, 1000)
             } else {
                 this.renderer.removeClass(this.attendanceElement.nativeElement, 'rw-toast-show')
                 setTimeout(() => {
                     this.renderer.removeClass(this.attendanceElement.nativeElement, 'display-flex')
                 }, 200)
+                if (!_.isEmpty(this.timerId)) {
+                    clearInterval(this.timerId)
+                }
             }
         }
     }
@@ -69,15 +84,10 @@ export class AttendanceToastComponent implements OnChanges, AfterViewChecked {
         const hostPos = document.body.getBoundingClientRect()
         const toastPos = this.attendanceElement.nativeElement.getBoundingClientRect()
         const x = hostPos.width / 2 - toastPos.width / 2
-        const y = 70
         this.renderer.setStyle(this.attendanceElement.nativeElement, 'left', `${x}px`)
-        this.renderer.setStyle(this.attendanceElement.nativeElement, 'top', `${y}px`)
     }
 
     onCancel(): void {
-        if (this.timer) {
-            clearTimeout(this.timer)
-            this.cancel.emit({})
-        }
+        this.cancel.emit({})
     }
 }
