@@ -10,6 +10,7 @@ import {
     AfterViewChecked,
     ViewChild,
 } from '@angular/core'
+import _ from 'lodash'
 
 @Component({
     selector: 'rw-toast',
@@ -19,23 +20,28 @@ import {
 export class ToastComponent implements OnChanges, AfterViewChecked {
     @Input() visible: boolean
     @Input() text: string
-    @Input() delay: number
+    @Input() timeOutCount = 3
 
     @ViewChild('toastElement') toastElement
 
     @Output() visibleChange = new EventEmitter<boolean>()
     @Output() cancel = new EventEmitter<any>()
 
-    changed: boolean
     timer: NodeJS.Timeout
+    changed: boolean
+    timerId = undefined
+    _timeOutCount = 0
 
-    constructor(private el: ElementRef, private renderer: Renderer2) {
-        this.delay = 2000
-    }
+    constructor(private el: ElementRef, private renderer: Renderer2) {}
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes['visible'] && !changes['visible'].firstChange) {
             if (changes['visible'].previousValue != changes['visible'].currentValue) {
+                this.changed = true
+            }
+        }
+        if (changes['text'] && !changes['text'].firstChange) {
+            if (changes['text'].previousValue != changes['text'].currentValue && this.visible) {
                 this.changed = true
             }
         }
@@ -44,6 +50,7 @@ export class ToastComponent implements OnChanges, AfterViewChecked {
     ngAfterViewChecked() {
         if (this.changed) {
             this.changed = false
+            clearInterval(this.timerId)
 
             if (this.visible) {
                 this.renderer.addClass(this.toastElement.nativeElement, 'display-flex')
@@ -51,14 +58,22 @@ export class ToastComponent implements OnChanges, AfterViewChecked {
                 setTimeout(() => {
                     this.renderer.addClass(this.toastElement.nativeElement, 'rw-toast-show')
                 }, 0)
-                this.timer = setTimeout(() => {
-                    this.onCancel()
-                }, this.delay)
+                this._timeOutCount = this.timeOutCount
+                this.timerId = setInterval(() => {
+                    this._timeOutCount = this._timeOutCount - 1
+                    if (this._timeOutCount <= 0) {
+                        this.onCancel()
+                        clearInterval(this.timerId)
+                    }
+                }, 1000)
             } else {
                 this.renderer.removeClass(this.toastElement.nativeElement, 'rw-toast-show')
                 setTimeout(() => {
                     this.renderer.removeClass(this.toastElement.nativeElement, 'display-flex')
                 }, 200)
+                if (!_.isEmpty(this.timerId)) {
+                    clearInterval(this.timerId)
+                }
             }
         }
     }
@@ -71,9 +86,6 @@ export class ToastComponent implements OnChanges, AfterViewChecked {
     }
 
     onCancel(): void {
-        if (this.timer) {
-            clearTimeout(this.timer)
-            this.cancel.emit({})
-        }
+        this.cancel.emit({})
     }
 }
