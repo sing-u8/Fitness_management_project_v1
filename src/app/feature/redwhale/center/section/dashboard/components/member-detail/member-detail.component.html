@@ -62,7 +62,10 @@
                 <div class="member-information__top-right">
                     <div class="l-info">
                         <div class="title">회원번호</div>
-                        <div class="content">{{ !curUserData.user ? '-' : (curUserData.user.center_membership_number ?? '-') }}</div>
+                        <div class="content changeable" (click)="curUserData.user && toggleShowChangeMembershipNumberModal()">
+                            {{ !curUserData.user ? '-' : (curUserData.user.center_membership_number ?? '-') }}
+                            <img src="assets/icons/etc/edit.svg" />
+                        </div>
                     </div>
                     <div class="l-info">
                         <div class="title">이메일</div>
@@ -274,6 +277,13 @@
     (cancel)="toggleShowChangeNameModal()"
     (confirm)="onChangeNameConfirm($event)"
 ></db-change-user-name-modal>
+<db-change-membership-number-modal
+    [(visible)]="doShowChangeMembershipNumberModal"
+    [membershipNumber]="userMembershipNumberForModal"
+    [curUser]="curUserData.user"
+    (cancel)="toggleShowChangeMembershipNumberModal()"
+    (confirm)="onChangeMembershipNumberConfirm($event)"
+></db-change-membership-number-modal>
 
 <rw-modal
     [(visible)]="doShowRemoveUserProfile"
@@ -310,3 +320,4 @@
     (cancel)="onCancelAttendModalClose()"
     (confirm)="onCancelAttendConfirm()"
 ></rw-modal>
+

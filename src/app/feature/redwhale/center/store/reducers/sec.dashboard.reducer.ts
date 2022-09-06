@@ -242,7 +242,7 @@ export const dashboardReducer = createImmerReducer(
     }),
     on(DashboardActions.startSetCurUserData, (state, { userId, reqBody, centerId }) => {
         if (state.curCenterId == centerId) {
-            state.curUserData.user = _.assign(state.curUserData.user, reqBody)
+            if (state.curUserData.user.id == userId) state.curUserData.user = _.assign(state.curUserData.user, reqBody)
 
             const userListsKeys = _.keys(state.usersLists) as MemberSelectCateg[]
             userListsKeys.forEach((key) => {
@@ -256,7 +256,9 @@ export const dashboardReducer = createImmerReducer(
             })
         }
         if (state.drawerCurCenterId == centerId) {
-            state.drawerCurUserData.user = _.assign(state.drawerCurUserData.user, reqBody)
+            if (state.drawerCurUserData.user.id == userId)
+                state.drawerCurUserData.user = _.assign(state.drawerCurUserData.user, reqBody)
+
             const userListsKeys = _.keys(state.drawerUsersLists) as MemberSelectCateg[]
             userListsKeys.forEach((key) => {
                 state.drawerUsersLists[key].find((v, i) => {

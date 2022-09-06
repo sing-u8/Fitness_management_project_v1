@@ -257,13 +257,18 @@ export class DashboardEffect {
         () =>
             this.actions$.pipe(
                 ofType(DashboardActions.startSetCurUserData),
-                switchMap(({ centerId, reqBody, userId, callback }) =>
-                    this.centerUsersApi.updateUser(centerId, userId, reqBody).pipe(
-                        tap(() => {
-                            callback ? callback() : null
-                        })
-                    )
-                ),
+                switchMap(({ centerId, reqBody, userId, callback, blockEffect }) => {
+                    if (blockEffect) {
+                        callback ? callback() : null
+                        return [EMPTY]
+                    } else {
+                        return this.centerUsersApi.updateUser(centerId, userId, reqBody).pipe(
+                            tap(() => {
+                                callback ? callback() : null
+                            })
+                        )
+                    }
+                }),
                 catchError((err: string) => of(DashboardActions.error({ error: err })))
             ),
         { dispatch: false }

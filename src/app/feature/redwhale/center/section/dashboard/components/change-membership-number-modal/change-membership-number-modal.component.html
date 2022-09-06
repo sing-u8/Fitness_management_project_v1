@@ -1,0 +1,61 @@
+<div class="rw-modal-background" #modalBackgroundElement></div>
+
+
+<div
+	class="rw-modal-wrapper justify-content-center align-items-center"
+	(mouseup)="!isMouseModalDown && onCancel()"
+	(mousedown) = 'resetMouseModalDown()'
+	#modalWrapperElement
+>
+	<div
+		class="rw-modal user-select-none"
+		(mousedown) ='onMouseModalDown(); $event.stopPropagation()'
+	>
+		<div class="title-container">
+			<div class="text rw-typo-title1 ">회원번호 변경</div>
+			<div class="sub-text sub-text__first rw-typo-subtext0-regular">회원번호는 전화번호 뒤 4자리 또는 5자리로 구성됩니다.</div>
+			<div class="sub-text rw-typo-subtext0-regular">(5자리일 경우, 전화번호 뒤 4자리 + 숫자)</div>
+		</div>
+
+		<div
+			id='name'
+			class="input"
+			#inputContainer
+			[class.input-box-error]="isError"
+		>
+			<p class="rw-typo-subtext1">변경할 회원번호</p>
+			<input
+				class="rw-input"
+				type="text"
+				placeholder="변경할 회원번호를 입력해주세요."
+				[(ngModel)]="membershipNumber"
+				#name = ngModel
+				minlength="4" maxlength="5" required
+				pattern="^\d{4,5}$"
+				(keydown)="membershipNumberCheck($event)"
+				(keyup.enter) = "name.valid && onConfirm()"
+			>
+			<div class="error" *ngIf="isError">
+				<img class="warning" src="assets/icons/etc/warning-red.svg" />
+				<span class="rw-typo-subtext1">{{ '다른 회원이 사용중인 회원번호입니다.' }}</span>
+			</div>
+		</div>
+
+		<div class="button-group">
+			<div class="cancel " rw-button (click)="onCancel()">
+				취소
+			</div>
+			<div
+				class="confirm"
+				rw-button
+				rwButtonColor="var(--red)"
+				[rwButtonDisabled]= "name.invalid"
+				(click)="name.valid  && onConfirm()"
+			>
+				저장
+			</div>
+		</div>
+
+
+	</div>
+</div>

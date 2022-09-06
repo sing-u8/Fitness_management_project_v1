@@ -127,7 +127,10 @@
                 <div class="user-info">
                     <div class="user-data">
                         <span class="rw-typo-bodytext1_grey prop">회원번호</span>
-                        <span class="rw-typo-bodytext1 value">{{!curCenterUser ? '-' : curCenterUser.center_membership_number}}</span>
+                        <div class="rw-typo-bodytext1 value changeable" (click)="curUserData.user && toggleShowChangeMembershipNumberModal()">
+                            {{!curCenterUser ? '-' : curCenterUser.center_membership_number ?? '-'}}
+                            <img src="assets/icons/etc/edit.svg" />
+                        </div>
                     </div>
                     <div class="user-data">
                         <span class="rw-typo-bodytext1_grey prop">전화번호</span>
@@ -223,6 +226,13 @@
     (cancel)="toggleShowChangeNameModal()"
     (confirm)="onChangeNameConfirm($event)"
 ></db-change-user-name-modal>
+<db-change-membership-number-modal
+    [(visible)]="doShowChangeMembershipNumberModal"
+    [membershipNumber]="userMembershipNumberForModal"
+    [curUser]="curUserData.user"
+    (cancel)="toggleShowChangeMembershipNumberModal()"
+    (confirm)="onChangeMembershipNumberConfirm($event)"
+></db-change-membership-number-modal>
 
 <rw-modal
     [(visible)]="doShowAttendModal"

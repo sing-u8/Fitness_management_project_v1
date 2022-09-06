@@ -197,6 +197,7 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
             if (changes['curUserData'].previousValue?.user?.id != changes['curUserData'].currentValue['user']?.id) {
                 this.memoForm.setValue(changes['curUserData'].currentValue['user']?.['center_user_memo'] ?? '')
                 this.userNameForModal = this.curUserData?.user?.center_user_name ?? ''
+                this.userMembershipNumberForModal = this.curUserData?.user?.center_membership_number ?? ''
 
                 _.forIn(this.userRole, (value, key) => {
                     this.userRole[key] = key == this.curUserData?.user?.role_code
@@ -271,6 +272,28 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
         } else {
             this.toggleShowChangeNameModal()
         }
+    }
+
+    public doShowChangeMembershipNumberModal = false
+    public userMembershipNumberForModal = ''
+    toggleShowChangeMembershipNumberModal() {
+        this.doShowChangeMembershipNumberModal = !this.doShowChangeMembershipNumberModal
+    }
+    onChangeMembershipNumberConfirm(membershipNumber: string) {
+        this.nxStore.dispatch(
+            DashboardActions.startSetCurUserData({
+                centerId: this.center.id,
+                reqBody: { center_membership_number: membershipNumber },
+                userId: this.curUserData.user.id,
+                blockEffect: true,
+                callback: () => {
+                    this.toggleShowChangeMembershipNumberModal()
+                    this.nxStore.dispatch(showToast({ text: `회원번호 변경이 완료되었습니다.` }))
+                    this.nxStore.dispatch(CenterCommonActions.startGetMembers({ centerId: this.center.id }))
+                    this.nxStore.dispatch(CenterCommonActions.startGetInstructors({ centerId: this.center.id }))
+                },
+            })
+        )
     }
 
     // update user profile funcs and vars
