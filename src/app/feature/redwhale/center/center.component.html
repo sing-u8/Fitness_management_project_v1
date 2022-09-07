@@ -28,3 +28,9 @@
         </div>
     </div>
 </div>
+
+<rw-attendance-toast
+    [(visible)]="attendanceToast.visible"
+    [member]="attendanceToast.centerUser"
+    (cancel)="onCancelToastModal()"
+></rw-attendance-toast>

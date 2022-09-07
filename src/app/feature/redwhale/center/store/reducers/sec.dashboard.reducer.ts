@@ -32,6 +32,10 @@ export type CurUseData = {
     reservations: Booking[]
     contracts: Contract[] // !!
 }
+export type AttendanceToast = {
+    visible: boolean
+    centerUser: CenterUser
+}
 
 export type UserDetailTag = 'membership' | 'locker' | 'reservation' | 'payment' | 'contract'
 export const UserDetailTagInit: UserDetailTag = 'membership'
@@ -68,6 +72,10 @@ export const CurUseDataInit: CurUseData = {
     contracts: [],
 }
 export const CurSearchInputInit = ''
+export const AttendanceToastInit = {
+    visible: false,
+    centerUser: undefined,
+}
 
 export interface State {
     // common
@@ -94,6 +102,8 @@ export interface State {
     drawerCurMemberManageCateg: MemberManageCategory
     drawerCurUserListSelect: UserListSelect
     drawerCurUserData: CurUseData
+    // attendance toast
+    attendanceToast: AttendanceToast
 }
 
 export const initialState: State = {
@@ -120,6 +130,9 @@ export const initialState: State = {
     drawerCurMemberManageCateg: MemberManageCategoryInit,
     drawerCurUserListSelect: UserListSelectInit,
     drawerCurUserData: CurUseDataInit,
+
+    // attendance toast
+    attendanceToast: AttendanceToastInit,
 }
 export const MainDashboardInitialState = {
     // main
@@ -150,6 +163,14 @@ export const DrawerDashboardInitialState = {
 
 export const dashboardReducer = createImmerReducer(
     initialState,
+    // attendance toast
+    on(DashboardActions.showAttendanceToast, (state, { visible, centerUser }) => {
+        state.attendanceToast = {
+            visible,
+            centerUser,
+        }
+        return state
+    }),
     // async
     on(DashboardActions.startLoadMemberList, (state) => {
         state = { ...state, ...MainDashboardInitialState } as State
@@ -613,6 +634,8 @@ export const dashboardReducer = createImmerReducer(
     })
 )
 
+// attendance toast
+export const selectAttendanceToast = (state: State) => state.attendanceToast
 // common
 export const selectCurCenterId = (state: State) => state.curCenterId
 export const selectIsLoading = (state: State) => state.isLoading

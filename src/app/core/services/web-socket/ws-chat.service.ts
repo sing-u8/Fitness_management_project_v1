@@ -136,6 +136,9 @@ export class WsChatService implements OnDestroy {
             // this.nxStore.dispatch(CommunityActions.createChatRoomByWS({ ws_data: ws as wsChat.touchPadCall }))
         } else if (ws.topic == 'touchpad' && ws.operation == 'check_in') {
             console.log('switchBtWsTouchPad -- touchpad : check_in ', ws)
+            this.nxStore.dispatch(DashboardAction.showAttendanceToast({ visible: true, centerUser: ws.dataset[0] }))
+            this.dashboardHelperService.synchronizeCheckIn(ws.info.center_id, ws.dataset[0])
+            this.dashboardHelperService.synchronizeCheckInDrawer(ws.info.center_id, ws.dataset[0])
             // this.nxStore.dispatch(CommunityActions.readChatRoomByWS({ ws_data: ws as wsChat.touchPadCheckIn }))
         }
     }

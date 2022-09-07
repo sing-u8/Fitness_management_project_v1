@@ -25,6 +25,12 @@ import { File } from '@schemas/file'
 
 const FeatureKey = 'Center/Dashboard'
 
+// attendance toast
+export const showAttendanceToast = createAction(
+    `[${FeatureKey}] showAttendanceToast`,
+    props<{ visible: boolean; centerUser: CenterUser }>()
+)
+
 // async
 export const startLoadMemberList = createAction(
     `[${FeatureKey}] Start Loading Member List`,
