@@ -10,28 +10,28 @@
         (rwClickOutside)="close()"
     >
         <div *ngIf="value?.value?.membership_number" class="avatar">
-          <rw-avatar
-            [image]="value.value.center_user_picture"
-            [backgroundColor]="value.value.color"
-            text="{{value.value.center_user_name}}"
-            size="23"
-            fontSize="10"
-          ></rw-avatar>
+            <rw-avatar
+                [image]="value.value.center_user_picture"
+                [backgroundColor]="value.value.color"
+                text="{{value.value.center_user_name}}"
+                size="23"
+                fontSize="10"
+            ></rw-avatar>
         </div>
         <span
-          class="text flex-fill"
-          [class.text--open]="isOpen"
+            class="text flex-fill"
+            [class.text--open]="isOpen"
         >
-          {{ value?.name }}
+            {{ value?.name }}
         </span>
         <span class="arrow-icon"></span>
     </div>
     <div
-      class="items"
-      [class.items-small] ="height_type == 'small'"
-      [class.border-none] = "noBorder == true"
-      #itemsElement
-      (click)="$event.stopPropagation()"
+        class="items"
+        [class.items-small] ="height_type == 'small'"
+        [class.border-none] = "noBorder == true"
+        #itemsElement
+        (click)="$event.stopPropagation()"
     >
         <div
             class="item d-flex align-items-center"
@@ -42,13 +42,13 @@
             (click)="onSelect(item)"
         >
             <div *ngIf="item.value?.membership_number" class="avatar">
-              <rw-avatar
-                [image]="item.value.center_user_picture"
-                [backgroundColor]="item.value.color"
-                text="{{item.value.center_user_name}}"
-                size="23"
-                fontSize="10"
-              ></rw-avatar>
+                <rw-avatar
+                    [image]="item.value.center_user_picture"
+                    [backgroundColor]="item.value.color"
+                    text="{{item.value.center_user_name}}"
+                    size="23"
+                    fontSize="10"
+                ></rw-avatar>
             </div>
             <span class="rw-typo-bodytext0">{{ item.name }}</span>
         </div>

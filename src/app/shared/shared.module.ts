@@ -106,6 +106,7 @@ import { GridsterModule } from 'angular-gridster2'
 // // ngx libraries
 import { NgxGaugeModule } from 'ngx-gauge'
 import { NgxSpinnerModule } from 'ngx-spinner'
+import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader'
 
 // import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader'
 
@@ -208,6 +209,7 @@ FullCalendarModule.registerPlugins([
         GridsterModule,
         ReactiveFormsModule,
         NgxSpinnerModule,
+        NgxSkeletonLoaderModule,
     ],
     exports: [
         AvatarComponent,

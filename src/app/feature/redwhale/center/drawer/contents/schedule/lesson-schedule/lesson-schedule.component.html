@@ -28,13 +28,10 @@
         <dw-lesson-flip-list
           *ngFor="let categ of lessonCategList"
           [lessonCateg]="categ"
+          [centerId]="center.id"
+          (onLessonClick)="onLessonClick($event)"
         >
-          <!-- <rw-drawer-lesson-card
-            *ngFor="let lesson of categ.items"
-            (click) = "onLessonClick(lesson, categ)"
-            [lesson]="lesson"
-            [categId]="categ.id"
-          ></rw-drawer-lesson-card> -->
+
         </dw-lesson-flip-list>
       </div>
     </ng-template>

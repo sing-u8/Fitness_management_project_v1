@@ -1,11 +1,27 @@
 <div class="flip-list">
-<!--  <div class="flip-header" [class.open]="isOpen" (click)="lessonCateg.items.length > 0 && toggleOpen()">-->
-<!--    <span class="mdi mdi-chevron-down"></span>-->
-<!--    <span class="rw-typo-bodytext0-bold">{{lessonCateg.name}}</span>-->
-<!--    <span class="rw-typo-bodytext0-bold lesson-length">{{lessonCateg.items.length}}</span>-->
-<!--  </div>-->
-<!--  <div class="contents" [class.open]="isOpen">-->
-<!--    <ng-content></ng-content>-->
-<!--  </div>-->
+  <div class="flip-header" [class.open]="isOpen" (click)="lessonCateg.item_count > 0 && toggleOpen()">
+    <span class="mdi mdi-chevron-down"></span>
+    <span class="rw-typo-bodytext0-bold">{{lessonCateg.name}}</span>
+    <span class="rw-typo-bodytext0-bold lesson-length">{{lessonCateg.item_count}}</span>
+  </div>
+  <div class="contents" [class.open]="isOpen">
+    <ng-template #item_pending [ngIf] = "loading == 'pending' && lessonItems.length == 0" [ngIfElse]="item_done">
+      <ngx-skeleton-loader
+          *ngFor="let _ of [].constructor(lessonCateg.item_count)"
+          count="1"
+          appearance="line"
+          [theme]="{width: '100%', height: '92px', 'border-radius':'5px', margin: '0px'}"
+      ></ngx-skeleton-loader>
+    </ng-template>
+
+    <ng-template #item_done>
+      <rw-drawer-lesson-card
+            *ngFor="let lesson of lessonItems"
+            (click) = "_onLessonClick(lesson)"
+            [lesson]="lesson"
+            [categId]="lessonCateg.id"
+      ></rw-drawer-lesson-card>
+    </ng-template>
+  </div>
 </div>
 

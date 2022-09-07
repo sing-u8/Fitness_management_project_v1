@@ -189,6 +189,7 @@ export class LessonScheduleComponent implements OnInit, OnDestroy, AfterViewInit
         const selectedStaff = _.find(this.instructorList, (item) => {
             return this.StaffSelectValue.value.id == item.instructor.calendar_user.id
         })
+        console.log('selectedStaff -- ', this.instructorList, this.StaffSelectValue)
 
         if (this.dayRepeatSwitch) {
             reqBody = {
@@ -325,17 +326,17 @@ export class LessonScheduleComponent implements OnInit, OnDestroy, AfterViewInit
     // ------------------------------------------------------------------------------------------------------------
 
     // --------------------------------------------------------------------------------------------------------------
-    onLessonClick(lesson: ClassItem, lessonCateg: ClassCategory) {
-        this.selectedLesson = { lesson: lesson, lessonCateg: lessonCateg }
-        this.planDetailInputs = { plan: lesson.name, detail: lesson.memo }
+    onLessonClick(res: { lesson: ClassItem; lessonCateg: ClassCategory }) {
+        this.selectedLesson = { lesson: res.lesson, lessonCateg: res.lessonCateg }
+        this.planDetailInputs = { plan: res.lesson.name, detail: res.lesson.memo }
         // !!
         // this.lesMembershipList = lesson.membership_items
-        this.people = String(lesson.capacity)
-        this.color = lesson.color
+        this.people = String(res.lesson.capacity)
+        this.color = res.lesson.color
 
-        this.reserveSettingInputs.reservation_start = String(lesson.start_booking_until)
-        this.reserveSettingInputs.reservation_end = String(lesson.end_booking_before)
-        this.reserveSettingInputs.reservation_cancel_end = String(lesson.cancel_booking_before)
+        this.reserveSettingInputs.reservation_start = String(res.lesson.start_booking_until)
+        this.reserveSettingInputs.reservation_end = String(res.lesson.end_booking_before)
+        this.reserveSettingInputs.reservation_cancel_end = String(res.lesson.cancel_booking_before)
 
         _.find(this.staffSelect_list, (item) => {
             if (this.schedulingInstructor != undefined && item.value.id == this.schedulingInstructor.calendar_user.id) {
@@ -343,7 +344,7 @@ export class LessonScheduleComponent implements OnInit, OnDestroy, AfterViewInit
                 this.StaffSelectValue = { name: item.value.center_user_name, value: item.value }
                 this.nxStore.dispatch(ScheduleActions.setSchedulingInstructor({ schedulingInstructor: undefined }))
                 return true
-            } else if (this.schedulingInstructor != undefined && item.value.id == lesson.instructors[0].id) {
+            } else if (this.schedulingInstructor != undefined && item.value.id == res.lesson.instructors[0].id) {
                 this.StaffSelectValue = { name: item.value.center_user_name, value: item.value }
                 return true
             }
@@ -409,7 +410,6 @@ export class LessonScheduleComponent implements OnInit, OnDestroy, AfterViewInit
 
             this.repeatDatepick.startDate = dayjs(date.startDate).format('YYYY-MM-DD')
             this.dayPick.date = dayjs(date.startDate).format('YYYY-MM-DD')
-            console.log('initTimePick(): ', this.timepick, ' --- select date : ', date)
         })
     }
 
@@ -420,10 +420,9 @@ export class LessonScheduleComponent implements OnInit, OnDestroy, AfterViewInit
             .subscribe((lessonCateg) => {
                 const fillCateg = []
                 const emtpyCateg = []
-                // !!
-                // _.forEach(lessonCateg, (categ) => {
-                //     categ.items.length > 0 ? fillCateg.push(categ) : emtpyCateg.push(categ)
-                // })
+                _.forEach(lessonCateg, (categ) => {
+                    categ.item_count > 0 ? fillCateg.push(categ) : emtpyCateg.push(categ)
+                })
                 this.lessonCategList = [...fillCateg, ...emtpyCateg]
                 this.isLessonCategInit = true
             })
