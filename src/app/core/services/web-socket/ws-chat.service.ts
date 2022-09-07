@@ -6,12 +6,15 @@ import _ from 'lodash'
 import * as wsChat from '@schemas/web-socket/web-socket'
 
 import { StorageService } from '@services/storage.service'
+import { DashboardHelperService } from '@services/center/dashboard-helper.service'
+import { SoundService } from '@services/helper/sound.service'
 
 // ngrx
 import { Store, select } from '@ngrx/store'
 import * as FromCommunity from '@centerStore/reducers/sec.community.reducer'
 import * as CommunitySelector from '@centerStore/selectors/sec.community.selector'
 import * as CommunityActions from '@centerStore/actions/sec.community.actions'
+import * as DashboardAction from '@centerStore/actions/sec.dashboard.actions'
 import { Subject, Subscription } from 'rxjs'
 import { User } from '@schemas/user'
 
@@ -26,7 +29,12 @@ export class WsChatService implements OnDestroy {
 
     public user: User
 
-    constructor(private nxStore: Store, private storageService: StorageService) {
+    constructor(
+        private nxStore: Store,
+        private storageService: StorageService,
+        private dashboardHelperService: DashboardHelperService,
+        private soundService: SoundService
+    ) {
         console.log('WsChatService chat service !!!!!!!!!')
         this.connect(this.wss)
     }
@@ -124,6 +132,7 @@ export class WsChatService implements OnDestroy {
         console.log('switchBtWsTouchPad -- ', ws)
         if (ws.topic == 'touchpad' && ws.operation == 'call') {
             console.log('switchBtWsTouchPad -- touchpad : call ', ws)
+            this.soundService.callEmployee()
             // this.nxStore.dispatch(CommunityActions.createChatRoomByWS({ ws_data: ws as wsChat.touchPadCall }))
         } else if (ws.topic == 'touchpad' && ws.operation == 'check_in') {
             console.log('switchBtWsTouchPad -- touchpad : check_in ', ws)

@@ -11,6 +11,7 @@ import { CenterTouchpadService } from '@services/center-touchpad.service'
 import { CenterUsersLockerService } from '@services/center-users-locker.service.service'
 import { CenterUsersMembershipService } from '@services/center-users-membership.service'
 import { DashboardHelperService } from '@services/center/dashboard-helper.service'
+import { SoundService } from '@services/helper/sound.service'
 
 import { UserLocker } from '@schemas/user-locker'
 import { UserMembership } from '@schemas/user-membership'
@@ -56,7 +57,8 @@ export class TouchPadComponent implements OnInit, OnDestroy {
         private nxStore: Store,
         private centerUsersLockerService: CenterUsersLockerService,
         private centerUsersMembershipService: CenterUsersMembershipService,
-        private dashboardHelper: DashboardHelperService
+        private dashboardHelper: DashboardHelperService,
+        private soundService: SoundService
     ) {
         this.center = this.storageService.getCenter()
         this.touchPadInput = ''
@@ -155,8 +157,13 @@ export class TouchPadComponent implements OnInit, OnDestroy {
 
     callEmployee() {
         this.spinner.show('call_employee')
-        setTimeout(() => {
+        this.centerTouchPadService.callEmployee(this.center.id).subscribe(() => {
             this.spinner.hide('call_employee')
-        }, 2000)
+            console.log('call employee !!! ')
+        })
+        // setTimeout(() => {
+        //     this.spinner.hide('call_employee')
+        // }, 2000)
+        this.soundService.callEmployee()
     }
 }
