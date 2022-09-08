@@ -141,12 +141,18 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
             if (!_.isEmpty(this.dwCurCenterId) && this.dwCurCenterId == this.center.id) {
                 this.dashboardHelperService.synchronizeCheckInDrawer(this.center.id, centerUser)
             }
+            // this.nxStore.dispatch(
+            //     showToast({
+            //         text: `${this.wordService.ellipsis(
+            //             this.curUserData.user.center_user_name,
+            //             4
+            //         )}님이 출석 처리되었습니다.`,
+            //     })
+            // )
             this.nxStore.dispatch(
-                showToast({
-                    text: `${this.wordService.ellipsis(
-                        this.curUserData.user.center_user_name,
-                        4
-                    )}님이 출석 처리되었습니다.`,
+                DashboardActions.showAttendanceToast({
+                    visible: true,
+                    centerUser: this.curUserData.user,
                 })
             )
             this.onAttendModalClose()

@@ -13,7 +13,10 @@ import {
 
 import { CenterUser } from '@schemas/center-user'
 
+import { TimeService } from '@services/helper/time.service'
+
 import _ from 'lodash'
+import dayjs from 'dayjs'
 
 @Component({
     selector: 'rw-attendance-toast',
@@ -24,6 +27,7 @@ export class AttendanceToastComponent implements OnChanges, AfterViewChecked {
     @Input() visible: boolean
     @Input() member: CenterUser
     @Input() timeOutCount = 3
+    @Input() dateToExpired = 7
 
     @ViewChild('attendanceElement') attendanceElement: ElementRef
 
@@ -34,7 +38,12 @@ export class AttendanceToastComponent implements OnChanges, AfterViewChecked {
     timerId = undefined
     _timeOutCount = 0
 
-    constructor(private el: ElementRef, private renderer: Renderer2) {}
+    imminentDateObj = {
+        isImminent: false,
+        imminentDate: 0,
+    }
+
+    constructor(private el: ElementRef, private renderer: Renderer2, private timeService: TimeService) {}
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes['visible'] && !changes['visible'].firstChange) {
@@ -44,6 +53,21 @@ export class AttendanceToastComponent implements OnChanges, AfterViewChecked {
         }
         if (changes['member'] && !changes['member'].firstChange) {
             if (changes['member'].previousValue != changes['member'].currentValue && this.visible) {
+                const remainDate = this.timeService.getRestPeriod(
+                    dayjs().format(),
+                    this.member.user_membership_end_date
+                )
+                if (remainDate <= this.dateToExpired) {
+                    this.imminentDateObj = {
+                        isImminent: true,
+                        imminentDate: remainDate,
+                    }
+                } else {
+                    this.imminentDateObj = {
+                        isImminent: false,
+                        imminentDate: 0,
+                    }
+                }
                 this.changed = true
             }
         }
