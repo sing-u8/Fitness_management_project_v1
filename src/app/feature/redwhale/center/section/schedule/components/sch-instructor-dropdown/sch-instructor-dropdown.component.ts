@@ -1,5 +1,5 @@
-import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/core'
-import { Router, ActivatedRoute } from '@angular/router'
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core'
+import { ActivatedRoute, Router } from '@angular/router'
 
 import _ from 'lodash'
 
@@ -46,6 +46,15 @@ export class SchInstructorDropdownComponent implements OnInit, OnChanges {
         if (this.instructorList && !this.isInit) {
             this.selectedNum = this.instructorList.length
         }
+        if (changes['instructorList']) {
+            // console.log('changes in sch instructor dropdown - ', changes)
+            this.instructorFilter = (cu: CenterUser) => {
+                return (
+                    cu.role_code != 'member' &&
+                    _.every(this.instructorList, (inst) => inst.instructor.calendar_user.id != cu.id)
+                )
+            }
+        }
     }
 
     toggleContent() {
@@ -78,7 +87,7 @@ export class SchInstructorDropdownComponent implements OnInit, OnChanges {
     }
 
     checkIsAllChecked() {
-        this.isAllChecked = this.selectedNum == this.instructorList.length ? true : false
+        this.isAllChecked = this.selectedNum == this.instructorList.length
     }
 
     goToRegisterMember() {}
@@ -152,5 +161,12 @@ export class SchInstructorDropdownComponent implements OnInit, OnChanges {
             6
         )}' 강사를 추가하시겠어요?`
         this.toggleAddInstructorModal()
+    }
+
+    instructorFilter(cu: CenterUser): boolean {
+        return (
+            cu.role_code != 'member' &&
+            _.every(this.instructorList, (inst) => inst.instructor.calendar_user.id != cu.id)
+        )
     }
 }

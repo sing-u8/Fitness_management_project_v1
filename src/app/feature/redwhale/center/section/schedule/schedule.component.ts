@@ -1,13 +1,13 @@
-import { Component, OnInit, AfterViewInit, OnDestroy, ViewChild, ElementRef, Renderer2 } from '@angular/core'
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core'
 import { Location } from '@angular/common'
-import { Router, ActivatedRoute } from '@angular/router'
+import { ActivatedRoute, Router } from '@angular/router'
 
 import _ from 'lodash'
 import dayjs from 'dayjs'
 
 // fullcalendar
-import { FullCalendarComponent, CalendarOptions } from '@fullcalendar/angular'
-import { EventClickArg, EventHoveringArg, EventDropArg } from '@fullcalendar/common'
+import { CalendarOptions, FullCalendarComponent } from '@fullcalendar/angular'
+import { EventClickArg, EventDropArg, EventHoveringArg } from '@fullcalendar/common'
 import koLocale from '@fullcalendar/core/locales/ko'
 
 // services
@@ -29,13 +29,12 @@ import { UserAbleToBook } from '@schemas/user-able-to-book'
 
 // rxjs
 import { Observable, Subject } from 'rxjs'
-import { takeUntil, take } from 'rxjs/operators'
+import { take, takeUntil } from 'rxjs/operators'
 
 // ngrx
-import { Store, select } from '@ngrx/store'
-import { drawerSelector } from '@appStore/selectors'
+import { select, Store } from '@ngrx/store'
 import { showToast } from '@appStore/actions/toast.action'
-import { openDrawer, closeDrawer, setScheduleDrawerIsReset } from '@appStore/actions/drawer.action'
+import { closeDrawer, openDrawer, setScheduleDrawerIsReset } from '@appStore/actions/drawer.action'
 
 import * as FromSchedule from '@centerStore/reducers/sec.schedule.reducer'
 import * as ScheduleSelector from '@centerStore/selectors/sec.schedule.selector'

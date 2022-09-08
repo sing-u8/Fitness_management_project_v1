@@ -1,37 +1,40 @@
 import {
-    Component,
-    Input,
-    ElementRef,
-    Renderer2,
-    Output,
-    EventEmitter,
-    OnChanges,
-    SimpleChanges,
     AfterViewChecked,
-    ViewChild,
-    OnInit,
     AfterViewInit,
+    Component,
+    ElementRef,
+    EventEmitter,
+    Input,
+    OnChanges,
+    OnDestroy,
+    Output,
+    Renderer2,
+    SimpleChanges,
+    ViewChild,
 } from '@angular/core'
-import { FormBuilder, FormControl, ValidationErrors, AsyncValidatorFn, AbstractControl } from '@angular/forms'
-import { Observable } from 'rxjs'
-import { distinctUntilChanged, debounceTime, map, switchMap } from 'rxjs/operators'
-import * as _ from 'lodash'
+import { AbstractControl, AsyncValidatorFn, FormBuilder, FormControl, ValidationErrors } from '@angular/forms'
+import { EMPTY, Observable, Subject } from 'rxjs'
+import { debounceTime, distinctUntilChanged, switchMap, takeUntil } from 'rxjs/operators'
+import _ from 'lodash'
 
 import { CenterUsersService } from '@services/center-users.service'
 import { StorageService } from '@services/storage.service'
 
 import { CenterUser } from '@schemas/center-user'
 import { Center } from '@schemas/center'
+import { Store } from '@ngrx/store'
+import * as CenterCommonSelector from '@centerStore/selectors/center.common.selector'
 
 @Component({
     selector: 'rw-member-list-modal',
     templateUrl: './member-list-modal.component.html',
     styleUrls: ['./member-list-modal.component.scss'],
 })
-export class MemberListModalComponent implements AfterViewChecked, OnChanges, AfterViewInit {
+export class MemberListModalComponent implements AfterViewChecked, OnChanges, AfterViewInit, OnDestroy {
     @Input() visible: boolean
     @Input() title = '회원 검색'
     @Input() searchPlaceholder = '회원의 이름 또는 전화번호를 검색해주세요.'
+    @Input() filterFn: (centerUser: CenterUser) => boolean = (centerUser: CenterUser) => true
 
     @ViewChild('modalBackgroundElement') modalBackgroundElement
     @ViewChild('modalWrapperElement') modalWrapperElement
@@ -40,39 +43,54 @@ export class MemberListModalComponent implements AfterViewChecked, OnChanges, Af
     @Output() cancel = new EventEmitter<any>()
     @Output() confirm = new EventEmitter<CenterUser>()
 
-    changed: boolean
+    public changed: boolean
 
     public center: Center
 
-    public centerUsers: Array<CenterUser>
+    public centerUsers: Array<CenterUser> = []
+    public originMemberList: Array<CenterUser> = []
     public memberSearchInput: FormControl
 
     public isMouseModalDown: boolean
+
+    public unsubscribe$ = new Subject<boolean>()
 
     constructor(
         private el: ElementRef,
         private renderer: Renderer2,
         private centerUsersService: CenterUsersService,
         private storageService: StorageService,
-        private fb: FormBuilder
+        private fb: FormBuilder,
+        private nxStore: Store
     ) {
+        this.center = this.storageService.getCenter()
         this.isMouseModalDown = false
         this.centerUsers = []
         this.memberSearchInput = this.fb.control('', { asyncValidators: [this.searchMemberValidator()] })
+        this.nxStore
+            .select(CenterCommonSelector.members)
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe((memberList) => {
+                const memberListCopy = _.cloneDeep(memberList)
+                this.centerUsers = this.filterMemberList(memberListCopy, this.memberSearchInput.value)
+                this.originMemberList = memberListCopy.reverse()
+            })
     }
 
     ngAfterViewInit(): void {
-        this.center = this.storageService.getCenter()
-        this.centerUsersService.getUserList(this.center.id, '', '').subscribe((memberList) => {
-            this.centerUsers = memberList.reverse()
-        })
+        // this.centerUsersService.getUserList(this.center.id, '', '').subscribe((memberList) => {
+        //     this.centerUsers = memberList.reverse()
+        // })
     }
 
     ngOnChanges(changes: SimpleChanges) {
-        if (!changes['visible'].firstChange) {
+        if (changes['visible'] && !changes['visible'].firstChange) {
             if (changes['visible'].previousValue != changes['visible'].currentValue) {
                 this.changed = true
             }
+        }
+        if (changes['filterFn'] && this.originMemberList.length > 0) {
+            this.centerUsers = this.filterMemberList(this.originMemberList, this.memberSearchInput.value)
         }
     }
 
@@ -97,6 +115,10 @@ export class MemberListModalComponent implements AfterViewChecked, OnChanges, Af
             }
         }
     }
+    ngOnDestroy() {
+        this.unsubscribe$.next(true)
+        this.unsubscribe$.complete()
+    }
 
     onCancel(): void {
         this.cancel.emit({})
@@ -119,12 +141,17 @@ export class MemberListModalComponent implements AfterViewChecked, OnChanges, Af
             return control.valueChanges.pipe(
                 distinctUntilChanged(),
                 debounceTime(500),
-                switchMap((v) => this.centerUsersService.getUserList(this.center.id, '', v)),
-                map((memberList) => {
-                    this.centerUsers = memberList.reverse()
-                    return null
+                switchMap((v) => {
+                    this.centerUsers = this.filterMemberList(this.originMemberList, v)
+                    return EMPTY
                 })
             )
         }
+    }
+
+    filterMemberList(memberList: CenterUser[], text: string) {
+        return memberList.filter(this.filterFn).filter((item) => {
+            return item.center_user_name.includes(text) || item.phone_number.includes(text)
+        })
     }
 }

@@ -99,6 +99,7 @@
     [visible]="addInstructorList"
     [title]="'강사 검색'"
     [searchPlaceholder]="'강사의 이름 또는 전화번호를 검색해주세요.'"
+    [filterFn]="instructorFilter"
     (cancel)="onMemberListModalCancel()"
     (confirm)="onMemberListModalConfirm($event)"
 ></rw-member-list-modal>

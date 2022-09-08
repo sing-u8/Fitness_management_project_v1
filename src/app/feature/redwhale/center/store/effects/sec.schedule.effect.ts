@@ -1,17 +1,19 @@
 import { Injectable } from '@angular/core'
-import { createEffect, Actions, ofType } from '@ngrx/effects'
-import { of, forkJoin } from 'rxjs'
-import { catchError, switchMap, map } from 'rxjs/operators'
+import { Actions, createEffect, ofType } from '@ngrx/effects'
+import { forkJoin, of } from 'rxjs'
+import { catchError, map, switchMap } from 'rxjs/operators'
 
 import { StorageService } from '@services/storage.service'
 import { CenterCalendarService } from '@services/center-calendar.service'
 import { CenterUsersService } from '@services/center-users.service'
 import { CenterLessonService } from '@services/center-lesson.service'
+import { WordService } from '@services/helper/word.service'
 
 import * as ScheduleActions from '../actions/sec.schedule.actions'
 import * as ScheduleReducer from '../reducers/sec.schedule.reducer'
 
 import _ from 'lodash'
+import { showToast } from '@appStore/actions/toast.action'
 
 @Injectable()
 export class ScheduleEffect {
@@ -20,7 +22,8 @@ export class ScheduleEffect {
         private storageService: StorageService,
         private centerCalendarApi: CenterCalendarService,
         private centerUsersApi: CenterUsersService,
-        private centerLessonApi: CenterLessonService
+        private centerLessonApi: CenterLessonService,
+        private wordService: WordService
     ) {}
 
     public loadScheduleState = createEffect(() => {
@@ -87,13 +90,18 @@ export class ScheduleEffect {
             ofType(ScheduleActions.startCreateInstructor),
             switchMap(({ centerId, reqBody }) => {
                 return this.centerCalendarApi.createCalendar(centerId, reqBody).pipe(
-                    map((newInstructor) => {
-                        return ScheduleActions.finishCreateInstructor({
-                            createdInstructor: {
-                                selected: true,
-                                instructor: newInstructor,
-                            },
-                        })
+                    switchMap((newInstructor) => {
+                        return [
+                            ScheduleActions.finishCreateInstructor({
+                                createdInstructor: {
+                                    selected: true,
+                                    instructor: newInstructor,
+                                },
+                            }),
+                            showToast({
+                                text: `'${this.wordService.ellipsis(reqBody.name, 6)}' 강사가 추가되었습니다.`,
+                            }),
+                        ]
                     }),
                     catchError((err: string) => of(ScheduleActions.setError({ error: 'createInstructor err :' + err })))
                 )
