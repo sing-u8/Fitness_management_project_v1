@@ -23,7 +23,6 @@ import { ButtonComponent } from './components/common/button/button.component'
 import { TermsEULAComponent } from './components/terms/terms-eula/terms-eula.component'
 import { TermsPrivacyComponent } from './components/terms/terms-privacy/terms-privacy.component'
 import { SmallModalComponent } from './components/common/small-modal/small-modal.component'
-import { MemberListModalComponent } from './components/common/member-list-modal/member-list-modal.component'
 import { ChargeModalComponent } from './components/common/charge-modal/charge-modal.component'
 import { DatepickModalComponent } from './components/common/datepick-modal/datepick-modal.component'
 import { DbDatepickerComponent } from './components/common/db-datepicker/db-datepicker.component'
@@ -142,7 +141,6 @@ FullCalendarModule.registerPlugins([
         TermsEULAComponent,
         TermsPrivacyComponent,
         SmallModalComponent,
-        MemberListModalComponent,
         LessonFlipListComponent,
         RolemodalComponent,
         CenterRolemodalComponent,
@@ -232,7 +230,6 @@ FullCalendarModule.registerPlugins([
         TermsEULAComponent,
         TermsPrivacyComponent,
         SmallModalComponent,
-        MemberListModalComponent,
         LessonFlipListComponent,
         RolemodalComponent,
         CenterRolemodalComponent,

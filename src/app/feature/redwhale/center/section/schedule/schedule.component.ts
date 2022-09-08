@@ -120,7 +120,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
         this.initFullCalendar()
     }
 
-    async ngOnInit(): Promise<void> {
+    ngOnInit(): void {
         this.user = this.storageService.getUser()
 
         this.curCenterId$ = this.nxStore.select(ScheduleSelector.curCenterId)
@@ -131,13 +131,12 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
         this.nxStore
             .pipe(select(ScheduleSelector.doLessonsExist), takeUntil(this.unsubscriber$))
             .subscribe((doExist) => {
-                this.doShowEmptyLessonModal = doExist ? false : true
+                this.doShowEmptyLessonModal = !doExist
             })
 
         this.nxStore.pipe(select(ScheduleSelector.curCenterId), take(1)).subscribe((curCenterid) => {
             console.log('select(ScheduleSelector.curCenterId) !!!!!')
             if (curCenterid != this.center.id) {
-                console.log('select(ScheduleSelector.curCenterId)  ---curCenterid != this.center.id !!!!!')
                 this.nxStore.dispatch(ScheduleActions.resetAll())
                 this.nxStore.dispatch(ScheduleActions.startLoadScheduleState())
             }

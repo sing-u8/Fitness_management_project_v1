@@ -5,10 +5,26 @@
   </div>
   <div class="content" [class.show] ="isContentOpen">
 
-    <ng-template
+    <ng-container
+        #instructorlist_loading
+        *ngIf="loading == 'pending'"
+    >
+      <div class="d-flex flex-column">
+        <ngx-skeleton-loader
+            *ngFor="let _ of [1,2]; last as isLast "
+            count = 1
+            appearance="line"
+            [theme]="{
+              width: '216px', height: '24px', 'border-radius': '5px',
+              margin: '12px 0 0 0', 'margin-bottom': isLast ? '12px' : '0'
+            }"
+        ></ngx-skeleton-loader>
+      </div>
+    </ng-container>
+
+    <ng-container
       #instructorlist_empty
-      [ngIf]="!instructorList || instructorList.length == 0"
-      [ngIfElse]="instructorlist_exist"
+      *ngIf="!instructorList || instructorList.length == 0 && loading == 'done'"
     >
       <div class="empty-guide">
         <img src="assets/icons/etc/empty_screen.svg" id="emtpy-screen" >
@@ -20,9 +36,12 @@
             <img src="assets/icons/etc/short_right_arrow_grey.svg">
         </div>
       </div>
-    </ng-template>
+    </ng-container>
 
-    <ng-template #instructorlist_exist>
+    <ng-container
+        #instructorlist_exist
+        *ngIf="!(!instructorList || instructorList.length == 0) && loading == 'done'"
+    >
       <div class="instructor-list">
 
         <div
@@ -54,7 +73,7 @@
 
 
       </div>
-    </ng-template>
+    </ng-container>
 
   </div>
 

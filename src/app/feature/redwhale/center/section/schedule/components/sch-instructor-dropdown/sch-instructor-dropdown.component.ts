@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnChanges } from '@angular/core'
+import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/core'
 import { Router, ActivatedRoute } from '@angular/router'
 
 import _ from 'lodash'
@@ -8,6 +8,7 @@ import { StorageService } from '@services/storage.service'
 
 import { CenterUser } from '@schemas/center-user'
 import { Center } from '@schemas/center'
+import { Loading } from '@schemas/store/loading'
 
 // ngrx
 import { Store } from '@ngrx/store'
@@ -21,6 +22,7 @@ import * as ScheduleActions from '@centerStore/actions/sec.schedule.actions'
 })
 export class SchInstructorDropdownComponent implements OnInit, OnChanges {
     @Input() instructorList: Array<FromSchedule.InstructorType> = []
+    @Input() loading: Loading = 'pending'
 
     public center: Center
 
@@ -40,7 +42,7 @@ export class SchInstructorDropdownComponent implements OnInit, OnChanges {
     }
 
     ngOnInit(): void {}
-    ngOnChanges(): void {
+    ngOnChanges(changes: SimpleChanges): void {
         if (this.instructorList && !this.isInit) {
             this.selectedNum = this.instructorList.length
         }

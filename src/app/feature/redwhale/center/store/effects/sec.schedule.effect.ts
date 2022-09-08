@@ -29,21 +29,19 @@ export class ScheduleEffect {
             switchMap(() => {
                 const center = this.storageService.getCenter()
                 const user = this.storageService.getUser()
-                return forkJoin({
-                    centerUsers: this.centerUsersApi.getUserList(center.id),
-                    calendars: this.centerCalendarApi.getCalendars(center.id, {
+                return forkJoin([
+                    this.centerUsersApi.getUserList(center.id),
+                    this.centerCalendarApi.getCalendars(center.id, {
                         typeCode: 'calendar_type_user_calendar',
                     }),
-                    lessonCategs: this.centerLessonApi.getCategoryList(center.id),
-                }).pipe(
-                    map(({ centerUsers, calendars, lessonCategs }) => {
+                    this.centerLessonApi.getCategoryList(center.id),
+                ]).pipe(
+                    map(([centerUsers, calendars, lessonCategs]) => {
                         const curCenterUser = _.find(centerUsers, (centerUser) => centerUser.id == user.id)
                         const curCalendar = _.find(calendars, (cal) => cal.calendar_user.id == curCenterUser.id)
                         const doLessonsExist =
-                            lessonCategs.length > 0
-                                ? //  && lessonCategs.reduce((acc, curCateg) => [...acc, curCateg.items], []).length > 0
-                                  true
-                                : false
+                            lessonCategs.length > 0 &&
+                            lessonCategs.reduce((acc, curCateg) => acc + curCateg.item_count, 0) > 0
                         return { curCenterUser, curCalendar, calendars, doLessonsExist }
                     }),
                     switchMap((value) => {
