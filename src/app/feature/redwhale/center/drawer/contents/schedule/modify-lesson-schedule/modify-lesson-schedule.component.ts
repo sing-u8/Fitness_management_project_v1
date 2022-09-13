@@ -1,10 +1,8 @@
-import { Component, OnInit, OnDestroy, AfterViewInit, ViewChild, ElementRef } from '@angular/core'
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core'
 
 import _ from 'lodash'
 import dayjs from 'dayjs'
 import isSameOrBefor from 'dayjs/plugin/isSameOrBefore'
-dayjs.extend(isSameOrBefor)
-
 import { StorageService } from '@services/storage.service'
 import { CenterUsersService } from '@services/center-users.service'
 import { CenterLessonService } from '@services/center-lesson.service'
@@ -15,26 +13,23 @@ import { WordService } from '@services/helper/word.service'
 import { User } from '@schemas/user'
 import { CenterUser } from '@schemas/center-user'
 import { Center } from '@schemas/center'
-import { ClassCategory } from '@schemas/class-category'
-import { ClassItem } from '@schemas/class-item'
 import { MembershipItem } from '@schemas/membership-item'
-import { Calendar } from '@schemas/calendar'
 import { CalendarTask } from '@schemas/calendar-task'
 
 // rxjs
 import { Subject } from 'rxjs'
-import { takeUntil } from 'rxjs/operators'
+import { take, takeUntil } from 'rxjs/operators'
 
 // ngrx
-import { Store, select } from '@ngrx/store'
+import { select, Store } from '@ngrx/store'
 import { concatLatestFrom } from '@ngrx/effects'
-import * as ScheduleActions from '@centerStore/actions/sec.schedule.actions'
 import * as ScheduleReducer from '@centerStore/reducers/sec.schedule.reducer'
 import * as ScheduleSelector from '@centerStore/selectors/sec.schedule.selector'
-
-import { scheduleIsResetSelector, drawerSelector } from '@appStore/selectors'
-import { setScheduleDrawerIsReset, closeDrawer } from '@appStore/actions/drawer.action'
+import * as CenterCommonSelector from '@centerStore/selectors/center.common.selector'
+import { closeDrawer } from '@appStore/actions/drawer.action'
 import { showToast } from '@appStore/actions/toast.action'
+
+dayjs.extend(isSameOrBefor)
 
 @Component({
     selector: 'modify-lesson-schedule',
@@ -247,7 +242,7 @@ export class ModifyLessonScheduleComponent implements OnInit, OnDestroy, AfterVi
             .subscribe({
                 next: (res) => {
                     fn ? fn() : null
-                    this.nxStore.dispatch(ScheduleActions.setIsScheduleEventChanged({ isScheduleEventChanged: true }))
+                    // this.nxStore.dispatch(ScheduleActions.setIsScheduleEventChanged({ isScheduleEventChanged: true }))
                     this.closeDrawer()
                     this.nxStore.dispatch(
                         showToast({
@@ -374,12 +369,18 @@ export class ModifyLessonScheduleComponent implements OnInit, OnDestroy, AfterVi
     // ----- select functions ----------------------------------------------------------------------------
 
     initStaffList(instructorList: ScheduleReducer.InstructorType[]) {
-        this.staffSelect_list = instructorList
-            .map((v) => v.instructor.calendar_user)
-            .map((v) => ({
-                name: v.center_user_name ?? v.name,
-                value: v,
-            }))
+        this.nxStore
+            .select(CenterCommonSelector.instructors)
+            .pipe(take(1))
+            .subscribe((instructors) => {
+                const centerInstructorList = _.cloneDeep(instructors)
+                this.staffSelect_list = centerInstructorList
+                    .filter((ci) => -1 != instructorList.findIndex((v) => ci.id == v.instructor.calendar_user.id))
+                    .map((value) => ({
+                        name: value.center_user_name,
+                        value: value,
+                    }))
+            })
     }
 
     public reservationExistInOtherTasks = false

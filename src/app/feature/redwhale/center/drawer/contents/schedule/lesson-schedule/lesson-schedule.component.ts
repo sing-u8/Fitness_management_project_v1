@@ -1,9 +1,7 @@
-import { Component, OnInit, OnDestroy, AfterViewInit, ViewChild, ElementRef } from '@angular/core'
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import _ from 'lodash'
 import dayjs from 'dayjs'
 import isSameOrBefor from 'dayjs/plugin/isSameOrBefore'
-dayjs.extend(isSameOrBefor)
-
 import { StorageService } from '@services/storage.service'
 import { CenterUsersService } from '@services/center-users.service'
 import { CenterLessonService } from '@services/center-lesson.service'
@@ -19,19 +17,22 @@ import { MembershipItem } from '@schemas/membership-item'
 import { Calendar } from '@schemas/calendar'
 
 // rxjs
-import { Subject, interval } from 'rxjs'
-import { takeUntil } from 'rxjs/operators'
+import { Subject } from 'rxjs'
+import { take, takeUntil } from 'rxjs/operators'
 
 // ngrx
-import { Store, select } from '@ngrx/store'
+import { select, Store } from '@ngrx/store'
 import { concatLatestFrom } from '@ngrx/effects'
 import * as ScheduleActions from '@centerStore/actions/sec.schedule.actions'
 import * as ScheduleReducer from '@centerStore/reducers/sec.schedule.reducer'
 import * as ScheduleSelector from '@centerStore/selectors/sec.schedule.selector'
+import * as CenterCommonSelector from '@centerStore/selectors/center.common.selector'
 
-import { scheduleIsResetSelector, drawerSelector } from '@appStore/selectors'
-import { setScheduleDrawerIsReset, closeDrawer } from '@appStore/actions/drawer.action'
+import { drawerSelector, scheduleIsResetSelector } from '@appStore/selectors'
+import { closeDrawer, setScheduleDrawerIsReset } from '@appStore/actions/drawer.action'
 import { showToast } from '@appStore/actions/toast.action'
+
+dayjs.extend(isSameOrBefor)
 
 @Component({
     selector: 'lesson-schedule',
@@ -106,7 +107,8 @@ export class LessonScheduleComponent implements OnInit, OnDestroy, AfterViewInit
     public staffSelect_list: Array<{ name: string; value: CenterUser }> = []
     public StaffSelectValue: { name: string; value: CenterUser } = { name: undefined, value: undefined }
 
-    public instructorList: Array<ScheduleReducer.InstructorType> = []
+    public schInstructorList: Array<ScheduleReducer.InstructorType> = []
+    public centerInstructorList: Array<CenterUser> = []
 
     public center: Center
 
@@ -146,7 +148,6 @@ export class LessonScheduleComponent implements OnInit, OnDestroy, AfterViewInit
             .subscribe(([schDrawerIsReset, drawer]) => {
                 if (schDrawerIsReset == true && drawer['tabName'] == 'lesson-schedule') {
                     this.selectedLesson = undefined
-                    this.initStaffList()
                     this.nxStore.dispatch(setScheduleDrawerIsReset({ isReset: false }))
                 }
             })
@@ -154,6 +155,22 @@ export class LessonScheduleComponent implements OnInit, OnDestroy, AfterViewInit
         this.nxStore.pipe(select(ScheduleSelector.operatingHour), takeUntil(this.unsubscribe$)).subscribe((opHour) => {
             this.centerOperatingTime = opHour
         })
+
+        this.nxStore
+            .select(ScheduleSelector.instructorList)
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe((schInstructorList) => {
+                this.schInstructorList = schInstructorList
+                console.log('this.schInstructorList - ', this.schInstructorList)
+                this.nxStore
+                    .select(CenterCommonSelector.instructors)
+                    .pipe(take(1))
+                    .subscribe((instructors) => {
+                        this.centerInstructorList = instructors
+                        console.log('this.centerInstructorList - ', this.centerInstructorList)
+                        this.initInstructorList()
+                    })
+            })
     }
     ngOnDestroy(): void {
         this.unsubscribe$.next()
@@ -169,27 +186,25 @@ export class LessonScheduleComponent implements OnInit, OnDestroy, AfterViewInit
         this.timepick = time.key
     }
 
-    // ------------------------------------------ 직원 셀렉트 데이터 초기화 -------------------------------------------
-    initStaffList() {
-        this.center = this.storageService.getCenter()
-        this.staffSelect_list = []
-        this.centerUsersService.getUserList(this.center.id, '', '').subscribe((users) => {
-            const managers = _.filter(users, (user) => user.role_code != 'member')
-            managers.forEach((v) => {
-                this.staffSelect_list.push({
-                    name: v.center_user_name ?? v.name,
-                    value: v,
-                })
-            })
-        })
+    // init instructor list
+    initInstructorList() {
+        if (this.schInstructorList.length > 0 && this.centerInstructorList.length > 0) {
+            this.staffSelect_list = this.centerInstructorList
+                .filter((ci) => -1 != this.schInstructorList.findIndex((v) => ci.id == v.instructor.calendar_user.id))
+                .map((value) => ({
+                    name: value.center_user_name,
+                    value: value,
+                }))
+        }
     }
+
     // ------------------------------------------register lesson task------------------------------------------------
     registerLessonTask(fn?: () => void) {
         let reqBody: CreateCalendarTaskReqBody = undefined
-        const selectedStaff = _.find(this.instructorList, (item) => {
+        const selectedStaff = _.find(this.schInstructorList, (item) => {
             return this.StaffSelectValue.value.id == item.instructor.calendar_user.id
         })
-        console.log('selectedStaff -- ', this.instructorList, this.StaffSelectValue)
+        console.log('selectedStaff -- ', this.schInstructorList, this.StaffSelectValue)
 
         if (this.dayRepeatSwitch) {
             reqBody = {
@@ -263,7 +278,7 @@ export class LessonScheduleComponent implements OnInit, OnDestroy, AfterViewInit
         this.centerCalendarService.createCalendarTask(this.center.id, selectedStaff.instructor.id, reqBody).subscribe({
             next: (res) => {
                 fn ? fn() : null
-                this.nxStore.dispatch(ScheduleActions.setIsScheduleEventChanged({ isScheduleEventChanged: true }))
+                // this.nxStore.dispatch(ScheduleActions.setIsScheduleEventChanged({ isScheduleEventChanged: true }))
                 this.closeDrawer()
                 this.nxStore.dispatch(
                     showToast({
@@ -399,8 +414,7 @@ export class LessonScheduleComponent implements OnInit, OnDestroy, AfterViewInit
         this.nxStore
             .pipe(select(ScheduleSelector.instructorList), takeUntil(this.unsubscribe$))
             .subscribe((instructors) => {
-                this.instructorList = instructors
-                console.log('this.instructorList: ', this.instructorList)
+                this.schInstructorList = instructors
             })
     }
 

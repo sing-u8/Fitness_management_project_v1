@@ -1,14 +1,15 @@
 import { Injectable } from '@angular/core'
 import _ from 'lodash'
 
-import { ClassCategory } from '@schemas/class-category'
-import { ClassItem } from '@schemas/class-item'
+import { Store } from '@ngrx/store'
+import * as ScheduleActions from '@centerStore/actions/sec.schedule.actions'
+import { CenterUser } from '@schemas/center-user'
 
 @Injectable({
     providedIn: 'root',
 })
 export class ScheduleHelperService {
-    constructor() {}
+    constructor(private nxStore: Store) {}
 
     getLessonEndTime(startTime: string, minutes: number) {
         // startTime = xx:xx:xx
@@ -21,7 +22,13 @@ export class ScheduleHelperService {
             String(Number(startTimeList[0]) + quotient).length == 1
                 ? `0${Number(startTimeList[0]) + quotient}`
                 : Number(startTimeList[0]) + quotient
-        const endTime = `${hour}:${remainder}`
-        return endTime // xx:xx
+        return `${hour}:${remainder}` // xx:xx
+    }
+
+    // synchronize
+    startSynchronizeInstructorList(centerId: string, centerUser: CenterUser) {
+        // this.nxStore.dispatch(ScheduleActions.setCurCenterId({ centerId }))
+        // this.nxStore.dispatch(ScheduleActions.startLoadScheduleState())
+        this.nxStore.dispatch(ScheduleActions.startSynchronizeInstructorList({ centerId, centerUser }))
     }
 }

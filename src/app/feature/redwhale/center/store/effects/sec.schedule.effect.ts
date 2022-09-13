@@ -54,6 +54,7 @@ export class ScheduleEffect {
                         }))
                         if (!value.doLessonsExist) {
                             return [
+                                ScheduleActions.setCurCenterId({ centerId: center.id }),
                                 ScheduleActions.setDoLessonsExist({ doExist: false }),
                                 ScheduleActions.finishLoadScheduleState({ instructorList }),
                             ]
@@ -108,4 +109,35 @@ export class ScheduleEffect {
             })
         )
     })
+
+    public synchronizeInstructorList = createEffect(() =>
+        this.actions$.pipe(
+            ofType(ScheduleActions.startSynchronizeInstructorList),
+            switchMap(({ centerId, centerUser }) =>
+                forkJoin([
+                    this.centerCalendarApi.getCalendars(centerId, { typeCode: 'calendar_type_user_calendar' }),
+                ]).pipe(
+                    map(([calendars]) => {
+                        const calendar = _.find(calendars, (v) => v.calendar_user.id == centerUser.id)
+                        return { existCal: calendar }
+                    }),
+                    switchMap(({ existCal }) => {
+                        if (!_.isEmpty(existCal)) {
+                            return this.centerCalendarApi
+                                .updateCalendar(centerId, existCal.id, {
+                                    name: centerUser.center_user_name,
+                                })
+                                .pipe(
+                                    switchMap((calendar) => [
+                                        ScheduleActions.finishSynchronizeInstructorList({ calendar }),
+                                    ])
+                                )
+                        } else {
+                            return []
+                        }
+                    })
+                )
+            )
+        )
+    )
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core'
+import { Component, OnDestroy, OnInit } from '@angular/core'
 import { FormBuilder, FormControl } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
 
@@ -12,7 +12,7 @@ import { MemberRole as Role } from '@schemas/center/dashboard/member-role'
 import { Observable, Subject } from 'rxjs'
 import { take, takeUntil } from 'rxjs/operators'
 // ngrx
-import { Store, select } from '@ngrx/store'
+import { select, Store } from '@ngrx/store'
 import { drawerSelector } from '@appStore/selectors'
 import { closeDrawer } from '@appStore/actions/drawer.action'
 import { showToast } from '@appStore/actions/toast.action'
@@ -28,6 +28,7 @@ import { DashboardHelperService } from '@services/center/dashboard-helper.servic
 import { WordService } from '@services/helper/word.service'
 import { FileService } from '@services/file.service'
 import { CenterUsersCheckInService } from '@services/center-users-check-in.service'
+import { ScheduleHelperService } from '@services/center/schedule-helper.service'
 
 import _ from 'lodash'
 
@@ -75,7 +76,8 @@ export class MemberComponent implements OnInit, OnDestroy {
         private fileService: FileService,
         private router: Router,
         private activatedRoute: ActivatedRoute,
-        private centerUsersCheckInService: CenterUsersCheckInService
+        private centerUsersCheckInService: CenterUsersCheckInService,
+        private scheduleHelperService: ScheduleHelperService
     ) {}
 
     ngOnInit(): void {
@@ -198,6 +200,10 @@ export class MemberComponent implements OnInit, OnDestroy {
                         this.nxStore.dispatch(showToast({ text: `회원 이름 변경이 완료되었습니다.` }))
                         this.nxStore.dispatch(CenterCommonActions.startGetMembers({ centerId: this.center.id }))
                         this.nxStore.dispatch(CenterCommonActions.startGetInstructors({ centerId: this.center.id }))
+
+                        const userCopy = _.cloneDeep(this.curCenterUser)
+                        userCopy.center_user_name = changedName
+                        this.scheduleHelperService.startSynchronizeInstructorList(this.center.id, userCopy)
                     },
                 })
             )

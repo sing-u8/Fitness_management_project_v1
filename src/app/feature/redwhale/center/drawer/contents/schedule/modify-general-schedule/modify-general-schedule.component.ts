@@ -1,6 +1,6 @@
-import { Component, OnInit, AfterViewInit, OnDestroy, ViewChild, ElementRef } from '@angular/core'
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { Subject } from 'rxjs'
-import { takeUntil } from 'rxjs/operators'
+import { take, takeUntil } from 'rxjs/operators'
 import dayjs from 'dayjs'
 import _ from 'lodash'
 
@@ -12,14 +12,12 @@ import { Center } from '@schemas/center'
 import { CalendarTask } from '@schemas/calendar-task'
 
 // ngrx
-import { Store, select } from '@ngrx/store'
+import { select, Store } from '@ngrx/store'
 import { concatLatestFrom } from '@ngrx/effects'
-import * as ScheduleActions from '@centerStore/actions/sec.schedule.actions'
 import * as ScheduleReducer from '@centerStore/reducers/sec.schedule.reducer'
 import * as ScheduleSelector from '@centerStore/selectors/sec.schedule.selector'
-
-import { scheduleIsResetSelector, drawerSelector } from '@appStore/selectors'
-import { setScheduleDrawerIsReset, closeDrawer } from '@appStore/actions/drawer.action'
+import * as CenterCommonSelector from '@centerStore/selectors/center.common.selector'
+import { closeDrawer } from '@appStore/actions/drawer.action'
 import { showToast } from '@appStore/actions/toast.action'
 
 @Component({
@@ -90,12 +88,7 @@ export class ModifyGeneralScheduleComponent implements OnInit, AfterViewInit, On
                 this.timepick.endTime = dayjs(event.end).format('HH:mm:ss')
                 this.datepick.date = dayjs(event.start).format('YYYY-MM-DD')
 
-                this.staffSelect_list = instructors
-                    .map((v) => v.instructor.calendar_user)
-                    .map((v) => ({
-                        name: v.center_user_name ?? v.name,
-                        value: v,
-                    }))
+                this.initStaffList(instructors)
 
                 this.StaffSelectValue = {
                     name: event.responsibility.center_user_name ?? event.responsibility.name,
@@ -139,7 +132,7 @@ export class ModifyGeneralScheduleComponent implements OnInit, AfterViewInit, On
             .subscribe({
                 next: (_) => {
                     fn ? fn() : null
-                    this.nxStore.dispatch(ScheduleActions.setIsScheduleEventChanged({ isScheduleEventChanged: true }))
+                    // this.nxStore.dispatch(ScheduleActions.setIsScheduleEventChanged({ isScheduleEventChanged: true }))
                     this.closeDrawer()
                     this.nxStore.dispatch(
                         showToast({ text: `'${this.planTexts.planTitle}' 기타 일정이 수정되었습니다.` })
@@ -153,5 +146,20 @@ export class ModifyGeneralScheduleComponent implements OnInit, AfterViewInit, On
 
     closeDrawer() {
         this.nxStore.dispatch(closeDrawer())
+    }
+
+    initStaffList(instructorList: ScheduleReducer.InstructorType[]) {
+        this.nxStore
+            .select(CenterCommonSelector.instructors)
+            .pipe(take(1))
+            .subscribe((instructors) => {
+                const centerInstructorList = _.cloneDeep(instructors)
+                this.staffSelect_list = centerInstructorList
+                    .filter((ci) => -1 != instructorList.findIndex((v) => ci.id == v.instructor.calendar_user.id))
+                    .map((value) => ({
+                        name: value.center_user_name,
+                        value: value,
+                    }))
+            })
     }
 }

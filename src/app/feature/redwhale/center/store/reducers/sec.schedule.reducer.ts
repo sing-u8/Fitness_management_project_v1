@@ -155,10 +155,6 @@ export const scheduleReducer = createImmerReducer(
         state.selectedDate = selectedDate
         return state
     }),
-    on(ScheduleActions.setIsScheduleEventChanged, (state, { isScheduleEventChanged }) => {
-        state.isScheduleEventChanged = isScheduleEventChanged
-        return state
-    }),
     on(ScheduleActions.setSchedulingInstructor, (state, { schedulingInstructor }) => {
         state.schedulingInstructor = schedulingInstructor
         return state
@@ -196,6 +192,14 @@ export const scheduleReducer = createImmerReducer(
     }),
     on(ScheduleActions.setDoLessonsExist, (state, { doExist }) => {
         state.doLessonsExist = doExist
+        return state
+    }),
+    // synchronize
+    on(ScheduleActions.finishSynchronizeInstructorList, (state, { calendar }) => {
+        if (state.isLoading == 'done') {
+            const instructorIdx = _.findIndex(state.instructorList, (v) => v.instructor.id == calendar.id)
+            state.instructorList[instructorIdx].instructor = calendar
+        }
         return state
     })
 )

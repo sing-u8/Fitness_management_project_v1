@@ -1,9 +1,8 @@
-import { Component, OnInit, AfterViewInit, OnDestroy, ViewChild, ElementRef } from '@angular/core'
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import dayjs from 'dayjs'
 import _ from 'lodash'
 
 import { StorageService } from '@services/storage.service'
-import { CenterUsersService } from '@services/center-users.service'
 import { CenterCalendarService, CreateCalendarTaskReqBody } from '@services/center-calendar.service'
 
 import { User } from '@schemas/user'
@@ -12,19 +11,20 @@ import { Center } from '@schemas/center'
 import { Calendar } from '@schemas/calendar'
 
 // rxjs
-import { Subject, interval } from 'rxjs'
-import { takeUntil } from 'rxjs/operators'
+import { Subject } from 'rxjs'
+import { take, takeUntil } from 'rxjs/operators'
 
 // ngrx
-import { Store, select } from '@ngrx/store'
+import { select, Store } from '@ngrx/store'
 import { concatLatestFrom } from '@ngrx/effects'
 import * as ScheduleActions from '@centerStore/actions/sec.schedule.actions'
 import * as ScheduleReducer from '@centerStore/reducers/sec.schedule.reducer'
 import * as ScheduleSelector from '@centerStore/selectors/sec.schedule.selector'
 
-import { scheduleIsResetSelector, drawerSelector } from '@appStore/selectors'
-import { setScheduleDrawerIsReset, closeDrawer } from '@appStore/actions/drawer.action'
+import { drawerSelector, scheduleIsResetSelector } from '@appStore/selectors'
+import { closeDrawer, setScheduleDrawerIsReset } from '@appStore/actions/drawer.action'
 import { showToast } from '@appStore/actions/toast.action'
+import * as CenterCommonSelector from '@centerStore/selectors/center.common.selector'
 
 @Component({
     selector: 'general-schedule',
@@ -174,7 +174,7 @@ export class GeneralScheduleComponent implements OnInit, AfterViewInit, OnDestro
             next: (_) => {
                 fn ? fn() : null
                 console.log('general register reqbody: ', reqBody)
-                this.nxStore.dispatch(ScheduleActions.setIsScheduleEventChanged({ isScheduleEventChanged: true }))
+                // this.nxStore.dispatch(ScheduleActions.setIsScheduleEventChanged({ isScheduleEventChanged: true }))
                 this.closeDrawer()
                 this.nxStore.dispatch(showToast({ text: `'${this.planTexts.planTitle}' 기타 일정이 추가되었습니다.` }))
             },
@@ -194,12 +194,26 @@ export class GeneralScheduleComponent implements OnInit, AfterViewInit, OnDestro
         this.staffSelect_list = []
 
         const managers = instructorList.map((v) => v.instructor.calendar_user)
-        managers.forEach((v) => {
-            this.staffSelect_list.push({
-                name: v.center_user_name ?? v.name,
-                value: v,
+        // managers.forEach((v) => {
+        //     this.staffSelect_list.push({
+        //         name: v.center_user_name ?? v.name,
+        //         value: v,
+        //     })
+        // })
+
+        this.nxStore
+            .select(CenterCommonSelector.instructors)
+            .pipe(take(1))
+            .subscribe((instructors) => {
+                const centerInstructorList = _.cloneDeep(instructors)
+                this.staffSelect_list = centerInstructorList
+                    .filter((ci) => -1 != instructorList.findIndex((v) => ci.id == v.instructor.calendar_user.id))
+                    .map((value) => ({
+                        name: value.center_user_name,
+                        value: value,
+                    }))
             })
-        })
+
         managers.find((v) => {
             if (schedulingInstructor != undefined && schedulingInstructor.calendar_user.id == v.id) {
                 this.StaffSelectValue = { name: v.center_user_name ?? v.name, value: v }

@@ -163,16 +163,15 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
                     instructorList.length == 0
                         ? 0
                         : instructorList.reduce((checkedLen, val) => checkedLen + (val.selected ? 1 : 0), 0)
+
+                console.log(
+                    'ScheduleSelector.instructorList -- ',
+                    instructorList,
+                    ' -- checkedInstructorLength: ',
+                    checkedInstructorLength
+                )
                 if (checkedInstructorLength > 0) {
                     this.getTaskList(this.selectedDateViewType)
-                }
-            })
-        this.nxStore
-            .pipe(select(ScheduleSelector.isScheduleEventChanged), takeUntil(this.unsubscriber$))
-            .subscribe((status) => {
-                if (status == true) {
-                    this.getTaskList(this.selectedDateViewType)
-                    this.nxStore.dispatch(ScheduleActions.setIsScheduleEventChanged({ isScheduleEventChanged: false }))
                 }
             })
     }
@@ -846,7 +845,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
                 reqBody,
                 'one'
             ).subscribe((__) => {
-                this.nxStore.dispatch(ScheduleActions.setIsScheduleEventChanged({ isScheduleEventChanged: true }))
+                // this.nxStore.dispatch(ScheduleActions.setIsScheduleEventChanged({ isScheduleEventChanged: true }))
                 this.nxStore.dispatch(
                     showToast({
                         text: `'${this.wordService.ellipsis(calTask.name, 8)}' 기타 일정이 수정 되었습니다.`,
@@ -916,7 +915,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
                 reqBody,
                 'one'
             ).subscribe((res) => {
-                this.nxStore.dispatch(ScheduleActions.setIsScheduleEventChanged({ isScheduleEventChanged: true }))
+                // this.nxStore.dispatch(ScheduleActions.setIsScheduleEventChanged({ isScheduleEventChanged: true }))
                 this.nxStore.dispatch(
                     showToast({
                         text: `'${this.wordService.ellipsis(calTask.name, 8)}' 수업 일정이 수정 되었습니다.`,

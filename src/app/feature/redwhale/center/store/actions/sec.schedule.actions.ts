@@ -1,10 +1,10 @@
 import { createAction, props } from '@ngrx/store'
 
 // schemas
-import { CenterUser } from '@schemas/center-user'
 import { Calendar } from '@schemas/calendar'
 import { CalendarTask } from '@schemas/calendar-task'
-import { CalendarTaskClass } from '@schemas/calendar-task-class'
+import { CenterUser } from '@schemas/center-user'
+
 import { CreateCalendarReqBody } from '@services/center-calendar.service'
 
 import * as FromSchReducer from '@centerStore/reducers/sec.schedule.reducer'
@@ -57,10 +57,6 @@ export const setSchedulingInstructor = createAction(
     `[${FeatureKey}] Set Scheduling Instructor`,
     props<{ schedulingInstructor: Calendar }>()
 )
-export const setIsScheduleEventChanged = createAction(
-    `[${FeatureKey}] Set IsScheduleEventChanged`,
-    props<{ isScheduleEventChanged: boolean }>()
-)
 
 export const setModifyGeneralEvent = createAction(
     `[${FeatureKey}] Set ModifyGeneralEvent`,
@@ -82,3 +78,13 @@ export const resetAll = createAction(`[${FeatureKey}] Reset All Schedule States`
 export const setCurCenterId = createAction(`[${FeatureKey}] Set Current Center Id`, props<{ centerId: string }>())
 export const setError = createAction(`[${FeatureKey}] Set Schedule Error Message`, props<{ error: string }>())
 export const setDoLessonsExist = createAction(`[${FeatureKey}] Set Do Lessons Exist`, props<{ doExist: boolean }>())
+
+// synchronize by dashboard
+export const startSynchronizeInstructorList = createAction(
+    `[${FeatureKey}] Start Synchronize InstructorList`,
+    props<{ centerUser: CenterUser; centerId: string }>()
+)
+export const finishSynchronizeInstructorList = createAction(
+    `[${FeatureKey}] Finish Synchronize InstructorList`,
+    props<{ calendar: Calendar }>()
+)

@@ -12,6 +12,7 @@ import { TimeService } from '@services/helper/time.service'
 import { DashboardHelperService } from '@services/center/dashboard-helper.service'
 import { FileService } from '@services/file.service'
 import { CenterUsersCheckInService } from '@services/center-users-check-in.service'
+import { ScheduleHelperService } from '@services/center/schedule-helper.service'
 
 import { Center } from '@schemas/center'
 import { Loading } from '@schemas/componentStore/loading'
@@ -68,7 +69,8 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
         private timeService: TimeService,
         private dashboardHelperService: DashboardHelperService,
         private fileService: FileService,
-        private centerUsersCheckInService: CenterUsersCheckInService
+        private centerUsersCheckInService: CenterUsersCheckInService,
+        private scheduleHelperService: ScheduleHelperService
     ) {
         this.center = this.storageService.getCenter()
         this.user = this.storageService.getUser()
@@ -272,6 +274,10 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
                         this.nxStore.dispatch(showToast({ text: `회원 이름 변경이 완료되었습니다.` }))
                         this.nxStore.dispatch(CenterCommonActions.startGetMembers({ centerId: this.center.id }))
                         this.nxStore.dispatch(CenterCommonActions.startGetInstructors({ centerId: this.center.id }))
+
+                        const userCopy = _.cloneDeep(this.curUserData.user)
+                        userCopy.center_user_name = changedName
+                        this.scheduleHelperService.startSynchronizeInstructorList(this.center.id, userCopy)
                     },
                 })
             )
