@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core'
-import { createEffect, Actions, ofType, concatLatestFrom } from '@ngrx/effects'
+import { Actions, concatLatestFrom, createEffect, ofType } from '@ngrx/effects'
 import { Store } from '@ngrx/store'
-import { of, forkJoin, EMPTY, from } from 'rxjs'
-import { catchError, switchMap, tap, map, find } from 'rxjs/operators'
+import { EMPTY, forkJoin, from, of } from 'rxjs'
+import { catchError, map, switchMap, tap } from 'rxjs/operators'
 
 import _ from 'lodash'
 import dayjs from 'dayjs'
@@ -222,16 +222,16 @@ export class DashboardEffect {
                     this.centerUsersLockerApi.getLockerTickets(centerId, centerUser.id),
                     this.centerUsersMembershipApi.getMembershipTickets(centerId, centerUser.id),
                     this.centerUsersPaymentApi.getPayments(centerId, centerUser.id),
-                    // reservations: this.centerUsersBookingService.getBookings(centerId, centerUser.id),
+                    this.centerUsersBookingService.getBookings(centerId, centerUser.id),
                     this.centerContractApi.getContract(centerId, centerUser.id),
                 ]).pipe(
-                    switchMap(([lockers, memberships, payments, contracts]) => {
+                    switchMap(([lockers, memberships, payments, reservations, contracts]) => {
                         return [
                             DashboardActions.finishGetUserData({
                                 memberships,
                                 lockers,
                                 payments,
-                                reservations: [],
+                                reservations,
                                 contracts,
                             }),
                         ]
