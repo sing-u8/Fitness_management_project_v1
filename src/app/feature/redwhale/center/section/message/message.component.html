@@ -80,6 +80,87 @@
                         (onSelectChange)="onGeneralCallerChange($event)"
                     ></msg-text-field>
                     <div class="general-setting-box">
+                        <div class="setting-ad-box">
+                            <p class="rw-typo-subtext1 ">광고성 문자</p>
+                            <div class="d-flex align-items-center">
+                                <rw-checkbox
+                                    [checked]="settingAdMsg"
+                                    [text]="'광고성 정보가 포함됨'"
+                                    [disabled]="(isLoading$ | async) == 'pending'"
+                                    (click)="onSettingAdMsgClick()"
+                                ></rw-checkbox>
+                                <div class="ad-text-guide-logo">
+                                    <div class="ad-text-guide-box">
+                                        <div class="help-text">
+                                            <div class="help-text-title">광고 표기 의무 안내</div>
+                                            <div class="help-text-content rw-typo-bodytext2">
+                                                <p class="text_first">
+                                                    광고성 문자 전송 시, 꼭 ‘광고성 정보가 포함됨’에 체크해주세요!
+                                                </p>
+                                                <p class="text_second">
+                                                    정보통신망법 제50조 제4항에 따라 영리 목적의 광고성 정보 전송 시<br>
+                                                    수신자의 명시적인 사전 동의를 받아야 하며, 이를 위반할 경우 3천만원<br>
+                                                    이하의 과태료가 부과될 수 있습니다.
+                                                </p>
+                                                <div class="d-flex">
+                                                    <div class="l-msg-image">
+                                                        <div class="msg-image">
+                                                            <div class="msg-image-title rw-typo-subtext0-regular">
+                                                                <span class="msg-image-title-icon"></span>
+                                                                발신번호
+                                                            </div>
+                                                            <div class="msg-image-text">
+                                                                <div class="rw-typo-subtext0-regular red-box">
+                                                                    (광고) 레드웨일
+                                                                </div>
+                                                                <p class="rw-typo-subtext0-regular plain-box">
+                                                                    쉽고 간편한 센터 관리,<br>
+                                                                    레드웨일로 시작하세요.
+                                                                </p>
+                                                                <div class="rw-typo-subtext0-regular red-box">
+                                                                    <p>무료거부</p>
+                                                                    <p>080-000-0000</p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="l-item d-flex flex-column">
+                                                        <div class="item rw-typo-bodytext2">
+                                                            <p>01</p>
+                                                            <div class="help-text-item">
+                                                                <span>메시지 맨 앞에 (광고) 표기</span>
+                                                                <span class="rw-typo-subtext1">반드시 (광고)로 표기해야 하며,</span>
+                                                                <span class="rw-typo-subtext1">(광/고), (광 고), [광고] 등 변칙 금지</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="item rw-typo-bodytext2">
+                                                            <p>02</p>
+                                                            <div class="help-text-item">
+                                                                <span>업체명/서비스명과 연락처 표기</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="item rw-typo-bodytext2">
+                                                            <p>03</p>
+                                                            <div class="help-text-item">
+                                                                <span>무료수신거부 방법 표기</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="item rw-typo-bodytext2">
+                                                            <p>04</p>
+                                                            <div class="help-text-item">
+                                                                <span>수신 거부 요청자에게 결과 통지</span>
+                                                                <span class="rw-typo-subtext1">안내 사항 추가 예정</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <div class="setting-transmission-time">
                             <p class="rw-typo-subtext1 ">전송 시점</p>
                             <div class="d-flex align-items-center">
@@ -128,11 +209,10 @@
                             <p class="rw-typo-bodytext0-bold ">{{subtractPoint}}p 차감 예정</p>
                             <p class="rw-typo-bodytext2-regular_darkgrey ">수신자 {{selectedUserListSelected$ | async}}명 * {{subtractText}}</p>
                             <ng-container *ngIf="!isPointEnough">
-                                <div class="rw-typo-subtext0-regular error">
+                                <p class="rw-typo-subtext0-regular error">
                                     <span class="error-icon"></span>
-                                    보유한 포인트가 차감 예정 포인트보다<br>
-                                    적어서 문자를 전송할 수 없어요.
-                                </div>
+                                    보유한 포인트가 차감 예정 포인트보다<br>적어서 문자를 전송할 수 없어요.
+                                </p>
                             </ng-container>
                         </div>
                         <rw-button

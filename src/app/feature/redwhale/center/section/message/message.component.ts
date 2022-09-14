@@ -1,12 +1,10 @@
-import { Component, OnInit, AfterViewInit, OnDestroy, Renderer2, ViewChild, ElementRef } from '@angular/core'
-import { FormBuilder, FormControl, ValidationErrors, AsyncValidatorFn, AbstractControl } from '@angular/forms'
+import { Component, OnDestroy, OnInit } from '@angular/core'
+import { FormBuilder } from '@angular/forms'
 import dayjs from 'dayjs'
 import _ from 'lodash'
 
 // schema
 import { Center } from '@schemas/center'
-import { User } from '@schemas/user'
-import { CenterUser } from '@schemas/center-user'
 
 // services
 import { StorageService } from '@services/storage.service'
@@ -17,15 +15,15 @@ import { Subject } from 'rxjs'
 import { take, takeUntil } from 'rxjs/operators'
 
 // ngrx
-import { Store, select } from '@ngrx/store'
+import { select, Store } from '@ngrx/store'
 import { showToast } from '@appStore/actions/toast.action'
 
 import * as FromSMS from '@centerStore/reducers/sec.sms.reducer'
 import * as SMSSelector from '@centerStore/selectors/sec.sms.selector'
 import * as SMSActions from '@centerStore/actions/sec.sms.actions'
+import { setGeneralTransmissionTime } from '@centerStore/actions/sec.sms.actions'
 import { Loading } from '@schemas/store/loading'
 import { SMSAutoSend } from '@schemas/sms-auto-send'
-import { setGeneralTransmissionTime } from '@centerStore/actions/sec.sms.actions'
 import { SMSCaller } from '@schemas/sms-caller'
 import { SMSHistoryGroup } from '@schemas/sms-history-group'
 
@@ -95,6 +93,11 @@ export class MessageComponent implements OnInit, OnDestroy {
     }
     onMembershipCallerChange(caller: SMSCaller) {
         this.nxStore.dispatch(SMSActions.setMembershipCaller({ caller }))
+    }
+
+    public settingAdMsg = false
+    onSettingAdMsgClick() {
+        this.settingAdMsg = !this.settingAdMsg
     }
 
     // ngrx -- history

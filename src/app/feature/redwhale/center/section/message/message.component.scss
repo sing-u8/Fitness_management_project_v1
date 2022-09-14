@@ -198,6 +198,180 @@
                     .general-setting-box {
                         width: 268px;
                         margin-left : 15px;
+
+                        .setting-ad-box {
+                            background-color: var(--white);
+                            box-shadow: 0 0 10px rgba(181, 181, 181, 0.109804);
+                            border-radius: 5px;
+                            padding: 23px;
+                            display: flex;
+                            flex-direction: column;
+                            margin-bottom: 15px;
+                            p:first-of-type {
+                                margin-bottom: 9px;
+                                text-align: start;
+                            }
+
+                            .ad-text-guide-logo {
+                                width: 23px;
+                                height: 23px;
+                                margin-left: 3px;
+                                background-image: url("/assets/icons/etc/help.svg");
+                                background-repeat: no-repeat;
+                                background-size: contain;
+                                position: relative;
+                                cursor: pointer;
+                                &:hover {
+                                    .ad-text-guide-box {
+                                        z-index: 10 !important;
+                                        opacity: 1 !important;
+                                        visibility: visible !important;
+                                    }
+                                }
+                                .ad-text-guide-box {
+                                    width: 430px;
+                                    height: 395px;
+                                    position: absolute;
+                                    z-index: -5;
+                                    display: flex;
+                                    align-items: flex-end;
+                                    top: 0;
+                                    right: 5px;
+                                    visibility: hidden;
+                                    opacity: 0;
+                                    transition: visibility 0s, opacity 0.4s;
+                                    -moz-transition: visibility 0s, opacity 0.4s;
+                                    -webkit-transition: visibility 0s, opacity 0.4s;
+                                    -o-transition: visibility 0s, opacity 0.4s;
+                                    cursor: pointer;
+
+                                    &:hover {
+                                        opacity: 1;
+                                        visibility: visible;
+                                        z-index: 10;
+                                    }
+
+                                    .help-text {
+                                        width: 430px;
+                                        height: 373px;
+                                        position: relative;
+
+                                        box-shadow: 0 0 10px #b5b5b51c;
+                                        background-color: var(--white);
+                                        border-radius: 5px;
+                                        overflow: hidden;
+                                        margin-top: 6px;
+
+                                        .help-text-title {
+                                            width: 100%;
+                                            height: 40px;
+                                            background-color: #212121;
+                                            color: var(--white);
+
+                                            display: flex;
+                                            justify-content: flex-start;
+                                            align-items: center;
+                                            padding: 0 15px;
+
+                                            font-size: 1.2rem;
+                                            line-height: 17px;
+                                            letter-spacing: -0.144px;
+                                            font-weight: 500;
+                                        }
+
+                                        .help-text-content {
+                                            padding: 15px 15px 0 15px;
+                                            .text_first {
+                                                color: var(--red);
+                                                margin-bottom: 10px !important;
+                                            }
+                                            .text_second {
+                                                margin-bottom: 29px !important;
+                                                text-align: left;
+                                            }
+                                            .l-item {
+                                                margin-left:20px;
+                                            }
+                                            & div.item {
+                                                display: flex;
+                                                margin-bottom: 10px;
+
+                                                &:last-child {
+                                                    margin-bottom: 0;
+                                                }
+                                                & p {
+                                                    color: var(--lightgrey);
+                                                    margin-right: 9px;
+                                                }
+                                            }
+                                            & div.help-text-item {
+                                                display: flex;
+                                                flex-direction: column;
+                                                align-items: flex-start;
+                                            }
+
+
+                                            .l-msg-image {
+                                                width: 175px;
+                                                height: 221px;
+                                                border: 1px solid #E9E9E9;
+                                                border-radius: 25px 25px 0 0;
+                                                padding: 7px 7px 0 7px;
+                                                position: relative;
+                                                background-color: var(--background-color);
+                                                .msg-image {
+                                                    width: 100%;
+                                                    height: 100%;
+                                                    border-radius: 15px 15px 0 0;
+                                                    padding: 10px 7px 0 7px;
+                                                    display: flex;
+                                                    flex-direction: column;
+                                                    background-color: var(--white);
+                                                    .msg-image-title {
+                                                        width: 100%;
+                                                        display: flex;
+                                                        align-items: center;
+                                                        margin-bottom: 11px;
+                                                        //margin-top: 12px;
+                                                        .msg-image-title-icon {
+                                                            background-image: url("/assets/icons/etc/chevron_left_black.svg");
+                                                            background-repeat: no-repeat;
+                                                            background-size: contain;
+                                                            width: 17px;
+                                                            height: 17px;
+                                                        }
+                                                    }
+                                                    .msg-image-text {
+                                                        display: flex;
+                                                        flex-direction: column;
+                                                        width: 145px;
+                                                        height: 170px;
+                                                        background: var(--background-color);
+                                                        border-radius: 5px;
+                                                        padding: 12px 10px;
+                                                        .red-box {
+                                                            background: rgba(227, 74, 94, 0.15);
+                                                            border-radius: 2px;
+                                                            display: flex;
+                                                            flex-direction: column;
+                                                            padding: 3px 4px;
+                                                            width: 84px;
+                                                            p {
+                                                                margin: 0 !important;
+                                                            }
+                                                        }
+                                                        .plain-box {
+                                                            margin: 9px 0;
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                        }
                         .setting-transmission-time {
                             background-color: var(--white);
                             box-shadow: 0 0 10px rgba(181, 181, 181, 0.109804);
@@ -223,8 +397,8 @@
                                     display: flex;
                                     flex-direction: column;
                                     .date-picker {
-                                      text-align: start;
-                                      margin-bottom: 15px;
+                                        text-align: start;
+                                        margin-bottom: 15px;
                                         padding: 14px 16px;
                                         cursor: pointer;
                                         background-color: var(--white);
@@ -261,7 +435,6 @@
                                 display: flex;
                                 margin-top: 5px;
                                 color: var(--red);
-
                             }
                         }
                     }
@@ -269,24 +442,23 @@
 
                 }
             }
-
-          .l-message__ticket {
-            display: flex;
-            flex-direction: column;
-            &:first-of-type {
-              margin-right: 85px;
+            .l-message__ticket {
+                display: flex;
+                flex-direction: column;
+                &:first-of-type {
+                margin-right: 85px;
+                }
+                p {
+                    text-align: start;
+                    margin-bottom: 15px;
+                }
+                .message__ticket {
+                    display: flex;
+                    msg-text-field {
+                    margin-right: 15px;
+                }
+                }
             }
-            p {
-              text-align: start;
-              margin-bottom: 15px;
-            }
-            .message__ticket {
-              display: flex;
-              msg-text-field {
-                margin-right: 15px;
-              }
-            }
-          }
 
         }
         .l-message-history {
@@ -294,19 +466,19 @@
             display: flex;
             flex-direction: column;
             .message-history__header {
-              display: flex;
-              align-items: center;
-              justify-content: space-between;
-              margin-bottom: 5px; // 15px
-              .message-history__header-left {
                 display: flex;
-                align-items: baseline;
-                span {
-                  &:first-of-type{
-                    margin-right: 6px;
-                  }
+                align-items: center;
+                justify-content: space-between;
+                margin-bottom: 5px; // 15px
+                .message-history__header-left {
+                    display: flex;
+                    align-items: baseline;
+                    span {
+                    &:first-of-type{
+                        margin-right: 6px;
+                    }
+                    }
                 }
-              }
             }
 
         }
@@ -316,6 +488,7 @@
 .error-icon {
     width: 20px;
     height: 20px;
+    margin-right: 2px;
     background-size: contain;
     background-repeat: no-repeat;
     background-image: url("/assets/icons/etc/warning-red.svg");
