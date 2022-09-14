@@ -12,20 +12,15 @@ import {
 } from '@angular/core'
 import { ClickEmitterType } from '@schemas/components/button'
 
-type ChargePoint = {
-    selected: boolean
-    pay: number
-    point: number
-}
-
 @Component({
-    selector: 'msg-charge-point-modal',
-    templateUrl: './charge-point-modal.component.html',
-    styleUrls: ['./charge-point-modal.component.scss'],
+    selector: 'msg-register-sender-phone-modal',
+    templateUrl: './register-sender-phone-modal.component.html',
+    styleUrls: ['./register-sender-phone-modal.component.scss'],
 })
-export class ChargePointModalComponent implements OnChanges, AfterViewChecked {
+export class RegisterSenderPhoneModalComponent implements OnChanges, AfterViewChecked {
     @Input() visible: boolean
     @Input() blockClickOutside = false
+    @Input() type: 'cover' | 'contain' = 'cover'
 
     @ViewChild('modalBackgroundElement') modalBackgroundElement
     @ViewChild('modalWrapperElement') modalWrapperElement
@@ -68,11 +63,6 @@ export class ChargePointModalComponent implements OnChanges, AfterViewChecked {
                     this.renderer.removeClass(this.modalBackgroundElement.nativeElement, 'display-block')
                     this.renderer.removeClass(this.modalWrapperElement.nativeElement, 'display-flex')
                 }, 200)
-
-                this.chargePointList.forEach((v, i) => {
-                    this.chargePointList[i].selected = i == 0
-                })
-                this.agreeCharge = false
             }
         }
     }
@@ -82,7 +72,6 @@ export class ChargePointModalComponent implements OnChanges, AfterViewChecked {
     }
 
     onConfirm(loadingFns: ClickEmitterType): void {
-        if (!this.agreeCharge) return
         this.confirm.emit(loadingFns)
     }
 
@@ -92,24 +81,5 @@ export class ChargePointModalComponent implements OnChanges, AfterViewChecked {
     }
     resetMouseModalDown() {
         this.isMouseModalDown = false
-    }
-
-    // charge point items vars and funcs
-    public chargePointList: ChargePoint[] = [
-        { selected: true, pay: 10000, point: 10000 },
-        { selected: false, pay: 50000, point: 50000 },
-        { selected: false, pay: 100000, point: 100000 },
-        { selected: false, pay: 200000, point: 200000 },
-    ]
-    setPointSelected(idx: number) {
-        this.chargePointList.forEach((v, i) => {
-            this.chargePointList[i].selected = i == idx
-        })
-    }
-
-    // agree charge var and func
-    public agreeCharge = false
-    onAgreeChargeClick() {
-        this.agreeCharge = !this.agreeCharge
     }
 }

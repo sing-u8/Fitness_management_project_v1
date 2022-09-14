@@ -1,5 +1,5 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
-import { FormBuilder, FormControl } from '@angular/forms'
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
+import { FormBuilder } from '@angular/forms'
 import { SMSCaller } from '@schemas/sms-caller'
 
 import { WordService } from '@services/helper/word.service'
@@ -18,6 +18,7 @@ export class TextFieldComponent implements OnInit {
     @Input() errText = ''
     @Output() textChange = new EventEmitter<string>()
     @Output() onSelectChange = new EventEmitter<SMSCaller>()
+    @Output() onAddNumber = new EventEmitter<void>()
 
     public textControl
     constructor(private wordService: WordService, private fb: FormBuilder) {

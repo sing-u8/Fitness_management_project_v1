@@ -6,6 +6,7 @@
             [errMsg]="errText"
             [(ngModel)]="curCaller"
             (onSelectChange)="onSelectChange.emit($event)"
+            (onAddNumber)="onAddNumber.emit()"
         ></msg-phone-number-selector>
     </div>
     <div class="text-field__content">

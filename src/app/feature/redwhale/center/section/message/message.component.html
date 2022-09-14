@@ -84,6 +84,7 @@
                         [text]="(generalText$ | async)"
                         [textByte]="generalTextByte"
                         [errText]="callerListErrText"
+                        (onAddNumber)="toggleRegisterSenderPhone();setRegisterSenderPhoneType('cover')"
                         (textChange)="updateGeneralText($event)"
                         (onSelectChange)="onGeneralCallerChange($event)"
                     ></msg-text-field>
@@ -247,6 +248,7 @@
                         [text]="membershipAutoSendSetting.text"
                         [textByte]="membershipAutoSendSettingTextByte"
                         [errText]="callerListErrText"
+                        (onAddNumber)="toggleRegisterSenderPhone();setRegisterSenderPhoneType('cover')"
                         (textChange)="onMLTextChange($event, 'membership')"
                         (onSelectChange)="onMLCallerChange($event,'membership')"
                     ></msg-text-field>
@@ -269,6 +271,7 @@
                         [text]="lockerAutoSendSetting.text"
                         [textByte]="lockerAutoSendSettingTextByte"
                         [errText]="callerListErrText"
+                        (onAddNumber)="toggleRegisterSenderPhone();setRegisterSenderPhoneType('cover')"
                         (textChange)="onMLTextChange($event, 'locker')"
                         (onSelectChange)="onMLCallerChange($event,'locker')"
                     ></msg-text-field>
@@ -322,3 +325,10 @@
     (cancel)="onChargePointCancel()"
     (confirm)="onChargePointChargeConfirm($event)"
 ></msg-charge-point-modal>
+
+<msg-register-sender-phone-modal
+    [(visible)]="showRegisterSenderPhone"
+    [type]="registerSenderPhoneType"
+    (cancel)="onRegisterSenderPhoneCancel()"
+    (confirm)="onRegisterSenderPhoneConfirm()"
+></msg-register-sender-phone-modal>

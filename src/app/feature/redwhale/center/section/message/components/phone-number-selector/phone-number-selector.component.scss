@@ -119,6 +119,22 @@
 				white-space: nowrap;
 				margin-right: 6px;
 			}
+
+			&.add-number {
+				font-weight: 700;
+				font-size: 14px;
+				line-height: 20px;
+				letter-spacing: -0.196px;
+				color: var(--red);
+				.plus-icon {
+					background-image: url('/assets/icons/etc/plus-red.svg');
+					background-size: contain;
+					background-repeat: no-repeat;
+					width: 22px;
+					height: 22px;
+					margin-right: 3px;
+				}
+			}
 		}
 
 		.active {
@@ -145,10 +161,10 @@
 	border-radius: 14px;
 	border: 1px solid #C96B12;
 	color: #C96B12;
-	&.verified {
-		border: 1px solid #0D755E;
-		color: #0D755E;
-	}
+	//&.verified {
+	//	border: 1px solid #0D755E;
+	//	color: #0D755E;
+	//}
 }
 
 .height-small {

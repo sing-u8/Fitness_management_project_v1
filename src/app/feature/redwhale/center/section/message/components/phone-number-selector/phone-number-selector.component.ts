@@ -1,15 +1,13 @@
 import {
+    AfterViewInit,
     Component,
-    Input,
-    forwardRef,
     ElementRef,
+    EventEmitter,
+    forwardRef,
+    Input,
+    Output,
     Renderer2,
     ViewChild,
-    ViewChildren,
-    QueryList,
-    AfterViewInit,
-    Output,
-    EventEmitter,
 } from '@angular/core'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
 
@@ -39,6 +37,7 @@ export class PhoneNumberSelectorComponent implements AfterViewInit, ControlValue
     @Input() errMsg = ''
 
     @Output() onSelectChange = new EventEmitter<any>()
+    @Output() onAddNumber = new EventEmitter<void>()
 
     @ViewChild('selectElement') selectElement
     @ViewChild('selectedElement') selectedElement
@@ -96,6 +95,10 @@ export class PhoneNumberSelectorComponent implements AfterViewInit, ControlValue
         this.onSelectChange.emit(item)
         this.close()
         this.onChanged(item)
+    }
+    onAddNumberClick() {
+        this.onAddNumber.emit()
+        this.close()
     }
     onChange = (_) => {}
     onTouched = (_) => {}

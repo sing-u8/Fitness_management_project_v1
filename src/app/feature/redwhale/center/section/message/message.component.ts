@@ -460,4 +460,20 @@ export class MessageComponent implements OnInit, OnDestroy {
     onChargePointChargeConfirm(loadingFns: ClickEmitterType) {
         this.showChargePointModal = false
     }
+
+    // register sender phone modal vars & funcs
+    public showRegisterSenderPhone = false
+    public registerSenderPhoneType: 'cover' | 'contain' = 'cover'
+    setRegisterSenderPhoneType(type: 'cover' | 'contain') {
+        this.registerSenderPhoneType = type
+    }
+    toggleRegisterSenderPhone() {
+        this.showRegisterSenderPhone = !this.showRegisterSenderPhone
+    }
+    onRegisterSenderPhoneCancel() {
+        this.showRegisterSenderPhone = false
+    }
+    onRegisterSenderPhoneConfirm() {
+        this.showRegisterSenderPhone = false
+    }
 }
