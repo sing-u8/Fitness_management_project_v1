@@ -52,6 +52,14 @@
                 전송 내역
                 <div class="under-bar"></div>
             </div>
+            <div
+                class="charge-point-button rw-typo-bodytext0-darkgrey-bold"
+                rw-button
+                (click)="toggleChargePointModal()"
+            >
+                <div class="plus-icon"></div>
+                포인트 충전
+            </div>
         </div>
     </header>
 
@@ -308,3 +316,9 @@
     (cancel)="onCancelTransmitMsg()"
     (confirm)="onConfirmTransmitMsg()"
 ></rw-modal>
+
+<msg-charge-point-modal
+    [(visible)]="showChargePointModal"
+    (cancel)="onChargePointCancel()"
+    (confirm)="onChargePointChargeConfirm($event)"
+></msg-charge-point-modal>

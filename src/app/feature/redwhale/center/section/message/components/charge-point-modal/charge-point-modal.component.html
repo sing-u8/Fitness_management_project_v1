@@ -1,0 +1,54 @@
+<div class="rw-modal-background" #modalBackgroundElement></div>
+<div
+  class="rw-modal-wrapper justify-content-center align-items-center"
+  (mouseup)="!isMouseModalDown && !blockClickOutside && onCancel()"
+  (mousedown) = 'resetMouseModalDown()'
+  #modalWrapperElement
+>
+  <div
+    class="rw-modal user-select-none"
+    (mousedown) ='onMouseModalDown(); $event.stopPropagation()'
+  >
+    <div class="contents">
+      <div class="header">
+        <span class="rw-typo-bodytext0-bold">문자 포인트 충전</span>
+        <div class="close-icon" (click)="onCancel()"></div>
+      </div>
+
+      <div class="body">
+        <p class="p-title rw-typo-bodytext0-bold ">충전 금액</p>
+        <div class="l-point-item">
+          <div
+            *ngFor="let item of chargePointList; let idx=index"
+            class="point-item"
+            [class.selected]="item.selected"
+            (click)="setPointSelected(idx)"
+          >
+            <span>{{item.pay | numberWithCommas}}원</span>
+            <span>{{item.point | numberWithCommas}}P</span>
+          </div>
+        </div>
+        <p class="p-title rw-typo-bodytext0-bold ">포인트 이용 안내</p>
+        <p class="p-item rw-typo-subtext1">· 부가가치세 10%는 별도로 부과됩니다.</p>
+        <p class="p-item rw-typo-subtext1">· 충전한 포인트는 기간 제한 없이 사용하실 수 있습니다.</p>
+        <p class="p-item rw-typo-subtext1">· 단문은 건당 11원으로, 최대 90byte까지 입력 가능하며, 국문 기준 약 40~45자 입력 가능합니다.</p>
+        <p class="p-item rw-typo-subtext1">· 장문은 건당 33원으로, 최대 2,000byte까지 입력 가능하며, 국문 기준 약 1,000자 입력 가능합니다.</p>
+        <rw-checkbox
+          [text]="'안내 사항을 확인하였으며, 결제 진행에 동의합니다.'"
+          [checked]="agreeCharge"
+          (click)="onAgreeChargeClick()"
+        ></rw-checkbox>
+      </div>
+    </div>
+    <rw-button
+      [height]="'50'"
+      [width]="'632'"
+      [color]="'var(--red)'"
+      [borderRadius]="'0 0 5px 5px'"
+      [disabled]="!agreeCharge"
+      (onClick)="onConfirm($event)"
+    >
+      <span>결제하기</span>
+    </rw-button>
+  </div>
+</div>

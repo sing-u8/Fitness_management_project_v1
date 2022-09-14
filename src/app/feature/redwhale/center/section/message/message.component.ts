@@ -26,6 +26,7 @@ import { Loading } from '@schemas/store/loading'
 import { SMSAutoSend } from '@schemas/sms-auto-send'
 import { SMSCaller } from '@schemas/sms-caller'
 import { SMSHistoryGroup } from '@schemas/sms-history-group'
+import { ClickEmitterType } from '@schemas/components/button'
 
 type AutoTransmitType = 'membership' | 'locker'
 
@@ -446,5 +447,17 @@ export class MessageComponent implements OnInit, OnDestroy {
         this.nxStore.dispatch(
             SMSActions.startGetHistoryGroupDetail({ centerId: this.center.id, historyGroupId: hd.id })
         )
+    }
+
+    // charge point modal vars & funcs
+    public showChargePointModal = false
+    toggleChargePointModal() {
+        this.showChargePointModal = !this.showChargePointModal
+    }
+    onChargePointCancel() {
+        this.showChargePointModal = false
+    }
+    onChargePointChargeConfirm(loadingFns: ClickEmitterType) {
+        this.showChargePointModal = false
     }
 }

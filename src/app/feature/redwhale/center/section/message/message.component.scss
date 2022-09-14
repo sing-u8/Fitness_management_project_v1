@@ -137,7 +137,7 @@
             align-items: center;
             position: absolute;
             right: 0;
-            bottom: 5px;
+            bottom: 10px;
             .message-route {
                 position: relative;
                 min-width: 62px;
@@ -167,6 +167,30 @@
                     height: 3px;
                     border-radius: 50px;
                     background-color: var(--font-color);
+                }
+            }
+            .charge-point-button {
+                width: 112px;
+                height: 44px;
+                background: #FFFFFF;
+                border: 1px solid #F1F1F1;
+                border-radius: 4px;
+                padding: 12px 13px 12px 10px!important;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                &:hover {
+                    opacity: 0.8;
+                }
+
+                .plus-icon {
+                    background-size: contain;
+                    background-repeat: no-repeat;
+                    background-image: url("/assets/icons/etc/plus-darkgrey.svg");
+                    width: 18px;
+                    height: 18px;
+                    margin-right: 2px;
                 }
             }
         }

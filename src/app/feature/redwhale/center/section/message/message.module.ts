@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core'
 import { CommonModule as AngularCommonModule } from '@angular/common'
-import { ReactiveFormsModule, FormsModule } from '@angular/forms'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 
 import { SharedModule } from '@shared/shared.module'
 
@@ -20,10 +20,12 @@ import { TransmissionHistoryDateSelectorComponent } from './components/transmiss
 import { TransmissionHistoryDetailModalComponent } from './components/transmission-history-detail-modal/transmission-history-detail-modal.component'
 import { PhoneNumberSelectorComponent } from './components/phone-number-selector/phone-number-selector.component'
 import { TransmissionHistoryItemComponent } from './components/transmission-history-item/transmission-history-item.component'
+import { MsgUserListSelectComponent } from './components/msg-user-list-select/msg-user-list-select.component'
+import { RegisterSenderPhoneModalComponent } from './components/register-sender-phone-modal/register-sender-phone-modal.component'
+import { ChargePointModalComponent } from './components/charge-point-modal/charge-point-modal.component'
 
 // pipes
 import { HistoryDatePipe } from './pipes/history-date.pipe'
-import { MsgUserListSelectComponent } from './components/msg-user-list-select/msg-user-list-select.component'
 
 @NgModule({
     declarations: [
@@ -40,6 +42,8 @@ import { MsgUserListSelectComponent } from './components/msg-user-list-select/ms
         PhoneNumberSelectorComponent,
         MsgUserListSelectComponent,
         TransmissionHistoryItemComponent,
+        RegisterSenderPhoneModalComponent,
+        ChargePointModalComponent,
     ],
     imports: [
         MessageRoutingModule,

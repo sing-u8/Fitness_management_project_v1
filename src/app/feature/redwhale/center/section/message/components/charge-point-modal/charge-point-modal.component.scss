@@ -1,0 +1,129 @@
+* {
+	padding: 0;
+	margin: 0;
+	text-align: start;
+}
+
+.rw-modal-background {
+	display: none;
+	position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	background-color: var(--font-color);
+	opacity: 0;
+	transition: opacity 0.3s cubic-bezier(0.25, 0.8, 0.25, 0.8);
+	-moz-transition: opacity 0.3s cubic-bezier(0.25, 0.8, 0.25, 0.8);
+	-webkit-transition: opacity 0.3s cubic-bezier(0.25, 0.8, 0.25, 0.8);
+	-o-transition: opacity 0.3s cubic-bezier(0.25, 0.8, 0.25, 0.8);
+	z-index: 9999;
+}
+
+.rw-modal-background-show {
+	opacity: 0.3;
+}
+
+.rw-modal-wrapper {
+	display: none;
+	position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	z-index: 10000;
+
+	.rw-modal {
+		width: 632px;
+		height: 420px;
+		border-radius: 6px;
+		background-color: var(--white);
+		box-shadow: 0 0 10px 0 rgba(181, 181, 181, 0.11);
+		opacity: 0;
+		transition: opacity 0s;
+		-moz-transition: opacity 0s;
+		-webkit-transition: opacity 0s;
+		-o-transition: opacity 0s;
+
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+
+		.header {
+			width: calc(100% - 34px);
+			height: 35px;
+			border-bottom: 1px solid var(--lightgrey);
+			display: flex;
+			align-items: flex-start;
+			justify-content: space-between;
+			padding-left: 4.5px;
+			margin: 15px 17px 0;
+
+			.close-icon {
+				cursor: pointer;
+				background-repeat: no-repeat;
+				background-image: url("/assets/icons/etc/close.svg");
+				background-size: contain;
+				width: 22px;
+				height: 22px;
+				margin-bottom: 16px;
+			}
+		}
+
+		.body {
+			display: flex;
+			flex-direction: column;
+			padding: 0 17px;
+			margin: 20px 0 30px 0;
+
+			p {
+				text-align: start;
+				&.p-title {
+					margin-bottom: 12px;
+				}
+				&.p-item {
+					margin-bottom: 5px;
+					&:last-of-type {
+						margin-bottom: 20px;
+					}
+				}
+			}
+
+			.l-point-item {
+				display: flex;
+				align-items: center;
+				margin-bottom: 20px;
+				.point-item {
+					display: flex;
+					flex-direction: column;
+					align-items: center;
+					justify-content: center;
+					border: 1px solid #E9E9E9;
+					border-radius: 10px;
+					width: 140px;
+					height: 61px;
+					cursor: pointer;
+					&:not(:last-of-type) {
+						margin-right: 10px;
+					}
+					span {
+						&:first-of-type {
+
+						}
+					}
+					&.selected {
+						background: rgba(227, 74, 94, 0.05);
+						border: 2px solid var(--red);
+					}
+				}
+			}
+		}
+
+	}
+}
+
+.rw-modal-wrapper-show {
+	.rw-modal {
+		opacity: 1;
+	}
+}
