@@ -32,7 +32,7 @@ export class ChargePointModalComponent implements OnChanges, AfterViewChecked {
 
     @Output() visibleChange = new EventEmitter<boolean>()
     @Output() cancel = new EventEmitter<any>()
-    @Output() confirm = new EventEmitter<any>()
+    @Output() confirm = new EventEmitter<{ loadingFns: ClickEmitterType; amount: number; point: number }>()
 
     changed: boolean
 
@@ -83,7 +83,9 @@ export class ChargePointModalComponent implements OnChanges, AfterViewChecked {
 
     onConfirm(loadingFns: ClickEmitterType): void {
         if (!this.agreeCharge) return
-        this.confirm.emit(loadingFns)
+        const chargePoint = this.chargePointList.find((v, i) => this.chargePointList[i].selected)
+        loadingFns.showLoading()
+        this.confirm.emit({ loadingFns, amount: chargePoint.pay, point: chargePoint.point })
     }
 
     // on mouse rw-modal down

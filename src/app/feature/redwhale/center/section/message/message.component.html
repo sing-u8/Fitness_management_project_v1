@@ -225,6 +225,7 @@
                             </ng-container>
                         </div>
                         <rw-button
+                            [loadingName]="'send_msg_bt'"
                             [color]="'var(--red)'"
                             [fontColor]="'var(--white)'"
                             [disabled]="!isMsgAbleToBeSent"
@@ -322,6 +323,7 @@
 
 <msg-charge-point-modal
     [(visible)]="showChargePointModal"
+    [blockClickOutside]="true"
     (cancel)="onChargePointCancel()"
     (confirm)="onChargePointChargeConfirm($event)"
 ></msg-charge-point-modal>

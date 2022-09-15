@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core'
-import { createEffect, Actions, ofType, concatLatestFrom } from '@ngrx/effects'
+import { Actions, concatLatestFrom, createEffect, ofType } from '@ngrx/effects'
 import { Store } from '@ngrx/store'
 import { of } from 'rxjs'
-import { catchError, switchMap, tap, map, debounceTime } from 'rxjs/operators'
+import { catchError, debounceTime, map, switchMap, tap } from 'rxjs/operators'
 
 import _ from 'lodash'
 
@@ -136,6 +136,22 @@ export class SMSEffect {
             )
         )
     )
+    chargeSMSPoint$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(SMSActions.startChargeSMSPoint),
+            concatLatestFrom(() => [this.store.select(SMSSelector.smsPoint)]),
+            switchMap(([{ centerId, smsPoint, cb }, curSMSPoint]) =>
+                this.centerSMSApi.updateSMSPoint(centerId, { sms_point: curSMSPoint + smsPoint }).pipe(
+                    switchMap(() => {
+                        cb ? cb() : null
+                        return [SMSActions.finishChargeSMSPoint({ smsPoint: smsPoint + curSMSPoint })]
+                    })
+                )
+            ),
+            catchError((err: string) => of(SMSActions.error({ error: err })))
+        )
+    )
+
     sendMessage$ = createEffect(() =>
         this.actions$.pipe(
             ofType(SMSActions.startSendGeneralMessage),

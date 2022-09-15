@@ -1,12 +1,12 @@
 import { createAction, props } from '@ngrx/store'
 import {
+    HistoryDateRange,
     MemberSelectCateg,
-    UsersSelectCateg,
+    SMSType,
     UserListSelect,
     UsersLists,
     UsersListValue,
-    SMSType,
-    HistoryDateRange,
+    UsersSelectCateg,
 } from '../reducers/sec.sms.reducer'
 import { SMSAutoSend } from '@schemas/sms-auto-send'
 import { SMSHistory } from '@schemas/sms-history'
@@ -56,6 +56,15 @@ export const finishGetUserList = createAction(
 
 export const startGetSMSPoint = createAction(`[${FeatureKey}] Start Get SMS Point`, props<{ centerId: string }>())
 export const finishGetSMSPoint = createAction(`[${FeatureKey}] Finish Get SMS Point`, props<{ smsPoint: number }>())
+
+export const startChargeSMSPoint = createAction(
+    `[${FeatureKey}] Start Charge SMS Point`,
+    props<{ centerId: string; smsPoint: number; cb?: () => void }>()
+)
+export const finishChargeSMSPoint = createAction(
+    `[${FeatureKey}] Finish Charge SMS Point`,
+    props<{ smsPoint: number }>()
+)
 
 export const startSendGeneralMessage = createAction(
     `[${FeatureKey}] Start Send General Message`,

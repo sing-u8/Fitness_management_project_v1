@@ -2,13 +2,13 @@ import { Component, OnDestroy, OnInit } from '@angular/core'
 import { FormBuilder } from '@angular/forms'
 import dayjs from 'dayjs'
 import _ from 'lodash'
-
 // schema
 import { Center } from '@schemas/center'
 
 // services
 import { StorageService } from '@services/storage.service'
 import { WordService } from '@services/helper/word.service'
+import { PaymentService } from '@services/payment.service'
 
 // rxjs
 import { Subject } from 'rxjs'
@@ -118,7 +118,8 @@ export class MessageComponent implements OnInit, OnDestroy {
         private nxStore: Store,
         private storageService: StorageService,
         private fb: FormBuilder,
-        private wordService: WordService
+        private wordService: WordService,
+        private paymentService: PaymentService
     ) {}
 
     ngOnInit(): void {
@@ -459,8 +460,60 @@ export class MessageComponent implements OnInit, OnDestroy {
     onChargePointCancel() {
         this.showChargePointModal = false
     }
-    onChargePointChargeConfirm(loadingFns: ClickEmitterType) {
-        this.showChargePointModal = false
+    onChargePointChargeConfirm(res: { loadingFns: ClickEmitterType; amount: number; point: number }) {
+        this.paymentService
+            .createPaymentData({
+                center_id: this.center.id,
+                product_type_code: 'import_payment_product_type_sms_point',
+                amount: res.amount,
+            })
+            .subscribe((v) => {
+                const user = this.storageService.getUser()
+                const IMP = window['IMP']
+                console.log('onChargePointChargeConfirm : ', IMP, ' --- ', v)
+                IMP.init('imp43860315')
+                IMP.request_pay(
+                    {
+                        pg: 'nice',
+                        pay_method: 'card',
+                        merchant_uid: v.merchant_uid,
+                        name: '문자 포인트 충전',
+                        amount: 1000, // v.amount,
+                        buyer_email: user.email,
+                        buyer_name: user.name,
+                        buyer_tel: user.phone_number,
+                    },
+                    (rsp) => {
+                        if (rsp.success) {
+                            console.log('res success : ', rsp)
+                            this.nxStore.dispatch(
+                                SMSActions.startChargeSMSPoint({
+                                    centerId: this.center.id,
+                                    smsPoint: res.point,
+                                    cb: () => {
+                                        this.showChargePointModal = false
+                                        res.loadingFns.hideLoading()
+                                    },
+                                })
+                            )
+
+                            // this.paymentService
+                            //     .validatePaymentDataAndSave({
+                            //         imp_uid: rsp.imp_uid,
+                            //         merchant_uid: rsp.merchant_uid,
+                            //     })
+                            //     .subscribe(() => {
+                            //         this.showChargePointModal = false
+                            //         res.loadingFns.hideLoading()
+                            //     })
+                        } else {
+                            console.log('결제에 실패하였습니다. 에러 내용: ' + rsp.error_msg)
+                            this.showChargePointModal = false
+                            res.loadingFns.hideLoading()
+                        }
+                    }
+                )
+            })
     }
 
     // register sender phone modal vars & funcs
