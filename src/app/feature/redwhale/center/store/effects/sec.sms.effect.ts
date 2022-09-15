@@ -136,21 +136,6 @@ export class SMSEffect {
             )
         )
     )
-    chargeSMSPoint$ = createEffect(() =>
-        this.actions$.pipe(
-            ofType(SMSActions.startChargeSMSPoint),
-            concatLatestFrom(() => [this.store.select(SMSSelector.smsPoint)]),
-            switchMap(([{ centerId, smsPoint, cb }, curSMSPoint]) =>
-                this.centerSMSApi.updateSMSPoint(centerId, { sms_point: curSMSPoint + smsPoint }).pipe(
-                    switchMap(() => {
-                        cb ? cb() : null
-                        return [SMSActions.finishChargeSMSPoint({ smsPoint: smsPoint + curSMSPoint })]
-                    })
-                )
-            ),
-            catchError((err: string) => of(SMSActions.error({ error: err })))
-        )
-    )
 
     sendMessage$ = createEffect(() =>
         this.actions$.pipe(

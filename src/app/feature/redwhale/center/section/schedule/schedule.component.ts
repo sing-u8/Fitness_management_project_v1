@@ -716,7 +716,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     eventDidMount(arg) {
-        // console.log('onEventDidMount: ', arg, arg.event.extendedProps.originItem)
+        console.log('onEventDidMount: ', arg, arg.event.extendedProps.originItem)
 
         if (arg.view.type == 'resourceTimeGridDay' || arg.view.type == 'timeGridWeek') {
             const eventMainFrame_el: HTMLElement = arg.el.getElementsByClassName('fc-event-main-frame')[0]

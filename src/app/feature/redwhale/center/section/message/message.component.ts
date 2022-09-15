@@ -465,7 +465,7 @@ export class MessageComponent implements OnInit, OnDestroy {
             .createPaymentData({
                 center_id: this.center.id,
                 product_type_code: 'import_payment_product_type_sms_point',
-                amount: res.amount,
+                amount: 1000, // res.amount,
             })
             .subscribe((v) => {
                 const user = this.storageService.getUser()
@@ -485,27 +485,16 @@ export class MessageComponent implements OnInit, OnDestroy {
                     },
                     (rsp) => {
                         if (rsp.success) {
-                            console.log('res success : ', rsp)
-                            this.nxStore.dispatch(
-                                SMSActions.startChargeSMSPoint({
-                                    centerId: this.center.id,
-                                    smsPoint: res.point,
-                                    cb: () => {
-                                        this.showChargePointModal = false
-                                        res.loadingFns.hideLoading()
-                                    },
+                            this.paymentService
+                                .validatePaymentDataAndSave({
+                                    imp_uid: rsp.imp_uid,
+                                    merchant_uid: rsp.merchant_uid,
                                 })
-                            )
-
-                            // this.paymentService
-                            //     .validatePaymentDataAndSave({
-                            //         imp_uid: rsp.imp_uid,
-                            //         merchant_uid: rsp.merchant_uid,
-                            //     })
-                            //     .subscribe(() => {
-                            //         this.showChargePointModal = false
-                            //         res.loadingFns.hideLoading()
-                            //     })
+                                .subscribe(() => {
+                                    this.nxStore.dispatch(SMSActions.startGetSMSPoint({ centerId: this.center.id }))
+                                    this.showChargePointModal = false
+                                    res.loadingFns.hideLoading()
+                                })
                         } else {
                             console.log('결제에 실패하였습니다. 에러 내용: ' + rsp.error_msg)
                             this.showChargePointModal = false

@@ -57,15 +57,6 @@ export const finishGetUserList = createAction(
 export const startGetSMSPoint = createAction(`[${FeatureKey}] Start Get SMS Point`, props<{ centerId: string }>())
 export const finishGetSMSPoint = createAction(`[${FeatureKey}] Finish Get SMS Point`, props<{ smsPoint: number }>())
 
-export const startChargeSMSPoint = createAction(
-    `[${FeatureKey}] Start Charge SMS Point`,
-    props<{ centerId: string; smsPoint: number; cb?: () => void }>()
-)
-export const finishChargeSMSPoint = createAction(
-    `[${FeatureKey}] Finish Charge SMS Point`,
-    props<{ smsPoint: number }>()
-)
-
 export const startSendGeneralMessage = createAction(
     `[${FeatureKey}] Start Send General Message`,
     props<{ centerId: string; cb?: () => void }>()
