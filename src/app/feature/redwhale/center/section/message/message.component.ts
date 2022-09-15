@@ -170,7 +170,9 @@ export class MessageComponent implements OnInit, OnDestroy {
         })
         this.callerList$.pipe(takeUntil(this.unsubscribe$)).subscribe((v) => {
             if (v.callerList.length == 0 && v.isCallerListInit) {
-                this.callerListErrText = '선택할 수 있는 발신번호가 없습니다.'
+                this.showRegisterSenderPhone = true
+                this.setRegisterSenderPhoneType('contain')
+                // this.callerListErrText = '선택할 수 있는 발신번호가 없습니다.'
             } else {
                 this.callerListErrText = ''
             }
@@ -473,7 +475,8 @@ export class MessageComponent implements OnInit, OnDestroy {
     onRegisterSenderPhoneCancel() {
         this.showRegisterSenderPhone = false
     }
-    onRegisterSenderPhoneConfirm() {
+    onRegisterSenderPhoneConfirm(res: { loadingFns: ClickEmitterType; data: { name: string; phone: string } }) {
+        res.loadingFns.hideLoading()
         this.showRegisterSenderPhone = false
     }
 }

@@ -1,35 +1,33 @@
 import {
-    Component,
-    OnInit,
-    OnDestroy,
-    SimpleChanges,
-    ElementRef,
-    Input,
-    Output,
-    EventEmitter,
-    ViewChild,
-    Renderer2,
-    OnChanges,
     AfterViewChecked,
+    Component,
+    ElementRef,
+    EventEmitter,
+    Input,
+    OnChanges,
+    OnDestroy,
+    OnInit,
+    Output,
+    Renderer2,
+    SimpleChanges,
+    ViewChild,
 } from '@angular/core'
 import { Router } from '@angular/router'
-import { FormBuilder, Validators, ValidationErrors, AbstractControl, FormGroup, AsyncValidatorFn } from '@angular/forms'
+import { AbstractControl, AsyncValidatorFn, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms'
 
 import { Observable, of } from 'rxjs'
-import { map, catchError } from 'rxjs/operators'
+import { catchError, map } from 'rxjs/operators'
 
 import { StorageService } from '@services/storage.service'
 import { AuthService } from '@services/auth.service'
 import { CreateUserRequestBody } from '@services/center-users.service'
-import { PictureManagementService, LocalFileData } from '@services/helper/picture-management.service'
+import { LocalFileData, PictureManagementService } from '@services/helper/picture-management.service'
 
 import { Center } from '@schemas/center'
 import { OutputType } from '@schemas/components/direct-register-member-fullmodal'
 // components
 import { ClickEmitterType } from '@schemas/components/button'
 // ngrx
-import * as DashboardActions from '@centerStore/actions/sec.dashboard.actions'
-import * as CenterCommonActions from '@centerStore/actions/center.common.actions'
 import { Store } from '@ngrx/store'
 import _ from 'lodash'
 

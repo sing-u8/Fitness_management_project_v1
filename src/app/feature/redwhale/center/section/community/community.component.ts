@@ -1,22 +1,21 @@
 import {
-    Component,
-    OnInit,
-    OnDestroy,
-    ViewChild,
-    ElementRef,
-    Renderer2,
     AfterViewInit,
-    ViewChildren,
+    Component,
+    ElementRef,
+    OnDestroy,
+    OnInit,
     QueryList,
+    Renderer2,
+    ViewChild,
+    ViewChildren,
 } from '@angular/core'
 import { Router } from '@angular/router'
-import { FormBuilder, FormControl, Validators, ValidationErrors, AbstractControl, ValidatorFn } from '@angular/forms'
-import { HttpEvent, HttpEventType } from '@angular/common/http'
+import { AbstractControl, FormBuilder, FormControl, ValidationErrors, ValidatorFn, Validators } from '@angular/forms'
 
 import dayjs from 'dayjs'
 import _ from 'lodash'
 import { Subject } from 'rxjs'
-import { takeUntil, take } from 'rxjs/operators'
+import { take, takeUntil } from 'rxjs/operators'
 
 import { Loading } from '@schemas/store/loading'
 import { CenterUser } from '@schemas/center-user'
@@ -25,7 +24,6 @@ import { Center } from '@schemas/center'
 import { ChatRoom, IsTmepRoom } from '@schemas/chat-room'
 import { ChatRoomMessage } from '@schemas/chat-room-message'
 import { ChatFile } from '@schemas/center/community/chat-file'
-import { ChatRoomUser } from '@schemas/chat-room-user'
 
 import { Confirm as InviteConfirm } from '@shared/components/redwhale/community/invite-room-modal/invite-room-modal.component'
 
@@ -35,11 +33,8 @@ import * as CenterChatRoomApi from '@services/center-chat-room.service'
 import { CommonCommunityService } from '@services/helper/common-community.service'
 
 // ngrx
-import { Store, select } from '@ngrx/store'
-import { drawerSelector } from '@appStore/selectors'
+import { select, Store } from '@ngrx/store'
 import { showToast } from '@appStore/actions/toast.action'
-
-import * as FromCommunity from '@centerStore/reducers/sec.community.reducer'
 import * as CommunitySelector from '@centerStore/selectors/sec.community.selector'
 import * as CommunityActions from '@centerStore/actions/sec.community.actions'
 

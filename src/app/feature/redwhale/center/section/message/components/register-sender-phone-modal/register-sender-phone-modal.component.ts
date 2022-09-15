@@ -10,7 +10,11 @@ import {
     SimpleChanges,
     ViewChild,
 } from '@angular/core'
+import { AbstractControl, FormBuilder, FormControl, ValidationErrors, ValidatorFn, Validators } from '@angular/forms'
+
 import { ClickEmitterType } from '@schemas/components/button'
+
+import { InputHelperService } from '@services/helper/input-helper.service'
 
 @Component({
     selector: 'msg-register-sender-phone-modal',
@@ -27,14 +31,29 @@ export class RegisterSenderPhoneModalComponent implements OnChanges, AfterViewCh
 
     @Output() visibleChange = new EventEmitter<boolean>()
     @Output() cancel = new EventEmitter<any>()
-    @Output() confirm = new EventEmitter<any>()
+    @Output() confirm = new EventEmitter<{ loadingFns: ClickEmitterType; data: { name: string; phone: string } }>()
 
     changed: boolean
 
     public isMouseModalDown: boolean
 
-    constructor(private el: ElementRef, private renderer: Renderer2) {
+    public nameForm: FormControl
+    public phoneForm: FormControl
+
+    constructor(
+        private el: ElementRef,
+        private renderer: Renderer2,
+        private fb: FormBuilder,
+        public inputHelper: InputHelperService
+    ) {
         this.isMouseModalDown = false
+
+        this.nameForm = this.fb.control('', {
+            validators: [Validators.required, Validators.pattern('^[가-힣|a-z|A-Z]{1,20}$'), this.nameValidator()],
+        })
+        this.phoneForm = this.fb.control('', {
+            validators: [Validators.required, Validators.pattern('^[0-9]{10,11}$'), this.phoneValidator()],
+        })
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -63,6 +82,8 @@ export class RegisterSenderPhoneModalComponent implements OnChanges, AfterViewCh
                     this.renderer.removeClass(this.modalBackgroundElement.nativeElement, 'display-block')
                     this.renderer.removeClass(this.modalWrapperElement.nativeElement, 'display-flex')
                 }, 200)
+                this.nameForm.reset()
+                this.phoneForm.reset()
             }
         }
     }
@@ -72,7 +93,8 @@ export class RegisterSenderPhoneModalComponent implements OnChanges, AfterViewCh
     }
 
     onConfirm(loadingFns: ClickEmitterType): void {
-        this.confirm.emit(loadingFns)
+        loadingFns.showLoading()
+        this.confirm.emit({ loadingFns, data: { name: this.nameForm.value, phone: this.phoneForm.value } })
     }
 
     // on mouse rw-modal down
@@ -81,5 +103,37 @@ export class RegisterSenderPhoneModalComponent implements OnChanges, AfterViewCh
     }
     resetMouseModalDown() {
         this.isMouseModalDown = false
+    }
+
+    // validators
+    public nameError = ''
+    public phoneError = ''
+    nameValidator(): ValidatorFn {
+        return (control: AbstractControl): ValidationErrors | null => {
+            const nameRegex = /^[가-힣|a-z|A-Z]{1,20}$/
+            console.log('name validator : ', control, ' -- ', control.pending)
+            if (!control.pristine && control.value == '') {
+                this.nameError = '이름을 입력해주세요.'
+                return { nameNone: true }
+            } else if (!nameRegex.test(control.value)) {
+                this.nameError = '이메일 양식을 확인해주세요.'
+                return { nameFormError: true }
+            }
+
+            return null
+        }
+    }
+    phoneValidator(): ValidatorFn {
+        return (control: AbstractControl): ValidationErrors | null => {
+            const phoneRegex = /^[0-9]{10,11}$/
+            if (!control.pristine && control.value == '') {
+                this.phoneError = '발신번호를 입력해주세요.'
+                return { phoneNone: true }
+            } else if (!phoneRegex.test(control.value)) {
+                this.phoneError = '발신번호 양식을 확인해주세요.'
+                return { phoneFormError: true }
+            }
+            return null
+        }
     }
 }

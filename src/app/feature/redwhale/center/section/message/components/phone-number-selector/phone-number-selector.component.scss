@@ -16,8 +16,17 @@
 		&.error {
 			border-color: var(--red);
 		}
+		&.empty {
+			cursor: auto;
+		}
 		.text {
 			font-weight: 500;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+			margin-right: 6px;
+		}
+		.text_empty {
 			overflow: hidden;
 			text-overflow: ellipsis;
 			white-space: nowrap;

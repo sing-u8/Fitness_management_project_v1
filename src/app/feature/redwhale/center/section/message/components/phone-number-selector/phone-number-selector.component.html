@@ -2,23 +2,20 @@
 	<div
 		class="selected rw-typo-bodytext1"
 		[class.open]="isOpen"
-		[class.disabled]="disabled !== false || items.length == 0"
 		[class.error]="errMsg"
+		[class.empty] = "items.length == 0"
 		#selectedElement
 		(click)="toggle()"
 		(rwClickOutside)="close()"
 	>
-<!--		<div *ngIf="errMsg" class="d-flex align-items-center">-->
-<!--			<span>선택할 수 있는 발신번호가 없습니다.</span>-->
-<!--		</div>-->
-<!--		<div *ngIf="!errMsg && !value" class="d-flex align-items-center">-->
-<!--			<span>발신번호를 선택해주세요.</span>-->
-<!--		</div>-->
-		<div *ngIf="!errMsg && value" class="d-flex align-items-center">
+		<div *ngIf="value" class="d-flex align-items-center">
 			<span class="text">{{ value?.phone_number }}</span>
 <!--			<div *ngIf="value?.being_verified" class="verification-icon">{{'승인중'}}</div>-->
 		</div>
-		<span class="mdi mdi-chevron-down"></span>
+		<div *ngIf="items.length == 0 && !value">
+			<span class="text_empty rw-typo-bodytext1_grey">등록된 번호가 없어요.</span>
+		</div>
+		<span *ngIf="items.length != 0" class="mdi mdi-chevron-down"></span>
 	</div>
 	<div *ngIf="errMsg" class="l-err-msg rw-typo-subtext0-regular">
 		<span class="error-icon"></span>

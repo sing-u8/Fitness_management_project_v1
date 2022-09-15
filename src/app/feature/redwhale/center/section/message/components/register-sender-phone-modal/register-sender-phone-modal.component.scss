@@ -5,7 +5,7 @@
 }
 
 .contain-type {
-	position: absolute;
+	position: absolute !important;
 }
 
 .rw-modal-background {
@@ -104,9 +104,9 @@
 
 					.warning {
 						position: relative;
-						top: 3px;
-						width: 12px;
-						height: 11px;
+						top: 2px;
+						width: 14px;
+						height: 14px;
 					}
 
 					.rw-typo-subtext1 {

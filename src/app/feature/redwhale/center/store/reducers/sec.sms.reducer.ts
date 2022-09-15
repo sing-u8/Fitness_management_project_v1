@@ -179,7 +179,7 @@ export const smsReducer = createImmerReducer(
         state.smsPoint = smsPoint
         return state
     }),
-    on(SMSActions.finishGetCallerList, (state) => {
+    on(SMSActions.startGetCallerList, (state) => {
         state.isCallerListInit = false
         return state
     }),

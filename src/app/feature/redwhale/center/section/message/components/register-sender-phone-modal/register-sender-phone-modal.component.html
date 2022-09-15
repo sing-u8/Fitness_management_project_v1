@@ -21,37 +21,34 @@
       </div>
     </div>
 
-    <div class="input">
+    <div class="input" [class.input-box-error]="!nameForm.pristine && nameForm.invalid">
       <p class="rw-typo-subtext1">이름 (발신번호 개통 시 사용한 실명)</p>
       <input
         class="rw-input"
         type="text"
         placeholder="이름을 입력해주세요."
-        minlength="10" maxlength="11" required
-        pattern="^\d{10,11}$"
-        (keypress) = "false"
-        (keyup) = "false"
+        [formControl]="nameForm"
       >
-      <div class="error" *ngIf="false">
+      <div class="error" *ngIf="!nameForm.pristine && nameForm.invalid">
         <img class="warning" src="assets/icons/etc/warning-red.svg" />
-        <span class="rw-typo-subtext1">{{ '' }}</span>
+        <span class="rw-typo-subtext1">{{nameError}}</span>
       </div>
     </div>
 
-    <div class="input" [class.input-box-error]="false">
+    <div class="input" [class.input-box-error]="!phoneForm.pristine && phoneForm.invalid">
       <p class="rw-typo-subtext1">발신번호</p>
       <input
         class="rw-input"
         type="text"
         placeholder="발신번호를 입력해주세요."
-        minlength="4" maxlength="4" required
-        pattern="^\d{4}$"
-        (keypress)="false"
-        (keyup)="false"
+        minlength="10"
+        maxlength="11"
+        (keydown)="inputHelper.restrictToNumber($event)"
+        [formControl]="phoneForm"
       >
-      <div class="error" *ngIf="false">
+      <div class="error" *ngIf="!phoneForm.pristine && phoneForm.invalid">
         <img class="warning" src="assets/icons/etc/warning-red.svg" />
-        <span class="rw-typo-subtext1">{{ '' }}</span>
+        <span class="rw-typo-subtext1">{{phoneError}}</span>
       </div>
 
     </div>
@@ -65,8 +62,8 @@
         [height]="'50'"
         [color]="'var(--red)'"
         [borderRadius]="'0 0 5px 0'"
-        [disabled]="false"
-        (onClick)="onConfirm($event)"
+        [disabled]="((nameForm.pristine || nameForm.invalid) || (phoneForm.pristine || phoneForm.invalid))"
+        (onClick)="(nameForm.valid && phoneForm.valid) && onConfirm($event)"
       >
         <span class="rw-typo-bodytext0-bold confirm__text">인증 요청하기</span>
       </rw-button>
