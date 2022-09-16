@@ -43,6 +43,21 @@ export const startUpdateCalendarTask = createAction(
     }>()
 )
 
+export const startGetAllCalendarTask = createAction(
+    `[${FeatureKey}] Start Get All Calendar Task`,
+    props<{
+        centerId: string
+        calendar_ids: string[]
+        cb?: (taskList: CalendarTask[]) => void
+    }>()
+)
+export const finishGetAllCalendarTask = createAction(
+    `[${FeatureKey}] Finish Get All Calendar Task`,
+    props<{
+        taskList: CalendarTask[]
+    }>()
+)
+
 // - // sync
 export const setTaskList = createAction(`[${FeatureKey}] Set Task List`, props<{ taskList: CalendarTask[] }>())
 export const setInstructorList = createAction(
@@ -51,7 +66,7 @@ export const setInstructorList = createAction(
 )
 export const setCalendarConfig = createAction(
     `[${FeatureKey}] Set Calendar Configuration Infomation`,
-    props<{ calendarConfig: FromSchReducer.CalendarConfigInfo }>()
+    props<{ calendarConfig: Partial<FromSchReducer.CalendarConfigInfo> }>()
 )
 export const setOperatingHour = createAction(
     `[${FeatureKey}] Set Operating Hour`,
@@ -95,6 +110,13 @@ export const resetAll = createAction(`[${FeatureKey}] Reset All Schedule States`
 export const setCurCenterId = createAction(`[${FeatureKey}] Set Current Center Id`, props<{ centerId: string }>())
 export const setError = createAction(`[${FeatureKey}] Set Schedule Error Message`, props<{ error: string }>())
 export const setDoLessonsExist = createAction(`[${FeatureKey}] Set Do Lessons Exist`, props<{ doExist: boolean }>())
+
+// datepick
+export const setDatePick = createAction(`[${FeatureKey}] Set Date Pick`, props<{ date: string }>())
+export const setWeekPick = createAction(
+    `[${FeatureKey}] Set Week Pick`,
+    props<{ startDate: string; endDate: string }>()
+)
 
 // synchronize by dashboard
 export const startSynchronizeInstructorList = createAction(

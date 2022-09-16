@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core'
-import { Actions, createEffect, ofType } from '@ngrx/effects'
+import { Actions, concatLatestFrom, createEffect, ofType } from '@ngrx/effects'
 import { forkJoin, of } from 'rxjs'
 import { catchError, map, switchMap, tap } from 'rxjs/operators'
 
@@ -11,9 +11,11 @@ import { WordService } from '@services/helper/word.service'
 
 import * as ScheduleActions from '../actions/sec.schedule.actions'
 import * as ScheduleReducer from '../reducers/sec.schedule.reducer'
+import * as ScheduleSelector from '../selectors/sec.schedule.selector'
 
 import _ from 'lodash'
 import { showToast } from '@appStore/actions/toast.action'
+import { Store } from '@ngrx/store'
 
 @Injectable()
 export class ScheduleEffect {
@@ -23,7 +25,8 @@ export class ScheduleEffect {
         private centerCalendarApi: CenterCalendarService,
         private centerUsersApi: CenterUsersService,
         private centerLessonApi: CenterLessonService,
-        private wordService: WordService
+        private wordService: WordService,
+        private nxStore: Store
     ) {}
 
     public loadScheduleState = createEffect(() => {
@@ -127,6 +130,35 @@ export class ScheduleEffect {
             ),
         { dispatch: false }
     )
+
+    public getTaskList$ = createEffect(() => {
+        return this.actions$.pipe(
+            ofType(ScheduleActions.startGetAllCalendarTask),
+            concatLatestFrom(() => [this.nxStore.select(ScheduleSelector.calendarConfig)]),
+            switchMap(([{ centerId, calendar_ids, cb }, calConfig]) => {
+                // console.log('ScheduleActions.startGetAllCalendarTask -- ', reqBody, ' -- ', calConfig)
+                return this.centerCalendarApi
+                    .getAllCalendarTask(centerId, {
+                        calendar_ids,
+                        start_date: calConfig.startDate,
+                        end_date: calConfig.endDate,
+                    })
+                    .pipe(
+                        switchMap((taskList) => {
+                            cb ? cb(taskList) : null
+                            return [
+                                ScheduleActions.finishGetAllCalendarTask({
+                                    taskList,
+                                }),
+                            ]
+                        }),
+                        catchError((err: string) =>
+                            of(ScheduleActions.setError({ error: 'createInstructor err :' + err }))
+                        )
+                    )
+            })
+        )
+    })
 
     // synchronize
 

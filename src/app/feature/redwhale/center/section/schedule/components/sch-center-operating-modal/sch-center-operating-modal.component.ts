@@ -1,13 +1,13 @@
 import {
-    Component,
-    Input,
-    ElementRef,
-    Renderer2,
-    Output,
-    EventEmitter,
-    OnChanges,
-    SimpleChanges,
     AfterViewChecked,
+    Component,
+    ElementRef,
+    EventEmitter,
+    Input,
+    OnChanges,
+    Output,
+    Renderer2,
+    SimpleChanges,
     ViewChild,
 } from '@angular/core'
 import _ from 'lodash'
@@ -58,12 +58,8 @@ export class SchCenterOpratingModalComponent implements AfterViewChecked, OnChan
             }
         }
 
-        if (this.time) {
-            console.log('change time: ', this.time)
-        }
         if (this.daysString.value) {
             this.initDayOfWeek(this.daysString.value)
-            console.log('change daysString: ', this.daysString)
         }
     }
 
@@ -151,10 +147,8 @@ export class SchCenterOpratingModalComponent implements AfterViewChecked, OnChan
 
     onStartTimeClick(time: { key: string; name: string }) {
         this.time.start = time.key
-        console.log('onStartTimeClick: ', time, this.time.start)
     }
     onEndTimeClick(time: { key: string; name: string }) {
         this.time.end = time.key
-        console.log('onEndTimeClick: ', time, this.time.start)
     }
 }

@@ -33,14 +33,14 @@ export type InstructorType = {
 
 export type CalendarViewType = 'resourceTimeGridDay' | 'timeGridWeek' | 'dayGridMonth'
 export type CalendarConfigInfo = {
-    startDate: Date
-    endDate: Date
+    startDate: string
+    endDate: string
     viewType: CalendarViewType
 }
 export const CalendarConfigInfoInit: CalendarConfigInfo = {
-    startDate: undefined,
-    endDate: undefined,
-    viewType: undefined,
+    startDate: null,
+    endDate: null,
+    viewType: 'timeGridWeek',
 }
 
 export type CenterOperatingHour = { start: string; end: string }
@@ -67,6 +67,13 @@ export interface State {
     error: string
     doLessonsExist: boolean
 
+    // datepick
+    datePick: string
+    weekPick: {
+        startDate: string
+        endDate: string
+    }
+
     // main
     taskList: CalendarTask[]
     instructorList: InstructorType[]
@@ -91,6 +98,13 @@ export const initialState: State = {
     isLoading: 'idle',
     error: '',
     doLessonsExist: true,
+
+    // datepick
+    datePick: '',
+    weekPick: {
+        startDate: '',
+        endDate: '',
+    },
     // main
     taskList: [],
     instructorList: [],
@@ -130,9 +144,14 @@ export const scheduleReducer = createImmerReducer(
         return state
     }),
 
+    on(ScheduleActions.finishGetAllCalendarTask, (state, { taskList }) => {
+        state.taskList = _.unionBy(taskList, state.taskList, 'id')
+        return state
+    }),
+
     // - // sync
     on(ScheduleActions.setTaskList, (state, { taskList }) => {
-        state.taskList = taskList
+        state.taskList = _.unionBy(taskList, state.taskList, 'id')
         return state
     }),
     on(ScheduleActions.setInstructorList, (state, { instructorList }) => {
@@ -140,7 +159,7 @@ export const scheduleReducer = createImmerReducer(
         return state
     }),
     on(ScheduleActions.setCalendarConfig, (state, { calendarConfig }) => {
-        state.calendarConfig = calendarConfig
+        state.calendarConfig = _.assign(state.calendarConfig, calendarConfig)
         return state
     }),
     on(ScheduleActions.setOperatingHour, (state, { operatingHour }) => {
@@ -180,6 +199,16 @@ export const scheduleReducer = createImmerReducer(
         state.taskTitleTime = dayjs(taskTitleTime).format('MM/DD (dd) a hh시 mm분')
         return state
     }),
+    // date pick
+    on(ScheduleActions.setDatePick, (state, { date }) => {
+        state.datePick = date
+        return state
+    }),
+    on(ScheduleActions.setWeekPick, (state, { startDate, endDate }) => {
+        state.weekPick.startDate = startDate
+        state.weekPick.endDate = endDate
+        return state
+    }),
 
     // common
     on(ScheduleActions.resetAll, (state) => {
@@ -213,6 +242,10 @@ export const selectCurCenterId = (state: State) => state.curCenterId
 export const selectError = (state: State) => state.error
 export const selectIsLoading = (state: State) => state.isLoading
 export const selectDoLessonsExist = (state: State) => state.doLessonsExist
+
+// date pick
+export const selectDatePick = (state: State) => state.datePick
+export const selectWeekPick = (state: State) => state.weekPick
 
 // main
 export const selectTaskList = (state: State) => state.taskList

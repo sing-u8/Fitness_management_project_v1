@@ -2,8 +2,6 @@ import { createSelector } from '@ngrx/store'
 import { GymFeature, GymState } from './sec.selector'
 import * as FromSchedule from '@centerStore/reducers/sec.schedule.reducer'
 
-import _ from 'lodash'
-
 export const FeatureKey = 'Center/Schedule'
 
 export const GymScheduleFeature = createSelector(GymFeature, (state: GymState) => state[FeatureKey])
@@ -13,6 +11,10 @@ export const isLoading = createSelector(GymScheduleFeature, FromSchedule.selectI
 export const error = createSelector(GymScheduleFeature, FromSchedule.selectError)
 export const curCenterId = createSelector(GymScheduleFeature, FromSchedule.selectCurCenterId)
 export const doLessonsExist = createSelector(GymScheduleFeature, FromSchedule.selectDoLessonsExist)
+
+// date pick
+export const datePick = createSelector(GymScheduleFeature, FromSchedule.selectDatePick)
+export const weekPick = createSelector(GymScheduleFeature, FromSchedule.selectWeekPick)
 
 // main
 export const taskList = createSelector(GymScheduleFeature, FromSchedule.selectTaskList)
