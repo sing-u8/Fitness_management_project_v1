@@ -847,20 +847,22 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
                 end_time: dayjs(arg.event.endStr).format('HH:mm'),
             }
             const apiCalId = otherInstructor ? otherInstructor.id : calId
-            this.CenterCalendarService.updateCalendarTask(
-                this.center.id,
-                apiCalId,
-                calTask.id,
-                reqBody,
-                'one'
-            ).subscribe((__) => {
-                // this.nxStore.dispatch(ScheduleActions.setIsScheduleEventChanged({ isScheduleEventChanged: true }))
-                this.nxStore.dispatch(
-                    showToast({
-                        text: `'${this.wordService.ellipsis(calTask.name, 8)}' 기타 일정이 수정 되었습니다.`,
-                    })
-                )
-            })
+            this.nxStore.dispatch(
+                ScheduleActions.startUpdateCalendarTask({
+                    centerId: this.center.id,
+                    calendarId: apiCalId,
+                    taskId: calTask.id,
+                    reqBody: reqBody,
+                    mode: 'one',
+                    cb: () => {
+                        this.nxStore.dispatch(
+                            showToast({
+                                text: `'${this.wordService.ellipsis(calTask.name, 8)}' 기타 일정이 수정 되었습니다.`,
+                            })
+                        )
+                    },
+                })
+            )
         } else {
             const eventData: CalendarTask = arg.event.extendedProps['originItem'] as CalendarTask
             let reqBody: UpdateCalendarTaskReqBody = undefined
@@ -917,20 +919,22 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
             }
             console.log('drop event: ', reqBody)
             const apiCalId = otherInstructor ? otherInstructor.id : calId
-            this.CenterCalendarService.updateCalendarTask(
-                this.center.id,
-                apiCalId,
-                calTask.id,
-                reqBody,
-                'one'
-            ).subscribe((res) => {
-                // this.nxStore.dispatch(ScheduleActions.setIsScheduleEventChanged({ isScheduleEventChanged: true }))
-                this.nxStore.dispatch(
-                    showToast({
-                        text: `'${this.wordService.ellipsis(calTask.name, 8)}' 수업 일정이 수정 되었습니다.`,
-                    })
-                )
-            })
+            this.nxStore.dispatch(
+                ScheduleActions.startUpdateCalendarTask({
+                    centerId: this.center.id,
+                    calendarId: apiCalId,
+                    taskId: calTask.id,
+                    reqBody: reqBody,
+                    mode: 'one',
+                    cb: () => {
+                        this.nxStore.dispatch(
+                            showToast({
+                                text: `'${this.wordService.ellipsis(calTask.name, 8)}' 수업 일정이 수정 되었습니다.`,
+                            })
+                        )
+                    },
+                })
+            )
         }
     }
 

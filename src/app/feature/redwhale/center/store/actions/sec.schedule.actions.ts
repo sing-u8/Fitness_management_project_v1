@@ -5,7 +5,7 @@ import { Calendar } from '@schemas/calendar'
 import { CalendarTask } from '@schemas/calendar-task'
 import { CenterUser } from '@schemas/center-user'
 
-import { CreateCalendarReqBody } from '@services/center-calendar.service'
+import { CreateCalendarReqBody, UpdateCalendarMode, UpdateCalendarTaskReqBody } from '@services/center-calendar.service'
 
 import * as FromSchReducer from '@centerStore/reducers/sec.schedule.reducer'
 
@@ -29,6 +29,18 @@ export const startCreateInstructor = createAction(
 export const finishCreateInstructor = createAction(
     `[${FeatureKey}] Finish Create Instructor`,
     props<{ createdInstructor: FromSchReducer.InstructorType; instructorList?: FromSchReducer.InstructorType[] }>()
+)
+
+export const startUpdateCalendarTask = createAction(
+    `[${FeatureKey}] Start Update Calendar Task`,
+    props<{
+        centerId: string
+        calendarId: string
+        taskId: string
+        reqBody: UpdateCalendarTaskReqBody
+        mode: UpdateCalendarMode
+        cb?: () => void
+    }>()
 )
 
 // - // sync

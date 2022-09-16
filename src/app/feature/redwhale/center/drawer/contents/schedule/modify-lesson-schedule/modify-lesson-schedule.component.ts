@@ -26,6 +26,7 @@ import { concatLatestFrom } from '@ngrx/effects'
 import * as ScheduleReducer from '@centerStore/reducers/sec.schedule.reducer'
 import * as ScheduleSelector from '@centerStore/selectors/sec.schedule.selector'
 import * as CenterCommonSelector from '@centerStore/selectors/center.common.selector'
+import * as ScheduleActions from '@centerStore/actions/sec.schedule.actions'
 import { closeDrawer } from '@appStore/actions/drawer.action'
 import { showToast } from '@appStore/actions/toast.action'
 
@@ -237,12 +238,16 @@ export class ModifyLessonScheduleComponent implements OnInit, OnDestroy, AfterVi
         const calId = this.instructorList.find((v) => v.instructor.calendar_user.id == this.StaffSelectValue.value.id)
             .instructor.id
 
-        this.centerCalendarService
-            .updateCalendarTask(this.center.id, calId, this.lessonEvent.id, reqBody, this.lessonRepeatOption)
-            .subscribe({
-                next: (res) => {
+        this.nxStore.dispatch(
+            ScheduleActions.startUpdateCalendarTask({
+                centerId: this.center.id,
+                calendarId: calId,
+                taskId: this.lessonEvent.id,
+                reqBody: reqBody,
+                mode: this.lessonRepeatOption,
+                cb: () => {
                     fn ? fn() : null
-                    // this.nxStore.dispatch(ScheduleActions.setIsScheduleEventChanged({ isScheduleEventChanged: true }))
+                    this.nxStore.dispatch(ScheduleActions.setIsScheduleEventChanged({ isScheduleEventChanged: true }))
                     this.closeDrawer()
                     this.nxStore.dispatch(
                         showToast({
@@ -253,11 +258,8 @@ export class ModifyLessonScheduleComponent implements OnInit, OnDestroy, AfterVi
                         })
                     )
                 },
-
-                error: (err) => {
-                    console.log('gymCalendarService.createTask err: ', err)
-                },
             })
+        )
     }
 
     // -----------------------------  일정 생성 수정 모달 ------------------------------------

@@ -9,8 +9,8 @@ import { environment } from '@environments/environment'
 import { Response } from '@schemas/response'
 import { Calendar } from '@schemas/calendar'
 import { CalendarTask } from '@schemas/calendar-task'
-import { UserAbleToBook } from '../schemas/user-able-to-book'
-import { UserBooked } from '../schemas/user-booked'
+import { UserAbleToBook } from '@schemas/user-able-to-book'
+import { UserBooked } from '@schemas/user-booked'
 
 @Injectable({
     providedIn: 'root',
@@ -126,7 +126,7 @@ export class CenterCalendarService {
         calendarId: string,
         taskId: string,
         reqBody: UpdateCalendarTaskReqBody,
-        mode: 'one' | 'after' | 'all'
+        mode: UpdateCalendarMode
     ): Observable<Response> {
         const url = this.SERVER + `/${centerId}/calendar/${calendarId}/task/${taskId}?mode=${mode}`
 
@@ -251,6 +251,7 @@ export interface CreateCalendarTaskReqBody {
     class?: ClassForCU
 }
 
+export type UpdateCalendarMode = 'one' | 'after' | 'all'
 export interface UpdateCalendarTaskReqBody {
     type_code?: 'calendar_task_type_normal' | 'calendar_task_type_class'
     name?: string

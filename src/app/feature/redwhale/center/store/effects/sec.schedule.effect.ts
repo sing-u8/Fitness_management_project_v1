@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core'
 import { Actions, createEffect, ofType } from '@ngrx/effects'
 import { forkJoin, of } from 'rxjs'
-import { catchError, map, switchMap } from 'rxjs/operators'
+import { catchError, map, switchMap, tap } from 'rxjs/operators'
 
 import { StorageService } from '@services/storage.service'
 import { CenterCalendarService } from '@services/center-calendar.service'
@@ -109,6 +109,26 @@ export class ScheduleEffect {
             })
         )
     })
+
+    public updateCalendarTask$ = createEffect(
+        () =>
+            this.actions$.pipe(
+                ofType(ScheduleActions.startUpdateCalendarTask),
+                switchMap(({ centerId, calendarId, taskId, reqBody, mode, cb }) =>
+                    this.centerCalendarApi.updateCalendarTask(centerId, calendarId, taskId, reqBody, mode).pipe(
+                        tap(() => {
+                            cb ? cb() : null
+                        })
+                    )
+                ),
+                catchError((err: string) =>
+                    of(ScheduleActions.setError({ error: 'startUpdateCalendarTask err :' + err }))
+                )
+            ),
+        { dispatch: false }
+    )
+
+    // synchronize
 
     public synchronizeInstructorList = createEffect(() =>
         this.actions$.pipe(

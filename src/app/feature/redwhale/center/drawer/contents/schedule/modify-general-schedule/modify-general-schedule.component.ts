@@ -6,6 +6,7 @@ import _ from 'lodash'
 
 import { StorageService } from '@services/storage.service'
 import { CenterCalendarService, UpdateCalendarTaskReqBody } from '@services/center-calendar.service'
+import { WordService } from '@services/helper/word.service'
 
 import { CenterUser } from '@schemas/center-user'
 import { Center } from '@schemas/center'
@@ -17,6 +18,7 @@ import { concatLatestFrom } from '@ngrx/effects'
 import * as ScheduleReducer from '@centerStore/reducers/sec.schedule.reducer'
 import * as ScheduleSelector from '@centerStore/selectors/sec.schedule.selector'
 import * as CenterCommonSelector from '@centerStore/selectors/center.common.selector'
+import * as ScheduleActions from '@centerStore/actions/sec.schedule.actions'
 import { closeDrawer } from '@appStore/actions/drawer.action'
 import { showToast } from '@appStore/actions/toast.action'
 
@@ -64,6 +66,7 @@ export class ModifyGeneralScheduleComponent implements OnInit, AfterViewInit, On
     constructor(
         private storageService: StorageService,
         private centerCalendarService: CenterCalendarService,
+        private wordService: WordService,
         private nxStore: Store
     ) {}
 
@@ -127,21 +130,28 @@ export class ModifyGeneralScheduleComponent implements OnInit, AfterViewInit, On
         }
         const calId = this.instructorList.find((v) => v.instructor.calendar_user.id == this.StaffSelectValue.value.id)
             .instructor.id
-        this.centerCalendarService
-            .updateCalendarTask(this.center.id, calId, this.generalEvent.id, reqBody, 'one')
-            .subscribe({
-                next: (_) => {
+        this.nxStore.dispatch(
+            ScheduleActions.startUpdateCalendarTask({
+                centerId: this.center.id,
+                calendarId: calId,
+                taskId: this.generalEvent.id,
+                reqBody: reqBody,
+                mode: 'one',
+                cb: () => {
                     fn ? fn() : null
-                    // this.nxStore.dispatch(ScheduleActions.setIsScheduleEventChanged({ isScheduleEventChanged: true }))
+                    this.nxStore.dispatch(ScheduleActions.setIsScheduleEventChanged({ isScheduleEventChanged: true }))
                     this.closeDrawer()
                     this.nxStore.dispatch(
-                        showToast({ text: `'${this.planTexts.planTitle}' 기타 일정이 수정되었습니다.` })
+                        showToast({
+                            text: `'${this.wordService.ellipsis(
+                                this.planTexts.planTitle,
+                                8
+                            )}' 기타 일정이 수정 되었습니다.`,
+                        })
                     )
                 },
-                error: (err) => {
-                    console.log('gymCalendarService.createTask err: ', err)
-                },
             })
+        )
     }
 
     closeDrawer() {
