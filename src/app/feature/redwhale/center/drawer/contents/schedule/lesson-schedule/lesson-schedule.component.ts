@@ -204,7 +204,7 @@ export class LessonScheduleComponent implements OnInit, OnDestroy, AfterViewInit
         const selectedStaff = _.find(this.schInstructorList, (item) => {
             return this.StaffSelectValue.value.id == item.instructor.calendar_user.id
         })
-        console.log('selectedStaff -- ', this.schInstructorList, this.StaffSelectValue)
+        // console.log('selectedStaff -- ', this.schInstructorList, this.StaffSelectValue)
 
         if (this.dayRepeatSwitch) {
             reqBody = {
@@ -242,7 +242,7 @@ export class LessonScheduleComponent implements OnInit, OnDestroy, AfterViewInit
                 },
             }
 
-            console.log('dayRepeatSwitch req body: ', reqBody)
+            // console.log('dayRepeatSwitch req body: ', reqBody)
         } else {
             reqBody = {
                 type_code: 'calendar_task_type_class',
@@ -274,11 +274,11 @@ export class LessonScheduleComponent implements OnInit, OnDestroy, AfterViewInit
                 },
             }
         }
-        console.log('createCalendarTask req body: ', reqBody)
+        // console.log('createCalendarTask req body: ', reqBody)
         this.centerCalendarService.createCalendarTask(this.center.id, selectedStaff.instructor.id, reqBody).subscribe({
             next: (res) => {
                 fn ? fn() : null
-                // this.nxStore.dispatch(ScheduleActions.setIsScheduleEventChanged({ isScheduleEventChanged: true }))
+                this.nxStore.dispatch(ScheduleActions.setIsScheduleEventChanged({ isScheduleEventChanged: true }))
                 this.closeDrawer()
                 this.nxStore.dispatch(
                     showToast({

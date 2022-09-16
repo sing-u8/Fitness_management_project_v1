@@ -164,14 +164,23 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
                         ? 0
                         : instructorList.reduce((checkedLen, val) => checkedLen + (val.selected ? 1 : 0), 0)
 
-                console.log(
-                    'ScheduleSelector.instructorList -- ',
-                    instructorList,
-                    ' -- checkedInstructorLength: ',
-                    checkedInstructorLength
-                )
+                // console.log(
+                //     'ScheduleSelector.instructorList -- ',
+                //     instructorList,
+                //     ' -- checkedInstructorLength: ',
+                //     checkedInstructorLength
+                // )
                 if (checkedInstructorLength > 0) {
                     this.getTaskList(this.selectedDateViewType)
+                }
+            })
+
+        this.nxStore
+            .pipe(select(ScheduleSelector.isScheduleEventChanged), takeUntil(this.unsubscriber$))
+            .subscribe((status) => {
+                if (status == true) {
+                    this.getTaskList(this.selectedDateViewType)
+                    this.nxStore.dispatch(ScheduleActions.setIsScheduleEventChanged({ isScheduleEventChanged: false }))
                 }
             })
     }

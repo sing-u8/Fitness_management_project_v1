@@ -174,7 +174,7 @@ export class GeneralScheduleComponent implements OnInit, AfterViewInit, OnDestro
             next: (_) => {
                 fn ? fn() : null
                 console.log('general register reqbody: ', reqBody)
-                // this.nxStore.dispatch(ScheduleActions.setIsScheduleEventChanged({ isScheduleEventChanged: true }))
+                this.nxStore.dispatch(ScheduleActions.setIsScheduleEventChanged({ isScheduleEventChanged: true }))
                 this.closeDrawer()
                 this.nxStore.dispatch(showToast({ text: `'${this.planTexts.planTitle}' 기타 일정이 추가되었습니다.` }))
             },

@@ -58,6 +58,11 @@ export const setSchedulingInstructor = createAction(
     props<{ schedulingInstructor: Calendar }>()
 )
 
+export const setIsScheduleEventChanged = createAction(
+    `[${FeatureKey}] Set IsScheduleEventChanged`,
+    props<{ isScheduleEventChanged: boolean }>()
+)
+
 export const setModifyGeneralEvent = createAction(
     `[${FeatureKey}] Set ModifyGeneralEvent`,
     props<{ event: CalendarTask }>()
