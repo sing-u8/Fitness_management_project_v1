@@ -17,6 +17,7 @@ export const datePick = createSelector(GymScheduleFeature, FromSchedule.selectDa
 export const weekPick = createSelector(GymScheduleFeature, FromSchedule.selectWeekPick)
 
 // main
+export const calendarOptions = createSelector(GymScheduleFeature, FromSchedule.selectCalendarOptions)
 export const taskList = createSelector(GymScheduleFeature, FromSchedule.selectTaskList)
 export const instructorList = createSelector(GymScheduleFeature, FromSchedule.selectInstructorList)
 export const calendarConfig = createSelector(GymScheduleFeature, FromSchedule.selectCalendarConfigInfo)

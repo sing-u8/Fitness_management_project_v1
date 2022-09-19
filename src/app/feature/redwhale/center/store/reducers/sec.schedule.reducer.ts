@@ -10,6 +10,7 @@ import { UpdateMode } from '@services/center-calendar.service'
 import { Loading } from '@schemas/store/loading'
 import { Calendar } from '@schemas/calendar'
 import { CalendarTask } from '@schemas/calendar-task'
+import { CalendarOptions } from '@fullcalendar/angular'
 
 import * as ScheduleActions from '../actions/sec.schedule.actions'
 
@@ -75,6 +76,7 @@ export interface State {
     }
 
     // main
+    calendarOptions: CalendarOptions
     taskList: CalendarTask[]
     instructorList: InstructorType[]
     calendarConfig: CalendarConfigInfo
@@ -106,6 +108,7 @@ export const initialState: State = {
         endDate: '',
     },
     // main
+    calendarOptions: undefined,
     taskList: [],
     instructorList: [],
     calendarConfig: CalendarConfigInfoInit,
@@ -145,11 +148,15 @@ export const scheduleReducer = createImmerReducer(
     }),
 
     on(ScheduleActions.finishGetAllCalendarTask, (state, { taskList }) => {
-        state.taskList = _.unionBy(taskList, state.taskList, 'id')
+        state.taskList = _.unionBy(state.taskList, taskList, 'id')
         return state
     }),
 
     // - // sync
+    on(ScheduleActions.setCalendarOptions, (state, { calendarOptions }) => {
+        state.calendarOptions = calendarOptions
+        return state
+    }),
     on(ScheduleActions.setTaskList, (state, { taskList }) => {
         state.taskList = _.unionBy(taskList, state.taskList, 'id')
         return state
@@ -248,6 +255,7 @@ export const selectDatePick = (state: State) => state.datePick
 export const selectWeekPick = (state: State) => state.weekPick
 
 // main
+export const selectCalendarOptions = (state: State) => state.calendarOptions
 export const selectTaskList = (state: State) => state.taskList
 export const selectInstructorList = (state: State) => state.instructorList
 export const selectCalendarConfigInfo = (state: State) => state.calendarConfig

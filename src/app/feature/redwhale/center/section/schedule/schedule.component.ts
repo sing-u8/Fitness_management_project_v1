@@ -38,6 +38,7 @@ import { closeDrawer, openDrawer, setScheduleDrawerIsReset } from '@appStore/act
 
 import * as FromSchedule from '@centerStore/reducers/sec.schedule.reducer'
 import * as ScheduleSelector from '@centerStore/selectors/sec.schedule.selector'
+import { calendarOptions } from '@centerStore/selectors/sec.schedule.selector'
 import * as ScheduleActions from '@centerStore/actions/sec.schedule.actions'
 
 // temp
@@ -117,7 +118,13 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.operatingTime = _.cloneDeep(operatingHour)
             })
 
-        this.initFullCalendar()
+        this.nxStore.pipe(select(calendarOptions), take(1)).subscribe((calendarOptions) => {
+            if (_.isEmpty(calendarOptions)) {
+                this.initFullCalendar()
+            } else {
+                this.fullCalendarOptions = calendarOptions
+            }
+        })
     }
 
     ngOnInit(): void {
@@ -154,6 +161,10 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
         this.nxStore
             .pipe(select(ScheduleSelector.calendarConfig), takeUntil(this.unsubscriber$))
             .subscribe((calConfig) => {
+                console.log(
+                    'ScheduleSelector.calendarConfig : ',
+                    _.isEqual(calConfig, FromSchedule.CalendarConfigInfoInit)
+                )
                 if (_.isEqual(calConfig, FromSchedule.CalendarConfigInfoInit)) {
                     const calView = this.fullCalendar.getApi().view
                     this.setCalendarTitle('timeGridWeek')
@@ -167,10 +178,11 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
                         })
                     )
                     this.initDatePickerData()
+                } else {
+                    this.activeStart = calConfig.startDate
+                    this.activeEnd = calConfig.endDate
+                    this.selectedDateViewType = calConfig.viewType
                 }
-                this.activeStart = calConfig.startDate
-                this.activeEnd = calConfig.endDate
-                this.selectedDateViewType = calConfig.viewType
             })
 
         this.nxStore
@@ -189,13 +201,6 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
                     instructorList.length == 0
                         ? 0
                         : instructorList.reduce((checkedLen, val) => checkedLen + (val.selected ? 1 : 0), 0)
-
-                // console.log(
-                //     'ScheduleSelector.instructorList -- ',
-                //     instructorList,
-                //     ' -- checkedInstructorLength: ',
-                //     checkedInstructorLength
-                // )
                 if (checkedInstructorLength > 0) {
                     this.getTaskList(this.selectedDateViewType)
                 }
@@ -210,16 +215,17 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
                 }
             })
 
+        this.nxStore.pipe(select(calendarOptions), takeUntil(this.unsubscriber$)).subscribe((calendarOptions) => {
+            console.log('calendarOptions selector :  ', calendarOptions, !_.isEmpty(calendarOptions))
+            if (!_.isEmpty(calendarOptions)) {
+                // this.fullCalendarOptions = calendarOptions
+                this.initCalendarOptionFuncs()
+                this.recallCalendarState(this.selectedDateViewType)
+            }
+        })
+
         this.nxStore.pipe(select(ScheduleSelector.taskList), takeUntil(this.unsubscriber$)).subscribe((taskList) => {
             this.eventList = taskList.map((task) => this.makeScheduleEvent(task, this.selectedDateViewType))
-            console.log(
-                'getTaskList - start, end: ',
-                this.activeStart,
-                ', ',
-                this.activeEnd,
-                '; ',
-                this.selectedDateViewType
-            )
             console.log('getTaskList : ', this.eventList)
             this.setEventsFiltersChange(this.instructorList$_, this.lectureFilter$_)
         })
@@ -228,6 +234,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
         this.closeDrawer()
         this.unsubscriber$.next()
         this.unsubscriber$.complete()
+        this.nxStore.dispatch(ScheduleActions.setCalendarOptions({ calendarOptions: this.fullCalendar.options }))
     }
     // ---------------------------------------------------------------------------------------------------------//
 
@@ -310,9 +317,10 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
 
     // --------------------- fucntions for datepicker related to fullcalendar  --------------
     initDatePickerData() {
-        // this.weekPickerData.startDate = dayjs().startOf('week').format('YYYY-MM-DD')
-        // this.weekPickerData.endDate = dayjs().endOf('week').format('YYYY-MM-DD')
-        // this.datePickerData.date = dayjs().format('YYYY-MM-DD')
+        console.log('initDatePickerData - is called')
+        this.weekPickerData.startDate = dayjs().startOf('week').format('YYYY-MM-DD')
+        this.weekPickerData.endDate = dayjs().endOf('week').format('YYYY-MM-DD')
+        this.datePickerData.date = dayjs().format('YYYY-MM-DD')
         this.nxStore.dispatch(
             ScheduleActions.setWeekPick({
                 startDate: dayjs().startOf('week').format('YYYY-MM-DD'),
@@ -329,6 +337,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
         const calView = this.fullCalendar.getApi().view
         // this.activeStart = dayjs(calView.activeStart).format('YYYY-MM-DD')
         // this.activeEnd = dayjs(calView.activeEnd).format('YYYY-MM-DD')
+        this.nxStore.dispatch(ScheduleActions.setDatePick({ date: rDate.date }))
         this.nxStore.dispatch(
             ScheduleActions.setCalendarConfig({
                 calendarConfig: {
@@ -347,6 +356,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
         const calView = calendarApi.view
         // this.activeStart = dayjs(calView.activeStart).format('YYYY-MM-DD')
         // this.activeEnd = dayjs(calView.activeEnd).format('YYYY-MM-DD')
+        this.nxStore.dispatch(ScheduleActions.setWeekPick({ startDate: rDate.startDate, endDate: rDate.endDate }))
         this.nxStore.dispatch(
             ScheduleActions.setCalendarConfig({
                 calendarConfig: {
@@ -361,7 +371,6 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
     // --------------------- functions for top of full calendar ---------------------
 
     changeView(viewType: ViewType) {
-        // this.selectedDateViewType = viewType
         this.nxStore.dispatch(
             ScheduleActions.setCalendarConfig({
                 calendarConfig: {
@@ -373,8 +382,6 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
         const calendarApi = this.fullCalendar.getApi()
         calendarApi.changeView(viewType)
 
-        // this.activeStart = dayjs(calendarApi.view.activeStart).format('YYYY-MM-DD')
-        // this.activeEnd = dayjs(calendarApi.view.activeEnd).format('YYYY-MM-DD')
         this.nxStore.dispatch(
             ScheduleActions.setCalendarConfig({
                 calendarConfig: {
@@ -484,6 +491,29 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.calendarTitle = calendarApi.view.title
                 break
         }
+    }
+
+    recallCalendarState(viewType: ViewType) {
+        const calendarApi = this.fullCalendar.getApi()
+        // recall title and schedule
+        switch (viewType) {
+            case 'resourceTimeGridDay':
+                this.calendarTitle = dayjs(this.datePickerData.date).format('MM.DD (dd)')
+                calendarApi.view.calendar.gotoDate(this.datePickerData.date)
+                break
+            case 'timeGridWeek':
+                this.calendarTitle =
+                    dayjs(this.weekPickerData.startDate).format('MM.DD (dd)') +
+                    ' - ' +
+                    dayjs(this.weekPickerData.endDate).subtract(1, 'day').format('MM.DD (dd)')
+                calendarApi.view.calendar.gotoDate(this.weekPickerData.startDate)
+                break
+            case 'dayGridMonth':
+                this.calendarTitle = dayjs(this.datePickerData.date).format('YYYY년 M월')
+                calendarApi.view.calendar.gotoDate(this.datePickerData.date)
+                break
+        }
+        calendarApi.changeView(viewType)
     }
 
     getTaskList(viewType: ViewType, callback?: (eventList: ScheduleEvent[]) => void) {
@@ -676,15 +706,6 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
     initFullCalendar(): void {
         const hiddenDays = this.getHiddenDays(this.center.day_of_the_week)
         const operatingTime = { start: this.center.open_time, end: this.center.close_time }
-        // console.log('initFullCalendar: operatingTime: ', this.operatingTime, hiddenDays)
-        // this.selectedDateViewType = 'timeGridWeek'
-        // this.nxStore.dispatch(
-        //   ScheduleActions.setCalendarConfig({
-        //       calendarConfig: {
-        //           viewType: 'timeGridWeek',
-        //       },
-        //   })
-        // )
         this.fullCalendarOptions = {
             schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',
             initialView: this.selectedDateViewType,
@@ -714,6 +735,15 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
             droppable: true,
             eventDurationEditable: false,
 
+            events: [],
+            resources: [],
+        }
+        this.initCalendarOptionFuncs()
+        this.getOperatingData(this.center.id)
+    }
+    initCalendarOptionFuncs() {
+        this.fullCalendarOptions = {
+            ...this.fullCalendarOptions,
             dateClick: this.onDateClick.bind(this),
             eventClick: this.onEventClick.bind(this),
             select: this.onDateSelect.bind(this),
@@ -722,11 +752,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
             eventMouseEnter: this.eventMouseEnter.bind(this),
             eventMouseLeave: this.eventMouseLeave.bind(this),
             eventDrop: this.eventDrop.bind(this),
-
-            events: [],
-            resources: [],
         }
-        this.getOperatingData(this.center.id)
     }
 
     // full calendar event functions

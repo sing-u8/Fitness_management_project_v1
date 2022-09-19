@@ -4,6 +4,7 @@ import { createAction, props } from '@ngrx/store'
 import { Calendar } from '@schemas/calendar'
 import { CalendarTask } from '@schemas/calendar-task'
 import { CenterUser } from '@schemas/center-user'
+import { CalendarOptions } from '@fullcalendar/angular'
 
 import { CreateCalendarReqBody, UpdateCalendarMode, UpdateCalendarTaskReqBody } from '@services/center-calendar.service'
 
@@ -59,6 +60,10 @@ export const finishGetAllCalendarTask = createAction(
 )
 
 // - // sync
+export const setCalendarOptions = createAction(
+    `[${FeatureKey}] Set Calendar Options`,
+    props<{ calendarOptions: CalendarOptions }>()
+)
 export const setTaskList = createAction(`[${FeatureKey}] Set Task List`, props<{ taskList: CalendarTask[] }>())
 export const setInstructorList = createAction(
     `[${FeatureKey}] Set Instructor List`,
