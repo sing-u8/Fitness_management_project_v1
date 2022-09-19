@@ -115,16 +115,16 @@
             <span class="rw-typo-bodytext2">회원 리스트</span>
             <div class="menu-item-selected-line" *ngIf="(drawer$ | async)?.tabName == 'member'"></div>
         </div>
-<!--        <div class="empty" *ngIf="url != '/redwhale-home'"></div>-->
-<!--        <div-->
-<!--            class="menu-item d-flex align-items-center"-->
-<!--            [class.menu-item-selected]="(drawer$ | async)?.tabName == 'community'"-->
-<!--            (click)="openDrawer('community')"-->
-<!--            *ngIf="url != '/redwhale-home'"-->
-<!--        >-->
-<!--            <span class="rw-typo-bodytext2">채팅</span>-->
-<!--            <div class="menu-item-selected-line" *ngIf="(drawer$ | async)?.tabName == 'community'"></div>-->
-<!--        </div>-->
+        <div class="empty" *ngIf="url != '/redwhale-home'"></div>
+        <div
+            class="menu-item d-flex align-items-center"
+            [class.menu-item-selected]="(drawer$ | async)?.tabName == 'community'"
+            (click)="openDrawer('community')"
+            *ngIf="url != '/redwhale-home'"
+        >
+            <span class="rw-typo-bodytext2">채팅</span>
+            <div class="menu-item-selected-line" *ngIf="(drawer$ | async)?.tabName == 'community'"></div>
+        </div>
 <!--        <div class="empty" *ngIf="url != '/redwhale-home'"></div>-->
 <!--        <div-->
 <!--            class="menu-item d-flex align-items-center"-->
