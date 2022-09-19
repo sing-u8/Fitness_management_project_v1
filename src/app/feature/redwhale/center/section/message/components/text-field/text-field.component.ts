@@ -30,7 +30,6 @@ export class TextFieldComponent implements OnInit {
     }
 
     checkTextIsOver(event) {
-        console.log('checkTextIsOver -- ', event, ' -- ', this.textByte, ' -- ', this.text.length)
         const code = event.which ? event.which : event.keyCode
         // 8: backspace, 37: <- , 39: ->, 13: enter, 9: tab
         return (

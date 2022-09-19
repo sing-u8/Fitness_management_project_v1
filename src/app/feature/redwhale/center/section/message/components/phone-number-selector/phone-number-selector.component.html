@@ -8,11 +8,11 @@
 		(click)="toggle()"
 		(rwClickOutside)="close()"
 	>
-		<div *ngIf="value" class="d-flex align-items-center">
+		<div *ngIf="value?.phone_number" class="d-flex align-items-center">
 			<span class="text">{{ value?.phone_number }}</span>
 <!--			<div *ngIf="value?.being_verified" class="verification-icon">{{'승인중'}}</div>-->
 		</div>
-		<div *ngIf="items.length == 0 && !value">
+		<div *ngIf="items.length == 0 && !value?.phone_number">
 			<span class="text_empty rw-typo-bodytext1_grey">등록된 번호가 없어요.</span>
 		</div>
 		<span *ngIf="items.length != 0" class="mdi mdi-chevron-down"></span>
