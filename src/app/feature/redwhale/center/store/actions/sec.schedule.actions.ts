@@ -65,6 +65,7 @@ export const setCalendarOptions = createAction(
     props<{ calendarOptions: CalendarOptions }>()
 )
 export const setTaskList = createAction(`[${FeatureKey}] Set Task List`, props<{ taskList: CalendarTask[] }>())
+export const updatetask = createAction(`[${FeatureKey}] Update Task`, props<{ task: CalendarTask }>())
 export const setInstructorList = createAction(
     `[${FeatureKey}] Set Instructor List`,
     props<{ instructorList: FromSchReducer.InstructorType[] }>()

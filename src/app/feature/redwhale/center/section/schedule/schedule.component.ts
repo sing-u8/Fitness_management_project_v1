@@ -218,7 +218,6 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
         this.nxStore.pipe(select(calendarOptions), takeUntil(this.unsubscriber$)).subscribe((calendarOptions) => {
             console.log('calendarOptions selector :  ', calendarOptions, !_.isEmpty(calendarOptions))
             if (!_.isEmpty(calendarOptions)) {
-                // this.fullCalendarOptions = calendarOptions
                 this.initCalendarOptionFuncs()
                 this.recallCalendarState(this.selectedDateViewType)
             }
@@ -408,10 +407,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
                         instructorData: value.instructor,
                     })
                 })
-                console.log('resoruces : ', resoruces)
-
                 this.fullCalendar.options = { ...this.fullCalendar.options, ...{ resources: resoruces } }
-
                 break
             case 'timeGridWeek':
                 break
@@ -433,8 +429,6 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
                 break
         }
         const calView = this.fullCalendar.getApi().view
-        // this.activeStart = dayjs(calView.activeStart).format('YYYY-MM-DD')
-        // this.activeEnd = dayjs(calView.activeEnd).format('YYYY-MM-DD')
         this.nxStore.dispatch(
             ScheduleActions.setCalendarConfig({
                 calendarConfig: {
@@ -443,9 +437,6 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
                 },
             })
         )
-
-        console.log('onMoveDate : ', calView, ' --- active time :', this.activeStart, ' : ', this.activeEnd)
-
         this.setDatePickerWhenViewChange(this.selectedDateViewType)
         this.setCalendarTitle(this.selectedDateViewType)
         this.getTaskList(this.selectedDateViewType)
@@ -459,18 +450,15 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
 
         switch (viewType) {
             case 'resourceTimeGridDay':
-                // this.datePickerData = { date: activeStart }
                 this.nxStore.dispatch(ScheduleActions.setDatePick({ date: activeStart }))
                 break
             case 'timeGridWeek':
-                // this.weekPickerData = { startDate: activeStart, endDate: activeEnd }
                 this.nxStore.dispatch(ScheduleActions.setWeekPick({ startDate: activeStart, endDate: activeEnd }))
                 break
             case 'dayGridMonth':
                 // !! 가장 날짜를 많이 차지하는 달로 선택하게 하기  [필요하면]
                 this.nxStore.dispatch(ScheduleActions.setDatePick({ date: dayjs().format('YYYY-MM-DD') }))
                 break
-            // this.datePickerData = { date: dayjs().format('YYYY-MM-DD') }
         }
     }
 
@@ -532,18 +520,6 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
                 },
             })
         )
-
-        // this.CenterCalendarService.getAllCalendarTask(this.center.id, {
-        //     calendar_ids: calendarIds,
-        //     start_date: this.activeStart,
-        //     end_date: this.activeEnd,
-        // }).subscribe((tasks) => {
-        //     this.eventList = tasks.map((task) => this.makeScheduleEvent(task, viewType))
-        //     console.log('getTaskList - start, end: ', this.activeStart, ', ', this.activeEnd, '; ', viewType)
-        //     console.log('getTaskList : ', this.eventList)
-        //     this.setEventsFiltersChange(this.instructorList$_, this.lectureFilter$_)
-        //     callback ? callback(this.eventList) : null
-        // })
     }
     makeScheduleEvent(task: CalendarTask, viewType: ViewType): ScheduleEvent {
         const calendars: Calendar[] = this.instructorList$_.map((v) => v.instructor)
@@ -859,7 +835,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     eventDidMount(arg) {
-        console.log('onEventDidMount: ', arg, arg.event.extendedProps.originItem)
+        // console.log('onEventDidMount: ', arg, arg.event.extendedProps.originItem)
 
         if (arg.view.type == 'resourceTimeGridDay' || arg.view.type == 'timeGridWeek') {
             const eventMainFrame_el: HTMLElement = arg.el.getElementsByClassName('fc-event-main-frame')[0]
@@ -966,7 +942,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
         console.log('eventDrop: ', arg, arg.event.startStr, arg.event.endStr)
         console.log('extendedProps: ', arg.event.extendedProps)
         this.fullCalendar.getApi().render()
-        const calTask: CalendarTask = arg.event.extendedProps['originItem'] as CalendarTask
+        let calTask: CalendarTask = _.cloneDeep(arg.event.extendedProps['originItem'] as CalendarTask)
         const calId = this.instructorList$_.find((v) => v.instructor.calendar_user.id == calTask.responsibility.id)
             .instructor.id
         const otherInstructor: Calendar = arg.newResource
@@ -980,6 +956,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
                 end_date: dayjs(arg.event.endStr).format('YYYY-MM-DD'),
                 end_time: dayjs(arg.event.endStr).format('HH:mm'),
             }
+
             const apiCalId = otherInstructor ? otherInstructor.id : calId
             this.nxStore.dispatch(
                 ScheduleActions.startUpdateCalendarTask({
@@ -989,6 +966,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
                     reqBody: reqBody,
                     mode: 'one',
                     cb: () => {
+                        // this.getTaskList(this.selectedDateViewType)
                         this.nxStore.dispatch(
                             showToast({
                                 text: `'${this.wordService.ellipsis(calTask.name, 8)}' 기타 일정이 수정 되었습니다.`,
@@ -1061,6 +1039,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
                     reqBody: reqBody,
                     mode: 'one',
                     cb: () => {
+                        // this.getTaskList(this.selectedDateViewType)
                         this.nxStore.dispatch(
                             showToast({
                                 text: `'${this.wordService.ellipsis(calTask.name, 8)}' 수업 일정이 수정 되었습니다.`,
@@ -1070,6 +1049,12 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
                 })
             )
         }
+
+        calTask = _.assign(calTask, {
+            start: dayjs(arg.event.startStr).format('YYYY-MM-DD HH:mm:ss'),
+            end: dayjs(arg.event.endStr).format('YYYY-MM-DD HH:mm:ss'),
+        })
+        this.nxStore.dispatch(ScheduleActions.updatetask({ task: calTask }))
     }
 
     public dayCellLeave = true
@@ -1341,13 +1326,6 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.updateLessonEventData(this.lessonEventData.id, eventList)
                 this.reserveLessonData = undefined
             })
-            // !! 필요에 따라 수정 필요
-            // this.gymDashboardStateService.reservationIsSet.value = true
-            // this.gymCalendarService.getTask(this.gym.id, String(this.reserveLessonData.id)).subscribe((updatedTask) => {
-            //     this.gymScheduleState.setIsScheduleEventChangedState(true)
-            //     this.lessonEventData = updatedTask
-            //     this.reserveLessonData = undefined
-            // })
         })
     }
 
@@ -1392,14 +1370,6 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.updateLessonEventData(this.lessonEventData.id, eventList)
                 this.beCanceledReservationData = undefined
             })
-            // !! 필요에 따라 수정 필요
-            // this.gymCalendarService
-            //     .getTask(this.gym.id, String(this.beCanceledReservationData.lessonData.id))
-            //     .subscribe((updatedTask) => {
-            //         this.lessonEventData = updatedTask
-            //         this.beCanceledReservationData = undefined
-            //     })
-            // this.gymScheduleState.setIsScheduleEventChangedState(true)
         })
         this.hideCancelReserveModal()
         this.showModifyLessonEventModal()

@@ -148,7 +148,7 @@ export const scheduleReducer = createImmerReducer(
     }),
 
     on(ScheduleActions.finishGetAllCalendarTask, (state, { taskList }) => {
-        state.taskList = _.unionBy(state.taskList, taskList, 'id')
+        state.taskList = taskList // _.unionBy(state.taskList, taskList, 'id')
         return state
     }),
 
@@ -158,7 +158,12 @@ export const scheduleReducer = createImmerReducer(
         return state
     }),
     on(ScheduleActions.setTaskList, (state, { taskList }) => {
-        state.taskList = _.unionBy(taskList, state.taskList, 'id')
+        state.taskList = taskList // _.unionBy(taskList, state.taskList, 'id')
+        return state
+    }),
+    on(ScheduleActions.updatetask, (state, { task }) => {
+        const taskIdx = state.taskList.findIndex((v) => v.id == task.id)
+        state.taskList[taskIdx] = task
         return state
     }),
     on(ScheduleActions.setInstructorList, (state, { instructorList }) => {
