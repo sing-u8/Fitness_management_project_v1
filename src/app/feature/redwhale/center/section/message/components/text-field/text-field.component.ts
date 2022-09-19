@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
-import { FormBuilder } from '@angular/forms'
+import { FormBuilder, FormControl } from '@angular/forms'
 import { SMSCaller } from '@schemas/sms-caller'
 
 import { WordService } from '@services/helper/word.service'
@@ -20,7 +20,7 @@ export class TextFieldComponent implements OnInit {
     @Output() onSelectChange = new EventEmitter<SMSCaller>()
     @Output() onAddNumber = new EventEmitter<void>()
 
-    public textControl
+    public textControl: FormControl
     constructor(private wordService: WordService, private fb: FormBuilder) {
         this.textControl = this.fb.control(this.text)
     }
