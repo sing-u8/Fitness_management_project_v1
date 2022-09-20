@@ -5,7 +5,7 @@ export const environment = {
     domain: 'redwhale.xyz',
     port: '',
     version: '/latest',
-    wss: 'wss://nwa565188k.execute-api.ap-northeast-2.amazonaws.com/dev',
+    wss: 'wss://m7gslx5e5k.execute-api.ap-northeast-2.amazonaws.com/dev',
     firebase: {
         projectId: 'redwhale-f9890',
         appId: '1:830659387924:web:6ad49776c58835ac10bd01',

@@ -2,6 +2,7 @@ import { Injectable, OnDestroy } from '@angular/core'
 
 import { webSocket, WebSocketSubject } from 'rxjs/webSocket'
 import _ from 'lodash'
+import { environment } from '@environments/environment'
 
 import * as wsChat from '@schemas/web-socket/web-socket'
 
@@ -10,12 +11,10 @@ import { DashboardHelperService } from '@services/center/dashboard-helper.servic
 import { SoundService } from '@services/helper/sound.service'
 
 // ngrx
-import { Store, select } from '@ngrx/store'
-import * as FromCommunity from '@centerStore/reducers/sec.community.reducer'
-import * as CommunitySelector from '@centerStore/selectors/sec.community.selector'
+import { Store } from '@ngrx/store'
 import * as CommunityActions from '@centerStore/actions/sec.community.actions'
 import * as DashboardAction from '@centerStore/actions/sec.dashboard.actions'
-import { Subject, Subscription } from 'rxjs'
+import { Subscription } from 'rxjs'
 import { User } from '@schemas/user'
 
 @Injectable({
@@ -23,7 +22,7 @@ import { User } from '@schemas/user'
 })
 // @Injectable()
 export class WsChatService implements OnDestroy {
-    private readonly wss = 'wss://15s5c1lahf.execute-api.ap-northeast-2.amazonaws.com/prod'
+    private readonly wss = environment.wss
     public chatWs: WebSocketSubject<any> = undefined
     public subscription: Subscription
 
@@ -47,7 +46,14 @@ export class WsChatService implements OnDestroy {
     }
 
     connect(url: string) {
-        console.log(`WsChatService connect chatWs : `, this.chatWs)
+        console.log(
+            `WsChatService connect chatWs : `,
+            this.chatWs,
+            ' -- wss : ',
+            this.wss,
+            ' -- env : ',
+            environment.production
+        )
         this.user = this.storageService.getUser()
         if (!this.chatWs) {
             this.chatWs = webSocket(this.wss)
