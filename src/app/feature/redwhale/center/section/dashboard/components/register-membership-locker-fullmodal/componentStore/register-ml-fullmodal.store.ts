@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core'
 import { ComponentStore } from '@ngrx/component-store'
 
-import { EMPTY, Observable, firstValueFrom, forkJoin } from 'rxjs'
-import { filter, switchMap, tap, catchError, map, withLatestFrom } from 'rxjs/operators'
+import { EMPTY, firstValueFrom, Observable } from 'rxjs'
+import { catchError, map, switchMap, tap, withLatestFrom } from 'rxjs/operators'
 
 import _ from 'lodash'
 import dayjs from 'dayjs'
@@ -16,12 +16,12 @@ import { CenterLockerService } from '@services/center-locker.service'
 import { FileService } from '@services/file.service'
 
 import {
-    MembershipTicket,
+    ChoseLockers,
     Locker,
     MembershipLockerItem,
-    ChoseLockers,
-    UpdateChoseLocker,
+    MembershipTicket,
     TotalPrice,
+    UpdateChoseLocker,
 } from '@schemas/center/dashboard/register-ml-fullmodal'
 
 import { MembershipItem } from '@schemas/membership-item'
@@ -318,22 +318,24 @@ export class RegisterMembershipLockerFullmodalStore extends ComponentStore<State
                                     }
                                 }
                                 if (!_.isEmpty(reqBody.signData)) {
-                                    this.fileService.urlToFileList(reqBody.signData, 'signData').then((fileList) => {
-                                        this.fileService
-                                            .createFile(
-                                                {
-                                                    type_code: 'file_type_center_contract',
-                                                    center_id: reqBody.centerId,
-                                                    center_contract_id: contract.id,
-                                                    center_user_id: reqBody.user.id,
-                                                },
-                                                fileList
-                                            )
-                                            .subscribe(() => {
-                                                func()
-                                                reqBody.callback()
-                                            })
-                                    })
+                                    this.fileService
+                                        .urlToFileList(reqBody.signData, 'signData.png')
+                                        .then((fileList) => {
+                                            this.fileService
+                                                .createFile(
+                                                    {
+                                                        type_code: 'file_type_center_contract',
+                                                        center_id: reqBody.centerId,
+                                                        center_contract_id: contract.id,
+                                                        center_user_id: reqBody.user.id,
+                                                    },
+                                                    fileList
+                                                )
+                                                .subscribe(() => {
+                                                    func()
+                                                    reqBody.callback()
+                                                })
+                                        })
                                 } else {
                                     func()
                                     reqBody.callback()

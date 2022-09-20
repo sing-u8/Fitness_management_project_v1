@@ -1,18 +1,18 @@
 import {
-    Component,
-    OnInit,
-    OnDestroy,
-    SimpleChanges,
-    ElementRef,
-    Input,
-    Output,
-    EventEmitter,
-    ViewChild,
-    Renderer2,
-    OnChanges,
     AfterViewChecked,
+    Component,
+    ElementRef,
+    EventEmitter,
+    Input,
+    OnChanges,
+    OnDestroy,
+    OnInit,
+    Output,
+    Renderer2,
+    SimpleChanges,
+    ViewChild,
 } from '@angular/core'
-import { Router, ActivatedRoute } from '@angular/router'
+import { ActivatedRoute, Router } from '@angular/router'
 
 import _ from 'lodash'
 import dayjs from 'dayjs'
@@ -30,19 +30,18 @@ import { RegisterMembershipLockerFullmodalStore, stateInit } from './componentSt
 import { Observable, Subject } from 'rxjs'
 import { takeUntil } from 'rxjs/operators'
 //
-
 import { CenterUser } from '@schemas/center-user'
 import { Center } from '@schemas/center'
 import { MembershipItem } from '@schemas/membership-item'
 import { LockerItem } from '@schemas/locker-item'
 import { LockerCategory } from '@schemas/locker-category'
 import {
-    MembershipLockerItem,
     ChoseLockers,
     Locker,
+    MembershipLockerItem,
     MembershipTicket,
-    UpdateChoseLocker,
     TotalPrice,
+    UpdateChoseLocker,
 } from '@schemas/center/dashboard/register-ml-fullmodal'
 
 // ngrx
@@ -199,6 +198,7 @@ export class RegisterMembershipLockerFullmodalComponent implements OnInit, OnCha
                     })
                 )
                 this.inputSignData = undefined
+                this.signData = undefined
             }
         }
     }
