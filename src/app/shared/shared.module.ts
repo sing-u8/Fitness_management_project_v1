@@ -1,4 +1,4 @@
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 
@@ -37,7 +37,7 @@ import { LessonFlipListComponent } from './components/redwhale/drawer/lesson-fli
 import { DrawerLessonCardComponent } from './components/redwhale/drawer/drawer-lesson-card/drawer-lesson-card.component'
 import { DwMembershipListModalComponent } from './components/redwhale/drawer/dw-membership-list-modal/dw-membership-list-modal.component'
 import { DrawerModifyLessonCardComponent } from './components/redwhale/drawer/drawer-modify-lesson-card/drawer-modify-lesson-card.component'
-
+import { DwChattingRoomSelectComponent } from './components/redwhale/drawer/dw-chatting-room-select/dw-chatting-room-select.component'
 // -schedule- //
 import { SchDayRepeatSelectComponent } from './components/redwhale/schedule/sch-day-repeat-select/sch-day-repeat-select.component'
 
@@ -88,7 +88,6 @@ import { IsTodayPipe } from './pipes/is-today.pipe'
 
 // Dragula
 // import { DragulaModule } from 'ng2-dragula'
-
 // FullCalendar
 import { FullCalendarModule } from '@fullcalendar/angular'
 import dayGridPlugin from '@fullcalendar/daygrid'
@@ -101,7 +100,6 @@ import resourceTimeGridPlugin from '@fullcalendar/resource-timegrid'
 import { GridsterModule } from 'angular-gridster2'
 
 // Angular signature
-
 // // ngx libraries
 import { NgxGaugeModule } from 'ngx-gauge'
 import { NgxSpinnerModule } from 'ngx-spinner'
@@ -154,6 +152,7 @@ FullCalendarModule.registerPlugins([
         DrawerModifyLessonCardComponent,
         ChargeModalComponent,
         DatepickModalComponent,
+        DwChattingRoomSelectComponent,
         // -- //schedule
         DbDatepickerComponent,
         // -- //community
@@ -243,6 +242,7 @@ FullCalendarModule.registerPlugins([
         DrawerModifyLessonCardComponent,
         ChargeModalComponent,
         DatepickModalComponent,
+        DwChattingRoomSelectComponent,
         // -- //schedule
         DbDatepickerComponent,
         // -- //community

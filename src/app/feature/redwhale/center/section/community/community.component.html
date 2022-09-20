@@ -29,14 +29,24 @@
                 >
             </div>
             <div class="chatting-room-container thin-scroll-y-overlay2">
-                <rw-chatting-room-card
-                    *ngFor="let room of chatRoomList$ | async; let i = index"
-                    [isLoading]="(isLoading$ | async)"
-                    [curUser]="user"
-                    [room]="room"
-                    [selectedRoom]="(curChatRoom$ | async)"
-                    (onCardClick)="joinRoom($event)"
-                ></rw-chatting-room-card>
+                <ng-template #loading_chat_room [ngIf]="isLoading_=='pending'" [ngIfElse]="done_chat_room">
+                    <ngx-skeleton-loader
+                        *ngFor="let _ of [1,2,3]"
+                        count = 1
+                        appearance="circle"
+                        [theme]="{width: '248px', height: '48px', 'border-radius': '5px', 'margin': '0 0 3px 0'}"
+                    ></ngx-skeleton-loader>
+                </ng-template>
+                <ng-template #done_chat_room>
+                    <rw-chatting-room-card
+                        *ngFor="let room of chatRoomList$ | async; let i = index"
+                        [isLoading]="(mainIsJoinRoomLoading$ | async)"
+                        [curUser]="user"
+                        [room]="room"
+                        [selectedRoom]="(curChatRoom$ | async)"
+                        (onCardClick)="joinRoom($event)"
+                    ></rw-chatting-room-card>
+                </ng-template>
             </div>
         </div>
 

@@ -1,0 +1,132 @@
+<section class="community d-flex flex-column">
+
+	<div class="d-flex justify-content-between align-items-center">
+		<span class="rw-typo-title2">채팅</span>
+		<img src="assets/icons/etc/close.svg" (click)="closeDrawer()" />
+	</div>
+
+	<div class="h-line"></div>
+
+	<div class="chatting-room-list">
+		<dw-chatting-room-select
+			[userRoomList] = "chatRoomList_"
+			[user] = "user"
+			[selectedRoom] = "curChatRoom_"
+			[isLoading]="(drawerIsJoinRoomLoading$ | async)"
+			(onRoomClick) = "joinRoom($event)"
+		></dw-chatting-room-select>
+	</div>
+
+	<div
+		class="flex-fill chatting-screen"
+		id="chatting-screen"
+		rw-dropzone2
+		[dropLeaveTargetId]="'drawer_drag_guide'"
+		(onDrop)="onFileDrop($event);onFileDragLeave()"
+		(onDragOver) = "onFileDragOver()"
+	>
+		<rw-drag-guide
+			id="drawer_drag_guide"
+			[showGuide]="showFileDragGuide"
+			[isSideBar]="true"
+		></rw-drag-guide>
+
+		<div
+			#chatting_screen
+			class="chatting-screen-content thin-scroll-y-overlay2"
+			(scroll)="scrolled($event)"
+		>
+			<rw-chat-message
+				*ngFor="let msg of (chatRoomLoadingMsgs$ | async); let i = index"
+				[message]="msg"
+				[showUserInfo]="true"
+				[isLoading]="true"
+				[isSidebar]="true"
+				[gauge]="msg.gauge.value"
+			></rw-chat-message>
+
+			<rw-chat-message
+				#message_el
+				*ngFor="let message of (chatRoomMsgs$ | async); let i = index"
+				[message]="message"
+				[showUserInfo]="showUser(i)"
+				[lastSuccessiveMsg]="isLastSuccessiveMsg(i)"
+				[isSidebar]="true"
+			></rw-chat-message>
+
+			<rw-chat-intro-message
+				[isSideBar]="true"
+				*ngIf="(curChatRoom$ | async)"
+				[selectedRoom]="(curChatRoom$ | async)"
+				[user]="user"
+				[msgList]="(chatRoomMsgs$ | async)"
+			></rw-chat-intro-message>
+		</div>
+
+		<div #chatting_input class="chatting-input-container">
+
+			<form class="input-box">
+
+          <textarea
+	          rw-textarea-autoResize
+	          [textareaResizeOption]="textareaResizeOption"
+	          (onResize)="onChatInputResize($event)"
+	          class="rw-typo-bodytext0-bold thin-scroll-y-overlay2"
+	          placeholder="메시지를 입력해주세요. (Shift + Enter 줄바꿈)"
+	          [formControl]="chatInput"
+	          (keypress)="onInputKeyPress($event)">
+          </textarea>
+
+				<input
+					type="file"
+					accept="image/*, video/*, .hwp, .pdf, .doc, .docx"
+					#file_picker hidden multiple
+					(change)="onFilePickerChange(file_picker)">
+
+				<div *ngIf="fileList.length > 0" class="file-thumbnail-list thin-scroll-x-overlay2">
+					<div class="file-thumbnail" [class.file]="file.type == 'file'" *ngFor="let file of fileList; let idx = index">
+
+						<img *ngIf="file.type == 'image'" src="{{file.result}}" id="background1">
+						<div *ngIf="file.type == 'video'" class="video-container">
+							<img src="{{file.result}}" id="background2">
+							<img src="assets/icons/etc/play_video.svg" alt="play_video" id="play">
+						</div>
+						<div *ngIf="file.type == 'file'" class="file-item">
+							<img src="assets/icons/etc/file_after_download_red.svg" alt="file_after_download.svg">
+							<div class="file-item-content">
+								<div class="rw-typo-bodytext0 file-name">{{file.file.name}}</div>
+								<div class="rw-typo-subtext0-regular file-size">{{file.file.size | filesize}}</div>
+							</div>
+						</div>
+
+						<img src="assets/icons/etc/close_white.svg" alt="close_white.svg" id="close" (click)="removeFile(idx)">
+					</div>
+				</div>
+
+			</form>
+
+			<div class="input-bottom">
+				<div class="plus-box">
+					<img
+						src="{{addBtSrc}}" alt="plus.svg"
+						rw-tooltip rwTooltipTitle="파일 첨부"
+						rwTooltipPlacement="top"
+						(click)="file_picker.click()"
+						(mouseover)="addFileBtMouseHover()"
+						(mouseleave)="addFileBtMouseLeave()"
+					>
+				</div>
+
+				<div
+					class="send-button"
+					[class.active]="chatInput.valid || fileList.length > 0"
+					(click)="sendMessage(chatInput.value)"
+				>
+					보내기
+				</div>
+			</div>
+
+		</div>
+
+	</div>
+</section>

@@ -67,6 +67,9 @@ import { SMSEffect } from '@centerStore/effects/sec.sms.effect'
 import { centerCommonReducer } from '@centerStore/reducers/center.common.reducer'
 import { CenterCommonEffect } from '@centerStore/effects/center.common.effect'
 
+// ngxSkeletonLoader module
+import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader'
+
 @NgModule({
     declarations: [
         CenterComponent,
@@ -116,6 +119,7 @@ import { CenterCommonEffect } from '@centerStore/effects/center.common.effect'
             CenterCommonEffect,
         ]),
         // ngrx     --> //
+        NgxSkeletonLoaderModule,
     ],
     exports: [],
     providers: [],

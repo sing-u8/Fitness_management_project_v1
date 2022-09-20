@@ -11,11 +11,11 @@ import {
 } from '@angular/core'
 import { Router } from '@angular/router'
 import { AbstractControl, FormBuilder, FormControl, ValidationErrors, ValidatorFn, Validators } from '@angular/forms'
+import { Subject } from 'rxjs'
+import { take, takeUntil } from 'rxjs/operators'
 
 import dayjs from 'dayjs'
 import _ from 'lodash'
-import { Subject } from 'rxjs'
-import { take, takeUntil } from 'rxjs/operators'
 
 import { Loading } from '@schemas/store/loading'
 import { CenterUser } from '@schemas/center-user'
@@ -35,11 +35,12 @@ import { CommonCommunityService } from '@services/helper/common-community.servic
 // ngrx
 import { select, Store } from '@ngrx/store'
 import { showToast } from '@appStore/actions/toast.action'
+import { closeDrawer } from '@appStore/actions/drawer.action'
 import * as CommunitySelector from '@centerStore/selectors/sec.community.selector'
 import * as CommunityActions from '@centerStore/actions/sec.community.actions'
 
 @Component({
-    selector: 'community',
+    selector: 'dr-community',
     templateUrl: './community.component.html',
     styleUrls: ['./community.component.scss'],
 })
@@ -49,25 +50,25 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
     public center: Center
 
     // ngrx vars
-    public isLoading$ = this.nxStore.select(CommunitySelector.isLoading)
+    public isLoading$ = this.nxStore.select(CommunitySelector.drawerIsLoading)
     public isLoading_: Loading
-    public mainIsJoinRoomLoading$ = this.nxStore.select(CommunitySelector.mainIsJoinRoomLoading)
+    public drawerIsJoinRoomLoading$ = this.nxStore.select(CommunitySelector.drawerIsJoinRoomLoading)
 
     public chatRoomList$ = this.nxStore.select(CommunitySelector.chatRoomList)
     public chatRoomList_: Array<ChatRoom> = []
 
-    public curChatRoom$ = this.nxStore.select(CommunitySelector.mainCurChatRoom)
+    public curChatRoom$ = this.nxStore.select(CommunitySelector.drawerCurChatRoom)
     public curChatRoom_: ChatRoom = undefined
-    public isCurChatRoomTemp$ = this.nxStore.select(CommunitySelector.curMainChatRoomIsTemp)
+    public isCurChatRoomTemp$ = this.nxStore.select(CommunitySelector.curDrawerChatRoomIsTemp)
 
-    public chatRoomUserList$ = this.nxStore.select(CommunitySelector.mainChatRoomUserList)
+    public chatRoomUserList$ = this.nxStore.select(CommunitySelector.drawerChatRoomUserList)
 
-    public chatRoomMsgs$ = this.nxStore.select(CommunitySelector.mainChatRoomMsgs)
+    public chatRoomMsgs$ = this.nxStore.select(CommunitySelector.drawerChatRoomMsgs)
     public chatRoomMsgs_: ChatRoomMessage[] = []
-    public chatRoomMsgLoading$ = this.nxStore.select(CommunitySelector.mainChatRoomMsgLoading)
+    public chatRoomMsgLoading$ = this.nxStore.select(CommunitySelector.drawerChatRoomMsgLoading)
     public chatRoomMsgLoading_ = false
 
-    public chatRoomLoadingMsgs$ = this.nxStore.select(CommunitySelector.mainChatRoomLoadingMsgs)
+    public chatRoomLoadingMsgs$ = this.nxStore.select(CommunitySelector.drawerChatRoomLoadingMsgs)
 
     public unsubscribe$ = new Subject<void>()
 
@@ -94,23 +95,23 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
             this.chatRoomMsgLoading_ = chatRoomMsgLoading
         })
 
-        this.nxStore.pipe(select(CommunitySelector.curCenterId), take(1)).subscribe((curCenterId) => {
+        this.nxStore.pipe(select(CommunitySelector.drawerCurCenterId), take(1)).subscribe((curCenterId) => {
             if (curCenterId != this.center.id) {
-                this.nxStore.dispatch(CommunityActions.resetAll({ spot: 'main' }))
+                this.nxStore.dispatch(CommunityActions.resetAll({ spot: 'drawer' }))
                 // !! 한 번 호출후에 호출하지 않기
                 if (this.isLoading_ == 'idle') {
                     this.nxStore.dispatch(
                         CommunityActions.startGetChatRooms({
                             centerId: this.center.id,
                             curUserId: this.user.id,
-                            spot: 'main',
+                            spot: 'drawer',
                         })
                     )
                 }
             }
         })
 
-        this.nxStore.dispatch(CommunityActions.setCurCenterId({ centerId: this.center.id }))
+        this.nxStore.dispatch(CommunityActions.setDrawerCurCenterId({ centerId: this.center.id }))
         this.chatRoomMsgs$.pipe(takeUntil(this.unsubscribe$)).subscribe((crMsgs) => {
             this.chatRoomMsgs_ = crMsgs
         })
@@ -269,7 +270,7 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
                     user_ids: user_ids,
                     type_code: 'chat_room_type_general',
                 },
-                spot: 'main',
+                spot: 'drawer',
             })
         )
     }
@@ -280,7 +281,7 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
                 center: this.center,
                 members: selectedMembers,
                 curUser: curCenterUser,
-                spot: 'main',
+                spot: 'drawer',
             })
         )
     }
@@ -290,14 +291,15 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
 
     // - // 채팅방 입장
     public joinRoom(chatRoom: ChatRoom) {
+        console.log('side bar join room : ', chatRoom, ' -- ', this.curChatRoom_)
         if (chatRoom.id == this.curChatRoom_.id) return
         this.resetChangeRoomNameData()
         this.resetChatInputData()
         if (_.includes(chatRoom.id, IsTmepRoom)) {
-            this.nxStore.dispatch(CommunityActions.joinTempChatRoom({ chatRoom, spot: 'main' }))
+            this.nxStore.dispatch(CommunityActions.joinTempChatRoom({ chatRoom, spot: 'drawer' }))
         } else {
             this.nxStore.dispatch(
-                CommunityActions.startJoinChatRoom({ centerId: this.center.id, chatRoom: chatRoom, spot: 'main' })
+                CommunityActions.startJoinChatRoom({ centerId: this.center.id, chatRoom: chatRoom, spot: 'drawer' })
             )
         }
     }
@@ -327,7 +329,11 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
     onInviteUserConfirm(res: InviteConfirm) {
         this.hideInviteUserModal()
         this.nxStore.dispatch(
-            CommunityActions.startInviteMembers({ centerId: this.center.id, invitedMembers: res.members, spot: 'main' })
+            CommunityActions.startInviteMembers({
+                centerId: this.center.id,
+                invitedMembers: res.members,
+                spot: 'drawer',
+            })
         )
     }
 
@@ -356,17 +362,17 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
     leaveRoomModalConfirm() {
         // !! 임시 채팅방일 때와 생성된 채팅방 구분해서 호출하기
         if (_.includes(this.curChatRoom_.id, IsTmepRoom)) {
-            this.nxStore.dispatch(CommunityActions.leaveTempChatRoom({ spot: 'main' }))
+            this.nxStore.dispatch(CommunityActions.leaveTempChatRoom({ spot: 'drawer' }))
             this.nxStore.dispatch(showToast({ text: '채팅방 나가기가 완료되었습니다' }))
             this.nxStore.dispatch(
                 CommunityActions.startJoinChatRoom({
                     centerId: this.center.id,
                     chatRoom: this.chatRoomList_.find((v) => v.type_code == 'chat_room_type_chat_with_me'),
-                    spot: 'main',
+                    spot: 'drawer',
                 })
             )
         } else {
-            this.nxStore.dispatch(CommunityActions.startLeaveChatRoom({ centerId: this.center.id, spot: 'main' }))
+            this.nxStore.dispatch(CommunityActions.startLeaveChatRoom({ centerId: this.center.id, spot: 'drawer' }))
         }
         this.closeLeaveRoomModal()
     }
@@ -400,7 +406,7 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
                 CommunityActions.startUpdateChatRoomName({
                     centerId: this.center.id,
                     reqBody: { name: trimName },
-                    spot: 'main',
+                    spot: 'drawer',
                 })
             )
         }
@@ -465,7 +471,9 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
         this.isNearBottom = this.isScrollNearBottom()
 
         if (this.isScrollNearTop() && !this.chatRoomMsgLoading_) {
-            this.nxStore.dispatch(CommunityActions.startGetMoreChatRoomMsgs({ centerId: this.center.id, spot: 'main' }))
+            this.nxStore.dispatch(
+                CommunityActions.startGetMoreChatRoomMsgs({ centerId: this.center.id, spot: 'drawer' })
+            )
         }
     }
     onItemElementsChanged(): void {
@@ -516,13 +524,13 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
     }
     resizeChatScreen() {
         if (this.fileList.length > 0) {
-            const screenPadMar = 150 + this.resizeHeight // 120px --> padding: 10px * 2 + margin: 30px 15px + fileHeight: 85px
-            const inputHeight = 105 + this.resizeHeight // 20px --> padding: 10px * 2 + fileHeight: 85px
+            const screenPadMar = 187 + this.resizeHeight // 90px --> padding-t,b: 22px + input-bt: 50px + fileHeight: 85px + margin-top : 30px
+            const inputHeight = 157 + this.resizeHeight // 90px --> padding-t,b: 22px + input-bt: 50px + + fileHeight: 85px
             this.renderer.setStyle(this.chatting_screen.nativeElement, 'height', `calc(100% - ${screenPadMar}px)`)
             this.renderer.setStyle(this.chatting_input.nativeElement, 'height', `${inputHeight}px`)
         } else {
-            const screenPadMar = 65 + this.resizeHeight // 60px --> padding: 10px * 2 + margin: 30px 15px
-            const inputHeight = 20 + this.resizeHeight // 20px --> padding: 10px * 2
+            const screenPadMar = 102 + this.resizeHeight // 62px --> padding-t,b: 22px + input-bt: 50px + margin-top : 30px
+            const inputHeight = 72 + this.resizeHeight // 62px --> padding-t,b: 22px + input-bt: 50px
             this.renderer.setStyle(this.chatting_screen.nativeElement, 'height', `calc(100% - ${screenPadMar}px)`)
             this.renderer.setStyle(this.chatting_input.nativeElement, 'height', `${inputHeight}px`)
         }
@@ -597,7 +605,7 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
                         createRoom,
                         sendMsg,
                     },
-                    spot: 'main',
+                    spot: 'drawer',
                 })
             )
         } else {
@@ -610,7 +618,7 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
                 size: 0,
             }
             this.nxStore.dispatch(
-                CommunityActions.startSendMessage({ centerId: this.center.id, reqBody, spot: 'main' })
+                CommunityActions.startSendMessage({ centerId: this.center.id, reqBody, spot: 'drawer' })
             )
         }
     }
@@ -626,7 +634,7 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
                     text,
                     fileList: this.fileList,
                     user_ids: this.curChatRoom_.chat_room_users.map((v) => v.id),
-                    spot: 'main',
+                    spot: 'drawer',
                 })
             )
         } else {
@@ -636,9 +644,14 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
                     user: this.user,
                     text,
                     fileList: this.fileList,
-                    spot: 'main',
+                    spot: 'drawer',
                 })
             )
         }
+    }
+
+    // drawer
+    closeDrawer() {
+        this.nxStore.dispatch(closeDrawer())
     }
 }

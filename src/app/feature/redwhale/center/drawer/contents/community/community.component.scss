@@ -1,0 +1,226 @@
+* {
+	padding: 0;
+	margin: 0;
+	text-align: start;
+}
+
+section.community {
+
+	height: 100%;
+
+	& > div:first-child {
+		height: 23px;
+		margin: 19px 17px;
+
+		span {
+			min-width: 100px;
+			overflow: hidden;
+		}
+
+		img {
+			width: 24px;
+			height: 24px;
+			cursor: pointer;
+		}
+	}
+
+	.h-line {
+		margin: 0 10px;
+		border-bottom: 1px solid var(--border-color);
+	}
+
+	.chatting-room-list {
+		width: 100%;
+		min-height: 50px;
+		padding: 15px 18px 0px;
+	}
+
+	.chatting-screen {
+		height: calc(100% - 112px);
+		width: 100%;
+		position: relative;
+		display: flex;
+		flex-direction: column;
+
+		.chatting-screen-content {
+			height: calc(100% - 150px);
+			width: 100%;
+			position: relative;
+			display: flex;
+			flex-direction: column-reverse;
+			justify-content: flex-start;
+		}
+
+		.chatting-input-container {
+			border-top: 1px solid var(--border-color);
+			margin-top: 30px;
+			width: 100%;
+			height: 120px;
+			display: flex;
+			flex-direction: column;
+			position: relative;
+
+			.input-box {
+				width: 100%;
+				position: relative;
+				display: flex;
+				flex-direction: column;
+				justify-content: space-between;
+				padding: 10px 15px;
+				textarea {
+					width: 100%;
+					resize: none;
+					outline: none;
+					border: none;
+					min-height: 50px !important;
+				}
+				.file-thumbnail-list {
+					height: 85px;
+					width: 100%;
+					display: flex;
+					align-items: flex-end;
+
+					.file-thumbnail {
+						width: 70px;
+						height: 70px;
+						border-radius: 5px;
+						position: relative;
+						margin-right: 10px;
+						// overflow: hidden;
+						&.file {
+							width: 200px;
+							height: 64px;
+						}
+						img#background {
+							width: 100%;
+							height: 100%;
+							border-radius: 5px;
+							image-rendering: pixelated;
+							object-fit: cover;
+						}
+
+						.video-container {
+							width: 100%;
+							height: 100%;
+							display: flex;
+							align-items: center;
+							justify-content: center;
+							position: relative;
+
+							img#play {
+								position: absolute;
+								z-index: 5;
+								width: 20px;
+								height: 20px;
+								background-color: rgba(33, 33, 33, 0.8);
+								border-radius: 50%;
+							}
+						}
+
+						&:hover {
+							img#close {
+								display: block;
+							}
+						}
+						img#close {
+							display: none;
+							position: absolute;
+							top: -7px;
+							right: -7px;
+							width: 22px;
+							height: 22px;
+							border-radius: 50%;
+							background-color: var(--darkgrey);
+							cursor: pointer;
+
+							&:hover {
+								background-color: var(--font-color) !important;
+							}
+						}
+
+						.file-item {
+							display: flex;
+							align-items: center;
+							border-radius: 5px;
+							border: 1px solid var(--border-color);
+							width: 100%;
+							height: 100%;
+							padding: 8px;
+
+							& img {
+								width: 45px;
+								height: 45px;
+								margin-right: 5px;
+							}
+
+							.file-item-content {
+								width: calc(100% - 62px);
+								height: 40px;
+								display: flex;
+								flex-direction: column;
+								justify-content: space-between;
+								position: relative;
+								.file-name {
+									width: 100%;
+									text-overflow: ellipsis;
+									white-space: nowrap;
+									overflow: hidden;
+								}
+								.file-size {
+									width: 100%;
+									color: var(--grey);
+									text-overflow: ellipsis;
+									white-space: nowrap;
+									overflow: hidden;
+								}
+							}
+						}
+					}
+				}
+			}
+
+			.input-bottom {
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				height: 50px;
+				width: 100%;
+				padding: 0px 15px 0px 8px;
+				margin-bottom: 10px;
+
+				.plus-box {
+					height: 35px;
+					width: 35px;
+					display: flex;
+					align-items: center;
+					justify-content: flex-start;
+					border-right: 1px solid var(--border-color);
+					img {
+						width: 25px;
+						height: 25px;
+						cursor: pointer;
+					}
+				}
+
+				.send-button {
+					width: 85px;
+					height: 35px;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					border-radius: 5px;
+					background-color: var(--lightergrey);
+					color: var(--white);
+					// position: absolute;
+					// bottom: 10px;
+					// right: 10px;
+
+					&.active {
+						background-color: var(--red);
+						cursor: pointer;
+					}
+				}
+			}
+		}
+	}
+}

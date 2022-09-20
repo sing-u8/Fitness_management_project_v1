@@ -1,6 +1,6 @@
 * {
-    padding: 0px;
-    margin: 0px;
+    padding: 0;
+    margin: 0;
 }
 
 section.message {
@@ -11,7 +11,7 @@ section.message {
         &:hover {
             background-color: var(--border-color);
         }
-        padding: 5px 0px;
+        padding: 5px 0;
     }
 
     & section.last-successive-msg {
@@ -46,10 +46,14 @@ section.message {
         align-items: center;
         justify-content: center;
         background-color: var(--border-color);
-        margin: 0px 0px 20px 0px;
+        margin: 0 0 20px 0;
         span#time {
             margin-left: 20px;
             color: var(--grey);
+        }
+
+        &.is_sidebar {
+            background-color: var(--background-color);
         }
     }
     section.msg-type-image {
@@ -263,7 +267,7 @@ section.message {
             display: flex;
             flex-direction: column;
             align-items: flex-end !important;
-            padding: 10px 5px 10px 0px;
+            padding: 10px 5px 10px 0;
 
             .file-left {
                 width: 220px !important;
@@ -334,7 +338,7 @@ section.message {
 }
 
 .opengraph {
-    margin: 8px 0px;
+    margin: 8px 0;
     display: flex;
     align-items: center;
     width: 410px;

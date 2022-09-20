@@ -7,7 +7,7 @@ import { DashboardModule } from '@redwhale/center/section/dashboard/dashboard.mo
 
 import { DrawerComponent } from './drawer.component'
 import { MemberComponent } from './contents/member/member.component'
-// import { CommunityComponent } from './contents/community/community.component'
+import { CommunityComponent } from './contents/community/community.component'
 import { NotificationComponent } from './contents/notification/notification.component'
 import { GeneralScheduleComponent } from './contents/schedule/general-schedule/general-schedule.component'
 import { LessonScheduleComponent } from './contents/schedule/lesson-schedule/lesson-schedule.component'
@@ -21,7 +21,7 @@ import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader'
     declarations: [
         DrawerComponent,
         MemberComponent,
-        // CommunityComponent,
+        CommunityComponent,
         NotificationComponent,
         GeneralScheduleComponent,
         LessonScheduleComponent,

@@ -15,5 +15,6 @@ export function resetAllState(nxStore: Store) {
     nxStore.dispatch(MembershipActions.resetAll())
     nxStore.dispatch(SaleActions.resetAll())
     nxStore.dispatch(ScheduleActions.resetAll())
-    nxStore.dispatch(CommunityActions.resetAll())
+    nxStore.dispatch(CommunityActions.resetAll({ spot: 'drawer' }))
+    nxStore.dispatch(CommunityActions.resetAll({ spot: 'main' }))
 }

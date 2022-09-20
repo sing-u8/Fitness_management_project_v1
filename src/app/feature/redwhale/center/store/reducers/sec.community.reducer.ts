@@ -7,12 +7,11 @@ import * as CommunitydActions from '../actions/sec.community.actions'
 
 // schema
 import { ChatRoom, IsTmepRoom } from '@schemas/chat-room'
-import { ChatRoomMessage, ChatRoomLoadingMessage } from '@schemas/chat-room-message'
+import { ChatRoomLoadingMessage, ChatRoomMessage } from '@schemas/chat-room-message'
 import { ChatRoomUser } from '@schemas/chat-room-user'
 import { Loading } from '@schemas/store/loading'
 import { CenterUser } from '@schemas/center-user'
 import { Center } from '@schemas/center'
-import { ChatFile } from '@schemas/center/community/chat-file'
 
 export const messagePageSize = 20
 
@@ -22,12 +21,15 @@ export interface State {
     // common
     curCenterId: string
     isLoading: Loading
+    drawerIsLoading: Loading
+    drawerCurCenterId: string
     error: string
 
     // main
     chatRoomList: Array<ChatRoom>
 
     // main - screen = main
+    mainIsJoinRoomLoading: Loading
     mainPreChatRoom: ChatRoom
     mainCurChatRoom: ChatRoom
     mainChatRoomMsgs: Array<ChatRoomMessage>
@@ -36,6 +38,7 @@ export interface State {
     mainChatRoomLoadingMsgs: Array<ChatRoomLoadingMessage>
     mainChatRoomUserList: Array<ChatRoomUser>
     // main - drawer
+    drawerIsJoinRoomLoading: Loading
     drawerPreChatRoom: ChatRoom
     drawerCurChatRoom: ChatRoom
     drawerChatRoomMsgs: Array<ChatRoomMessage>
@@ -49,12 +52,15 @@ export const initialState: State = {
     // common
     curCenterId: undefined,
     isLoading: 'idle',
+    drawerIsLoading: 'idle',
+    drawerCurCenterId: undefined,
     error: '',
 
     // main
     chatRoomList: [],
 
     // main - screen = main
+    mainIsJoinRoomLoading: 'idle',
     mainPreChatRoom: undefined,
     mainCurChatRoom: undefined,
     mainChatRoomMsgs: [],
@@ -63,6 +69,7 @@ export const initialState: State = {
     mainChatRoomLoadingMsgs: [],
     mainChatRoomUserList: [],
     // main - drawer
+    drawerIsJoinRoomLoading: 'idle',
     drawerPreChatRoom: undefined,
     drawerCurChatRoom: undefined,
     drawerChatRoomMsgs: [],
@@ -87,26 +94,35 @@ export const communityReducer = createImmerReducer(
         return state
     }),
 
-    on(CommunitydActions.startGetChatRooms, (state) => {
-        state.isLoading = 'pending'
+    on(CommunitydActions.startGetChatRooms, (state, { spot }) => {
+        if (spot == 'main') {
+            state.isLoading = 'pending'
+        } else if (spot == 'drawer') {
+            state.drawerIsLoading = 'pending'
+        }
         return state
     }),
     on(CommunitydActions.finishGetChatRooms, (state, { chatRooms, spot }) => {
         state.chatRoomList = chatRooms
         const myChatRoom = chatRooms.find((v) => v.type_code == 'chat_room_type_chat_with_me')
+
         if (spot == 'main' && myChatRoom != undefined) {
             state.mainCurChatRoom = myChatRoom
             state.mainChatRoomUserList = myChatRoom.chat_room_users
-        } else if (myChatRoom != undefined) {
+        } else if (spot == 'drawer' && myChatRoom != undefined) {
             state.drawerCurChatRoom = myChatRoom
             state.drawerChatRoomUserList = myChatRoom.chat_room_users
         }
-        state.isLoading = 'done'
+
+        if (spot == 'main') {
+            state.isLoading = 'done'
+        } else if (spot == 'drawer') {
+            state.drawerIsLoading = 'done'
+        }
 
         return state
     }),
     on(CommunitydActions.startJoinChatRoom, (state, { chatRoom, spot }) => {
-        state.isLoading = 'pending'
         const chatRoomIdx = state.chatRoomList.findIndex((v) => v.id == chatRoom.id)
         const _chatRoom = _.cloneDeep(chatRoom)
         _chatRoom.unread_message_count = 0
@@ -114,21 +130,24 @@ export const communityReducer = createImmerReducer(
         state.chatRoomList[chatRoomIdx] = _chatRoom
 
         if (spot == 'main') {
+            state.mainIsJoinRoomLoading = 'pending'
+
             state.mainPreChatRoom = state.mainCurChatRoom
             state.mainCurChatRoom = _chatRoom
             state.mainChatRoomMsgEnd = false
         } else {
-            state.drawerPreChatRoom = state.drawerPreChatRoom
+            state.drawerIsJoinRoomLoading = 'pending'
+
+            state.drawerPreChatRoom = state.drawerCurChatRoom
             state.drawerCurChatRoom = _chatRoom
             state.drawerChatRoomMsgEnd = false
         }
         return state
     }),
     on(CommunitydActions.finishJoinChatRoom, (state, { chatRoom, chatRoomMesgs, chatRoomUsers, spot }) => {
-        // !! 추후에 추가 수정 필요
-        state.isLoading = 'done'
-
         if (spot == 'main') {
+            state.mainIsJoinRoomLoading = 'done'
+
             state.mainPreChatRoom = undefined
             state.mainChatRoomMsgs = getDateInsteredMessage(chatRoomMesgs)
             state.mainChatRoomUserList = chatRoomUsers
@@ -138,6 +157,8 @@ export const communityReducer = createImmerReducer(
                 state.mainChatRoomMsgs.push(makeDateMessage(lastMsgDate))
             }
         } else {
+            state.drawerIsJoinRoomLoading = 'done'
+
             state.drawerPreChatRoom = undefined
             state.drawerChatRoomMsgs = getDateInsteredMessage(chatRoomMesgs)
             state.drawerChatRoomUserList = chatRoomUsers
@@ -170,13 +191,14 @@ export const communityReducer = createImmerReducer(
         return state
     }),
     on(CommunitydActions.startLeaveChatRoom, (state, { spot }) => {
-        state.isLoading = 'pending'
         if (spot == 'main') {
+            state.isLoading = 'pending'
             state.mainPreChatRoom = state.mainCurChatRoom
             state.mainCurChatRoom = undefined
             state.mainChatRoomMsgs = []
             state.chatRoomList = state.chatRoomList.filter((v) => v.id != state.mainPreChatRoom.id)
         } else {
+            state.drawerIsLoading = 'pending'
             state.drawerPreChatRoom = state.drawerCurChatRoom
             state.drawerCurChatRoom = undefined
             state.drawerChatRoomMsgs = []
@@ -186,8 +208,10 @@ export const communityReducer = createImmerReducer(
     }),
     on(CommunitydActions.finishLeaveChatRoom, (state, { spot }) => {
         if (spot == 'main') {
+            // state.isLoading = 'done'
             state.mainPreChatRoom = undefined
         } else {
+            // state.drawerIsLoading = 'done'
             state.drawerPreChatRoom = undefined
         }
         return state
@@ -406,13 +430,16 @@ export const communityReducer = createImmerReducer(
         const chatRoomIdx = _.findIndex(state.chatRoomList, (chatRoom) => {
             return chatRoom.id == ws_data.info.chat_room_id
         })
+
+        // 최근에 자신한테도 소켓이 오기 때문에... 추가한 방지책
+        if (_.isEmpty(chatRoomIdx)) return state
+
         const chatRoom = _.cloneDeep(state.chatRoomList[chatRoomIdx])
-        const chatRoomUsers = _.slice(
+        chatRoom.chat_room_users = _.slice(
             _.unionWith(chatRoom.chat_room_users, ws_data.dataset, (a, b) => a.id == b.id),
             0,
             5
         )
-        chatRoom.chat_room_users = chatRoomUsers
         chatRoom.chat_room_user_count += ws_data.dataset.length
 
         _.assign(state.chatRoomList[chatRoomIdx], chatRoom)
@@ -545,12 +572,51 @@ export const communityReducer = createImmerReducer(
         state.curCenterId = centerId
         return state
     }),
+    on(CommunitydActions.setDrawerCurCenterId, (state, { centerId }) => {
+        state.drawerCurCenterId = centerId
+        return state
+    }),
     on(CommunitydActions.error, (state, { error }) => {
         state.error = error
         return state
     }),
-    on(CommunitydActions.resetAll, (state) => {
-        state = { ...state, ...initialState }
+    on(CommunitydActions.resetAll, (state, { spot }) => {
+        if (spot == 'main') {
+            state = {
+                ...state,
+                ..._.pick(initialState, [
+                    'curCenterId',
+                    'isLoading',
+                    'error',
+                    'mainIsJoinRoomLoading',
+                    'mainPreChatRoom',
+                    'mainCurChatRoom',
+                    'mainChatRoomMsgs',
+                    'mainChatRoomMsgLoading',
+                    'mainChatRoomMsgEnd',
+                    'mainChatRoomLoadingMsgs',
+                    'mainChatRoomUserList',
+                ]),
+            }
+        } else if (spot == 'drawer') {
+            state = {
+                ...state,
+                ..._.pick(initialState, [
+                    'drawerCurCenterId',
+                    'drawerIsLoading',
+                    'error',
+                    'drawerIsJoinRoomLoading',
+                    'drawerPreChatRoom',
+                    'drawerCurChatRoom',
+                    'drawerChatRoomMsgs',
+                    'drawerChatRoomMsgLoading',
+                    'drawerChatRoomMsgEnd',
+                    'drawerChatRoomLoadingMsgs',
+                    'drawerChatRoomUserList',
+                ]),
+            }
+        }
+
         return state
     })
 )
@@ -558,6 +624,7 @@ export const communityReducer = createImmerReducer(
 // main
 export const selectChatRoomList = (state: State) => state.chatRoomList
 // main - screen = main
+export const selectMainIsJoinRoomLoading = (state: State) => state.mainIsJoinRoomLoading
 export const selectMainPreChatRoom = (state: State) => state.mainPreChatRoom
 export const selectMainCurChatRoom = (state: State) => state.mainCurChatRoom
 export const selectMainChatRoomMsgs = (state: State) => state.mainChatRoomMsgs
@@ -566,6 +633,7 @@ export const selectMainChatRoomMsgLoading = (state: State) => state.mainChatRoom
 export const selectMainChatRoomLoadingMsgs = (state: State) => state.mainChatRoomLoadingMsgs
 export const selectMainChatRoomUserList = (state: State) => state.mainChatRoomUserList
 // main - drawer
+export const selectDrawerIsJoinRoomLoading = (state: State) => state.drawerIsJoinRoomLoading
 export const selectDrawerPreChatRoom = (state: State) => state.drawerPreChatRoom
 export const selectDrawerCurChatRoom = (state: State) => state.drawerCurChatRoom
 export const selectDrawerChatRoomMsgs = (state: State) => state.drawerChatRoomMsgs
@@ -576,7 +644,9 @@ export const selectDrawerChatRoomUserList = (state: State) => state.drawerChatRo
 
 // common
 export const selectCurCenterId = (state: State) => state.curCenterId
+export const selectDrawerCurCenterId = (state: State) => state.drawerCurCenterId
 export const selectIsLoading = (state: State) => state.isLoading
+export const selectDrawerIsLoading = (state: State) => state.drawerIsLoading
 export const selectError = (state: State) => state.error
 
 // etc selector

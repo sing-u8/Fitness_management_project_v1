@@ -13,10 +13,11 @@
 
   <section
     class="msg-type-info"
+    [class.is_sidebar]="isSidebar"
     *ngIf="type == 'info'"
   >
     <span id='info-text' class="rw-typo-bodytext2-regular">{{message.text}}</span>
-    <span id="time" class="rw-typo-subtext0-regular">{{message.created_at | dateFormat: 'a hh:mm'}}</span>
+    <span *ngIf="!isSidebar" id="time" class="rw-typo-subtext0-regular">{{message.created_at | dateFormat: 'a hh:mm'}}</span>
   </section>
 
   <section

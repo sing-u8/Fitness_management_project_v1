@@ -3,7 +3,7 @@ import { createAction, props } from '@ngrx/store'
 import * as FromCommunity from '@centerStore/reducers/sec.community.reducer'
 
 import { ChatRoom } from '@schemas/chat-room'
-import { ChatRoomMessage, ChatRoomLoadingMessage } from '@schemas/chat-room-message'
+import { ChatRoomLoadingMessage, ChatRoomMessage } from '@schemas/chat-room-message'
 import { ChatRoomUser } from '@schemas/chat-room-user'
 import { CenterUser } from '@schemas/center-user'
 import { ChatFile } from '@schemas/center/community/chat-file'
@@ -17,9 +17,13 @@ const FeatureKey = 'Center/Community'
 
 // cur center id
 export const setCurCenterId = createAction(`[${FeatureKey}] Set Current Center Id`, props<{ centerId: string }>())
+export const setDrawerCurCenterId = createAction(
+    `[${FeatureKey}] Set Drawer Current Center Id`,
+    props<{ centerId: string }>()
+)
 
 // common
-export const resetAll = createAction(`[${FeatureKey}] Reset Community All State`)
+export const resetAll = createAction(`[${FeatureKey}] Reset Community All State`, props<{ spot: FromCommunity.spot }>())
 export const error = createAction(`[${FeatureKey}] Community State Error`, props<{ error: string }>())
 
 // main
