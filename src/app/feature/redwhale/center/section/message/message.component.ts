@@ -465,20 +465,20 @@ export class MessageComponent implements OnInit, OnDestroy {
             .createPaymentData({
                 center_id: this.center.id,
                 product_type_code: 'import_payment_product_type_sms_point',
-                amount: 1000, // res.amount,
+                amount: res.amount, // res.amount,
             })
             .subscribe((v) => {
                 const user = this.storageService.getUser()
                 const IMP = window['IMP']
                 console.log('onChargePointChargeConfirm : ', IMP, ' --- ', v)
-                IMP.init('imp43860315')
+                IMP.init('imp46444316')
                 IMP.request_pay(
                     {
-                        pg: 'nice',
+                        pg: 'uplus',
                         pay_method: 'card',
                         merchant_uid: v.merchant_uid,
                         name: '문자 포인트 충전',
-                        amount: 1000, // v.amount,
+                        amount: res.amount, // v.amount,
                         buyer_email: user.email,
                         buyer_name: user.name,
                         buyer_tel: user.phone_number,
