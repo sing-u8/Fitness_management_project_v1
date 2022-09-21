@@ -163,16 +163,20 @@ export class CommunityEffect {
                     ? this.store.select(CommunitySelector.mainPreChatRoom)
                     : this.store.select(CommunitySelector.drawerPreChatRoom),
                 this.store.select(CommunitySelector.chatRoomList),
+                this.store.select(CommunitySelector.mainPreChatRoom),
+                this.store.select(CommunitySelector.drawerPreChatRoom),
             ]),
-            switchMap(([{ centerId, spot }, curChatRoom, chatRoomList]) =>
+            switchMap(([{ centerId, spot }, curChatRoom, chatRoomList, mainCurChatRoom, drawerCurChatRoom]) =>
                 this.centerChatRoomApi.leaveChatRoom(centerId, curChatRoom.id).pipe(
                     switchMap((__) => {
                         return [
                             showToast({ text: `채팅방 나가기가 완료되었습니다.` }),
-                            CommunityActions.finishLeaveChatRoom({ spot }),
+                            CommunityActions.finishLeaveChatRoom({
+                                spot: mainCurChatRoom?.id == drawerCurChatRoom?.id ? 'both' : spot,
+                            }),
                             CommunityActions.startJoinChatRoom({
                                 centerId,
-                                spot,
+                                spot: mainCurChatRoom?.id == drawerCurChatRoom?.id ? 'both' : spot,
                                 chatRoom: chatRoomList.find((v) => v.type_code == 'chat_room_type_chat_with_me'),
                             }),
                         ]

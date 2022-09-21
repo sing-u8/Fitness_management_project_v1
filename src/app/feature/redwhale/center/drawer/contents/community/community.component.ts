@@ -358,13 +358,26 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
     leaveRoomModalConfirm() {
         // !! 임시 채팅방일 때와 생성된 채팅방 구분해서 호출하기
         if (_.includes(this.curChatRoom_.id, IsTmepRoom)) {
-            this.nxStore.dispatch(CommunityActions.leaveTempChatRoom({ spot: 'drawer' }))
+            let mainCurChatRoom: ChatRoom = undefined
+            const drawerCurChatRoom: ChatRoom = _.cloneDeep(this.curChatRoom_)
+            this.nxStore
+                .select(CommunitySelector.mainCurChatRoom)
+                .pipe(take(1))
+                .subscribe((ccr) => {
+                    mainCurChatRoom = ccr
+                })
+
             this.nxStore.dispatch(showToast({ text: '채팅방 나가기가 완료되었습니다' }))
+            this.nxStore.dispatch(
+                CommunityActions.leaveTempChatRoom({
+                    spot: drawerCurChatRoom.id == mainCurChatRoom?.id ? 'both' : 'main',
+                })
+            )
             this.nxStore.dispatch(
                 CommunityActions.startJoinChatRoom({
                     centerId: this.center.id,
                     chatRoom: this.chatRoomList_.find((v) => v.type_code == 'chat_room_type_chat_with_me'),
-                    spot: 'drawer',
+                    spot: drawerCurChatRoom.id == mainCurChatRoom?.id ? 'both' : 'main',
                 })
             )
         } else {

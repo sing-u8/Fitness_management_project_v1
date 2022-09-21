@@ -15,7 +15,7 @@ import { Center } from '@schemas/center'
 
 export const messagePageSize = 20
 
-export type spot = 'main' | 'drawer'
+export type spot = 'main' | 'drawer' | 'both'
 
 export interface State {
     // common
@@ -129,23 +129,31 @@ export const communityReducer = createImmerReducer(
 
         state.chatRoomList[chatRoomIdx] = _chatRoom
 
-        if (spot == 'main') {
+        const joinMain = () => {
             state.mainIsJoinRoomLoading = 'pending'
-
             state.mainPreChatRoom = state.mainCurChatRoom
             state.mainCurChatRoom = _chatRoom
             state.mainChatRoomMsgEnd = false
-        } else {
+        }
+        const joinDrawer = () => {
             state.drawerIsJoinRoomLoading = 'pending'
-
             state.drawerPreChatRoom = state.drawerCurChatRoom
             state.drawerCurChatRoom = _chatRoom
             state.drawerChatRoomMsgEnd = false
         }
+
+        if (spot == 'main') {
+            joinMain()
+        } else if (spot == 'drawer') {
+            joinDrawer()
+        } else if (spot == 'both') {
+            joinMain()
+            joinDrawer()
+        }
         return state
     }),
-    on(CommunitydActions.finishJoinChatRoom, (state, { chatRoom, chatRoomMesgs, chatRoomUsers, spot }) => {
-        if (spot == 'main') {
+    on(CommunitydActions.finishJoinChatRoom, (state, { chatRoomMesgs, chatRoomUsers, spot }) => {
+        const joinRoomMain = () => {
             state.mainIsJoinRoomLoading = 'done'
 
             state.mainPreChatRoom = undefined
@@ -156,7 +164,8 @@ export const communityReducer = createImmerReducer(
             if (chatRoomMesgs.length < messagePageSize && lastMsgDate) {
                 state.mainChatRoomMsgs.push(makeDateMessage(lastMsgDate))
             }
-        } else {
+        }
+        const joinRoomDrawer = () => {
             state.drawerIsJoinRoomLoading = 'done'
 
             state.drawerPreChatRoom = undefined
@@ -167,6 +176,15 @@ export const communityReducer = createImmerReducer(
             if (chatRoomMesgs.length < messagePageSize && lastMsgDate) {
                 state.drawerChatRoomMsgs.push(makeDateMessage(lastMsgDate))
             }
+        }
+
+        if (spot == 'main') {
+            joinRoomMain()
+        } else if (spot == 'drawer') {
+            joinRoomDrawer()
+        } else if (spot == 'both') {
+            joinRoomMain()
+            joinRoomDrawer()
         }
         return state
     }),
@@ -191,27 +209,46 @@ export const communityReducer = createImmerReducer(
         return state
     }),
     on(CommunitydActions.startLeaveChatRoom, (state, { spot }) => {
-        if (spot == 'main') {
+        const leaveChatRoomMain = () => {
             state.isLoading = 'pending'
             state.mainPreChatRoom = state.mainCurChatRoom
             state.mainCurChatRoom = undefined
             state.mainChatRoomMsgs = []
             state.chatRoomList = state.chatRoomList.filter((v) => v.id != state.mainPreChatRoom.id)
-        } else {
+        }
+        const leaveChatRoomDrawer = () => {
             state.drawerIsLoading = 'pending'
             state.drawerPreChatRoom = state.drawerCurChatRoom
             state.drawerCurChatRoom = undefined
             state.drawerChatRoomMsgs = []
             state.chatRoomList = state.chatRoomList.filter((v) => v.id != state.drawerPreChatRoom.id)
         }
+
+        if (spot == 'main') {
+            if (state.mainCurChatRoom.id == state.drawerCurChatRoom?.id) {
+                leaveChatRoomDrawer()
+            }
+            leaveChatRoomMain()
+        } else {
+            if (state.mainCurChatRoom?.id == state.drawerCurChatRoom.id) {
+                leaveChatRoomMain()
+            }
+            leaveChatRoomDrawer()
+        }
         return state
     }),
     on(CommunitydActions.finishLeaveChatRoom, (state, { spot }) => {
         if (spot == 'main') {
-            // state.isLoading = 'done'
+            state.isLoading = 'done'
             state.mainPreChatRoom = undefined
-        } else {
-            // state.drawerIsLoading = 'done'
+        } else if (spot == 'drawer') {
+            state.drawerIsLoading = 'done'
+            state.drawerPreChatRoom = undefined
+        } else if (spot == 'both') {
+            state.isLoading = 'done'
+            state.mainPreChatRoom = undefined
+
+            state.drawerIsLoading = 'done'
             state.drawerPreChatRoom = undefined
         }
         return state
@@ -262,7 +299,7 @@ export const communityReducer = createImmerReducer(
     }),
 
     on(CommunitydActions.finishSendMessage, (state, { spot, chatRoomMessage }) => {
-        if (spot == 'main') {
+        const addMsgToMain = () => {
             if (
                 !_.isEmpty(state.mainChatRoomMsgs[0]) &&
                 checkDayDiffBtMsgAndMsg(chatRoomMessage, state.mainChatRoomMsgs[0])
@@ -270,7 +307,8 @@ export const communityReducer = createImmerReducer(
                 state.mainChatRoomMsgs.unshift(makeDateMessage(chatRoomMessage.created_at))
             }
             state.mainChatRoomMsgs.unshift(chatRoomMessage)
-        } else {
+        }
+        const addMsgToDrawer = () => {
             if (
                 !_.isEmpty(state.drawerChatRoomMsgs[0]) &&
                 checkDayDiffBtMsgAndMsg(chatRoomMessage, state.drawerChatRoomMsgs[0])
@@ -278,6 +316,18 @@ export const communityReducer = createImmerReducer(
                 state.drawerChatRoomMsgs.unshift(makeDateMessage(chatRoomMessage.created_at))
             }
             state.drawerChatRoomMsgs.unshift(chatRoomMessage)
+        }
+
+        if (spot == 'main') {
+            addMsgToMain()
+            if (state.mainCurChatRoom.id == state.drawerCurChatRoom?.id) {
+                addMsgToDrawer()
+            }
+        } else {
+            addMsgToDrawer()
+            if (state.mainCurChatRoom?.id == state.drawerCurChatRoom.id) {
+                addMsgToMain()
+            }
         }
         return state
     }),
@@ -315,16 +365,29 @@ export const communityReducer = createImmerReducer(
     on(CommunitydActions.finishSendMessageToTempRoom, (state, { spot, chatRoomMessage, chatRoom }) => {
         let preTempChatRoom: ChatRoom = undefined
         // !! 채팅 유저리스트는 임시 채팅방을 만들 때 해놨음, 필요 시 이것도 API에서 받아와야함.
-        if (spot == 'main') {
-            preTempChatRoom = state.mainCurChatRoom
+        const addMsgToMain = () => {
             state.mainCurChatRoom = chatRoom
             state.mainChatRoomMsgs = [chatRoomMessage, makeDateMessage(chatRoomMessage.created_at)]
             state.chatRoomList[state.chatRoomList.findIndex((v) => v.id == preTempChatRoom.id)] = chatRoom
-        } else {
-            preTempChatRoom = state.drawerCurChatRoom
+        }
+        const addMsgToDrawer = () => {
             state.drawerCurChatRoom = chatRoom
             state.drawerChatRoomMsgs = [chatRoomMessage, makeDateMessage(chatRoomMessage.created_at)]
             state.chatRoomList[state.chatRoomList.findIndex((v) => v.id == preTempChatRoom.id)] = chatRoom
+        }
+
+        if (spot == 'main') {
+            preTempChatRoom = state.mainCurChatRoom
+            addMsgToMain()
+            if (state.mainCurChatRoom.id == state.drawerCurChatRoom?.id) {
+                addMsgToDrawer()
+            }
+        } else {
+            preTempChatRoom = state.drawerCurChatRoom
+            addMsgToDrawer()
+            if (state.mainCurChatRoom?.id == state.drawerCurChatRoom.id) {
+                addMsgToMain()
+            }
         }
         return state
     }),
@@ -359,16 +422,26 @@ export const communityReducer = createImmerReducer(
         return state
     }),
     on(CommunitydActions.leaveTempChatRoom, (state, { spot }) => {
-        if (spot == 'main') {
+        const leaveMain = () => {
             state.chatRoomList = _.filter(state.chatRoomList, (v) => v.id != state.mainCurChatRoom.id)
             state.mainCurChatRoom = undefined
             state.mainChatRoomMsgs = []
             state.mainChatRoomUserList = []
-        } else {
-            state.chatRoomList = _.filter(state.chatRoomList, (v) => v.id != state.mainCurChatRoom.id)
+        }
+        const leaveDrawer = () => {
+            state.chatRoomList = _.filter(state.chatRoomList, (v) => v.id != state.drawerCurChatRoom.id)
             state.drawerCurChatRoom = undefined
             state.drawerChatRoomUserList = []
             state.drawerChatRoomMsgs = []
+        }
+
+        if (spot == 'main') {
+            leaveMain()
+        } else if (spot == 'drawer') {
+            leaveDrawer()
+        } else if (spot == 'both') {
+            leaveMain()
+            leaveDrawer()
         }
         return state
     }),
