@@ -128,13 +128,6 @@ export const startSendMessageWithFile = createAction(
         spot: FromCommunity.spot
     }>()
 )
-// export const finishSendMessageWithFile = createAction(
-//     `[${FeatureKey}] Finish Send Message With File to ChatRoom`,
-//     props<{
-//         chatRoomMessage: ChatRoomMessage
-//         spot: FromCommunity.spot
-//     }>()
-// )
 
 // - // -- // async for temp room
 export const startSendMessageToTempRoom = createAction(

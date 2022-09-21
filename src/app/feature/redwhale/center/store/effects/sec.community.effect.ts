@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core'
 import { HttpEvent, HttpEventType } from '@angular/common/http'
-import { createEffect, Actions, ofType, concatLatestFrom } from '@ngrx/effects'
+import { Actions, concatLatestFrom, createEffect, ofType } from '@ngrx/effects'
 import { Store } from '@ngrx/store'
-import { of, EMPTY, iif, forkJoin } from 'rxjs'
-import { catchError, switchMap, tap, map, exhaustMap, mapTo, filter, find } from 'rxjs/operators'
+import { forkJoin, of } from 'rxjs'
+import { catchError, map, mergeMap, switchMap } from 'rxjs/operators'
 
-import { CenterChatRoomService, CreateChatRoomReqBody, SendMessageReqBody } from '@services/center-chat-room.service'
+import { CenterChatRoomService, SendMessageReqBody } from '@services/center-chat-room.service'
 import { CommonCommunityService } from '@services/helper/common-community.service'
 
 import { File as ServiceFile } from '@schemas/file'
-import { ChatRoomMessage, ChatRoomLoadingMessage } from '@schemas/chat-room-message'
+import { ChatRoomLoadingMessage } from '@schemas/chat-room-message'
 
 import _ from 'lodash'
 import dayjs from 'dayjs'
@@ -19,6 +19,7 @@ import { showToast } from '@appStore/actions/toast.action'
 import * as CommunityActions from '../actions/sec.community.actions'
 import * as CommunitySelector from '../selectors/sec.community.selector'
 import * as CommunityReducer from '../reducers/sec.community.reducer'
+
 @Injectable()
 export class CommunityEffect {
     constructor(
@@ -31,7 +32,7 @@ export class CommunityEffect {
     public createChatRoom$ = createEffect(() =>
         this.actions$.pipe(
             ofType(CommunityActions.startCreateChatRoom),
-            switchMap(({ centerId, reqBody, spot }) =>
+            mergeMap(({ centerId, reqBody, spot }) =>
                 this.centerChatRoomApi.createChatRoom(centerId, reqBody).pipe(
                     switchMap((chatRoom) => {
                         return [CommunityActions.finishCreateChatRoom({ chatRoom, spot })]
@@ -45,7 +46,7 @@ export class CommunityEffect {
     public getChatRoom$ = createEffect(() =>
         this.actions$.pipe(
             ofType(CommunityActions.startGetChatRooms),
-            switchMap(({ centerId, spot, curUserId }) =>
+            mergeMap(({ centerId, spot, curUserId }) =>
                 this.centerChatRoomApi.getChatRoom(centerId).pipe(
                     switchMap((chatRooms) => {
                         const myChatRoomIdx = chatRooms.findIndex((v) => v.type_code == 'chat_room_type_chat_with_me')
@@ -89,20 +90,20 @@ export class CommunityEffect {
                         : this.store.select(CommunitySelector.drawerPreChatRoom),
                 ]
             }),
-            switchMap(([{ centerId, chatRoom, spot }, curChatRoom]) => {
+            mergeMap(([{ centerId, chatRoom, spot }, curChatRoom]) => {
                 if (!_.isEmpty(curChatRoom) && curChatRoom.id == chatRoom.id) {
                     return []
                 } else {
-                    return forkJoin({
-                        chatRoomMesgs: this.centerChatRoomApi.getChatRoomMessage(
+                    return forkJoin([
+                        this.centerChatRoomApi.getChatRoomMessage(
                             centerId,
                             chatRoom.id,
                             1,
                             CommunityReducer.messagePageSize
                         ),
-                        chatRoomUsers: this.centerChatRoomApi.getChatRoomMember(centerId, chatRoom.id, true),
-                    }).pipe(
-                        switchMap(({ chatRoomMesgs, chatRoomUsers }) => {
+                        this.centerChatRoomApi.getChatRoomMember(centerId, chatRoom.id, true),
+                    ]).pipe(
+                        switchMap(([chatRoomMesgs, chatRoomUsers]) => {
                             return [
                                 CommunityActions.finishJoinChatRoom({
                                     centerId,
