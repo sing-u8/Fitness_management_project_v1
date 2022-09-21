@@ -261,30 +261,26 @@ export const communityReducer = createImmerReducer(
         return state
     }),
 
-    // on(CommunitydActions.startSendMessage, (state, { spot }) => {
-    //     if (spot == 'main') {
-    //     } else {
-    //     }
-    //     return state
-    // }),
     on(CommunitydActions.finishSendMessage, (state, { spot, chatRoomMessage }) => {
         if (spot == 'main') {
-            if (checkDayDiffBtMsgAndMsg(chatRoomMessage, state.mainChatRoomMsgs[0])) {
+            if (
+                !_.isEmpty(state.mainChatRoomMsgs[0]) &&
+                checkDayDiffBtMsgAndMsg(chatRoomMessage, state.mainChatRoomMsgs[0])
+            ) {
                 state.mainChatRoomMsgs.unshift(makeDateMessage(chatRoomMessage.created_at))
             }
             state.mainChatRoomMsgs.unshift(chatRoomMessage)
         } else {
-            if (checkDayDiffBtMsgAndMsg(chatRoomMessage, state.drawerChatRoomMsgs[0])) {
-                state.mainChatRoomMsgs.unshift(makeDateMessage(chatRoomMessage.created_at))
+            if (
+                !_.isEmpty(state.drawerChatRoomMsgs[0]) &&
+                checkDayDiffBtMsgAndMsg(chatRoomMessage, state.drawerChatRoomMsgs[0])
+            ) {
+                state.drawerChatRoomMsgs.unshift(makeDateMessage(chatRoomMessage.created_at))
             }
             state.drawerChatRoomMsgs.unshift(chatRoomMessage)
         }
         return state
     }),
-
-    // on(CommunitydActions.finishSendMessageWithFile, (state) => {
-    //     return state
-    // }),
 
     on(CommunitydActions.startGetMoreChatRoomMsgs, (state, { spot }) => {
         if (spot == 'main') {

@@ -63,7 +63,7 @@
                         appearance="circle"
                         [theme]="{width: '150px', height: '22px', 'border-radius': '5px', 'margin': '0'}"
                     ></ngx-skeleton-loader>
-                    <span *ngIf="!changeRoomMode && (isLoading$ | async) == 'done'" class="rw-typo-title2">{{(curChatRoom$ | async).name}}</span>
+                    <span *ngIf="!changeRoomMode && (isLoading$ | async) == 'done'" class="rw-typo-title2">{{(curChatRoom$ | async)?.name}}</span>
                     <img
                         rw-tooltip rwTooltipTitle="채팅방 이름 변경"
                         rwTooltipPlacement="bottom"
