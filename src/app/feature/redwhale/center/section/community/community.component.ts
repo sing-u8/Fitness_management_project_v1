@@ -151,11 +151,9 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
     // file drag guide vars & func
     public showFileDragGuide = false
     onFileDragOver() {
-        console.log('in chat drag Over !! ')
         this.showFileDragGuide = true
     }
     onFileDragLeave() {
-        console.log('in chat drag leave !! ')
         this.showFileDragGuide = false
     }
 
@@ -172,7 +170,6 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
     async setFileToFileList(files: FileList) {
         console.log('enter set file to file list : ', files, ' - ', this.file_picker_el)
         if (!this.isFileExist(files)) return
-        console.log('isFileExist -- true')
 
         this.fileList = []
         const videoChatFile = await this.setFIleToFileListForVideo(files)
@@ -189,7 +186,6 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
                 continue
             }
             const type = this.commonCommunityService.setLocalFileType(value)
-            console.log(' enter file type setting !!!!!!!')
             if (type == 'image') {
                 const fileReader = new FileReader()
                 fileReader.onload = (e) => {

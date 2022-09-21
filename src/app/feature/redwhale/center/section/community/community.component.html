@@ -54,17 +54,23 @@
 
             <div class="chatting-screen-header">
                 <form
-                    *ngIf="(curChatRoom$ | async)"
                     id="left"
                     class="room-title"
                 >
-                    <span *ngIf="!changeRoomMode" class="rw-typo-title2">{{(curChatRoom$ | async).name}}</span>
+                    <ngx-skeleton-loader
+                        *ngIf="(isLoading$ | async) == 'pending'"
+                        count = 1
+                        appearance="circle"
+                        [theme]="{width: '150px', height: '22px', 'border-radius': '5px', 'margin': '0'}"
+                    ></ngx-skeleton-loader>
+                    <span *ngIf="!changeRoomMode && (isLoading$ | async) == 'done'" class="rw-typo-title2">{{(curChatRoom$ | async).name}}</span>
                     <img
                         rw-tooltip rwTooltipTitle="채팅방 이름 변경"
                         rwTooltipPlacement="bottom"
-                        *ngIf=" (curChatRoom$ | async).type_code == 'chat_room_type_general'
+                        *ngIf=" (curChatRoom$ | async)?.type_code == 'chat_room_type_general'
                                 && (isCurChatRoomTemp$ | async) != true
-                                && !changeRoomMode"
+                                && !changeRoomMode
+                                && ((isLoading$ | async) == 'done')"
                         src="assets/icons/etc/edit-darkgrey.svg"
                         alt="edit-darkgrey.svg"
                         (click)="showChangeRoomNameModal()"
@@ -82,7 +88,26 @@
                     >
                 </form>
 
-                <div *ngIf="(curChatRoom$ | async) && (curChatRoom$ | async).type_code == 'chat_room_type_general'" id="right">
+                <div class="d-flex align-items-center" *ngIf="(isLoading$ | async) == 'pending'">
+                    <ngx-skeleton-loader
+                        *ngIf="(isLoading$ | async) == 'pending'"
+                        count = 1
+                        appearance="circle"
+                        [theme]="{width: '60px', height: '20px', 'border-radius': '5px', 'margin': '0 5px 0 0'}"
+                    ></ngx-skeleton-loader>
+                    <ngx-skeleton-loader
+                        *ngIf="(isLoading$ | async) == 'pending'"
+                        count = 1
+                        appearance="circle"
+                        [theme]="{width: '30px', height: '30px', 'border-radius': '5px', 'margin': '0 16px 0 0'}"
+                    ></ngx-skeleton-loader>
+                </div>
+                <div
+                    *ngIf="(curChatRoom$ | async)
+                        && (curChatRoom$ | async).type_code == 'chat_room_type_general'
+                        && ((isLoading$ | async) == 'done')"
+                    id="right"
+                >
                     <div class="room-user-number"
                         (click)="toggleRoomUserListDropDown()"
                         (rwClickOutside)="closeRoomUserListDropDown()"
@@ -192,9 +217,9 @@
                                 *ngFor="let file of fileList; let idx = index"
                             >
 
-                                <img *ngIf="file.type == 'image'" src="{{file.result}}" id="background">
+                                <img *ngIf="file.type == 'image'" src="{{file.result}}" class="background">
                                 <div *ngIf="file.type == 'video'" class="video-container">
-                                    <img src="{{file.result}}" id="background">
+                                    <img src="{{file.result}}" class="background">
                                     <img src="assets/icons/etc/play_video.svg" alt="play_video" id="play">
                                 </div>
                                 <div *ngIf="file.type == 'file'" class="file-item">

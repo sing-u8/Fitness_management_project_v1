@@ -19,7 +19,7 @@ section.message {
     }
 
     section.msg-type-date {
-        padding: 24px;
+        padding: 24px 0;
         .divider {
             display: flex;
             align-items: center;
@@ -46,7 +46,7 @@ section.message {
         align-items: center;
         justify-content: center;
         background-color: var(--border-color);
-        margin: 0 0 20px 0;
+        margin: 10px 0;
         span#time {
             margin-left: 20px;
             color: var(--grey);

@@ -9,12 +9,19 @@
 
 	<div class="chatting-room-list">
 		<dw-chatting-room-select
+			*ngIf="isLoading_=='done'"
 			[userRoomList] = "chatRoomList_"
 			[user] = "user"
 			[selectedRoom] = "curChatRoom_"
 			[isLoading]="(drawerIsJoinRoomLoading$ | async)"
 			(onRoomClick) = "joinRoom($event)"
 		></dw-chatting-room-select>
+		<ngx-skeleton-loader
+			*ngIf="isLoading_=='pending'"
+			count = 1
+			appearance="circle"
+			[theme]="{width: '96px', height: '35px', 'border-radius': '5px', 'margin': '0'}"
+		></ngx-skeleton-loader>
 	</div>
 
 	<div
@@ -24,6 +31,7 @@
 		[dropLeaveTargetId]="'drawer_drag_guide'"
 		(onDrop)="onFileDrop($event);onFileDragLeave()"
 		(onDragOver) = "onFileDragOver()"
+		(onDragLeave) = "onFileDragLeave()"
 	>
 		<rw-drag-guide
 			id="drawer_drag_guide"
@@ -67,28 +75,32 @@
 
 			<form class="input-box">
 
-          <textarea
-	          rw-textarea-autoResize
-	          [textareaResizeOption]="textareaResizeOption"
-	          (onResize)="onChatInputResize($event)"
-	          class="rw-typo-bodytext0-bold thin-scroll-y-overlay2"
-	          placeholder="메시지를 입력해주세요. (Shift + Enter 줄바꿈)"
-	          [formControl]="chatInput"
-	          (keypress)="onInputKeyPress($event)">
-          </textarea>
+				<textarea
+					#chat_textarea
+					rw-textarea-autoResize
+					[textareaResizeOption]="textareaResizeOption"
+					(onResize)="onChatInputResize($event)"
+					class="rw-typo-bodytext0-bold thin-scroll-y-overlay2"
+					placeholder="메시지를 입력해주세요. (Shift + Enter 줄바꿈)"
+					[formControl]="chatInput"
+					(keypress)="onInputKeyPress($event)"
+					(focus) = "onTextAreaFocused()"
+					(blur) = "onTextAreaBlur()"
+				></textarea>
 
 				<input
 					type="file"
 					accept="image/*, video/*, .hwp, .pdf, .doc, .docx"
 					#file_picker hidden multiple
-					(change)="onFilePickerChange(file_picker)">
+					(change)="onFilePickerChange(file_picker)"
+				>
 
 				<div *ngIf="fileList.length > 0" class="file-thumbnail-list thin-scroll-x-overlay2">
 					<div class="file-thumbnail" [class.file]="file.type == 'file'" *ngFor="let file of fileList; let idx = index">
 
-						<img *ngIf="file.type == 'image'" src="{{file.result}}" id="background1">
+						<img *ngIf="file.type == 'image'" src="{{file.result}}" class="background">
 						<div *ngIf="file.type == 'video'" class="video-container">
-							<img src="{{file.result}}" id="background2">
+							<img src="{{file.result}}" class="background">
 							<img src="assets/icons/etc/play_video.svg" alt="play_video" id="play">
 						</div>
 						<div *ngIf="file.type == 'file'" class="file-item">

@@ -31,11 +31,11 @@ export class DwChattingRoomSelectComponent implements AfterViewInit, ControlValu
     @ViewChild('itemsElement') itemsElement
 
     value: ChatRoom
-    isOpen: boolean
+    isOpen = false
 
     constructor(private el: ElementRef, private renderer: Renderer2) {
         this.disabled = false
-        this.width = '250px'
+        this.width = '260px'
     }
 
     ngAfterViewInit(): void {
@@ -47,13 +47,13 @@ export class DwChattingRoomSelectComponent implements AfterViewInit, ControlValu
     }
 
     toggle() {
-        if (this.disabled === false) {
+        if (this.disabled == false) {
             const display = this.itemsElement.nativeElement.style.display
 
-            if (display == 'block') {
+            if (display == 'flex') {
                 this.close()
             } else {
-                this.renderer.setStyle(this.itemsElement.nativeElement, 'display', 'block')
+                this.renderer.setStyle(this.itemsElement.nativeElement, 'display', 'flex')
                 this.isOpen = true
             }
         }

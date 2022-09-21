@@ -66,12 +66,20 @@
 		position: absolute;
 		top: 33px;
 		left: 0;
-		width: 250px;
+		width: 260px;
 		max-height: 388px;
-		display: flex;
+		display: none;
+		align-items: center;
 		flex-direction: column;
 		box-shadow: 0 0 10px rgba(181, 181, 181, 0.15);
 		border-radius: 5px;
+
+		.l-chat-room-card {
+			margin-bottom: 3px;
+			&:last-of-type {
+				margin-bottom: 0;
+			}
+		}
 	}
 }
 

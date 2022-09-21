@@ -19,15 +19,16 @@
 		<img *ngIf="selectedRoom" class="fill-arrow" src="assets/icons/etc/arrow-down-fill-darkgrey.svg" alt="">
 	</div>
 
-	<div class="chatting-room-dropdown thin-scroll-y-overlay2" #itemsElement>
-		<rw-chatting-room-card
-			*ngFor="let room of userRoomList; let i = index"
-			[isLoading]="isLoading"
-			[curUser]="user"
-			[room]="room"
-			[selectedRoom]="selectedRoom"
-			(onCardClick)="roomClick($event)"
-		></rw-chatting-room-card>
+	<div class="chatting-room-dropdown thin-scroll-y-overlay2" #itemsElement (click)="$event.stopPropagation()">
+		<div class="l-chat-room-card" *ngFor="let room of userRoomList; let i = index">
+			<rw-chatting-room-card
+				[isLoading]="isLoading"
+				[curUser]="user"
+				[room]="room"
+				[selectedRoom]="selectedRoom"
+				(onCardClick)="roomClick($event)"
+			></rw-chatting-room-card>
+		</div>
 	</div>
 
 
