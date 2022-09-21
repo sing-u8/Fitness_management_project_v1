@@ -24,7 +24,7 @@
       <span *ngIf="room?.type_code == 'chat_room_type_chat_with_me'" class="rw-typo-subtext0-regular me">나</span>
       <span
         *ngIf="(room?.type_code != 'chat_room_type_chat_with_me')
-              && (room.chat_room_users.length > 1)"
+              && (room.chat_room_users.length > 2)"
         class="rw-typo-subtext0-regular group"
       >
         {{room.chat_room_user_count}}
