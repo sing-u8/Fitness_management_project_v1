@@ -409,13 +409,13 @@ export const communityReducer = createImmerReducer(
         const tempChatRoom = makeTempChatRoom(center, curUser, members)
         state.chatRoomList.unshift(tempChatRoom)
         if (spot == 'main') {
+            // tempChatRoom.chat_room_users = tempChatRoom.chat_room_users.filter((v) => v.id != curUser.id)
             state.mainChatRoomUserList = tempChatRoom.chat_room_users
-            tempChatRoom.chat_room_users = tempChatRoom.chat_room_users.filter((v) => v.id != curUser.id)
             state.mainCurChatRoom = tempChatRoom
             state.mainChatRoomMsgs = []
         } else {
+            // tempChatRoom.chat_room_users = tempChatRoom.chat_room_users.filter((v) => v.id != curUser.id)
             state.drawerChatRoomUserList = tempChatRoom.chat_room_users
-            tempChatRoom.chat_room_users = tempChatRoom.chat_room_users.filter((v) => v.id != curUser.id)
             state.drawerCurChatRoom = tempChatRoom
             state.drawerChatRoomMsgs = []
         }
@@ -501,7 +501,7 @@ export const communityReducer = createImmerReducer(
         })
 
         // 최근에 자신한테도 소켓이 오기 때문에... 추가한 방지책
-        if (_.isEmpty(chatRoomIdx)) return state
+        if (chatRoomIdx == -1) return state
 
         const chatRoom = _.cloneDeep(state.chatRoomList[chatRoomIdx])
         chatRoom.chat_room_users = _.slice(
@@ -523,7 +523,7 @@ export const communityReducer = createImmerReducer(
             state.drawerCurChatRoom.chat_room_users = _.cloneDeep(chatRoom.chat_room_users)
             state.drawerCurChatRoom.chat_room_user_count = chatRoom.chat_room_user_count
 
-            state.drawerChatRoomUserList = [...state.mainChatRoomUserList, ...ws_data.dataset]
+            state.drawerChatRoomUserList = [...state.drawerChatRoomUserList, ...ws_data.dataset]
         }
 
         return state
