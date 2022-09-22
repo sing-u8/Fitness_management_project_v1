@@ -409,13 +409,13 @@ export const communityReducer = createImmerReducer(
         const tempChatRoom = makeTempChatRoom(center, curUser, members)
         state.chatRoomList.unshift(tempChatRoom)
         if (spot == 'main') {
-            // tempChatRoom.chat_room_users = tempChatRoom.chat_room_users.filter((v) => v.id != curUser.id)
             state.mainChatRoomUserList = tempChatRoom.chat_room_users
+            tempChatRoom.chat_room_users = tempChatRoom.chat_room_users.filter((v) => v.id != curUser.id)
             state.mainCurChatRoom = tempChatRoom
             state.mainChatRoomMsgs = []
         } else {
-            // tempChatRoom.chat_room_users = tempChatRoom.chat_room_users.filter((v) => v.id != curUser.id)
             state.drawerChatRoomUserList = tempChatRoom.chat_room_users
+            tempChatRoom.chat_room_users = tempChatRoom.chat_room_users.filter((v) => v.id != curUser.id)
             state.drawerCurChatRoom = tempChatRoom
             state.drawerChatRoomMsgs = []
         }

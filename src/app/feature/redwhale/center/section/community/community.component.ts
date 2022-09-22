@@ -307,9 +307,21 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
         this.doShowCreateRoomModal = false
     }
     onCreateRoomConfirm(res: InviteConfirm) {
+        console.log('on create room confirm -- ', res)
+        const existSameRoom: ChatRoom = _.find(this.chatRoomList_, (v) => {
+            return (
+                v.chat_room_users.length == res.members.length &&
+                _.differenceBy(v.chat_room_users, res.members, 'id').length == 0
+            )
+        })
+
+        if (existSameRoom == undefined) {
+            this.createTemChatRoom(res.members, res.curCenterUser)
+        } else {
+            this.joinRoom(existSameRoom)
+        }
+
         this.hideCreateRoomModal()
-        this.createTemChatRoom(res.members, res.curCenterUser)
-        // this.createChatRoom(res.members, res.curCenterUser)
     }
 
     // - // 채팅방 초대
