@@ -307,7 +307,6 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
         this.doShowCreateRoomModal = false
     }
     onCreateRoomConfirm(res: InviteConfirm) {
-        console.log('on create room confirm -- ', res)
         const existSameRoom: ChatRoom = _.find(this.chatRoomList_, (v) => {
             return (
                 v.chat_room_users.length == res.members.length &&

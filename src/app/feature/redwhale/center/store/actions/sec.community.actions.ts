@@ -61,6 +61,12 @@ export const finishJoinChatRoom = createAction(
         isSameRoom: boolean
     }>()
 )
+export const skipFinishJoinChatRoom = createAction(
+    `[${FeatureKey}] Skip Finish Join Chat Room`,
+    props<{
+        spot: FromCommunity.spot
+    }>()
+)
 
 export const startGetMoreChatRoomMsgs = createAction(
     `[${FeatureKey}] Start Get Chat Room Messages`,
@@ -224,4 +230,18 @@ export const finishCreateChatRoomMsgByWS = createAction(
 export const deleteChatRoomMsgByWS = createAction(
     `[${FeatureKey}] Delete Chat Room Message By Web Socket`,
     props<{ ws_data: WS.DeleteChatRoomMessage }>()
+)
+
+// oneToOneChat by dashboard
+export const createOneToOneChatRoomByDashboard = createAction(
+    `[${FeatureKey}] Create OneToOne Chat Room By Dashboard`,
+    props<{ openSpot: FromCommunity.spot }>()
+)
+export const startGetChatRoomsByDashboard = createAction(
+    `[${FeatureKey}] Start Get Chat Rooms By Dashboard`,
+    props<{ openSpot: FromCommunity.spot; centerId: string; cb?: (chatRooms: Array<ChatRoom>) => void }>()
+)
+export const finishGetChatRoomsByDashboard = createAction(
+    `[${FeatureKey}] Finish Get Chat Rooms By Dashboard`,
+    props<{ openSpot: FromCommunity.spot; chatRooms: Array<ChatRoom>; cb?: (chatRooms: Array<ChatRoom>) => void }>()
 )

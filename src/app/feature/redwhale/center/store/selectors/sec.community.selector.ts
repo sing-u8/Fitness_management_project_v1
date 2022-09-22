@@ -37,3 +37,23 @@ export const error = createSelector(CommunityFeature, FromCommunity.selectError)
 // etc
 export const curMainChatRoomIsTemp = createSelector(CommunityFeature, FromCommunity.selectCurMainChatRoomIsTemp)
 export const curDrawerChatRoomIsTemp = createSelector(CommunityFeature, FromCommunity.selectCurDrawerChatRoomIsTemp)
+
+// by dashboard
+export const curMainChatLoaded = createSelector(
+    CommunityFeature,
+    (state: FromCommunity.State): FromCommunity.ChatLoaded => {
+        return {
+            isLoading: state.isLoading,
+            curCenterId: state.curCenterId,
+        }
+    }
+)
+export const curDrawerChatLoaded = createSelector(
+    CommunityFeature,
+    (state: FromCommunity.State): FromCommunity.ChatLoaded => {
+        return {
+            isLoading: state.drawerIsLoading,
+            curCenterId: state.drawerCurCenterId,
+        }
+    }
+)

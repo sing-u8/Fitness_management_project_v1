@@ -1,7 +1,6 @@
-import { createSelector, createFeatureSelector } from '@ngrx/store'
+import { createSelector } from '@ngrx/store'
 import { GymFeature, GymState } from './sec.selector'
 import * as FromDashboard from '@centerStore/reducers/sec.dashboard.reducer'
-import { selectAttendanceToast } from '@centerStore/reducers/sec.dashboard.reducer'
 
 export const FeatureKey = 'Center/Dashboard'
 export const DashboardFeature = createSelector(GymFeature, (state: GymState) => state[FeatureKey])
@@ -16,6 +15,7 @@ export const error = createSelector(DashboardFeature, FromDashboard.selectError)
 export const searchInput = createSelector(DashboardFeature, FromDashboard.selectSearchInput)
 export const userDeatilTag = createSelector(DashboardFeature, FromDashboard.selectUserDetailTag)
 export const isUserDetailLoading = createSelector(DashboardFeature, FromDashboard.selectIsUserDetailLoading)
+export const userInCenter = createSelector(DashboardFeature, FromDashboard.selectUserInCenter)
 
 // main
 export const usersSelectCategs = createSelector(DashboardFeature, FromDashboard.selectUsersSelectCategs)

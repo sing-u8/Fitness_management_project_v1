@@ -29,6 +29,7 @@ import { WordService } from '@services/helper/word.service'
 import { FileService } from '@services/file.service'
 import { CenterUsersCheckInService } from '@services/center-users-check-in.service'
 import { ScheduleHelperService } from '@services/center/schedule-helper.service'
+import { CommunityHelperService } from '@services/center/community-helper.service'
 
 import _ from 'lodash'
 
@@ -50,6 +51,9 @@ export class MemberComponent implements OnInit, OnDestroy {
     public curUserListSelect$ = this.nxStore.select(DashboardSelector.drawerCurUserListSelect)
 
     public unSubscriber$ = new Subject<boolean>()
+
+    public user: User = this.storageService.getUser()
+    public userInCenter: CenterUser
 
     public center: Center
     public centerStaff: User
@@ -77,7 +81,8 @@ export class MemberComponent implements OnInit, OnDestroy {
         private router: Router,
         private activatedRoute: ActivatedRoute,
         private centerUsersCheckInService: CenterUsersCheckInService,
-        private scheduleHelperService: ScheduleHelperService
+        private scheduleHelperService: ScheduleHelperService,
+        private communityHelperService: CommunityHelperService
     ) {}
 
     ngOnInit(): void {
@@ -124,6 +129,18 @@ export class MemberComponent implements OnInit, OnDestroy {
                 this.userRole[key] = key == this.curCenterUser?.role_code
             })
         })
+
+        this.nxStore
+            .select(DashboardSelector.userInCenter)
+            .pipe(takeUntil(this.unSubscriber$))
+            .subscribe((userInCenter) => {
+                this.userInCenter = userInCenter
+                if (_.isEmpty(userInCenter) || this.user.id != userInCenter?.id) {
+                    this.nxStore.dispatch(
+                        DashboardActions.startSetUserInCenter({ centerId: this.center.id, user: this.user })
+                    )
+                }
+            })
     }
     ngOnDestroy() {
         this.unSubscriber$.next(true)
@@ -136,6 +153,17 @@ export class MemberComponent implements OnInit, OnDestroy {
 
     routeToDashboard() {
         this.router.navigate(['./dashboard'], { relativeTo: this.activatedRoute })
+    }
+
+    // oneToOne Chat
+    onOneToOneChat() {
+        this.communityHelperService.createOneToOneChatRoomByDashboard(
+            'main',
+            this.center,
+            this.curUserData.user,
+            this.userInCenter
+        )
+        this.router.navigate(['./community'], { relativeTo: this.activatedRoute })
     }
 
     // register modal vars and funcs

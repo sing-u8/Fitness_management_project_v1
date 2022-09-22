@@ -92,7 +92,7 @@ export class CommunityEffect {
             }),
             mergeMap(([{ centerId, chatRoom, spot }, curChatRoom]) => {
                 if (!_.isEmpty(curChatRoom) && curChatRoom.id == chatRoom.id) {
-                    return []
+                    return [CommunityActions.skipFinishJoinChatRoom({ spot })]
                 } else {
                     return forkJoin([
                         this.centerChatRoomApi.getChatRoomMessage(
@@ -553,5 +553,27 @@ export class CommunityEffect {
                 catchError((err: string) => of(CommunityActions.error({ error: err })))
             ),
         { dispatch: false }
+    )
+
+    // by dashboard
+    public getChatRoomsByDashboard$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(CommunityActions.startGetChatRoomsByDashboard),
+            mergeMap(({ openSpot, centerId, cb }) =>
+                this.centerChatRoomApi.getChatRoom(centerId).pipe(
+                    switchMap((chatRooms) => {
+                        // cb ? cb(chatRooms) : null
+                        return [
+                            CommunityActions.finishGetChatRoomsByDashboard({
+                                openSpot,
+                                chatRooms,
+                                cb,
+                            }),
+                        ]
+                    })
+                )
+            ),
+            catchError((err: string) => of(CommunityActions.error({ error: err })))
+        )
     )
 }

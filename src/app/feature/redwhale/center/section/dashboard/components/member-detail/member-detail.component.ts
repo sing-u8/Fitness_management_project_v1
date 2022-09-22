@@ -13,6 +13,7 @@ import { DashboardHelperService } from '@services/center/dashboard-helper.servic
 import { FileService } from '@services/file.service'
 import { CenterUsersCheckInService } from '@services/center-users-check-in.service'
 import { ScheduleHelperService } from '@services/center/schedule-helper.service'
+import { CommunityHelperService } from '@services/center/community-helper.service'
 
 import { Center } from '@schemas/center'
 import { Loading } from '@schemas/componentStore/loading'
@@ -29,6 +30,8 @@ import * as DashboardActions from '@centerStore/actions/sec.dashboard.actions'
 import * as DashboardSelector from '@centerStore/selectors/sec.dashoboard.selector'
 import * as CenterCommonActions from '@centerStore/actions/center.common.actions'
 import { showToast } from '@appStore/actions/toast.action'
+import { openDrawer } from '@appStore/actions/drawer.action'
+import { CenterUser } from '@schemas/center-user'
 
 @Component({
     selector: 'db-member-detail',
@@ -42,6 +45,7 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
     public memoForm: FormControl = this.fb.control('')
     public center: Center
     public user: User
+    public userInCenter: CenterUser
 
     public unSubscriber$ = new Subject<void>()
     public userDetailTag$ = this.nxStore.select(DashboardSelector.userDeatilTag)
@@ -70,7 +74,8 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
         private dashboardHelperService: DashboardHelperService,
         private fileService: FileService,
         private centerUsersCheckInService: CenterUsersCheckInService,
-        private scheduleHelperService: ScheduleHelperService
+        private scheduleHelperService: ScheduleHelperService,
+        private communityHelperService: CommunityHelperService
     ) {
         this.center = this.storageService.getCenter()
         this.user = this.storageService.getUser()
@@ -96,6 +101,29 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
         this.dwCurCenterId$.pipe(takeUntil(this.unSubscriber$)).subscribe((dwCurCenterId) => {
             this.dwCurCenterId = dwCurCenterId
         })
+
+        this.nxStore
+            .select(DashboardSelector.userInCenter)
+            .pipe(takeUntil(this.unSubscriber$))
+            .subscribe((userInCenter) => {
+                this.userInCenter = userInCenter
+                if (_.isEmpty(userInCenter) || this.user.id != userInCenter?.id) {
+                    this.nxStore.dispatch(
+                        DashboardActions.startSetUserInCenter({ centerId: this.center.id, user: this.user })
+                    )
+                }
+            })
+    }
+
+    // oneToOne Chat
+    onOneToOneChat() {
+        this.communityHelperService.createOneToOneChatRoomByDashboard(
+            'drawer',
+            this.center,
+            this.curUserData.user,
+            this.userInCenter
+        )
+        this.nxStore.dispatch(openDrawer({ tabName: 'community' }))
     }
 
     // register membership locker full modal vars and funcs

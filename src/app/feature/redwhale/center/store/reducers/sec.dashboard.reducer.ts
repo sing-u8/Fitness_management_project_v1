@@ -14,7 +14,6 @@ import { Contract } from '@schemas/contract'
 
 import * as DashboardActions from '../actions/sec.dashboard.actions'
 import dayjs from 'dayjs'
-import { synchronizeRemoveCheckIn, synchronizeRemoveCheckInDrawer } from '../actions/sec.dashboard.actions'
 
 export type MemberSelectCateg = 'member' | 'valid' | 'unpaid' | 'imminent' | 'expired' | 'employee' | 'attendance'
 export type MemberManageCategory = 'membershipLocker' | 'reservation' | 'payment'
@@ -85,6 +84,7 @@ export interface State {
     isLoading: Loading
     isUserDetailLoading: Loading
     error: string
+    userInCenter: CenterUser
 
     // main
     usersSelectCategs: UsersSelectCateg
@@ -113,6 +113,7 @@ export const initialState: State = {
     isLoading: 'idle',
     isUserDetailLoading: 'idle',
     error: '',
+    userInCenter: undefined,
     // main
     curSearchInput: CurSearchInputInit,
     usersSelectCategs: UsersSelectCategInit,
@@ -403,6 +404,10 @@ export const dashboardReducer = createImmerReducer(
         state = { ...state, ...DrawerDashboardInitialState } as State
         return state
     }),
+    on(DashboardActions.finishSetUserInCenter, (state, { centerUser }) => {
+        state.userInCenter = centerUser
+        return state
+    }),
     // synchronize dashboard data
     // // by locker
     on(DashboardActions.finishSynchronizeUserLocker, (state, { success, lockers }) => {
@@ -643,6 +648,7 @@ export const selectError = (state: State) => state.error
 export const selectSearchInput = (state: State) => state.curSearchInput
 export const selectUserDetailTag = (state: State) => state.userDetailTag
 export const selectIsUserDetailLoading = (state: State) => state.isUserDetailLoading
+export const selectUserInCenter = (state: State) => state.userInCenter
 
 // main
 export const selectUsersSelectCategs = (state: State) => state.usersSelectCategs

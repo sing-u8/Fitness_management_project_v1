@@ -16,16 +16,20 @@ import { Center } from '@schemas/center'
 export const messagePageSize = 20
 
 export type spot = 'main' | 'drawer' | 'both'
+export type ChatLoaded = {
+    isLoading: Loading
+    curCenterId: string
+}
 
 export interface State {
     // common
-    curCenterId: string
-    isLoading: Loading
+    curCenterId: string // for main
+    isLoading: Loading // for main
     drawerIsLoading: Loading
     drawerCurCenterId: string
     error: string
 
-    // main
+    // main and drawer
     chatRoomList: Array<ChatRoom>
 
     // main - screen = main
@@ -185,6 +189,17 @@ export const communityReducer = createImmerReducer(
         } else if (spot == 'both') {
             joinRoomMain()
             joinRoomDrawer()
+        }
+        return state
+    }),
+    on(CommunitydActions.skipFinishJoinChatRoom, (state, { spot }) => {
+        if (spot == 'main') {
+            state.mainIsJoinRoomLoading = 'done'
+        } else if (spot == 'drawer') {
+            state.drawerIsJoinRoomLoading = 'done'
+        } else if (spot == 'both') {
+            state.mainIsJoinRoomLoading = 'done'
+            state.drawerIsJoinRoomLoading = 'done'
         }
         return state
     }),
@@ -633,6 +648,29 @@ export const communityReducer = createImmerReducer(
         if (!_.isEmpty(state.drawerCurChatRoom) && state.drawerCurChatRoom.id == ws_data.info.chat_room_id) {
             state.drawerChatRoomMsgs.filter((v) => v.id != ws_data.info.message_id)
         }
+        return state
+    }),
+
+    // by dashboard
+    on(CommunitydActions.startGetChatRoomsByDashboard, (state, { openSpot }) => {
+        if (openSpot == 'main') {
+            state.isLoading = 'pending'
+        } else if (openSpot == 'drawer') {
+            state.drawerIsLoading = 'pending'
+        }
+        return state
+    }),
+    on(CommunitydActions.finishGetChatRoomsByDashboard, (state, { openSpot, chatRooms, cb }) => {
+        if (openSpot == 'main') {
+            state.isLoading = 'done'
+            state.mainIsJoinRoomLoading = 'done'
+        } else if (openSpot == 'drawer') {
+            state.drawerIsLoading = 'done'
+            state.drawerIsJoinRoomLoading = 'done'
+        }
+
+        state.chatRoomList = chatRooms
+        cb ? cb(chatRooms) : null
         return state
     }),
 

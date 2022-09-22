@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core'
-import _ from 'lodash'
 
 import { CenterUser } from '@schemas/center-user'
 
@@ -7,11 +6,6 @@ import { CenterUser } from '@schemas/center-user'
 import { Store } from '@ngrx/store'
 import * as DashboardActions from '@centerStore/actions/sec.dashboard.actions'
 import { MemberSelectCateg } from '@centerStore/reducers/sec.dashboard.reducer'
-import {
-    setDrawerCurUser,
-    synchronizeCheckIn,
-    synchronizeCheckInDrawer,
-} from '@centerStore/actions/sec.dashboard.actions'
 
 @Injectable({
     providedIn: 'root',
