@@ -20,6 +20,16 @@ export type ChatLoaded = {
     isLoading: Loading
     curCenterId: string
 }
+export type CurChatLoaded = {
+    main: {
+        isLoading: Loading
+        curCenterId: string
+    }
+    drawer: {
+        isLoading: Loading
+        curCenterId: string
+    }
+}
 
 export interface State {
     // common
@@ -382,13 +392,15 @@ export const communityReducer = createImmerReducer(
         // !! 채팅 유저리스트는 임시 채팅방을 만들 때 해놨음, 필요 시 이것도 API에서 받아와야함.
         const addMsgToMain = () => {
             state.mainCurChatRoom = chatRoom
+            // startCreateChatRoomMsgByWS와 겹치기 떄문에 이 코드는 제거
             state.mainChatRoomMsgs = [chatRoomMessage, makeDateMessage(chatRoomMessage.created_at)]
-            state.chatRoomList[state.chatRoomList.findIndex((v) => v.id == preTempChatRoom.id)] = chatRoom
+            // state.chatRoomList[state.chatRoomList.findIndex((v) => v.id == preTempChatRoom.id)] = chatRoom
         }
         const addMsgToDrawer = () => {
             state.drawerCurChatRoom = chatRoom
+            // startCreateChatRoomMsgByWS와 겹치기 떄문에 이 코드는 제거
             state.drawerChatRoomMsgs = [chatRoomMessage, makeDateMessage(chatRoomMessage.created_at)]
-            state.chatRoomList[state.chatRoomList.findIndex((v) => v.id == preTempChatRoom.id)] = chatRoom
+            // state.chatRoomList[state.chatRoomList.findIndex((v) => v.id == preTempChatRoom.id)] = chatRoom
         }
 
         if (spot == 'main') {
@@ -491,7 +503,7 @@ export const communityReducer = createImmerReducer(
     }),
 
     // for web socket
-    // ! 있는 채팅방에 회원이 초대 됐을 때 초대에 관한 웹 소켓이 없음
+    // ! 있는 채팅방에 회원이 초대 됐을 때 초대에 관한 웹 소켓이 없음, 방을 만든 사람의 채팅방 데이터가 들어옴...
     on(CommunitydActions.createChatRoomByWS, (state, { ws_data }) => {
         state.chatRoomList.unshift(ws_data.dataset[0])
         return state
@@ -569,14 +581,20 @@ export const communityReducer = createImmerReducer(
     }),
 
     on(CommunitydActions.finishCreateChatRoomMsgByWS, (state, { ws_data, chatRoomIdx, chatRoomList }) => {
-        if (!_.isEmpty(chatRoomList)) state.chatRoomList = _.cloneDeep(chatRoomList)
-        const chatRoom = _.cloneDeep(state.chatRoomList[chatRoomIdx])
+        let chatRoom: ChatRoom = undefined
+        if (!_.isEmpty(chatRoomList)) {
+            state.chatRoomList = _.cloneDeep(chatRoomList)
+            chatRoom = _.cloneDeep(state.chatRoomList[chatRoomIdx])
+            chatRoom.unread_message_count = 0
+        } else {
+            chatRoom = _.cloneDeep(state.chatRoomList[chatRoomIdx])
+        }
 
         let lastMsg = ''
         let lastCreatedAt = dayjs().format('YYYY-MM-DD HH:mm:dd')
         let unread_msg_count = 0
         ws_data.dataset.forEach((msg) => {
-            if (msg.type_code != 'chat_room_message_type_system') {
+            if (msg.type_code != 'chat_room_message_type_system' && msg.type_code != 'fe_chat_room_message_type_date') {
                 lastMsg = msg.text
                 lastCreatedAt = msg.created_at
                 unread_msg_count += 1
@@ -675,6 +693,17 @@ export const communityReducer = createImmerReducer(
     }),
 
     // common
+    on(CommunitydActions.setLoading, (state, { spot, loading }) => {
+        if (spot == 'main') {
+            state.isLoading = loading
+        } else if (spot == 'drawer') {
+            state.drawerIsLoading = loading
+        } else if (spot == 'both') {
+            state.isLoading = loading
+            state.drawerIsLoading = loading
+        }
+        return state
+    }),
     on(CommunitydActions.setCurCenterId, (state, { centerId }) => {
         state.curCenterId = centerId
         return state

@@ -28,33 +28,17 @@ export class CommunityHelperService {
         let mainLoaded: CommunityReducer.ChatLoaded = undefined
         let drawerLoaded: CommunityReducer.ChatLoaded = undefined
         this.nxStore
-            .select(CommunitySelector.curMainChatLoaded)
+            .select(CommunitySelector.curChatLoaded)
             .pipe(take(1))
             .subscribe((loaded) => {
-                mainLoaded = loaded
+                mainLoaded = loaded.main
+                drawerLoaded = loaded.drawer
             })
-        this.nxStore
-            .select(CommunitySelector.curDrawerChatLoaded)
-            .pipe(take(1))
-            .subscribe((loaded) => {
-                drawerLoaded = loaded
-            })
-
-        console.log(
-            'createOneToOneChatRoomByDashboard :: ',
-            mainLoaded,
-            ' - ',
-            drawerLoaded,
-            ' --- ',
-            (mainLoaded.isLoading == 'done' && mainLoaded.curCenterId == center.id) ||
-                (drawerLoaded.isLoading == 'done' && drawerLoaded.curCenterId == center.id)
-        )
 
         if (
             (mainLoaded.isLoading == 'done' && mainLoaded.curCenterId == center.id) ||
             (drawerLoaded.isLoading == 'done' && drawerLoaded.curCenterId == center.id)
         ) {
-            console.log('createOneToOneChatRoomByDashboard == A')
             this.setCurCenterId(openSpot, center.id)
             this.nxStore
                 .select(CommunitySelector.chatRoomList)
@@ -63,7 +47,6 @@ export class CommunityHelperService {
                     this.determineJoinOrCreate(center, openSpot, chatRooms, chatUser, curUser)
                 })
         } else {
-            console.log('createOneToOneChatRoomByDashboard == B')
             this.setCurCenterId(openSpot, center.id)
             this.nxStore.dispatch(
                 CommunityActions.startGetChatRoomsByDashboard({

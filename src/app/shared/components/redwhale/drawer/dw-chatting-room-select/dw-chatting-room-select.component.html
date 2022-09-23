@@ -13,7 +13,7 @@
             {{
 				selectedRoom?.chat_room_users && selectedRoom?.chat_room_users[0] == selectedRoom?.chat_room_users[1]
 				? '나'
-				: selectedRoom?.chat_room_users?.length
+				: selectedRoom?.chat_room_user_count
 			}}
         </span>
 		<img *ngIf="selectedRoom" class="fill-arrow" src="assets/icons/etc/arrow-down-fill-darkgrey.svg" alt="">

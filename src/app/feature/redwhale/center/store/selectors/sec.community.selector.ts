@@ -39,21 +39,18 @@ export const curMainChatRoomIsTemp = createSelector(CommunityFeature, FromCommun
 export const curDrawerChatRoomIsTemp = createSelector(CommunityFeature, FromCommunity.selectCurDrawerChatRoomIsTemp)
 
 // by dashboard
-export const curMainChatLoaded = createSelector(
+export const curChatLoaded = createSelector(
     CommunityFeature,
-    (state: FromCommunity.State): FromCommunity.ChatLoaded => {
+    (state: FromCommunity.State): FromCommunity.CurChatLoaded => {
         return {
-            isLoading: state.isLoading,
-            curCenterId: state.curCenterId,
-        }
-    }
-)
-export const curDrawerChatLoaded = createSelector(
-    CommunityFeature,
-    (state: FromCommunity.State): FromCommunity.ChatLoaded => {
-        return {
-            isLoading: state.drawerIsLoading,
-            curCenterId: state.drawerCurCenterId,
+            main: {
+                isLoading: state.isLoading,
+                curCenterId: state.curCenterId,
+            },
+            drawer: {
+                isLoading: state.drawerIsLoading,
+                curCenterId: state.drawerCurCenterId,
+            },
         }
     }
 )

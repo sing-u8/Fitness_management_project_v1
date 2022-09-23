@@ -113,7 +113,7 @@ export class WsChatService implements OnDestroy {
     switchByWsChatBase(ws: wsChat.Base) {
         console.log(' switchByWsChatBase -- ', ws)
         if (ws.topic == 'chat_room' && ws.operation == 'create') {
-            this.nxStore.dispatch(CommunityActions.createChatRoomByWS({ ws_data: ws as wsChat.CreateChatRoom }))
+            // this.nxStore.dispatch(CommunityActions.createChatRoomByWS({ ws_data: ws as wsChat.CreateChatRoom }))
         } else if (ws.topic == 'chat_room' && ws.operation == 'read') {
             this.nxStore.dispatch(CommunityActions.readChatRoomByWS({ ws_data: ws as wsChat.ReadChatRoom }))
         } else if (ws.topic == 'chat_room' && ws.operation == 'update') {

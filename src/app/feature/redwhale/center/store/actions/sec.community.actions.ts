@@ -8,10 +8,11 @@ import { ChatRoomUser } from '@schemas/chat-room-user'
 import { CenterUser } from '@schemas/center-user'
 import { ChatFile } from '@schemas/center/community/chat-file'
 import { Center } from '@schemas/center'
-import * as WS from '@schemas/web-socket/web-socket'
-
-import * as ChatRoomApi from '@services/center-chat-room.service'
 import { User } from '@schemas/user'
+import { Loading } from '@schemas/store/loading'
+
+import * as WS from '@schemas/web-socket/web-socket'
+import * as ChatRoomApi from '@services/center-chat-room.service'
 
 const FeatureKey = 'Center/Community'
 
@@ -25,6 +26,10 @@ export const setDrawerCurCenterId = createAction(
 // common
 export const resetAll = createAction(`[${FeatureKey}] Reset Community All State`, props<{ spot: FromCommunity.spot }>())
 export const error = createAction(`[${FeatureKey}] Community State Error`, props<{ error: string }>())
+export const setLoading = createAction(
+    `[${FeatureKey}] Set Loading`,
+    props<{ spot: FromCommunity.spot; loading: Loading }>()
+)
 
 // main
 // - // async

@@ -93,12 +93,30 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
         this.chatRoomMsgLoading$.pipe(takeUntil(this.unsubscribe$)).subscribe((chatRoomMsgLoading) => {
             this.chatRoomMsgLoading_ = chatRoomMsgLoading
         })
+        this.chatRoomList$.pipe(takeUntil(this.unsubscribe$)).subscribe((chatRoomList) => {
+            this.chatRoomList_ = chatRoomList
+        })
+        this.chatRoomMsgs$.pipe(takeUntil(this.unsubscribe$)).subscribe((crMsgs) => {
+            this.chatRoomMsgs_ = crMsgs
+        })
+        this.curChatRoom$.pipe(takeUntil(this.unsubscribe$)).subscribe((curChatRoom) => {
+            this.curChatRoom_ = curChatRoom
+        })
 
-        this.nxStore.pipe(select(CommunitySelector.curCenterId), take(1)).subscribe((curCenterId) => {
-            if (curCenterId != this.center.id) {
+        this.nxStore.pipe(select(CommunitySelector.curChatLoaded), take(1)).subscribe((curChatLoaded) => {
+            if (curChatLoaded.main.curCenterId != this.center.id) {
                 this.nxStore.dispatch(CommunityActions.resetAll({ spot: 'main' }))
-                // !! 한 번 호출후에 호출하지 않기
-                if (this.isLoading_ == 'idle') {
+                if (curChatLoaded.drawer.isLoading == 'done' && curChatLoaded.drawer.curCenterId == this.center.id) {
+                    const myChatRoom = this.chatRoomList_.find((v) => v.type_code == 'chat_room_type_chat_with_me')
+                    this.nxStore.dispatch(
+                        CommunityActions.startJoinChatRoom({
+                            centerId: this.center.id,
+                            chatRoom: myChatRoom,
+                            spot: 'main',
+                        })
+                    )
+                    this.nxStore.dispatch(CommunityActions.setLoading({ spot: 'main', loading: 'done' }))
+                } else if (curChatLoaded.main.isLoading == 'idle') {
                     this.nxStore.dispatch(
                         CommunityActions.startGetChatRooms({
                             centerId: this.center.id,
@@ -110,16 +128,21 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
             }
         })
 
+        // this.nxStore.pipe(select(CommunitySelector.curCenterId), take(1)).subscribe((curCenterId) => {
+        //     if (curCenterId != this.center.id) {
+        //         this.nxStore.dispatch(CommunityActions.resetAll({ spot: 'main' }))
+        //         if (this.isLoading_ == 'idle') {
+        //             this.nxStore.dispatch(
+        //                 CommunityActions.startGetChatRooms({
+        //                     centerId: this.center.id,
+        //                     curUserId: this.user.id,
+        //                     spot: 'main',
+        //                 })
+        //             )
+        //         }
+        //     }
+        // })
         this.nxStore.dispatch(CommunityActions.setCurCenterId({ centerId: this.center.id }))
-        this.chatRoomMsgs$.pipe(takeUntil(this.unsubscribe$)).subscribe((crMsgs) => {
-            this.chatRoomMsgs_ = crMsgs
-        })
-        this.curChatRoom$.pipe(takeUntil(this.unsubscribe$)).subscribe((curChatRoom) => {
-            this.curChatRoom_ = curChatRoom
-        })
-        this.chatRoomList$.pipe(takeUntil(this.unsubscribe$)).subscribe((chatRoomList) => {
-            this.chatRoomList_ = chatRoomList
-        })
     }
 
     ngOnInit(): void {}

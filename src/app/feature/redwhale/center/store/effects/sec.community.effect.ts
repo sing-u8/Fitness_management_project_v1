@@ -19,6 +19,7 @@ import { showToast } from '@appStore/actions/toast.action'
 import * as CommunityActions from '../actions/sec.community.actions'
 import * as CommunitySelector from '../selectors/sec.community.selector'
 import * as CommunityReducer from '../reducers/sec.community.reducer'
+import { IsTmepRoom } from '@schemas/chat-room'
 
 @Injectable()
 export class CommunityEffect {
@@ -498,8 +499,7 @@ export class CommunityEffect {
                 this.store.select(CommunitySelector.chatRoomList),
                 this.store.select(CommunitySelector.isLoading),
             ]),
-            switchMap(([{ ws_data }, chatRoomList, isLoading]) => {
-                console.log('call startCreateChatRoomMsgByWS -- ', chatRoomList)
+            mergeMap(([{ ws_data }, chatRoomList, isLoading]) => {
                 // if (_.isEmpty(chatRoomList) || isLoading != 'done') return []
                 const chatRoomIdx = chatRoomList.findIndex((v) => v.id == ws_data.info.chat_room_id)
                 if (chatRoomIdx != -1) {
@@ -512,13 +512,22 @@ export class CommunityEffect {
                     ]
                 } else {
                     return this.centerChatRoomApi.getChatRoom(ws_data.info.center_id).pipe(
-                        switchMap((_chatRoomList) => {
-                            const chatRoomIdx = _chatRoomList.findIndex((v) => v.id == ws_data.info.chat_room_id)
+                        mergeMap((_chatRoomList) => {
+                            const cr = _.find(_chatRoomList, (v) => v.id == ws_data.info.chat_room_id)
+                            const ctlWoCr = _.filter(_chatRoomList, (v) => v.id != ws_data.info.chat_room_id)
+                            const tempChatRooms = chatRoomList.filter(
+                                (v) =>
+                                    _.includes(v.id, IsTmepRoom) &&
+                                    _.differenceBy(v.chat_room_users, cr.chat_room_users, 'id').length != 0
+                            )
+                            const ctl = [cr, ...tempChatRooms, ...ctlWoCr]
+                            const chatRoomIdx = ctl.findIndex((v) => v.id == ws_data.info.chat_room_id)
+
                             return [
                                 CommunityActions.finishCreateChatRoomMsgByWS({
                                     ws_data,
                                     chatRoomIdx,
-                                    chatRoomList: _.cloneDeep(_chatRoomList),
+                                    chatRoomList: ctl,
                                 }),
                             ]
                         })

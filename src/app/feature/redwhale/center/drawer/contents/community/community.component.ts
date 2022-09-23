@@ -94,12 +94,30 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
         this.chatRoomMsgLoading$.pipe(takeUntil(this.unsubscribe$)).subscribe((chatRoomMsgLoading) => {
             this.chatRoomMsgLoading_ = chatRoomMsgLoading
         })
+        this.chatRoomMsgs$.pipe(takeUntil(this.unsubscribe$)).subscribe((crMsgs) => {
+            this.chatRoomMsgs_ = crMsgs
+        })
+        this.curChatRoom$.pipe(takeUntil(this.unsubscribe$)).subscribe((curChatRoom) => {
+            this.curChatRoom_ = curChatRoom
+        })
+        this.chatRoomList$.pipe(takeUntil(this.unsubscribe$)).subscribe((chatRoomList) => {
+            this.chatRoomList_ = chatRoomList
+        })
 
-        this.nxStore.pipe(select(CommunitySelector.drawerCurCenterId), take(1)).subscribe((curCenterId) => {
-            if (curCenterId != this.center.id) {
+        this.nxStore.pipe(select(CommunitySelector.curChatLoaded), take(1)).subscribe((curChatLoaded) => {
+            if (curChatLoaded.drawer.curCenterId != this.center.id) {
                 this.nxStore.dispatch(CommunityActions.resetAll({ spot: 'drawer' }))
-                // !! 한 번 호출후에 호출하지 않기
-                if (this.isLoading_ == 'idle') {
+                if (curChatLoaded.main.isLoading == 'done' && curChatLoaded.main.curCenterId == this.center.id) {
+                    const myChatRoom = this.chatRoomList_.find((v) => v.type_code == 'chat_room_type_chat_with_me')
+                    this.nxStore.dispatch(
+                        CommunityActions.startJoinChatRoom({
+                            centerId: this.center.id,
+                            chatRoom: myChatRoom,
+                            spot: 'drawer',
+                        })
+                    )
+                    this.nxStore.dispatch(CommunityActions.setLoading({ spot: 'drawer', loading: 'done' }))
+                } else if (curChatLoaded.drawer.isLoading == 'idle') {
                     this.nxStore.dispatch(
                         CommunityActions.startGetChatRooms({
                             centerId: this.center.id,
@@ -110,17 +128,7 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
                 }
             }
         })
-
         this.nxStore.dispatch(CommunityActions.setDrawerCurCenterId({ centerId: this.center.id }))
-        this.chatRoomMsgs$.pipe(takeUntil(this.unsubscribe$)).subscribe((crMsgs) => {
-            this.chatRoomMsgs_ = crMsgs
-        })
-        this.curChatRoom$.pipe(takeUntil(this.unsubscribe$)).subscribe((curChatRoom) => {
-            this.curChatRoom_ = curChatRoom
-        })
-        this.chatRoomList$.pipe(takeUntil(this.unsubscribe$)).subscribe((chatRoomList) => {
-            this.chatRoomList_ = chatRoomList
-        })
     }
 
     ngOnInit(): void {}
@@ -287,7 +295,6 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
 
     // - // 채팅방 입장
     public joinRoom(chatRoom: ChatRoom) {
-        console.log('side bar join room : ', chatRoom, ' -- ', this.curChatRoom_)
         if (chatRoom.id == this.curChatRoom_.id) return
         this.resetChangeRoomNameData()
         this.resetChatInputData()
