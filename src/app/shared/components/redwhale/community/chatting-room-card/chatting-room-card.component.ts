@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, AfterViewInit, OnChanges, Output, EventEmitter } from '@angular/core'
+import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core'
 
 import { ChatRoom } from '@schemas/chat-room'
 import { ChatRoomUser } from '@schemas/chat-room-user'
