@@ -390,19 +390,25 @@ export const communityReducer = createImmerReducer(
     }),
 
     // - // for temp romm
-    on(CommunitydActions.finishSendMessageToTempRoom, (state, { spot, chatRoomMessage, chatRoom }) => {
+    on(CommunitydActions.finishSendMessageToTempRoom, (state, { spot, chatRoomMessages, chatRoom }) => {
         let preTempChatRoom: ChatRoom = undefined
         // !! 채팅 유저리스트는 임시 채팅방을 만들 때 해놨음, 필요 시 이것도 API에서 받아와야함.
         const addMsgToMain = () => {
             state.mainCurChatRoom = chatRoom
             // startCreateChatRoomMsgByWS와 겹치기 떄문에 이 코드는 제거
-            state.mainChatRoomMsgs = [chatRoomMessage, makeDateMessage(chatRoomMessage.created_at)]
+            state.mainChatRoomMsgs = [
+                ...chatRoomMessages,
+                makeDateMessage(chatRoomMessages[chatRoomMessages.length - 1].created_at),
+            ]
             // state.chatRoomList[state.chatRoomList.findIndex((v) => v.id == preTempChatRoom.id)] = chatRoom
         }
         const addMsgToDrawer = () => {
             state.drawerCurChatRoom = chatRoom
             // startCreateChatRoomMsgByWS와 겹치기 떄문에 이 코드는 제거
-            state.drawerChatRoomMsgs = [chatRoomMessage, makeDateMessage(chatRoomMessage.created_at)]
+            state.drawerChatRoomMsgs = [
+                ...chatRoomMessages,
+                makeDateMessage(chatRoomMessages[chatRoomMessages.length - 1].created_at),
+            ]
             // state.chatRoomList[state.chatRoomList.findIndex((v) => v.id == preTempChatRoom.id)] = chatRoom
         }
 
@@ -620,11 +626,13 @@ export const communityReducer = createImmerReducer(
             _.forEach(ws_data.dataset, (msg) => {
                 state.mainChatRoomMsgs.unshift(msg)
             })
+            state.mainChatRoomMsgs = _.uniqBy(state.mainChatRoomMsgs, 'id')
         }
         if (isInDrawerChatRoom) {
             _.forEach(ws_data.dataset, (msg) => {
                 state.drawerChatRoomMsgs.unshift(msg)
             })
+            state.drawerChatRoomMsgs = _.uniqBy(state.drawerChatRoomMsgs, 'id')
         }
         if (isInMainChatRoom || isInDrawerChatRoom) {
             chatRoom.unread_message_count -= unread_msg_count

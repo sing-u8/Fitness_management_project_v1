@@ -384,10 +384,18 @@ export class CommunityEffect {
             switchMap(({ centerId, reqBody, spot }) =>
                 this.centerChatRoomApi.createChatRoom(centerId, reqBody.createRoom).pipe(
                     switchMap((chatRoom) =>
-                        this.centerChatRoomApi.sendMeesageToChatRoom(centerId, chatRoom.id, reqBody.sendMsg).pipe(
-                            switchMap((chatRoomMessage) => {
+                        forkJoin([
+                            this.centerChatRoomApi.getChatRoomMessage(centerId, chatRoom.id),
+                            this.centerChatRoomApi.sendMeesageToChatRoom(centerId, chatRoom.id, reqBody.sendMsg),
+                        ]).pipe(
+                            switchMap(([existingMsgs, chatRoomMessage]) => {
+                                const chatRoomMessages = _.sortBy(_.uniqBy([...existingMsgs, chatRoomMessage], 'id'), [
+                                    (o) => {
+                                        return -dayjs(o.created_at).unix()
+                                    },
+                                ])
                                 return [
-                                    CommunityActions.finishSendMessageToTempRoom({ spot, chatRoomMessage, chatRoom }),
+                                    CommunityActions.finishSendMessageToTempRoom({ spot, chatRoomMessages, chatRoom }),
                                 ]
                             })
                         )
@@ -466,19 +474,50 @@ export class CommunityEffect {
                                             size: _flieList[0].size,
                                         }
 
-                                        return this.centerChatRoomApi
-                                            .sendMeesageToChatRoom(centerId, chatRoom.id, reqBody)
-                                            .pipe(
-                                                switchMap((chatRoomMessage) => {
-                                                    return [
-                                                        CommunityActions.finishSendMessage({ spot, chatRoomMessage }),
-                                                        CommunityActions.removeChatRoomLoadingMsgs({
-                                                            loadingMsgId: res.msgId,
-                                                            spot,
-                                                        }),
+                                        return forkJoin([
+                                            this.centerChatRoomApi.getChatRoomMessage(centerId, chatRoom.id),
+                                            this.centerChatRoomApi.sendMeesageToChatRoom(
+                                                centerId,
+                                                chatRoom.id,
+                                                reqBody
+                                            ),
+                                        ]).pipe(
+                                            switchMap(([existingMsgs, chatRoomMessage]) => {
+                                                const chatRoomMessages = _.sortBy(
+                                                    _.uniqBy([...existingMsgs, chatRoomMessage], 'id'),
+                                                    [
+                                                        (o) => {
+                                                            return -dayjs(o.created_at).unix()
+                                                        },
                                                     ]
-                                                })
-                                            )
+                                                )
+                                                return [
+                                                    CommunityActions.finishSendMessageToTempRoom({
+                                                        spot,
+                                                        chatRoomMessages,
+                                                        chatRoom,
+                                                    }),
+                                                    CommunityActions.removeChatRoomLoadingMsgs({
+                                                        loadingMsgId: res.msgId,
+                                                        spot,
+                                                    }),
+                                                ]
+                                            })
+                                        )
+
+                                    // return this.centerChatRoomApi
+                                    //     .sendMeesageToChatRoom(centerId, chatRoom.id, reqBody)
+                                    //     .pipe(
+                                    //         switchMap((chatRoomMessage) => {
+                                    //             return [
+                                    //                 CommunityActions.finishSendMessage({ spot, chatRoomMessage }),
+                                    //                 CommunityActions.removeChatRoomLoadingMsgs({
+                                    //                     loadingMsgId: res.msgId,
+                                    //                     spot,
+                                    //                 }),
+                                    //             ]
+                                    //         })
+                                    //     )
                                     default:
                                         return []
                                 }
