@@ -9,7 +9,7 @@
 
 	<div class="chatting-room-list">
 		<dw-chatting-room-select
-			*ngIf="isLoading_=='done'"
+			*ngIf="isLoading_!='pending'"
 			[userRoomList] = "chatRoomList_"
 			[user] = "user"
 			[selectedRoom] = "curChatRoom_"

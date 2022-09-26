@@ -26,6 +26,7 @@ export const drawerChatRoomMsgEnd = createSelector(CommunityFeature, FromCommuni
 export const drawerChatRoomMsgLoading = createSelector(CommunityFeature, FromCommunity.selectDrawerChatRoomMsgLoading)
 export const drawerChatRoomLoadingMsgs = createSelector(CommunityFeature, FromCommunity.selectDrawerChatRoomLoadingMsgs)
 export const drawerChatRoomUserList = createSelector(CommunityFeature, FromCommunity.selectDrawerChatRoomUserList)
+export const drawerJoinedChatRoom = createSelector(CommunityFeature, FromCommunity.selectDrawerJoinedChatRoom)
 
 // common
 export const curCenterId = createSelector(CommunityFeature, FromCommunity.selectCurCenterId)

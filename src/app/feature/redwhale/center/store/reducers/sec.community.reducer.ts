@@ -60,6 +60,8 @@ export interface State {
     drawerChatRoomMsgEnd: boolean
     drawerChatRoomLoadingMsgs: Array<ChatRoomLoadingMessage>
     drawerChatRoomUserList: Array<ChatRoomUser>
+    // // excluded for reset
+    drawerJoinedChatRoom: ChatRoom
 }
 
 export const initialState: State = {
@@ -91,6 +93,7 @@ export const initialState: State = {
     drawerChatRoomMsgLoading: false,
     drawerChatRoomLoadingMsgs: [],
     drawerChatRoomUserList: [],
+    drawerJoinedChatRoom: undefined,
 }
 
 export const communityReducer = createImmerReducer(
@@ -420,6 +423,10 @@ export const communityReducer = createImmerReducer(
     }),
 
     // sync
+    on(CommunitydActions.setJoinedChatRoom, (state, { chatRoom }) => {
+        state.drawerJoinedChatRoom = chatRoom
+        return state
+    }),
     on(CommunitydActions.joinTempChatRoom, (state, { chatRoom, spot }) => {
         if (spot == 'main') {
             state.mainCurChatRoom = chatRoom
@@ -777,6 +784,7 @@ export const selectDrawerChatRoomMsgEnd = (state: State) => state.drawerChatRoom
 export const selectDrawerChatRoomMsgLoading = (state: State) => state.drawerChatRoomMsgLoading
 export const selectDrawerChatRoomLoadingMsgs = (state: State) => state.drawerChatRoomLoadingMsgs
 export const selectDrawerChatRoomUserList = (state: State) => state.drawerChatRoomUserList
+export const selectDrawerJoinedChatRoom = (state: State) => state.drawerJoinedChatRoom
 
 // common
 export const selectCurCenterId = (state: State) => state.curCenterId

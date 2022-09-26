@@ -156,7 +156,7 @@ export const finishSendMessageToTempRoom = createAction(
     `[${FeatureKey}] Finish Send Message to TempChatRoom`,
     props<{
         chatRoom: ChatRoom
-        chatRoomMessage: ChatRoomMessage
+        chatRoomMessages: Array<ChatRoomMessage>
         spot: FromCommunity.spot
     }>()
 )
@@ -196,8 +196,14 @@ export const updateChatRoomLoadingMsg = createAction(
     props<{ msgId: string; spot: FromCommunity.spot; gauge: number }>()
 )
 export const removeChatRoomLoadingMsgs = createAction(
-    `[${FeatureKey}] remove Chat Room Loading Messages`,
+    `[${FeatureKey}] Remove Chat Room Loading Messages`,
     props<{ loadingMsgId: string; spot: FromCommunity.spot }>()
+)
+
+// - // - // drawer
+export const setJoinedChatRoom = createAction(
+    `[${FeatureKey}] Set Joined Chat Room For Drawer`,
+    props<{ chatRoom: ChatRoom }>()
 )
 
 // for web socket

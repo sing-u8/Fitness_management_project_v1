@@ -59,8 +59,9 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
 
     public curChatRoom$ = this.nxStore.select(CommunitySelector.drawerCurChatRoom)
     public curChatRoom_: ChatRoom = undefined
+    public joinedChatRoom$ = this.nxStore.select(CommunitySelector.drawerJoinedChatRoom)
+    public joinedChatRoom_: ChatRoom = undefined
     public isCurChatRoomTemp$ = this.nxStore.select(CommunitySelector.curDrawerChatRoomIsTemp)
-
     public chatRoomUserList$ = this.nxStore.select(CommunitySelector.drawerChatRoomUserList)
 
     public chatRoomMsgs$ = this.nxStore.select(CommunitySelector.drawerChatRoomMsgs)
@@ -100,31 +101,64 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
         this.curChatRoom$.pipe(takeUntil(this.unsubscribe$)).subscribe((curChatRoom) => {
             this.curChatRoom_ = curChatRoom
         })
+        this.joinedChatRoom$.pipe(takeUntil(this.unsubscribe$)).subscribe((joinedChatRoom) => {
+            this.joinedChatRoom_ = joinedChatRoom
+        })
         this.chatRoomList$.pipe(takeUntil(this.unsubscribe$)).subscribe((chatRoomList) => {
             this.chatRoomList_ = chatRoomList
         })
 
         this.nxStore.pipe(select(CommunitySelector.curChatLoaded), take(1)).subscribe((curChatLoaded) => {
             if (curChatLoaded.drawer.curCenterId != this.center.id) {
-                this.nxStore.dispatch(CommunityActions.resetAll({ spot: 'drawer' }))
+                // this.nxStore.dispatch(CommunityActions.resetAll({ spot: 'drawer' }))
                 if (curChatLoaded.main.isLoading == 'done' && curChatLoaded.main.curCenterId == this.center.id) {
-                    const myChatRoom = this.chatRoomList_.find((v) => v.type_code == 'chat_room_type_chat_with_me')
-                    this.nxStore.dispatch(
-                        CommunityActions.startJoinChatRoom({
-                            centerId: this.center.id,
-                            chatRoom: myChatRoom,
-                            spot: 'drawer',
-                        })
-                    )
+                    if (
+                        !_.isEmpty(this.joinedChatRoom_) &&
+                        this.chatRoomList_.findIndex((v) => v.id == this.joinedChatRoom_.id) != -1
+                    ) {
+                        this.nxStore.dispatch(
+                            CommunityActions.startJoinChatRoom({
+                                centerId: this.center.id,
+                                chatRoom: this.joinedChatRoom_,
+                                spot: 'drawer',
+                            })
+                        )
+                        this.nxStore.dispatch(CommunityActions.setLoading({ spot: 'drawer', loading: 'done' }))
+                    } else {
+                        const myChatRoom = this.chatRoomList_.find((v) => v.type_code == 'chat_room_type_chat_with_me')
+                        this.nxStore.dispatch(
+                            CommunityActions.startJoinChatRoom({
+                                centerId: this.center.id,
+                                chatRoom: myChatRoom,
+                                spot: 'drawer',
+                            })
+                        )
+                        this.nxStore.dispatch(CommunityActions.setLoading({ spot: 'drawer', loading: 'done' }))
+                    }
+
                     this.nxStore.dispatch(CommunityActions.setLoading({ spot: 'drawer', loading: 'done' }))
                 } else if (curChatLoaded.drawer.isLoading == 'idle') {
-                    this.nxStore.dispatch(
-                        CommunityActions.startGetChatRooms({
-                            centerId: this.center.id,
-                            curUserId: this.user.id,
-                            spot: 'drawer',
-                        })
-                    )
+                    if (
+                        !_.isEmpty(this.joinedChatRoom_) &&
+                        this.chatRoomList_.findIndex((v) => v.id == this.joinedChatRoom_.id) != -1
+                    ) {
+                        this.nxStore.dispatch(
+                            CommunityActions.startJoinChatRoom({
+                                centerId: this.center.id,
+                                chatRoom: this.joinedChatRoom_,
+                                spot: 'drawer',
+                            })
+                        )
+                        this.nxStore.dispatch(CommunityActions.setLoading({ spot: 'drawer', loading: 'done' }))
+                    } else {
+                        this.nxStore.dispatch(
+                            CommunityActions.startGetChatRooms({
+                                centerId: this.center.id,
+                                curUserId: this.user.id,
+                                spot: 'drawer',
+                            })
+                        )
+                    }
                 }
             }
         })
@@ -133,7 +167,10 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
 
     ngOnInit(): void {}
     ngAfterViewInit(): void {}
-    ngOnDestroy(): void {}
+    ngOnDestroy(): void {
+        this.nxStore.dispatch(CommunityActions.setJoinedChatRoom({ chatRoom: this.curChatRoom_ }))
+        this.nxStore.dispatch(CommunityActions.resetAll({ spot: 'drawer' }))
+    }
 
     // input focused funcs and vars
     public isTextAreaFoucsed = false
