@@ -1,14 +1,4 @@
-import {
-    Directive,
-    ElementRef,
-    Renderer2,
-    Input,
-    Output,
-    OnDestroy,
-    EventEmitter,
-    HostListener,
-    AfterViewInit,
-} from '@angular/core'
+import { AfterViewInit, Directive, ElementRef, EventEmitter, Input, OnDestroy, Output, Renderer2 } from '@angular/core'
 import * as _ from 'lodash'
 
 @Directive({

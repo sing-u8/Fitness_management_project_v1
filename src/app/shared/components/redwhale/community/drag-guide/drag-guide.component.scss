@@ -6,10 +6,10 @@
 .drag-guide {
     z-index: 999;
     position: absolute;
-    top: 0px;
-    left: 0px;
-    right: 0px;
-    bottom: 0px;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     background-color: rgba(33, 33, 33, 0.3);
 
     align-items: center;
@@ -32,7 +32,7 @@
         align-items: center;
         border-radius: 6px;
         background-color: var(--white);
-        padding: 0px 40px 0px 20px;
+        padding: 0 40px 0 20px;
         width: 320px;
         height: 108px;
         position: relative;
@@ -52,7 +52,7 @@
     &.is-sidebar {
         position: absolute;
         .guide-icon-container {
-            padding: 0px 25px 0px 15px;
+            padding: 0 25px 0 15px;
             width: 260px;
             height: 86px;
             img {
