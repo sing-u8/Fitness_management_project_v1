@@ -890,7 +890,7 @@ function makeDateMessage(created_at: string): ChatRoomMessage {
         text: undefined,
         url: undefined,
         originalname: undefined,
-        mimetype: undefined,
+        contentType: undefined,
         size: undefined,
         unread_user_ids: [],
         created_at: dayjs(created_at).format('YYYY-MM-DD HH:mm:ss'),

@@ -7,7 +7,6 @@ import { FileService } from '@services/file.service'
 
 import { ChatFile } from '@schemas/center/community/chat-file'
 // ngrx
-
 import { Store } from '@ngrx/store'
 import { showToast } from '@appStore/actions/toast.action'
 
@@ -41,14 +40,14 @@ export class CommonCommunityService {
     setChatFileType(
         fileList: Array<{
             location: string
-            mimetype: string
+            contentType: string
             originalname: string
             size: number
         }>
     ): 'text' | 'image' | 'file' | 'video' {
-        const firstFileType = fileList[0].mimetype.split('/')[0]
+        const firstFileType = fileList[0].contentType.split('/')[0]
         const isAllSameType = fileList.every((file) => {
-            return file.mimetype.split('/')[0] == firstFileType
+            return file.contentType.split('/')[0] == firstFileType
         })
         if (!isAllSameType) {
             return 'file'
@@ -88,13 +87,13 @@ export class CommonCommunityService {
     // functoins related to message
     // related to  show user avatar
     showUser(msgList: Array<any>, index) {
-        return msgList.length > index + 1 &&
+        return !(
+            msgList.length > index + 1 &&
             msgList[index].user &&
             msgList[index].user?._id == msgList[index + 1].user?._id &&
             dayjs(msgList[index].timestamp).format('YYYY-MM-DD_HH_mm') ==
                 dayjs(msgList[index + 1].timestamp).format('YYYY-MM-DD_HH_mm') &&
             msgList[index + 1].type != 'info'
-            ? false
-            : true
+        )
     }
 }

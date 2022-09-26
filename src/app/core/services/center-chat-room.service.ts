@@ -7,11 +7,9 @@ import handleError from './handleError'
 import { environment } from '@environments/environment'
 
 import { Response } from '@schemas/response'
-import { ChatRoom, ChatRoomPermissionCode, ChatRoomTypeCode } from '@schemas/chat-room'
+import { ChatRoom, ChatRoomTypeCode } from '@schemas/chat-room'
 import { ChatRoomMessage, ChatRoomMessageType } from '@schemas/chat-room-message'
 import { ChatRoomUser } from '@schemas/chat-room-user'
-
-import _ from 'lodash'
 
 @Injectable({
     providedIn: 'root',
@@ -216,6 +214,7 @@ export interface SendMessageReqBody {
     text: string
     url: string
     originalname: string
-    mimetype: string
+    // mimetype: string
+    contentType: string
     size: number
 }

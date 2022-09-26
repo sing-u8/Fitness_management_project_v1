@@ -202,7 +202,7 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
                         file: value,
                         result: e.target.result as string,
                         type: type,
-                        mimetype: value.type,
+                        contentType: value.type,
                         videoImageFile: null,
                     })
                     this.resizeChatScreen()
@@ -217,7 +217,7 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
                     file: value,
                     result: thumbnailFile != null ? thumbnailFile.url : null,
                     type: type,
-                    mimetype: value.type,
+                    contentType: value.type,
                     videoImageFile: thumbnailFile != null ? thumbnailFile.file : null,
                 })
                 this.resizeChatScreen()
@@ -237,7 +237,7 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
             file: videoFile,
             result: thumbnailFile.url,
             type: 'video',
-            mimetype: videoFile.type,
+            contentType: videoFile.type,
             videoImageFile: thumbnailFile.file,
         }
         if (files.length > 1) {
@@ -610,7 +610,7 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
                 text: text,
                 url: '_',
                 originalname: '_',
-                mimetype: '_',
+                contentType: '_',
                 size: 0,
             }
 
@@ -630,7 +630,7 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
                 text: text,
                 url: '_',
                 originalname: '_',
-                mimetype: '_',
+                contentType: '_',
                 size: 0,
             }
             this.nxStore.dispatch(

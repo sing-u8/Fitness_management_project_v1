@@ -10,7 +10,8 @@ export interface ChatRoomMessage {
     text: string
     url: string
     originalname: string
-    mimetype: string
+    mimetype?: string // !! need to be removed later
+    contentType: string
     size: number
     unread_user_ids: string[]
     created_at: string

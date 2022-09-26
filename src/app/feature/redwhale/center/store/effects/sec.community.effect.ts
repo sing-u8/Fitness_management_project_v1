@@ -270,7 +270,7 @@ export class CommunityEffect {
                                     text: text,
                                     url: fileList[0].result,
                                     originalname: fileList[0].file.name,
-                                    mimetype: fileList[0].mimetype,
+                                    contentType: fileList[0].contentType,
                                     size: fileList[0].file.size,
                                     unread_user_ids: [], // !! 추후에 필요에 따라 수정 필요
                                     created_at: dayjs().format('YYYY-MM-DD HH:mm:ss'),
@@ -303,7 +303,7 @@ export class CommunityEffect {
                                     text: text,
                                     url: _flieList[0].url,
                                     originalname: _flieList[0].originalname,
-                                    mimetype: _flieList[0].mimetype,
+                                    contentType: _flieList[0].contentType,
                                     size: _flieList[0].size,
                                 }
 
@@ -425,7 +425,7 @@ export class CommunityEffect {
                                             text: text,
                                             url: fileList[0].result,
                                             originalname: fileList[0].file.name,
-                                            mimetype: fileList[0].mimetype,
+                                            contentType: fileList[0].contentType,
                                             size: fileList[0].file.size,
                                             unread_user_ids: [], // !! 추후에 필요에 따라 수정 필요
                                             created_at: dayjs().format('YYYY-MM-DD HH:mm:ss'),
@@ -462,7 +462,7 @@ export class CommunityEffect {
                                             text: text,
                                             url: _flieList[0].url,
                                             originalname: _flieList[0].originalname,
-                                            mimetype: _flieList[0].mimetype,
+                                            contentType: _flieList[0].contentType,
                                             size: _flieList[0].size,
                                         }
 

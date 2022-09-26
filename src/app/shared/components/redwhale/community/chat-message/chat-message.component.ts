@@ -1,25 +1,24 @@
 import {
-    Component,
-    OnInit,
-    Input,
     AfterContentInit,
     AfterViewInit,
+    Component,
+    ElementRef,
+    Input,
+    OnInit,
     Renderer2,
     ViewChild,
-    ElementRef,
 } from '@angular/core'
 import { NgxSpinnerService } from 'ngx-spinner'
 
 import _ from 'lodash'
 
 import { saveAs } from 'file-saver'
-import { SystemService, OpengraphOutput } from '@services/system.service'
+import { OpengraphOutput, SystemService } from '@services/system.service'
 import { FileService } from '@services/file.service'
 
 import { VideoProcessingService } from '@services/helper/video-processing-service.service'
 
-import { CenterUser } from '@schemas/center-user'
-import { ChatRoomMessage, ChatRoomMessageType, ChatRoomLoadingMessage } from '@schemas/chat-room-message'
+import { ChatRoomLoadingMessage, ChatRoomMessage } from '@schemas/chat-room-message'
 
 @Component({
     selector: 'rw-chat-message',
@@ -80,7 +79,9 @@ export class ChatMessageComponent implements OnInit, AfterContentInit, AfterView
         } else if (this.message.type_code == 'fe_chat_room_message_type_date') {
             this.type = 'date'
         } else {
-            const firstFileType = this.message.mimetype.split('/')[0]
+            console.log('chat message comp : ', this.message)
+            const type = this.message.contentType ?? this.message.mimetype
+            const firstFileType = type.split('/')[0]
             this.type = firstFileType.includes('application')
                 ? 'file'
                 : firstFileType.includes('image')
