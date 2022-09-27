@@ -1,16 +1,17 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core'
 import { FormBuilder, FormControl } from '@angular/forms'
 import { SMSCaller } from '@schemas/sms-caller'
 
 import { WordService } from '@services/helper/word.service'
 import _ from 'lodash'
+import { Subscription } from 'rxjs'
 
 @Component({
     selector: 'msg-text-field',
     templateUrl: './text-field.component.html',
     styleUrls: ['./text-field.component.scss'],
 })
-export class TextFieldComponent implements OnInit {
+export class TextFieldComponent implements OnInit, OnDestroy {
     @Input() callerList: SMSCaller[] = []
     @Input() curCaller: SMSCaller = undefined
     @Input() text = ''
@@ -20,13 +21,32 @@ export class TextFieldComponent implements OnInit {
     @Output() onSelectChange = new EventEmitter<SMSCaller>()
     @Output() onAddNumber = new EventEmitter<void>()
 
-    public textControl: FormControl
+    public textControl: FormControl = new FormControl(this.text)
+    public unsubscriber: Subscription
+
+    public textControl1: FormControl = new FormControl(this.text)
+    public unsubscriber1: Subscription
     constructor(private wordService: WordService, private fb: FormBuilder) {
-        this.textControl = this.fb.control(this.text)
+        // this.textControl = this.fb.control(this.text)
+        this.unsubscriber = this.textControl.valueChanges.subscribe((v) => {
+            console.log('textControl.valueChanges - v : ', v)
+            this.matchTextTo(v)
+            this.textChange.emit(this.textControl.value)
+        })
+
+        this.unsubscriber1 = this.textControl1.valueChanges.subscribe((v) => {
+            console.log('textControl.valueChanges - v1 : ', v)
+            // this.matchTextTo(v)
+            // this.textChange.emit(this.textControl.value)
+        })
     }
 
     ngOnInit(): void {
         this.textControl.setValue(this.text)
+    }
+    ngOnDestroy() {
+        this.unsubscriber.unsubscribe()
+        this.unsubscriber1.unsubscribe()
     }
 
     checkTextIsOver(event) {
@@ -44,6 +64,7 @@ export class TextFieldComponent implements OnInit {
         )
     }
     onTextChange(text: string) {
+        console.log('onTextChange : ', text, ' - ', this.textControl.value)
         this.matchTextTo(text)
         this.textChange.emit(this.textControl.value)
     }
