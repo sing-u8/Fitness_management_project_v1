@@ -6,7 +6,10 @@ import _ from 'lodash'
     name: 'dateFormat',
 })
 export class DateFormatPipe implements PipeTransform {
-    transform(date: string | number, format: string): unknown {
+    transform(date: string | number, format: string, markToday = false): unknown {
+        if (markToday && dayjs().isSame(date, 'day')) {
+            return '오늘'
+        }
         if (_.isNumber(date)) {
             date = String(date)
         }
