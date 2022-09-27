@@ -560,54 +560,26 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     // - // chatInput fucntions and validator
-    public textareaResizeOption = {
-        fontSize: 14,
-        maxLine: 10,
-        initHeight: 30,
-        lineHeight: 1.43,
-    }
-
-    // ! 입력란 여백 제조정 필요
-    public resizeHeight = 30
-
-    setResizeHeight(height: number) {
-        return height < 60
-            ? 40
-            : height < 80
-            ? 60
-            : height < 100
-            ? 80
-            : height < 120
-            ? 100
-            : height < 140
-            ? 120
-            : height < 160
-            ? 140
-            : height < 180
-            ? 160
-            : height < 200
-            ? 180
-            : 200
-    }
+    public resizeHeight = 20
     onChatInputResize(resizeHeight: string) {
-        this.resizeHeight = this.setResizeHeight(Number(resizeHeight.slice(0, -2)))
+        this.resizeHeight = Number(resizeHeight.slice(0, -2))
         this.resizeChatScreen()
     }
     resizeChatScreen() {
         if (this.fileList.length > 0) {
-            const screenPadMar = 187 + this.resizeHeight // 90px --> padding-t,b: 22px + input-bt: 50px + fileHeight: 85px + margin-top : 30px
+            const screenPadMar = 188 + this.resizeHeight // 90px --> padding-t,b: 22px + input-bt: 50px + fileHeight: 85px + margin-top : 30px
             const inputHeight = 157 + this.resizeHeight // 90px --> padding-t,b: 22px + input-bt: 50px + + fileHeight: 85px
             this.renderer.setStyle(this.chatting_screen.nativeElement, 'height', `calc(100% - ${screenPadMar}px)`)
             this.renderer.setStyle(this.chatting_input.nativeElement, 'height', `${inputHeight}px`)
         } else {
-            const screenPadMar = 102 + this.resizeHeight // 62px --> padding-t,b: 22px + input-bt: 50px + margin-top : 30px
+            const screenPadMar = 103 + this.resizeHeight // 62px --> padding-t,b: 22px + input-bt: 50px + margin-top : 30px
             const inputHeight = 72 + this.resizeHeight // 62px --> padding-t,b: 22px + input-bt: 50px
             this.renderer.setStyle(this.chatting_screen.nativeElement, 'height', `calc(100% - ${screenPadMar}px)`)
             this.renderer.setStyle(this.chatting_input.nativeElement, 'height', `${inputHeight}px`)
         }
     }
     resetChatScreenSize() {
-        this.resizeHeight = 30
+        this.resizeHeight = 20
         this.renderer.removeStyle(this.chatting_screen.nativeElement, 'height')
         this.renderer.removeStyle(this.chatting_input.nativeElement, 'height')
         // this.renderer.removeStyle(this.chat_textarea_el.nativeElement, 'height')
@@ -648,10 +620,11 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
         // !! 분기 필요
         if (this.fileList.length > 0) {
             this.sendMessageWithFile(text)
-        } else {
+            this.resetChatInputData()
+        } else if (_.trim(text) != '') {
             this.sendTextMessage(text)
+            this.resetChatInputData()
         }
-        this.resetChatInputData()
     }
 
     sendTextMessage(text: string) {
