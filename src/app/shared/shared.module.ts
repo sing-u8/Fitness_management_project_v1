@@ -63,6 +63,7 @@ import { AutoFocusDirective } from './directives/auto-focus.directive'
 import { TextareaAutoResize } from './directives/textarea-auto-resize.directive'
 import { Dropzone2Directive } from './directives/dropzone2.directive'
 import { EllipsisDropdownDirective } from './directives/ellipsis-dropdown.directive'
+import { ContenteditableDirective } from './directives/contenteditable.directive'
 
 // Pipes
 import { LinkPipe } from './pipes/link.pipe'
@@ -176,6 +177,7 @@ FullCalendarModule.registerPlugins([
         TextareaAutoResize,
         Dropzone2Directive,
         EllipsisDropdownDirective,
+        ContenteditableDirective,
         // Pipes
         LinkPipe,
         MinuteSecondsPipe,
@@ -197,6 +199,7 @@ FullCalendarModule.registerPlugins([
         IsAfterPipe,
         CallbackPipe,
         IsTodayPipe,
+        ContenteditableDirective,
     ],
     imports: [
         CommonModule,
@@ -266,6 +269,7 @@ FullCalendarModule.registerPlugins([
         TextareaAutoResize,
         Dropzone2Directive,
         EllipsisDropdownDirective,
+        ContenteditableDirective,
         // Pipes
         LinkPipe,
         MinuteSecondsPipe,
