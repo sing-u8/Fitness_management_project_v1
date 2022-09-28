@@ -132,6 +132,14 @@ export const initialState: State = {
     historyDateRange: [dayjs().subtract(3, 'month').format('YYYY-MM-DD'), dayjs().format('YYYY-MM-DD')],
 }
 
+export const adMsgObj = {
+    top: `(광고) 레드웨일\n`,
+    bottom: '무료거부\n080-0000-0000',
+}
+export function getTextWithAd(text: string) {
+    return adMsgObj.top + '\n' + text + '\n\n' + adMsgObj.bottom
+}
+
 export const smsReducer = createImmerReducer(
     initialState,
     // async

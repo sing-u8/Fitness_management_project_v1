@@ -84,6 +84,8 @@
                         [text]="(generalText$ | async)"
                         [textByte]="generalTextByte"
                         [errText]="callerListErrText"
+                        [showAdditionalText]="settingAdMsg"
+                        [additionalText]="adMegObj"
                         (onAddNumber)="toggleRegisterSenderPhone();setRegisterSenderPhoneType('cover')"
                         (textChange)="updateGeneralText($event)"
                         (onSelectChange)="onGeneralCallerChange($event)"

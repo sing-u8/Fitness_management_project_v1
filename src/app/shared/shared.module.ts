@@ -64,6 +64,7 @@ import { TextareaAutoResize } from './directives/textarea-auto-resize.directive'
 import { Dropzone2Directive } from './directives/dropzone2.directive'
 import { EllipsisDropdownDirective } from './directives/ellipsis-dropdown.directive'
 import { ContenteditableDirective } from './directives/contenteditable.directive'
+import { TextareaHeightResizeDirective } from './directives/textarea-height-resize.directive'
 
 // Pipes
 import { LinkPipe } from './pipes/link.pipe'
@@ -104,7 +105,8 @@ import { GridsterModule } from 'angular-gridster2'
 // // ngx libraries
 import { NgxGaugeModule } from 'ngx-gauge'
 import { NgxSpinnerModule } from 'ngx-spinner'
-import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader'
+import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
+
 
 // import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader'
 
@@ -178,6 +180,7 @@ FullCalendarModule.registerPlugins([
         Dropzone2Directive,
         EllipsisDropdownDirective,
         ContenteditableDirective,
+        TextareaHeightResizeDirective,
         // Pipes
         LinkPipe,
         MinuteSecondsPipe,
@@ -200,6 +203,7 @@ FullCalendarModule.registerPlugins([
         CallbackPipe,
         IsTodayPipe,
         ContenteditableDirective,
+
     ],
     imports: [
         CommonModule,
@@ -270,6 +274,7 @@ FullCalendarModule.registerPlugins([
         Dropzone2Directive,
         EllipsisDropdownDirective,
         ContenteditableDirective,
+        TextareaHeightResizeDirective,
         // Pipes
         LinkPipe,
         MinuteSecondsPipe,

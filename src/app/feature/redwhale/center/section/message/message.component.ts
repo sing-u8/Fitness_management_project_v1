@@ -99,7 +99,11 @@ export class MessageComponent implements OnInit, OnDestroy {
     public settingAdMsg = false
     onSettingAdMsgClick() {
         this.settingAdMsg = !this.settingAdMsg
+        this.generalTextByte = this.wordService.getTextByte(
+            this.settingAdMsg ? FromSMS.getTextWithAd(this.generalText) : this.generalText
+        )
     }
+    public adMegObj = FromSMS.adMsgObj
 
     // ngrx -- history
     public historyGroupLoading: Loading = 'idle'
@@ -180,7 +184,7 @@ export class MessageComponent implements OnInit, OnDestroy {
         })
         this.generalText$.pipe(takeUntil(this.unsubscribe$)).subscribe((gt) => {
             this.generalText = gt
-            this.generalTextByte = this.wordService.getTextByte(gt)
+            this.generalTextByte = this.wordService.getTextByte(this.settingAdMsg ? FromSMS.getTextWithAd(gt) : gt)
             this.calculateSubtractPoint(this.generalTextByte, this.selectedUserListSelected)
             this.checkIsMsgAbleToBeSent()
         })
@@ -317,6 +321,7 @@ export class MessageComponent implements OnInit, OnDestroy {
         this.nxStore.dispatch(
             SMSActions.startSendGeneralMessage({
                 centerId: this.center.id,
+                isAd: this.settingAdMsg,
                 cb: () => {
                     this.nxStore.dispatch(
                         SMSActions.startGetHistoryGroup({

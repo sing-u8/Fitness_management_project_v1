@@ -59,7 +59,7 @@ export const finishGetSMSPoint = createAction(`[${FeatureKey}] Finish Get SMS Po
 
 export const startSendGeneralMessage = createAction(
     `[${FeatureKey}] Start Send General Message`,
-    props<{ centerId: string; cb?: () => void }>()
+    props<{ centerId: string; isAd: boolean; cb?: () => void }>()
 )
 export const finishSendGeneralMessage = createAction(
     `[${FeatureKey}] Finish Send General Message`,

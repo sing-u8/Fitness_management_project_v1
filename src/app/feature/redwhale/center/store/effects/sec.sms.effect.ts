@@ -149,22 +149,21 @@ export class SMSEffect {
                 this.store.select(SMSSelector.bookTime),
                 this.store.select(SMSSelector.curUserListSelect),
             ]),
-            switchMap(([{ centerId, cb }, gCaller, gtTime, bookDate, gText, userListIds, bookTime]) => {
+            switchMap(([{ centerId, isAd, cb }, gCaller, gtTime, bookDate, gText, userListIds, bookTime]) => {
                 let reqBody: SendSMSMessageReqBody = undefined
                 if (gtTime.immediate) {
                     reqBody = {
                         sender_phone_number: gCaller.phone_number,
-                        text: gText,
+                        text: isAd ? SMSReducer.getTextWithAd(gText) : gText,
                         receiver_user_ids: userListIds,
                     }
                 } else {
                     reqBody = {
                         sender_phone_number: gCaller.phone_number,
-                        text: gText,
+                        text: isAd ? SMSReducer.getTextWithAd(gText) : gText,
                         receiver_user_ids: userListIds,
                         reservation_datetime: `${bookDate.date} ${bookTime}`,
                     }
-                    console.log
                 }
                 return this.centerSMSApi.sendSMSMessage(centerId, reqBody).pipe(
                     switchMap((v) => {

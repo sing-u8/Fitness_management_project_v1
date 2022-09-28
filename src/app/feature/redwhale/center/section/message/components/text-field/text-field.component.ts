@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core'
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild, ElementRef } from '@angular/core'
 import { FormBuilder, FormControl } from '@angular/forms'
 import { SMSCaller } from '@schemas/sms-caller'
 
@@ -17,6 +17,13 @@ export class TextFieldComponent implements OnInit, OnDestroy {
     @Input() text = ''
     @Input() textByte = 0
     @Input() errText = ''
+
+    @Input() showAdditionalText = false
+    @Input() additionalText: { top: string; bottom: string } = {
+        top: '',
+        bottom: '',
+    }
+
     @Output() textChange = new EventEmitter<string>()
     @Output() onSelectChange = new EventEmitter<SMSCaller>()
     @Output() onAddNumber = new EventEmitter<void>()
@@ -63,11 +70,7 @@ export class TextFieldComponent implements OnInit, OnDestroy {
             this.textByte <= 2000
         )
     }
-    onTextChange(text: string) {
-        console.log('onTextChange : ', text, ' - ', this.textControl.value)
-        this.matchTextTo(text)
-        this.textChange.emit(this.textControl.value)
-    }
+
     matchTextTo(text: string, byte = 2000) {
         let _textByte = this.wordService.getTextByte(text)
         let textCopy = _.clone(text)
@@ -82,5 +85,17 @@ export class TextFieldComponent implements OnInit, OnDestroy {
             this.textControl.setValue(textCopy)
             // _.findLast(this.text, (v, i) => {})
         }
+    }
+
+    // text container
+    @ViewChild('text_field_container') text_field_container_el: ElementRef
+    @ViewChild('text_field') text_field_el: ElementRef
+    onFocusTextArea() {
+        console.log('onFocusTextArea -- ', this.text_field_el.nativeElement.focused)
+        this.text_field_el.nativeElement.focus()
+    }
+    onFocusTextAreaOut() {
+        console.log('onFocusTextArea out-- ', this.text_field_el.nativeElement.focused)
+        this.text_field_el.nativeElement.blur()
     }
 }

@@ -25,13 +25,42 @@ div.l-text-field {
         }
     }
     .text-field__content{
-        textarea {
-            width: 260px;
-            height: 400px;
-            resize: none;
-            margin: 15px 0;
-            padding: 20px;
+        margin: 15px 0;
+        padding: 20px;
+        border: 1px solid var(--border-color);
+        border-radius: 5px;
+        height: 400px;
+        width: 260px;
+        position: relative;
+        &.focused {
+            border: 1px solid var(--grey);
         }
+
+        .ad_msg {
+            &:nth-of-type(1){
+                margin-bottom: 7px;
+            }
+            &:nth-of-type(2){
+                margin-top: 7px;
+            }
+            white-space: pre-wrap;
+            font-size: 1.4rem;
+            font-weight: 500;
+            line-height: 20px;
+            letter-spacing: -0.196px;
+            color: var(--font-color);
+        }
+
+        textarea {
+            width: 100%;
+            resize: none;
+            border: none;
+            &:focus {
+                font-weight: 500;
+                border: none;
+            }
+        }
+
     }
     .text-field__footer{
         width: 100%;
