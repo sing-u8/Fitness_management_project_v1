@@ -35,16 +35,6 @@ export class TextareaHeightResizeDirective {
     }
 
     setResizeHeight(height: number) {
-        let _height = 20
-        for (let i = 2; i < this.maxLine; i++) {
-            if (height < 20 * i) {
-                _height = 20 * (i - 1) ?? 20
-                break
-            }
-        }
-        if (height >= 20 * this.maxLine) {
-            _height = 20 * this.maxLine
-        }
-        return _height
+        return Number.parseInt(String(height / 20)) * 20
     }
 }
