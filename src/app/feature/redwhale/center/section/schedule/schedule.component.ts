@@ -257,7 +257,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
     }
     // --------------------------------- modal operating fucntions and texts --------------------------------//
     public operatingTime: GymOperatingTime = { start: undefined, end: undefined }
-    public operatingDayOfWeek: { value: number[] } = { value: [] }
+    public operatingDayOfWeek: { value: number[] } = { value: [0, 1, 2, 3, 4, 5, 6] }
     public doShowCenterOperModal = false
     openCenterOperatingModal() {
         this.doShowCenterOperModal = true
