@@ -26,6 +26,7 @@ export const bookTime = createSelector(SMSFeature, FromSMS.selectBookTime)
 export const bookDate = createSelector(SMSFeature, FromSMS.selectBookDate)
 export const generalTransmissionTime = createSelector(SMSFeature, FromSMS.selectGeneralTransmissionTime)
 export const generalCaller = createSelector(SMSFeature, FromSMS.selectGeneralCaller)
+export const generalIsAdSet = createSelector(SMSFeature, FromSMS.selectIsAd)
 // // auto transmission
 export const membershipAutoSendSetting = createSelector(SMSFeature, FromSMS.selectMembershipAutoSend)
 export const lockerAutoSendSetting = createSelector(SMSFeature, FromSMS.selectLockerAutoSend)

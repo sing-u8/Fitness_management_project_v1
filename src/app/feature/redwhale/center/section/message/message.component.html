@@ -84,7 +84,7 @@
                         [text]="(generalText$ | async)"
                         [textByte]="generalTextByte"
                         [errText]="callerListErrText"
-                        [showAdditionalText]="settingAdMsg"
+                        [showAdditionalText]="generalIsAdSet"
                         [additionalText]="adMegObj"
                         (onAddNumber)="toggleRegisterSenderPhone();setRegisterSenderPhoneType('cover')"
                         (textChange)="updateGeneralText($event)"
@@ -95,10 +95,10 @@
                             <p class="rw-typo-subtext1 ">광고성 문자</p>
                             <div class="d-flex align-items-center">
                                 <rw-checkbox
-                                    [checked]="settingAdMsg"
+                                    [checked]="generalIsAdSet"
                                     [text]="'광고성 정보가 포함됨'"
                                     [disabled]="(isLoading$ | async) == 'pending'"
-                                    (click)="onSettingAdMsgClick()"
+                                    (click)="onSetGeneralAdSetClick()"
                                 ></rw-checkbox>
                                 <div class="ad-text-guide-logo">
                                     <div class="ad-text-guide-box">

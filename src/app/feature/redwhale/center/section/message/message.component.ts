@@ -27,6 +27,7 @@ import { SMSAutoSend } from '@schemas/sms-auto-send'
 import { SMSCaller } from '@schemas/sms-caller'
 import { SMSHistoryGroup } from '@schemas/sms-history-group'
 import { ClickEmitterType } from '@schemas/components/button'
+import { generalIsAdSet } from '@centerStore/selectors/sec.sms.selector'
 
 type AutoTransmitType = 'membership' | 'locker'
 
@@ -60,6 +61,11 @@ export class MessageComponent implements OnInit, OnDestroy {
     }
     public callerList$ = this.nxStore.select(SMSSelector.callerList)
     public callerListErrText = ''
+    public generalIsAdSet$ = this.nxStore.select(SMSSelector.generalIsAdSet)
+    public generalIsAdSet = false
+    onSetGeneralAdSetClick() {
+        this.nxStore.dispatch(SMSActions.setIsAdSet({ isAd: !this.generalIsAdSet }))
+    }
     public generalText$ = this.nxStore.select(SMSSelector.generalText)
     public generalText = ''
     public generalTextByte = 0
@@ -96,13 +102,6 @@ export class MessageComponent implements OnInit, OnDestroy {
         this.nxStore.dispatch(SMSActions.setMembershipCaller({ caller }))
     }
 
-    public settingAdMsg = false
-    onSettingAdMsgClick() {
-        this.settingAdMsg = !this.settingAdMsg
-        this.generalTextByte = this.wordService.getTextByte(
-            this.settingAdMsg ? FromSMS.getTextWithAd(this.generalText) : this.generalText
-        )
-    }
     public adMegObj = FromSMS.adMsgObj
 
     // ngrx -- history
@@ -146,7 +145,6 @@ export class MessageComponent implements OnInit, OnDestroy {
         this.nxStore.dispatch(SMSActions.startGetCallerList({ centerId: this.center.id }))
 
         this.historyDateRange$.pipe(takeUntil(this.unsubscribe$)).subscribe((dateRange) => {
-            console.log('history date range  selector : ', dateRange)
             this.selectedHistoryDate = dateRange
         })
         this.nxStore.dispatch(
@@ -182,9 +180,16 @@ export class MessageComponent implements OnInit, OnDestroy {
                 this.callerListErrText = ''
             }
         })
+
+        this.generalIsAdSet$.pipe(takeUntil(this.unsubscribe$)).subscribe((isAd) => {
+            this.generalIsAdSet = isAd
+            this.generalTextByte = this.wordService.getTextByte(
+                this.generalIsAdSet ? FromSMS.getTextWithAd(this.generalText) : this.generalText
+            )
+        })
         this.generalText$.pipe(takeUntil(this.unsubscribe$)).subscribe((gt) => {
             this.generalText = gt
-            this.generalTextByte = this.wordService.getTextByte(this.settingAdMsg ? FromSMS.getTextWithAd(gt) : gt)
+            this.generalTextByte = this.wordService.getTextByte(this.generalIsAdSet ? FromSMS.getTextWithAd(gt) : gt)
             this.calculateSubtractPoint(this.generalTextByte, this.selectedUserListSelected)
             this.checkIsMsgAbleToBeSent()
         })
@@ -321,7 +326,6 @@ export class MessageComponent implements OnInit, OnDestroy {
         this.nxStore.dispatch(
             SMSActions.startSendGeneralMessage({
                 centerId: this.center.id,
-                isAd: this.settingAdMsg,
                 cb: () => {
                     this.nxStore.dispatch(
                         SMSActions.startGetHistoryGroup({

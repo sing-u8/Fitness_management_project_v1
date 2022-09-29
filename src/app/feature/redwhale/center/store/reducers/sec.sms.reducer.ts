@@ -13,6 +13,7 @@ import { CenterUser } from '@schemas/center-user'
 import { CenterUsersCategory } from '@schemas/center/community/center-users-by-category'
 
 import * as SMSActions from '../actions/sec.sms.actions'
+import { setIsAdSet } from '../actions/sec.sms.actions'
 
 export type MemberSelectCateg = 'member' | 'valid' | 'unpaid' | 'imminent' | 'expired' | 'employee' | 'attendance'
 export type UsersListValue = Array<{ user: CenterUser; selected: boolean }>
@@ -37,6 +38,7 @@ export interface State {
     usersSelectCategs: UsersSelectCateg
     usersLists: UsersLists
     curUserListSelect: UserListSelect
+    isAdSet: boolean
     generalText: string
     bookTime: string // HH:mm:ss
     bookDate: { date: string } // YYYY-MM-DD
@@ -109,6 +111,7 @@ export const initialState: State = {
     usersSelectCategs: UsersSelectCategInit,
     usersLists: UsersListInit,
     curUserListSelect: UserListSelectInit,
+    isAdSet: false,
     generalText: '',
     bookTime: '10:00:00',
     bookDate: { date: dayjs().format('YYYY-MM-DD') },
@@ -250,6 +253,11 @@ export const smsReducer = createImmerReducer(
     }),
 
     // sync
+
+    on(SMSActions.setIsAdSet, (state, { isAd }) => {
+        state.isAdSet = isAd
+        return state
+    }),
     on(SMSActions.setSMSType, (state, { smsType }) => {
         state.smsType = smsType
         return state
@@ -366,6 +374,7 @@ export const selectBookTime = (state: State) => state.bookTime
 export const selectBookDate = (state: State) => state.bookDate
 export const selectGeneralTransmissionTime = (state: State) => state.generalTransmissionTime
 export const selectGeneralCaller = (state: State) => state.generalCaller
+export const selectIsAd = (state: State) => state.isAdSet
 // // auto transmission
 export const selectMembershipAutoSend = (state: State) => state.membershipAutoSendSetting
 export const selectLockerAutoSend = (state: State) => state.lockerAutoSendSetting

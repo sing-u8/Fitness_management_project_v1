@@ -31,20 +31,12 @@ export class TextFieldComponent implements OnInit, OnDestroy {
     public textControl: FormControl = new FormControl(this.text)
     public unsubscriber: Subscription
 
-    public textControl1: FormControl = new FormControl(this.text)
-    public unsubscriber1: Subscription
     constructor(private wordService: WordService, private fb: FormBuilder) {
         // this.textControl = this.fb.control(this.text)
         this.unsubscriber = this.textControl.valueChanges.subscribe((v) => {
             console.log('textControl.valueChanges - v : ', v)
             this.matchTextTo(v)
             this.textChange.emit(this.textControl.value)
-        })
-
-        this.unsubscriber1 = this.textControl1.valueChanges.subscribe((v) => {
-            console.log('textControl.valueChanges - v1 : ', v)
-            // this.matchTextTo(v)
-            // this.textChange.emit(this.textControl.value)
         })
     }
 
@@ -53,7 +45,6 @@ export class TextFieldComponent implements OnInit, OnDestroy {
     }
     ngOnDestroy() {
         this.unsubscriber.unsubscribe()
-        this.unsubscriber1.unsubscribe()
     }
 
     checkTextIsOver(event) {

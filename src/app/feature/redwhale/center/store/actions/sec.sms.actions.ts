@@ -59,7 +59,7 @@ export const finishGetSMSPoint = createAction(`[${FeatureKey}] Finish Get SMS Po
 
 export const startSendGeneralMessage = createAction(
     `[${FeatureKey}] Start Send General Message`,
-    props<{ centerId: string; isAd: boolean; cb?: () => void }>()
+    props<{ centerId: string; cb?: () => void }>()
 )
 export const finishSendGeneralMessage = createAction(
     `[${FeatureKey}] Finish Send General Message`,
@@ -120,6 +120,7 @@ export const setSMSType = createAction(`[${FeatureKey}] Set SMS Type`, props<{ s
 
 // // general
 // userListSelect
+export const setIsAdSet = createAction(`[${FeatureKey}] Set General Text AD`, props<{ isAd: boolean }>())
 export const setUserListSelect = createAction(
     `[${FeatureKey}] Set UserList Select`,
     props<{ userListSelect: UserListSelect }>()
