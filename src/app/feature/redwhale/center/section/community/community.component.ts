@@ -543,8 +543,10 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
 
     // - // chatInput fucntions and validator
     public resizeHeight = 20
+
     onChatInputResize(resizeHeight: string) {
         this.resizeHeight = Number(resizeHeight.slice(0, -2))
+
         this.resizeChatScreen()
     }
     resizeChatScreen() {

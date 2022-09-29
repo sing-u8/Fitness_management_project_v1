@@ -53,11 +53,11 @@ section.community {
 
 		.chatting-input-container {
 			border-top: 1px solid var(--border-color);
-			margin-top: 30px;
-			width: 100%;
-			//height: 120px;
-			min-height: 110px;
 			display: flex;
+			width: 100%;
+			margin-top: 30px;
+			min-height: 110px;
+			//height: 120px;
 			flex-direction: column;
 			position: relative;
 
@@ -69,7 +69,8 @@ section.community {
 				justify-content: space-between;
 				padding: 10px 15px;
 				textarea {
-					width: 100%;
+					//width: 100%;
+					width: 293px;
 					resize: none;
 					outline: none;
 					border: none;
