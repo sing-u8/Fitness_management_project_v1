@@ -38,7 +38,12 @@ export class StorageService {
     }
     isSocialUser(): boolean {
         const user = JSON.parse(this.storage.getItem(this.userKey))
-        return this.isUserEmpty() ? false : user?.sign_in_method == 'email' ? false : true
+        return this.isUserEmpty() ? false : user?.sign_in_method != 'email'
+    }
+
+    setAccessToken(token: string) {
+        const user = { ...this.getUser(), accessToken: token }
+        this.setUser(user)
     }
 
     async removeUser() {

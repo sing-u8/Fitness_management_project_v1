@@ -89,7 +89,7 @@ export class AuthService {
     }
 
     // -- // new
-    refreshToken(requestBody: RefreshTokenRequestBody) {
+    refreshToken(requestBody: RefreshTokenRequestBody): Observable<string> {
         const url = this.SERVER + '/token'
 
         const options = {
@@ -106,6 +106,7 @@ export class AuthService {
                     ...user,
                     ...resData,
                 })
+                return resData.accessToken
             })
         )
     }
