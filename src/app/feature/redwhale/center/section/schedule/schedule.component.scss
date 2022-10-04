@@ -563,6 +563,7 @@ article.schedule {
             .fc-timegrid-slot-minor {
                 border-top-style: none;
             }
+            border: 1px dashed var(--border-color) !important;
             td {
                 border: 1px dashed var(--border-color) !important;
             }
@@ -573,7 +574,6 @@ article.schedule {
                     }
                 }
             }
-            border: 1px dashed var(--border-color);
         }
     }
 
@@ -805,6 +805,7 @@ article.schedule {
             .fc-timegrid-slot-minor {
                 border-top-style: none;
             }
+            border: 1px dashed var(--border-color) !important;
             td {
                 border: 1px dashed var(--border-color) !important;
             }
@@ -815,7 +816,6 @@ article.schedule {
                     }
                 }
             }
-            border: 1px dashed var(--border-color);
         }
     }
 
