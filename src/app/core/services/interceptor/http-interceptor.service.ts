@@ -28,7 +28,6 @@ export class HttpInterceptorService implements HttpInterceptor {
             const request: HttpRequest<any> = this.setTokenHeader(req, accessToken)
             return next.handle(request).pipe(
                 catchError((err: ErrorObj) => {
-                    console.log('catch error in http intercepter : ', err)
                     if (err.status == 401) {
                         return this.handle401Error(req, next)
                     }
