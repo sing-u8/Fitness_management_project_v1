@@ -65,7 +65,7 @@
 
         <div
           class="add-instructor-button"
-          (click)="toggleAddInstructorListModal()"
+          (click)="toggleAddInstructorListModalIfPossible()"
         >
           <div class="plus-icon"></div>
           강사 추가하기
@@ -85,14 +85,14 @@
   [(visible)]="noAddtionalInstructor"
   [data]="noAdditionanlInstructorData"
   (cancel)="onCancelNoAddInst()"
-  (confirm)="onConfirmNoAddInst();"
+  (confirm)="onConfirmNoAddInst()"
 ></rw-modal>
 
 <rw-modal
   [(visible)]="addlInstructor"
   [data]="addlInstructorData"
   (cancel)="onCancelAddInst()"
-  (confirm)="onConfirmAddInst();"
+  (confirm)="onConfirmAddInst()"
 ></rw-modal>
 
 <rw-member-list-modal
@@ -103,3 +103,10 @@
     (cancel)="onMemberListModalCancel()"
     (confirm)="onMemberListModalConfirm($event)"
 ></rw-member-list-modal>
+
+<rw-modal
+  [(visible)]="noInstructorModal"
+  [data]="noInstructorModalData"
+  (cancel)="onNoInstructorModalCancel()"
+  (confirm)="onNoInstructorModalConfirm()"
+></rw-modal>

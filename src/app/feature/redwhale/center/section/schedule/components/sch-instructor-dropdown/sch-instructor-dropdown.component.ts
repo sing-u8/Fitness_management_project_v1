@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core'
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 
 import _ from 'lodash'
@@ -14,13 +14,16 @@ import { Loading } from '@schemas/store/loading'
 import { Store } from '@ngrx/store'
 import * as FromSchedule from '@centerStore/reducers/sec.schedule.reducer'
 import * as ScheduleActions from '@centerStore/actions/sec.schedule.actions'
+import * as CenterCommonSelector from '@centerStore/selectors/center.common.selector'
+import { Subject } from 'rxjs'
+import { takeUntil } from 'rxjs/operators'
 
 @Component({
     selector: 'rw-sch-instructor-dropdown',
     templateUrl: './sch-instructor-dropdown.component.html',
     styleUrls: ['./sch-instructor-dropdown.component.scss'],
 })
-export class SchInstructorDropdownComponent implements OnInit, OnChanges {
+export class SchInstructorDropdownComponent implements OnInit, OnChanges, OnDestroy {
     @Input() instructorList: Array<FromSchedule.InstructorType> = []
     @Input() loading: Loading = 'pending'
 
@@ -29,6 +32,10 @@ export class SchInstructorDropdownComponent implements OnInit, OnChanges {
     public isContentOpen = true
     public selectedNum = 0
     public isAllChecked = true
+
+    public addableInstLength = 0
+    public memberList: Array<CenterUser> = []
+    public unsubscribe$ = new Subject<boolean>()
 
     public isInit = false
     constructor(
@@ -41,20 +48,31 @@ export class SchInstructorDropdownComponent implements OnInit, OnChanges {
         this.center = this.storageService.getCenter()
     }
 
-    ngOnInit(): void {}
+    ngOnInit(): void {
+        this.nxStore
+            .select(CenterCommonSelector.members)
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe((memberList) => {
+                this.memberList = memberList
+            })
+    }
     ngOnChanges(changes: SimpleChanges): void {
         if (this.instructorList && !this.isInit) {
             this.selectedNum = this.instructorList.length
         }
         if (changes['instructorList']) {
-            // console.log('changes in sch instructor dropdown - ', changes)
             this.instructorFilter = (cu: CenterUser) => {
                 return (
                     cu.role_code != 'member' &&
                     _.every(this.instructorList, (inst) => inst.instructor.calendar_user.id != cu.id)
                 )
             }
+            this.addableInstLength = _.filter(this.memberList, this.instructorFilter).length
         }
+    }
+    ngOnDestroy() {
+        this.unsubscribe$.next(true)
+        this.unsubscribe$.complete()
     }
 
     toggleContent() {
@@ -110,7 +128,7 @@ export class SchInstructorDropdownComponent implements OnInit, OnChanges {
     }
     onConfirmNoAddInst() {
         this.toggleNoAdditionalInstructorModal()
-        this.router.navigate(['./dashboard'], { relativeTo: this.activatedRoute })
+        this.router.navigate(['../dashboard'], { relativeTo: this.activatedRoute })
     }
 
     // add instructor modal
@@ -147,20 +165,39 @@ export class SchInstructorDropdownComponent implements OnInit, OnChanges {
 
     // add instructor list modal
     public addInstructorList = false
-    toggleAddInstructorListModal() {
-        this.addInstructorList = !this.addInstructorList
+    toggleAddInstructorListModalIfPossible() {
+        if (this.addableInstLength > 0) {
+            this.addInstructorList = true
+        } else {
+            this.noInstructorModal = true
+        }
     }
     onMemberListModalCancel() {
-        this.toggleAddInstructorListModal()
+        this.addInstructorList = false
     }
     onMemberListModalConfirm(centerUser: CenterUser) {
-        this.toggleAddInstructorListModal()
+        this.addInstructorList = false
         this.willBeAddedInstructor = centerUser
         this.addlInstructorData.text = `'${this.wordService.ellipsis(
             centerUser.center_user_name,
             6
         )}' 강사를 추가하시겠어요?`
         this.toggleAddInstructorModal()
+    }
+
+    public noInstructorModal = false
+    public noInstructorModalData = {
+        text: '더 이상 추가할 수 있는 강사가 없어요. 😥',
+        subText: `강사의 정보로 회원 등록을 하신 후,
+                회원관리 페이지에서 강사로 권한을 변경해주세요.`,
+        cancelButtonText: '닫기',
+        confirmButtonText: '회원관리로 이동',
+    }
+    onNoInstructorModalCancel() {
+        this.noInstructorModal = false
+    }
+    onNoInstructorModalConfirm() {
+        this.router.navigate(['../dashboard'], { relativeTo: this.activatedRoute })
     }
 
     instructorFilter(cu: CenterUser): boolean {
