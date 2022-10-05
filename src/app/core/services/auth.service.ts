@@ -100,13 +100,9 @@ export class AuthService {
 
         return this.http.post<Response>(url, requestBody, options).pipe(
             map((res) => {
-                const resData = res.dataset[0]
-                const user: User = this.storageService.getUser()
-                this.storageService.setUser({
-                    ...user,
-                    ...resData,
-                })
-                return resData.accessToken
+                const accessToken = res.dataset[0].access_token
+                this.storageService.setAccessToken(accessToken)
+                return accessToken
             })
         )
     }
