@@ -1294,8 +1294,8 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
     public usersBookedLength = 0
     public doShowReserveModal = false
     showReserveModal(reserveLessonData: CalendarTask, usersBooked: UserBooked[]) {
-        this.reserveLessonData = reserveLessonData
         this.usersBookedLength = usersBooked.length
+        this.reserveLessonData = reserveLessonData
         this.doShowReserveModal = true
         this.hideModifyLessonEventModal()
     }

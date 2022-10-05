@@ -17,11 +17,11 @@ import { Subject, Observable } from 'rxjs'
 import { distinctUntilChanged, debounceTime, map, takeUntil } from 'rxjs/operators'
 import { FormBuilder, FormControl, ValidationErrors, AsyncValidatorFn, AbstractControl } from '@angular/forms'
 
-import { GlobalService } from '@services/global.service'
 import { CenterCalendarService } from '@services/center-calendar.service'
 
 import { CalendarTask } from '@schemas/calendar-task'
 import { UserAbleToBook } from '@schemas/user-able-to-book'
+import { Loading } from '@schemas/store/loading'
 
 // ! 로딩 화면 추가할 필요가 있음
 @Component({
@@ -46,6 +46,7 @@ export class SchReserveMemberModalComponent implements AfterViewChecked, OnChang
     public searchInput: FormControl
     public userList: Array<{ show: boolean; selected: boolean; user: UserAbleToBook }> = []
     public selectedNum = 0
+    public isUserListLoading: Loading = 'idle'
 
     changed: boolean
 
@@ -57,8 +58,7 @@ export class SchReserveMemberModalComponent implements AfterViewChecked, OnChang
         private el: ElementRef,
         private renderer: Renderer2,
         private centerCalendarService: CenterCalendarService,
-        private fb: FormBuilder,
-        private globalService: GlobalService
+        private fb: FormBuilder
     ) {
         this.searchInput = this.fb.control('', {
             asyncValidators: [this.searchMemberValidator()],
@@ -75,9 +75,6 @@ export class SchReserveMemberModalComponent implements AfterViewChecked, OnChang
                 this.changed = true
             }
         }
-        if (this.classTask && this.curCenterId) {
-            this.getValidMemberList()
-        }
     }
 
     ngAfterViewChecked() {
@@ -91,6 +88,8 @@ export class SchReserveMemberModalComponent implements AfterViewChecked, OnChang
                     this.renderer.addClass(this.modalBackgroundElement.nativeElement, 'rw-modal-background-show')
                     this.renderer.addClass(this.modalWrapperElement.nativeElement, 'rw-modal-wrapper-show')
                 }, 0)
+
+                this.getValidMemberList()
             } else {
                 this.renderer.removeClass(this.modalBackgroundElement.nativeElement, 'rw-modal-background-show')
                 this.renderer.removeClass(this.modalWrapperElement.nativeElement, 'rw-modal-wrapper-show')
@@ -127,14 +126,14 @@ export class SchReserveMemberModalComponent implements AfterViewChecked, OnChang
     }
     // ----------------------------- get valid member lsit func
     getValidMemberList() {
+        this.isUserListLoading = 'pending'
         this.centerCalendarService
             .getReservableUsers(this.curCenterId, this.responsiblityCalId, this.classTask.id)
             .subscribe((users) => {
                 this.userList = users.map((user) => {
                     return { show: true, selected: false, user: user }
                 })
-
-                console.log('sch reserve member modal -- getReservableusers : ', users)
+                this.isUserListLoading = 'done'
             })
     }
 

@@ -45,15 +45,17 @@ export class HttpInterceptorService implements HttpInterceptor {
             this.refreshTokenSubject.next(null)
 
             const refreshToken = this.storageService.getUser().refresh_token
-
+            console.log('handle 401 error -- refreshToken : ', refreshToken)
             if (refreshToken) {
                 return this.authService.refreshToken({ refresh_token: refreshToken }).pipe(
                     switchMap((accessToken) => {
+                        console.log('after refresh access token : ', accessToken)
                         this.isRefreshing = false
                         this.refreshTokenSubject.next(accessToken)
                         return next.handle(this.setTokenHeader(request, accessToken))
                     }),
                     catchError((err) => {
+                        console.log('after refresh access token err : ', err)
                         this.isRefreshing = false
                         this.storageService.logout()
                         return throwError(err)

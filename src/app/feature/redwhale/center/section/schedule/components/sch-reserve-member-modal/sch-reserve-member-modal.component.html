@@ -33,35 +33,48 @@
 
       <div class="member-list">
 
-        <div *ngIf="userList.length < 1; else user_exist" class="user-none">
-          <img src="assets/icons/etc/empty_screen.svg" >
-          <p class="rw-typo-subtext0-regular grey">해당 수업에 예약할 수 있는 회원이 없어요.</p>
-        </div>
+        <ng-container *ngIf="isUserListLoading != 'done'">
+          <div class="user-none">
+            <ngx-skeleton-loader
+              *ngFor="let _ of [1, 2, 3, 4]"
+              count="1"
+              appearance="line"
+              [theme]="{width: '345px', height: '60px', 'border-radius': '5px', 'margin': '0'}"
+            ></ngx-skeleton-loader>
+          </div>
+        </ng-container>
 
-        <ng-template #user_exist >
-          <ng-container *ngFor="let item of userList; let idx = index">
-            <div class="member-card" *ngIf='item.show'  (click)="onCardClick(idx)">
-              <div class="left">
-                <rw-avatar
-                  [image]="item.user.center_user_picture"
-                  [backgroundColor]="item.user.color"
-                  [text]="item.user.center_user_name"
-                  size="45" fontSize="12"
-                ></rw-avatar>
-                <div class="member-info">
-                  <div class="rw-typo-bodytext0-bold">{{item.user.center_user_name}}</div>
-                  <div class="rw-typo-subtext0-regular">{{item.user.phone_number | phoneNumber}}</div>
+        <ng-container *ngIf="isUserListLoading == 'done'">
+          <div *ngIf="userList.length < 1; else user_exist" class="user-none">
+            <img src="assets/icons/etc/empty_screen.svg" >
+            <p class="rw-typo-subtext0-regular grey">해당 수업에 예약할 수 있는 회원이 없어요.</p>
+          </div>
+
+          <ng-template #user_exist >
+
+            <ng-container *ngFor="let item of userList; let idx = index">
+              <div class="member-card" *ngIf='item.show'  (click)="onCardClick(idx)">
+                <div class="left">
+                  <rw-avatar
+                    [image]="item.user.center_user_picture"
+                    [backgroundColor]="item.user.color"
+                    [text]="item.user.center_user_name"
+                    size="45" fontSize="12"
+                  ></rw-avatar>
+                  <div class="member-info">
+                    <div class="rw-typo-bodytext0-bold">{{item.user.center_user_name}}</div>
+                    <div class="rw-typo-subtext0-regular">{{item.user.phone_number | phoneNumber}}</div>
+                  </div>
                 </div>
+                <rw-checkbox
+                  [checked]="item.selected"
+                ></rw-checkbox>
               </div>
+            </ng-container>
 
-              <rw-checkbox
-                [checked]="item.selected"
-              ></rw-checkbox>
-            </div>
-          </ng-container>
+          </ng-template>
 
-        </ng-template>
-
+        </ng-container>
 
       </div>
 

@@ -100,7 +100,6 @@ export class SchLessonModalComponent implements AfterViewChecked, OnChanges {
             ) {
                 isAnotherLesson = true
             }
-            console.log('sch lesson modal changes : ', changes)
             this.initTime()
             this.getTimeDiff()
             this.getRepeatTimeDiff()
@@ -116,7 +115,6 @@ export class SchLessonModalComponent implements AfterViewChecked, OnChanges {
 
             this.getLessonCalendarTaskStatus()
         }
-        console.log('lessonData in g modal: ', this.lessonData)
     }
 
     ngAfterViewChecked() {
@@ -252,7 +250,6 @@ export class SchLessonModalComponent implements AfterViewChecked, OnChanges {
             })
             this.repeatText = text
         }
-        console.log('setRepeatDayOfWeek -- ', this.repeatText)
     }
 
     //
@@ -282,7 +279,6 @@ export class SchLessonModalComponent implements AfterViewChecked, OnChanges {
         this.centerCalendarService
             .getReservedUsers(this.center.id, this.responsiblityCalId, this.lessonData.id)
             .subscribe((userBookeds: UserBooked[]) => {
-                console.log('getUsersBooked users : ', userBookeds)
                 this.userBookeds = userBookeds
                 this.isUsersBookedInitialized = true
             })
