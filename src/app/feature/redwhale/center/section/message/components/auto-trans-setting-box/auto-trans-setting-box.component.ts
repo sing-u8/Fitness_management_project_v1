@@ -45,6 +45,8 @@ export class AutoTransSettingBoxComponent implements OnInit, OnDestroy {
         String(this.smsAutoSend.days).replace(/[^0-9]/gi, '')
     }
     updateAutoTransmitDay() {
+        if (!this.isInputFocused) return
+        this.isInputFocused = false
         this.OnAutoTransmitDayChange.emit(String(this.smsAutoSendDays))
     }
 
@@ -52,5 +54,11 @@ export class AutoTransSettingBoxComponent implements OnInit, OnDestroy {
     onAutoTransmitTimeClick(v: { key: string; name: string }) {
         this.smsAutoSend.time = v.key
         this.OnAutoTransmitTimeChange.emit(this.smsAutoSend.time)
+    }
+
+    // isInputFocused
+    public isInputFocused = false
+    onFocus() {
+        this.isInputFocused = true
     }
 }
