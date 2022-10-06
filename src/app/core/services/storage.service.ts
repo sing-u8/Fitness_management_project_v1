@@ -42,7 +42,7 @@ export class StorageService {
     }
 
     setAccessToken(token: string) {
-        const user = { ...this.getUser(), accessToken: token }
+        const user = { ...this.getUser(), access_token: token }
         this.setUser(user)
     }
 
