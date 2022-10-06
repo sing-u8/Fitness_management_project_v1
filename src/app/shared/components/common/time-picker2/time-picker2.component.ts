@@ -78,7 +78,6 @@ export class TimePicker2Component implements OnInit, AfterViewInit, OnChanges {
             this.initTimeList()
             this.initSelectedTime()
         }
-        console.log('timeList : ', this.timeList)
     }
 
     initTextAlign() {
