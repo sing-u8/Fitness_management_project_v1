@@ -81,7 +81,8 @@ export class WsChatService implements OnDestroy {
                 console.log('web socket chat error : ', err)
             },
             complete: () => {
-                console.log('web socket chat complete!')
+                console.log('web socket chat complete! -- err 발생 구간')
+                this.user = this.storageService.getUser()
                 this.connect(this.user.access_token)
             },
         })
