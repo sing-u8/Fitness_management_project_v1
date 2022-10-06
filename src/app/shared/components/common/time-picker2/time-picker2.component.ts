@@ -78,6 +78,7 @@ export class TimePicker2Component implements OnInit, AfterViewInit, OnChanges {
             this.initTimeList()
             this.initSelectedTime()
         }
+        console.log('timeList : ', this.timeList)
     }
 
     initTextAlign() {
@@ -104,14 +105,15 @@ export class TimePicker2Component implements OnInit, AfterViewInit, OnChanges {
             endTime:
                 endTime.length != 0
                     ? new Date().setHours(endTime[0], endTime[1], endTime[2])
-                    : new Date().setHours(23, 59, 59, 999),
+                    : new Date().setHours(23, 59, 59, 999), // new Date().setHours(24, 0, 0, 0), // 서버에서 24:00:00을 허용하지 않음
         }
     }
 
     initTimeList() {
         let { startTime, endTime } = this.getInitialTimeObj()
         this.timeList = []
-        while (startTime < endTime) {
+        // let isFirstNoon = false
+        while (startTime <= endTime) {
             const valueList = dayjs(startTime).format('A:hh:mm').split(':')
             const value =
                 (valueList[0] == 'AM' || valueList[0] == '오전' ? '오전' : '오후') +
@@ -120,10 +122,16 @@ export class TimePicker2Component implements OnInit, AfterViewInit, OnChanges {
                 ':' +
                 valueList[2]
             const key = dayjs(startTime).format('HH:mm:ss')
+            // if (key == '00:00:00' && !isFirstNoon) {
+            //     isFirstNoon = true
+            // } else if (key == '00:00:00' && isFirstNoon) {
+            //     key = '24:00:00'
+            // }
             this.timeList.push({ key: key, name: value, isDisabled: this.checkIsDisableTime(key) })
             if (dayjs().isBetween(dayjs(startTime), dayjs(startTime + 1800000), 'minute', '[]')) {
                 this.selectedTime = { key: key, name: value, isDisabled: this.checkIsDisableTime(key) }
             }
+
             startTime += 1800000
         }
     }
