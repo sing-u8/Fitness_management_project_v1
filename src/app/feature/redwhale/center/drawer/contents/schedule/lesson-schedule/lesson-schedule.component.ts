@@ -344,8 +344,8 @@ export class LessonScheduleComponent implements OnInit, OnDestroy, AfterViewInit
     onLessonClick(res: { lesson: ClassItem; lessonCateg: ClassCategory }) {
         this.selectedLesson = { lesson: res.lesson, lessonCateg: res.lessonCateg }
         this.planDetailInputs = { plan: res.lesson.name, detail: res.lesson.memo }
-        // !!
-        // this.lesMembershipList = lesson.membership_items
+
+        this.getLinkedMemberships(res.lesson, res.lessonCateg)
         this.people = String(res.lesson.capacity)
         this.color = res.lesson.color
 
@@ -439,6 +439,14 @@ export class LessonScheduleComponent implements OnInit, OnDestroy, AfterViewInit
                 })
                 this.lessonCategList = [...fillCateg, ...emtpyCateg]
                 this.isLessonCategInit = true
+            })
+    }
+
+    getLinkedMemberships(lesson: ClassItem, lessonCateg: ClassCategory) {
+        this.centerLessonService
+            .getLinkedMemberships(this.center.id, lessonCateg.id, lesson.id)
+            .subscribe((memberships) => {
+                this.lesMembershipList = memberships
             })
     }
 }
