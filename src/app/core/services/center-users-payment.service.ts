@@ -50,10 +50,10 @@ export class CenterUsersPaymentService {
 }
 
 export interface CreateMLPaymentReqBody {
+    type_code: 'contract_type_new' | 'contract_type_renewal' | 'contract_type_transfer'
+    memo?: string
     user_memberships?: Array<{
         membership_item_id: string
-        // category_name: string
-        // name: string
         start_date: string
         end_date: string
         count: number

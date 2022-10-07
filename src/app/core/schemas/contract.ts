@@ -1,5 +1,7 @@
 export interface Contract {
     id: string
+    type_code: string
+    type_code_name: string
     date: string
     user_membership_number: string
     user_name: string
@@ -11,4 +13,5 @@ export interface Contract {
     user_sign: string
     responsibility: string
     terms: string
+    memo: string
 }

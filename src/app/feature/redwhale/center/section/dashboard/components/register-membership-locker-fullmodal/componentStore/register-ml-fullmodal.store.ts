@@ -220,6 +220,7 @@ export class RegisterMembershipLockerFullmodalStore extends ComponentStore<State
                     const membershipItems = mlItems.filter((item) => item.type == 'membership')
 
                     const createMLPaymentReqBody: CreateMLPaymentReqBody = {
+                        type_code: 'contract_type_new',
                         user_memberships:
                             membershipItems.length > 0
                                 ? _.map(membershipItems, (v) => {
