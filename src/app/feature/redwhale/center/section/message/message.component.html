@@ -2,7 +2,7 @@
     <header class="header">
         <div class="header-text">
             <span class="title rw-typo-headline1">문자</span>
-            <span class="title-desc rw-typo-subtext1">남은 포인트 : {{smsPoint$ | async}}p (단문 {{textCountForSMSPoint.short}}건 / 장문 {{textCountForSMSPoint.long}}건)</span>
+            <span class="title-desc rw-typo-subtext1">남은 포인트 : {{smsPoint$ | async | numberWithCommas}}P (단문 {{textCountForSMSPoint.short}}건 / 장문 {{textCountForSMSPoint.long}}건)</span>
             <div class="help-icon">
                 <div class="help">
                     <div class="help-text-container">
@@ -217,7 +217,8 @@
                             </div>
                         </div>
                         <div class="deduction-box">
-                            <p class="rw-typo-bodytext0-bold ">{{subtractPoint}}p 차감 예정</p>
+                            <p [class.red]="!isPointEnough" class="rw-typo-bodytext0-bold ">보유한 {{smsPoint$ | async | numberWithCommas}}P 중</p>
+                            <p [class.red]="!isPointEnough" class="rw-typo-bodytext0-bold "> <span class="red">{{subtractPoint | numberWithCommas}}P</span> 차감 예정</p>
                             <p class="rw-typo-bodytext2-regular_darkgrey ">수신자 {{selectedUserListSelected$ | async}}명 * {{subtractText}}</p>
                             <ng-container *ngIf="!isPointEnough">
                                 <p class="rw-typo-subtext0-regular error">
