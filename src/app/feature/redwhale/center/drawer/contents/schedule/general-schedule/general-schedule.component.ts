@@ -104,6 +104,45 @@ export class GeneralScheduleComponent implements OnInit, AfterViewInit, OnDestro
     }
     // --------------------------------------------------------------------------------
 
+    // repeat day vars
+    public dayRepeatSwitch = false
+
+    @ViewChild('rw_datepicker') rw_datepicker: ElementRef
+    public doShowRepeatDatePick = false
+    public repeatDatepick = {
+        startDate: '',
+        endDate: '',
+    }
+    public dayDiff = ''
+    toggleShowRepeatDatePicker() {
+        this.doShowRepeatDatePick = !this.doShowRepeatDatePick
+    }
+    closeShowRepeatDatePicker() {
+        this.doShowRepeatDatePick = false
+    }
+    checkClickRepeatDatePickOutside(event) {
+        _.some(event.path, this.rw_datepicker.nativeElement) ? null : this.closeShowRepeatDatePicker()
+    }
+    onRepeatDatePickRangeChange() {
+        if (this.repeatDatepick.endDate) {
+            this.dayDiff = String(this.getDayDiff(this.repeatDatepick))
+        }
+    }
+    getDayDiff(date: { startDate: string; endDate: string }) {
+        const date1 = dayjs(date.startDate)
+        const date2 = dayjs(date.endDate)
+
+        return date2.diff(date1, 'day') + 1
+    }
+
+    // day repeat var
+    public repeatOfWeek = [0, 1, 2, 3, 4, 5, 6]
+    onDayRepeatChange(dayList: number[]) {
+        this.repeatOfWeek = dayList
+    }
+
+    // --------------------------------------------------------------------------------
+
     public unsubscribe$ = new Subject<void>()
 
     constructor(
@@ -154,22 +193,44 @@ export class GeneralScheduleComponent implements OnInit, AfterViewInit, OnDestro
     }
 
     registerPlan(fn?: () => void) {
+        let reqBody: CreateCalendarTaskReqBody = undefined
         const selectedStaff = _.find(this.instructorList, (item) => {
             return this.StaffSelectValue.value.id == item.instructor.calendar_user.id
         })
         console.log('this.timepick.startTime : ', this.timepick.startTime, this.timepick.endTime)
-        const reqBody: CreateCalendarTaskReqBody = {
-            type_code: 'calendar_task_type_normal',
-            name: this.planTexts.planTitle,
-            start_date: dayjs(this.datepick.date).format('YYYY-MM-DD'),
-            end_date: dayjs(this.datepick.date).format('YYYY-MM-DD'),
-            all_day: false,
-            start_time: this.timepick.startTime.slice(0, 5),
-            end_time: this.timepick.endTime.slice(0, 5), // !!확인 필요
-            memo: this.planTexts.planDetail,
-            repeat: false,
-            responsibility_user_id: selectedStaff.instructor.calendar_user.id,
+        if (this.dayRepeatSwitch) {
+            reqBody = {
+                type_code: 'calendar_task_type_normal',
+                name: this.planTexts.planTitle,
+                start_date: dayjs(this.repeatDatepick.startDate).format('YYYY-MM-DD'),
+                end_date: dayjs(this.repeatDatepick.startDate).format('YYYY-MM-DD'),
+                all_day: false,
+                start_time: this.timepick.startTime.slice(0, 5),
+                end_time: this.timepick.endTime.slice(0, 5),
+                memo: this.planTexts.planDetail,
+                repeat: true,
+                responsibility_user_id: selectedStaff.instructor.calendar_user.id,
+                repeat_day_of_the_week: this.repeatOfWeek,
+                repeat_cycle_unit_code: 'calendar_task_group_repeat_cycle_unit_week',
+                repeat_cycle: 1,
+                repeat_termination_type_code: 'calendar_task_group_repeat_termination_type_date',
+                repeat_end_date: dayjs(this.repeatDatepick.endDate).format('YYYY-MM-DD'),
+            }
+        } else {
+            reqBody = {
+                type_code: 'calendar_task_type_normal',
+                name: this.planTexts.planTitle,
+                start_date: dayjs(this.datepick.date).format('YYYY-MM-DD'),
+                end_date: dayjs(this.datepick.date).format('YYYY-MM-DD'),
+                all_day: false,
+                start_time: this.timepick.startTime.slice(0, 5),
+                end_time: this.timepick.endTime.slice(0, 5),
+                memo: this.planTexts.planDetail,
+                repeat: false,
+                responsibility_user_id: selectedStaff.instructor.calendar_user.id,
+            }
         }
+
         this.centerCalendarService.createCalendarTask(this.center.id, selectedStaff.instructor.id, reqBody).subscribe({
             next: (_) => {
                 fn ? fn() : null
@@ -231,6 +292,7 @@ export class GeneralScheduleComponent implements OnInit, AfterViewInit, OnDestro
         this.nxStore.pipe(select(ScheduleSelector.selectedDate), takeUntil(this.unsubscribe$)).subscribe((date) => {
             this.timepick.startTime = dayjs(date.startDate).format('HH:mm:ss')
             this.timepick.endTime = dayjs(date.endDate).format('HH:mm:ss')
+            this.repeatDatepick.startDate = dayjs(date.startDate).format('YYYY-MM-DD')
             this.datepick.date = dayjs(date.startDate).format('YYYY-MM-DD')
         })
     }

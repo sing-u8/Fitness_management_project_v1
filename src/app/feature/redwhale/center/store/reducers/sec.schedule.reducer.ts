@@ -13,6 +13,7 @@ import { CalendarTask } from '@schemas/calendar-task'
 import { CalendarOptions } from '@fullcalendar/angular'
 
 import * as ScheduleActions from '../actions/sec.schedule.actions'
+import { setModifyGeneralOption } from '../actions/sec.schedule.actions'
 
 export type FilterType = 'onetoone' | 'group' | 'general'
 export type FilterTypeName = '1:1 수업' | '그룹 수업' | '기타 일정'
@@ -88,6 +89,7 @@ export interface State {
     taskTitleTime: string // string type -> MM/DD (dd) a hh:mm
 
     modifyGeneralEvent: CalendarTask
+    modifyGeneralOption: ModifyLessonOption
     modifyLessonEvent: CalendarTask
     modifyLessonOption: ModifyLessonOption
 
@@ -120,6 +122,7 @@ export const initialState: State = {
     taskTitleTime: '',
 
     modifyGeneralEvent: undefined,
+    modifyGeneralOption: 'one',
     modifyLessonEvent: undefined,
     modifyLessonOption: 'one',
 }
@@ -199,6 +202,10 @@ export const scheduleReducer = createImmerReducer(
         state.modifyGeneralEvent = event
         return state
     }),
+    on(ScheduleActions.setModifyGeneralOption, (state, { option }) => {
+        state.modifyGeneralOption = option
+        return state
+    }),
     on(ScheduleActions.setModifyLessonEvent, (state, { event }) => {
         state.modifyLessonEvent = event
         return state
@@ -270,6 +277,7 @@ export const selectSelectedDate = (state: State) => state.selectedDate
 export const selectSchedulingInstructor = (state: State) => state.schedulingInstructor
 export const selectIsScheduleEventChanged = (state: State) => state.isScheduleEventChanged
 export const selectModifyGeneralEvent = (state: State) => state.modifyGeneralEvent
+export const selectModifyGeneralOption = (state: State) => state.modifyGeneralOption
 export const selectModifyLessonEvent = (state: State) => state.modifyLessonEvent
 export const selectModifyLessonOption = (state: State) => state.modifyLessonOption
 export const selectTaskTitleTime = (state: State) => state.taskTitleTime

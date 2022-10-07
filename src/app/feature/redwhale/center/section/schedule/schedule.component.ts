@@ -1220,6 +1220,31 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
         this.repeatedLessonTask = undefined
         // this.fullCalendar.getApi().updateSize()
     }
+
+    public doShowRepeatGeneralOptionModal = false
+    public repeatGeneralTitle = ''
+    public repeatedGeneralTask: CalendarTask = undefined
+    showRepeatGeneralOptionModal() {
+        this.doShowRepeatGeneralOptionModal = true
+    }
+    hideRepeatGeneralOptionModal() {
+        this.doShowRepeatGeneralOptionModal = false
+    }
+    onRepeatGeneralOptionCancel() {
+        this.hideRepeatGeneralOptionModal()
+        this.repeatedGeneralTask = undefined
+    }
+    onRepeatGeneralOptionConfirm(modifyOption: FromSchedule.ModifyLessonOption) {
+        this.nxStore.dispatch(ScheduleActions.setModifyGeneralOption({ option: modifyOption }))
+        this.nxStore.dispatch(ScheduleActions.setModifyGeneralEvent({ event: this.repeatedGeneralTask }))
+
+        // !! 아직 예약 부분은 API문제로 구현 불가
+        // this.gymScheduleState.getLessonTaskReservations(this.center.id, String(this.repeatedLessonTask.id))
+        this.hideRepeatGeneralOptionModal()
+        this.nxStore.dispatch(openDrawer({ tabName: 'modify-general-schedule' }))
+        this.repeatedGeneralTask = undefined
+        // this.fullCalendar.getApi().updateSize()
+    }
     // - //
 
     public lessonModalCalId: string = undefined
@@ -1258,9 +1283,9 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
             this.nxStore.dispatch(openDrawer({ tabName: 'modify-lesson-schedule' }))
             // this.fullCalendar.getApi().updateSize()
         } else {
-            this.hideModifyLessonEventModal()
             this.repeatedLessonTask = lessonTask
             this.repeatLessonTitle = lessonTask.name
+            this.hideModifyLessonEventModal()
             this.showRepeatLessonOptionModal()
         }
     }
@@ -1279,13 +1304,79 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
     }
     onDeleteGeneralEvent(generalTask: CalendarTask) {
         this.hideModifyGeneralEventModal()
-        this.showDeleteEventModal(generalTask, 'general')
+        if (generalTask.calendar_task_group_id) {
+            this.showDelRepeatGeneralModal(generalTask)
+        } else {
+            this.showDeleteEventModal(generalTask, 'general')
+        }
     }
     onModifyGeneralEvent(generalTask: CalendarTask) {
-        this.hideModifyGeneralEventModal()
-        this.nxStore.dispatch(ScheduleActions.setModifyGeneralEvent({ event: generalTask }))
-        this.nxStore.dispatch(openDrawer({ tabName: 'modify-general-schedule' }))
         // this.fullCalendar.getApi().updateSize()
+        if (!generalTask.calendar_task_group_id) {
+            this.hideModifyGeneralEventModal()
+
+            this.nxStore.dispatch(ScheduleActions.setModifyGeneralEvent({ event: generalTask }))
+            this.nxStore.dispatch(openDrawer({ tabName: 'modify-general-schedule' }))
+            // this.fullCalendar.getApi().updateSize()
+        } else {
+            this.repeatedGeneralTask = generalTask
+            this.repeatGeneralTitle = generalTask.name
+            this.hideModifyGeneralEventModal()
+            this.showRepeatGeneralOptionModal()
+        }
+    }
+
+    public doShowDelRepeatGeneralModal = false
+    public delRepeatGeneralData: CalendarTask = undefined
+    public delRepeatGeneralType: DeleteMode = undefined
+    public delRepeatGeneralTitle = ''
+    showDelRepeatGeneralModal(task: CalendarTask) {
+        this.delRepeatGeneralData = task
+        this.delRepeatGeneralTitle = task.name
+        this.doShowDelRepeatGeneralModal = true
+    }
+    hideDelRepeatGeneralModal() {
+        this.doShowDelRepeatGeneralModal = false
+    }
+    onDelRepeatGeneralConfirm(deleteType: DeleteMode) {
+        this.delRepeatGeneralType = deleteType
+        // !! 아직 예약 부분은 API문제로 구현 불가
+        // if (this.delRepeatLessonData.class.reservation.length > 0) {
+        //     this.reservedLessonType = 'repeat'
+        //     this.showReservedDelLessonModal()
+        //     this.hideDelRepeatLessonModal()
+        // } else {
+        this.deleteRepeatGeneralEvent()
+        this.hideDelRepeatGeneralModal()
+        // }
+    }
+    onDelRepeatGeneralCancel() {
+        this.hideDelRepeatGeneralModal()
+    }
+    deleteRepeatGeneralEvent(fn?: () => void) {
+        const calId = this.instructorList$_.filter(
+            (v) => v.instructor.calendar_user.id == this.delRepeatGeneralData.responsibility.id
+        )[0].instructor.id
+        this.CenterCalendarService.deleteCalendarTask(
+            this.center.id,
+            calId,
+            String(this.delRepeatGeneralData.id),
+            this.delRepeatGeneralType
+        ).subscribe((_) => {
+            this.getTaskList(this.selectedDateViewType)
+            this.hideDelRepeatGeneralModal()
+            this.nxStore.dispatch(
+                showToast({
+                    text: `'${this.wordService.ellipsis(
+                        this.delRepeatGeneralData.name,
+                        7
+                    )}' 기타 일정이 삭제되었습니다.`,
+                })
+            )
+            this.delRepeatGeneralData = undefined
+            this.delRepeatGeneralType = undefined
+            fn ? fn() : null
+        })
     }
 
     // - // lesson reserve modal and cancel modal

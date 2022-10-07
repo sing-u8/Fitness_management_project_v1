@@ -50,6 +50,9 @@
         position: relative;
         .plan-and-detail-info,
         .assignee,
+        .day-repeat,
+        .repeat-application-period,
+        .repeat-day-of-week,
         .date,
         .detail {
             display: flex;
@@ -76,6 +79,51 @@
                 padding: 15px;
                 &:focus {
                     font-weight: 700;
+                }
+            }
+        }
+
+        .day-repeat {
+            .day-repeat-button {
+                height: 48px;
+                display: flex;
+                align-items: center;
+                padding: 0px 15px;
+                border-radius: 5px;
+                border: 1px solid var(--border-color);
+            }
+        }
+
+        .repeat-application-period {
+            .datepicker {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                width: 100%;
+                height: 48px;
+                position: relative;
+                .date-pick-button {
+                    display: flex;
+                    align-items: center;
+                    justify-content: flex-start;
+                    border: 1px solid var(--border-color);
+                    border-radius: 5px;
+                    width: 100%;
+                    height: 48px;
+                    position: relative;
+                    .date-empty-text {
+                        color: var(--grey);
+                    }
+                }
+                .rw-datepicker {
+                    position: absolute;
+                    top: 53px;
+                    left: 18px;
+                    z-index: 3;
+
+                    &.display-none {
+                        display: none;
+                    }
                 }
             }
         }

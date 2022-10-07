@@ -38,34 +38,99 @@
       ></rw-user-select>
     </div>
 
-    <div class="date">
-      <p class="small-title">일자</p>
-      <div
-        class="date-pick-button"
-        (click) ="checkClickDatePickOutside($event); $event.stopPropagation()"
-      >
+    <div class="day-repeat">
+      <p class="small-title">반복 여부</p>
+      <div class="day-repeat-button">
+        <rw-switch
+          [text]="dayRepeatSwitch ? '반복함' : '반복 안 함'"
+          [(ngModel)]="dayRepeatSwitch"
+        ></rw-switch>
+      </div>
+    </div>
 
-        <span *ngIf="!datepick.date;else showDate" class="rw-typo-bodytext0">일자를 선택해주세요.</span>
-        <ng-template #showDate>
-          <span class="rw-typo-bodytext0">{{datepick.date | dateFormat:'YYYY.MM.DD (dd)'}}</span>
-        </ng-template>
+    <ng-container *ngIf="dayRepeatSwitch == false">
+      <div class="date">
+        <p class="small-title">일자</p>
+        <div
+          class="date-pick-button"
+          (click) ="checkClickDatePickOutside($event); $event.stopPropagation()"
+        >
+
+          <span *ngIf="!datepick.date;else showDate" class="rw-typo-bodytext0">일자를 선택해주세요.</span>
+          <ng-template #showDate>
+            <span class="rw-typo-bodytext0">{{datepick.date | dateFormat:'YYYY.MM.DD (dd)'}}</span>
+          </ng-template>
+
+          <div
+            #datepicker
+            [class.display-none] = "!doShowDatepick"
+            (rwClickOutside) = "doShowDatepick = false"
+            class="datepicker"
+          >
+            <rw-datepicker2
+              mode="date"
+              [(data)]="datepick"
+              [shadowOn]="true"
+            ></rw-datepicker2>
+          </div>
+
+        </div>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="dayRepeatSwitch == true">
+      <div class="repeat-application-period">
+        <p class="small-title">반복 적용 기간</p>
 
         <div
-          #datepicker
-          [class.display-none] = "!doShowDatepick"
-          (rwClickOutside) = "doShowDatepick = false"
           class="datepicker"
         >
-          <rw-datepicker2
-            mode="date"
-            [(data)]="datepick"
-            [shadowOn]="true"
-          ></rw-datepicker2>
+          <div
+            class="date-pick-button"
+            rw-button rwButtonColor="var(--white)"
+            rwButtonFontColor="var(--font-color)"
+            (click) ="toggleShowRepeatDatePicker(); $event.stopPropagation()"
+          >
+            <p class="rw-typo-bodytext1 date-empty-text" *ngIf="!repeatDatepick.startDate && !repeatDatepick.endDate">
+              시작일과 종료일을 선택해주세요.
+            </p>
+            <p *ngIf="(repeatDatepick.startDate && !repeatDatepick.endDate)" class="rw-typo-bodytext0-bold">
+              {{repeatDatepick.startDate | dateFormat:'YYYY.MM.DD'}} - <span class="rw-typo-bodytext1 date-empty-text">종료일 선택</span>
+            </p>
+            <p *ngIf="(!repeatDatepick.startDate && repeatDatepick.endDate)" class="rw-typo-bodytext0-bold">
+              <span class="rw-typo-bodytext1 date-empty-text">시작일 선택</span> - {{repeatDatepick.endDate | dateFormat:'YYYY.MM.DD'}}
+            </p>
+            <p *ngIf="(repeatDatepick.startDate && repeatDatepick.endDate)" class="rw-typo-bodytext0-bold">
+              {{repeatDatepick.startDate | dateFormat:'YYYY.MM.DD'}} - {{repeatDatepick.endDate | dateFormat:'YYYY.MM.DD'}} ({{dayDiff}}일)
+            </p>
+
+          </div>
+
+          <div
+            class="rw-datepicker"
+            #rw_datepicker
+            [class.display-none] = "!doShowRepeatDatePick"
+            (rwClickOutside) = "checkClickRepeatDatePickOutside($event);"
+          >
+            <rw-datepicker
+              mode="multiline-component"
+              [(data)]="repeatDatepick"
+              (dataChange) = "onRepeatDatePickRangeChange()"
+            ></rw-datepicker>
+          </div>
+
         </div>
 
       </div>
 
-    </div>
+      <div class="repeat-day-of-week">
+        <p class="small-title">반복 요일</p>
+        <rw-sch-day-repeat-select
+          [dayList]="repeatOfWeek"
+          (onDayChange)="onDayRepeatChange($event)"
+        ></rw-sch-day-repeat-select>
+      </div>
+    </ng-container>
+
 
     <div class="time-select">
 
@@ -96,8 +161,10 @@
       class="save-button"
       rw-button
       rwButtonColor="var(--red)"
-      [rwButtonDisabled]="plan_title.invalid"
-      (click) = "plan_title.valid && showConfirmSaveModal()"
+      [rwButtonDisabled]="!((!dayRepeatSwitch && plan_title.valid)
+                              || (dayRepeatSwitch && repeatDatepick.startDate && repeatDatepick.endDate))"
+      (click) = "((!dayRepeatSwitch && plan_title.valid)
+                || (dayRepeatSwitch && repeatDatepick.startDate && repeatDatepick.endDate)) && showConfirmSaveModal()"
     >
       저장하기
     </div>

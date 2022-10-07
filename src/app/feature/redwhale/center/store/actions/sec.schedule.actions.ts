@@ -100,6 +100,10 @@ export const setModifyGeneralEvent = createAction(
     `[${FeatureKey}] Set ModifyGeneralEvent`,
     props<{ event: CalendarTask }>()
 )
+export const setModifyGeneralOption = createAction(
+    `[${FeatureKey}] Set ModifyGeneralOption`,
+    props<{ option: FromSchReducer.ModifyLessonOption }>()
+)
 export const setModifyLessonEvent = createAction(
     `[${FeatureKey}] Set ModifyLessonEvent`,
     props<{ event: CalendarTask }>()

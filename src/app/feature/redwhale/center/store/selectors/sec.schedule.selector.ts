@@ -27,6 +27,7 @@ export const selectedDate = createSelector(GymScheduleFeature, FromSchedule.sele
 export const schedulingInstructor = createSelector(GymScheduleFeature, FromSchedule.selectSchedulingInstructor)
 export const isScheduleEventChanged = createSelector(GymScheduleFeature, FromSchedule.selectIsScheduleEventChanged)
 export const modifyGeneralEvent = createSelector(GymScheduleFeature, FromSchedule.selectModifyGeneralEvent)
+export const modifyGeneralOption = createSelector(GymScheduleFeature, FromSchedule.selectModifyGeneralOption)
 export const modifyLessonEvent = createSelector(GymScheduleFeature, FromSchedule.selectModifyLessonEvent)
 export const modifyLessonOption = createSelector(GymScheduleFeature, FromSchedule.selectModifyLessonOption)
 export const taskTitleTime = createSelector(GymScheduleFeature, FromSchedule.selectTaskTitleTime)

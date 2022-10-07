@@ -1,16 +1,18 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core'
-import { Subject } from 'rxjs'
-import { take, takeUntil } from 'rxjs/operators'
 import dayjs from 'dayjs'
 import _ from 'lodash'
 
 import { StorageService } from '@services/storage.service'
-import { CenterCalendarService, UpdateCalendarTaskReqBody } from '@services/center-calendar.service'
+import { CenterCalendarService, UpdateCalendarTaskReqBody, UpdateMode } from '@services/center-calendar.service'
 import { WordService } from '@services/helper/word.service'
 
 import { CenterUser } from '@schemas/center-user'
 import { Center } from '@schemas/center'
 import { CalendarTask } from '@schemas/calendar-task'
+
+// rxjs
+import { Subject } from 'rxjs'
+import { take, takeUntil } from 'rxjs/operators'
 
 // ngrx
 import { select, Store } from '@ngrx/store'
@@ -31,6 +33,16 @@ export class ModifyGeneralScheduleComponent implements OnInit, AfterViewInit, On
     public center: Center
 
     public generalEvent: CalendarTask
+    public generalRepeatOption: UpdateMode
+    selectGeneralOptions() {
+        this.nxStore
+            .pipe(select(ScheduleSelector.modifyGeneralOption), takeUntil(this.unsubscribe$))
+            .subscribe((option) => {
+                console.log('general repeat option ', option)
+                this.generalRepeatOption = option
+            })
+    }
+    public isAlreadyRepeat = false
 
     public gymOperatingTime: ScheduleReducer.CenterOperatingHour = { start: null, end: null }
 
@@ -46,6 +58,9 @@ export class ModifyGeneralScheduleComponent implements OnInit, AfterViewInit, On
         planDetail: '',
     }
 
+    // repeat day vars
+    public dayRepeatSwitch = false
+
     public doShowDatepick = false
     public datepick: { date: string } = { date: '' }
     @ViewChild('datepicker') datepicker: ElementRef
@@ -53,7 +68,44 @@ export class ModifyGeneralScheduleComponent implements OnInit, AfterViewInit, On
         _.some(event.path, this.datepicker.nativeElement) ? null : (this.doShowDatepick = !this.doShowDatepick)
     }
 
+    @ViewChild('rw_datepicker') rw_datepicker: ElementRef
+    public doShowRepeatDatePick = false
+    public repeatDatepick = {
+        startDate: '',
+        endDate: '',
+    }
+    public dayDiff = ''
+
+    // timepick var
     public timepick: { startTime: string; endTime: string } = { startTime: '', endTime: '' }
+
+    // day repeat var
+    public repeatOfWeek = [0, 1, 2, 3, 4, 5, 6]
+    onDayRepeatChange(dayList) {
+        this.repeatOfWeek = dayList
+    }
+    // --------------------------------------------------------------------------------------------------------------
+
+    toggleShowRepeatDatePicker() {
+        this.doShowRepeatDatePick = !this.doShowRepeatDatePick
+    }
+    closeShowRepeatDatePicker() {
+        this.doShowRepeatDatePick = false
+    }
+    checkClickRepeatDatePickOutside(event) {
+        _.some(event.path, this.rw_datepicker.nativeElement) ? null : this.closeShowRepeatDatePicker()
+    }
+    onRepeatDatePickRangeChange() {
+        if (this.repeatDatepick.endDate) {
+            this.dayDiff = String(this.getDayDiff(this.repeatDatepick))
+        }
+    }
+    getDayDiff(date: { startDate: string; endDate: string }) {
+        const date1 = dayjs(date.startDate)
+        const date2 = dayjs(date.endDate)
+
+        return date2.diff(date1, 'day') + 1
+    }
 
     // --------------------------------------------------------------------------------
     cancelModifyGeneralSchedule() {
@@ -73,6 +125,7 @@ export class ModifyGeneralScheduleComponent implements OnInit, AfterViewInit, On
     ngOnInit(): void {
         this.center = this.storageService.getCenter()
         this.titleTime = dayjs().format('M/D (dd) A hh시 mm분')
+        this.selectGeneralOptions()
         this.nxStore
             .pipe(
                 select(ScheduleSelector.modifyGeneralEvent),
@@ -81,6 +134,7 @@ export class ModifyGeneralScheduleComponent implements OnInit, AfterViewInit, On
             )
             .subscribe(([event, instructors]) => {
                 this.instructorList = instructors
+                this.isAlreadyRepeat = false
                 this.generalEvent = event
                 this.planTexts = {
                     planTitle: event.name,
@@ -96,6 +150,22 @@ export class ModifyGeneralScheduleComponent implements OnInit, AfterViewInit, On
                 this.StaffSelectValue = {
                     name: event.responsibility.center_user_name ?? event.responsibility.name,
                     value: event.responsibility,
+                }
+
+                if (event.calendar_task_group_id) {
+                    this.dayRepeatSwitch = true
+                    this.isAlreadyRepeat = true
+
+                    // !! repeat start 속성 필요
+                    this.repeatDatepick.startDate =
+                        this.generalRepeatOption == 'all'
+                            ? dayjs(event.start).format('YYYY-MM-DD')
+                            : dayjs(event.start).format('YYYY-MM-DD')
+                    this.repeatDatepick.endDate = dayjs(event.repeat_end_date).format('YYYY-MM-DD')
+                    this.dayDiff = String(this.getDayDiff(this.repeatDatepick))
+                } else {
+                    this.repeatDatepick.startDate = dayjs(event.start).format('YYYY-MM-DD')
+                    this.dayRepeatSwitch = false
                 }
             })
 
@@ -120,23 +190,45 @@ export class ModifyGeneralScheduleComponent implements OnInit, AfterViewInit, On
     }
 
     modifyPlan(fn?: () => void) {
-        const reqBody: UpdateCalendarTaskReqBody = {
-            responsibility_user_id: this.StaffSelectValue.value.id,
-            name: this.planTexts.planTitle,
-            start_date: dayjs(this.datepick.date).format('YYYY-MM-DD'),
-            start_time: this.timepick.startTime.slice(0, 5),
-            end_time: this.timepick.endTime.slice(0, 5),
-            memo: this.planTexts.planDetail,
-        }
+        let reqBody: UpdateCalendarTaskReqBody = undefined
         const calId = this.instructorList.find((v) => v.instructor.calendar_user.id == this.StaffSelectValue.value.id)
             .instructor.id
+
+        if (this.dayRepeatSwitch && this.generalRepeatOption != 'one') {
+            reqBody = {
+                responsibility_user_id: this.StaffSelectValue.value.id,
+                name: this.planTexts.planTitle,
+                start_date: dayjs(this.repeatDatepick.startDate).format('YYYY-MM-DD'),
+                end_date: dayjs(this.repeatDatepick.startDate).format('YYYY-MM-DD'),
+                start_time: this.timepick.startTime.slice(0, 5),
+                end_time: this.timepick.endTime.slice(0, 5),
+                memo: this.planTexts.planDetail,
+                repeat: true,
+                repeat_day_of_the_week: this.repeatOfWeek,
+                repeat_cycle_unit_code: 'calendar_task_group_repeat_cycle_unit_week',
+                repeat_cycle: 1,
+                repeat_termination_type_code: 'calendar_task_group_repeat_termination_type_date',
+                repeat_end_date: dayjs(this.repeatDatepick.endDate).format('YYYY-MM-DD'),
+            }
+        } else {
+            reqBody = {
+                responsibility_user_id: this.StaffSelectValue.value.id,
+                name: this.planTexts.planTitle,
+                start_date: dayjs(this.datepick.date).format('YYYY-MM-DD'),
+                end_date: dayjs(this.datepick.date).format('YYYY-MM-DD'),
+                start_time: this.timepick.startTime.slice(0, 5),
+                end_time: this.timepick.endTime.slice(0, 5),
+                memo: this.planTexts.planDetail,
+            }
+        }
+
         this.nxStore.dispatch(
             ScheduleActions.startUpdateCalendarTask({
                 centerId: this.center.id,
                 calendarId: calId,
                 taskId: this.generalEvent.id,
                 reqBody: reqBody,
-                mode: 'one',
+                mode: this.generalRepeatOption,
                 cb: () => {
                     fn ? fn() : null
                     this.nxStore.dispatch(ScheduleActions.setIsScheduleEventChanged({ isScheduleEventChanged: true }))

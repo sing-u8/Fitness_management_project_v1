@@ -44,6 +44,13 @@ export class ModifyLessonScheduleComponent implements OnInit, OnDestroy, AfterVi
 
     public lessonEvent: CalendarTask = undefined
     public lessonRepeatOption: UpdateMode
+    selectLessonOptions() {
+        this.nxStore
+            .pipe(select(ScheduleSelector.modifyLessonOption), takeUntil(this.unsubscribe$))
+            .subscribe((option) => {
+                this.lessonRepeatOption = option
+            })
+    }
 
     // save confirm modal var
     public doShowConfirmSaveModal = false
@@ -414,15 +421,6 @@ export class ModifyLessonScheduleComponent implements OnInit, OnDestroy, AfterVi
         //                 break
         //         }
         //     })
-    }
-
-    selectLessonOptions() {
-        this.nxStore
-            .pipe(select(ScheduleSelector.modifyLessonOption), takeUntil(this.unsubscribe$))
-            .subscribe((option) => {
-                this.lessonRepeatOption = option
-                console.log('this.lessonRepeatOption : ', this.lessonRepeatOption)
-            })
     }
 
     public initRepeatOfWeek: number[] = []
