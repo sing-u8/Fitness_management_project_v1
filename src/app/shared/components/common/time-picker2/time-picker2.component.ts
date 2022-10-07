@@ -95,7 +95,13 @@ export class TimePicker2Component implements OnInit, AfterViewInit, OnChanges {
 
     getInitialTimeObj() {
         const startTime = this.startTime ? this.startTime.split(':').map((time) => Number(time)) : []
-        const endTime = this.endTime ? this.endTime.split(':').map((time) => Number(time)) : []
+        const endTime = this.endTime
+            ? this.endTime == '23:59:00'
+                ? [24, 0, 0]
+                : this.endTime.split(':').map((time) => Number(time))
+            : []
+        // endTime -- db에서 24:00:00을 받아들이지 못하므로 23:59:00으로 24:00:00을 표현
+
         return {
             startTime:
                 startTime.length != 0
@@ -104,14 +110,14 @@ export class TimePicker2Component implements OnInit, AfterViewInit, OnChanges {
             endTime:
                 endTime.length != 0
                     ? new Date().setHours(endTime[0], endTime[1], endTime[2])
-                    : new Date().setHours(23, 59, 59, 999), // new Date().setHours(24, 0, 0, 0), // 서버에서 24:00:00을 허용하지 않음
+                    : new Date().setHours(24, 0, 0, 0), // new Date().setHours(23, 59, 59, 999), // 서버에서 24:00:00을 허용하지 않음
         }
     }
 
     initTimeList() {
         let { startTime, endTime } = this.getInitialTimeObj()
         this.timeList = []
-        // let isFirstNoon = false
+        let idx = 0
         while (startTime <= endTime) {
             const valueList = dayjs(startTime).format('A:hh:mm').split(':')
             const value =
@@ -120,18 +126,20 @@ export class TimePicker2Component implements OnInit, AfterViewInit, OnChanges {
                 valueList[1] +
                 ':' +
                 valueList[2]
-            const key = dayjs(startTime).format('HH:mm:ss')
-            // if (key == '00:00:00' && !isFirstNoon) {
-            //     isFirstNoon = true
-            // } else if (key == '00:00:00' && isFirstNoon) {
-            //     key = '24:00:00'
-            // }
+            let key = dayjs(startTime).format('HH:mm:ss')
+            if (key == '00:00:00' && idx != 0) {
+                key = '23:59:00'
+            }
+
             this.timeList.push({ key: key, name: value, isDisabled: this.checkIsDisableTime(key) })
-            if (dayjs().isBetween(dayjs(startTime), dayjs(startTime + 1800000), 'minute', '[]')) {
+            if (idx != 48 && dayjs().isBetween(dayjs(startTime), dayjs(startTime + 1800000), 'minute', '[]')) {
                 this.selectedTime = { key: key, name: value, isDisabled: this.checkIsDisableTime(key) }
+            } else {
+                this.selectedTime = { key: key, name: value, isDisabled: false }
             }
 
             startTime += 1800000
+            idx++
         }
     }
     initSelectedTime() {
