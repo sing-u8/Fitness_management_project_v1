@@ -12,6 +12,9 @@ import {
 } from '@angular/core'
 import _ from 'lodash'
 
+export type InputTime = { start: string; end: string }
+export type DayString = { value: number[] }
+
 @Component({
     selector: 'rw-sch-center-operating-modal',
     templateUrl: './sch-center-operating-modal.component.html',
@@ -19,15 +22,23 @@ import _ from 'lodash'
 })
 export class SchCenterOpratingModalComponent implements AfterViewChecked, OnChanges {
     @Input() visible: boolean
-    @Input() time: { start: string; end: string }
-    @Input() daysString: { value: number[] }
+    @Input() time: InputTime
+    @Input() daysString: DayString
+    @Input() isAllTime = false
+    onCheckAllTime() {
+        this.isAllTime = !this.isAllTime
+    }
 
     @ViewChild('modalBackgroundElement') modalBackgroundElement
     @ViewChild('modalWrapperElement') modalWrapperElement
 
     @Output() visibleChange = new EventEmitter<boolean>()
     @Output() cancel = new EventEmitter<any>()
-    @Output() confirm = new EventEmitter<any>()
+    @Output() confirm = new EventEmitter<{
+        operatingTime: InputTime
+        operatingDayOfWeek: DayString
+        isAllTime: boolean
+    }>()
 
     public dayOfWeek = [
         { key: 0, name: '일', selected: true },
@@ -94,6 +105,7 @@ export class SchCenterOpratingModalComponent implements AfterViewChecked, OnChan
         this.confirm.emit({
             operatingTime: this.time,
             operatingDayOfWeek: this.daysString,
+            isAllTime: this.isAllTime,
         })
     }
 

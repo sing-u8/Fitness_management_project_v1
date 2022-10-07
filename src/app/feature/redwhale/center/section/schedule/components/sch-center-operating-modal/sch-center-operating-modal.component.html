@@ -34,22 +34,28 @@
 
         <div class="time">
           <div class="rw-typo-subtext0-regular small-title">시간</div>
-          <div class="time-select-container">
+          <div [class.disabled]="isAllTime" class="time-select-container">
             <rw-time-picker2
               [time]="time.start"
+              [disabled]="isAllTime"
               (onTimeClick)="onStartTimeClick($event)"
             ></rw-time-picker2>
-            <span class="rw-typo-bodytext0">부터</span>
+            <span  class="rw-typo-bodytext0">부터</span>
             <rw-time-picker2
               [time]="time.end"
+              [disabled]="isAllTime"
               [disableTimeUntil]= "time.start"
               (onTimeClick)="onEndTimeClick($event)"
             ></rw-time-picker2>
-            <span class="rw-typo-bodytext0">까지</span>
+            <span  class="rw-typo-bodytext0">까지</span>
 
           </div>
+          <rw-checkbox
+            text="24시간 운영"
+            [checked]="isAllTime"
+            (click)="onCheckAllTime()"
+          ></rw-checkbox>
         </div>
-
       </div>
 
       <div class="bottom">

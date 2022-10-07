@@ -142,7 +142,6 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
             })
 
         this.nxStore.pipe(select(ScheduleSelector.curCenterId), take(1)).subscribe((curCenterid) => {
-            console.log('select(ScheduleSelector.curCenterId) !!!!!')
             if (curCenterid != this.center.id) {
                 this.nxStore.dispatch(ScheduleActions.resetAll())
                 this.nxStore.dispatch(ScheduleActions.startLoadScheduleState())
@@ -269,6 +268,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
     onCenterOperatingModalConfirm(Return: {
         operatingTime: GymOperatingTime
         operatingDayOfWeek: { value: number[] }
+        isAllTime: boolean
     }) {
         this.centerService
             .updateCenter(this.center.id, {
@@ -316,7 +316,6 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
 
     // --------------------- fucntions for datepicker related to fullcalendar  --------------
     initDatePickerData() {
-        console.log('initDatePickerData - is called')
         this.weekPickerData.startDate = dayjs().startOf('week').format('YYYY-MM-DD')
         this.weekPickerData.endDate = dayjs().endOf('week').format('YYYY-MM-DD')
         this.datePickerData.date = dayjs().format('YYYY-MM-DD')
@@ -446,7 +445,6 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
         const calendarApi = this.fullCalendar.getApi()
         const activeStart = dayjs(calendarApi.view.activeStart).format('YYYY-MM-DD')
         const activeEnd = dayjs(calendarApi.view.activeEnd).subtract(1, 'day').format('YYYY-MM-DD')
-        // console.log("dayjs(calendarApi.view.activeEnd).subtract(1, 'day').format('YYYY-MM-DD') : ", activeEnd)
 
         switch (viewType) {
             case 'resourceTimeGridDay':
@@ -1059,16 +1057,12 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
 
     public dayCellLeave = true
     dayCellDidMount(arg) {
-        // console.log('dayCellDidMount arg: ', arg)
-
         if (arg.view.type == 'dayGridMonth') {
-            // console.log('dayCellDidMount =======================')
             if (arg.el.classList.contains('fc-daygrid-day')) {
                 // normal daycell element
                 const daygridDayTop_el: HTMLElement = arg.el.getElementsByClassName('fc-daygrid-day-top')[0]
                 const isToday = arg.el.classList.contains('fc-day-today')
                 if (daygridDayTop_el) {
-                    // console.log('daygridDayTop_el : ', daygridDayTop_el)
                     daygridDayTop_el.style.flexDirection = 'row'
                     daygridDayTop_el.style.justifyContent = 'space-between'
                     daygridDayTop_el.style.alignItems = 'center'
