@@ -12,6 +12,9 @@ import {
 } from '@angular/core'
 
 import { UpdateMode } from '@services/center-calendar.service'
+import { WordService } from '@services/helper/word.service'
+
+import _ from 'lodash'
 
 @Component({
     selector: 'rw-sch-modify-repeat-lesson-modal',
@@ -32,7 +35,7 @@ export class SchModifyRepeatLessonModalComponent implements OnChanges {
 
     changed: boolean
 
-    constructor(private el: ElementRef, private renderer: Renderer2) {}
+    constructor(private el: ElementRef, private renderer: Renderer2, private wordService: WordService) {}
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes['visible'] && !changes['visible'].firstChange) {
@@ -53,6 +56,8 @@ export class SchModifyRepeatLessonModalComponent implements OnChanges {
                     this.renderer.addClass(this.modalBackgroundElement.nativeElement, 'rw-modal-background-show')
                     this.renderer.addClass(this.modalWrapperElement.nativeElement, 'rw-modal-wrapper-show')
                 }, 0)
+
+                this.title = !_.isEmpty(this.title) ? this.wordService.ellipsis(this.title, 7) : this.title
             } else {
                 this.renderer.removeClass(this.modalBackgroundElement.nativeElement, 'rw-modal-background-show')
                 this.renderer.removeClass(this.modalWrapperElement.nativeElement, 'rw-modal-wrapper-show')
