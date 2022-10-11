@@ -43,6 +43,8 @@ import { UserLocker } from '@schemas/user-locker'
     styleUrls: ['./locker.component.scss'],
 })
 export class LockerComponent implements OnInit, AfterViewInit, OnDestroy {
+    public readonly maxLockerLength = 200
+
     // ngrx state
     public isLoading$ = this.nxStore.pipe(select(LockerSelector.isLoading))
     public curLockerItemListIsLoading$ = this.nxStore.pipe(select(LockerSelector.curLockerItemListIsLoading))
@@ -212,7 +214,7 @@ export class LockerComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     checkIsLockerCountItemEnable() {
-        if (this.curLockerItemList.length >= 100) {
+        if (this.curLockerItemList.length >= this.maxLockerLength) {
             this.lockerItemCountInput.disable()
         } else {
             this.lockerItemCountInput.enable()
