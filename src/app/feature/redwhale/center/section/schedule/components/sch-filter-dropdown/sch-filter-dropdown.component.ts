@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, AfterViewInit } from '@angular/core'
 
 import _ from 'lodash'
-
+import { originalOrder } from '@helpers/pipe/keyvalue'
 // ngrx
 import { Store } from '@ngrx/store'
 import * as FromSchedule from '@centerStore/reducers/sec.schedule.reducer'
@@ -30,4 +30,6 @@ export class SchFilterDropdownComponent implements OnInit, AfterViewInit {
         this.filter[key].selected = !this.filter[key].selected
         this.nxStore.dispatch(ScheduleActions.setLectureFilter({ lectureFilter: this.filter }))
     }
+
+    originalOrder = originalOrder
 }

@@ -6,7 +6,7 @@
   <div class="content" [class.show] ="isContentOpen">
 
     <rw-checkbox
-        *ngFor="let item of filter | keyvalue"
+        *ngFor="let item of filter | keyvalue: originalOrder"
         [text]="item.value.filterName"
         [checked]="item.value.selected"
         (click)="onCheckBoxSelect(item.key)"
