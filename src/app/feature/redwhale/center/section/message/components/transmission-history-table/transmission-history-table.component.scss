@@ -17,6 +17,7 @@ table.message-history-table {
 	tbody.data-container {
 		position: absolute;
 		height: 100%;
+		width: 100% !important;
 	}
 	tbody.none-data-container {
 		width: 100%;
@@ -107,11 +108,17 @@ table.message-history-table {
 			width: calc( calc(94 / 1105) * calc(100%) );
 		}
 		&:nth-child(4){
+			padding-right: 10px;
+			min-width: calc(42px + 40px);
+			width: calc( calc(82 / 1105) * calc(100%) );
+
+		}
+		&:nth-child(5){
 			min-width: calc(40px + 26px);
 			width: calc( calc(66 / 1105) * calc(100%) );
 		}
-		&:nth-child(5){
-			// add ellipsis !!
+		&:nth-child(6){
+
 			padding-right: 40px;
 			min-width: calc(344px + 26px);
 			width: calc( calc(370 / 1105) * calc(100%) );
@@ -119,11 +126,6 @@ table.message-history-table {
 				width: 100%;
 				height: 100%;
 			}
-		}
-		&:nth-child(6){
-			padding-right: 10px;
-			min-width: calc(42px + 40px);
-			width: calc( calc(82 / 1105) * calc(100%) );
 		}
 		&:nth-child(7){
 			padding-right: 10px;
@@ -171,17 +173,19 @@ table.message-history-table {
 				width: calc( calc(104 / 1265) * calc(100%) );
 			}
 			&:nth-child(4){
+				min-width: calc(42px + 50px);
+				width: calc( calc(92 / 1265) * calc(100%) );
+
+			}
+			&:nth-child(5){
 				min-width: calc(50px + 26px);
 				width: calc( calc(76 / 1265) * calc(100%) );
 			}
-			&:nth-child(5){
+			&:nth-child(6){
+
 				padding-right: 50px;
 				min-width: calc(354px + 26px);
 				width: calc( calc(380 / 1265) * calc(100%) );
-			}
-			&:nth-child(6){
-				min-width: calc(42px + 50px);
-				width: calc( calc(92 / 1265) * calc(100%) );
 			}
 			&:nth-child(7){
 				min-width: calc(54px + 50px);
@@ -211,17 +215,18 @@ table.message-history-table {
 				width: calc( calc(134 / 1745) * calc(100%) );
 			}
 			&:nth-child(4){
+				min-width: calc(42px + 80px);
+				width: calc( calc(122 / 1745) * calc(100%) );
+
+			}
+			&:nth-child(5){
 				min-width: calc(80px + 26px);
 				width: calc( calc(106 / 1745) * calc(100%) );
 			}
-			&:nth-child(5){
+			&:nth-child(6){
 				padding-right: 60px;
 				min-width: calc(384px + 26px);
 				width: calc( calc(410 / 1745) * calc(100%) );
-			}
-			&:nth-child(6){
-				min-width: calc(42px + 80px);
-				width: calc( calc(122 / 1745) * calc(100%) );
 			}
 			&:nth-child(7){
 				min-width: calc(54px + 80px);

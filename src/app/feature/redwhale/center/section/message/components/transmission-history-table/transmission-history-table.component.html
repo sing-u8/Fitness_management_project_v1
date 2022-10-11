@@ -5,8 +5,8 @@
 			<th>일시</th>
 			<th>상태</th>
 			<th>구분</th>
+			<th>유형</th>
 			<th [style.maxWidth.px]="contentWidth">내용</th>
-			<th>글자 수</th>
 			<th>요청 건수</th>
 			<th>성공 건수</th>
 			<th>실패 건수</th>
@@ -30,17 +30,17 @@
 				<td></td>
 				<td>{{item.datetime}}</td>
 				<td>{{item.state_code_name}}</td>
+				<td>{{'일반 전송T'}}</td>
 				<td>{{item.type_code_name}}</td>
 				<td [style.maxWidth.px]="contentWidth">
 					<div class="line-ellipsis-one">
 						{{item.text}}
 					</div>
 				</td>
-				<td>{{item.text.length}}</td>
-				<td>{{item.request}}</td>
-				<td>{{item.success}}</td>
+				<td>{{ item.request }}</td>
+				<td>{{item.state_code == 'sms_state_sent' ? item.success : '-'}}</td>
 				<td>
-					<span>{{item.failure}}</span>
+					<span>{{item.state_code == 'sms_state_sent' ? item.failure : '-'}}</span>
 					<div class="arrow-right"></div>
 				</td>
 				<td></td>
