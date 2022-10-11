@@ -21,6 +21,7 @@ export class AutoTransSettingBoxComponent implements OnInit, OnDestroy {
     }
     @Input() smsAutoSend: SMSAutoSend
     @Input() smsAutoSendDays: number
+    @Input() guideText: string
 
     @Output() OnAutoTransmitChange = new EventEmitter<boolean>()
     @Output() OnAutoTransmitDayChange = new EventEmitter<string>()
