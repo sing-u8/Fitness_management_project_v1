@@ -230,10 +230,11 @@ export const selectTypeCheck = (state: State) => state.typeCheck
 export const selectProductCheck = (state: State) => state.productCheck
 export const selectInputs = (state: State) => state.inputs
 export const selectSelectedDate = (state: State) => state.selectedDate
-export const selectSaleData = (state: State) => state.saleData
+export const selectSaleData = (state: State) => excludeZeroSale(state.saleData)
+
 export const selectSaleStatistics = (state: State) => {
     return _.reduce(
-        state.saleData,
+        excludeZeroSale(state.saleData),
         (acc, cur) => {
             acc.card = cur.type_code == 'payment_type_refund' ? acc.card - cur.card : acc.card + cur.card
             acc.cash = cur.type_code == 'payment_type_refund' ? acc.cash - cur.cash : acc.cash + cur.cash
@@ -254,3 +255,8 @@ export const selectSummaryData = (state: State) => ({
     totalSummary: state.saleTotal,
 })
 export const selectSaleSummaryLoading = (state: State) => state.isSaleSummaryLoading
+
+// helper
+function excludeZeroSale(sales: StatsSales[]) {
+    return sales.filter((v) => !(v.card == 0 && v.cash == 0 && v.trans == 0 && v.unpaid == 0))
+}
