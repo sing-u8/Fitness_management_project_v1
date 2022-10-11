@@ -25,35 +25,35 @@
 		</tbody>
 	</ng-container>
 	<ng-container *ngIf="historyGroupLoading != 'pending'">
-		<tbody *ngIf="smsHistoryGroupList.length > 0">
-		<tr *ngFor="let item of smsHistoryGroupList" (click)="openHistoryDetailModal(item)">
-			<td></td>
-			<td>{{item.datetime}}</td>
-			<td>{{item.state_code_name}}</td>
-			<td>{{item.type_code_name}}</td>
-			<td [style.maxWidth.px]="contentWidth">
-				<div class="line-ellipsis-one">
-					{{item.text}}
-				</div>
-			</td>
-			<td>{{item.text.length}}</td>
-			<td>{{item.request}}</td>
-			<td>{{item.success}}</td>
-			<td>
-				<span>{{item.failure}}</span>
-				<div class="arrow-right"></div>
-			</td>
-			<td></td>
-		</tr>
+		<tbody class="data-container thin-scroll-y-overlay2" *ngIf="smsHistoryGroupList.length > 0">
+			<tr *ngFor="let item of smsHistoryGroupList" (click)="openHistoryDetailModal(item)">
+				<td></td>
+				<td>{{item.datetime}}</td>
+				<td>{{item.state_code_name}}</td>
+				<td>{{item.type_code_name}}</td>
+				<td [style.maxWidth.px]="contentWidth">
+					<div class="line-ellipsis-one">
+						{{item.text}}
+					</div>
+				</td>
+				<td>{{item.text.length}}</td>
+				<td>{{item.request}}</td>
+				<td>{{item.success}}</td>
+				<td>
+					<span>{{item.failure}}</span>
+					<div class="arrow-right"></div>
+				</td>
+				<td></td>
+			</tr>
 		</tbody>
 		<tbody
 			*ngIf="smsHistoryGroupList.length <= 0 "
 			class="none-data-container"
 		>
-		<img src="assets/icons/etc/empty_screen.svg" >
-		<p class="rw-typo-subtext2">아직 전송된 메시지가 없어요.</p>
-		<p class="rw-typo-subtext2">상단의 일반 전송 / 자동 전송 메뉴에 접속하시면</p>
-		<p class="rw-typo-subtext2">회원에게 문자를 전송하실 수 있어요.</p>
+			<img src="assets/icons/etc/empty_screen.svg" >
+			<p class="rw-typo-subtext2">아직 전송된 메시지가 없어요.</p>
+			<p class="rw-typo-subtext2">상단의 일반 전송 / 자동 전송 메뉴에 접속하시면</p>
+			<p class="rw-typo-subtext2">회원에게 문자를 전송하실 수 있어요.</p>
 		</tbody>
 	</ng-container>
 

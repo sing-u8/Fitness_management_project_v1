@@ -63,7 +63,7 @@
         </div>
     </header>
 
-    <article class="content-container thin-scroll-y">
+    <article class="content-container" [class.thin-scroll-y]="smsType != 'history'">
         <div *ngIf="smsType == 'general'" class="l-message">
             <msg-member-list
                 [usersLists]="usersLists$ | async"
