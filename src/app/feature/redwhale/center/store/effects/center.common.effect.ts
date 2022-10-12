@@ -1,13 +1,10 @@
 import { Injectable } from '@angular/core'
-import { createEffect, Actions, ofType, concatLatestFrom } from '@ngrx/effects'
+import { createEffect, Actions, ofType } from '@ngrx/effects'
 import { Store } from '@ngrx/store'
-import { of, forkJoin, EMPTY } from 'rxjs'
+import { of } from 'rxjs'
 import { catchError, switchMap, tap, map, find } from 'rxjs/operators'
 
 import _ from 'lodash'
-
-import { Center } from '@schemas/center'
-import { CenterUser } from '@schemas/center-user'
 
 import { CenterUserListService } from '@services/helper/center-user-list.service'
 import { CenterRolePermissionService } from '@services/center-role-permission.service'
