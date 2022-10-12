@@ -100,7 +100,7 @@
                 </div>
             </div>
 
-            <div class="main-right">
+            <div class="main-right" >
                 <div class="main-right__header main-title-margin">
                     <p class="rw-typo-title1 ">락커</p>
                     <rw-switch
@@ -111,7 +111,7 @@
                     ></rw-switch>
                 </div>
 
-                <div class="l-locker">
+                <div class="l-locker" (rwClickOutside)="onClickOutsideOfLocker($event)">
                     <div
                         *ngIf="!(lockerCategLength == 0 && !isEditMode)"
                         class="l-locker__header"

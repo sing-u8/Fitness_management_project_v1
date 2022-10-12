@@ -221,6 +221,7 @@
                 rw-button
                 rwButtonFontColor="var(--white)"
                 rwButtonColor="var(--darkgrey)"
+                [rwButtonDisabled]="additionalChargeDisabled"
                 (click)="toggleShowAdditionalChargeModal()"
             >
                 변경하기

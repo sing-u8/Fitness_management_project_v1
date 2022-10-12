@@ -5,7 +5,11 @@ import _ from 'lodash'
 import dayjs from 'dayjs'
 
 import { StorageService } from '@services/storage.service'
-import { CenterUsersLockerService, CreateLockerTicketReqBody } from '@services/center-users-locker.service.service'
+import {
+    CenterUsersLockerService,
+    CreateLockerTicketReqBody,
+    ExtendLockerTicketReqBody,
+} from '@services/center-users-locker.service.service'
 import { CenterLockerService } from '@services/center-locker.service'
 import { DashboardHelperService } from '@services/center/dashboard-helper.service'
 
@@ -52,6 +56,24 @@ export class LockerDetailBoxComponent implements OnInit, OnChanges, OnDestroy {
     public doShowlockerHistory = false
     public doShowChargeModal = false
     public doShowAdditionalChargeModal = false
+    public additionalChargeDisabled = false
+    setAdditionalChargeDisable() {
+        const userLockerDay: number = dayjs(this.lockerDate.endDate).diff(this.lockerDate.startDate, 'day')
+        const originUserLockerDay: number = dayjs(this.curUserLocker.end_date).diff(
+            this.curUserLocker.start_date,
+            'day'
+        )
+        this.additionalChargeDisabled = originUserLockerDay - userLockerDay == 0
+    }
+    public lockerChargeType: ChargeMode = 'modify'
+    setLockerChargeType() {
+        const userLockerDay: number = dayjs(this.lockerDate.endDate).diff(this.lockerDate.startDate, 'day')
+        const originUserLockerDay: number = dayjs(this.curUserLocker.end_date).diff(
+            this.curUserLocker.start_date,
+            'day'
+        )
+        this.lockerChargeType = originUserLockerDay - userLockerDay > 0 ? 'refund' : 'modify'
+    }
 
     public lockerEmptyTitle = ''
 
@@ -243,6 +265,7 @@ export class LockerDetailBoxComponent implements OnInit, OnChanges, OnDestroy {
         this.doShowChargeModal = false
     }
     toggleShowAdditionalChargeModal() {
+        if (this.additionalChargeDisabled) return
         this.doShowAdditionalChargeModal = !this.doShowAdditionalChargeModal
     }
     closeShowAdditionalChargeModal() {
@@ -282,19 +305,37 @@ export class LockerDetailBoxComponent implements OnInit, OnChanges, OnDestroy {
 
     // 결제 가격 수정되는 방식에 따라 수정 필요!  결제 담당자 에러 때문에  주석 처리 ; 나중에 수정되면 수정하기!
     changeDate(res: ConfirmOuput) {
-        const reqBody = {
-            end_date: this.lockerDate.endDate,
-            payment: {
-                card: res.chargeType.pay_card,
-                trans: res.chargeType.pay_trans,
-                vbank: 0,
-                phone: 0,
-                cash: res.chargeType.pay_cash,
-                unpaid: res.chargeType.unpaid,
-                memo: '',
-                responsibility_user_id: res.chargeType.assignee_id,
-            },
+        let reqBody: ExtendLockerTicketReqBody = undefined
+        if (this.lockerChargeType == 'refund') {
+            reqBody = {
+                end_date: this.lockerDate.endDate,
+                payment: {
+                    card: -res.chargeType.pay_card,
+                    trans: -res.chargeType.pay_trans,
+                    vbank: 0,
+                    phone: 0,
+                    cash: -res.chargeType.pay_cash,
+                    unpaid: 0,
+                    memo: '',
+                    responsibility_user_id: res.chargeType.assignee_id,
+                },
+            }
+        } else if (this.lockerChargeType == 'modify') {
+            reqBody = {
+                end_date: this.lockerDate.endDate,
+                payment: {
+                    card: res.chargeType.pay_card,
+                    trans: res.chargeType.pay_trans,
+                    vbank: 0,
+                    phone: 0,
+                    cash: res.chargeType.pay_cash,
+                    unpaid: res.chargeType.unpaid,
+                    memo: '',
+                    responsibility_user_id: res.chargeType.assignee_id,
+                },
+            }
         }
+
         this.nxStore.dispatch(
             LockerActions.startExtendLockerTicket({
                 centerId: this.center.id,
@@ -377,6 +418,9 @@ export class LockerDetailBoxComponent implements OnInit, OnChanges, OnDestroy {
         this.lockerDate.endDate = changedLockerDate.endDate
 
         this.lockerDateDiff = dayjs(this.lockerDate.endDate).diff(dayjs(this.lockerDate.startDate), 'day') + 1
+
+        this.setAdditionalChargeDisable()
+        this.setLockerChargeType()
     }
 
     registerMember(res: ConfirmOuput) {
