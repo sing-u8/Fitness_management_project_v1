@@ -1,4 +1,5 @@
 <div
+    id="rw-locker-detail-box"
     class="locker-detail-box-container"
     [class.avatar-exit]="curUserLocker"
     [class.locker-stop]="lockerItem.state_code == 'locker_item_state_stop_using'"
@@ -275,7 +276,7 @@
 
 <rw-locker-charge-modal
     [(visible)]="doShowAdditionalChargeModal"
-    [type]="'modify'"
+    [type]="lockerChargeType"
     (cancel)="closeShowAdditionalChargeModal()"
     (confirm)="changeDate($event)"
 ></rw-locker-charge-modal>
