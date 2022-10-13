@@ -10,7 +10,7 @@ import { StorageService } from '@services/storage.service'
 import { Response } from '@schemas/response'
 
 import { Role } from '@schemas/role'
-import { PermissionCategory } from '@schemas/permission-category'
+import { PermissionCategory, RoleCode } from '@schemas/permission-category'
 import { PermissionItem } from '@schemas/permission-item'
 
 @Injectable({
@@ -38,7 +38,7 @@ export class CenterRolePermissionService {
         )
     }
 
-    getCenterRolePermission(centerId: string, roleCode: string): Observable<Array<PermissionCategory>> {
+    getCenterRolePermission(centerId: string, roleCode: RoleCode): Observable<Array<PermissionCategory>> {
         const url = this.SERVER + `${centerId}/role/${roleCode}/permission`
 
         return this.http.get<Response>(url, this.options).pipe(
@@ -62,7 +62,7 @@ export class CenterRolePermissionService {
     }
 
     // put
-    modifyCenterRole(centerId: string, roleCode: string, reqBody: ModifyCenterRoleReqBody): Observable<Role> {
+    modifyCenterRole(centerId: string, roleCode: RoleCode, reqBody: ModifyCenterRoleReqBody): Observable<Role> {
         const url = this.SERVER + `${centerId}/role/${roleCode}`
 
         return this.http.put<Response>(url, reqBody, this.options).pipe(
@@ -90,7 +90,7 @@ export class CenterRolePermissionService {
     }
 
     // delete
-    deleteCenterRole(centerId: string, roleCode: string) {
+    deleteCenterRole(centerId: string, roleCode: RoleCode) {
         const url = this.SERVER + `${centerId}/role/${roleCode}`
 
         return this.http.delete<Response>(url, this.options).pipe(

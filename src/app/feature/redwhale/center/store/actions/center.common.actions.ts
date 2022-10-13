@@ -29,21 +29,21 @@ export const finishGetMembers = createAction(
 
 export const startGetCenterPermission = createAction(
     `[${FeatureKey}] Start Get Center Permission`,
-    props<{ roleCode: RoleCode; centerId: string }>()
+    props<{ centerId: string }>()
 )
 export const finishGetCenterPermission = createAction(
     `[${FeatureKey}] Finish Get Center Permission`,
-    props<{ roleCode: RoleCode; permissionCategoryList: Array<PermissionCategory> }>()
+    props<{ permissionObj: Record<RoleCode, Array<PermissionCategory>> }>()
 )
 
 export const startUpdateCenterPermission = createAction(
     `[${FeatureKey}] Start Update Center Permission`,
     props<{
         centerId: string
-        roleCode: RoleCode
-        permmissionKeyCode: PermissionKeys
-        permissionCode: PermissionCode
-        permissionCategoryList: Array<PermissionCategory>
+        permitObj: {
+            administrator: Array<PermissionCategory>
+            instructor: Array<PermissionCategory>
+        }
         cb?: () => void
     }>()
 )

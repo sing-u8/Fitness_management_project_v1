@@ -32,9 +32,7 @@ export class CenterGuard implements CanActivate {
         const address = route.params['address']
         const center: Center = this.storageService.getCenter()
         if (address == this.addrData.addr && this.addrData.isChecked) {
-            this.nxStore.dispatch(
-                CenterCommonActions.startGetCenterPermission({ roleCode: 'instructor', centerId: center.id })
-            )
+            this.nxStore.dispatch(CenterCommonActions.startGetCenterPermission({ centerId: center.id }))
             return of(true)
         } else {
             return this.CenterService.checkMemeber(address).pipe(
@@ -45,9 +43,7 @@ export class CenterGuard implements CanActivate {
                     this.nxStore.dispatch(CenterCommonActions.setCurCenter({ center }))
                     this.nxStore.dispatch(CenterCommonActions.startGetInstructors({ centerId: center.id }))
                     this.nxStore.dispatch(CenterCommonActions.startGetMembers({ centerId: center.id }))
-                    this.nxStore.dispatch(
-                        CenterCommonActions.startGetCenterPermission({ roleCode: 'instructor', centerId: center.id })
-                    )
+                    this.nxStore.dispatch(CenterCommonActions.startGetCenterPermission({ centerId: center.id }))
                     return true
                 }),
                 catchError((error: any) => {

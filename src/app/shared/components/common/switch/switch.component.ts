@@ -20,9 +20,7 @@ export class SwitchComponent implements ControlValueAccessor {
     @Output() change = new EventEmitter<boolean>()
 
     isChecked: boolean
-    onChange = (_) => {
-        console.log('onChange: ', _)
-    }
+    onChange = (_) => {}
     onTouched = (_) => {}
 
     constructor() {

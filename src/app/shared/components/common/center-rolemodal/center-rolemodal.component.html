@@ -19,14 +19,36 @@
                         대한 모든 정보를 조회할 수 있어요.
                     </div>
                 </div>
-                <div class="show-sale">
+                <div class="l-check-box">
+                    <rw-switch
+                        [text]="'운영자 조회 가능'"
+                        [disabled]="true"
+                        [(ngModel)]="ownerCheckApprove"
+                    ></rw-switch>
+                    <ng-container *ngFor="let item of permissionObj.administrator">
+                        <ng-container *ngFor="let subItem of item.items">
+                            <div
+                                *ngIf="subItem.code == 'read_stats_sales'"
+                                class="checkbox-margin-top"
+                            >
+                                <rw-switch
+                                    [text]="subItem.approved ? '관리자 조회 가능' : '관리자 조회 불가능'"
+                                    [(ngModel)]="subItem.approved"
+                                ></rw-switch>
+                            </div>
+                        </ng-container>
+                    </ng-container>
                     <ng-container *ngFor="let item of permissionObj.instructor">
                         <ng-container *ngFor="let subItem of item.items">
-                            <rw-switch
+                            <div
                                 *ngIf="subItem.code == 'read_stats_sales'"
-                                [text]="subItem.approved ? '강사에게도 매출 공개  🙉' : '강사에게 매출 비공개  🙈'"
-                                [(ngModel)]="subItem.approved"
-                            ></rw-switch>
+                                class="checkbox-margin-top"
+                            >
+                                <rw-switch
+                                    [text]="subItem.approved ? '강사 조회 가능' : '강사 조회 불가능'"
+                                    [(ngModel)]="subItem.approved"
+                                ></rw-switch>
+                            </div>
                         </ng-container>
                     </ng-container>
                 </div>
@@ -40,14 +62,36 @@
                         하니 주의해주세요!
                     </div>
                 </div>
-                <div class="show-sale">
+                <div class="l-check-box">
+                    <rw-switch
+                        [text]="'운영자 삭제 가능'"
+                        [disabled]="true"
+                        [(ngModel)]="ownerCheckApprove"
+                    ></rw-switch>
+                    <ng-container *ngFor="let item of permissionObj.administrator">
+                        <ng-container *ngFor="let subItem of item.items">
+                            <div
+                                *ngIf="subItem.code == 'delete_user_membership_payment'"
+                                class="checkbox-margin-top"
+                            >
+                                <rw-switch
+                                    [text]="subItem.approved ? '관리자 삭제 가능' : '관리자 삭제 불가능'"
+                                    [(ngModel)]="subItem.approved"
+                                ></rw-switch>
+                            </div>
+                        </ng-container>
+                    </ng-container>
                     <ng-container *ngFor="let item of permissionObj.instructor">
                         <ng-container *ngFor="let subItem of item.items">
-                            <rw-switch
-                                *ngIf="subItem.code == 'read_stats_sales'"
-                                [text]="subItem.approved ? '강사에게도 매출 공개  🙉' : '강사에게 매출 비공개  🙈'"
-                                [(ngModel)]="subItem.approved"
-                            ></rw-switch>
+                            <div
+                                *ngIf="subItem.code == 'delete_user_membership_payment'"
+                                class="checkbox-margin-top"
+                            >
+                                <rw-switch
+                                    [text]="subItem.approved ? '강사 삭제 가능' : '강사 삭제 불가능'"
+                                    [(ngModel)]="subItem.approved"
+                                ></rw-switch>
+                            </div>
                         </ng-container>
                     </ng-container>
                 </div>

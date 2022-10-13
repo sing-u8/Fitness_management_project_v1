@@ -55,7 +55,17 @@ export type UserMembershipPermissionCode =
     | 'read_user_membership'
     | 'update_user_membership'
     | 'delete_user_membership'
+export type UserMembershipPaymentPermissionCode =
+    | 'create_user_membership_payment'
+    | 'read_user_membership_payment'
+    | 'update_user_membership_payment'
+    | 'delete_user_membership_payment'
 export type UserLockerPermissionCode =
+    | 'create_user_locker_payment'
+    | 'read_user_locker_payment'
+    | 'update_user_locker_payment'
+    | 'delete_user_locker_payment'
+export type UserLockerPaymentPermissionCode =
     | 'create_user_locker'
     | 'read_user_locker'
     | 'update_user_locker'
@@ -73,7 +83,10 @@ export type PermissionKeys =
     | 'calendar'
     | 'user_membership'
     | 'user_locker'
+    | 'user_locker_payment'
+    | 'user_membership_payment'
     | 'stats_sales'
+
 export type PermissionCode =
     | StatsSalesPermissionCode
     | UserLockerPermissionCode
@@ -86,5 +99,7 @@ export type PermissionCode =
     | PermissionPermissionCode
     | RolePermissionCode
     | CenterPermissionCode
+    | UserMembershipPaymentPermissionCode
+    | UserLockerPaymentPermissionCode
 
-export type RoleCode = 'instructor'
+export type RoleCode = 'instructor' | 'administrator'

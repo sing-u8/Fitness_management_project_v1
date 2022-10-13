@@ -36,6 +36,7 @@ export class CenterRolemodalComponent implements OnChanges, AfterViewChecked, On
     @Input() permissionObj: PermissionObj = {
         visible: false,
         instructor: [],
+        administrator: [],
     }
 
     @ViewChild('modalBackgroundElement') modalBackgroundElement
@@ -44,6 +45,8 @@ export class CenterRolemodalComponent implements OnChanges, AfterViewChecked, On
     public changed: boolean
     public isMouseModalDown = false
     public center: Center
+
+    public ownerCheckApprove = true
 
     constructor(private renderer: Renderer2, private nxStore: Store, private storageService: StorageService) {}
 
@@ -88,10 +91,10 @@ export class CenterRolemodalComponent implements OnChanges, AfterViewChecked, On
         this.nxStore.dispatch(
             startUpdateCenterPermission({
                 centerId: this.center.id,
-                roleCode: 'instructor',
-                permmissionKeyCode: 'stats_sales',
-                permissionCode: 'read_stats_sales',
-                permissionCategoryList: this.permissionObj.instructor,
+                permitObj: {
+                    administrator: this.permissionObj.administrator,
+                    instructor: this.permissionObj.instructor,
+                },
                 cb: () => {
                     clickEmitter.hideLoading()
                     this.onCancel()

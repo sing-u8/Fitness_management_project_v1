@@ -11,6 +11,7 @@ import * as CommunitydActions from '@centerStore/actions/sec.community.actions'
 
 export interface PermissionObj {
     visible: boolean
+    administrator: Array<PermissionCategory>
     instructor: Array<PermissionCategory>
 }
 
@@ -20,6 +21,7 @@ export const intialState: State = {
     instructors: [],
     permissionObj: {
         visible: false,
+        administrator: [],
         instructor: [],
     },
 }
@@ -51,12 +53,15 @@ export const centerCommonReducer = createImmerReducer(
         state.members = members
         return state
     }),
-    on(CenterCommonActions.finishGetCenterPermission, (state, { roleCode, permissionCategoryList }) => {
-        state.permissionObj[roleCode] = permissionCategoryList
+    on(CenterCommonActions.finishGetCenterPermission, (state, { permissionObj }) => {
+        _.forEach(_.keys(permissionObj), (key) => {
+            state.permissionObj[key] = permissionObj[key]
+        })
         return state
     }),
-    on(CenterCommonActions.startUpdateCenterPermission, (state, { roleCode, permissionCategoryList }) => {
-        state.permissionObj[roleCode] = permissionCategoryList
+    on(CenterCommonActions.startUpdateCenterPermission, (state, { permitObj }) => {
+        state.permissionObj.instructor = permitObj.instructor
+        state.permissionObj.administrator = permitObj.administrator
         return state
     }),
 

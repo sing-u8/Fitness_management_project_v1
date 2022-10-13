@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core'
-import { createEffect, Actions, ofType } from '@ngrx/effects'
+import { createEffect, Actions, ofType, concatLatestFrom } from '@ngrx/effects'
 import { Store } from '@ngrx/store'
-import { of } from 'rxjs'
-import { catchError, switchMap, tap, map, find } from 'rxjs/operators'
+import { of, forkJoin } from 'rxjs'
+import { catchError, switchMap, tap, map } from 'rxjs/operators'
 
 import _ from 'lodash'
 
@@ -10,6 +10,7 @@ import { CenterUserListService } from '@services/helper/center-user-list.service
 import { CenterRolePermissionService } from '@services/center-role-permission.service'
 
 import * as centerCommonActions from '@centerStore/actions/center.common.actions'
+import * as centerCommonSelector from '@centerStore/selectors/center.common.selector'
 
 @Injectable()
 export class CenterCommonEffect {
@@ -57,13 +58,18 @@ export class CenterCommonEffect {
     public getCenterPermission$ = createEffect(() =>
         this.actions$.pipe(
             ofType(centerCommonActions.startGetCenterPermission),
-            switchMap(({ roleCode, centerId }) =>
-                this.centerRolePermissionApi.getCenterRolePermission(centerId, roleCode).pipe(
-                    switchMap((permissionCategoryList) => {
+            switchMap(({ centerId }) =>
+                forkJoin([
+                    this.centerRolePermissionApi.getCenterRolePermission(centerId, 'administrator'),
+                    this.centerRolePermissionApi.getCenterRolePermission(centerId, 'instructor'),
+                ]).pipe(
+                    switchMap(([adminPCList, instPCList]) => {
                         return [
                             centerCommonActions.finishGetCenterPermission({
-                                roleCode,
-                                permissionCategoryList,
+                                permissionObj: {
+                                    administrator: adminPCList,
+                                    instructor: instPCList,
+                                },
                             }),
                         ]
                     })
@@ -76,18 +82,74 @@ export class CenterCommonEffect {
         () =>
             this.actions$.pipe(
                 ofType(centerCommonActions.startUpdateCenterPermission),
-                switchMap(({ roleCode, centerId, permissionCode, permmissionKeyCode, permissionCategoryList, cb }) =>
-                    this.centerRolePermissionApi
-                        .modifyCenterRolePermission(centerId, roleCode, permissionCode, {
-                            approved: permissionCategoryList
-                                .find((v) => v.code == permmissionKeyCode)
-                                .items.find((v) => v.code == permissionCode).approved,
+                concatLatestFrom(() => [this.store.select(centerCommonSelector.centerPermission)]),
+                switchMap(([{ centerId, permitObj, cb }, cpObj]) =>
+                    forkJoin([
+                        this.centerRolePermissionApi.modifyCenterRolePermission(
+                            centerId,
+                            'administrator',
+                            'read_stats_sales',
+                            {
+                                approved: permitObj.administrator
+                                    .find((v) => v.code == 'stats_sales')
+                                    .items.find((v) => v.code == 'read_stats_sales').approved,
+                            }
+                        ),
+                        this.centerRolePermissionApi.modifyCenterRolePermission(
+                            centerId,
+                            'administrator',
+                            'delete_user_membership_payment',
+                            {
+                                approved: permitObj.administrator
+                                    .find((v) => v.code == 'user_membership_payment')
+                                    .items.find((v) => v.code == 'delete_user_membership_payment').approved,
+                            }
+                        ),
+                        this.centerRolePermissionApi.modifyCenterRolePermission(
+                            centerId,
+                            'administrator',
+                            'delete_user_locker_payment',
+                            {
+                                approved: permitObj.administrator
+                                    .find((v) => v.code == 'user_membership_payment')
+                                    .items.find((v) => v.code == 'delete_user_membership_payment').approved,
+                            }
+                        ),
+                        this.centerRolePermissionApi.modifyCenterRolePermission(
+                            centerId,
+                            'instructor',
+                            'read_stats_sales',
+                            {
+                                approved: permitObj.instructor
+                                    .find((v) => v.code == 'stats_sales')
+                                    .items.find((v) => v.code == 'read_stats_sales').approved,
+                            }
+                        ),
+                        this.centerRolePermissionApi.modifyCenterRolePermission(
+                            centerId,
+                            'instructor',
+                            'delete_user_locker_payment',
+                            {
+                                approved: permitObj.instructor
+                                    .find((v) => v.code == 'user_membership_payment')
+                                    .items.find((v) => v.code == 'delete_user_membership_payment').approved,
+                            }
+                        ),
+                        this.centerRolePermissionApi.modifyCenterRolePermission(
+                            centerId,
+                            'instructor',
+                            'delete_user_membership_payment',
+                            {
+                                approved: permitObj.instructor
+                                    .find((v) => v.code == 'user_membership_payment')
+                                    .items.find((v) => v.code == 'delete_user_membership_payment').approved,
+                            }
+                        ),
+                    ]).pipe(
+                        tap(() => {
+                            cb ? cb() : null
                         })
-                        .pipe(
-                            tap(() => {
-                                cb ? cb() : null
-                            })
-                        )
+                    )
                 )
             ),
         { dispatch: false }
