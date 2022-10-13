@@ -21,7 +21,7 @@ export type UsersSelectCateg = Record<MemberSelectCateg, { name: string; userSiz
 export type UserListSelect = { key: MemberSelectCateg; value: { name: string; userSize: number } }
 export type UsersLists = Record<MemberSelectCateg, UsersListValue>
 export type SMSType = 'general' | 'auto-transmission' | 'history'
-export type HistoryDateRange = [string, string]
+export type HistoryDateRange = string | [string, string]
 
 export interface State {
     // common

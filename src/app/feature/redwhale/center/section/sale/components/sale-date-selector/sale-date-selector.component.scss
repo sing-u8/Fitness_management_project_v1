@@ -1,6 +1,6 @@
 * {
-    padding: 0px;
-    margin: 0px;
+    padding: 0;
+    margin: 0;
     text-align: initial;
 }
 
@@ -54,7 +54,7 @@
         z-index: 1;
         position: absolute;
         top: 46px;
-        right: 0px;
+        right: 0;
         width: 263px;
         min-height: 276px;
         background-color: var(--white);
@@ -170,7 +170,7 @@
                 border-top: 1px solid var(--border-color);
                 background-color: var(--white);
                 border-radius: 0 0 5px 5px;
-                padding: 0px 0px;
+                padding: 0 0;
 
                 & .guide-text {
                     color: var(--darkgrey);
@@ -179,7 +179,7 @@
                     width: 100%;
                     display: flex;
                     justify-content: space-between;
-                    margin: 7px 0px;
+                    margin: 7px 0;
 
                     & .date-text {
                         display: flex;

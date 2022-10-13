@@ -4,10 +4,10 @@
 	text-align: initial;
 }
 
-div.transmission-history-date-selector {
+.rw-sale-date-selector {
 	position: relative;
 	display: inline-flex;
-	width: 222px;
+	width: 225px;
 	height: 42px;
 
 	& > .selected {
@@ -62,6 +62,95 @@ div.transmission-history-date-selector {
 		box-shadow: 0 0 10px 0 rgba(181, 181, 181, 0.15);
 		border: solid 1px #f1f1f1;
 
+		.header {
+			display: flex;
+			align-items: center;
+			position: relative;
+			width: 100%;
+			height: 45px;
+
+			border-bottom: 1px solid var(--border-color);
+
+			& > .header-selected {
+				color: var(--red);
+				border-bottom: 3px solid var(--red);
+			}
+
+			.month-picker-header,
+			.date-picker-header {
+				width: 50%;
+				height: 100%;
+				display: inline-flex;
+				justify-content: center;
+				// align-items: center;
+				padding-top: 12px;
+				cursor: pointer;
+			}
+		}
+
+		.month-picker {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			padding: 24px 32px;
+
+			.month-picker-header {
+				display: flex;
+				align-items: center;
+				margin-bottom: 15px;
+				position: relative;
+				justify-content: center;
+
+				& > .mdi {
+					display: flex;
+					justify-content: inherit;
+					width: 15px;
+					font-size: 2rem;
+					color: var(--grey);
+					cursor: pointer;
+					position:absolute;
+
+					&:hover {
+						color: var(--darkgrey);
+					}
+				}
+
+				& > .mdi-chevron-left {
+					left: -40px;
+				}
+				& > .mdi-chevron-right {
+					right: -40px;;
+				}
+
+			}
+			.month-item-grid {
+				display: grid;
+				gap: 10px;
+				grid-template-rows: repeat(3, 42px);
+				grid-template-columns: repeat(4, 42px);
+				width: 198px;
+				height: 146px;
+
+				.grid-item {
+					width: 100%;
+					height: 100%;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					cursor: pointer;
+					border-radius: 5px;
+					color: var(--darkgrey);
+
+					&.grid-item-selected {
+						color: var(--red);
+						border: 1px solid var(--red);
+					}
+					&:hover {
+						background-color: var(--background-color);
+					}
+				}
+			}
+		}
 		.date-picker {
 			display: flex;
 			flex-direction: column;

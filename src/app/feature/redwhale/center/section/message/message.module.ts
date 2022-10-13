@@ -26,6 +26,7 @@ import { ChargePointModalComponent } from './components/charge-point-modal/charg
 
 // pipes
 import { HistoryDatePipe } from './pipes/history-date.pipe'
+import { SmsDatePipe } from './pipes/sms-date.pipe'
 
 @NgModule({
     declarations: [
@@ -37,13 +38,14 @@ import { HistoryDatePipe } from './pipes/history-date.pipe'
         MsgMemberListCardComponent,
         TransmissionHistoryTableComponent,
         TransmissionHistoryDateSelectorComponent,
-        HistoryDatePipe,
         TransmissionHistoryDetailModalComponent,
         PhoneNumberSelectorComponent,
         MsgUserListSelectComponent,
         TransmissionHistoryItemComponent,
         RegisterSenderPhoneModalComponent,
         ChargePointModalComponent,
+        HistoryDatePipe,
+        SmsDatePipe,
     ],
     imports: [
         MessageRoutingModule,

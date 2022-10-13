@@ -369,8 +369,6 @@ export class SaleComponent implements OnInit, OnDestroy {
                 : 'reFilter'
         }
 
-        console.log('getSaleTable - start, end : ', start, end)
-
         this.callGetSaleTable(start, end, option)
     }
     callGetSaleTable(start: string, end: string, option?: getStatsSaleOption) {

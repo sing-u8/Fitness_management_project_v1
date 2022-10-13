@@ -1,61 +1,98 @@
-<div class="transmission-history-date-selector">
-	<div
-		class="selected rw-typo-bodytext1 d-flex justify-content-center align-items-center"
-		[class.open]="isOpen"
-		(click)="toggle()"
-		(rwClickOutside)="isOpen && close();"
-	>
-		<span class="text flex-fill">{{ selectedDate | historyDate}}</span>
-		<span class="mdi mdi-chevron-down"></span>
-	</div>
-	<div *ngIf="isOpen" class="drop-down-container" (click)="$event.stopPropagation()">
-		<div class="date-picker">
-			<db-datepicker
-				[mode]="'multiline-component'"
-				[option]="'normal'"
-				width="246"
-				height="244"
-				[(data)]="RangeDateData"
-				(dataChange)="setRangeDateData($event.startDate, $event.endDate);"
-				[isShadow] ="false"
-			></db-datepicker>
+<div class="rw-sale-date-selector user-select-none">
+    
+    <div
+        class="selected rw-typo-bodytext1 d-flex justify-content-center align-items-center"
+        [class.open]="isOpen"
+        (click)="toggle()"
+        (rwClickOutside)="isOpen && close();"
+    >
+        <span class="text flex-fill">{{ selectedDate | smsDate}}</span>
+        <span class="mdi mdi-chevron-down"></span>
+    </div>
+    
+    <div *ngIf="isOpen" class="drop-down-container" (click)="$event.stopPropagation()">
+        <div class="rw-typo-bodytext0-darkgrey header">
+            <div
+                [class.header-selected]="datePickType == 'month'"
+                class="month-picker-header"
+                (click) = "changeDatePickType('month')"
+            >
+                월별 기간 선택
+            </div>
+            <div
+                [class.header-selected]="datePickType == 'range'"
+                class="date-picker-header"
+                (click) = "changeDatePickType('range')"
+            >
+                기간 직접 입력
+            </div>
+        </div>
+        
+        <div *ngIf="datePickType == 'month'" class="month-picker">
+            <div class="rw-typo-bodytext0-bold month-picker-header">
+                <span class="mdi mdi-chevron-left" (click)="setMonthDateYear('prev')"></span>
+                <p>{{monthDateData.year}}년</p>
+                <span class="mdi mdi-chevron-right" (click)="setMonthDateYear('next')"></span>
+            </div>
+            <div *ngIf="datePickType =='month'" class="month-item-grid">
+                <div
+                    *ngFor ="let item of [].constructor(12); let i = index"
+                    class="rw-typo-bodytext2 grid-item"
+                    [class.grid-item-selected] = "checkSelectedMonthDate(i+1)"
+                    (click) = "setMonthDateMonth(i+1); setRangeDateData();close()"
+                >
+                    {{i+1}}월
+                </div>
+            </div>
+        </div>
+        
+        <div *ngIf="datePickType =='range'" class="date-picker">
+            <db-datepicker
+                mode="multiline-component"
+                width="246"
+                height="244"
+                [(data)]="RangeDateData"
+                (dataChange)="setRangeDateData($event.startDate, $event.endDate);"
+                [isShadow] ="false"
+            ></db-datepicker>
+            
+            <div class="date-picker-bottom">
+                <div
+                    *ngIf="!RangeDateData.startDate && !RangeDateData.endDate"
+                    class="rw-typo-bodytext2 guide-text"
+                >
+                    시작일과 종료일을 선택해주세요.
+                </div>
+                <div
+                    *ngIf="RangeDateData.startDate || RangeDateData.endDate"
+                    class="rw-typo-bodytext2-bold date-viewer"
+                >
+                    <p class="date-text">
 
-			<div class="date-picker-bottom">
-				<div
-					*ngIf="!RangeDateData.startDate && !RangeDateData.endDate"
-					class="rw-typo-bodytext2 guide-text"
-				>
-					시작일과 종료일을 선택해주세요.
-				</div>
-				<div
-					*ngIf="RangeDateData.startDate || RangeDateData.endDate"
-					class="rw-typo-bodytext2-bold date-viewer"
-				>
-					<p class="date-text">
+                    <span  [class.date-none]= "!RangeDateData.startDate">
+                        <span *ngIf="RangeDateData.startDate">{{RangeDateData.startDate | dateFormat:'YYYY.MM.DD'}}&nbsp;-&nbsp;</span>
+                        <span *ngIf="!RangeDateData.startDate">선택일 선택&nbsp;-&nbsp;</span>
+                    </span>
+                        <span
+                            [class.date-none]= "!RangeDateData.endDate"
+                        >
+                        <span *ngIf="RangeDateData.endDate">{{RangeDateData.endDate | dateFormat:'YYYY.MM.DD'}}</span>
+                        <span *ngIf="!RangeDateData.endDate">종료일 선택</span>
+                    </span>
+                    </p>
+                    <div
+                        class="rw-typo-bodytext2"
+                        rw-button rwButtonWidth="62" rwButtonHeight="35"
+                        rwButtonColor="var(--red)" rwButtonFontColor="var(--white)"
+                        [rwButtonDisabled]="!RangeDateData.startDate"
+                        (click) = "RangeDateData.startDate && applyRangeDateDate()"
+                    >
+                        적용
+                    </div>
+                </div>
+            
+            </div>
+        </div>
+    </div>
 
-            <span  [class.date-none]= "!RangeDateData.startDate">
-              <span *ngIf="RangeDateData.startDate">{{RangeDateData.startDate | dateFormat:'YYYY.MM.DD'}}&nbsp;-&nbsp;</span>
-              <span *ngIf="!RangeDateData.startDate">선택일 선택&nbsp;-&nbsp;</span>
-            </span>
-						<span
-							[class.date-none]= "!RangeDateData.endDate"
-						>
-              <span *ngIf="RangeDateData.endDate">{{RangeDateData.endDate | dateFormat:'YYYY.MM.DD'}}</span>
-              <span *ngIf="!RangeDateData.endDate">종료일 선택</span>
-            </span>
-					</p>
-					<div
-						class="rw-typo-bodytext2"
-						rw-button rwButtonWidth="62" rwButtonHeight="35"
-						rwButtonColor="var(--red)" rwButtonFontColor="var(--white)"
-						[rwButtonDisabled]="!RangeDateData.startDate"
-						(click) = "RangeDateData.startDate && applyRangeDateDate()"
-					>
-						적용
-					</div>
-				</div>
-
-			</div>
-		</div>
-	</div>
 </div>

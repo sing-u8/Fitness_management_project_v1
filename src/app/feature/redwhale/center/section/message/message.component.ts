@@ -28,6 +28,7 @@ import { SMSCaller } from '@schemas/sms-caller'
 import { SMSHistoryGroup } from '@schemas/sms-history-group'
 import { ClickEmitterType } from '@schemas/components/button'
 import { generalIsAdSet } from '@centerStore/selectors/sec.sms.selector'
+import { HistoryDateRange } from '@centerStore/reducers/sec.sms.reducer'
 
 type AutoTransmitType = 'membership' | 'locker'
 
@@ -112,7 +113,7 @@ export class MessageComponent implements OnInit, OnDestroy {
     public smsHistoryGroupList$ = this.nxStore.select(SMSSelector.smsHistoryGroupList)
     public smsHistoryList$ = this.nxStore.select(SMSSelector.smsHistoryList)
     public historyDateRange$ = this.nxStore.select(SMSSelector.historyDateRange)
-    public selectedHistoryDate: [string, string] = undefined
+    public selectedHistoryDate: FromSMS.HistoryDateRange = undefined
     public curHistoryGroup$ = this.nxStore.select(SMSSelector.curHistoryGroup)
 
     public unsubscribe$ = new Subject<boolean>()
@@ -145,7 +146,7 @@ export class MessageComponent implements OnInit, OnDestroy {
         this.nxStore.dispatch(SMSActions.startGetCallerList({ centerId: this.center.id }))
 
         this.historyDateRange$.pipe(takeUntil(this.unsubscribe$)).subscribe((dateRange) => {
-            this.selectedHistoryDate = dateRange
+            this.selectedHistoryDate = _.cloneDeep(dateRange)
         })
         this.nxStore.dispatch(
             SMSActions.startGetHistoryGroup({
@@ -439,19 +440,46 @@ export class MessageComponent implements OnInit, OnDestroy {
 
     // message route : history
 
-    onDateSelected(date: [string, string]) {
-        console.log('onDateSelected : ', date)
+    onDateSelected(date: FromSMS.HistoryDateRange) {
+        const _date = this.getDateRange(date)
         this.nxStore.dispatch(SMSActions.setHistoryDateRange({ historyDateRange: date }))
         this.nxStore.dispatch(
             SMSActions.startGetHistoryGroup({
                 centerId: this.center.id,
-                start_date: date[0],
-                end_date: date[1],
+                start_date: _date[0],
+                end_date: _date[1],
                 cb: () => {
                     this.nxStore.dispatch(showToast({ text: '내역 조회 기간이 변경되었습니다.' }))
                 },
             })
         )
+    }
+
+    getDateRange(date: FromSMS.HistoryDateRange): [string, string] {
+        let start: string = undefined
+        let end: string = undefined
+        if (_.isArray(date)) {
+            start = date[0]
+            end = date[1]
+        } else if (_.isString(date)) {
+            start = date
+        }
+        if (!end) {
+            const dateList = _.map(_.split(start, '.'), _.parseInt)
+            if (dateList.length == 2) {
+                start = dayjs(new Date(dateList[0], dateList[1] - 1, 1)).format('YYYY-MM-DD')
+                end = dayjs(new Date(dateList[0], dateList[1], 0)).format('YYYY-MM-DD')
+            } else if (dateList.length == 3) {
+                start = dayjs(new Date(dateList[0], dateList[1] - 1, dateList[2])).format('YYYY-MM-DD')
+                end = dayjs(new Date(dateList[0], dateList[1] - 1, dateList[2])).format('YYYY-MM-DD')
+            }
+        } else {
+            const _startDateList = _.map(_.split(start, '.'), _.parseInt)
+            start = dayjs(new Date(_startDateList[0], _startDateList[1] - 1, _startDateList[2])).format('YYYY-MM-DD')
+            const _endDateList = _.map(_.split(end, '.'), _.parseInt)
+            end = dayjs(new Date(_endDateList[0], _endDateList[1] - 1, _endDateList[2])).format('YYYY-MM-DD')
+        }
+        return [start, end]
     }
 
     onHistoryGroupItemClick(hd: SMSHistoryGroup) {
