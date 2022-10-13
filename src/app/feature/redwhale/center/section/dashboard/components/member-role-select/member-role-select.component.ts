@@ -29,6 +29,7 @@ export class MemberRoleSelectComponent implements OnInit, OnChanges {
     // ! 추후에 센터별 권한을 API에서 불러오기
     public roleNameObj = {
         owner: '운영자',
+        administrator: '관리자',
         instructor: '강사',
         member: '회원',
     }

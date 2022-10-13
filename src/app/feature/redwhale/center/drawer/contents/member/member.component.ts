@@ -257,11 +257,13 @@ export class MemberComponent implements OnInit, OnDestroy {
     // role select vars and funcs
     public userRole: Record<Role, boolean> = {
         owner: false,
+        administrator: false,
         instructor: false,
         member: false,
     }
     public roleName: Record<Role, string> = {
         owner: '운영자',
+        administrator: '관리자',
         instructor: '강사',
         member: '회원',
     }
