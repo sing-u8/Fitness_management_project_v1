@@ -132,7 +132,7 @@ export const initialState: State = {
     curSMSHistoryGroup: undefined,
     smsHistoryGroupList: SMSHistoryGroupListInit,
     smsHistoryList: SMSHistoryListInit,
-    historyDateRange: [dayjs().subtract(3, 'month').format('YYYY-MM-DD'), dayjs().format('YYYY-MM-DD')],
+    historyDateRange: dayjs().format('YYYY.MM'), // [dayjs().subtract(3, 'month').format('YYYY-MM-DD'), dayjs().format('YYYY-MM-DD')],
 }
 
 export const adMsgObj = {
