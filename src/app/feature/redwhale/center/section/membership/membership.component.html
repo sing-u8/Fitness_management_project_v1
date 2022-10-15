@@ -332,12 +332,25 @@
                       [centerId]="center.id"
                       [categName]="item.category_name"
                       [isIn]="'addReservableItemList'"
-                      (onAddReservableCard)="setReserveLessonModalOff()"
+                      (onAddReservableCard)="false"
                     ></gl-lesson-card>
                   </div>
                 </ng-template>
               </ng-template>
             </div>
+              
+              <div
+                  class="reservable-save-button"
+                  *ngIf="selectedMembership.membershipData && selectedMembership.isLoading =='done'"
+                  rw-button
+                  rwButtonColor="var(--red)"
+                  rwButtonFontColor="var(--white)"
+                  [rwButtonDisabled] = "(selectedMembership.willBeLinkedClassItemRecord | keyvalue)?.length < 1"
+                  rwButtonHeight="50"
+                  (click)="setReserveLessonItems()"
+              >
+                  {{(selectedMembership.willBeLinkedClassItemRecord | keyvalue)?.length ?? 0}}개 수업 저장하기
+              </div>
 
 
             <div *ngIf=!isReserveLessonExist class="none-lesson">

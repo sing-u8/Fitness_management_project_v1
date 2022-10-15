@@ -1,99 +1,99 @@
-<div class="category-container" >
+<div class="category-container">
 
-  <div class="category-header">
-    <form class="header-left" (click)= "toggleCategOpen()">
-      <div class="mdi mdi-chevron-down" [class.open]="isCategOpen"></div>
-      <span
-        *ngIf="!isChangeNameOn" class="rw-typo-title1"
-      >
-        {{categ.name}}
-      </span>
-      <input
-        *ngIf="isChangeNameOn"
-        rw-autoFocus
-        (rwClickOutside) = "changeCategName()"
-        (keyup.enter) = "changeCategName()"
-        class="rw-input"
-        [formControl] = "categNameForm"
-        [placeholder]="categ.name"
-      >
-      <span class="rw-typo-title1 item-length">{{categ.item_count}}</span>
-    </form>
-
-    <div class="header-right">
-      <img (click)="setDropdonwOpen($event)" src="assets/icons/etc/menu-vertical-grey.svg">
-      <div
-        class="dropdown"
-        (rwClickOutside) = "setDropdonwClose();"
-        [style.visibility] = "isDropdownOpen ? 'visible' : 'hidden'"
-      >
-        <div
-          (click) =" onChangeName($event)"
-          class="dropdown-item"
-        >이름 변경</div>
-        <div
-          (click)="setCategDelModalOepn()"
-          class="dropdown-item"
-        >카테고리 삭제</div>
-      </div>
+    <div class="category-header">
+        <form class="header-left" (click)= "toggleCategOpen()">
+            <div class="mdi mdi-chevron-down" [class.open]="isCategOpen"></div>
+            <span
+                *ngIf="!isChangeNameOn" class="rw-typo-title1"
+            >
+                {{categ.name}}
+            </span>
+            <input
+                *ngIf="isChangeNameOn"
+                rw-autoFocus
+                (rwClickOutside) = "changeCategName()"
+                (keyup.enter) = "changeCategName()"
+                class="rw-input"
+                [formControl] = "categNameForm"
+                [placeholder]="categ.name"
+            >
+            <span class="rw-typo-title1 item-length">{{categ.item_count}}</span>
+        </form>
+    
+        <div class="header-right">
+            <img (click)="setDropdonwOpen($event)" src="assets/icons/etc/menu-vertical-grey.svg">
+            <div
+                class="dropdown"
+                (rwClickOutside) = "setDropdonwClose();"
+                [style.visibility] = "isDropdownOpen ? 'visible' : 'hidden'"
+            >
+                <div
+                    (click) =" onChangeName($event)"
+                    class="dropdown-item"
+                >이름 변경</div>
+                <div
+                    (click)="setCategDelModalOepn()"
+                    class="dropdown-item"
+                >카테고리 삭제</div>
+            </div>
+        </div>
     </div>
-  </div>
-
-  <div
-    class="category-content"
-    [class.categ-open] = 'isCategOpen'
-  >
-    <ng-template #item_pending [ngIf] = "categ.isCategPending == 'pending' && categ.items.length == 0" [ngIfElse]="item_done">
-      <ngx-skeleton-loader
-        *ngFor="let _ of [].constructor(categ.item_count)"
-        count="1"
-        appearance="line"
-        [theme]="{width: '100%', height: '92px', 'border-radius':'5px', margin: '0px'}"
-      ></ngx-skeleton-loader>
-    </ng-template>
-
-    <ng-template #item_done>
-      <gl-lesson-card
-        *ngFor = "let item of items"
-        [categItem] = "item"
-        [categId] = "id"
-        [centerId] = "centerId"
-        [categName] = "name"
-        [isIn] = "'category'"
-      ></gl-lesson-card>
-    </ng-template>
-
+    
     <div
-      *ngIf="!isAddLessonInputOn"
-      class="add-item"
-      (click) = "setAddLessonItemOn($event)"
+        class="category-content"
+        [class.categ-open] = 'isCategOpen'
     >
-      <img src="assets/icons/etc/plus-darkgrey.svg" />
-      <span>수업 추가</span>
+        <ng-template #item_pending [ngIf] = "categ.isCategPending == 'pending' && categ.items.length == 0" [ngIfElse]="item_done">
+            <ngx-skeleton-loader
+                *ngFor="let _ of [].constructor(categ.item_count)"
+                count="1"
+                appearance="line"
+                [theme]="{width: '100%', height: '92px', 'border-radius':'5px', margin: '0px'}"
+            ></ngx-skeleton-loader>
+        </ng-template>
+    
+        <ng-template #item_done>
+            <div class="l-lesson-card" [dragula]="DragulaLesson" [(dragulaModel)]="items">
+                <gl-lesson-card
+                    *ngFor = "let item of items"
+                    [categItem] = "item"
+                    [categId] = "id"
+                    [centerId] = "centerId"
+                    [categName] = "name"
+                    [isIn] = "'category'"
+                ></gl-lesson-card>
+            </div>
+        </ng-template>
+    
+        <div
+            *ngIf="!isAddLessonInputOn"
+            class="add-item"
+            (click) = "setAddLessonItemOn($event)"
+        >
+            <img src="assets/icons/etc/plus-darkgrey.svg" />
+            <span>수업 추가</span>
+        </div>
+        <form
+            *ngIf="isAddLessonInputOn"
+            class="add-item-container"
+        >
+            <input
+                rw-autoFocus
+                (rwClickOutside) = "addCategItem( newLessonForm.value )"
+                (keyup.enter) = "addCategItem( newLessonForm.value )"
+                [formControl] = newLessonForm
+                class="rw-input add-item-input"
+                type="text"
+                placeholder="수업명을 입력해주세요."
+            >
+            <img src="assets/icons/etc/plus-darkgrey.svg">
+        </form>
     </div>
-    <form
-      *ngIf="isAddLessonInputOn"
-      class="add-item-container"
-    >
-      <input
-        rw-autoFocus
-        (rwClickOutside) = "addCategItem( newLessonForm.value )"
-        (keyup.enter) = "addCategItem( newLessonForm.value )"
-        [formControl] = newLessonForm
-        class="rw-input add-item-input"
-        type="text"
-        placeholder="수업명을 입력해주세요."
-      >
-      <img src="assets/icons/etc/plus-darkgrey.svg">
-    </form>
-
-
-  </div>
 </div>
 
 <rw-small-modal
-  [(visible)] = "isCategDelOpen"
-  [data] = "delModalData"
-  (cancel) ="onDeleteCategoryCancel()"
-  (confirm) ="onDeleteCategoryConfirm()"
+    [(visible)] = "isCategDelOpen"
+    [data] = "delModalData"
+    (cancel) ="onDeleteCategoryCancel()"
+    (confirm) ="onDeleteCategoryConfirm()"
 ></rw-small-modal>

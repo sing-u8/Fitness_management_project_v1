@@ -9,6 +9,7 @@ import { MembershipCategory, FE_MembershipCategory } from '@schemas/membership-c
 import { MembershipItem } from '@schemas/membership-item'
 import { Loading } from '@schemas/store/loading'
 import { ClassItem } from '@schemas/class-item'
+import * as LessonActions from '@centerStore/actions/sec.lesson.actions'
 
 export interface SelectedMembership {
     membershipData: MembershipItem
@@ -18,6 +19,7 @@ export interface SelectedMembership {
     linkedClassItems?: Array<ClassItem>
     linkableClassItems?: Array<ClassItem>
     isLoading?: Loading
+    willBeLinkedClassItemRecord?: Record<string, ClassItem>
 }
 export const initialSelectedMembership: SelectedMembership = {
     membershipData: undefined,
@@ -27,6 +29,7 @@ export const initialSelectedMembership: SelectedMembership = {
     linkedClassItems: [],
     linkableClassItems: [],
     isLoading: 'idle',
+    willBeLinkedClassItemRecord: undefined,
 }
 
 export interface MembershipCategoryState extends FE_MembershipCategory {
@@ -185,6 +188,27 @@ export const membershipReducer = createImmerReducer(
         state.selectedMembership = initialSelectedMembership
         return state
     }),
+    on(MembershipActions.updateWillBeLinkedClassItem, (state, { classItem }) => {
+        if (_.isEmpty(state.selectedMembership.willBeLinkedClassItemRecord)) {
+            state.selectedMembership.willBeLinkedClassItemRecord = {
+                [classItem.id]: classItem,
+            }
+        } else {
+            if (_.has(state.selectedMembership.willBeLinkedClassItemRecord, classItem.id)) {
+                state.selectedMembership.willBeLinkedClassItemRecord = _.omit(
+                    state.selectedMembership.willBeLinkedClassItemRecord,
+                    classItem.id
+                )
+            } else {
+                _.assign(state.selectedMembership.willBeLinkedClassItemRecord, { [classItem.id]: classItem })
+            }
+        }
+        return state
+    }),
+    on(MembershipActions.resetWillBeLinkedClassItem, (state) => {
+        state.selectedMembership.willBeLinkedClassItemRecord = undefined
+        return state
+    }),
 
     // common
     on(MembershipActions.resetAll, (state) => {
@@ -201,9 +225,11 @@ export const membershipReducer = createImmerReducer(
     }),
 
     // linked lesson
-    on(MembershipActions.startLinkClass, (state, { linkClass }) => {
-        state.selectedMembership.linkedClassItems.push(linkClass)
-        _.remove(state.selectedMembership.linkableClassItems, (v) => v.id == linkClass.id)
+    on(MembershipActions.startLinkClass, (state) => {
+        _.values(state.selectedMembership.willBeLinkedClassItemRecord).forEach((mv) => {
+            state.selectedMembership.linkedClassItems.push(mv)
+            _.remove(state.selectedMembership.linkableClassItems, (v) => v.id == mv.id)
+        })
         return state
     }),
     on(MembershipActions.startUnlinkClass, (state, { unlinkClass }) => {

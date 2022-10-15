@@ -105,12 +105,18 @@
         overflow: hidden;
         display: grid;
         row-gap: 10px;
-        height: 0px;
+        height: 0;
         -moz-transition: height 1s ease;
         -webkit-transition: height 1s ease;
         -o-transition: height 1s ease;
         transition: height 1s ease;
         grid-template-columns: repeat(1, auto);
+
+        .l-lesson-card {
+            display: grid;
+            row-gap: 10px;
+            grid-template-columns: repeat(1, auto);
+        }
 
         &.categ-open {
             height: auto;

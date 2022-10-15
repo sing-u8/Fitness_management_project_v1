@@ -6,7 +6,8 @@
                         ? 'var(--red)'
                         : 'var(--border-color)'"
 
-  [class.selected] = "isIn=='category' && isSelected ? true : false"
+  [class.selected] = "isIn=='category' && isSelected"
+  [class.will-be-linked] = "isIn=='addReservableItemList' && willBeLinked"
   [class.reservable-card-hover] = "isIn == 'reservableItemList' "
   [class.add-reservable-card-hover] = "isIn == 'addReservableItemList'"
   [class.card-hover-in-category] = "isIn == 'category'"

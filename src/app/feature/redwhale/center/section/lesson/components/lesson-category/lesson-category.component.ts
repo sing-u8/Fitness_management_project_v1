@@ -3,9 +3,12 @@ import { FormBuilder, FormControl } from '@angular/forms'
 import _ from 'lodash'
 
 import { ClassItem } from '@schemas/class-item'
+import { DragulaLesson } from '@schemas/lesson'
+
+import { DragulaService } from 'ng2-dragula'
 
 // rxjs
-import { Subject } from 'rxjs'
+import { Subject, Subscription } from 'rxjs'
 import { takeUntil } from 'rxjs/operators'
 
 // ngrx
@@ -51,7 +54,23 @@ export class LessonCategoryComponent implements OnInit, AfterViewInit, OnDestroy
         confirmButtonText: '삭제',
     }
 
-    constructor(private fb: FormBuilder, private nxStore: Store) {
+    // dragula vars
+    public DragulaLesson = undefined
+    public dragulaSubs = new Subscription()
+
+    public onDragLessonItem: ClassItem = undefined
+    onLessonDragStart(item: ClassItem) {
+        this.onDragLessonItem = item
+    }
+    changeLessonItemOrder() {
+        console.log('changeLessonItemOrder - items: ', this.items)
+        console.log(
+            'onDragLessonItem is in ',
+            _.findIndex(this.items, (v) => v.id == this.onDragLessonItem.id)
+        )
+    }
+
+    constructor(private fb: FormBuilder, private nxStore: Store, private dragulaService: DragulaService) {
         this.isDropdownOpen = false
 
         this.isChangeNameOn = false
@@ -76,10 +95,21 @@ export class LessonCategoryComponent implements OnInit, AfterViewInit, OnDestroy
         this.isCategOpen = this.categ.isCategOpen
         this.isAddLessonInputOn = this.categ.initialInputOn
     }
-    ngAfterViewInit(): void {}
+    ngAfterViewInit(): void {
+        this.DragulaLesson = DragulaLesson + this.id
+        this.dragulaSubs.add(
+            this.dragulaService.drop(this.DragulaLesson).subscribe(({ el, target, source, sibling }) => {
+                console.log('drop lesson card -- ', el, ' ', target, ' ', source, sibling)
+                this.changeLessonItemOrder()
+            })
+        )
+        this.dragulaSubs.add(this.dragulaService.drag(this.DragulaLesson).subscribe(({ el }) => {}))
+    }
     ngOnDestroy(): void {
         this.unSubscriber$.next()
         this.unSubscriber$.complete()
+
+        this.dragulaSubs.unsubscribe()
     }
 
     // flag methods

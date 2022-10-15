@@ -16,6 +16,7 @@ import * as LessonActions from '@centerStore/actions/sec.lesson.actions'
 import * as FromMembership from '@centerStore/reducers/sec.membership.reducer'
 import * as MembershipActions from '@centerStore/actions/sec.membership.actions'
 import * as MembershipSelector from '@centerStore/selectors/sec.membership.selector'
+import _ from 'lodash'
 
 @Component({
     selector: 'gl-lesson-card',
@@ -39,6 +40,7 @@ export class LessonCardComponent implements OnInit, AfterViewInit, OnDestroy {
     public selectedLesson: FromLesson.SelectedLesson = undefined
     public unSubscriber$ = new Subject<void>()
     public isSelected = false
+    public willBeLinked = false
 
     public cardInfo: {
         color: string
@@ -62,8 +64,15 @@ export class LessonCardComponent implements OnInit, AfterViewInit, OnDestroy {
                 .pipe(select(LessonSelector.selectedLesson), takeUntil(this.unSubscriber$))
                 .subscribe((selectedLesson) => {
                     this.selectedLesson = selectedLesson
-                    this.isSelected =
-                        selectedLesson.lessonData && selectedLesson.lessonData.id == this.categItem.id ? true : false
+                    this.isSelected = selectedLesson.lessonData && selectedLesson.lessonData.id == this.categItem.id
+                })
+        } else if (this.isIn == 'addReservableItemList') {
+            this.nxStore
+                .pipe(select(MembershipSelector.selectedMembership), takeUntil(this.unSubscriber$))
+                .subscribe((selectedMembership) => {
+                    this.willBeLinked =
+                        !_.isEmpty(selectedMembership.willBeLinkedClassItemRecord) &&
+                        _.has(selectedMembership.willBeLinkedClassItemRecord, this.categItem.id)
                 })
         }
         this.parseCardInfo()
@@ -98,7 +107,7 @@ export class LessonCardComponent implements OnInit, AfterViewInit, OnDestroy {
         }
     }
     addReservableLessonToMembership() {
-        this.nxStore.dispatch(MembershipActions.startLinkClass({ linkClass: this.categItem }))
+        this.nxStore.dispatch(MembershipActions.updateWillBeLinkedClassItem({ classItem: this.categItem }))
         this.onAddReservableCard.emit({})
     }
 

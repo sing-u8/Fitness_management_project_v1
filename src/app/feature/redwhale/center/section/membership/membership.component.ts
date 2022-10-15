@@ -34,6 +34,7 @@ import { ActivatedRoute, Router } from '@angular/router'
 
 import { originalOrder, reverseOrder } from '@helpers/pipe/keyvalue'
 import { Loading } from '@schemas/componentStore/loading'
+import * as LessonActions from '@centerStore/actions/sec.lesson.actions'
 
 // screen types
 type SelectedMembershipObj = {
@@ -55,7 +56,6 @@ export class MembershipComponent implements OnInit {
     public membershipCategEntities$ = this.nxStore.pipe(select(MembershipSelector.membershipCategEntities))
     public membershipIsloading$ = this.nxStore.pipe(select(MembershipSelector.isLoading))
 
-    public isCurGymFirstSet = false
     public selectedMembership: SelectedMembership = _.cloneDeep(initialSelectedMembership)
 
     public unSubscriber$ = new Subject<boolean>()
@@ -115,7 +115,7 @@ export class MembershipComponent implements OnInit {
                         }
                     })
                     this.selMembershipMemo.setValue(this.selectedMembership.membershipData.memo)
-                    this.isReserveLessonExist = this.selectedMembership.linkableClassItems.length > 0 ? true : false
+                    this.isReserveLessonExist = this.selectedMembership.linkableClassItems.length > 0
                 }
             })
     }
@@ -281,10 +281,15 @@ export class MembershipComponent implements OnInit {
     // selected-membership-lessonlist methods
     public isReservLessonListModalOn = false
     setReserveLessonModalOn() {
-        this.isReservLessonListModalOn = this.isReservLessonListModalOn == true ? false : true
+        this.isReservLessonListModalOn = this.isReservLessonListModalOn != true
     }
     setReserveLessonModalOff() {
         this.isReservLessonListModalOn = false
+        this.nxStore.dispatch(MembershipActions.resetWillBeLinkedClassItem())
+    }
+    setReserveLessonItems() {
+        this.isReservLessonListModalOn = false
+        this.nxStore.dispatch(MembershipActions.startLinkClass())
     }
 
     removeReservationLesson(unlinkClass: ClassItem) {

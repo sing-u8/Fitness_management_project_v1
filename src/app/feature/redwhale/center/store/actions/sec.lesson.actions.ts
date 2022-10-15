@@ -118,6 +118,15 @@ export const refreshSelectedLesson = createAction(
     `[${FeatureKey}] Refresh Selected Lesson`
     // props<{ selectedLesson: SelectedLesson }>()
 )
+
+export const updateWillBeLinkedMembershipItem = createAction(
+    `[${FeatureKey} update SelectedLesson Will Be Linked MembershipItem]`,
+    props<{ membershipItem: MembershipItem }>()
+)
+export const resetWillBeLinkedMembershipItem = createAction(
+    `[${FeatureKey} reset SelectedLesson Will Be Linked MembershipItem]`
+)
+
 export const resetSelectedLesson = createAction(`[${FeatureKey}] Reset Selected Lesson`)
 
 //
@@ -125,10 +134,7 @@ export const resetAll = createAction(`[${FeatureKey}] Reset All`)
 export const error = createAction(`[${FeatureKey}] Lesson Category State Error`, props<{ error: string }>())
 
 // linked membership
-export const startLinkMembership = createAction(
-    `[${FeatureKey}] Start Link Membership To Class`,
-    props<{ linkMembership: MembershipItem }>()
-)
+export const startLinkMemberships = createAction(`[${FeatureKey}] Start Link Membership To Class`)
 // export const finishLinkClass = createAction(`[${FeatureKey}] Start Link Class To Membership`, props<{}>())
 
 export const startUnlinkMembership = createAction(

@@ -69,6 +69,11 @@ p {
         border-width: 2px;
         padding: 12px 13px 10px 13px;
     }
+    &.will-be-linked {
+        border-color: var(--red) !important;
+        border-width: 2px;
+        padding: 12px 13px 10px 13px;
+    }
 
     .card-inner-container {
         display: flex;

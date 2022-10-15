@@ -16,6 +16,7 @@ import * as MembershipActions from '@centerStore/actions/sec.membership.actions'
 import * as FromLesson from '@centerStore/reducers/sec.lesson.reducer'
 import * as LessonActions from '@centerStore/actions/sec.lesson.actions'
 import * as LessonSelector from '@centerStore/selectors/sec.lesson.selector'
+import _ from 'lodash'
 
 @Component({
     selector: 'gm-membership-card',
@@ -39,6 +40,7 @@ export class MembershipCardComponent implements OnInit, AfterViewInit, OnDestroy
     public selectedMembership: FromMembership.SelectedMembership = undefined
     public unSubscriber$ = new Subject<void>()
     public isSelected = false
+    public willBeLinked = false
 
     public cardInfo: {
         color: string
@@ -67,8 +69,14 @@ export class MembershipCardComponent implements OnInit, AfterViewInit, OnDestroy
                     this.selectedMembership = selectedMembership
                     this.isSelected =
                         selectedMembership.membershipData && selectedMembership.membershipData.id == this.categItem.id
-                            ? true
-                            : false
+                })
+        } else if (this.isIn == 'addReservableItemList') {
+            this.nxStore
+                .pipe(select(LessonSelector.selectedLesson), takeUntil(this.unSubscriber$))
+                .subscribe((selectedLesson) => {
+                    this.willBeLinked =
+                        !_.isEmpty(selectedLesson.willBeLinkedMembershipItemRecord) &&
+                        _.has(selectedLesson.willBeLinkedMembershipItemRecord, this.categItem.id)
                 })
         }
         this.parseCardInfo()
@@ -103,7 +111,7 @@ export class MembershipCardComponent implements OnInit, AfterViewInit, OnDestroy
     }
 
     addReservableMembershipToLesson() {
-        this.nxStore.dispatch(LessonActions.startLinkMembership({ linkMembership: this.categItem }))
+        this.nxStore.dispatch(LessonActions.updateWillBeLinkedMembershipItem({ membershipItem: this.categItem }))
         this.onAddReservableCard.emit({})
     }
 

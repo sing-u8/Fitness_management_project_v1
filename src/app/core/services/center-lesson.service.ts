@@ -217,7 +217,7 @@ export class CenterLessonService {
         categoryId: string,
         ItemId: string,
         reqBdoy: LinkMembershipRequestBody
-    ): Observable<MembershipItem> {
+    ): Observable<Array<MembershipItem>> {
         const url = this.SERVER + `/${centerId}/class/${categoryId}/item/${ItemId}/membership`
 
         const options = {
@@ -228,7 +228,7 @@ export class CenterLessonService {
 
         return this.http.post<Response>(url, reqBdoy, options).pipe(
             map((res) => {
-                return res.dataset[0]
+                return res.dataset
             }),
             catchError(handleError)
         )
@@ -371,7 +371,7 @@ export interface MoveItemRequestBody {
 }
 
 export interface LinkMembershipRequestBody {
-    membership_item_id: string
+    membership_item_ids: string[]
 }
 
 export interface AddInstructorRequestBody {

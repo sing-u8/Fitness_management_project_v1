@@ -216,7 +216,7 @@ export class CenterMembershipService {
         categoryId: string,
         ItemId: string,
         reqBody: LinkClassRequestBody
-    ): Observable<ClassItem> {
+    ): Observable<Array<ClassItem>> {
         const url = this.SERVER + `/${centerId}/membership/${categoryId}/item/${ItemId}/class`
 
         const options = {
@@ -227,7 +227,7 @@ export class CenterMembershipService {
 
         return this.http.post<Response>(url, reqBody, options).pipe(
             map((res) => {
-                return res.dataset[0]
+                return res.dataset
             }),
             catchError(handleError)
         )
@@ -299,5 +299,5 @@ export interface MoveItemRequestBody {
 }
 
 export interface LinkClassRequestBody {
-    class_item_id: string
+    class_item_ids: string[]
 }

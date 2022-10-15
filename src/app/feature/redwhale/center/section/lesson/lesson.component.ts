@@ -3,6 +3,7 @@ import { FormBuilder, FormControl } from '@angular/forms'
 import _ from 'lodash'
 import * as kvPipe from '@helpers/pipe/keyvalue'
 
+import { DragulaService } from 'ng2-dragula'
 // services
 import { StorageService } from '@services/storage.service'
 import { CenterMembershipService } from '@services/center-membership.service'
@@ -10,7 +11,6 @@ import { CenterMembershipService } from '@services/center-membership.service'
 // scehmas
 import { Center } from '@schemas/center'
 import { Drawer } from '@schemas/store/app/drawer.interface'
-import { MembershipCategory } from '@schemas/membership-category'
 import { MembershipItem } from '@schemas/membership-item'
 import { UpdateItemRequestBody } from '@services/center-lesson.service'
 
@@ -38,6 +38,8 @@ import * as LessonActions from '@centerStore/actions/sec.lesson.actions'
 import { ActivatedRoute, Router } from '@angular/router'
 
 import { originalOrder } from '@helpers/pipe/keyvalue'
+import { Dictionary } from '@ngrx/entity'
+import { startLinkMemberships } from '@centerStore/actions/sec.lesson.actions'
 
 // screen types
 type SelectedLessonObj = {
@@ -57,9 +59,13 @@ type ButtinItems = keyof Omit<SelectedLessonObj, 'name'>
     styleUrls: ['./lesson.component.scss'],
 })
 export class LessonComponent implements OnInit, AfterViewInit, OnDestroy {
+    // dragula Vars
+    public dLessonCateg = 'D_LESSON_CATEG'
+
     // ngrx state
     public drawer$: Observable<Drawer> = this.nxStore.pipe(select(drawerSelector))
-    public lessonCategEntities$ = this.nxStore.pipe(select(LessonSelector.FilteredLessonCategEntities))
+    public lessonCategEntities$ = this.nxStore.select(LessonSelector.FilteredLessonCategEntities)
+    public lessonCategList: FromLesson.LessonCategoryState[] = []
     public lessonLength$ = this.nxStore.pipe(select(LessonSelector.lessonLength))
     public lessonIsloading$ = this.nxStore.pipe(select(LessonSelector.isLoading))
 
@@ -124,6 +130,9 @@ export class LessonComponent implements OnInit, AfterViewInit, OnDestroy {
 
         this.nxStore.dispatch(LessonActions.startGetTrainerFilterList({ centerId: this.center.id }))
 
+        this.lessonCategEntities$.pipe(takeUntil(this.unSubscriber$)).subscribe((lesCategEn) => {
+            this.lessonCategList = _.values(lesCategEn)
+        })
         this.nxStore
             .pipe(select(LessonSelector.seletedTrainerFilter), takeUntil(this.unSubscriber$))
             .subscribe((tf) => {
@@ -158,8 +167,7 @@ export class LessonComponent implements OnInit, AfterViewInit, OnDestroy {
                         value: this.selectedLesson.lessonData.instructors[0],
                     }
 
-                    this.isReserveMembershipExist =
-                        this.selectedLesson.linkableMembershipItems.length > 0 ? true : false
+                    this.isReserveMembershipExist = this.selectedLesson.linkableMembershipItems.length > 0
                 }
             })
     }
@@ -334,10 +342,15 @@ export class LessonComponent implements OnInit, AfterViewInit, OnDestroy {
     // seleted-lesson-membershiplist methods
     public isReservMembershipListModalOn = false
     setReserveMembershipModalOn() {
-        this.isReservMembershipListModalOn = this.isReservMembershipListModalOn == true ? false : true
+        this.isReservMembershipListModalOn = this.isReservMembershipListModalOn != true
     }
     setReserveMembershipModalOff() {
         this.isReservMembershipListModalOn = false
+        this.nxStore.dispatch(LessonActions.resetWillBeLinkedMembershipItem())
+    }
+    addReserveMembershipItems() {
+        this.isReservMembershipListModalOn = false
+        this.nxStore.dispatch(LessonActions.startLinkMemberships())
     }
 
     removeReservationMembership(unlinkMembership: MembershipItem) {

@@ -299,24 +299,33 @@ export class LessonEffect {
         )
     )
 
-    public linkClass$ = createEffect(() =>
+    public linkMembership$ = createEffect(() =>
         this.actions$.pipe(
-            ofType(LessonActions.startLinkMembership),
+            ofType(LessonActions.startLinkMemberships),
             concatLatestFrom(() => [this.store.select(LessonSelector.selectedLesson)]),
-            switchMap(([{ linkMembership }, curSelecteLesson]) =>
+            switchMap(([action, curSelecteLesson]) =>
                 this.centerLessonApi
                     .linkMembership(
                         curSelecteLesson.centerId,
                         curSelecteLesson.categId,
                         curSelecteLesson.lessonData.id,
-                        { membership_item_id: linkMembership.id }
+                        {
+                            membership_item_ids: _.values(curSelecteLesson.willBeLinkedMembershipItemRecord).map(
+                                (v) => v.id
+                            ),
+                        }
                     )
-                    .pipe(switchMap(() => [MembershipActions.startUpsertState()]))
+                    .pipe(
+                        switchMap(() => [
+                            MembershipActions.startUpsertState(),
+                            LessonActions.resetWillBeLinkedMembershipItem(),
+                        ])
+                    )
             )
         )
     )
 
-    public unlinkClass$ = createEffect(() =>
+    public unlinkMembership$ = createEffect(() =>
         this.actions$.pipe(
             ofType(LessonActions.startUnlinkMembership),
             concatLatestFrom(() => [this.store.select(LessonSelector.selectedLesson)]),

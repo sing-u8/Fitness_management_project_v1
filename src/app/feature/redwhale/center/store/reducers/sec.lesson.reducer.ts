@@ -19,6 +19,7 @@ export interface SelectedLesson {
     linkedMembershipItems?: Array<MembershipItem>
     linkableMembershipItems?: Array<MembershipItem>
     isLoading?: Loading
+    willBeLinkedMembershipItemRecord?: Record<string, MembershipItem> // Array<MembershipItem>
 }
 export const initialSelectedLesson: SelectedLesson = {
     lessonData: undefined,
@@ -28,6 +29,7 @@ export const initialSelectedLesson: SelectedLesson = {
     linkedMembershipItems: [],
     linkableMembershipItems: [],
     isLoading: 'idle',
+    willBeLinkedMembershipItemRecord: undefined,
 }
 
 export interface LessonCategoryState extends FE_ClassCategory {
@@ -231,6 +233,27 @@ export const lessonReducer = createImmerReducer(
         state.selectedLesson = initialSelectedLesson
         return state
     }),
+    on(LessonActions.updateWillBeLinkedMembershipItem, (state, { membershipItem }) => {
+        if (_.isEmpty(state.selectedLesson.willBeLinkedMembershipItemRecord)) {
+            state.selectedLesson.willBeLinkedMembershipItemRecord = {
+                [membershipItem.id]: membershipItem,
+            }
+        } else {
+            if (_.has(state.selectedLesson.willBeLinkedMembershipItemRecord, membershipItem.id)) {
+                state.selectedLesson.willBeLinkedMembershipItemRecord = _.omit(
+                    state.selectedLesson.willBeLinkedMembershipItemRecord,
+                    membershipItem.id
+                )
+            } else {
+                _.assign(state.selectedLesson.willBeLinkedMembershipItemRecord, { [membershipItem.id]: membershipItem })
+            }
+        }
+        return state
+    }),
+    on(LessonActions.resetWillBeLinkedMembershipItem, (state) => {
+        state.selectedLesson.willBeLinkedMembershipItemRecord = undefined
+        return state
+    }),
 
     // common
     on(LessonActions.resetAll, (state) => {
@@ -249,9 +272,11 @@ export const lessonReducer = createImmerReducer(
     }),
 
     // linked Membership
-    on(LessonActions.startLinkMembership, (state, { linkMembership }) => {
-        state.selectedLesson.linkedMembershipItems.push(linkMembership)
-        _.remove(state.selectedLesson.linkableMembershipItems, (v) => v.id == linkMembership.id)
+    on(LessonActions.startLinkMemberships, (state) => {
+        _.values(state.selectedLesson.willBeLinkedMembershipItemRecord).forEach((mv) => {
+            state.selectedLesson.linkedMembershipItems.push(mv)
+            _.remove(state.selectedLesson.linkableMembershipItems, (v) => v.id == mv.id)
+        })
         return state
     }),
     on(LessonActions.startUnlinkMembership, (state, { unlinkMembership }) => {
@@ -282,6 +307,7 @@ export const getLessonLength = (state: State) => {
     })
     return lessonLength
 }
+
 export const getSelectedLesson = (state: State) => state.selectedLesson
 export const selectTrainerFilter = (state: State) => state.selectedTrainerFilter
 export const selectTrainerFilterList = (state: State) => state.trainerFilterList
