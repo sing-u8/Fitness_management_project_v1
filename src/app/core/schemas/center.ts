@@ -4,6 +4,7 @@ export interface Center {
     address: string
     open_time: string // hh:mm:ss
     close_time: string // hh:mm:ss
+    all_day: boolean
     day_of_the_week: number[] // [0일 ~ 6토]
     color: string
     timezone: string

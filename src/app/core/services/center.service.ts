@@ -133,6 +133,7 @@ export interface UpdateCenterRequestBody {
     address?: string
     open_time?: string
     close_time?: string
+    all_day?: boolean
     day_of_the_week?: Array<number> // [0sun ~ 0sat]
     color?: string
     contract_terms?: string

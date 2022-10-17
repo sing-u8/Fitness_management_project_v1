@@ -257,6 +257,8 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
     // --------------------------------- modal operating fucntions and texts --------------------------------//
     public operatingTime: GymOperatingTime = { start: undefined, end: undefined }
     public operatingDayOfWeek: { value: number[] } = { value: [0, 1, 2, 3, 4, 5, 6] }
+    public operatingAllDay = false
+
     public doShowCenterOperModal = false
     openCenterOperatingModal() {
         this.doShowCenterOperModal = true
@@ -275,6 +277,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
                 day_of_the_week: Return.operatingDayOfWeek.value,
                 open_time: Return.operatingTime.start.slice(0, 5),
                 close_time: Return.operatingTime.end.slice(0, 5),
+                all_day: Return.isAllTime,
             })
             .subscribe((gymData) => {
                 // UI가 두 번 변함!!!
@@ -282,8 +285,8 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
                     ...this.fullCalendar.options,
                     ...{
                         hiddenDays: this.getHiddenDays(Return.operatingDayOfWeek.value),
-                        slotMinTime: Return.operatingTime.start,
-                        slotMaxTime: Return.operatingTime.end,
+                        slotMinTime: Return.isAllTime ? '00:00:00' : Return.operatingTime.start,
+                        slotMaxTime: Return.isAllTime ? '23:59:00' : Return.operatingTime.end,
                     },
                 }
 
@@ -305,6 +308,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
             }
             this.nxStore.dispatch(ScheduleActions.setOperatingHour({ operatingHour: operatingTime }))
             this.operatingDayOfWeek.value = center.day_of_the_week
+            this.operatingAllDay = center.all_day
             fn ? fn() : null
         })
     }
