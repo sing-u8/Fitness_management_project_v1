@@ -13,7 +13,6 @@ import { CenterUser } from '@schemas/center-user'
 import { CenterUsersCategory } from '@schemas/center/community/center-users-by-category'
 
 import * as SMSActions from '../actions/sec.sms.actions'
-import { setIsAdSet } from '../actions/sec.sms.actions'
 
 export type MemberSelectCateg = 'member' | 'valid' | 'unpaid' | 'imminent' | 'expired' | 'employee' | 'attendance'
 export type UsersListValue = Array<{ user: CenterUser; selected: boolean }>
@@ -113,7 +112,7 @@ export const initialState: State = {
     curUserListSelect: UserListSelectInit,
     isAdSet: false,
     generalText: '',
-    bookTime: '10:00:00',
+    bookTime: '08:00:00',
     bookDate: { date: dayjs().format('YYYY-MM-DD') },
     generalTransmissionTime: {
         immediate: true,
@@ -134,13 +133,19 @@ export const initialState: State = {
     smsHistoryList: SMSHistoryListInit,
     historyDateRange: dayjs().format('YYYY.MM'), // [dayjs().subtract(3, 'month').format('YYYY-MM-DD'), dayjs().format('YYYY-MM-DD')],
 }
-
+export const adMsgRef = {
+    top: '(광고) OO센터',
+    bottom: {
+        one: '무료거부',
+        two: '080-880-1571',
+    },
+}
 export const adMsgObj = {
-    top: `(광고) 레드웨일\n`,
-    bottom: '무료거부\n080-0000-0000',
+    top: `${adMsgRef.top}\n`,
+    bottom: `${adMsgRef.bottom.one}\n${adMsgRef.bottom.two}`,
 }
 export function getTextWithAd(text: string) {
-    return adMsgObj.top + '\n' + text + '\n\n' + adMsgObj.bottom
+    return adMsgObj.top + '\n\n' + text + '\n\n' + adMsgObj.bottom
 }
 
 export const smsReducer = createImmerReducer(
@@ -248,7 +253,7 @@ export const smsReducer = createImmerReducer(
             state.usersLists[state.curUserListSelect.key][index].selected = false
         })
         // reset general text
-        state.generalText = ''
+        // state.generalText = ''
         return state
     }),
 

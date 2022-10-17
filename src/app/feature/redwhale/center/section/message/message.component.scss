@@ -236,22 +236,39 @@
                                 text-align: start;
                             }
 
+                            .ad-text-content {
+                                padding-left: 34px;
+                                margin-top: 3px;
+                                margin-bottom: 8px;
+                                text-align: start;
+                            }
+
                             .ad-text-guide-logo {
-                                width: 23px;
-                                height: 23px;
-                                margin-left: 3px;
-                                background-image: url("/assets/icons/etc/help.svg");
-                                background-repeat: no-repeat;
-                                background-size: contain;
-                                position: relative;
+                                padding-left: 34px;
                                 cursor: pointer;
-                                &:hover {
-                                    .ad-text-guide-box {
-                                        z-index: 10 !important;
-                                        opacity: 1 !important;
-                                        visibility: visible !important;
+                                div.ad-text-guide-title {
+                                    display: flex;
+                                    align-items: center;
+                                    position: relative;
+                                    color: var(--red);
+                                    margin-bottom: 0;
+                                    img {
+                                        width: 20px;
+                                        height: 20px;
+                                        position: absolute;
+                                        right: -20px;
+                                        top: 0;
+                                    }
+
+                                    &:hover {
+                                        .ad-text-guide-box {
+                                            z-index: 10 !important;
+                                            opacity: 1 !important;
+                                            visibility: visible !important;
+                                        }
                                     }
                                 }
+
                                 .ad-text-guide-box {
                                     width: 430px;
                                     height: 395px;
@@ -260,7 +277,7 @@
                                     display: flex;
                                     align-items: flex-end;
                                     top: 0;
-                                    right: 5px;
+                                    right: -15px;
                                     visibility: hidden;
                                     opacity: 0;
                                     transition: visibility 0s, opacity 0.4s;
@@ -403,9 +420,101 @@
                             padding: 23px;
                             display: flex;
                             flex-direction: column;
+
                             p {
                                 text-align: start;
                                 margin-bottom: 11px;
+                            }
+                            div.setting-transmission-time__title {
+                                text-align: start;
+                                margin-bottom: 11px;
+                                display: flex;
+                                align-items: center;
+                                position: relative;
+
+                                .setting-trans-time-guide__logo {
+                                    width: 23px;
+                                    height: 23px;
+                                    margin-left: 3px;
+                                    background-image: url("/assets/icons/etc/help.svg");
+                                    background-repeat: no-repeat;
+                                    background-size: contain;
+                                    cursor: pointer;
+                                    position: absolute;
+                                    left: 127px;
+                                    top: -1.5px;
+
+                                    &:hover {
+                                        .setting-trans-time-guide__box {
+                                            z-index: 10 !important;
+                                            opacity: 1 !important;
+                                            visibility: visible !important;
+                                        }
+                                    }
+
+                                    .setting-trans-time-guide__box {
+                                        width: 262px;
+                                        height: 212px;
+                                        padding-top: 20px;
+                                        position: absolute;
+                                        z-index: -5;
+                                        display: flex;
+                                        align-items: flex-end;
+                                        top: 4px;
+                                        right: 3px;
+                                        visibility: hidden;
+                                        opacity: 0;
+                                        transition: visibility 0s, opacity 0.4s;
+                                        -moz-transition: visibility 0s, opacity 0.4s;
+                                        -webkit-transition: visibility 0s, opacity 0.4s;
+                                        -o-transition: visibility 0s, opacity 0.4s;
+                                        cursor: pointer;
+                                        box-shadow: 0 4px 10px rgba(181, 181, 181, 0.1098);
+
+                                        &:hover {
+                                            opacity: 1;
+                                            visibility: visible;
+                                            z-index: 10;
+                                        }
+
+                                        .help-text {
+                                            width: 262px;
+                                            height: 192px;
+                                            position: relative;
+
+                                            box-shadow: 0 0 10px #b5b5b51c;
+                                            background-color: var(--white);
+                                            border-radius: 5px;
+                                            overflow: hidden;
+                                            margin-top: 6px;
+
+                                            .help-text-title {
+                                                width: 100%;
+                                                height: 37px;
+                                                background-color: #212121;
+                                                color: var(--white);
+
+                                                display: flex;
+                                                justify-content: flex-start;
+                                                align-items: center;
+                                                padding: 0 15px;
+
+                                                font-size: 1.2rem;
+                                                line-height: 17px;
+                                                letter-spacing: -0.144px;
+                                                font-weight: 500;
+                                            }
+
+                                            .help-text-content {
+                                                padding: 15px 18px;
+                                                .text_first {
+                                                    margin-bottom: 8px !important;
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                }
                             }
                             rw-radio-button {
                                 &:first-of-type {

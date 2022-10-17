@@ -1,53 +1,76 @@
 <div class="l-auto-trans-setting-box">
-  <div class="auto-trans-setting">
-    <p class="title">{{autoTransmitTextObj.settingTitle}}</p>
-    <rw-checkbox
-      [checked]="smsAutoSend.auto_send_yn"
-      [text]="smsAutoSend.auto_send_yn ? checkBoxText.on : checkBoxText.off"
-      (click)="onCheckBoxClick()"
-    ></rw-checkbox>
-  </div>
-  <div class="bar"></div>
-  <div class="auto-trans-time" >
-    <p class="title">자동 전송 시점</p>
-    <p class="rw-typo-bodytext0">{{autoTransmitTextObj.transType}} 만기일로부터</p>
-    <div class="time-inputs">
-      <div class="l-input">
-        <input
-          class="rw-input"
-          [(ngModel)]="smsAutoSendDays"
-          (keydown)="inputhelperService.restrictToNumber($event)"
-          (keyup)="updateAutoTransmitDayKeyUp($event)"
-          (keyup.enter)="updateAutoTransmitDay()"
-          (keydown.tab)="updateAutoTransmitDay()"
-          (rwClickOutside)="updateAutoTransmitDay()"
-          (focus)="onFocus()"
-        >
-        <span class="rw-typo-bodytext0">일 전</span>
-      </div>
-      <rw-time-picker2
-        [time]="smsAutoSend.time"
-        [width]="'129'"
-        [textAlign]="'start'"
-        (onTimeClick)="onAutoTransmitTimeClick($event)"
-      ></rw-time-picker2>
+    <div class="auto-trans-setting">
+        <p class="title">{{autoTransmitTextObj.settingTitle}}</p>
+        <rw-checkbox
+            [checked]="smsAutoSend.auto_send_yn"
+            [text]="smsAutoSend.auto_send_yn ? checkBoxText.on : checkBoxText.off"
+            (click)="onCheckBoxClick()"
+        ></rw-checkbox>
     </div>
-  </div>
-
-  <div class="guide-text">
-    {{guideText}}
-    <div class="guide-text-box">
-      <div>
-        ‘자동 전송 사용함’으로 설정한 경우,
-        자동 전송 시점에 문자가 즉시 전송되므로
-        문자 내용을 변경하는 중에도 문자가 발송
-        될 수 있어요.
-      </div>
-      <div>
-        이를 방지하고자, 가급적 ‘<span class="red">문자 내용’이나
+    <div class="bar"></div>
+    <div class="auto-trans-time" >
+        <div class="title">
+            자동 전송 시점 (야간 전송 불가)
+            <div class="setting-trans-time-guide__logo">
+                <div class="setting-trans-time-guide__box">
+                    <div class="help-text">
+                        <div class="help-text-title">문자 야간 전송 안내</div>
+                        <div class="help-text-content rw-typo-bodytext2">
+                            <p class="text_first">
+                                오후 9시부터 다음날 오전 8시 사이에는<br>
+                                문자를 전송하실 수 없어요.
+                            </p>
+                            <p>
+                                정보통신망법 제76조 제1항에 따라 별도의<br>
+                                동의 없이 오후 9시부터 그 다음날 오전 8시<br>
+                                사이에 문자를 전송할 경우, 3천만원 이하의<br>
+                                과태료가 부과될 수 있습니다.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <p class="rw-typo-bodytext0">{{autoTransmitTextObj.transType}} 만기일로부터</p>
+        <div class="time-inputs">
+            <div class="l-input">
+                <input
+                    class="rw-input"
+                    [(ngModel)]="smsAutoSendDays"
+                    (keydown)="inputhelperService.restrictToNumber($event)"
+                    (keyup)="updateAutoTransmitDayKeyUp($event)"
+                    (keyup.enter)="updateAutoTransmitDay()"
+                    (keydown.tab)="updateAutoTransmitDay()"
+                    (rwClickOutside)="updateAutoTransmitDay()"
+                    (focus)="onFocus()"
+                >
+                <span class="rw-typo-bodytext0">일 전</span>
+            </div>
+            <rw-time-picker2
+                [time]="smsAutoSend.time"
+                [startTime]="'08:00:00'"
+                [endTime]="'21:00:00'"
+                [width]="'129'"
+                [textAlign]="'start'"
+                (onTimeClick)="onAutoTransmitTimeClick($event)"
+            ></rw-time-picker2>
+        </div>
+    </div>
+    
+    <div class="guide-text">
+        {{guideText}}
+        <div class="guide-text-box">
+            <div>
+                ‘자동 전송 사용함’으로 설정한 경우,
+                자동 전송 시점에 문자가 즉시 전송되므로
+                문자 내용을 변경하는 중에도 문자가 발송
+                될 수 있어요.
+            </div>
+            <div>
+                이를 방지하고자, 가급적 ‘<span class="red">문자 내용’이나
         ‘전송 시점’을 변경하기 전에는 잠시 자동
         전송 사용을 해제</span>해주세요.
-      </div>
+            </div>
+        </div>
     </div>
-  </div>
 </div>

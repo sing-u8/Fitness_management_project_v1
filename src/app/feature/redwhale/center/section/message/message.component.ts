@@ -1,6 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { FormBuilder } from '@angular/forms'
+
 import dayjs from 'dayjs'
+import isBetween from 'dayjs/plugin/isBetween'
+dayjs.extend(isBetween)
+
 import _ from 'lodash'
 // schema
 import { Center } from '@schemas/center'
@@ -27,8 +31,6 @@ import { SMSAutoSend } from '@schemas/sms-auto-send'
 import { SMSCaller } from '@schemas/sms-caller'
 import { SMSHistoryGroup } from '@schemas/sms-history-group'
 import { ClickEmitterType } from '@schemas/components/button'
-import { generalIsAdSet } from '@centerStore/selectors/sec.sms.selector'
-import { HistoryDateRange } from '@centerStore/reducers/sec.sms.reducer'
 
 type AutoTransmitType = 'membership' | 'locker'
 
@@ -104,6 +106,7 @@ export class MessageComponent implements OnInit, OnDestroy {
     }
 
     public adMegObj = FromSMS.adMsgObj
+    public adMsgRef = FromSMS.adMsgRef
 
     // ngrx -- history
     public historyGroupLoading: Loading = 'idle'
@@ -128,6 +131,7 @@ export class MessageComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         this.center = this.storageService.getCenter()
+        this.adMegObj.top = '(광고) ' + this.center.name + ' 센터'
 
         this.nxStore.pipe(select(SMSSelector.curCenterId), take(1)).subscribe((curCenterId) => {
             if (curCenterId != this.center.id) {
@@ -255,8 +259,8 @@ export class MessageComponent implements OnInit, OnDestroy {
 
     calculateSubtractPoint(gtb: number, selectedUsers: number) {
         if (gtb <= 90) {
-            this.subtractText = '단문 11P'
-            this.subtractPoint = 11 * selectedUsers
+            this.subtractText = '단문 12P'
+            this.subtractPoint = 12 * selectedUsers
         } else {
             this.subtractText = '장문 33P'
             this.subtractPoint = 33 * selectedUsers
@@ -340,6 +344,38 @@ export class MessageComponent implements OnInit, OnDestroy {
             })
         )
         // this.nxStore.dispatch(showToast({text:'문자 전송이 완료되었습니다.'}))
+    }
+
+    public showNotTransmitableModal = false
+    public showNotTransmitableModalData = {
+        text: `오후 9시부터 다음날 오전 8시 사이에는
+                문자를 전송할 수 없어요. 😞`,
+        subText: `정보통신망법에 따라, 별도의 동의 없이 야간 시간에
+                문자를 전송할 경우 과태료가 부과됩니다.`,
+        cancelButtonText: '확인',
+        confirmButtonText: '전송 시간 변경하기',
+    }
+    onCancelNotTransmitableModal() {
+        this.showNotTransmitableModal = false
+    }
+    onConfirmNotTransmitableModal() {
+        this.showNotTransmitableModal = false
+        this.onGeneralTransmissionTimeClick('book')
+    }
+
+    checkTransmitAvailable() {
+        const isTransmitable = dayjs().isBetween(
+            dayjs().set('hour', 8).set('minute', 0).set('second', 0),
+            dayjs().set('hour', 21).set('minute', 0).set('second', 0),
+            'minute',
+            '[]'
+        )
+        console.log('checkTransmitAvailable - ', isTransmitable)
+        if (isTransmitable) {
+            this.openTransmitMsgModal()
+        } else {
+            this.showNotTransmitableModal = true
+        }
     }
 
     // message route : auto-transmission

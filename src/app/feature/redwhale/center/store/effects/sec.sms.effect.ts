@@ -150,34 +150,46 @@ export class SMSEffect {
                 this.store.select(SMSSelector.curUserListSelect),
                 this.store.select(SMSSelector.generalIsAdSet),
             ]),
-            switchMap(([{ centerId, cb }, gCaller, gtTime, bookDate, gText, userListIds, bookTime, generalIsAdSet]) => {
-                let reqBody: SendSMSMessageReqBody = undefined
-                if (gtTime.immediate) {
-                    reqBody = {
-                        sender_phone_number: gCaller.phone_number,
-                        text: generalIsAdSet ? SMSReducer.getTextWithAd(gText) : gText,
-                        receiver_user_ids: userListIds,
+            switchMap(
+                ([
+                    { centerId, cb },
+                    gCaller,
+                    gtTime,
+                    bookDate,
+                    gText,
+                    userListIds,
+                    bookTime,
+                    curUserListSelect,
+                    generalIsAdSet,
+                ]) => {
+                    let reqBody: SendSMSMessageReqBody = undefined
+                    if (gtTime.immediate) {
+                        reqBody = {
+                            sender_phone_number: gCaller.phone_number,
+                            text: generalIsAdSet ? SMSReducer.getTextWithAd(gText) : gText,
+                            receiver_user_ids: userListIds,
+                        }
+                    } else {
+                        reqBody = {
+                            sender_phone_number: gCaller.phone_number,
+                            text: generalIsAdSet ? SMSReducer.getTextWithAd(gText) : gText,
+                            receiver_user_ids: userListIds,
+                            reservation_datetime: `${bookDate.date} ${bookTime}`,
+                        }
                     }
-                } else {
-                    reqBody = {
-                        sender_phone_number: gCaller.phone_number,
-                        text: generalIsAdSet ? SMSReducer.getTextWithAd(gText) : gText,
-                        receiver_user_ids: userListIds,
-                        reservation_datetime: `${bookDate.date} ${bookTime}`,
-                    }
+                    return this.centerSMSApi.sendSMSMessage(centerId, reqBody).pipe(
+                        switchMap((v) => {
+                            cb ? cb() : null
+                            return [
+                                SMSActions.finishSendGeneralMessage({
+                                    smsPoint: v.sms_point,
+                                }),
+                            ]
+                        }),
+                        catchError((err: string) => of(SMSActions.error({ error: err })))
+                    )
                 }
-                return this.centerSMSApi.sendSMSMessage(centerId, reqBody).pipe(
-                    switchMap((v) => {
-                        cb ? cb() : null
-                        return [
-                            SMSActions.finishSendGeneralMessage({
-                                smsPoint: v.sms_point,
-                            }),
-                        ]
-                    }),
-                    catchError((err: string) => of(SMSActions.error({ error: err })))
-                )
-            })
+            )
         )
     )
 
