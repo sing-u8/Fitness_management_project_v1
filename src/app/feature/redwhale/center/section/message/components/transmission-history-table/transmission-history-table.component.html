@@ -30,7 +30,7 @@
 				<td></td>
 				<td>{{item.datetime}}</td>
 				<td>{{item.state_code_name}}</td>
-				<td>{{'일반 전송T'}}</td>
+				<td>{{item.sms_auto_send_yn ? '자동 전송' : '일반 전송'}}</td>
 				<td>{{item.type_code_name}}</td>
 				<td [style.maxWidth.px]="contentWidth">
 					<div class="line-ellipsis-one">

@@ -7,6 +7,7 @@ export interface SMSHistoryGroup {
     type_code_name: string
     text: string
     reservation_datetime: string
+    sms_auto_send_yn: boolean
     request: number
     success: number
     failure: number
