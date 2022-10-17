@@ -100,13 +100,14 @@ import resourceTimeGridPlugin from '@fullcalendar/resource-timegrid'
 
 // Angular-Gridster2
 import { GridsterModule } from 'angular-gridster2'
+// ng2-dragular
+import { DragulaModule } from 'ng2-dragula'
 
 // Angular signature
 // // ngx libraries
 import { NgxGaugeModule } from 'ngx-gauge'
 import { NgxSpinnerModule } from 'ngx-spinner'
-import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
-
+import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader'
 
 // import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader'
 
@@ -203,17 +204,16 @@ FullCalendarModule.registerPlugins([
         CallbackPipe,
         IsTodayPipe,
         ContenteditableDirective,
-
     ],
     imports: [
         CommonModule,
         FormsModule,
-        // DragulaModule.forRoot(),
         NgxGaugeModule,
         GridsterModule,
         ReactiveFormsModule,
         NgxSpinnerModule,
         NgxSkeletonLoaderModule,
+        DragulaModule.forRoot(),
     ],
     exports: [
         AvatarComponent,
@@ -300,6 +300,7 @@ FullCalendarModule.registerPlugins([
         FullCalendarModule,
         // Angular-Gridstar2
         GridsterModule,
+        DragulaModule,
     ],
     providers: [],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],

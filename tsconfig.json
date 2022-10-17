@@ -35,7 +35,7 @@
             "@redwhale/redwhale-home/*": ["./src/app/feature/redwhale/redwhale-home/*"],
 
             "@appStore/*": ["./src/app/store/*"],
-            "@centerStore/*": ["src/app/feature/redwhale/center/store/*"]
+            "@centerStore/*": ["src/app/feature/redwhale/center/store/*"],
         }
     },
     "angularCompilerOptions": {

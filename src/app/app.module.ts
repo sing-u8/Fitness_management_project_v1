@@ -14,6 +14,7 @@ import { SharedModule } from '@shared/shared.module'
 import { CenterModule } from 'src/app/feature/redwhale/center/center.module'
 import { AuthModule } from '@redwhale/auth/auth.module'
 import { RedwhaleHomeModule } from '@redwhale/redwhale-home/redwhale-home.module'
+// ng2-dragular
 
 // ngrx
 import { StoreModule } from '@ngrx/store'
