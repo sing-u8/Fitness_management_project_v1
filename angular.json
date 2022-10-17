@@ -45,7 +45,8 @@
                             "dayjs",
                             "file-saver",
                             "moment-timezone",
-                            "signature_pad"
+                            "signature_pad",
+                            "dragula"
                         ]
                     },
                     "configurations": {
