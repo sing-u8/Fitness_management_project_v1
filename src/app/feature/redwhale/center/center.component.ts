@@ -7,7 +7,7 @@ import { Observable, Subject } from 'rxjs'
 // ngrx
 import { Store, select } from '@ngrx/store'
 import { drawerSelector } from '@appStore/selectors'
-import * as DashboardSelector from '@centerStore/selectors/sec.dashoboard.selector'
+import * as DashboardSelector from '@centerStore/selectors/sec.dashboard.selector'
 import * as DashboardReducer from '@centerStore/reducers/sec.dashboard.reducer'
 import * as DashboardAction from '@centerStore/actions/sec.dashboard.actions'
 import { takeUntil } from 'rxjs/operators'

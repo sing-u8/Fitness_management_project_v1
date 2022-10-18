@@ -187,7 +187,7 @@ export class MsgMemberListComponent implements OnInit, OnDestroy {
         },
         valid: {
             showTopImage: true,
-            texts: ['[유효한 회원] 내역에서 ', '검색하신 회원을 찾을 수 없습니다.'],
+            texts: ['[회원권 사용중인 회원] 내역에서 ', '검색하신 회원을 찾을 수 없습니다.'],
         },
         unpaid: {
             showTopImage: true,
@@ -195,7 +195,7 @@ export class MsgMemberListComponent implements OnInit, OnDestroy {
         },
         imminent: {
             showTopImage: true,
-            texts: ['[만료 예정인 회원] 내역에서 ', '검색하신 회원을 찾을 수 없습니다.'],
+            texts: ['[7일 내 만료 예정인 회원] 내역에서 ', '검색하신 회원을 찾을 수 없습니다.'],
         },
         expired: {
             showTopImage: true,

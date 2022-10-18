@@ -32,7 +32,7 @@ import { FeatureKey as GymFeatureKey } from '@centerStore/selectors/sec.selector
 import { FeatureKey as LessonFeatureKey } from '@centerStore/selectors/sec.lesson.selector'
 import { FeatureKey as MembershipFeatureKey } from '@centerStore/selectors/sec.membership.selector'
 import { FeatureKey as LockerFeatureKey } from '@centerStore/selectors/sec.locker.selector'
-import { FeatureKey as DashboardFeatureKey } from '@centerStore/selectors/sec.dashoboard.selector'
+import { FeatureKey as DashboardFeatureKey } from '@centerStore/selectors/sec.dashboard.selector'
 import { FeatureKey as ScheduleFeatureKey } from '@centerStore/selectors/sec.schedule.selector'
 import { FeatureKey as SaleFeatureKey } from '@centerStore/selectors/sec.sale.selector'
 import { FeatureKey as CommunityFeatureKey } from '@centerStore/selectors/sec.community.selector'

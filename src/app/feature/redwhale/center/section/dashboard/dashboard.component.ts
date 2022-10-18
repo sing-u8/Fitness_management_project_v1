@@ -22,7 +22,7 @@ import { take } from 'rxjs/operators'
 import { Store, select } from '@ngrx/store'
 
 import * as FromDashboard from '@centerStore/reducers/sec.dashboard.reducer'
-import * as DashboardSelector from '@centerStore/selectors/sec.dashoboard.selector'
+import * as DashboardSelector from '@centerStore/selectors/sec.dashboard.selector'
 import * as DashboardActions from '@centerStore/actions/sec.dashboard.actions'
 import * as CenterCommonActions from '@centerStore/actions/center.common.actions'
 

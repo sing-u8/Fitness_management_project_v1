@@ -23,7 +23,7 @@ import _ from 'lodash'
 import { Store } from '@ngrx/store'
 import * as DashboardReducer from '@centerStore/reducers/sec.dashboard.reducer'
 import * as DashboardActions from '@centerStore/actions/sec.dashboard.actions'
-import * as DashboardSelector from '@centerStore/selectors/sec.dashoboard.selector'
+import * as DashboardSelector from '@centerStore/selectors/sec.dashboard.selector'
 import { showToast } from '@appStore/actions/toast.action'
 @Component({
     selector: 'db-user-detail-payment',

@@ -43,9 +43,9 @@ export const MemberManageCategoryInit = 'membershipLocker'
 export const UsersSelectCategInit: UsersSelectCateg = {
     member: { name: '전체 회원', userSize: 0 },
     attendance: { name: '오늘 출석한 회원', userSize: 0 },
-    valid: { name: '유효한 회원', userSize: 0 },
+    valid: { name: '회원권 사용중인 회원', userSize: 0 },
     unpaid: { name: '미수금이 있는 회원', userSize: 0 },
-    imminent: { name: '만료 예정인 회원', userSize: 0 },
+    imminent: { name: '7일 내 만료 예정인 회원', userSize: 0 },
     expired: { name: '만료된 회원', userSize: 0 },
     employee: { name: '센터 직원', userSize: 0 },
 }

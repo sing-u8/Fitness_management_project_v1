@@ -24,7 +24,7 @@ import { NgxSpinnerService } from 'ngx-spinner'
 import { select, Store } from '@ngrx/store'
 import { showToast } from '@appStore/actions/toast.action'
 import { CenterUser } from '@schemas/center-user'
-import * as DashboardSelector from '@centerStore/selectors/sec.dashoboard.selector'
+import * as DashboardSelector from '@centerStore/selectors/sec.dashboard.selector'
 
 @Component({
     selector: 'touch-pad',

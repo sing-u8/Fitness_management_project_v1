@@ -22,7 +22,7 @@ import { distinctUntilChanged, map, takeUntil } from 'rxjs/operators'
 import { Store, select } from '@ngrx/store'
 
 import * as FromDashboard from '@centerStore/reducers/sec.dashboard.reducer'
-import * as DashboardSelector from '@centerStore/selectors/sec.dashoboard.selector'
+import * as DashboardSelector from '@centerStore/selectors/sec.dashboard.selector'
 import * as DashboardActions from '@centerStore/actions/sec.dashboard.actions'
 
 @Component({
@@ -254,7 +254,7 @@ export class MemberListComponent implements OnInit, OnDestroy {
         },
         valid: {
             showTopImage: true,
-            texts: ['[유효한 회원] 내역에서 ', '검색하신 회원을 찾을 수 없습니다.'],
+            texts: ['[회원권 사용중인 회원] 내역에서 ', '검색하신 회원을 찾을 수 없습니다.'],
         },
         unpaid: {
             showTopImage: true,
@@ -262,7 +262,7 @@ export class MemberListComponent implements OnInit, OnDestroy {
         },
         imminent: {
             showTopImage: true,
-            texts: ['[만료 예정인 회원] 내역에서 ', '검색하신 회원을 찾을 수 없습니다.'],
+            texts: ['[7일 내 만료 예정인 회원] 내역에서 ', '검색하신 회원을 찾을 수 없습니다.'],
         },
         expired: {
             showTopImage: true,

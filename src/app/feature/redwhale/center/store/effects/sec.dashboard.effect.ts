@@ -9,7 +9,7 @@ import dayjs from 'dayjs'
 
 import * as DashboardActions from '../actions/sec.dashboard.actions'
 import * as DashboardReducer from '../reducers/sec.dashboard.reducer'
-import * as DashboardSelector from '../selectors/sec.dashoboard.selector'
+import * as DashboardSelector from '../selectors/sec.dashboard.selector'
 
 import { showToast } from '@appStore/actions/toast.action'
 

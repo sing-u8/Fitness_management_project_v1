@@ -19,7 +19,7 @@ import { showToast } from '@appStore/actions/toast.action'
 import * as DashboardReducer from '@centerStore/reducers/sec.dashboard.reducer'
 import * as DashboardActions from '@centerStore/actions/sec.dashboard.actions'
 import * as CenterCommonActions from '@centerStore/actions/center.common.actions'
-import * as DashboardSelector from '@centerStore/selectors/sec.dashoboard.selector'
+import * as DashboardSelector from '@centerStore/selectors/sec.dashboard.selector'
 // services
 import { CenterService } from '@services/center.service'
 import { StorageService } from '@services/storage.service'
