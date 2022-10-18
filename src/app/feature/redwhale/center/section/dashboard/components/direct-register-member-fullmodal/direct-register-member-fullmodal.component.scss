@@ -49,29 +49,25 @@ section.direct-regitser-member-fullmodal-wrapper {
 
                 .l-guide-text {
                     text-decoration-line: underline;
+                    text-underline-offset: 5px;
                     margin-top: 10px;
                     position: relative;
+                    cursor: pointer;
+                    width: 245px;
                     &:hover {
-                        .guide-text-box {
+                        .l-guide-text-box {
                             z-index: 10 !important;
                             opacity: 1 !important;
                             visibility: visible !important;
                         }
                     }
-                    .guide-text-box {
+                    .l-guide-text-box {
                         display: flex;
-                        width: 350px;
-                        height: 296px;
-                        background: #FFFFFF;
-                        box-shadow: 0 0 10px rgba(181, 181, 181, 0.109804);
-                        padding: 15px;
-                        border-radius: 5px;
-                        position: absolute;
-                        z-index: -5;
-                        display: flex;
+                        justify-content: flex-end;
                         flex-direction: column;
-                        align-items: flex-start;
-                        top: 25px;
+                        width: 350px;
+                        height: 321px;
+                        top: 0;
                         left: 0;
                         visibility: hidden;
                         opacity: 0;
@@ -79,11 +75,26 @@ section.direct-regitser-member-fullmodal-wrapper {
                         -moz-transition: visibility 0s, opacity 0.4s;
                         -webkit-transition: visibility 0s, opacity 0.4s;
                         -o-transition: visibility 0s, opacity 0.4s;
+                        border-radius: 5px;
+                        position: absolute;
+                        cursor: pointer;
+                        z-index: -5;
                         &:hover {
                             opacity: 1;
                             visibility: visible;
                             z-index: 10;
                         }
+                    }
+                    .guide-text-box {
+                        display: flex;
+                        height: 296px;
+                        width: 100%;
+                        background: #FFFFFF;
+                        box-shadow: 0 0 10px rgba(181, 181, 181, 0.109804);
+                        padding: 15px;
+                        flex-direction: column;
+                        align-items: flex-start;
+
                         .guide-text-box__title {
                             margin-bottom: 7px;
                             font-size: 1.2rem;
