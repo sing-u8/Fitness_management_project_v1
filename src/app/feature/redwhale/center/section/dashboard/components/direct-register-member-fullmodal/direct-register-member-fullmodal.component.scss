@@ -41,11 +41,84 @@ section.direct-regitser-member-fullmodal-wrapper {
             height: $header_height;
             background-color: var(--white);
             position: relative;
-            padding: 0px 20px;
+            padding: 0 20px;
 
             .header-text-container {
                 width: $containerWidth;
                 margin-bottom: 27px;
+
+                .l-guide-text {
+                    text-decoration-line: underline;
+                    margin-top: 10px;
+                    position: relative;
+                    &:hover {
+                        .guide-text-box {
+                            z-index: 10 !important;
+                            opacity: 1 !important;
+                            visibility: visible !important;
+                        }
+                    }
+                    .guide-text-box {
+                        display: flex;
+                        width: 350px;
+                        height: 296px;
+                        background: #FFFFFF;
+                        box-shadow: 0 0 10px rgba(181, 181, 181, 0.109804);
+                        padding: 15px;
+                        border-radius: 5px;
+                        position: absolute;
+                        z-index: -5;
+                        display: flex;
+                        flex-direction: column;
+                        align-items: flex-start;
+                        top: 25px;
+                        left: 0;
+                        visibility: hidden;
+                        opacity: 0;
+                        transition: visibility 0s, opacity 0.4s;
+                        -moz-transition: visibility 0s, opacity 0.4s;
+                        -webkit-transition: visibility 0s, opacity 0.4s;
+                        -o-transition: visibility 0s, opacity 0.4s;
+                        &:hover {
+                            opacity: 1;
+                            visibility: visible;
+                            z-index: 10;
+                        }
+                        .guide-text-box__title {
+                            margin-bottom: 7px;
+                            font-size: 1.2rem;
+                            font-weight: 400;
+                            line-height: 17px;
+                            letter-spacing: -0.144px;
+                            color: var(--font-color);
+                            &:last-of-type {
+                                margin-bottom: 15px;
+                            }
+                        }
+                        .guide-text-box__content {
+                            padding-left: 18px;
+                            position: relative;
+
+                            font-weight: 700;
+                            font-size: 12px;
+                            line-height: 17px;
+                            letter-spacing: -0.144px;
+                            color: var(--font-color);
+
+                            &:not(:last-of-type){
+                                margin-bottom: 7px;
+                            }
+
+                            img {
+                                width: 15px;
+                                height: 15px;
+                                position: absolute;
+                                top: 0;
+                                left: 0;
+                            }
+                        }
+                    }
+                }
             }
 
             .close-button {
@@ -254,4 +327,11 @@ section.direct-regitser-member-fullmodal-wrapper {
 
 .direct-regitser-member-fullmodal-show {
     opacity: 1 !important;
+}
+
+.red {
+    color: var(--red);
+}
+.bold {
+    font-weight: 700;
 }
