@@ -1,0 +1,43 @@
+<div class="rw-modal-background" #modalBackgroundElement></div>
+<div
+    class="rw-modal-wrapper justify-content-center align-items-center"
+    (mouseup)="!isMouseModalDown && !blockClickOutside && onConfirm()"
+    (mousedown) = 'resetMouseModalDown()'
+    #modalWrapperElement
+>
+    <div
+        class="rw-modal user-select-none"
+        (mousedown) ='onMouseModalDown(); $event.stopPropagation()'
+    >
+
+        <div class="l-title">
+            <div class="title">
+                <span class="rw-typo-title1">{{chargedPoint | numberWithCommas}}P</span>
+                <span class="rw-typo-title1">충전이 완료되었어요!</span>
+            </div>
+        </div>
+        <div class="divider"></div>
+        <div class="l-detail">
+            <div class="detail-item">
+                <span class="rw-typo-subtext1">결제 금액</span>
+                <span class="rw-typo-subtext1">{{chargedPay | numberWithCommas}}원</span>
+            </div>
+            <div class="detail-item">
+                <span class="rw-typo-subtext1">결제 수단</span>
+                <span class="rw-typo-subtext1">{{chargeType}}</span>
+            </div>
+            <div class="detail-item">
+                <span class="rw-typo-subtext1">충전 후</span>
+                <span class="rw-typo-subtext1 red">{{(curPoint + chargedPoint) | numberWithCommas}}P</span>
+            </div>
+        </div>
+        <div class="button-group d-flex">
+            <div
+                class="confirm col d-flex justify-content-center align-items-center rw-typo-bodytext2"
+                (click)="onConfirm(); $event.stopPropagation()"
+            >
+                {{ '확인' }}
+            </div>
+        </div>
+    </div>
+</div>

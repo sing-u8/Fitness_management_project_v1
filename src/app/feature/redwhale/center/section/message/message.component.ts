@@ -525,6 +525,18 @@ export class MessageComponent implements OnInit, OnDestroy {
         )
     }
 
+    // chargePoint complete modal
+    public showChargePointCompleteModal = false
+    onShowChargePointCompleteConfirm() {
+        this.showChargePointCompleteModal = false
+    }
+    public chargedData = {
+        point: 0,
+        curPoint: 0,
+        pay: 0,
+    }
+    public chargeType = '카드'
+
     // charge point modal vars & funcs
     public showChargePointModal = false
     toggleChargePointModal() {
@@ -544,6 +556,7 @@ export class MessageComponent implements OnInit, OnDestroy {
                 const user = this.storageService.getUser()
                 const IMP = window['IMP']
                 console.log('onChargePointChargeConfirm : ', IMP, ' --- ', v)
+
                 IMP.init('imp46444316')
                 IMP.request_pay(
                     {
@@ -564,6 +577,14 @@ export class MessageComponent implements OnInit, OnDestroy {
                                     merchant_uid: rsp.merchant_uid,
                                 })
                                 .subscribe(() => {
+                                    this.showChargePointCompleteModal = true
+                                    this.chargedData = {
+                                        point: res.point,
+                                        curPoint: this.smsPoint,
+                                        pay: res.amount,
+                                    }
+                                    this.chargeType = '카드'
+
                                     this.nxStore.dispatch(SMSActions.startGetSMSPoint({ centerId: this.center.id }))
                                     this.showChargePointModal = false
                                     res.loadingFns.hideLoading()

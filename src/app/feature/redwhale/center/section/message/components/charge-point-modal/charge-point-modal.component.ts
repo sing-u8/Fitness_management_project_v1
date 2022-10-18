@@ -10,7 +10,12 @@ import {
     SimpleChanges,
     ViewChild,
 } from '@angular/core'
+
 import { ClickEmitterType } from '@schemas/components/button'
+
+import { InputHelperService } from '@services/helper/input-helper.service'
+
+import _ from 'lodash'
 
 type ChargePoint = {
     selected: boolean
@@ -38,7 +43,7 @@ export class ChargePointModalComponent implements OnChanges, AfterViewChecked {
 
     public isMouseModalDown: boolean
 
-    constructor(private el: ElementRef, private renderer: Renderer2) {
+    constructor(private el: ElementRef, private renderer: Renderer2, public inputHelperService: InputHelperService) {
         this.isMouseModalDown = false
     }
 
@@ -73,6 +78,7 @@ export class ChargePointModalComponent implements OnChanges, AfterViewChecked {
                     this.chargePointList[i].selected = i == 0
                 })
                 this.agreeCharge = false
+                this.pointInput = ''
             }
         }
     }
@@ -82,10 +88,10 @@ export class ChargePointModalComponent implements OnChanges, AfterViewChecked {
     }
 
     onConfirm(loadingFns: ClickEmitterType): void {
-        if (!this.agreeCharge) return
-        const chargePoint = this.chargePointList.find((v, i) => this.chargePointList[i].selected)
+        if (!(this.agreeCharge && this.isChargeablePoint())) return
+        const chargePoint = Number(this.pointInput) // this.chargePointList.find((v, i) => this.chargePointList[i].selected)
         loadingFns.showLoading()
-        this.confirm.emit({ loadingFns, amount: chargePoint.pay, point: chargePoint.point })
+        this.confirm.emit({ loadingFns, amount: chargePoint, point: chargePoint })
     }
 
     // on mouse rw-modal down
@@ -113,5 +119,16 @@ export class ChargePointModalComponent implements OnChanges, AfterViewChecked {
     public agreeCharge = false
     onAgreeChargeClick() {
         this.agreeCharge = !this.agreeCharge
+    }
+
+    // input vars and funcs
+    public pointInput = ''
+    onSelectedItemInputKeyup(event) {
+        if (event.code == 'Enter' || _.includes(event.code, 'Arrow')) return
+        this.pointInput.replace(/[^0-9]/gi, '').replace(/[^0-9]/gi, ',')
+    }
+
+    isChargeablePoint() {
+        return Number(this.pointInput) >= 1000
     }
 }

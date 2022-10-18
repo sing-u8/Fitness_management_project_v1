@@ -137,7 +137,7 @@
                                                                     </p>
                                                                     <div class="rw-typo-subtext0-regular red-box">
                                                                         <p>{{adMsgRef.bottom.one}}</p>
-                                                                        <p>{{adMsgRef.bottom.two}}</p>
+                                                                        <p>000-000-0000</p>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -370,6 +370,15 @@
     (cancel)="onChargePointCancel()"
     (confirm)="onChargePointChargeConfirm($event)"
 ></msg-charge-point-modal>
+<msg-charge-point-compelete-modal
+    [(visible)]="showChargePointCompleteModal"
+    [chargedPay]="chargedData.pay"
+    [chargedPoint]="chargedData.point"
+    [curPoint]="chargedData.curPoint"
+    [chargeType]="chargeType"
+    [blockClickOutside]="false"
+    (confirm)="onShowChargePointCompleteConfirm()"
+></msg-charge-point-compelete-modal>
 
 <msg-register-sender-phone-modal
     [(visible)]="showRegisterSenderPhone"

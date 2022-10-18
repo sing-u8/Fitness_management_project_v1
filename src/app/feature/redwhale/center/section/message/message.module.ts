@@ -23,6 +23,7 @@ import { TransmissionHistoryItemComponent } from './components/transmission-hist
 import { MsgUserListSelectComponent } from './components/msg-user-list-select/msg-user-list-select.component'
 import { RegisterSenderPhoneModalComponent } from './components/register-sender-phone-modal/register-sender-phone-modal.component'
 import { ChargePointModalComponent } from './components/charge-point-modal/charge-point-modal.component'
+import { ChargePointCompeleteModalComponent } from './components/charge-point-compelete-modal/charge-point-compelete-modal.component'
 
 // pipes
 import { HistoryDatePipe } from './pipes/history-date.pipe'
@@ -44,6 +45,7 @@ import { SmsDatePipe } from './pipes/sms-date.pipe'
         TransmissionHistoryItemComponent,
         RegisterSenderPhoneModalComponent,
         ChargePointModalComponent,
+        ChargePointCompeleteModalComponent,
         HistoryDatePipe,
         SmsDatePipe,
     ],

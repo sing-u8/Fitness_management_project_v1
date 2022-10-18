@@ -34,7 +34,7 @@
 	z-index: 10000;
 
 	.rw-modal {
-		width: 632px;
+		width: 570px;
 		height: 420px;
 		border-radius: 6px;
 		background-color: var(--white);
@@ -92,28 +92,26 @@
 			.l-point-item {
 				display: flex;
 				align-items: center;
-				margin-bottom: 20px;
-				.point-item {
-					display: flex;
-					flex-direction: column;
-					align-items: center;
-					justify-content: center;
-					border: 1px solid #E9E9E9;
-					border-radius: 10px;
-					width: 140px;
-					height: 61px;
-					cursor: pointer;
-					&:not(:last-of-type) {
-						margin-right: 10px;
-					}
-					span {
-						&:first-of-type {
+				margin-bottom: 30px;
 
-						}
+				.l-input {
+					position: relative;
+					width: 235px;
+					input {
+						padding: 14px 40px 14px 15px;
+						height: 48px;
+						width: 235px;
+						text-align: right;
 					}
-					&.selected {
-						background: rgba(227, 74, 94, 0.05);
-						border: 2px solid var(--red);
+					span.point-text {
+						position: absolute;
+						top: 14px;
+						right: 19px;
+					}
+					span.point-guide-text {
+						position: absolute;
+						right: -53px;
+						bottom: 5px;
 					}
 				}
 			}
