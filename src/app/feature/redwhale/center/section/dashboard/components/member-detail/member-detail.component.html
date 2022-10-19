@@ -242,7 +242,6 @@
                 <db-user-detail-reservation
                     *ngIf="(userDetailTag$ | async) == 'reservation'"
                     [curUserData]="curUserData"
-                    (onRegisterML)="toggleRegisterMLFullModal()"
                 ></db-user-detail-reservation>
                 <db-user-detail-payment
                     *ngIf="(userDetailTag$ | async) == 'payment'"

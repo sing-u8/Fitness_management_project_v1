@@ -24,7 +24,6 @@ import { showToast } from '@appStore/actions/toast.action'
 export class UserDetailReservationComponent implements OnInit {
     @Input() curUserData: DashboardReducer.CurUseData = _.cloneDeep(DashboardReducer.CurUseDataInit)
 
-    @Output() onRegisterML = new EventEmitter<void>()
     constructor(
         private nxStore: Store,
         private wordService: WordService,
@@ -52,13 +51,6 @@ export class UserDetailReservationComponent implements OnInit {
         confirmButtonText: '예약 취소',
     }
     openCancelBookModal() {
-        console.log(
-            'openCancel book modal : ',
-            this.selectedUserBooking.name,
-            '----',
-            this.wordService.ellipsis(this.selectedUserBooking.name, 7),
-            _.slice(this.selectedUserBooking.name, 0, 7)
-        )
         this.cancelBookModalData.text = `'${this.wordService.ellipsis(
             this.selectedUserBooking.name,
             7
