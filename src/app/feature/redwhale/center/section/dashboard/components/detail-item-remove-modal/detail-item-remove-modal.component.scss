@@ -1,0 +1,107 @@
+* {
+	margin: 0;
+	padding: 0;
+	text-align: start;
+}
+
+.rw-modal-background {
+	display: none;
+	position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	background-color: var(--font-color);
+	opacity: 0;
+	transition: opacity 0.3s cubic-bezier(0.25, 0.8, 0.25, 0.8);
+	-moz-transition: opacity 0.3s cubic-bezier(0.25, 0.8, 0.25, 0.8);
+	-webkit-transition: opacity 0.3s cubic-bezier(0.25, 0.8, 0.25, 0.8);
+	-o-transition: opacity 0.3s cubic-bezier(0.25, 0.8, 0.25, 0.8);
+	z-index: 9999;
+}
+
+.rw-modal-background-show {
+	opacity: 0.3;
+}
+
+.rw-modal-wrapper {
+	display: none;
+	position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	z-index: 10000;
+
+	.rw-modal {
+		width: 334px;
+		padding: 0 10px;
+		border: 1px solid var(--border-color);
+		border-radius: 6px;
+		background-color: var(--white);
+		box-shadow: 0 0 10px 0 rgba(181, 181, 181, 0.11);
+		opacity: 0;
+		transition: opacity 0s;
+		-moz-transition: opacity 0s;
+		-webkit-transition: opacity 0s;
+		-o-transition: opacity 0s;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+
+		.title {
+			margin-top: 45px;
+			white-space: pre-line;
+			text-align: center;
+		}
+
+		.l-content-info {
+			padding: 17px 15px 18px;
+			display: flex;
+			flex-direction: column;
+			justify-content: space-between;
+			width: 294px;
+			height: 83px;
+			position: relative;
+			background: var(--background-color);
+			border-radius: 5px;
+			margin: 16px 0 35px 0;
+			.content-info-item {
+				width: 100%;
+				position: relative;
+				display: flex;
+				div {
+					&:nth-child(1){
+						min-width: 94px;
+						margin-right: 14px;
+					}
+					&:nth-child(2){
+						width: calc(100% - 108px);
+					}
+				}
+			}
+		}
+
+		.button-group {
+			height: 50px;
+			width: 100%;
+			padding: 10px 0;
+			border-top: 1px solid var(--border-color);
+			.cancel {
+				border-right: 1px solid var(--border-color);
+				color: var(--grey) !important;
+				cursor: pointer;
+			}
+
+			.confirm {
+				cursor: pointer;
+			}
+		}
+	}
+}
+
+.rw-modal-wrapper-show {
+	.rw-modal {
+		opacity: 1;
+	}
+}

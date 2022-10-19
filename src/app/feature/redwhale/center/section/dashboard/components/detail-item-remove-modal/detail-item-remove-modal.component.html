@@ -1,0 +1,37 @@
+<div class="rw-modal-background" #modalBackgroundElement></div>
+<div
+    class="rw-modal-wrapper justify-content-center align-items-center"
+    (mouseup)="!isMouseModalDown && !blockClickOutside && onCancel()"
+    (mousedown) = 'resetMouseModalDown()'
+    #modalWrapperElement
+>
+    <div
+        class="rw-modal user-select-none"
+        (mousedown) ='onMouseModalDown(); $event.stopPropagation()'
+    >
+        <div class="title rw-typo-title1 d-flex justify-content-center align-items-center flex-column">
+            <span class="rw-typo-title1">{{ userName }}님의 '{{itemName}}'</span>
+            <span class="rw-typo-title1">{{ typeName }}을 삭제하시겠어요?</span>
+        </div>
+        <div class="l-content-info">
+            <div class="content-info-item" *ngFor="let item of contentInfoObj[type]">
+                <div class="rw-typo-subtext1">{{item[0]}}</div>
+                <div class="rw-typo-subtext0-regular">{{item[1]}}</div>
+            </div>
+        </div>
+        <div class="button-group d-flex">
+            <div
+                class="cancel col d-flex justify-content-center align-items-center rw-typo-bodytext2"
+                (click)="onCancel()"
+            >
+                {{ '취소' }}
+            </div>
+            <div
+                class="confirm col d-flex justify-content-center align-items-center rw-typo-bodytext2"
+                (click)="onConfirm(); $event.stopPropagation()"
+            >
+                {{ '삭제' }}
+            </div>
+        </div>
+    </div>
+</div>
