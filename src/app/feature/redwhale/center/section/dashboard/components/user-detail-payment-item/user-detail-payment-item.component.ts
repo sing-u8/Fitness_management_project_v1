@@ -16,6 +16,7 @@ export class UserDetailPaymentItemComponent implements OnInit, AfterViewInit {
     @Output() onUpdatePayment = new EventEmitter<Payment>()
     @Output() onUpdateTransfer = new EventEmitter<Payment>()
     @Output() onUpdateRefund = new EventEmitter<Payment>()
+    @Output() onRemovePayment = new EventEmitter<Payment>()
 
     public originalOrder = originalOrder
 
@@ -50,6 +51,14 @@ export class UserDetailPaymentItemComponent implements OnInit, AfterViewInit {
             visible: true,
             func: () => {
                 this.onUpdateRefund.emit(this.payment)
+            },
+        },
+        removePayment: {
+            name: '결제 내역 삭제',
+            color: 'var(--red)',
+            visible: true,
+            func: () => {
+                this.onRemovePayment.emit(this.payment)
             },
         },
     }
@@ -101,5 +110,7 @@ export class UserDetailPaymentItemComponent implements OnInit, AfterViewInit {
             this.menuDropDownItemObj.updatePayment.visible = false
             this.menuDropDownItemObj.updateRefund.visible = false
         }
+
+        // 결제 내역 삭제는 권한이 있는 경우만
     }
 }

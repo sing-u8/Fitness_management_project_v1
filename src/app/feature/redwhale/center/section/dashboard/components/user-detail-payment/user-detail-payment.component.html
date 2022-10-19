@@ -30,6 +30,7 @@
                 (onUpdatePayment)="setSelectedPayment(item); getPaymentLockerOrMembership(); toggleModifyPaymentFullModal()"
                 (onUpdateTransfer)="setSelectedPayment(item);openChargeModal('modify_transfer_payment')"
                 (onUpdateRefund)="setSelectedPayment(item); openChargeModal('modify_refund_payment')"
+                (onRemovePayment)="setSelectedPayment(item); openRemovePaymentModal()"
             ></db-user-detail-payment-item>
         </ng-template>
 
@@ -53,3 +54,12 @@
     (cancel) = "hideChargeModal()"
     (confirm) = "onChargeConfirm($event)"
 ></rw-dashboard-charge-modal>
+
+<db-detail-item-remove-modal
+    [(visible)] = "showRemovePaymentModal"
+    [userName]="curUserData?.user?.center_user_name"
+    [item]="selectedPayment"
+    [type]="'payment'"
+    (cancel) = "onRemovePaymentCancel()"
+    (confirm) = "onRemovePaymentConfirm()"
+></db-detail-item-remove-modal>

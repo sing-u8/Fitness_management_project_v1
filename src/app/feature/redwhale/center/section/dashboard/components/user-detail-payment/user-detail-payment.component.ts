@@ -148,12 +148,6 @@ export class UserDetailPaymentComponent implements OnInit {
                         )}' ${text} 수정되었습니다.`
 
                         this.nxStore.dispatch(showToast({ text: toastText }))
-                        // this.nxStore.dispatch(
-                        //     DashboardActions.startGetUserData({
-                        //         centerId: this.center.id,
-                        //         centerUser: this.curUserData.user,
-                        //     })
-                        // )
                         this.dashboardHelper.refreshCurUser(this.center.id, this.curUserData.user)
                         cb ? cb() : null
                     },
@@ -190,12 +184,6 @@ export class UserDetailPaymentComponent implements OnInit {
                         )}' ${text} 수정되었습니다.`
 
                         this.nxStore.dispatch(showToast({ text: toastText }))
-                        // this.nxStore.dispatch(
-                        //     DashboardActions.startGetUserData({
-                        //         centerId: this.center.id,
-                        //         centerUser: this.curUserData.user,
-                        //     })
-                        // )
                         this.dashboardHelper.refreshCurUser(this.center.id, this.curUserData.user)
                         cb ? cb() : null
                     },
@@ -204,5 +192,25 @@ export class UserDetailPaymentComponent implements OnInit {
                     },
                 })
         }
+    }
+
+    // remove payment vars and funcs
+    public showRemovePaymentModal = false
+    openRemovePaymentModal() {
+        this.showRemovePaymentModal = true
+    }
+    closeRemovePaymentModal() {
+        this.showRemovePaymentModal = false
+    }
+
+    onRemovePaymentCancel() {
+        this.closeRemovePaymentModal()
+    }
+    onRemovePaymentConfirm() {
+        this.closeRemovePaymentModal()
+        const itemName = this.selectedPayment.user_membership_name ?? this.selectedPayment.user_locker_name
+        const toastText = `'${this.wordService.ellipsis(itemName, 8)}' 결제 내역이 삭제되었습니다.`
+        this.nxStore.dispatch(showToast({ text: toastText }))
+        // this.dashboardHelper.refreshCurUser(this.center.id, this.curUserData.user)
     }
 }
