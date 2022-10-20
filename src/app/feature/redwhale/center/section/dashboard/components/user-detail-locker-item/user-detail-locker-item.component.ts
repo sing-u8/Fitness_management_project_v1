@@ -46,22 +46,15 @@ export class UserDetailLockerItemComponent implements OnInit, AfterViewInit {
                 this.onUpdateInfo.emit(this.locker)
             },
         },
-        extendPeriod: {
-            name: '기간 연장',
-            color: 'var(--font-color)',
-            visible: true,
-            func: () => {
-                this.onExtendPeriod.emit(this.locker)
-            },
-        },
-        movePlace: {
-            name: '자리 이동',
-            color: 'var(--font-color)',
-            visible: true,
-            func: () => {
-                this.onMovePlace.emit(this.locker)
-            },
-        },
+        // extendPeriod: {
+        //     name: '기간 연장',
+        //     color: 'var(--font-color)',
+        //     visible: true,
+        //     func: () => {
+        //         this.onExtendPeriod.emit(this.locker)
+        //     },
+        // },
+
         hold: {
             name: '홀딩',
             color: 'var(--font-color)',
@@ -78,14 +71,14 @@ export class UserDetailLockerItemComponent implements OnInit, AfterViewInit {
                 this.onEmpty.emit(this.locker)
             },
         },
-        refund: {
-            name: '환불',
-            color: 'var(--font-color)',
-            visible: true,
-            func: () => {
-                this.onRefund.emit(this.locker)
-            },
-        },
+        // refund: {
+        //     name: '환불',
+        //     color: 'var(--font-color)',
+        //     visible: true,
+        //     func: () => {
+        //         this.onRefund.emit(this.locker)
+        //     },
+        // },
         removeRecord: {
             name: '기록 삭제',
             color: '#C2273B',
