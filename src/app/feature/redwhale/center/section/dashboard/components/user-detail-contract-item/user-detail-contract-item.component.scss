@@ -11,8 +11,6 @@
   height: 70px;
   position: relative;
   padding: 0 25px;
-  position: relative;
-
 
   .border-bottom {
     width: calc(100% - 24px);
@@ -29,23 +27,29 @@
 }
 
 .col1 {
-  min-width: 224px;
-  padding-right: 48px;
-  width: calc(224 / 806) * 100%;
+  min-width: 154px;
+  padding-right: 30px;
+  width: calc(154 / 806) * 100%;
 }
 
 .col2 {
-  min-width: 189px;
+  min-width: 134px;
   padding-right: 20px;
-  width: calc(189 / 806) * 100%;
+  width: calc(134 / 806) * 100%;
 }
 
 .col3 {
-  min-width: calc(100% - 413px);
-  width: calc(100% - ((calc(224 / 806) * 100%) + (calc(189 / 806) * 100%)));
+  min-width: 119px;
+  padding-right: 15px;
+  width: calc(119 / 806) * 100%;
+}
+
+.col4 {
+  min-width: calc(100% - 407px);
+  width: calc(100% - ((calc(154 / 806) * 100%) + (calc(134 / 806) * 100%) + (calc(119 / 806) * 100%)));
   position: relative;
 
-  div.col3__menu {
+  div.col4__menu {
     background-image: url('/assets/icons/etc/menu-vertical.svg');
     background-size: contain;
     background-repeat: no-repeat;
@@ -113,7 +117,8 @@
 
 
 .col2,
-.col3 {
+.col3,
+.col4 {
   font-weight: 400;
   font-size: 1.4rem;
   line-height: 19px;
@@ -123,37 +128,49 @@
 
 @media (min-width: 1440px) {
   .col1 {
-    min-width: 224px;
-    padding-right: 48px;
-    width: calc(224 / 914) * 100%;
+    min-width: 164px;
+    padding-right: 35px;
+    width: calc(164 / 914) * 100%;
   }
 
   .col2 {
-    min-width: 189px;
-    padding-right: 20px;
-    width: calc(189 / 914) * 100%;
+    min-width: 144px;
+    padding-right: 25px;
+    width: calc(144 / 914) * 100%;
   }
 
   .col3 {
-    min-width: calc(100% - 413px);
-    width: calc(100% - ((calc(224 / 914) * 100%) + (calc(189 / 914) * 100%)));
+    min-width: 129px;
+    padding-right: 20px;
+    width: calc(129 / 914) * 100%;
+  }
+
+  .col4 {
+    min-width: calc(100% - 437px);
+    width: calc(100% - ((calc(164 / 914) * 100%) + (calc(144 / 914) * 100%) + (calc(129 / 914) * 100%)));
   }
 }
 @media (min-width: 1920px) {
   .col1 {
-    min-width: 224px;
-    padding-right: 48px;
-    width: calc(224 / 1319) * 100%;
+    min-width: 194px;
+    padding-right: 40px;
+    width: calc(194 / 1319) * 100%;
   }
 
   .col2 {
-    min-width: 189px;
-    padding-right: 20px;
-    width: calc(189 / 1319) * 100%;
+    min-width: 174px;
+    padding-right: 30px;
+    width: calc(174 / 1319) * 100%;
   }
 
   .col3 {
-    min-width: calc(100% - 413px);
-    width: calc(100% - ((calc(224 / 1319) * 100%) + (calc(189 / 1319) * 100%)));
+    min-width: 159px;
+    padding-right: 25px;
+    width: calc(159 / 1319) * 100%;
+  }
+
+  .col4 {
+    min-width: calc(100% - 527px);
+    width: calc(100% - ((calc(194 / 1319) * 100%) + (calc(174 / 1319) * 100%) + (calc(159 / 1319) * 100%)));
   }
 }

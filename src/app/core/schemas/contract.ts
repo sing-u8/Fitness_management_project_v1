@@ -1,6 +1,6 @@
 export interface Contract {
     id: string
-    type_code: string
+    type_code: 'contract_type_new' | 'contract_type_renewal' | 'contract_type_transfer'
     type_code_name: string
     date: string
     user_membership_number: string

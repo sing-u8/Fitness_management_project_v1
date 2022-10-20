@@ -55,6 +55,7 @@ export class UserDetailContractItemComponent implements OnInit, AfterViewInit {
     ngAfterViewInit() {
         this.menuDropDownItemObj.sign.visible = !this.contract.user_sign
         this.initContractorName()
+        this.initContractType()
     }
 
     public contractorName = ''
@@ -62,5 +63,15 @@ export class UserDetailContractItemComponent implements OnInit, AfterViewInit {
         const contractors = _.split(this.contract.responsibility, ',').map((v) => v.trim())
         this.contractorName =
             contractors.length == 1 ? `${contractors[0]}` : `${contractors[0]} 외 ${contractors.length - 1}명`
+    }
+
+    public contractType = ''
+    initContractType() {
+        this.contractType =
+            this.contract.type_code == 'contract_type_new'
+                ? '신규 등록'
+                : this.contract.type_code == 'contract_type_renewal'
+                ? '재등록'
+                : '양도'
     }
 }

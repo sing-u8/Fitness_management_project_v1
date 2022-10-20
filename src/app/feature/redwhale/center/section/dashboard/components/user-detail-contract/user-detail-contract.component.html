@@ -1,8 +1,9 @@
 <section class="user-detail-contract">
     <header class="rw-typo-subtext1">
         <div class="col1">계약일</div>
-        <div class="col2">계약 담당자</div>
-        <div class="col3">서명</div>
+        <div class="col2">구분</div>
+        <div class="col3">계약 담당자</div>
+        <div class="col4">서명</div>
     </header>
     <main class="thin-scroll-y-overlay2">
         <ng-template #contract_emtpy [ngIf]="curUserData.contracts.length == 0" [ngIfElse]="contract_exist">
