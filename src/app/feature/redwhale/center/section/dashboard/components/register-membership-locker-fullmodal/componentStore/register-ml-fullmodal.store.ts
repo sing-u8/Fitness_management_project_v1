@@ -190,7 +190,6 @@ export class RegisterMembershipLockerFullmodalStore extends ComponentStore<State
                 this.centerMembershipApi.getAllMemberships(centerId).pipe(
                     tap({
                         next: (membershipItemList) => {
-                            console.log('centerMembershipApi.getAllMemberships : ', membershipItemList)
                             this.setMembershipItems(_.reverse(membershipItemList))
                         },
                         error: (err) => {
