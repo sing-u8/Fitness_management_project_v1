@@ -44,12 +44,17 @@
                     ({{item.start_date | period :item.end_date}}일) {{ (item.start_date | isAfter) ? '홀딩 예약' : '홀딩중'}}
                 </div>
 
-                <div class="notification-menu" (click)="toggleNotificationDropDown(i);"
-                     (rwClickOutside)="hideNotificationDropDown(i)">
+                <div
+                    class="notification-menu"
+                    (click)="toggleNotificationDropDown(i);"
+                    (rwClickOutside)="hideNotificationDropDown(i)"
+                >
                     <div class="l-menu-items" [class.show-items]="showNotificationDropDownObj?.[i]">
-                        <div class="menu-item" *ngFor="let item of holdingMenuDropDownItemObj | keyvalue : originalOrder"
-                             [ngStyle]="{color: item.value.color}" (click)="item.value.func(i)"
-                             [class.none] = "!item.value.visible"
+                        <div
+                            class="menu-item"
+                            *ngFor="let item of holdingMenuDropDownItemObj | keyvalue : originalOrder"
+                            [ngStyle]="{color: item.value.color}" (click)="item.value.func(i)"
+                            [class.none] = "!item.value.visible"
                         >
                             {{item.value.name}}
                         </div>

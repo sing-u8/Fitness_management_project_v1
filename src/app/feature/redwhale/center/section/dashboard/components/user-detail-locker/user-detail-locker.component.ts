@@ -3,7 +3,6 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
 import { WordService } from '@services/helper/word.service'
 import {
     CenterUsersLockerService,
-    ExtendLockerTicketReqBody,
     RefundLockerTicketReqBody,
     ExpireLockerTicketReqBody,
     UpdateHoldingLockerTicketReqBody,
@@ -16,7 +15,6 @@ import { LockerHelperService } from '@services/center/locker-helper.service'
 
 import { Center } from '@schemas/center'
 import { UserLocker } from '@schemas/user-locker'
-import { ExtensionOutput } from '../locker-extension-modal/locker-extension-modal.component'
 import { ChargeType, ChargeMode, ConfirmOuput } from '@shared/components/common/charge-modal/charge-modal.component'
 import { HoldingOutput, HoldingConfirmOutput } from '../hold-modal/hold-modal.component'
 import { DatePickConfirmOutput } from '@shared/components/common/datepick-modal/datepick-modal.component'
@@ -63,24 +61,6 @@ export class UserDetailLockerComponent implements OnInit {
             this.selectedUserLockerHoldingIdx = holdingIdx
         }
     }
-    public showExtensionModal = false
-    toggleExtensionModal() {
-        this.showExtensionModal = !this.showExtensionModal
-    }
-    public extensionModalData: ExtensionOutput = {
-        datepick: {
-            startDate: '',
-            endDate: '',
-        },
-    }
-
-    onExtensionConfirm(output: ExtensionOutput) {
-        console.log('onExtensionConfirm - output : ', output)
-        this.extensionModalData = output
-        this.chargeMode = 'extend'
-        this.toggleExtensionModal()
-        this.toggleChargeModal()
-    }
 
     public showChargeModal = false
     public chargeData: ChargeType = {
@@ -98,13 +78,7 @@ export class UserDetailLockerComponent implements OnInit {
         this.toggleChargeModal()
         this.chargeData = output.chargeType
 
-        if (this.chargeMode == 'extend') {
-            this.callExpendApi(() => {
-                output.loadingFns.hideLoading()
-                this.lockerHelperService.synchronizeCurUserLocker(this.center.id, this.curUserData.user.id)
-                this.lockerHelperService.synchronizeLockerItemList(this.center.id)
-            })
-        } else if (this.chargeMode == 'refund') {
+        if (this.chargeMode == 'refund') {
             this.callRefundApi(() => {
                 output.loadingFns.hideLoading()
                 this.lockerHelperService.synchronizeCurUserLocker(this.center.id, this.curUserData.user.id)
@@ -300,41 +274,7 @@ export class UserDetailLockerComponent implements OnInit {
     }
 
     // api funcs
-    callExpendApi(cb?: () => void) {
-        const reqBody: ExtendLockerTicketReqBody = {
-            end_date: this.extensionModalData.datepick.endDate,
-            payment: {
-                card: this.chargeData.pay_card,
-                trans: this.chargeData.pay_trans,
-                cash: this.chargeData.pay_cash,
-                unpaid: this.chargeData.unpaid,
-                vbank: 0,
-                phone: 0,
-                memo: '',
-                responsibility_user_id: this.chargeData.assignee_id,
-            },
-        }
 
-        this.centerUsersLockerService
-            .extendLockerTicket(this.center.id, this.curUserData.user.id, this.selectedUserLocker.id, reqBody)
-            .subscribe({
-                next: (userMembership) => {
-                    this.nxStore.dispatch(
-                        showToast({
-                            text: `'[${this.wordService.ellipsis(
-                                this.selectedUserLocker.category_name,
-                                10
-                            )}] ${this.wordService.ellipsis(this.selectedUserLocker.name, 6)}' 기간이 연장되었습니다.`,
-                        })
-                    )
-                    this.dashboardHelper.refreshCurUser(this.center.id, this.curUserData.user)
-                    cb ? cb() : null
-                },
-                error: () => {
-                    cb ? cb() : null
-                },
-            })
-    }
     callHodingApi(cb?: () => void) {
         const reqBody: HoldingLockerTicketReqBody = {
             start_date: this.holdData.startDate,

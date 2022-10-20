@@ -23,7 +23,6 @@
                 *ngFor="let item of curUserData.lockers"
                 [locker]="item"
                 (onUpdateInfo) = 'setSelectedUserLocker(item); toggleModifyLockerFullModal()'
-                (onExtendPeriod) = 'toggleExtensionModal(); setSelectedUserLocker(item)'
                 (onHold) = 'toggleHoldModal();setSelectedUserLocker(item) '
                 (onEmpty) = 'setSelectedUserLocker(item);openEmptyModal()'
                 (onRefund) = 'setSelectedUserLocker(item); toggleShowRefundModal()'
@@ -35,13 +34,6 @@
 
     </main>
 </section>
-
-<db-locker-extension-modal
-    [(visible)] = "showExtensionModal"
-    [userLocker] = "selectedUserLocker"
-    (cancel) = "toggleExtensionModal()"
-    (confirm) = "onExtensionConfirm($event)"
-></db-locker-extension-modal>
 
 <rw-dashboard-charge-modal
     [(visible)] = "showChargeModal"

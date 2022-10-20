@@ -17,8 +17,6 @@ export class UserDetailLockerItemComponent implements OnInit, AfterViewInit {
     @Input() locker: UserLocker
 
     @Output() onUpdateInfo = new EventEmitter<UserLocker>()
-    @Output() onExtendPeriod = new EventEmitter<UserLocker>()
-    // @Output() onMovePlace = new EventEmitter<UserLocker>()
     @Output() onHold = new EventEmitter<UserLocker>()
     @Output() onEmpty = new EventEmitter<UserLocker>()
     @Output() onRefund = new EventEmitter<UserLocker>()
@@ -46,15 +44,6 @@ export class UserDetailLockerItemComponent implements OnInit, AfterViewInit {
                 this.onUpdateInfo.emit(this.locker)
             },
         },
-        // extendPeriod: {
-        //     name: '기간 연장',
-        //     color: 'var(--font-color)',
-        //     visible: true,
-        //     func: () => {
-        //         this.onExtendPeriod.emit(this.locker)
-        //     },
-        // },
-
         hold: {
             name: '홀딩',
             color: 'var(--font-color)',
@@ -71,14 +60,6 @@ export class UserDetailLockerItemComponent implements OnInit, AfterViewInit {
                 this.onEmpty.emit(this.locker)
             },
         },
-        // refund: {
-        //     name: '환불',
-        //     color: 'var(--font-color)',
-        //     visible: true,
-        //     func: () => {
-        //         this.onRefund.emit(this.locker)
-        //     },
-        // },
         removeRecord: {
             name: '기록 삭제',
             color: '#C2273B',
