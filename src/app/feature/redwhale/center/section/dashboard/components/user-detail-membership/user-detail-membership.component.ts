@@ -265,26 +265,6 @@ export class UserDetailMembershipComponent implements OnInit {
         this.showRemoveHoldModal = false
     }
 
-    // remove payment vars and funcs
-    public showRemovePaymentModal = false
-    openRemovePaymentModal() {
-        this.showRemovePaymentModal = true
-    }
-    closeRemovePaymentModal() {
-        this.showRemovePaymentModal = false
-    }
-
-    onRemovePaymentCancel() {
-        this.closeRemovePaymentModal()
-    }
-    onRemovePaymentConfirm() {
-        this.closeRemovePaymentModal()
-        const itemName = this.selectedUserMembership.name
-        const toastText = `'${this.wordService.ellipsis(itemName, 8)}' 결제 내역이 삭제되었습니다.`
-        this.nxStore.dispatch(showToast({ text: toastText }))
-        // this.dashboardHelper.refreshCurUser(this.center.id, this.curUserData.user)
-    }
-
     // api funcs
     callExpendApi(cb?: () => void) {
         const reqBody: ExtendMembershipTicketReqBody = {
