@@ -116,37 +116,12 @@ export class UserDetailLockerComponent implements OnInit {
     }
 
     // Empty function
-    public showEmptyModal = false
-    public EmptyModalTextData = {
-        text: '',
-        subText: `추가 결제 또는 환불이 발생한 경우,
-            다음 단계에서 금액을 입력해주세요.`,
-        cancelButtonText: '취소',
-        confirmButtonText: '락커 비우기',
-    }
     openEmptyModal() {
-        this.EmptyModalTextData.text = `'[${this.wordService.ellipsis(
-            this.selectedUserLocker.category_name,
-            10
-        )}] ${this.wordService.ellipsis(this.selectedUserLocker.name, 13)}'
-            락커를 비우시겠어요?`
-        this.showEmptyModal = true
-    }
-    hideEmptyModal() {
-        this.showEmptyModal = false
-    }
-    onConfirmEmptyModal() {
         this.chargeMode =
-            this.timeService.getRestPeriod(dayjs().format(), this.selectedUserLocker.end_date) < 0 ||
-            this.checkIsLockerExpired()
+            this.timeService.getRestPeriod(dayjs().format(), this.selectedUserLocker.end_date) < 0
                 ? 'empty_locker_payment'
                 : 'empty_locker_refund'
-        this.hideEmptyModal()
         this.toggleChargeModal()
-    }
-
-    checkIsLockerExpired() {
-        return this.timeService.getRestPeriod(dayjs().format(), this.selectedUserLocker.end_date) < 1
     }
 
     // refund funcs

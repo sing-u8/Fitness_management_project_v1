@@ -42,22 +42,12 @@
     (confirm) = "onChargeConfirm($event)"
 ></rw-dashboard-charge-modal>
 
-
 <db-hold-modal
     [(visible)]="showHoldModal"
     [userLocker]="selectedUserLocker"
     (confirm)="onHoldConfirm($event)"
     (cancel)="toggleHoldModal()"
 ></db-hold-modal>
-
-
-<rw-modal
-    [(visible)]="showEmptyModal"
-    [data]="EmptyModalTextData"
-    (cancel)="hideEmptyModal()"
-    (confirm)="onConfirmEmptyModal()"
-></rw-modal>
-
 
 <rw-modal
     [(visible)]="showRefundModal"
