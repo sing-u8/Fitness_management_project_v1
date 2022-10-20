@@ -12,7 +12,6 @@ export class TextareaAutoResize implements AfterViewInit {
     @HostListener(':keydown.backspace')
     @HostListener(':input')
     onInput(e) {
-        console.log('on input : ', e)
         this.resize()
     }
 
