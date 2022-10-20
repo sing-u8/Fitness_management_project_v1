@@ -186,17 +186,7 @@ export class UserDetailMembershipComponent implements OnInit {
 
     // remove funcs
     public showRemoveModal = false
-    public removeModalData = {
-        text: '',
-        subText: `해당 회원권에 대한 모든 정보가 삭제되며,
-                다시 복구하실 수 없어요.`,
-        cancelButtonText: '취소',
-        confirmButtonText: '회원권 삭제',
-    }
     toggleRemoveModal() {
-        this.removeModalData.text = this.selectedUserMembership
-            ? `'${this.wordService.ellipsis(this.selectedUserMembership.name, 6)}' 회원권을 삭제하시겠어요?`
-            : ''
         this.showRemoveModal = !this.showRemoveModal
     }
     onConfirmRemove() {
@@ -273,6 +263,26 @@ export class UserDetailMembershipComponent implements OnInit {
     onConfirmRemoveHolding() {
         this.callRemoveHoldingApi()
         this.showRemoveHoldModal = false
+    }
+
+    // remove payment vars and funcs
+    public showRemovePaymentModal = false
+    openRemovePaymentModal() {
+        this.showRemovePaymentModal = true
+    }
+    closeRemovePaymentModal() {
+        this.showRemovePaymentModal = false
+    }
+
+    onRemovePaymentCancel() {
+        this.closeRemovePaymentModal()
+    }
+    onRemovePaymentConfirm() {
+        this.closeRemovePaymentModal()
+        const itemName = this.selectedUserMembership.name
+        const toastText = `'${this.wordService.ellipsis(itemName, 8)}' 결제 내역이 삭제되었습니다.`
+        this.nxStore.dispatch(showToast({ text: toastText }))
+        // this.dashboardHelper.refreshCurUser(this.center.id, this.curUserData.user)
     }
 
     // api funcs

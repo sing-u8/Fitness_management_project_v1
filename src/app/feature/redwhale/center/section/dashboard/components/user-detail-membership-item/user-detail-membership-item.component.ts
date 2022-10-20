@@ -26,6 +26,8 @@ export class UserDetailMembershipItemComponent implements OnInit, AfterViewInit 
     @Output() onTransfer = new EventEmitter<UserMembership>()
     @Output() onRefund = new EventEmitter<UserMembership>()
     @Output() onRemoveRecord = new EventEmitter<UserMembership>()
+    @Output() onReRegister = new EventEmitter<UserMembership>()
+    @Output() onRemovePayment = new EventEmitter<UserMembership>()
 
     @Output() onUpdateHolding = new EventEmitter<{ item: UserMembership; holdingIdx: number }>()
     @Output() onRemoveHolding = new EventEmitter<{ item: UserMembership; holdingIdx: number }>()
@@ -49,12 +51,12 @@ export class UserDetailMembershipItemComponent implements OnInit, AfterViewInit 
                 this.onUpdateInfo.emit(this.membership)
             },
         },
-        extendPeriodCount: {
-            name: '기간 / 횟수 연장',
+        reRegister: {
+            name: '재등록',
             color: 'var(--font-color)',
             visible: true,
             func: () => {
-                this.onExtendPeriodCount.emit(this.membership)
+                this.onReRegister.emit(this.membership)
             },
         },
         hold: {
@@ -73,6 +75,15 @@ export class UserDetailMembershipItemComponent implements OnInit, AfterViewInit 
                 this.onTransfer.emit(this.membership)
             },
         },
+        // 재등록으로 대체 !!
+        // extendPeriodCount: {
+        //     name: '기간 / 횟수 연장',
+        //     color: 'var(--font-color)',
+        //     visible: true,
+        //     func: () => {
+        //         this.onExtendPeriodCount.emit(this.membership)
+        //     },
+        // },
         refund: {
             name: '환불',
             color: 'var(--font-color)',
@@ -87,6 +98,14 @@ export class UserDetailMembershipItemComponent implements OnInit, AfterViewInit 
             visible: true,
             func: () => {
                 this.onRemoveRecord.emit(this.membership)
+            },
+        },
+        removePayment: {
+            name: '결제 내역 삭제',
+            color: '#C2273B',
+            visible: true,
+            func: () => {
+                this.onRemovePayment.emit(this.membership)
             },
         },
     }
@@ -175,9 +194,10 @@ export class UserDetailMembershipItemComponent implements OnInit, AfterViewInit 
             (this.membership.count <= 0 && this.membership.unlimited == false)
         ) {
             this.isExpired = true
-            this.setMenuDropDownVisible(['removeRecord'], true)
+            this.setMenuDropDownVisible(['removePayment', 'reRegister'], true)
         } else {
             this.isExpired = false
+            this.menuDropDownItemObj.removePayment.visible = false
         }
     }
 
