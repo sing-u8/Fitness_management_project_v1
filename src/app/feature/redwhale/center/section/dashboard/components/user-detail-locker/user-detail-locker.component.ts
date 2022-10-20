@@ -279,8 +279,8 @@ export class UserDetailLockerComponent implements OnInit {
     public showRemoveHoldModal = false
     public removeHoldingModalData = {
         text: '',
-        subText: `홀딩 정보를 삭제하실 경우,
-                홀딩중이거나 홀딩 예약된 정보가 모두 삭제돼요.`,
+        subText: `이미 경과된 기간을 포함해
+                전체 기간에 대한 홀딩 정보가 모두 삭제돼요.`,
         cancelButtonText: '취소',
         confirmButtonText: '홀딩 정보 삭제',
     }
