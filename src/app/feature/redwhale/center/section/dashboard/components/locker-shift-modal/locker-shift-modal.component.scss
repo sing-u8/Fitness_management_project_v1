@@ -68,13 +68,23 @@
         }
 
         db-ml-locker-select {
-            margin: 15px 0px;
+            margin: 15px 0;
         }
 
         .locker-grid {
             width: 563px;
             height: 315px;
             margin-bottom: 15px;
+
+            &.loading-item {
+                display: grid;
+                gap: 10px;
+                padding: 10px;
+                justify-content: flex-start;
+                align-items: initial;
+                grid-template-rows: repeat(2, 50px);
+                grid-template-columns: repeat(3, 50px);
+            }
         }
     }
 }

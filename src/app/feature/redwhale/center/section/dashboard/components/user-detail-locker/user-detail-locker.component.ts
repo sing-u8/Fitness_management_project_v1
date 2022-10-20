@@ -126,20 +126,6 @@ export class UserDetailLockerComponent implements OnInit {
         }
     }
 
-    // movePlace function
-    public showMovePlaceModal = false
-    openMovePlaceModal() {
-        this.showMovePlaceModal = !this.showMovePlaceModal
-    }
-    onConfirmMoveLocker() {
-        this.showMovePlaceModal = false
-        this.nxStore.dispatch(
-            DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.curUserData.user })
-        )
-        this.lockerHelperService.synchronizeCurUserLocker(this.center.id, this.curUserData.user.id)
-        this.lockerHelperService.synchronizeLockerItemList(this.center.id)
-    }
-
     // hoding function
     public showHoldModal = false
     public holdData: HoldingOutput = undefined

@@ -24,7 +24,6 @@
                 [locker]="item"
                 (onUpdateInfo) = 'setSelectedUserLocker(item); toggleModifyLockerFullModal()'
                 (onExtendPeriod) = 'toggleExtensionModal(); setSelectedUserLocker(item)'
-                (onMovePlace) = 'setSelectedUserLocker(item); openMovePlaceModal()'
                 (onHold) = 'toggleHoldModal();setSelectedUserLocker(item) '
                 (onEmpty) = 'setSelectedUserLocker(item);openEmptyModal()'
                 (onRefund) = 'setSelectedUserLocker(item); toggleShowRefundModal()'
@@ -106,11 +105,3 @@
     (cancel)="hideUpdateHoldModal()"
     (confirm)="onUpdateHoldConfirm($event)"
 ></rw-datepick-modal>
-
-<db-locker-shift-modal
-    [(visible)]="showMovePlaceModal"
-    [userLocker]="selectedUserLocker"
-    [curUser]="curUserData.user"
-    (cancel)="openMovePlaceModal()"
-    (confirm)="onConfirmMoveLocker()"
-></db-locker-shift-modal>

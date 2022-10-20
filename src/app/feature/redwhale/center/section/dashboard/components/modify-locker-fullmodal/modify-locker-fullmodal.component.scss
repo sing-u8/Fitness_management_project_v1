@@ -1,6 +1,6 @@
 * {
-    padding: 0px;
-    margin: 0px;
+    padding: 0;
+    margin: 0;
     text-align: initial;
 }
 
@@ -42,7 +42,7 @@ section.modify-locker-fullmodal-wrapper {
             height: $header_height;
             background-color: var(--white);
             position: relative;
-            padding: 0px 20px;
+            padding: 0 20px;
 
             .header-text-container {
                 width: $containerWidth;
@@ -79,7 +79,7 @@ section.modify-locker-fullmodal-wrapper {
                     align-items: center;
                     width: 585px;
                     height: 340px;
-                    box-shadow: 0px 0px 10px #b5b5b51c;
+                    box-shadow: 0 0 10px #b5b5b51c;
                     border-radius: 7px;
                     background-color: var(--white);
                     padding: 17px 20px 20px;
@@ -107,6 +107,7 @@ section.modify-locker-fullmodal-wrapper {
                             background-color: var(--white);
                             border: 1px solid var(--border-color);
                             border-radius: 5px;
+                            position: relative;
 
                             .icon {
                                 display: flex;
@@ -135,6 +136,25 @@ section.modify-locker-fullmodal-wrapper {
                                 }
 
                                 // justify-content: space-between;
+                            }
+
+                            .move-button {
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                border: 1px solid #606060;
+                                border-radius: 5px;
+                                position: absolute;
+                                top: 18px;
+                                right: 18px;
+                                .move-icon {
+                                    background-image: url("/assets/icons/etc/change_place_black.svg");
+                                    background-repeat: no-repeat;
+                                    background-size: contain;
+                                    width: 23px;
+                                    height: 23px;
+
+                                }
                             }
                         }
                     }
@@ -176,7 +196,7 @@ section.modify-locker-fullmodal-wrapper {
                             db-datepicker {
                                 position: absolute;
                                 top: 75px;
-                                left: 0px;
+                                left: 0;
                                 z-index: 3;
                             }
                         }

@@ -14,6 +14,7 @@ import {
 } from '@angular/core'
 
 import dayjs from 'dayjs'
+import _ from 'lodash'
 
 import { StorageService } from '@services/storage.service'
 import { CenterUsersLockerService, UpdateLockerTicketReqBody } from '@services/center-users-locker.service.service'
@@ -27,6 +28,7 @@ import { CenterUser } from '@schemas/center-user'
 import { Center } from '@schemas/center'
 import { UserLocker } from '@schemas/user-locker'
 import { LockerItem } from '@schemas/locker-item'
+import { LockerCategory } from '@schemas/locker-category'
 
 // ngrx
 import { Store } from '@ngrx/store'
@@ -113,7 +115,6 @@ export class ModifyLockerFullmodalComponent implements OnInit, OnChanges, AfterV
             if (this.visible) {
                 this.renderer.addClass(this.modalWrapperElement.nativeElement, 'display-flex')
                 setTimeout(() => {
-                    this.renderer
                     this.renderer.addClass(this.modalWrapperElement.nativeElement, 'rw-modal-wrapper-show')
                 }, 0)
                 this.setUserLockerData()
@@ -122,16 +123,22 @@ export class ModifyLockerFullmodalComponent implements OnInit, OnChanges, AfterV
                 setTimeout(() => {
                     this.renderer.removeClass(this.modalWrapperElement.nativeElement, 'display-flex')
                 }, 200)
+
+                this.updateUserDataAfterMoveLocker()
+                this.isLockerMoved = false
+                this.isConfirmModifyRun = false
             }
         }
     }
 
     // modify confirm
+    public isConfirmModifyRun = false
     confirmModify(loadingBt: ClickEmitterType) {
         if (!this.date.startDate || !this.date.endDate) {
             return
         }
 
+        this.isConfirmModifyRun = true
         loadingBt.showLoading()
         const reqBody: UpdateLockerTicketReqBody = {
             start_date: this.date.startDate,
@@ -140,19 +147,42 @@ export class ModifyLockerFullmodalComponent implements OnInit, OnChanges, AfterV
         this.centerUsersLockerService
             .updateLockerTicket(this.center.id, this.centerUser.id, this.userLocker.id, reqBody)
             .subscribe((userMembership) => {
+                this.confirm.emit()
                 this.nxStore.dispatch(
                     showToast({
                         text: `'[${this.userLocker.category_name}] ${this.userLocker.name}' 정보가 수정되었습니다.`,
                     })
                 )
-                this.nxStore.dispatch(
-                    DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.centerUser })
-                )
                 this.dashboardHelperService.refreshCurUser(this.center.id, this.centerUser)
                 this.lockerHelperService.synchronizeCurUserLocker(this.center.id, this.centerUser.id)
                 this.lockerHelperService.synchronizeLockerItemList(this.center.id)
                 loadingBt.hideLoading()
-                this.confirm.emit()
             })
+    }
+
+    // movePlace function
+    public showMovePlaceModal = false
+    public isLockerMoved = false
+    openMovePlaceModal() {
+        this.showMovePlaceModal = !this.showMovePlaceModal
+    }
+    onConfirmMoveLocker(res: { lockerItem: LockerItem; lockerCategory: LockerCategory }) {
+        this.showMovePlaceModal = false
+        this.isLockerMoved = true
+
+        this.userLocker = _.assign(_.cloneDeep(this.userLocker), {
+            category_name: res.lockerCategory.name,
+            locker_category_id: res.lockerCategory.id,
+            locker_item_id: res.lockerItem.id,
+            name: res.lockerItem.name,
+        })
+    }
+    updateUserDataAfterMoveLocker() {
+        if (!this.isLockerMoved || this.isConfirmModifyRun) return
+        this.nxStore.dispatch(
+            DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.centerUser })
+        )
+        this.lockerHelperService.synchronizeCurUserLocker(this.center.id, this.centerUser.id)
+        this.lockerHelperService.synchronizeLockerItemList(this.center.id)
     }
 }

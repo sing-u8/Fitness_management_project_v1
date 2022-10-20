@@ -18,7 +18,7 @@ export class UserDetailLockerItemComponent implements OnInit, AfterViewInit {
 
     @Output() onUpdateInfo = new EventEmitter<UserLocker>()
     @Output() onExtendPeriod = new EventEmitter<UserLocker>()
-    @Output() onMovePlace = new EventEmitter<UserLocker>()
+    // @Output() onMovePlace = new EventEmitter<UserLocker>()
     @Output() onHold = new EventEmitter<UserLocker>()
     @Output() onEmpty = new EventEmitter<UserLocker>()
     @Output() onRefund = new EventEmitter<UserLocker>()

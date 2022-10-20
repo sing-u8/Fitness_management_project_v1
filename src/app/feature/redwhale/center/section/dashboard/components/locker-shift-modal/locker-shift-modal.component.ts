@@ -53,7 +53,7 @@ export class LockerShiftModalComponent implements AfterViewChecked, OnChanges, O
 
     @Output() visibleChange = new EventEmitter<boolean>()
     @Output() cancel = new EventEmitter<any>()
-    @Output() confirm = new EventEmitter<any>()
+    @Output() confirm = new EventEmitter<{ lockerCategory: LockerCategory; lockerItem: LockerItem }>()
 
     changed: boolean
 
@@ -71,6 +71,8 @@ export class LockerShiftModalComponent implements AfterViewChecked, OnChanges, O
     public isSameCategWithSelectedTicket = false
 
     public center: Center
+
+    public lockerLoaded = false
 
     // gridster vars
     public gridsterOptions: GridsterConfig
@@ -152,10 +154,6 @@ export class LockerShiftModalComponent implements AfterViewChecked, OnChanges, O
         this.cancel.emit({})
     }
 
-    onConfirm(): void {
-        this.confirm.emit({})
-    }
-
     // on mouse rw-modal down
     onMouseModalDown() {
         this.isMouseModalDown = true
@@ -187,6 +185,7 @@ export class LockerShiftModalComponent implements AfterViewChecked, OnChanges, O
 
     // init locker categ and item list
     initLockerCategAndItemList() {
+        this.lockerLoaded = false
         this.centerLockerService.getCategoryList(this.center.id).subscribe((categs) => {
             this.categList = categs
             if (this.categList.length > 0) {
@@ -194,6 +193,7 @@ export class LockerShiftModalComponent implements AfterViewChecked, OnChanges, O
                     ? this.categList[0]
                     : this.categList.find((v) => v.id == this.userLocker.locker_category_id)
                 this.centerLockerService.getItemList(this.center.id, this.selectedCateg.id).subscribe((items) => {
+                    this.lockerLoaded = true
                     this.itemList = items
                 })
             }
@@ -201,15 +201,17 @@ export class LockerShiftModalComponent implements AfterViewChecked, OnChanges, O
     }
 
     isSelectedLockerInCateg(itemList: LockerItem[]) {
-        return itemList.findIndex((v) => v.id == this.userLocker.locker_item_id) != -1 ? true : false
+        return itemList.findIndex((v) => v.id == this.userLocker.locker_item_id) != -1
     }
 
     onSelectChange(categ) {
+        this.lockerLoaded = false
         if (this.isSelectedLockerInCateg(this.itemList)) {
             this.isSameCategWithSelectedTicket = true
         }
         this.centerLockerService.getItemList(this.center.id, categ.id).subscribe((items) => {
             this.itemList = items
+            this.lockerLoaded = true
         })
     }
 
@@ -231,7 +233,6 @@ export class LockerShiftModalComponent implements AfterViewChecked, OnChanges, O
         this.shiftConfirmModal = false
     }
     onShiftConfirm() {
-        console.log('onShiftConfirm  -- userLocker : ', this.userLocker)
         this.nxStore.dispatch(
             startMoveLockerTicketInDashboard({
                 centerId: this.center.id,
@@ -242,7 +243,7 @@ export class LockerShiftModalComponent implements AfterViewChecked, OnChanges, O
                 },
                 callback: () => {
                     this.shiftConfirmModal = false
-                    this.confirm.emit({})
+                    this.confirm.emit({ lockerCategory: this.selectedCateg, lockerItem: this.shiftLocker })
                     this.nxStore.dispatch(
                         showToast({
                             text: `${this.curUser.center_user_name}님의 락커가 '[${this.wordService.ellipsis(

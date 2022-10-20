@@ -27,6 +27,8 @@
                 (onHold)="toggleHoldModal(); setSelectedUserMembership(item)"
                 (onTransfer)="setSelectedUserMembership(item); toggleShowTransferModal()"
                 (onRefund)="setSelectedUserMembership(item); toggleShowRefundModal()"
+                (onReRegister)="setSelectedUserMembership(item);"
+                (onRemovePayment)="setSelectedUserMembership(item); openRemovePaymentModal() "
                 (onRemoveRecord)="setSelectedUserMembership(item); toggleRemoveModal()"
                 (onUpdateHolding)="setSelectedUserMembership(item, $event.holdingIdx); toggleUpdateHoldModal($event.holdingIdx)"
                 (onRemoveHolding)="setSelectedUserMembership(item, $event.holdingIdx); toggleRemoveHoldingModal()"
@@ -77,12 +79,7 @@
     (confirm)="onConfirmRefund()"
 ></rw-modal>
 
-<rw-modal
-    [(visible)]="showRemoveModal"
-    [data]="removeModalData"
-    (cancel)="toggleRemoveModal()"
-    (confirm)="onConfirmRemove()"
-></rw-modal>
+
 
 <db-modify-membership-fullmodal
     [(visible)]="showModifyMembershipFullModal"
@@ -107,3 +104,21 @@
     (cancel)="hideUpdateHoldModal()"
     (confirm)="onUpdateHoldConfirm($event)"
 ></rw-datepick-modal>
+
+<db-detail-item-remove-modal
+    [(visible)] = "showRemoveModal"
+    [userName]="curUserData?.user?.center_user_name"
+    [item]="selectedUserMembership"
+    [type]="'membership'"
+    (cancel) = "toggleRemoveModal()"
+    (confirm) = "onConfirmRemove()"
+></db-detail-item-remove-modal>
+
+<db-detail-item-remove-modal
+    [(visible)] = "showRemovePaymentModal"
+    [userName]="curUserData?.user?.center_user_name"
+    [item]="selectedUserMembership"
+    [type]="'membership'"
+    (cancel) = "onRemovePaymentCancel()"
+    (confirm) = "onRemovePaymentConfirm()"
+></db-detail-item-remove-modal>

@@ -13,8 +13,14 @@
             [(ngModel)]="selectedCateg"
             (change)="onSelectChange($event)">
         </db-ml-locker-select>
-
-        <div class="locker-grid">
+    
+        <div *ngIf="!lockerLoaded" class="locker-grid loading-item">
+            <ngx-skeleton-loader
+                *ngFor="let _ of [1,2,3,4,5,6,7,8]" count=1 appearance="line"
+                [theme]="{width: '50px', 'height': '50px', 'border-radius': '5px'}"
+            ></ngx-skeleton-loader>
+        </div>
+        <div *ngIf="lockerLoaded"  class="locker-grid">
             <gridster class="thin-scroll-x thin-scroll-y " [options]="gridsterOptions">
                 <db-move-locker-item
                     *ngFor="let item of itemList; let idx = index"

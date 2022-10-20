@@ -8,8 +8,12 @@
                 <p class="rw-typo-headline2">락커 정보를 수정해보세요.</p>
             </div>
 
-            <div class="cg-typo-subtext close-button" rw-button rwButtonWidth="85" rwButtonHeight="40"
-                rwButtonBorderColor="var(--font-color)" (click)="close.emit()">
+            <div
+                class="cg-typo-subtext close-button"
+                rw-button rwButtonWidth="85" rwButtonHeight="40"
+                rwButtonBorderColor="var(--font-color)"
+                (click)="close.emit()"
+            >
                 <span class="mdi mdi-close"></span>
                 <span>닫기</span>
             </div>
@@ -30,6 +34,16 @@
                                 <span
                                     class="rw-typo-subtext0-regular small-title">{{userLocker?.category_name}}</span>
                                 <span class="rw-typo-title2">락커 {{userLocker?.name}}</span>
+                            </div>
+                            
+                            <div
+                                rw-button rwButtonWidth="94" rwButtonHeight="33"
+                                rwButtonBorderColor="var(--font-color)"
+                                class="move-button rw-typo-bodytext2-bold"
+                                (click)="openMovePlaceModal()"
+                            >
+                                <div class="move-icon"></div>
+                                자리 이동
                             </div>
                         </div>
                     </div>
@@ -81,3 +95,11 @@
         </main>
     </section>
 </section>
+
+<db-locker-shift-modal
+    [(visible)]="showMovePlaceModal"
+    [userLocker]="userLocker"
+    [curUser]="centerUser"
+    (cancel)="openMovePlaceModal()"
+    (confirm)="onConfirmMoveLocker($event)"
+></db-locker-shift-modal>
