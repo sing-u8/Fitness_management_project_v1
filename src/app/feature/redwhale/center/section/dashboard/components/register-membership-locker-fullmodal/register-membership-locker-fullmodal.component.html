@@ -246,15 +246,24 @@
                     <div class="l-terms">
                         <p class="rw-typo-title2 contract__title">이용 약관</p>
                         <textarea
-                          #terms
-                          [readonly]="true"
-                          [style.display]="center.contract_terms ? 'block' : 'none'"
-                          class="terms rw-typo-bodytext0-regular thin-scroll-y"
-                          [(ngModel)]="center.contract_terms"
+                            #terms
+                            [readonly]="true"
+                            [style.display]="center.contract_terms ? 'block' : 'none'"
+                            class="terms rw-typo-bodytext0-regular thin-scroll-y"
+                            [(ngModel)]="center.contract_terms"
                         ></textarea>
                         <div *ngIf="!center.contract_terms" class="no-terms rw-typo-bodytext0-regular">
                             [센터 설정 > 약관 설정]에서 이용 약관을 작성해주세요.
                         </div>
+                    </div>
+                    <div class="l-terms">
+                        <p class="rw-typo-title2 contract__title">특이 사항</p>
+                        <textarea
+                            class="terms memo-terms rw-typo-bodytext0-regular thin-scroll-y"
+                            rw-TextareaInfiniteResize
+                            [placeholder]="'계약 시 발생한 특이 사항에 대해 입력해주세요.'"
+                            [(ngModel)]="memoTerms"
+                        ></textarea>
                     </div>
                 </article>
 

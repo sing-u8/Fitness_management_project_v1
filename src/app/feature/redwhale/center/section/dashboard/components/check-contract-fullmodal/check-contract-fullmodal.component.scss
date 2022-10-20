@@ -225,6 +225,11 @@ section.register-ml-fullmodal-wrapper {
           div.l-terms {
             display: flex;
             flex-direction: column;
+
+            &:not(:last-of-type) {
+              margin-bottom: 40px;
+            }
+
             .terms{
               resize: none;
               outline: none;
@@ -239,6 +244,9 @@ section.register-ml-fullmodal-wrapper {
             }
             .no-terms {
               color: var(--grey) !important;
+            }
+            .memo-terms {
+              min-height: 150px;
             }
           }
         }

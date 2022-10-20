@@ -327,6 +327,7 @@ export class RegisterMembershipLockerFullmodalComponent implements OnInit, OnCha
             centerId: this.center.id,
             user: this.curUser,
             signData: this.signData,
+            memo: this.memoTerms,
             callback: () => {
                 btLoadingFns.hideLoading()
                 if (!_.isEmpty(this.dbCurCenterId) && this.dbCurCenterId == this.center.id) {
@@ -335,11 +336,19 @@ export class RegisterMembershipLockerFullmodalComponent implements OnInit, OnCha
                 if (!_.isEmpty(this.dwCurCenterId) && this.dwCurCenterId == this.center.id) {
                     this.dashboardHelper.refreshDrawerCurUser(this.center.id, this.curUser)
                 }
+
+                this.resetMemoTerms()
                 this.closeModal()
             },
             errCallback: () => {
                 btLoadingFns.hideLoading()
             },
         })
+    }
+
+    // memo terms
+    public memoTerms = ''
+    resetMemoTerms() {
+        this.memoTerms = ''
     }
 }

@@ -46,6 +46,7 @@ export class CheckContractFullmodalComponent implements OnInit, OnChanges, After
 
     @ViewChild('modalWrapperElement') modalWrapperElement: ElementRef
     @ViewChild('terms') termsElement: ElementRef
+    @ViewChild('terms_memo') termsMemoElement: ElementRef
 
     public today = dayjs().format('YYYY.MM.DD')
     public changed: boolean
@@ -96,6 +97,13 @@ export class CheckContractFullmodalComponent implements OnInit, OnChanges, After
                         this.termsElement.nativeElement,
                         'height',
                         `${this.termsElement.nativeElement.scrollHeight + 10}px`
+                    )
+                }
+                if (this.termsMemoElement) {
+                    this.renderer.setStyle(
+                        this.termsMemoElement.nativeElement,
+                        'height',
+                        `${this.termsMemoElement.nativeElement.scrollHeight + 10}px`
                     )
                 }
             } else {

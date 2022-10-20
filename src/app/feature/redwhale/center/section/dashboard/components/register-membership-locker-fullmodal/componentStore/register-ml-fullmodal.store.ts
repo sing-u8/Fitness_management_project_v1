@@ -209,6 +209,7 @@ export class RegisterMembershipLockerFullmodalStore extends ComponentStore<State
                 centerId: string
                 user: CenterUser
                 signData: string
+                memo: string
                 callback: () => void
                 errCallback?: () => void
             }>
@@ -221,6 +222,7 @@ export class RegisterMembershipLockerFullmodalStore extends ComponentStore<State
 
                     const createMLPaymentReqBody: CreateMLPaymentReqBody = {
                         type_code: 'contract_type_new',
+                        memo: reqBody.memo,
                         user_memberships:
                             membershipItems.length > 0
                                 ? _.map(membershipItems, (v) => {
