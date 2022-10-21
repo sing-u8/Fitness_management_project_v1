@@ -7,7 +7,7 @@ import handleError from './handleError'
 import { environment } from '@environments/environment'
 import { Response } from '@schemas/response'
 import { Payment } from '@schemas/payment'
-import { Contract } from '@schemas/contract'
+import { Contract, ContractTypeCode } from '@schemas/contract'
 
 @Injectable({
     providedIn: 'root',
@@ -50,7 +50,7 @@ export class CenterUsersPaymentService {
 }
 
 export interface CreateMLPaymentReqBody {
-    type_code: 'contract_type_new' | 'contract_type_renewal' | 'contract_type_transfer'
+    type_code: ContractTypeCode
     memo?: string
     user_memberships?: Array<{
         membership_item_id: string
