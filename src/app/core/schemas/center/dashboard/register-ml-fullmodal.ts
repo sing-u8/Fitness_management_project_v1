@@ -34,6 +34,7 @@ export type Locker = {
     price?: Record<PriceType, string>
     assignee?: { name: string; value: CenterUser }
     locker: LockerItem
-    lockerCategory: LockerCategory
+    lockerCategoryId: string // LockerCategory
+    lockerCategoryName: string
     status?: 'done' | 'modify'
 }

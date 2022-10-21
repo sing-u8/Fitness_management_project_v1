@@ -149,9 +149,9 @@ export class RegisterMembershipLockerFullmodalStore extends ComponentStore<State
         const removedItem = state.mlItems[index]
         if (removedItem.type == 'locker') {
             const removedItem = state.mlItems[index] as Locker
-            const newCategLockers = state.choseLockers.get(removedItem.lockerCategory.id)
+            const newCategLockers = state.choseLockers.get(removedItem.lockerCategoryId)
             delete newCategLockers[removedItem.locker.id]
-            state.choseLockers.set(removedItem.lockerCategory.id, newCategLockers)
+            state.choseLockers.set(removedItem.lockerCategoryId, newCategLockers)
             state.choseLockers = new Map(state.choseLockers)
         } else {
             const removedItem = state.mlItems[index] as MembershipTicket
@@ -413,7 +413,8 @@ export class RegisterMembershipLockerFullmodalStore extends ComponentStore<State
                 unpaid: '',
             },
             locker: locker,
-            lockerCategory: lockerCategory,
+            lockerCategoryId: lockerCategory.id,
+            lockerCategoryName: lockerCategory.name,
             status: 'modify' as const,
         }
     }

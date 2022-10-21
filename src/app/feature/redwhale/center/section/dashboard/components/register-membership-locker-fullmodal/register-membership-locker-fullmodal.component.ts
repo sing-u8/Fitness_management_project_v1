@@ -43,6 +43,7 @@ import {
     TotalPrice,
     UpdateChoseLocker,
 } from '@schemas/center/dashboard/register-ml-fullmodal'
+import { ContractTypeCode } from '@schemas/contract'
 
 // ngrx
 import { Store } from '@ngrx/store'
@@ -61,6 +62,17 @@ export class RegisterMembershipLockerFullmodalComponent implements OnInit, OnCha
     // modal vars and funcs
     @Input() curUser: CenterUser
     @Input() visible: boolean
+
+    // type and vars
+    @Input() type: ContractTypeCode
+    // // re register
+    @Input() rerMembershipItem: MembershipItem
+    @Input() rerLockerITem: LockerItem
+    @Input() rerLockerCategory: LockerCategory
+    // // transfer
+    @Input() transferCenterUser: CenterUser
+    //
+
     @Output() visibleChange = new EventEmitter<boolean>()
     @Output() close = new EventEmitter<any>()
     @Output() finishRegister = new EventEmitter<any>()
