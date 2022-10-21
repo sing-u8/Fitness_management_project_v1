@@ -54,37 +54,35 @@ section.user-detail-membership {
     }
 
     .col1 {
-        min-width: 185px;
-        padding-right: 49px;
-        width: calc(185 / 806) * 100%;
-        //min-width: 300px;
-        //padding-right: 48px;
-        //width: calc(320 / 806) * 100%;
-    }
-
-    .col2 {
-        min-width: 210px;
-        padding-right: 23px;
-        width: calc(210 / 806) * 100%;
-        //min-width: 300px;
-        //padding-right: 48px;
-        //width: calc(320 / 806) * 100%;
-    }
-
-    .col3 {
         min-width: 137px;
         padding-right: 23px;
         width: calc(137 / 806) * 100%;
     }
 
-    .col4 {
-        min-width: calc(100% - 185px - 210px - 137px);
-        width: calc(100% - (calc(185 / 806) * 100% + calc(210 / 806) * 100% + calc(137 / 806) * 100%));
-        //min-width: calc(100% - 600px);
-        //width: calc(100% - (calc(320 / 806) * 200%));
+    .col2 {
+        min-width: 77px;
+        padding-right: 15px;
+        width: calc(77 / 806) * 100%;
     }
 
-    .col1, .col2, .col3, .col4 {
+    .col3 {
+        min-width: 210px;
+        padding-right: 20px;
+        width: calc(210 / 806) * 100%;
+    }
+
+    .col4 {
+        min-width: 137px;
+        padding-right: 15px;
+        width: calc(137 / 806) * 100%;
+    }
+
+    .col5 {
+        min-width: calc(100% - 77px - 210px - 137px - 137px);
+        width: calc(100% - (calc(137 / 806) * 100% + calc(77 / 806) * 100% + calc(210 / 806) * 100% + calc(137 / 806) * 100%));
+    }
+
+    .col1, .col2, .col3, .col4, .col5 {
         &.notification {
             padding-bottom: calc(26px + 2px);
         }
@@ -92,51 +90,63 @@ section.user-detail-membership {
 
     @media (min-width: 1440px) {
         .col1 {
-            min-width: 256px;
-            padding-right: 50px;
-            width: calc(256 / 914) * 100%;
+            min-width: 192px;
+            padding-right: 35px;
+            width: calc(192 / 914) * 100%;
         }
 
         .col2 {
-            min-width: 222px;
+            min-width: 89px;
             padding-right: 28px;
-            width: calc(222 / 914) * 100%;
+            width: calc(89 / 914) * 100%;
         }
 
         .col3 {
-            min-width: 149px;
-            padding-right: 35px;
-            width: calc(149 / 914) * 100%;
+            min-width: 222px;
+            padding-right: 30px;
+            width: calc(222 / 914) * 100%;
         }
 
         .col4 {
-            min-width: calc(100% - 256px - 222px - 149px);
-            width: calc(100% - (calc(256 / 914) * 100% + calc(222 / 914) * 100% + calc(149 / 914) * 100%));
+            min-width: 146px;
+            padding-right: 25px;
+            width: calc(146 / 914) * 100%;
+        }
+
+        .col5 {
+            min-width: calc(100% - 192px - 89px - 222px - 146px);
+            width: calc(100% - (calc(192 / 914) * 100% + calc(89 / 914) * 100% + calc(222 / 914) * 100% + calc(146 / 914) * 100%));
         }
     }
 
     @media (min-width: 1920px) {
         .col1 {
-            min-width: 396px;
-            padding-right: 80px;
-            width: calc(396 / 1319) * 100%;
+            min-width: 386px;
+            padding-right: 70px;
+            width: calc(386 / 1319) * 100%;
         }
 
         .col2 {
-            min-width: 267px;
-            padding-right: 70px;
-            width: calc(267 / 1319) * 100%;
+            min-width: 109px;
+            padding-right: 50px;
+            width: calc(109 / 1319) * 100%;
         }
 
         .col3 {
-            min-width: 194px;
-            padding-right: 80px;
-            width: calc(194 / 1319) * 100%;
+            min-width: 257px;
+            padding-right: 60px;
+            width: calc(257 / 1319) * 100%;
         }
 
         .col4 {
-            min-width: calc(100% - 396px - 267px - 194px);
-            width: calc(100% - ( calc(396 / 1319) * 100% + calc(267 / 1319) * 100% + calc(194 / 1319) * 100% ));
+            min-width: 184px;
+            padding-right: 50px;
+            width: calc(184 / 1319) * 100%;
+        }
+
+        .col5 {
+            min-width: calc(100% - 386px - 109px - 257px - 184px);
+            width: calc(100% - ( calc(386 / 1319) * 100% + calc(109 / 1319) * 100% + calc(257 / 1319) * 100% + calc(184 / 1319) * 100% ));
         }
     }
 

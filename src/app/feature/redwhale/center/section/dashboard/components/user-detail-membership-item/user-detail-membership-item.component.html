@@ -2,21 +2,29 @@
     <div rwEllipsisDropdown [lineClamp]="2" class="col1 two-line-ellipsis">
         {{ membership.name }}
     </div>
+    
+    <div class="col2">
+        {{
+            membership.contract_type_code == 'contract_type_new'
+            ? '신규 등록' : membership.contract_type_code == 'contract_type_renewal'
+            ? '재등록' : '양도'
+        }}
+    </div>
 
     <div class="holding-layout">
         <div class="col-wrapper">
-            <div class="col2" >
+            <div class="col3" >
                 {{ membership.start_date | dateFormat: 'YYYY.MM.DD' }} - {{ membership.end_date | dateFormat: 'YYYY.MM.DD' }}
                 ({{membership.start_date | period: membership.end_date}}일)
             </div>
-            <div class="col3" >
+            <div class="col4" >
                 {{restDate}}일 / {{membership.unlimited ? '무제한' : membership.count < 1 || isExpired ? 0 : membership.count + '회' }} 남음
             </div>
-            <div class="col4" >
+            <div class="col5" >
                 <div
                     (mousemove)="!isExpired && openShowFullClass()"
                     (mouseleave)="!isExpired && closeShowFullClass()"
-                    class="col4__content"
+                    class="col5__content"
                     [class.pointer-cursor]="!isExpired && showFullClassArrow"
                 >
                     <ng-container *ngIf="isClassLoaded">
@@ -42,7 +50,7 @@
 <!--                    {{ restDate }}일 /-->
 <!--                    {{ membership.unlimited ? '무제한' : membership.count < 1 || isExpired ? 0 : membership.count + '회' }} 남음-->
 <!--                </div>-->
-                <div class="col4__menu" (click)="toggleMenuDropDown()" (rwClickOutside)="hideMenuDropDown()">
+                <div class="col5__menu" (click)="toggleMenuDropDown()" (rwClickOutside)="hideMenuDropDown()">
                     <div class="l-menu-items" [class.show-items]="showMenuDropDown">
                         <div
                             class="menu-item"
