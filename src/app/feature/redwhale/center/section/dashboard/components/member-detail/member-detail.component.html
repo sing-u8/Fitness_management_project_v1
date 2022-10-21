@@ -122,7 +122,7 @@
                     rw-button
                     rwButtonHeight="35"
                     rwButtonWidth="142"
-                    (click)="curUserData.user && toggleRegisterMLFullModal()"
+                    (click)="curUserData.user && openRegisterMLFullModal('contract_type_new')"
                 >
                     <div class="plus-icon"></div>
                     <span class="rw-typo-bodytext0-bold red">회원권 / 락커 등록</span>
@@ -232,12 +232,16 @@
                 <db-user-detail-membership
                     *ngIf="(userDetailTag$ | async) == 'membership'"
                     [curUserData]="curUserData"
-                    (onRegisterML)="toggleRegisterMLFullModal()"
+                    (onRegisterML)="openRegisterMLFullModal('contract_type_new')"
+                    (onReRegisterM)="setReRegisterMLUserMembership($event); openRegisterMLFullModal('contract_type_renewal')"
+                    (onTransferM)="setTransferCenterUser($event.centerUser);
+                                setReRegisterMLUserMembership($event.userMembership);
+                                "
                 ></db-user-detail-membership>
                 <db-user-detail-locker
                     *ngIf="(userDetailTag$ | async) == 'locker'"
                     [curUserData]="curUserData"
-                    (onRegisterML)="toggleRegisterMLFullModal()"
+                    (onRegisterML)="openRegisterMLFullModal('contract_type_new')"
                 ></db-user-detail-locker>
                 <db-user-detail-reservation
                     *ngIf="(userDetailTag$ | async) == 'reservation'"
@@ -246,12 +250,12 @@
                 <db-user-detail-payment
                     *ngIf="(userDetailTag$ | async) == 'payment'"
                     [curUserData]="curUserData"
-                    (onRegisterML)="toggleRegisterMLFullModal()"
+                    (onRegisterML)="openRegisterMLFullModal('contract_type_new')"
                 ></db-user-detail-payment>
                 <db-user-detail-contract
                     *ngIf="(userDetailTag$ | async) == 'contract'"
                     [curUserData]="curUserData"
-                    (onRegisterML)="toggleRegisterMLFullModal()"
+                    (onRegisterML)="openRegisterMLFullModal('contract_type_new')"
                 ></db-user-detail-contract>
             </ng-template>
             <ng-template #user_detail_loading [ngIf]="showUserDetailLoading">
@@ -293,7 +297,9 @@
 
 <db-register-membership-locker-fullmodal
     [(visible)]="doShowRegisterMLFullModal"
-    (close)="toggleRegisterMLFullModal()"
+    [type]="registerMLFullModalType"
+    [rerUserMembership]="registerMLUserMembership"
+    (close)="closeRegisterMLFullModal()"
     (finishRegister)="onFinishRegisterML()"
     [curUser]="curUserData.user"
 ></db-register-membership-locker-fullmodal>

@@ -28,10 +28,13 @@ import { MembershipItem } from '@schemas/membership-item'
 import { LockerItem } from '@schemas/locker-item'
 import { LockerCategory } from '@schemas/locker-category'
 import { CenterUser } from '@schemas/center-user'
+import { UserMembership } from '@schemas/user-membership'
 
 // ngrx
 import { Store } from '@ngrx/store'
 import { showToast } from '@appStore/actions/toast.action'
+import { ContractTypeCode } from '@schemas/contract'
+import { Loading } from '@schemas/store/loading'
 
 export interface State {
     mlItems: MembershipLockerItem[]
@@ -39,6 +42,7 @@ export interface State {
     membershipItems: MembershipItem[]
     doLockerItemsExist: boolean
     doMembershipItemsExist: boolean
+    isRenewalMLLoading: Loading
 }
 export const stateInit: State = {
     mlItems: [],
@@ -46,6 +50,8 @@ export const stateInit: State = {
     membershipItems: [],
     doLockerItemsExist: false,
     doMembershipItemsExist: false,
+    // re register vars // contract_type_renewal
+    isRenewalMLLoading: 'idle',
 }
 
 @Injectable()
@@ -81,6 +87,8 @@ export class RegisterMembershipLockerFullmodalStore extends ComponentStore<State
         (s) => s.mlItems.length > 0 && _.every(s.mlItems, (mlItem) => mlItem.status == 'done')
     )
 
+    public readonly isRenewalMLLoading$ = this.select((s) => s.isRenewalMLLoading)
+
     constructor(
         private centerUserListService: CenterUserListService,
         private centerMembershipApi: CenterMembershipService,
@@ -97,6 +105,14 @@ export class RegisterMembershipLockerFullmodalStore extends ComponentStore<State
     resetAll() {
         this.setState((state) => _.cloneDeep(stateInit))
     }
+    // renewal loaidng
+    setRenewalMLLoading = this.updater((state, loading: Loading) => {
+        return {
+            ...state,
+            isRenewalMLLoading: loading,
+        }
+    })
+
     // set check membership locker items
     setLockerItemsExist = this.updater((state, doExist: boolean) => {
         // state.doLockerItemsExist = doExist
@@ -176,6 +192,16 @@ export class RegisterMembershipLockerFullmodalStore extends ComponentStore<State
             return _.cloneDeep(state)
         }
     )
+    saveMItemInTransfer = this.updater((state) => {
+        state.mlItems[0] = state.mlItems[0]
+        state.mlItems[0].status = 'done'
+        return _.cloneDeep(state)
+    })
+    backToOneProgressInTransfer = this.updater((state) => {
+        state.mlItems[0].status = 'modify'
+        return _.cloneDeep(state)
+    })
+
     setMembershipItems(membershipItems: MembershipItem[]) {
         this.setState((state) => {
             return {
@@ -205,6 +231,7 @@ export class RegisterMembershipLockerFullmodalStore extends ComponentStore<State
     registerMlItems = this.effect(
         (
             reqBody$: Observable<{
+                type: ContractTypeCode
                 centerId: string
                 user: CenterUser
                 signData: string
@@ -220,7 +247,7 @@ export class RegisterMembershipLockerFullmodalStore extends ComponentStore<State
                     const membershipItems = mlItems.filter((item) => item.type == 'membership')
 
                     const createMLPaymentReqBody: CreateMLPaymentReqBody = {
-                        type_code: 'contract_type_new',
+                        type_code: reqBody.type,
                         memo: reqBody.memo,
                         user_memberships:
                             membershipItems.length > 0
@@ -420,7 +447,7 @@ export class RegisterMembershipLockerFullmodalStore extends ComponentStore<State
     }
 
     async initMembershipItem(membership: MembershipItem): Promise<MembershipTicket> {
-        const price = membership.price ? membership.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') : '0'
+        // const price = membership.price ? membership.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') : '0'
         const center = this.storageService.getCenter()
         const linkedClass = await firstValueFrom(
             this.centerMembershipApi.getLinkedClass(center.id, membership.category_id, membership.id)
@@ -446,6 +473,55 @@ export class RegisterMembershipLockerFullmodalStore extends ComponentStore<State
             count: { count: String(membership.count), infinite: membership.unlimited },
             assignee: undefined,
             membershipItem: membership,
+            lessonList: _.map(linkedClass, (value) => {
+                return { selected: true, item: value }
+            }),
+            status: 'modify' as const,
+        }
+    }
+
+    async initMembershipItemByUM(userMembership: UserMembership): Promise<MembershipTicket> {
+        const center = this.storageService.getCenter()
+        const linkedClass = await firstValueFrom(
+            this.centerMembershipApi.getLinkedClass(
+                center.id,
+                userMembership.membership_category_id,
+                userMembership.membership_item_id
+            )
+        )
+        return {
+            type: 'membership',
+            date: {
+                startDate: dayjs().format('YYYY-MM-DD'),
+                endDate: dayjs()
+                    .add(dayjs(userMembership.end_date).diff(userMembership.start_date, 'day') - 1, 'day')
+                    .format('YYYY-MM-DD'),
+            },
+            amount: {
+                normalAmount: String(userMembership.total_price).replace(/\B(?=(\d{3})+(?!\d))/g, ','),
+                paymentAmount: '0',
+            },
+            price: {
+                card: '',
+                cash: '',
+                trans: '',
+                unpaid: '',
+            },
+            count: { count: String(userMembership.count), infinite: userMembership.unlimited },
+            assignee: undefined,
+            membershipItem: {
+                id: userMembership.membership_item_id,
+                category_id: userMembership.membership_category_id,
+                category_name: userMembership.category_name,
+                name: userMembership.name,
+                days: dayjs(userMembership.end_date).diff(userMembership.start_date, 'day'),
+                count: userMembership.count - userMembership.used_count,
+                unlimited: userMembership.unlimited,
+                price: userMembership.total_price,
+                color: userMembership.color,
+                memo: '',
+                sequence_number: 0,
+            },
             lessonList: _.map(linkedClass, (value) => {
                 return { selected: true, item: value }
             }),

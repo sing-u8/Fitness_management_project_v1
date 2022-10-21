@@ -40,6 +40,8 @@ export class UserDetailMembershipComponent implements OnInit {
     @Input() curUserData: DashboardReducer.CurUseData = _.cloneDeep(DashboardReducer.CurUseDataInit)
 
     @Output() onRegisterML = new EventEmitter<void>()
+    @Output() onReRegisterM = new EventEmitter<UserMembership>()
+    @Output() onTransferM = new EventEmitter<{ userMembership: UserMembership; centerUser: CenterUser }>()
 
     constructor(
         private nxStore: Store,
@@ -132,35 +134,17 @@ export class UserDetailMembershipComponent implements OnInit {
     }
 
     // transter function
+
     public showTransferModal = false
     public transferMember: CenterUser = undefined
     toggleShowTransferModal() {
         this.showTransferModal = !this.showTransferModal
     }
-    onTransferMemberConfirm(centerUser: CenterUser) {
-        this.toggleShowTransferModal()
-        this.transferMember = centerUser
-        const membershipName = this.wordService.ellipsis(this.selectedUserMembership.name, 15)
-        this.showTransferCheckModalText.text = `'${membershipName}' 회원권을
-            ${this.transferMember.center_user_name}님에게 양도하시겠어요?`
-        this.toggleTransferCheckModal()
-    }
-
-    public showTransferCheckModal = false
-    public showTransferCheckModalText = {
-        text: '',
-        subText: `양도 시, 예약 내역 및 결제 내역을
-                제외한 모든 정보가 양도돼요.`,
-        cancelButtonText: '취소',
-        confirmButtonText: '회원권 양도',
-    }
-    toggleTransferCheckModal() {
-        this.showTransferCheckModal = !this.showTransferCheckModal
-    }
-    onConfirmTransferCheck() {
-        this.chargeMode = 'transfer'
-        this.toggleTransferCheckModal()
-        this.toggleChargeModal()
+    onTransferMembership(centerUser: CenterUser) {
+        this.onTransferM.emit({
+            userMembership: this.selectedUserMembership,
+            centerUser: centerUser,
+        })
     }
 
     // refund funcs

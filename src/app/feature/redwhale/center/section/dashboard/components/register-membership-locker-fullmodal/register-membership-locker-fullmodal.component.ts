@@ -44,11 +44,13 @@ import {
     UpdateChoseLocker,
 } from '@schemas/center/dashboard/register-ml-fullmodal'
 import { ContractTypeCode } from '@schemas/contract'
+import { UserMembership } from '@schemas/user-membership'
 
 // ngrx
 import { Store } from '@ngrx/store'
 import * as CenterCommonSelector from '@centerStore/selectors/center.common.selector'
 import * as DashboardSelector from '@centerStore/selectors/sec.dashboard.selector'
+import { Loading } from '@schemas/store/loading'
 
 type Progress = 'one' | 'two'
 
@@ -63,15 +65,10 @@ export class RegisterMembershipLockerFullmodalComponent implements OnInit, OnCha
     @Input() curUser: CenterUser
     @Input() visible: boolean
 
-    // type and vars
+    // type and vars  !! transfer type은 input으로 받지 않음
     @Input() type: ContractTypeCode
     // // re register
-    @Input() rerMembershipItem: MembershipItem
-    @Input() rerLockerITem: LockerItem
-    @Input() rerLockerCategory: LockerCategory
-    // // transfer
-    @Input() transferCenterUser: CenterUser
-    //
+    @Input() rerUserMembership: UserMembership
 
     @Output() visibleChange = new EventEmitter<boolean>()
     @Output() close = new EventEmitter<any>()
@@ -95,6 +92,7 @@ export class RegisterMembershipLockerFullmodalComponent implements OnInit, OnCha
 
     public isAllMlItemDone = false
     public isAllMlItemDoneSubscriber = this.cmpStore.isAllMlItemDone$.subscribe((isDone) => {
+        console.log('isAllMlItemDoneSubscriber before -- ', this.type, this.isAllMlItemDone)
         this.isAllMlItemDone = isDone
     })
 
@@ -106,6 +104,8 @@ export class RegisterMembershipLockerFullmodalComponent implements OnInit, OnCha
             this.totalSum += v.price
         })
     })
+
+    public isRenewalMLLoading$: Observable<Loading> = this.cmpStore.isRenewalMLLoading$
 
     public lockerItemsExist = false
     public membershipItemsExist = false
@@ -193,6 +193,8 @@ export class RegisterMembershipLockerFullmodalComponent implements OnInit, OnCha
                 setTimeout(() => {
                     this.renderer.addClass(this.modalWrapperElement.nativeElement, 'rw-modal-wrapper-show')
                 }, 0)
+
+                this.initByType()
             } else {
                 this.renderer.removeClass(this.modalWrapperElement.nativeElement, 'rw-modal-wrapper-show')
                 setTimeout(() => {
@@ -336,6 +338,7 @@ export class RegisterMembershipLockerFullmodalComponent implements OnInit, OnCha
     registerMLs(btLoadingFns: ClickEmitterType) {
         btLoadingFns.showLoading()
         this.cmpStore.registerMlItems({
+            type: this.type,
             centerId: this.center.id,
             user: this.curUser,
             signData: this.signData,
@@ -362,5 +365,15 @@ export class RegisterMembershipLockerFullmodalComponent implements OnInit, OnCha
     public memoTerms = ''
     resetMemoTerms() {
         this.memoTerms = ''
+    }
+
+    // init by type
+    async initByType() {
+        if (this.type == 'contract_type_renewal' && !_.isEmpty(this.rerUserMembership)) {
+            this.cmpStore.setRenewalMLLoading('pending')
+            const membershipTicket = await this.cmpStore.initMembershipItemByUM(this.rerUserMembership)
+            this.cmpStore.addMlItem(membershipTicket)
+            this.cmpStore.setRenewalMLLoading('done')
+        }
     }
 }

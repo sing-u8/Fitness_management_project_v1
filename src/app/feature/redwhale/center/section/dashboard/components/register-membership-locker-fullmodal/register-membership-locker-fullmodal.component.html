@@ -3,12 +3,25 @@
         <header>
             <div class="header-text-container">
                 <ng-container *ngIf="progress == 'one'">
-                    <p class="rw-typo-headline1">{{ curUser?.center_user_name }}님의</p>
-                    <p class="rw-typo-headline1">회원권과 락커를 등록해주세요.</p>
+                    <p class="rw-typo-headline1">
+                        {{
+                            type == 'contract_type_new' ? curUser?.center_user_name + '님의'
+                                :  curUser?.center_user_name + '님이 재등록할'
+                        }}
+                    </p>
+                    <p class="rw-typo-headline1">
+                        {{
+                            type == 'contract_type_new' ? '회원권과 락커를 등록해주세요.'
+                                :'회원권/락커 정보를 입력해주세요.'
+                        }}
+                        
+                    </p>
                 </ng-container>
                 <ng-container *ngIf="progress == 'two'">
                     <p class="rw-typo-headline1">[{{ center.name }}]</p>
-                    <p class="rw-typo-headline1">회원 계약서</p>
+                    <p class="rw-typo-headline1">
+                        {{type == 'contract_type_new' ? '신규 등록 계약서' :  '재등록 계약서' }}
+                    </p>
                 </ng-container>
 
                 <div class="register-ml-progress">
@@ -41,10 +54,10 @@
 
         <main id="progress-one" [style.display]="progress == 'one' ? 'block' : 'none'">
             <div class="main-wrapper">
-                <article class="membership-and-locker">
+                <article class="membership-and-locker" >
                     <ng-template
                         #none_membership_locker
-                        [ngIf]="(mlItems$ | async)['length'] == 0"
+                        [ngIf]="(mlItems$ | async)['length'] == 0 && type == 'contract_type_new'"
                         [ngIfElse]="presence_membership_locker"
                     >
                         <div class="empty-memberhip-card">
@@ -102,29 +115,41 @@
                                     <img src="assets/icons/etc/plus.svg" />
                                 </div>
                             </div>
-
-                            <div class="window-item" *ngFor="let item of (mlItems$ | async); let idx = index">
-                                <ng-container class="window-item" *ngIf="item.type == 'membership'">
-                                    <db-membership-ticket-window
-                                        [membershipState]="item"
-                                        [index]="idx"
-                                        [instructors]="instructors$ | async"
-                                        (onRemoveMlItem)="onMLItemRemove($event)"
-                                        (onSaveMlItem)="onMemberhispTicketItemSave($event)"
-                                        (onModifyMlItem)="onMemberhispTicketItemModify($event)"
-                                    ></db-membership-ticket-window>
-                                </ng-container>
-                                <ng-container class="window-item" *ngIf="item.type == 'locker'">
-                                    <db-locker-window
-                                        [lockerState]="item"
-                                        [index]="idx"
-                                        [Instructors]="instructors$ | async"
-                                        (onRemoveMlItem)="onMLItemRemove($event)"
-                                        (onSaveMlItem)="onLockerItemSave($event)"
-                                        (onModifyMlItem)="onLockerItemModify($event)"
-                                    ></db-locker-window>
-                                </ng-container>
-                            </div>
+                            
+                            <ng-container
+                                *ngIf="type=='contract_type_new'
+                                    || (type=='contract_type_renewal' && (isRenewalMLLoading$ | async) == 'done')"
+                            >
+                                <div class="window-item" *ngFor="let item of (mlItems$ | async); let idx = index">
+                                    <ng-container class="window-item" *ngIf="item.type == 'membership'">
+                                        <db-membership-ticket-window
+                                            [membershipState]="item"
+                                            [index]="idx"
+                                            [instructors]="instructors$ | async"
+                                            (onRemoveMlItem)="onMLItemRemove($event)"
+                                            (onSaveMlItem)="onMemberhispTicketItemSave($event)"
+                                            (onModifyMlItem)="onMemberhispTicketItemModify($event)"
+                                        ></db-membership-ticket-window>
+                                    </ng-container>
+                                    <ng-container class="window-item" *ngIf="item.type == 'locker'">
+                                        <db-locker-window
+                                            [lockerState]="item"
+                                            [index]="idx"
+                                            [Instructors]="instructors$ | async"
+                                            (onRemoveMlItem)="onMLItemRemove($event)"
+                                            (onSaveMlItem)="onLockerItemSave($event)"
+                                            (onModifyMlItem)="onLockerItemModify($event)"
+                                        ></db-locker-window>
+                                    </ng-container>
+                                </div>
+                            </ng-container>
+                            <ng-container *ngIf="type=='contract_type_renewal' && (isRenewalMLLoading$ | async) == 'pending'">
+                                <ngx-skeleton-loader
+                                    appearance="line" count="1"
+                                    [theme]="{width: '585px', height: '978px', 'border-radius':'7px', 'margin':'0'}"
+                                ></ngx-skeleton-loader>
+                            </ng-container>
+                            
                         </div>
                     </ng-template>
                 </article>
@@ -161,7 +186,7 @@
                             [color]="'var(--red)'"
                             [loadingName]="'next_bt'"
                             [borderRadius]="'5px'"
-                            [disabled]="!isAllMlItemDone"
+                            [disabled]=" !isAllMlItemDone"
                             (onClick)="isAllMlItemDone && setProgress('two')"
                         >
                             <span class="register-ml-button"> 다음 </span>
@@ -216,7 +241,9 @@
                         </div>
                     </div>
                     <div class="l-ml-registered">
-                        <p class="rw-typo-title2 contract__title">회원권 / 락커 정보</p>
+                        <p class="rw-typo-title2 contract__title">
+                            회원권 / 락커 정보
+                        </p>
                         <div class="ml-registered" *ngFor="let item of (mlItems$ | async); let idx =index">
                             <ng-container class="window-item" *ngIf="item.type == 'membership'">
                                 <db-membership-ticket-window-registered
@@ -299,7 +326,10 @@
                             [borderRadius]="'5px'"
                             (onClick)="registerMLs($event)"
                         >
-                            <span class="register-ml-button"> 모두 등록하기 </span>
+                            <span class="register-ml-button">
+                                {{type == 'contract_type_new' ? '모두 등록하기 ' : '저장하기'}}
+                                
+                            </span>
                         </rw-button>
                         </div>
                     </div>

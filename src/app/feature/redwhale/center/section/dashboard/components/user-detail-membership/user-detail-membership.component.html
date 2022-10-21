@@ -27,7 +27,7 @@
                 (onHold)="toggleHoldModal(); setSelectedUserMembership(item)"
                 (onTransfer)="setSelectedUserMembership(item); toggleShowTransferModal()"
                 (onRefund)="setSelectedUserMembership(item); toggleShowRefundModal()"
-                (onReRegister)="setSelectedUserMembership(item);"
+                (onReRegister)="setSelectedUserMembership(item); onReRegisterM.emit($event)"
                 (onRemoveRecord)="setSelectedUserMembership(item); toggleRemoveModal()"
                 (onUpdateHolding)="setSelectedUserMembership(item, $event.holdingIdx); toggleUpdateHoldModal($event.holdingIdx)"
                 (onRemoveHolding)="setSelectedUserMembership(item, $event.holdingIdx); toggleRemoveHoldingModal()"
@@ -62,14 +62,8 @@
     [title]="'회원권을 양도받을 회원을 선택해주세요.'"
     [searchPlaceholder]="'회원의 이름 또는 전화번호를 검색해주세요.'"
     (cancel)="toggleShowTransferModal()"
-    (confirm)="onTransferMemberConfirm($event)"
+    (confirm)="onTransferMembership($event)"
 ></rw-member-list-modal>
-<rw-modal
-    [(visible)]="showTransferCheckModal"
-    [data]="showTransferCheckModalText"
-    (cancel)="toggleTransferCheckModal()"
-    (confirm)="onConfirmTransferCheck()"
-></rw-modal>
 
 <rw-modal
     [(visible)]="showRefundModal"

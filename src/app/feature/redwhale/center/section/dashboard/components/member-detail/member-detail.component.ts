@@ -32,6 +32,8 @@ import * as CenterCommonActions from '@centerStore/actions/center.common.actions
 import { showToast } from '@appStore/actions/toast.action'
 import { openDrawer } from '@appStore/actions/drawer.action'
 import { CenterUser } from '@schemas/center-user'
+import { ContractTypeCode } from '@schemas/contract'
+import { UserMembership } from '@schemas/user-membership'
 
 @Component({
     selector: 'db-member-detail',
@@ -128,11 +130,27 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
 
     // register membership locker full modal vars and funcs
     public doShowRegisterMLFullModal = false
-    toggleRegisterMLFullModal() {
-        this.doShowRegisterMLFullModal = !this.doShowRegisterMLFullModal
+    public registerMLFullModalType: ContractTypeCode = 'contract_type_new'
+    openRegisterMLFullModal(type: ContractTypeCode) {
+        this.registerMLFullModalType = type
+        this.doShowRegisterMLFullModal = true
+    }
+    closeRegisterMLFullModal() {
+        this.doShowRegisterMLFullModal = false
     }
     onFinishRegisterML() {
-        this.toggleRegisterMLFullModal()
+        this.closeRegisterMLFullModal()
+    }
+
+    // reRegister funcs and vars
+    public registerMLUserMembership: UserMembership = undefined
+    setReRegisterMLUserMembership(um: UserMembership) {
+        this.registerMLUserMembership = um
+    }
+    // transfer funcs and vars
+    public transferCenterUser: CenterUser = undefined
+    setTransferCenterUser(cu: CenterUser) {
+        this.transferCenterUser = cu
     }
 
     // check in
