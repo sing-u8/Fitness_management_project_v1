@@ -234,9 +234,8 @@
                     [curUserData]="curUserData"
                     (onRegisterML)="openRegisterMLFullModal('contract_type_new')"
                     (onReRegisterM)="setReRegisterMLUserMembership($event); openRegisterMLFullModal('contract_type_renewal')"
-                    (onTransferM)="setTransferCenterUser($event.centerUser);
-                                setReRegisterMLUserMembership($event.userMembership);
-                                "
+                    (onTransferM)="setTransferCenterUser($event.centerUser);setTransferUserMembership($event.userMembership);
+                                openTransferMFullModal()"
                 ></db-user-detail-membership>
                 <db-user-detail-locker
                     *ngIf="(userDetailTag$ | async) == 'locker'"
@@ -303,6 +302,15 @@
     (finishRegister)="onFinishRegisterML()"
     [curUser]="curUserData.user"
 ></db-register-membership-locker-fullmodal>
+
+<db-transfer-membership-fullmodal
+    [(visible)]="doShowTransferMFullModal"
+    [transferUserMembership]="transferUserMembership"
+    [transferCenterUser]="transferCenterUser"
+    [curUser]="curUserData.user"
+    (close)="closeTransferMFullModal()"
+    (finishTransfer)="onFinishTransferM()"
+></db-transfer-membership-fullmodal>
 
 <rw-modal
     (click)="$event.stopPropagation()"

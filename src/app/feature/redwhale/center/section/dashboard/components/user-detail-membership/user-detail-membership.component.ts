@@ -134,13 +134,17 @@ export class UserDetailMembershipComponent implements OnInit {
     }
 
     // transter function
-
+    public transFilterFn: (centerUser: CenterUser) => boolean = (centerUser: CenterUser) => true
+    setTransFilterFn() {
+        this.transFilterFn = (centerUser: CenterUser) => centerUser.id != this.curUserData.user.id
+    }
     public showTransferModal = false
     public transferMember: CenterUser = undefined
     toggleShowTransferModal() {
         this.showTransferModal = !this.showTransferModal
     }
     onTransferMembership(centerUser: CenterUser) {
+        this.showTransferModal = false
         this.onTransferM.emit({
             userMembership: this.selectedUserMembership,
             centerUser: centerUser,
@@ -332,7 +336,6 @@ export class UserDetailMembershipComponent implements OnInit {
                 responsibility_user_id: this.chargeData.assignee_id,
             },
         }
-        console.log('callTransferApi -- reqBody : ', reqBody)
         this.centerUsersMembershipService
             .transferMembershipTicket(this.center.id, this.curUserData.user.id, this.selectedUserMembership.id, reqBody)
             .subscribe({

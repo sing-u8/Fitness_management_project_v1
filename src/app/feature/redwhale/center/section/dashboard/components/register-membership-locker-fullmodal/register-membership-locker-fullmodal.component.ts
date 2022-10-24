@@ -92,7 +92,6 @@ export class RegisterMembershipLockerFullmodalComponent implements OnInit, OnCha
 
     public isAllMlItemDone = false
     public isAllMlItemDoneSubscriber = this.cmpStore.isAllMlItemDone$.subscribe((isDone) => {
-        console.log('isAllMlItemDoneSubscriber before -- ', this.type, this.isAllMlItemDone)
         this.isAllMlItemDone = isDone
     })
 

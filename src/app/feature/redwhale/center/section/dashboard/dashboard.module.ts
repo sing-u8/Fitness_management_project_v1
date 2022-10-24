@@ -58,6 +58,8 @@ import { LockerWindowRegisteredComponent } from './components/locker-window-regi
 import { CheckContractFullmodalComponent } from './components/check-contract-fullmodal/check-contract-fullmodal.component'
 import { ChangeMembershipNumberModalComponent } from './components/change-membership-number-modal/change-membership-number-modal.component'
 import { DetailItemRemoveModalComponent } from './components/detail-item-remove-modal/detail-item-remove-modal.component'
+import { TransferMembershipFullmodalComponent } from './components/transfer-membership-fullmodal/transfer-membership-fullmodal.component'
+import { TransferMembershipTicketWindowComponent } from './components/transfer-membership-ticket-window/transfer-membership-ticket-window.component'
 // // drawer
 import { DwMemberListComponent } from './components/dw-member-list/dw-member-list.component'
 
@@ -124,6 +126,8 @@ import { NgxSpinnerModule } from 'ngx-spinner'
         DwMemberListComponent,
         ChangeMembershipNumberModalComponent,
         DetailItemRemoveModalComponent,
+        TransferMembershipFullmodalComponent,
+        TransferMembershipTicketWindowComponent,
     ],
     imports: [
         DashboardRoutingModule,

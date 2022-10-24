@@ -92,11 +92,11 @@ export class RegisterMembershipLockerFullmodalStore extends ComponentStore<State
     constructor(
         private centerUserListService: CenterUserListService,
         private centerMembershipApi: CenterMembershipService,
-        private centerLockerApi: CenterLockerService,
-        private centerUsersPaymentApi: CenterUsersPaymentService,
         private storageService: StorageService,
-        private nxStore: Store,
+        private centerUsersPaymentApi: CenterUsersPaymentService,
         private fileService: FileService,
+        private nxStore: Store,
+        private centerLockerApi: CenterLockerService,
         private lockerHelperService: LockerHelperService
     ) {
         super(_.cloneDeep(stateInit))
@@ -192,15 +192,6 @@ export class RegisterMembershipLockerFullmodalStore extends ComponentStore<State
             return _.cloneDeep(state)
         }
     )
-    saveMItemInTransfer = this.updater((state) => {
-        state.mlItems[0] = state.mlItems[0]
-        state.mlItems[0].status = 'done'
-        return _.cloneDeep(state)
-    })
-    backToOneProgressInTransfer = this.updater((state) => {
-        state.mlItems[0].status = 'modify'
-        return _.cloneDeep(state)
-    })
 
     setMembershipItems(membershipItems: MembershipItem[]) {
         this.setState((state) => {
@@ -480,6 +471,7 @@ export class RegisterMembershipLockerFullmodalStore extends ComponentStore<State
         }
     }
 
+    // 회원권을 지웠을 경우에 연결된 수업을 얻을 수 없음
     async initMembershipItemByUM(userMembership: UserMembership): Promise<MembershipTicket> {
         const center = this.storageService.getCenter()
         const linkedClass = await firstValueFrom(

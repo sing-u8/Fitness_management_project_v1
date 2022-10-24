@@ -1,4 +1,14 @@
-import { Component, Input, forwardRef, ElementRef, Renderer2, ViewChild, AfterViewInit } from '@angular/core'
+import {
+    Component,
+    Input,
+    forwardRef,
+    ElementRef,
+    Renderer2,
+    ViewChild,
+    AfterViewInit,
+    EventEmitter,
+    Output,
+} from '@angular/core'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
 
 import _ from 'lodash'
@@ -19,6 +29,8 @@ export class LessonSelectorComponent implements AfterViewInit, ControlValueAcces
     // @Input() items: Array<any>
     @Input() width: string
     @Input() disabled = false
+
+    @Output() onSelectChange = new EventEmitter()
 
     @ViewChild('selectElement') selectElement
     @ViewChild('selectedElement') selectedElement
@@ -98,5 +110,6 @@ export class LessonSelectorComponent implements AfterViewInit, ControlValueAcces
         this.value = value
         this.onChange(value)
         this.getSelectText()
+        this.onSelectChange.emit(this.value)
     }
 }

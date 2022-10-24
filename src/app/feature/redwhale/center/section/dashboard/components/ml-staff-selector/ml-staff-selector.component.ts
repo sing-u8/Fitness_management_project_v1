@@ -90,9 +90,9 @@ export class MlStaffSelectorComponent implements AfterViewInit, ControlValueAcce
     onSelect(item) {
         if (item.disabled) return
 
-        this.onSelectChange.emit(item)
         this.close()
         this.onChanged(item)
+        this.onSelectChange.emit(item)
     }
 
     onChange = (_) => {}

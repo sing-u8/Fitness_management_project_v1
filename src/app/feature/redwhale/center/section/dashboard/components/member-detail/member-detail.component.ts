@@ -128,6 +128,27 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
         this.nxStore.dispatch(openDrawer({ tabName: 'community' }))
     }
 
+    // transfer membership full modal vars and funcs
+    public doShowTransferMFullModal = false
+    openTransferMFullModal() {
+        this.doShowTransferMFullModal = true
+    }
+    closeTransferMFullModal() {
+        this.doShowTransferMFullModal = false
+    }
+    onFinishTransferM() {
+        this.closeTransferMFullModal()
+    }
+
+    public transferCenterUser: CenterUser = undefined
+    setTransferCenterUser(cu: CenterUser) {
+        this.transferCenterUser = cu
+    }
+    public transferUserMembership: UserMembership = undefined
+    setTransferUserMembership(um: UserMembership) {
+        this.transferUserMembership = um
+    }
+
     // register membership locker full modal vars and funcs
     public doShowRegisterMLFullModal = false
     public registerMLFullModalType: ContractTypeCode = 'contract_type_new'
@@ -146,11 +167,6 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
     public registerMLUserMembership: UserMembership = undefined
     setReRegisterMLUserMembership(um: UserMembership) {
         this.registerMLUserMembership = um
-    }
-    // transfer funcs and vars
-    public transferCenterUser: CenterUser = undefined
-    setTransferCenterUser(cu: CenterUser) {
-        this.transferCenterUser = cu
     }
 
     // check in
