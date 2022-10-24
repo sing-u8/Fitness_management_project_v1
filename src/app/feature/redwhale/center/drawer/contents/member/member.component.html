@@ -203,6 +203,7 @@
 
 <db-register-membership-locker-fullmodal
     [(visible)]="doShowRegisterMLFullModal"
+    [type]="'contract_type_new'"
     (close)="toggleRegisterMLFullModal()"
     (finishRegister)="onFinishRegisterML()"
     [curUser]="curCenterUser"
