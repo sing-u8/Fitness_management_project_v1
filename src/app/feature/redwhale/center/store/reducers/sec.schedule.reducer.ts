@@ -142,11 +142,13 @@ export const scheduleReducer = createImmerReducer(
         return state
     }),
 
-    on(ScheduleActions.startCreateInstructor, (state): State => {
-        return state
-    }),
     on(ScheduleActions.finishCreateInstructor, (state, { createdInstructor }): State => {
         state.instructorList.push(createdInstructor)
+        return state
+    }),
+
+    on(ScheduleActions.startRemoveInstructor, (state, { calendar }): State => {
+        state.instructorList = _.filter(state.instructorList, (v) => v.instructor.id != calendar.id)
         return state
     }),
 

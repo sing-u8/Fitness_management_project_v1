@@ -1,6 +1,6 @@
 * {
-    margin: 0px;
-    padding: 0px;
+    margin: 0;
+    padding: 0;
 }
 
 .dropdown-container {
@@ -16,7 +16,7 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 0px 5px;
+        padding: 0 5px;
 
         width: calc(100% - 25px);
         height: 46px;
@@ -48,7 +48,7 @@
         flex-direction: column;
         text-overflow: clip;
         width: 100%;
-        height: 0px;
+        height: 0;
         overflow: hidden;
         position: relative;
         // padding: 20px 0px;
@@ -65,7 +65,39 @@
             display: flex;
             flex-direction: column;
             width: calc(100% - 34px);
-            padding: 15px 0px;
+            padding: 15px 0;
+            position: relative;
+
+            .l-check-box {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                &:not(:first-of-type) {
+                    margin-top: 12px;
+                }
+                &:hover {
+                    .delete-icon {
+                        display: flex;
+                    }
+                }
+                .delete-icon {
+                    display: none;
+                    width: 22px;
+                    height: 22px;
+                    background-image: url("/assets/icons/etc/trash_darkgrey.svg");
+                    background-size: contain;
+                    background-repeat: no-repeat;
+                    cursor: pointer;
+                    border-radius: 5px;
+                    &:hover {
+                        background-color: var(--background-color);
+                    }
+
+                    &.delete-icon-none {
+                        display: none !important;
+                    }
+                }
+            }
 
             .select-button {
                 width: 215px;
@@ -82,12 +114,6 @@
                     height: 15px;
                     margin-top: 2px;
                     margin-right: 5px;
-                }
-            }
-
-            rw-checkbox {
-                &:not(:first-of-type) {
-                    margin-top: 12px;
                 }
             }
 

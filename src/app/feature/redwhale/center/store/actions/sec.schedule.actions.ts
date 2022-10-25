@@ -24,12 +24,17 @@ export const finishLoadScheduleState = createAction(
 )
 
 export const startCreateInstructor = createAction(
-    `[${FeatureKey}] Start Create Instructor`,
+    `[${FeatureKey}] Start Create Instructor Calendar`,
     props<{ centerId: string; reqBody: CreateCalendarReqBody }>()
 )
 export const finishCreateInstructor = createAction(
-    `[${FeatureKey}] Finish Create Instructor`,
+    `[${FeatureKey}] Finish Create Instructor Calendar`,
     props<{ createdInstructor: FromSchReducer.InstructorType; instructorList?: FromSchReducer.InstructorType[] }>()
+)
+
+export const startRemoveInstructor = createAction(
+    `[${FeatureKey}] Start Remove Instructor Calendar`,
+    props<{ centerId: string; calendar: Calendar }>()
 )
 
 export const startUpdateCalendarTask = createAction(

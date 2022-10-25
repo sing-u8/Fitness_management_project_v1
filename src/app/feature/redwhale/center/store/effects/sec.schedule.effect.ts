@@ -29,7 +29,7 @@ export class ScheduleEffect {
         private nxStore: Store
     ) {}
 
-    public loadScheduleState = createEffect(() => {
+    public loadScheduleState$ = createEffect(() => {
         return this.actions$.pipe(
             ofType(ScheduleActions.startLoadScheduleState),
             switchMap(() => {
@@ -89,7 +89,7 @@ export class ScheduleEffect {
         )
     })
 
-    public createInstructor = createEffect(() => {
+    public createInstructor$ = createEffect(() => {
         return this.actions$.pipe(
             ofType(ScheduleActions.startCreateInstructor),
             switchMap(({ centerId, reqBody }) => {
@@ -108,6 +108,27 @@ export class ScheduleEffect {
                         ]
                     }),
                     catchError((err: string) => of(ScheduleActions.setError({ error: 'createInstructor err :' + err })))
+                )
+            })
+        )
+    })
+
+    public removeInstructor$ = createEffect(() => {
+        return this.actions$.pipe(
+            ofType(ScheduleActions.startRemoveInstructor),
+            switchMap(({ centerId, calendar }) => {
+                return this.centerCalendarApi.deleteCalendar(centerId, calendar.id).pipe(
+                    switchMap((res) => {
+                        return [
+                            showToast({
+                                text: `강사별 보기 목록에서 ${this.wordService.ellipsis(
+                                    calendar.name,
+                                    6
+                                )}님이 삭제되었습니다.`,
+                            }),
+                        ]
+                    }),
+                    catchError((err: string) => of(ScheduleActions.setError({ error: 'removeInstructor err :' + err })))
                 )
             })
         )

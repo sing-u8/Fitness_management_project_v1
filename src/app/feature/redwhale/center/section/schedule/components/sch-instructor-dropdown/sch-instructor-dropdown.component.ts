@@ -17,6 +17,8 @@ import * as ScheduleActions from '@centerStore/actions/sec.schedule.actions'
 import * as CenterCommonSelector from '@centerStore/selectors/center.common.selector'
 import { Subject } from 'rxjs'
 import { takeUntil } from 'rxjs/operators'
+import { InstructorType } from '@centerStore/reducers/sec.schedule.reducer'
+import { Calendar } from '@schemas/calendar'
 
 @Component({
     selector: 'rw-sch-instructor-dropdown',
@@ -198,6 +200,31 @@ export class SchInstructorDropdownComponent implements OnInit, OnChanges, OnDest
     }
     onNoInstructorModalConfirm() {
         this.router.navigate(['../dashboard'], { relativeTo: this.activatedRoute })
+    }
+
+    public removeInstructorModal = false
+    public removeInstructorModalData = {
+        text: '',
+        subText: `삭제 시, 해당 강사의 기존 일정이 모두 삭제되며
+                다시 복구하실 수 없어요.`,
+        cancelButtonText: '취소',
+        confirmButtonText: '삭제하기',
+    }
+    public removeInstructor: Calendar = undefined
+    openRemoveInstructorModal(it: InstructorType) {
+        this.removeInstructorModalData.text = `강사별 보기 목록에서
+            ${it.instructor.name}님을 삭제하시겠어요?`
+        this.removeInstructorModal = true
+        this.removeInstructor = it.instructor
+    }
+    onRemoveInstructorModalCancel() {
+        this.removeInstructorModal = false
+    }
+    onRemoveInstructorModalConfirm() {
+        this.nxStore.dispatch(
+            ScheduleActions.startRemoveInstructor({ centerId: this.center.id, calendar: this.removeInstructor })
+        )
+        this.removeInstructorModal = false
     }
 
     instructorFilter(cu: CenterUser): boolean {
