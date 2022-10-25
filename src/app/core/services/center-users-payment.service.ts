@@ -51,6 +51,10 @@ export class CenterUsersPaymentService {
 
 export interface CreateMLPaymentReqBody {
     type_code: ContractTypeCode
+    transfer?: {
+        user_membership_id: string
+        transferee_user_id: string
+    }
     memo?: string
     user_memberships?: Array<{
         membership_item_id: string

@@ -486,7 +486,7 @@ export class RegisterMembershipLockerFullmodalStore extends ComponentStore<State
             date: {
                 startDate: dayjs().format('YYYY-MM-DD'),
                 endDate: dayjs()
-                    .add(dayjs(userMembership.end_date).diff(userMembership.start_date, 'day') - 1, 'day')
+                    .add(dayjs(userMembership.end_date).diff(userMembership.start_date, 'day'), 'day')
                     .format('YYYY-MM-DD'),
             },
             amount: {

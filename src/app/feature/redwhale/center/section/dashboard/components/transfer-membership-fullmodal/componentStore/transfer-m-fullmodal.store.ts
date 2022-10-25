@@ -134,22 +134,12 @@ export class TransferMembershipFullmodalStore extends ComponentStore<State> {
             param$.pipe(
                 withLatestFrom(this.mItem$),
                 map(([param, mItem]) => {
-                    const transferReqBody: TransferMembershipTicketReqBody = {
-                        transferee_user_id: param.transferUser.id,
-                        payment: {
-                            card: Number(mItem.price.card.replace(/[^0-9]/gi, '')),
-                            trans: Number(mItem.price.trans.replace(/[^0-9]/gi, '')),
-                            cash: Number(mItem.price.cash.replace(/[^0-9]/gi, '')),
-                            unpaid: Number(mItem.price.unpaid.replace(/[^0-9]/gi, '')),
-                            vbank: 0,
-                            phone: 0,
-                            memo: '',
-                            responsibility_user_id: mItem.assignee.value.id,
-                        },
-                    }
-
                     const createMLPaymentReqBody: CreateMLPaymentReqBody = {
                         type_code: 'contract_type_transfer',
+                        transfer: {
+                            user_membership_id: param.transferUserMembership.id,
+                            transferee_user_id: param.transferUser.id,
+                        },
                         memo: param.memo,
                         user_memberships: [
                             {
@@ -182,12 +172,6 @@ export class TransferMembershipFullmodalStore extends ComponentStore<State> {
                             param.centerId,
                             param.transferUser.id,
                             createMLPaymentReqBody
-                        ),
-                        this.centerUsersMembershipService.transferMembershipTicket(
-                            param.centerId,
-                            param.user.id,
-                            param.transferUserMembership.id,
-                            transferReqBody
                         ),
                     ])
                         .pipe(
@@ -250,7 +234,7 @@ export class TransferMembershipFullmodalStore extends ComponentStore<State> {
             date: {
                 startDate: dayjs().format('YYYY-MM-DD'),
                 endDate: dayjs()
-                    .add(dayjs(userMembership.end_date).diff(userMembership.start_date, 'day') - 1, 'day')
+                    .add(dayjs(userMembership.end_date).diff(userMembership.start_date, 'day'), 'day')
                     .format('YYYY-MM-DD'),
             },
             amount: {
