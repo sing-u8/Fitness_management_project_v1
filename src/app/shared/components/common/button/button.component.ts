@@ -30,6 +30,8 @@ export class ButtonComponent implements OnInit, OnChanges, AfterViewChecked, Aft
     @Input() borderRadius: string
     @Input() fontColor: string
     @Input() disabled: boolean
+    @Input() loadingColor = '#fff'
+    @Input() loadingSize: 'small' | 'default' | 'medium' | 'large' = 'default'
     @Input() loadingName = 'loading-button'
 
     @Output() onClick = new EventEmitter<ClickEmitterType>()
