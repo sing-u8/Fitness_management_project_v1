@@ -13,6 +13,7 @@ import {
 
 import { Payment } from '@schemas/payment'
 import { UserMembership } from '@schemas/user-membership'
+import { ClickEmitterType } from '@schemas/components/button'
 
 import { WordService } from '@services/helper/word.service'
 
@@ -37,7 +38,7 @@ export class DetailItemRemoveModalComponent implements OnChanges, AfterViewCheck
 
     @Output() visibleChange = new EventEmitter<boolean>()
     @Output() cancel = new EventEmitter<any>()
-    @Output() confirm = new EventEmitter<any>()
+    @Output() confirm = new EventEmitter<ClickEmitterType>()
 
     changed: boolean
 
@@ -118,8 +119,8 @@ export class DetailItemRemoveModalComponent implements OnChanges, AfterViewCheck
         this.cancel.emit({})
     }
 
-    onConfirm(): void {
-        this.confirm.emit({})
+    onConfirm(e: ClickEmitterType): void {
+        this.confirm.emit(e)
     }
 
     // on mouse rw-modal down

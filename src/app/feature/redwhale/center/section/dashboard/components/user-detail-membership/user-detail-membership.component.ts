@@ -19,6 +19,7 @@ import { ChargeType, ChargeMode, ConfirmOuput } from '@shared/components/common/
 import { HoldingOutput, HoldingConfirmOutput } from '../hold-modal/hold-modal.component'
 import { DatePickConfirmOutput } from '@shared/components/common/datepick-modal/datepick-modal.component'
 import { CenterUser } from '@schemas/center-user'
+import { ClickEmitterType } from '@schemas/components/button'
 
 import _ from 'lodash'
 import dayjs from 'dayjs'
@@ -177,8 +178,8 @@ export class UserDetailMembershipComponent implements OnInit {
     toggleRemoveModal() {
         this.showRemoveModal = !this.showRemoveModal
     }
-    onConfirmRemove() {
-        this.callRemoveApi()
+    onConfirmRemove(e: ClickEmitterType) {
+        this.callRemoveApi(e)
         this.showRemoveModal = false
     }
 
@@ -394,7 +395,8 @@ export class UserDetailMembershipComponent implements OnInit {
                 },
             })
     }
-    callRemoveApi(cb?: () => void) {
+    callRemoveApi(e: ClickEmitterType, cb?: () => void) {
+        e.showLoading()
         this.centerUsersMembershipService
             .deletteMembershipTicket(this.center.id, this.curUserData.user.id, this.selectedUserMembership.id)
             .subscribe({
@@ -407,14 +409,13 @@ export class UserDetailMembershipComponent implements OnInit {
                             )}' 회원권이 삭제되었습니다.`,
                         })
                     )
-                    // this.nxStore.dispatch(
-                    //     DashboardActions.startGetUserData({ centerId: this.center.id, centerUser: this.curUserData.user })
-                    // )
                     this.dashboardHelper.refreshCurUser(this.center.id, this.curUserData.user)
                     cb ? cb() : null
+                    e.hideLoading()
                 },
                 error: () => {
                     cb ? cb() : null
+                    e.hideLoading()
                 },
             })
     }

@@ -20,18 +20,23 @@
             </div>
         </div>
         <div class="button-group d-flex">
-            <div
-                class="cancel col d-flex justify-content-center align-items-center rw-typo-bodytext2"
-                (click)="onCancel()"
+            <rw-button
+                [width] = "'155.5'"
+                [height] = "'40'"
+                (onClick)="onCancel()"
             >
                 {{ '취소' }}
-            </div>
-            <div
-                class="confirm col d-flex justify-content-center align-items-center rw-typo-bodytext2"
-                (click)="onConfirm(); $event.stopPropagation()"
+            </rw-button>
+            <rw-button
+                [width] = "'155.5'"
+                [height] = "'40'"
+                [loadingName]="'remove_payment'"
+                [loadingColor]="'#606060'"
+                [loadingSize]="'default'"
+                (onClick)="onConfirm($event)"
             >
                 {{ '삭제' }}
-            </div>
+            </rw-button>
         </div>
     </div>
 </div>

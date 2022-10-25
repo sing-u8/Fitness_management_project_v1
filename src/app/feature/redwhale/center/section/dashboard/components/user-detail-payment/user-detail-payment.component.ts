@@ -17,6 +17,7 @@ import { Center } from '@schemas/center'
 import { ChargeType, ChargeMode, ConfirmOuput } from '@shared/components/common/charge-modal/charge-modal.component'
 import { UserLocker } from '@schemas/user-locker'
 import { UserMembership } from '@schemas/user-membership'
+import { ClickEmitterType } from '@schemas/components/button'
 
 import _ from 'lodash'
 // ngrx
@@ -206,11 +207,54 @@ export class UserDetailPaymentComponent implements OnInit {
     onRemovePaymentCancel() {
         this.closeRemovePaymentModal()
     }
-    onRemovePaymentConfirm() {
-        this.closeRemovePaymentModal()
-        const itemName = this.selectedPayment.user_membership_name ?? this.selectedPayment.user_locker_name
-        const toastText = `'${this.wordService.ellipsis(itemName, 8)}' 결제 내역이 삭제되었습니다.`
-        this.nxStore.dispatch(showToast({ text: toastText }))
-        // this.dashboardHelper.refreshCurUser(this.center.id, this.curUserData.user)
+    onRemovePaymentConfirm(e: ClickEmitterType) {
+        e.showLoading()
+        if (this.selectedPayment.user_membership_id) {
+            this.centerUsersMembershipService
+                .removeMembershipTicketPayment(
+                    this.center.id,
+                    this.curUserData.user.id,
+                    this.selectedPayment.user_membership_id,
+                    this.selectedPayment.id
+                )
+                .subscribe({
+                    next: () => {
+                        const itemName =
+                            this.selectedPayment.user_membership_name ?? this.selectedPayment.user_membership_name
+                        const toastText = `'${this.wordService.ellipsis(itemName, 8)}' 결제 내역이 삭제되었습니다.`
+                        this.nxStore.dispatch(showToast({ text: toastText }))
+                        this.dashboardHelper.refreshCurUser(this.center.id, this.curUserData.user)
+                        this.closeRemovePaymentModal()
+                        e.hideLoading()
+                    },
+                    error: () => {
+                        this.closeRemovePaymentModal()
+                        e.hideLoading()
+                    },
+                })
+        } else if (this.selectedPayment.user_locker_id) {
+            this.centerUsersLockerService
+                .removeLockerTicketPayment(
+                    this.center.id,
+                    this.curUserData.user.id,
+                    this.selectedPayment.user_locker_id,
+                    this.selectedPayment.id
+                )
+                .subscribe({
+                    next: () => {
+                        const itemName =
+                            this.selectedPayment.user_membership_name ?? this.selectedPayment.user_locker_name
+                        const toastText = `'${this.wordService.ellipsis(itemName, 8)}' 결제 내역이 삭제되었습니다.`
+                        this.nxStore.dispatch(showToast({ text: toastText }))
+                        this.dashboardHelper.refreshCurUser(this.center.id, this.curUserData.user)
+                        this.closeRemovePaymentModal()
+                        e.hideLoading()
+                    },
+                    error: () => {
+                        this.closeRemovePaymentModal()
+                        e.hideLoading()
+                    },
+                })
+        }
     }
 }

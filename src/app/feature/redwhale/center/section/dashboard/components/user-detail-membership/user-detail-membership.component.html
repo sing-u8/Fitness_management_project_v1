@@ -104,5 +104,5 @@
     [item]="selectedUserMembership"
     [type]="'membership'"
     (cancel) = "toggleRemoveModal()"
-    (confirm) = "onConfirmRemove()"
+    (confirm) = "onConfirmRemove($event)"
 ></db-detail-item-remove-modal>

@@ -61,5 +61,5 @@
     [item]="selectedPayment"
     [type]="'payment'"
     (cancel) = "onRemovePaymentCancel()"
-    (confirm) = "onRemovePaymentConfirm()"
+    (confirm) = "onRemovePaymentConfirm($event)"
 ></db-detail-item-remove-modal>

@@ -209,7 +209,7 @@ export class CenterUsersLockerService {
     }
 
     // 락커 이용권 결제 삭제
-    deleteLockerTicketPayment(
+    removeLockerTicketPayment(
         centerId: string,
         userId: string,
         lockerId: string,
