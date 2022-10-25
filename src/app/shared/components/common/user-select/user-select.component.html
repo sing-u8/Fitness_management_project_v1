@@ -1,46 +1,46 @@
 <div class="rw-select user-select-none" #selectElement>
-  <div
-      class="selected rw-typo-bodytext1 d-flex justify-content-center align-items-center"
-      [class.open]="isOpen"
-      [class.disabled]="disabled !== false"
-      #selectedElement
-      (click)="toggle()"
-      (rwClickOutside)="close()"
-  >
-      <div *ngIf="value?.value?.membership_number" class="avatar">
-        <rw-avatar
-          [image]="value.value.center_user_picture"
-          [backgroundColor]="value.value.color"
-          text="{{ value?.value?.center_user_name}}"
-          size="23"
-          fontSize="10"
-        ></rw-avatar>
-      </div>
-      <span class="text flex-fill">{{ value?.name }}</span>
-      <span class="mdi mdi-chevron-down"></span>
-  </div>
-  <div
-    class="items select-scroll-y"
-    #itemsElement
-    (click)="$event.stopPropagation()"
-  >
-      <div
-          class="item d-flex align-items-center"
-          *ngFor="let item of items"
-          [class.active]="item.value.id == value?.value?.id"
-          [class.disabled]="item.disabled"
-          (click)="onSelect(item)"
-      >
-          <div *ngIf="item.value?.membership_number" class="avatar">
+    <div
+        class="selected rw-typo-bodytext1 d-flex justify-content-center align-items-center"
+        [class.open]="isOpen"
+        [class.disabled]="disabled !== false"
+        #selectedElement
+        (click)="toggle()"
+        (rwClickOutside)="close()"
+    >
+        <div *ngIf="value?.value?.membership_number" class="avatar">
             <rw-avatar
-              [image]="item.value.center_user_picture"
-              [backgroundColor]="item.value.color"
-              text="{{item.value.center_user_name}}"
-              size="26"
-              fontSize="10"
+                [image]="value.value.center_user_picture"
+                [backgroundColor]="value.value.color"
+                text="{{ value?.value?.center_user_name}}"
+                size="23"
+                fontSize="10"
             ></rw-avatar>
-          </div>
-          <span class="rw-typo-bodytext0">{{ item.name }}</span>
-      </div>
-  </div>
+        </div>
+        <span class="text flex-fill">{{ value?.name }}</span>
+        <span class="mdi mdi-chevron-down"></span>
+    </div>
+    <div
+        class="items select-scroll-y"
+        #itemsElement
+        (click)="$event.stopPropagation()"
+    >
+        <div
+            class="item d-flex align-items-center"
+            *ngFor="let item of items"
+            [class.active]="item.value.id == value?.value?.id"
+            [class.disabled]="item.disabled"
+            (click)="onSelect(item)"
+        >
+            <div *ngIf="item.value?.membership_number" class="avatar">
+                <rw-avatar
+                    [image]="item.value.center_user_picture"
+                    [backgroundColor]="item.value.color"
+                    text="{{item.value.center_user_name}}"
+                    size="26"
+                    fontSize="10"
+                ></rw-avatar>
+            </div>
+            <span class="rw-typo-bodytext0">{{ item.name }}</span>
+        </div>
+    </div>
 </div>
