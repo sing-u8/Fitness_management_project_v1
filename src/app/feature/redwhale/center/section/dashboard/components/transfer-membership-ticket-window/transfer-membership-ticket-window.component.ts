@@ -23,6 +23,7 @@ export class TransferMembershipTicketWindowComponent implements OnInit, AfterVie
     @Input() membershipItems: Array<MembershipItem>
 
     @Output() onModifyMlItem = new EventEmitter<MembershipTicket>()
+    @Output() onModifyTotalPrice = new EventEmitter<MembershipTicket>()
 
     public selectedLessons: Array<ClassItem> = []
     public selectedLessonText = ''
@@ -132,6 +133,7 @@ export class TransferMembershipTicketWindowComponent implements OnInit, AfterVie
         this.membershipState.amount.paymentAmount = this.membershipState.amount.paymentAmount
             .replace(/[^0-9]/gi, '')
             .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+        this.modifyTotalPrice()
     }
     onCountKeyup(event) {
         if (event.code == 'Enter') return
@@ -147,6 +149,10 @@ export class TransferMembershipTicketWindowComponent implements OnInit, AfterVie
     modifyTransferMembership() {
         const itemObj: MembershipTicket = _.cloneDeep({ ...this.membershipState })
         this.onModifyMlItem.emit(itemObj)
+    }
+    modifyTotalPrice() {
+        const itemObj: MembershipTicket = _.cloneDeep({ ...this.membershipState })
+        this.onModifyTotalPrice.emit(itemObj)
     }
 
     // status method

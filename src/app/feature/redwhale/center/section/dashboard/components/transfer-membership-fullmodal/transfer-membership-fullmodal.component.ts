@@ -193,6 +193,9 @@ export class TransferMembershipFullmodalComponent implements OnInit, OnChanges, 
     onMemberhispTicketItemModify(item: MembershipTicket) {
         this.cmpStore.modifyMItem(item)
     }
+    onTotalPriceModify(item: MembershipTicket) {
+        this.cmpStore.setTotalPrice(item)
+    }
 
     // register ml items func
     transferMembership(btLoadingFns: ClickEmitterType) {

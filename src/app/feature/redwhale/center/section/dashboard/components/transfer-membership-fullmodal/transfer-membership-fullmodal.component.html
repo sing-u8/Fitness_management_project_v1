@@ -63,6 +63,7 @@
                                     [membershipState]="mItem$ | async"
                                     [instructors]="instructors$ | async"
                                     (onModifyMlItem)="onMemberhispTicketItemModify($event)"
+                                    (onModifyTotalPrice)="onTotalPriceModify($event)"
                                 ></db-transfer-membership-ticket-window>
                             </ng-container>
                         </div>

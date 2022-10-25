@@ -32,10 +32,17 @@ import { MembershipLockerItem } from '@schemas/center/dashboard/register-ml-full
 
 export interface State {
     mItem: MembershipTicket
+    totalPrice: TotalPrice
     isMLoading: Loading
 }
 export const stateInit: State = {
     mItem: undefined,
+    totalPrice: {
+        cash: { price: 0, name: '현금' },
+        card: { price: 0, name: '카드' },
+        trans: { price: 0, name: '계좌이체' },
+        unpaid: { price: 0, name: '미수금' },
+    },
     isMLoading: 'idle',
 }
 
@@ -43,22 +50,7 @@ export const stateInit: State = {
 export class TransferMembershipFullmodalStore extends ComponentStore<State> {
     public readonly mItem$ = this.select((s) => s.mItem)
     public readonly isMLoading$ = this.select((s) => s.isMLoading)
-    public readonly totalPrice$ = this.select((s) => {
-        const total: TotalPrice = {
-            cash: { price: 0, name: '현금' },
-            card: { price: 0, name: '카드' },
-            trans: { price: 0, name: '계좌이체' },
-            unpaid: { price: 0, name: '미수금' },
-        }
-        const priceKeys = _.keys(total)
-        if (_.isEmpty(s.mItem)) {
-            return total
-        }
-        priceKeys.forEach((key) => {
-            total[key]['price'] += Number(s.mItem.price[key].replace(/[^0-9]/gi, '')) ?? 0
-        })
-        return total
-    })
+    public readonly totalPrice$ = this.select((s) => s.totalPrice)
 
     // 이후에 필요에 따라 수정 필요
     public isAllMItemDone$ = this.select((s) => {
@@ -80,6 +72,23 @@ export class TransferMembershipFullmodalStore extends ComponentStore<State> {
     resetAll() {
         this.setState((state) => _.cloneDeep(stateInit))
     }
+    // total price
+    setTotalPrice = this.updater((state, mItem: MembershipTicket) => {
+        const total: TotalPrice = {
+            cash: { price: 0, name: '현금' },
+            card: { price: 0, name: '카드' },
+            trans: { price: 0, name: '계좌이체' },
+            unpaid: { price: 0, name: '미수금' },
+        }
+        const priceKeys = _.keys(total)
+        priceKeys.forEach((key) => {
+            total[key]['price'] += Number(mItem.price[key].replace(/[^0-9]/gi, '')) ?? 0
+        })
+        state.totalPrice = total
+        return {
+            ...state,
+        }
+    })
 
     // loaidng
     setMLoading = this.updater((state, loading: Loading) => {
@@ -174,12 +183,12 @@ export class TransferMembershipFullmodalStore extends ComponentStore<State> {
                             param.transferUser.id,
                             createMLPaymentReqBody
                         ),
-                        // this.centerUsersMembershipService.transferMembershipTicket(
-                        //     param.centerId,
-                        //     param.user.id,
-                        //     param.transferUserMembership.id,
-                        //     transferReqBody
-                        // ),
+                        this.centerUsersMembershipService.transferMembershipTicket(
+                            param.centerId,
+                            param.user.id,
+                            param.transferUserMembership.id,
+                            transferReqBody
+                        ),
                     ])
                         .pipe(
                             tap(([contract]) => {
