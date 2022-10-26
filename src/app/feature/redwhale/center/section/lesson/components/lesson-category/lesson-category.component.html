@@ -53,7 +53,7 @@
         </ng-template>
     
         <ng-template #item_done>
-            <div class="l-lesson-card" [dragula]="DragulaLesson" [(dragulaModel)]="items">
+            <div class="l-lesson-card">
                 <gl-lesson-card
                     *ngFor = "let item of items"
                     [categItem] = "item"
