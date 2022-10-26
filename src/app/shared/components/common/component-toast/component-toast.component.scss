@@ -1,0 +1,46 @@
+* {
+	padding: 0;
+	margin: 0;
+	text-align: initial;
+}
+
+.rw-toast {
+	display: none;
+	bottom: 60px;
+	min-height: 25px;
+	padding: 10.5px 50px 10.5px 13px;
+	border-radius: 5px;
+	background-color: var(--font-color);
+	opacity: 0;
+	transition: opacity 0.3s cubic-bezier(0.25, 0.8, 0.25, 0.8);
+	-moz-transition: opacity 0.3s cubic-bezier(0.25, 0.8, 0.25, 0.8);
+	-webkit-transition: opacity 0.3s cubic-bezier(0.25, 0.8, 0.25, 0.8);
+	-o-transition: opacity 0.3s cubic-bezier(0.25, 0.8, 0.25, 0.8);
+	z-index: 2000;
+
+	width: 313px;
+	@media (min-width: 1920px) {
+		width: 388px;
+	}
+
+	.rw-typo-bodytext2 {
+		font-weight: 700;
+		color: var(--white);
+	}
+
+	.close-icon {
+		position: absolute;
+		right: 10px;
+		border-radius: 18px;
+		background-image: url("/assets/icons/etc/close_white.svg");
+		background-size: contain;
+		background-repeat: no-repeat;
+		width: 24px;
+		height: 24px;
+		cursor: pointer;
+	}
+}
+
+.rw-toast-show {
+	opacity: 1;
+}

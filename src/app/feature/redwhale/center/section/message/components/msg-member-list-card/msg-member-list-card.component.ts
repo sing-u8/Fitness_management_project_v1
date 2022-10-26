@@ -12,6 +12,7 @@ import { CenterUser } from '@schemas/center-user'
 export class MsgMemberListCardComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy {
     @Input() cardItem: { user: CenterUser; selected: boolean }
     @Input() search: string
+    @Input() includeAd: boolean
 
     public doHide = false
     public searchSubject = new Subject<string>()

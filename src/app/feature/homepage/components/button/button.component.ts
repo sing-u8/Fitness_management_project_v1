@@ -41,7 +41,6 @@ export class ButtonComponent implements OnInit, OnChanges, AfterViewChecked, Aft
         if (changes['disabled'] && !changes['disabled'].firstChange) {
             if (changes['disabled'].previousValue != changes['disabled'].currentValue) {
                 this.changed = true
-                console.log('button is disabled : ', this.isDisabled)
             }
         }
     }

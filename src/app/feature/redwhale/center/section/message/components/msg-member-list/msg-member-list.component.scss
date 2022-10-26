@@ -1,16 +1,21 @@
 * {
-    padding: 0px;
-    margin: 0px;
+    padding: 0;
+    margin: 0;
     text-align: initial;
 }
 
 // 이 컴포넌트의 부모 태그는 position : relative로 설정되어야함.
 section.l-member-list {
     width: 100%;
-    min-width: 290px;
+    min-width: 333px;
     height: 100%;
     display: flex;
     flex-direction: column;
+
+    @media (min-width: 1920px) {
+        min-width: 408px;
+    }
+
 
     .member-list-header {
         display: flex;
@@ -32,9 +37,10 @@ section.l-member-list {
         flex-direction: column;
         justify-content: flex-start;
         background-color: var(--white);
-        box-shadow: 0px 0px 10px #b5b5b51c;
+        box-shadow: 0 0 10px #b5b5b51c;
         border-radius: 5px;
         height: 660px;
+        position: relative;
 
         .l-input {
             margin: 20px 20px 5px;
@@ -95,10 +101,17 @@ section.l-member-list {
             //height: calc(100% - 88px);
             padding: 8px 14px;
             height: calc(100% - 135px);
+            position: relative;
 
             .l-empty-search {
                 height: 100%;
             }
+        }
+
+        rw-component-toast {
+            position: absolute;
+            bottom: 10px;
+            left: 8px;
         }
     }
 }

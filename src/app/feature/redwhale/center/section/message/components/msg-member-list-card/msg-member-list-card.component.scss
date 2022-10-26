@@ -34,5 +34,25 @@
     }
   }
 
-  .card-right {}
+  .card-right {
+    .receive-ad-block {
+      display: flex;
+      align-items: center;
+
+      font-weight: 700;
+      font-size: 12px;
+      line-height: 17px;
+      text-align: right;
+      letter-spacing: -0.144px;
+      color: #606060;
+      .ad-block-icon {
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-image: url("/assets/icons/etc/unavailable_darkgrey.svg");
+        width: 18px;
+        height: 18px;
+        margin-top: 1px;
+      }
+    }
+  }
 }

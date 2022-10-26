@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, OnDestroy, EventEmitter } from '@angular/core'
+import { Component, OnInit, Input, Output, OnDestroy, EventEmitter, OnChanges, SimpleChanges } from '@angular/core'
 import { FormBuilder, FormControl, ValidationErrors, AsyncValidatorFn, AbstractControl } from '@angular/forms'
 
 import _ from 'lodash'
@@ -28,13 +28,14 @@ import * as SMSActions from '@centerStore/actions/sec.sms.actions'
     templateUrl: './msg-member-list.component.html',
     styleUrls: ['./msg-member-list.component.scss'],
 })
-export class MsgMemberListComponent implements OnInit, OnDestroy {
+export class MsgMemberListComponent implements OnInit, OnDestroy, OnChanges {
     @Input() usersLists: FromSMS.UsersLists = _.cloneDeep(FromSMS.UsersListInit)
     @Input() searchedUsersLists: FromSMS.UsersLists = _.cloneDeep(FromSMS.UsersListInit)
     @Input() usersSelectCateg: FromSMS.UsersSelectCateg = _.cloneDeep(FromSMS.UsersSelectCategInit)
     @Input() selectedUserList: FromSMS.UserListSelect = _.cloneDeep(FromSMS.UserListSelectInit)
     @Input() selectedUserListsSelected = 0
     @Input() isLoading: Loading = 'idle'
+    @Input() includeAd: boolean
 
     public userSearchInput: FormControl
     public userSearchInput$_: string
@@ -65,7 +66,23 @@ export class MsgMemberListComponent implements OnInit, OnDestroy {
     public center: Center
 
     ngOnInit(): void {}
+    ngOnChanges(changes: SimpleChanges) {
+        if (changes['includeAd'] && !changes['includeAd'].firstChange && changes['includeAd'].currentValue == true) {
+            this.openAdToast()
+        }
+    }
+
     ngOnDestroy() {}
+
+    public adToastText = `광고성 문자 전송 시에 한해, 광고성 문자 수신을
+                거부한 회원은 선택하실 수 없어요.`
+    public adToastShow = false
+    closeAdToast() {
+        this.adToastShow = false
+    }
+    openAdToast() {
+        this.adToastShow = true
+    }
 
     onCardClick(selected: boolean, index: number) {
         this.nxStore.dispatch(
