@@ -25,6 +25,7 @@ import { drawerSelector, scheduleIsResetSelector } from '@appStore/selectors'
 import { closeDrawer, setScheduleDrawerIsReset } from '@appStore/actions/drawer.action'
 import { showToast } from '@appStore/actions/toast.action'
 import * as CenterCommonSelector from '@centerStore/selectors/center.common.selector'
+import { MultiSelect } from '@schemas/components/multi-select'
 
 @Component({
     selector: 'general-schedule',
@@ -39,10 +40,10 @@ export class GeneralScheduleComponent implements OnInit, AfterViewInit, OnDestro
 
     public titleTime$ = this.nxStore.select(ScheduleSelector.taskTitleTime)
 
-    public staffSelect_list: Array<{ name: string; value: CenterUser }> = []
+    // - // assignee var
+    public multiStaffSelect_list: MultiSelect = []
+    public multiStaffSelectValue: MultiSelect = []
     public instructorList: Array<ScheduleReducer.InstructorType> = []
-
-    public StaffSelectValue: { name: string; value: CenterUser } = { name: undefined, value: undefined }
 
     public planTexts = {
         planTitle: '',
@@ -194,8 +195,9 @@ export class GeneralScheduleComponent implements OnInit, AfterViewInit, OnDestro
 
     registerPlan(fn?: () => void) {
         let reqBody: CreateCalendarTaskReqBody = undefined
-        const selectedStaff = _.find(this.instructorList, (item) => {
-            return this.StaffSelectValue.value.id == item.instructor.calendar_user.id
+        const selectedStaffs = _.filter(this.instructorList, (item) => {
+            const idx = _.findIndex(this.multiStaffSelectValue, (mi) => mi.value.id == item.instructor.calendar_user.id)
+            return idx != -1
         })
         console.log('this.timepick.startTime : ', this.timepick.startTime, this.timepick.endTime)
         if (this.dayRepeatSwitch) {
@@ -209,7 +211,7 @@ export class GeneralScheduleComponent implements OnInit, AfterViewInit, OnDestro
                 end_time: this.timepick.endTime.slice(0, 5),
                 memo: this.planTexts.planDetail,
                 repeat: true,
-                responsibility_user_id: selectedStaff.instructor.calendar_user.id,
+                responsibility_user_id: selectedStaffs[0].instructor.calendar_user.id,
                 repeat_day_of_the_week: this.repeatOfWeek,
                 repeat_cycle_unit_code: 'calendar_task_group_repeat_cycle_unit_week',
                 repeat_cycle: 1,
@@ -227,22 +229,25 @@ export class GeneralScheduleComponent implements OnInit, AfterViewInit, OnDestro
                 end_time: this.timepick.endTime.slice(0, 5),
                 memo: this.planTexts.planDetail,
                 repeat: false,
-                responsibility_user_id: selectedStaff.instructor.calendar_user.id,
+                responsibility_user_id: selectedStaffs[0].instructor.calendar_user.id,
             }
         }
 
-        this.centerCalendarService.createCalendarTask(this.center.id, selectedStaff.instructor.id, reqBody).subscribe({
-            next: (_) => {
-                fn ? fn() : null
-                console.log('general register reqbody: ', reqBody)
-                this.nxStore.dispatch(ScheduleActions.setIsScheduleEventChanged({ isScheduleEventChanged: true }))
-                this.closeDrawer()
-                this.nxStore.dispatch(showToast({ text: `'${this.planTexts.planTitle}' 기타 일정이 추가되었습니다.` }))
-            },
-            error: (err) => {
-                console.log('gymCalendarService.createTask err: ', err)
-            },
-        })
+        this.centerCalendarService
+            .createCalendarTask(this.center.id, selectedStaffs[0].instructor.id, reqBody)
+            .subscribe({
+                next: (_) => {
+                    fn ? fn() : null
+                    this.nxStore.dispatch(ScheduleActions.setIsScheduleEventChanged({ isScheduleEventChanged: true }))
+                    this.closeDrawer()
+                    this.nxStore.dispatch(
+                        showToast({ text: `'${this.planTexts.planTitle}' 기타 일정이 추가되었습니다.` })
+                    )
+                },
+                error: (err) => {
+                    console.log('gymCalendarService.createTask err: ', err)
+                },
+            })
     }
 
     closeDrawer() {
@@ -252,7 +257,7 @@ export class GeneralScheduleComponent implements OnInit, AfterViewInit, OnDestro
     initStaffList(instructorList: ScheduleReducer.InstructorType[], schedulingInstructor: Calendar) {
         this.center = this.storageService.getCenter()
         this.user = this.storageService.getUser()
-        this.staffSelect_list = []
+        this.multiStaffSelect_list = []
 
         const managers = instructorList.map((v) => v.instructor.calendar_user)
         // managers.forEach((v) => {
@@ -267,21 +272,22 @@ export class GeneralScheduleComponent implements OnInit, AfterViewInit, OnDestro
             .pipe(take(1))
             .subscribe((instructors) => {
                 const centerInstructorList = _.cloneDeep(instructors)
-                this.staffSelect_list = centerInstructorList
+                this.multiStaffSelect_list = centerInstructorList
                     .filter((ci) => -1 != instructorList.findIndex((v) => ci.id == v.instructor.calendar_user.id))
                     .map((value) => ({
                         name: value.center_user_name,
                         value: value,
+                        checked: false,
                     }))
             })
 
         managers.find((v) => {
             if (schedulingInstructor != undefined && schedulingInstructor.calendar_user.id == v.id) {
-                this.StaffSelectValue = { name: v.center_user_name ?? v.name, value: v }
+                this.multiStaffSelectValue = [{ name: v.center_user_name, value: v, checked: true }]
                 this.nxStore.dispatch(ScheduleActions.setSchedulingInstructor({ schedulingInstructor: undefined }))
                 return true
             } else if (schedulingInstructor == undefined && this.user.id == v.id) {
-                this.StaffSelectValue = { name: v.center_user_name ?? v.name, value: v }
+                this.multiStaffSelectValue = [{ name: v.center_user_name, value: v, checked: true }]
                 return true
             }
             return false

@@ -29,6 +29,7 @@ import * as CenterCommonSelector from '@centerStore/selectors/center.common.sele
 import * as ScheduleActions from '@centerStore/actions/sec.schedule.actions'
 import { closeDrawer } from '@appStore/actions/drawer.action'
 import { showToast } from '@appStore/actions/toast.action'
+import { MultiSelect } from '@schemas/components/multi-select'
 
 dayjs.extend(isSameOrBefor)
 
@@ -118,9 +119,10 @@ export class ModifyLessonScheduleComponent implements OnInit, OnDestroy, AfterVi
     onColorClick(color) {
         this.color = color
     }
+
     // - // assignee var
-    public staffSelect_list: Array<{ name: string; value: CenterUser }> = []
-    public StaffSelectValue: { name: string; value: CenterUser } = { name: 'test', value: undefined }
+    public multiStaffSelect_list: MultiSelect = []
+    public multiStaffSelectValue: MultiSelect = []
 
     public instructorList: Array<ScheduleReducer.InstructorType> = []
 
@@ -172,8 +174,9 @@ export class ModifyLessonScheduleComponent implements OnInit, OnDestroy, AfterVi
     // ------------------------------------------register lesson task------------------------------------------------
     modifyLessonTask(fn?: () => void) {
         let reqBody: UpdateCalendarTaskReqBody = undefined
-        const selectedStaff = _.find(this.instructorList, (item) => {
-            return this.StaffSelectValue.value.id == item.instructor.calendar_user.id
+        const selectedStaffs = _.filter(this.instructorList, (item) => {
+            const idx = _.findIndex(this.multiStaffSelectValue, (mi) => mi.value.id == item.instructor.calendar_user.id)
+            return idx != -1
         })
         console.log(
             'dayRepeatSwitch: ',
@@ -200,7 +203,7 @@ export class ModifyLessonScheduleComponent implements OnInit, OnDestroy, AfterVi
                 repeat_cycle: 1,
                 repeat_termination_type_code: 'calendar_task_group_repeat_termination_type_date',
                 repeat_end_date: dayjs(this.repeatDatepick.endDate).format('YYYY-MM-DD'),
-                responsibility_user_id: selectedStaff.instructor.calendar_user.id,
+                responsibility_user_id: selectedStaffs[0].instructor.calendar_user.id,
                 class: {
                     name: this.lessonEvent.class.name,
                     category_name: this.lessonEvent.class.category_name,
@@ -212,7 +215,7 @@ export class ModifyLessonScheduleComponent implements OnInit, OnDestroy, AfterVi
                     start_booking_until: this.reserveSettingInputs.reservation_start,
                     end_booking_before: this.reserveSettingInputs.reservation_end,
                     cancel_booking_before: this.reserveSettingInputs.reservation_cancel_end,
-                    instructor_user_ids: [selectedStaff.instructor.calendar_user.id],
+                    instructor_user_ids: selectedStaffs.map((v) => v.instructor.calendar_user.id),
                 },
             }
         } else {
@@ -225,7 +228,7 @@ export class ModifyLessonScheduleComponent implements OnInit, OnDestroy, AfterVi
                 end_time: this.scheduleHelperService.getLessonEndTime(this.timepick, this.lessonEvent.class.duration),
                 color: this.lessonEvent.color,
                 memo: this.planDetailInputs.detail,
-                responsibility_user_id: selectedStaff.instructor.calendar_user.id,
+                responsibility_user_id: selectedStaffs[0].instructor.calendar_user.id,
                 class: {
                     name: this.lessonEvent.class.name,
                     category_name: this.lessonEvent.class.category_name,
@@ -237,18 +240,17 @@ export class ModifyLessonScheduleComponent implements OnInit, OnDestroy, AfterVi
                     start_booking_until: this.reserveSettingInputs.reservation_start,
                     end_booking_before: this.reserveSettingInputs.reservation_end,
                     cancel_booking_before: this.reserveSettingInputs.reservation_cancel_end,
-                    instructor_user_ids: [selectedStaff.instructor.calendar_user.id],
+                    instructor_user_ids: selectedStaffs.map((v) => v.instructor.calendar_user.id),
                 },
             }
         }
 
-        const calId = this.instructorList.find((v) => v.instructor.calendar_user.id == this.StaffSelectValue.value.id)
-            .instructor.id
+        const calIds = selectedStaffs.map((v) => v.instructor.id)
 
         this.nxStore.dispatch(
             ScheduleActions.startUpdateCalendarTask({
                 centerId: this.center.id,
-                calendarId: calId,
+                calendarId: calIds[0],
                 taskId: this.lessonEvent.id,
                 reqBody: reqBody,
                 mode: this.lessonRepeatOption,
@@ -383,11 +385,12 @@ export class ModifyLessonScheduleComponent implements OnInit, OnDestroy, AfterVi
             .pipe(take(1))
             .subscribe((instructors) => {
                 const centerInstructorList = _.cloneDeep(instructors)
-                this.staffSelect_list = centerInstructorList
+                this.multiStaffSelect_list = centerInstructorList
                     .filter((ci) => -1 != instructorList.findIndex((v) => ci.id == v.instructor.calendar_user.id))
                     .map((value) => ({
                         name: value.center_user_name,
                         value: value,
+                        checked: false,
                     }))
             })
     }
@@ -453,10 +456,14 @@ export class ModifyLessonScheduleComponent implements OnInit, OnDestroy, AfterVi
                 this.isAlreadyRepeat = false
                 this.lessonEvent = lessonEvent
 
-                this.StaffSelectValue = {
-                    name: lessonEvent.responsibility.center_user_name,
-                    value: lessonEvent.responsibility,
-                }
+                // !!! 수정 필요 !!!
+                this.multiStaffSelectValue = [
+                    {
+                        name: lessonEvent.responsibility.center_user_name,
+                        value: lessonEvent.responsibility,
+                        checked: true,
+                    },
+                ]
                 this.initStaffList(instructors)
 
                 this.planDetailInputs = {

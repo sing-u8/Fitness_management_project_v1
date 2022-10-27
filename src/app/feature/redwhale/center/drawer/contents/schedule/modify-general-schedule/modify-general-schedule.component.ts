@@ -23,6 +23,7 @@ import * as CenterCommonSelector from '@centerStore/selectors/center.common.sele
 import * as ScheduleActions from '@centerStore/actions/sec.schedule.actions'
 import { closeDrawer } from '@appStore/actions/drawer.action'
 import { showToast } from '@appStore/actions/toast.action'
+import { MultiSelect } from '@schemas/components/multi-select'
 
 @Component({
     selector: 'modify-general-schedule',
@@ -48,10 +49,10 @@ export class ModifyGeneralScheduleComponent implements OnInit, AfterViewInit, On
 
     public titleTime: string
 
-    public staffSelect_list: Array<{ name: string; value: CenterUser }> = []
-    public instructorList: Array<ScheduleReducer.InstructorType> = []
+    public multiStaffSelect_list: MultiSelect = []
+    public multiStaffSelectValue: MultiSelect = []
 
-    public StaffSelectValue: { name: string; value: CenterUser } = { name: undefined, value: undefined }
+    public instructorList: Array<ScheduleReducer.InstructorType> = []
 
     public planTexts = {
         planTitle: '',
@@ -147,10 +148,13 @@ export class ModifyGeneralScheduleComponent implements OnInit, AfterViewInit, On
 
                 this.initStaffList(instructors)
 
-                this.StaffSelectValue = {
-                    name: event.responsibility.center_user_name ?? event.responsibility.name,
-                    value: event.responsibility,
-                }
+                this.multiStaffSelectValue = [
+                    {
+                        name: event.responsibility.center_user_name ?? event.responsibility.name,
+                        value: event.responsibility,
+                        checked: true,
+                    },
+                ]
 
                 if (event.calendar_task_group_id) {
                     this.dayRepeatSwitch = true
@@ -191,12 +195,15 @@ export class ModifyGeneralScheduleComponent implements OnInit, AfterViewInit, On
 
     modifyPlan(fn?: () => void) {
         let reqBody: UpdateCalendarTaskReqBody = undefined
-        const calId = this.instructorList.find((v) => v.instructor.calendar_user.id == this.StaffSelectValue.value.id)
-            .instructor.id
+        const selectedStaffs = _.filter(this.instructorList, (item) => {
+            const idx = _.findIndex(this.multiStaffSelectValue, (mi) => mi.value.id == item.instructor.calendar_user.id)
+            return idx != -1
+        })
+        const calIds = selectedStaffs.map((v) => v.instructor.id)
 
         if (this.dayRepeatSwitch && this.generalRepeatOption != 'one') {
             reqBody = {
-                responsibility_user_id: this.StaffSelectValue.value.id,
+                responsibility_user_id: selectedStaffs[0].instructor.calendar_user.id,
                 name: this.planTexts.planTitle,
                 start_date: dayjs(this.repeatDatepick.startDate).format('YYYY-MM-DD'),
                 end_date: dayjs(this.repeatDatepick.startDate).format('YYYY-MM-DD'),
@@ -212,7 +219,7 @@ export class ModifyGeneralScheduleComponent implements OnInit, AfterViewInit, On
             }
         } else {
             reqBody = {
-                responsibility_user_id: this.StaffSelectValue.value.id,
+                responsibility_user_id: selectedStaffs[0].instructor.calendar_user.id,
                 name: this.planTexts.planTitle,
                 start_date: dayjs(this.datepick.date).format('YYYY-MM-DD'),
                 end_date: dayjs(this.datepick.date).format('YYYY-MM-DD'),
@@ -225,7 +232,7 @@ export class ModifyGeneralScheduleComponent implements OnInit, AfterViewInit, On
         this.nxStore.dispatch(
             ScheduleActions.startUpdateCalendarTask({
                 centerId: this.center.id,
-                calendarId: calId,
+                calendarId: calIds[0],
                 taskId: this.generalEvent.id,
                 reqBody: reqBody,
                 mode: this.generalRepeatOption,
@@ -256,11 +263,12 @@ export class ModifyGeneralScheduleComponent implements OnInit, AfterViewInit, On
             .pipe(take(1))
             .subscribe((instructors) => {
                 const centerInstructorList = _.cloneDeep(instructors)
-                this.staffSelect_list = centerInstructorList
+                this.multiStaffSelect_list = centerInstructorList
                     .filter((ci) => -1 != instructorList.findIndex((v) => ci.id == v.instructor.calendar_user.id))
                     .map((value) => ({
                         name: value.center_user_name,
                         value: value,
+                        checked: false,
                     }))
             })
     }

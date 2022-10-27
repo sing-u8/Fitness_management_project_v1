@@ -67,12 +67,12 @@
                 
                 <div class="assignee">
                     <p class="small-title">담당자</p>
-                    <rw-user-select
-                        [width] = "'285'"
-                        [height] = "'48'"
-                        [items] = "staffSelect_list"
-                        [(ngModel)] = "StaffSelectValue"
-                    ></rw-user-select>
+                    <rw-multi-user-select
+                        [width]="'285'"
+                        [height]="'48'"
+                        [items]="multiStaffSelect_list"
+                        [(ngModel)]="multiStaffSelectValue"
+                    ></rw-multi-user-select>
                 </div>
                 
                 <div class="capacity">
