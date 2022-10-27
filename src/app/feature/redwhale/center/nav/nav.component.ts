@@ -4,12 +4,15 @@ import { Router } from '@angular/router'
 import { takeUntil } from 'rxjs/operators'
 import { Subject, Observable, Subscription } from 'rxjs'
 
-import { GlobalService } from '@services/global.service'
 import { StorageService } from '@services/storage.service'
 import { CenterService } from '@services/center.service'
 
 import { Center } from '@schemas/center'
 import { User } from '@schemas/user'
+
+import { PermissionObj } from '@centerStore/reducers/center.common.reducer'
+import * as CenterCommonSelector from '@centerStore/selectors/center.common.selector'
+import { select, Store } from '@ngrx/store'
 
 @Component({
     selector: 'rw-centerNav',
@@ -31,12 +34,7 @@ export class NavComponent implements OnInit, OnDestroy {
     public isGymChanged: Observable<boolean>
     public centerChangedSubscription: Subscription
 
-    constructor(
-        private router: Router,
-        private storageService: StorageService,
-        private centerService: CenterService,
-        private globalService: GlobalService
-    ) {
+    constructor(private router: Router, private storageService: StorageService, private centerService: CenterService) {
         this.center = this.storageService.getCenter()
         this.user = this.storageService.getUser()
         this.getCenterAddress()
@@ -48,15 +46,15 @@ export class NavComponent implements OnInit, OnDestroy {
                 this.isLoading = true
             })
 
-        this.centerChangedSubscription = this.globalService
-            .selectIsGymChangedForNav()
-            .subscribe((centerDataChanged) => {
-                if (centerDataChanged == true) {
-                    this.center = this.storageService.getCenter()
-                    this.centerApiData = this.center
-                    this.globalService.setIsGymChangedForNav(false)
-                }
-            })
+        // this.centerChangedSubscription = this.globalService
+        //     .selectIsGymChangedForNav()
+        //     .subscribe((centerDataChanged) => {
+        //         if (centerDataChanged == true) {
+        //             this.center = this.storageService.getCenter()
+        //             this.centerApiData = this.center
+        //             this.globalService.setIsGymChangedForNav(false)
+        //         }
+        //     })
     }
 
     ngOnInit(): void {}
