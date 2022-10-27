@@ -370,7 +370,7 @@
     </div>
 
     <div
-        *ngIf="centerApiData?.role_code != 'member'"
+        *ngIf="showNavs.sale"
         class="menu d-flex flex-column justify-content-center align-items-center"
         [routerLink]="['/', address, 'sale']"
         routerLinkActive="selected"

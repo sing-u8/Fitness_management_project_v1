@@ -6,6 +6,7 @@ import { CommunityComponent } from './section/community/community.component'
 import { TouchPadComponent } from './touch-pad/touch-pad.component'
 
 import { CenterMemberBlockGuard } from '@guards/center-member-block.guard'
+import { CenterSaleGuard } from '@guards/center-sale.guard'
 
 const routes: Routes = [
     {
@@ -41,7 +42,7 @@ const routes: Routes = [
             { path: 'community', component: CommunityComponent },
             {
                 path: 'sale',
-                canActivate: [CenterMemberBlockGuard],
+                canActivate: [CenterMemberBlockGuard, CenterSaleGuard],
                 loadChildren: () => import('./section/sale/sale.module').then((m) => m.SaleModule),
             },
             {

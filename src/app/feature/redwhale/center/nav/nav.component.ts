@@ -3,14 +3,15 @@ import { Router } from '@angular/router'
 
 import { takeUntil } from 'rxjs/operators'
 import { Subject, Observable, Subscription } from 'rxjs'
+import _ from 'lodash'
 
 import { StorageService } from '@services/storage.service'
 import { CenterService } from '@services/center.service'
 
-import { Center } from '@schemas/center'
+import { Center, RoleCode } from '@schemas/center'
 import { User } from '@schemas/user'
 
-import { PermissionObj } from '@centerStore/reducers/center.common.reducer'
+import { Permission } from '@centerStore/reducers/center.common.reducer'
 import * as CenterCommonSelector from '@centerStore/selectors/center.common.selector'
 import { select, Store } from '@ngrx/store'
 
@@ -31,11 +32,49 @@ export class NavComponent implements OnInit, OnDestroy {
 
     public isLoading = false
 
-    public isGymChanged: Observable<boolean>
-    public centerChangedSubscription: Subscription
+    public permissions: Permission = {
+        administrator: [],
+        instructor: [],
+    }
+    public showNavs = {
+        sale: true,
+    }
+    updateShowNavs(permissions: Permission, roleCode: RoleCode) {
+        switch (roleCode) {
+            case 'owner':
+                this.showNavs.sale = true
+                break
+            case 'instructor':
+            case 'administrator':
+                this.showNavs.sale = this.permissions[roleCode]
+                    .find((v) => v.code == 'stats_sales')
+                    .items.find((vi) => vi.code == 'read_stats_sales').approved
+                break
+            default:
+                this.showNavs.sale = false
+                break
+        }
+    }
 
-    constructor(private router: Router, private storageService: StorageService, private centerService: CenterService) {
-        this.center = this.storageService.getCenter()
+    constructor(
+        private nxStore: Store,
+        private router: Router,
+        private storageService: StorageService,
+        private centerService: CenterService
+    ) {
+        this.nxStore.pipe(select(CenterCommonSelector.curCenter), takeUntil(this.unSubscriber$)).subscribe((cc) => {
+            this.center = cc
+        })
+        this.nxStore
+            .pipe(select(CenterCommonSelector.centerPermission), takeUntil(this.unSubscriber$))
+            .subscribe((cp) => {
+                this.permissions = {
+                    administrator: cp.administrator,
+                    instructor: cp.instructor,
+                }
+                this.updateShowNavs(this.permissions, this.center.role_code)
+            })
+
         this.user = this.storageService.getUser()
         this.getCenterAddress()
         this.centerService
@@ -45,16 +84,6 @@ export class NavComponent implements OnInit, OnDestroy {
                 this.centerApiData = centerData
                 this.isLoading = true
             })
-
-        // this.centerChangedSubscription = this.globalService
-        //     .selectIsGymChangedForNav()
-        //     .subscribe((centerDataChanged) => {
-        //         if (centerDataChanged == true) {
-        //             this.center = this.storageService.getCenter()
-        //             this.centerApiData = this.center
-        //             this.globalService.setIsGymChangedForNav(false)
-        //         }
-        //     })
     }
 
     ngOnInit(): void {}
