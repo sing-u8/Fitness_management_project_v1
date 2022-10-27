@@ -10,8 +10,10 @@ export interface Center {
     timezone: string
     picture: string
     background: string
-    role_code: string // owner, member
+    role_code: RoleCode
     role_name: string //
     permissions: Array<string> // 권한 코드 리스트
     contract_terms: string
 }
+
+export type RoleCode = 'owner' | 'member' | 'administrator' | 'instructor'
