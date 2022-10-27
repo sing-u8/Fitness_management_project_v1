@@ -6,7 +6,6 @@ import { throwError, forkJoin, Subject } from 'rxjs'
 import { map, catchError, takeUntil } from 'rxjs/operators'
 
 import { StorageService } from '@services/storage.service'
-import { GlobalService } from '@services/global.service'
 import { CenterTouchpadService } from '@services/center-touchpad.service'
 import { CenterUsersLockerService } from '@services/center-users-locker.service.service'
 import { CenterUsersMembershipService } from '@services/center-users-membership.service'
@@ -51,7 +50,6 @@ export class TouchPadComponent implements OnInit, OnDestroy {
 
     constructor(
         private storageService: StorageService,
-        private globalService: GlobalService,
         private spinner: NgxSpinnerService,
         private centerTouchPadService: CenterTouchpadService,
         private nxStore: Store,

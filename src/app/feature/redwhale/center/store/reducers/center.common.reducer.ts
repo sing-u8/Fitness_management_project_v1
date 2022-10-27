@@ -7,7 +7,6 @@ import { CenterUser } from '@schemas/center-user'
 import { PermissionCategory } from '@schemas/permission-category'
 
 import * as CenterCommonActions from '../actions/center.common.actions'
-import * as CommunitydActions from '@centerStore/actions/sec.community.actions'
 
 export interface PermissionObj {
     visible: boolean

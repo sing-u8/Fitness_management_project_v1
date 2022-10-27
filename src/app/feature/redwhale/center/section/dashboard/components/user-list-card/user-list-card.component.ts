@@ -1,16 +1,18 @@
 import { Component, OnInit, Input, AfterViewInit, Output, EventEmitter, OnChanges, OnDestroy } from '@angular/core'
-import { Subject, Subscription } from 'rxjs'
-import { distinctUntilChanged, debounceTime } from 'rxjs/operators'
+import { CenterUser } from '@schemas/center-user'
 
 import dayjs from 'dayjs'
+import _ from 'lodash'
 
-import { GlobalService } from '@services/global.service'
 import { TimeService } from '@services/helper/time.service'
 
+// ngrx
+import { Store } from '@ngrx/store'
+import { showToast } from '@appStore/actions/toast.action'
 import * as FromDashboardReducer from '@centerStore/reducers/sec.dashboard.reducer'
 
-import { CenterUser } from '@schemas/center-user'
-import _ from 'lodash' // !! 나중에 다른 스키마로 수정해야할 필요가 있음
+import { Subject, Subscription } from 'rxjs'
+import { distinctUntilChanged, debounceTime } from 'rxjs/operators'
 
 @Component({
     selector: 'db-user-list-card',
@@ -39,14 +41,14 @@ export class UserListCardComponent implements OnInit, AfterViewInit, OnChanges, 
 
     toggleHold() {
         if (this.holdNumber >= 500 && !this.cardItem.holdSelected) {
-            this.globalService.showToast('일부 회원 홀딩 시, 최대 500명까지 선택하실 수 있어요.')
+            this.nxStore.dispatch(showToast({ text: '일부 회원 홀딩 시, 최대 500명까지 선택하실 수 있어요.' }))
         } else {
             // this.cardItem.holdSelected = !this.cardItem.holdSelected
             this.onHoldClick.emit(this.cardItem.holdSelected)
         }
     }
 
-    constructor(private globalService: GlobalService, private timeService: TimeService) {
+    constructor(private timeService: TimeService, private nxStore: Store) {
         this.searchSubscription = this.searchSubject
             .asObservable()
             .pipe(distinctUntilChanged())

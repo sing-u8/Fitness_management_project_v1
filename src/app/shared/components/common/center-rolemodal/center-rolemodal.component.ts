@@ -12,16 +12,12 @@ import {
     ViewChild,
 } from '@angular/core'
 
-import _ from 'lodash'
-
 import { ClickEmitterType } from '@schemas/components/button'
 import { Center } from '@schemas/center'
 import { StorageService } from '@services/storage.service'
-import { CenterRolePermissionService } from '@services/center-role-permission.service'
 
 import { setCenterPermissionModal, startUpdateCenterPermission } from '@centerStore/actions/center.common.actions'
 import { PermissionObj } from '@centerStore/reducers/center.common.reducer'
-import { RoleModal } from '@schemas/store/app/modal.interface'
 import { Store } from '@ngrx/store'
 
 @Component({
