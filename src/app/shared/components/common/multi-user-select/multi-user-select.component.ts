@@ -12,12 +12,10 @@ import {
     EventEmitter,
 } from '@angular/core'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
-import { CenterUser } from '@schemas/center-user'
+
+import { MultiSelectValue, MultiSelect } from '@schemas/components/multi-select'
 
 import _ from 'lodash'
-
-type MultiSelectValue = { name: string; value: CenterUser; checked: boolean; disabled?: boolean }
-type MultiSelect = Array<MultiSelectValue>
 
 @Component({
     selector: 'rw-multi-user-select',
@@ -41,7 +39,7 @@ export class MultiUserSelectComponent implements AfterViewInit, ControlValueAcce
     @Input() unCheckMode = false
     @Input() unCheckName = '담당자 없음'
 
-    @Input() noSelectname = '담당자 없음'
+    @Input() noSelectName = '담당자 없음'
 
     @Output() onSelectChange = new EventEmitter<any>()
 
@@ -97,32 +95,52 @@ export class MultiUserSelectComponent implements AfterViewInit, ControlValueAcce
     }
 
     // !!
-    onSelect(item) {
+    onSelect(item: MultiSelectValue, idx: number) {
         if (item.disabled) return
 
-        this.close()
+        this.items[idx].checked = !this.items[idx].checked
+
         this.onChanged(item)
         this.onSelectChange.emit(item)
     }
 
-    onChange = (_) => {}
+    onChange = (value: MultiSelectValue) => {
+        if (this.value.length > 0) {
+            if (!value.checked) {
+                _.remove(this.value, (v) => v.value.id == value.value.id)
+            } else {
+                this.value.push(value)
+            }
+        } else {
+            this.value.push(value)
+        }
+
+        this.setIsAllChecked()
+        this.getSelectedValueSummary()
+    }
     onTouched = (_) => {}
 
-    writeValue(value: any): void {
+    writeValue(value: MultiSelect): void {
+        _.forEach(value, (v) => {
+            const idx = this.items.findIndex((vi) => vi.value.id == v.value.id && v.checked)
+            if (idx != -1) {
+                this.items[idx].checked = true
+            }
+        })
+        this.setIsAllChecked()
+        this.getSelectedValueSummary()
         this.value = value
     }
 
     registerOnChange(fn: any): void {
-        this.onChange = fn
+        // this.onChange = fn
     }
 
     registerOnTouched(fn: any): void {
         this.onTouched = fn
     }
 
-    onChanged(value: any) {
-        this.value = value
-
+    onChanged(value: MultiSelectValue) {
         this.onChange(value)
     }
 
@@ -136,5 +154,36 @@ export class MultiUserSelectComponent implements AfterViewInit, ControlValueAcce
             value: checkValues[0].value,
             checked: true,
         }
+    }
+
+    // on click all
+    public isAllChecked = false
+    setIsAllChecked() {
+        this.isAllChecked = this.checkIsAllChecked()
+    }
+
+    checkIsAllChecked() {
+        return this.items.every((v) => v.checked)
+    }
+    onSelectAllButtonClick() {
+        if (this.checkIsAllChecked()) {
+            this.items.forEach((v, i) => {
+                this.items[i].checked = false
+            })
+        } else {
+            this.items.forEach((v, i) => {
+                this.items[i].checked = true
+            })
+        }
+        this.getSelectedValueSummary()
+        this.setIsAllChecked()
+    }
+
+    onSelectUnCheckButtonClick() {
+        this.items.forEach((v, i) => {
+            this.items[i].checked = false
+        })
+        this.selectedValue = undefined
+        this.setIsAllChecked()
     }
 }

@@ -16,7 +16,7 @@
                 fontSize="10"
             ></rw-avatar>
         </div>
-        <span class="text flex-fill">{{ selectedValue?.name ?? noSelectname }}</span>
+        <span class="text flex-fill">{{ selectedValue?.name ?? noSelectName }}</span>
         <span class="mdi mdi-chevron-down"></span>
     </div>
     <div
@@ -24,23 +24,52 @@
         #itemsElement
         (click)="$event.stopPropagation()"
     >
+        <div class="l-select-all-button">
+            <div
+                *ngIf="unCheckMode"
+                (click)="onSelectUnCheckButtonClick()"
+                class="select-button uncheck-mode"
+                rw-button
+                rwButtonColor="var(--white)"
+            >
+                <img src="assets/icons/etc/check_darkgrey.svg">
+                <span class="rw-typo-bodytext2-bold_darkgrey">{{unCheckName}}</span>
+            </div>
+            <div
+                (click)="onSelectAllButtonClick()"
+                class="select-button"
+                [class.uncheck-mode]="unCheckMode"
+                rw-button
+                rwButtonColor="var(--white)"
+            >
+                <img src="assets/icons/etc/check_darkgrey.svg">
+                <span *ngIf="isAllChecked" class="rw-typo-bodytext2-bold_darkgrey">전체 선택 해제</span>
+                <span *ngIf="!isAllChecked" class="rw-typo-bodytext2-bold_darkgrey">전체 선택</span>
+            </div>
+        </div>
+        
         <div
-            class="item d-flex align-items-center"
-            *ngFor="let item of items"
+            class="item d-flex align-items-center justify-content-between"
+            *ngFor="let item of items; let idx=index"
             [class.active]="item.checked"
             [class.disabled]="item.disabled"
-            (click)="onSelect(item)"
+            (click)="onSelect(item, idx)"
         >
-            <div *ngIf="item.value?.membership_number" class="avatar">
-                <rw-avatar
-                    [image]="item.value.center_user_picture"
-                    [backgroundColor]="item.value.color"
-                    text="{{item.value.center_user_name}}"
-                    size="26"
-                    fontSize="10"
-                ></rw-avatar>
+            <div class="d-flex align-items-center">
+                <div *ngIf="item.value?.membership_number" class="avatar">
+                    <rw-avatar
+                        [image]="item.value.center_user_picture"
+                        [backgroundColor]="item.value.color"
+                        text="{{item.value.center_user_name}}"
+                        size="26"
+                        fontSize="10"
+                    ></rw-avatar>
+                </div>
+                <span class="rw-typo-bodytext0">{{ item.name }}</span>
             </div>
-            <span class="rw-typo-bodytext0">{{ item.name }}</span>
+            <rw-checkbox
+                [checked]="item.checked"
+            ></rw-checkbox>
         </div>
     </div>
 </div>
