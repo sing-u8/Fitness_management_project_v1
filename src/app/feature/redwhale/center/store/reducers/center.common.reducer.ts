@@ -8,10 +8,12 @@ import { PermissionCategory } from '@schemas/permission-category'
 
 import * as CenterCommonActions from '../actions/center.common.actions'
 
-export interface PermissionObj {
-    visible: boolean
+export interface Permission {
     administrator: Array<PermissionCategory>
     instructor: Array<PermissionCategory>
+}
+export interface PermissionObj extends Permission {
+    visible: boolean
 }
 
 export const intialState: State = {
