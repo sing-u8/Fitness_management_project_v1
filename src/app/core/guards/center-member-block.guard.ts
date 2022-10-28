@@ -29,12 +29,5 @@ export class CenterMemberBlockGuard implements CanActivate {
         } else {
             return of(true)
         }
-
-        // if (this.center.role_code == 'member') {
-        //     this.router.navigateByUrl(`/${urls[1]}/community`)
-        //     return false
-        // } else {
-        //     return true
-        // }
     }
 }

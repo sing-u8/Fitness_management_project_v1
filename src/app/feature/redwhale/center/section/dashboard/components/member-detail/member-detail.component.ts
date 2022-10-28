@@ -547,9 +547,13 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
                         )
                         this.nxStore.dispatch(CenterCommonActions.startGetInstructors({ centerId: this.center.id }))
                         this.nxStore.dispatch(CenterCommonActions.startGetMembers({ centerId: this.center.id }))
+                        this.nxStore.dispatch(
+                            CenterCommonActions.startGetCenterPermission({ centerId: this.center.id })
+                        )
                         this.centerService.getCenter(this.center.id).subscribe((center) => {
                             this.storageService.setCenter(center)
                         })
+                        this.nxStore.dispatch(CenterCommonActions.startGetCurCenter({ centerId: this.center.id }))
                         this.dashboardHelperService.refreshUserList(
                             this.center.id,
                             this.curUserData.user,
@@ -578,6 +582,10 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
                         )
                         this.nxStore.dispatch(CenterCommonActions.startGetInstructors({ centerId: this.center.id }))
                         this.nxStore.dispatch(CenterCommonActions.startGetMembers({ centerId: this.center.id }))
+                        this.nxStore.dispatch(
+                            CenterCommonActions.startGetCenterPermission({ centerId: this.center.id })
+                        )
+                        this.nxStore.dispatch(CenterCommonActions.startGetCurCenter({ centerId: this.center.id }))
                         this.dashboardHelperService.refreshUserList(
                             this.center.id,
                             this.curUserData.user,

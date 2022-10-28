@@ -6,6 +6,8 @@ import { RoleCode, PermissionCategory, PermissionCode, PermissionKeys } from '@s
 const FeatureKey = 'Center/Common'
 
 // sync
+export const startGetCurCenter = createAction(`[${FeatureKey}] Start Get Cur Center`, props<{ centerId: string }>())
+export const finishGetCurCenter = createAction(`[${FeatureKey}] Finish Get Cur Center`, props<{ center: Center }>())
 
 export const setCurCenter = createAction(`[${FeatureKey}] Set Cur Center`, props<{ center: Center }>())
 export const setCenterPermissionModal = createAction(

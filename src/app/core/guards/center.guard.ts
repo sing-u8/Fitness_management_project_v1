@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core'
 import { Router, ActivatedRouteSnapshot, RouterStateSnapshot, CanActivate } from '@angular/router'
 import { Observable, of, forkJoin } from 'rxjs'
-import { catchError, map } from 'rxjs/operators'
+import { catchError, map, take } from 'rxjs/operators'
 
 import { Center } from '@schemas/center'
 
@@ -11,6 +11,7 @@ import { StorageService } from '@services/storage.service'
 // ngrx
 import { Store, select } from '@ngrx/store'
 import * as CenterCommonActions from '@centerStore/actions/center.common.actions'
+import { curCenterRefreshed } from '@centerStore/selectors/center.common.selector'
 
 @Injectable({
     providedIn: 'root',
@@ -44,6 +45,12 @@ export class CenterGuard implements CanActivate {
                     this.nxStore.dispatch(CenterCommonActions.startGetInstructors({ centerId: center.id }))
                     this.nxStore.dispatch(CenterCommonActions.startGetMembers({ centerId: center.id }))
                     this.nxStore.dispatch(CenterCommonActions.startGetCenterPermission({ centerId: center.id }))
+
+                    this.nxStore.pipe(select(curCenterRefreshed), take(1)).subscribe((ccr) => {
+                        if (!ccr) {
+                            this.nxStore.dispatch(CenterCommonActions.startGetCurCenter({ centerId: center.id }))
+                        }
+                    })
                     return true
                 }),
                 catchError((error: any) => {

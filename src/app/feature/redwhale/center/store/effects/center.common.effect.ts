@@ -8,6 +8,8 @@ import _ from 'lodash'
 
 import { CenterUserListService } from '@services/helper/center-user-list.service'
 import { CenterRolePermissionService } from '@services/center-role-permission.service'
+import { StorageService } from '@services/storage.service'
+import { CenterService } from '@services/center.service'
 
 import * as centerCommonActions from '@centerStore/actions/center.common.actions'
 import * as centerCommonSelector from '@centerStore/selectors/center.common.selector'
@@ -18,8 +20,24 @@ export class CenterCommonEffect {
         private centerUserListApi: CenterUserListService,
         private store: Store,
         private actions$: Actions,
-        private centerRolePermissionApi: CenterRolePermissionService
+        private centerRolePermissionApi: CenterRolePermissionService,
+        private centerApi: CenterService,
+        private storageService: StorageService
     ) {}
+
+    public getCenter$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(centerCommonActions.startGetCurCenter),
+            switchMap(({ centerId }) =>
+                this.centerApi.getCenter(centerId).pipe(
+                    switchMap((cc) => {
+                        this.storageService.setCenter(cc)
+                        return [centerCommonActions.finishGetCurCenter({ center: cc })]
+                    })
+                )
+            )
+        )
+    )
 
     public getInstructors$ = createEffect(() =>
         this.actions$.pipe(
@@ -64,6 +82,7 @@ export class CenterCommonEffect {
                     this.centerRolePermissionApi.getCenterRolePermission(centerId, 'instructor'),
                 ]).pipe(
                     switchMap(([adminPCList, instPCList]) => {
+                        console.log('getCenterPermission$ effect : ', adminPCList, ' -- ', instPCList)
                         return [
                             centerCommonActions.finishGetCenterPermission({
                                 permissionObj: {

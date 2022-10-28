@@ -1,25 +1,29 @@
 import { Injectable } from '@angular/core'
 import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree } from '@angular/router'
+import { Location } from '@angular/common'
 import { Observable, EMPTY, of } from 'rxjs'
 
-import { CenterService } from '@services/center.service'
 import { StorageService } from '@services/storage.service'
 
 import { Center } from '@schemas/center'
-import { map, catchError, take, takeUntil } from 'rxjs/operators'
+import { take } from 'rxjs/operators'
 
 import { Permission } from '@centerStore/reducers/center.common.reducer'
 import * as CenterCommonSelector from '@centerStore/selectors/center.common.selector'
 import { select, Store } from '@ngrx/store'
 
-import _ from 'lodash'
 @Injectable({
     providedIn: 'root',
 })
 export class CenterSaleGuard implements CanActivate {
     public center: Center
 
-    constructor(private router: Router, private storageService: StorageService, private nxStore: Store) {}
+    constructor(
+        private router: Router,
+        private storageService: StorageService,
+        private nxStore: Store,
+        private location: Location
+    ) {}
 
     canActivate(
         route: ActivatedRouteSnapshot,
@@ -37,16 +41,23 @@ export class CenterSaleGuard implements CanActivate {
                 administrator: cp.administrator,
                 instructor: cp.instructor,
             }
-            if (this.center.role_code == 'owner') {
-                canEnter = true
-            } else {
-                canEnter = permissions[this.center.role_code]
-                    .find((v) => v.code == 'stats_sales')
-                    .items.find((vi) => vi.code == 'read_stats_sales').approved
+            switch (this.center.role_code) {
+                case 'owner':
+                    canEnter = true
+                    break
+                case 'instructor':
+                case 'administrator':
+                    canEnter = permissions[this.center.role_code]
+                        .find((v) => v?.code == 'stats_sales')
+                        ?.items?.find((vi) => vi.code == 'read_stats_sales').approved
+                    break
+                default:
+                    canEnter = false
+                    break
             }
-
-            console.log('CenterSaleGuard -- ', canEnter)
         })
+
+        if (!canEnter) this.location.back()
 
         return of(canEnter)
     }

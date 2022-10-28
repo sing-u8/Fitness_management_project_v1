@@ -8,12 +8,12 @@ import { StorageService } from '@services/storage.service'
 import { CenterService } from '@services/center.service'
 import { CenterPermissionHelperService } from '@services/helper/center-permission-helper.service'
 
-import { Center, RoleCode } from '@schemas/center'
+import { Center } from '@schemas/center'
 import { User } from '@schemas/user'
 
-import { Permission } from '@centerStore/reducers/center.common.reducer'
 import * as CenterCommonSelector from '@centerStore/selectors/center.common.selector'
 import { select, Store } from '@ngrx/store'
+import _ from 'lodash'
 
 @Component({
     selector: 'rw-centerNav',
@@ -27,15 +27,10 @@ export class NavComponent implements OnInit, OnDestroy {
     public user: User
     public address: string
 
-    public centerApiData: Center
     public unSubscriber$ = new Subject<void>()
 
     public isLoading = false
 
-    public permissions: Permission = {
-        administrator: [],
-        instructor: [],
-    }
     public showNavs = {
         sale: true,
     }
@@ -47,17 +42,13 @@ export class NavComponent implements OnInit, OnDestroy {
         private centerService: CenterService,
         private centerPermissionHelperService: CenterPermissionHelperService
     ) {
-        this.nxStore.pipe(select(CenterCommonSelector.curCenter), takeUntil(this.unSubscriber$)).subscribe((cc) => {
-            this.center = cc
-        })
         this.nxStore
-            .pipe(select(CenterCommonSelector.centerPermission), takeUntil(this.unSubscriber$))
-            .subscribe((cp) => {
-                this.permissions = {
-                    administrator: cp.administrator,
-                    instructor: cp.instructor,
+            .pipe(select(CenterCommonSelector.curCenterAndPermission), takeUntil(this.unSubscriber$))
+            .subscribe((obj) => {
+                this.center = obj.curCenter
+                if (!_.isEmpty(obj.curCenter)) {
+                    this.showNavs.sale = this.centerPermissionHelperService.getReceiveSalePermission()
                 }
-                this.showNavs.sale = this.centerPermissionHelperService.getReceiveSalePermission()
             })
 
         this.user = this.storageService.getUser()

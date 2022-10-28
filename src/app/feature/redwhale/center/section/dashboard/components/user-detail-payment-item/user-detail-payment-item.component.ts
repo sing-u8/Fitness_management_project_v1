@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit } from '@angular/core'
+import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit, OnDestroy } from '@angular/core'
 import { CenterPermissionHelperService } from '@services/helper/center-permission-helper.service'
 
 import _ from 'lodash'
@@ -6,12 +6,18 @@ import { originalOrder } from '@helpers/pipe/keyvalue'
 
 import { Payment } from '@schemas/payment'
 
+// ngrx
+import { Store, select } from '@ngrx/store'
+import { curCenter } from '@centerStore/selectors/center.common.selector'
+import { takeUntil } from 'rxjs/operators'
+import { Subject } from 'rxjs'
+
 @Component({
     selector: 'db-user-detail-payment-item',
     templateUrl: './user-detail-payment-item.component.html',
     styleUrls: ['./user-detail-payment-item.component.scss'],
 })
-export class UserDetailPaymentItemComponent implements OnInit, AfterViewInit {
+export class UserDetailPaymentItemComponent implements OnInit, AfterViewInit, OnDestroy {
     @Input() payment: Payment
 
     @Output() onUpdatePayment = new EventEmitter<Payment>()
@@ -88,10 +94,16 @@ export class UserDetailPaymentItemComponent implements OnInit, AfterViewInit {
 
     public isRemovePaymentApproved = false
 
-    constructor(private centerPermissionHelperService: CenterPermissionHelperService) {}
+    public unSubscriber$ = new Subject<void>()
+
+    constructor(private centerPermissionHelperService: CenterPermissionHelperService, private nxStore: Store) {}
 
     ngOnInit(): void {
-        this.isRemovePaymentApproved = this.centerPermissionHelperService.getRemovePaymentHistoryPermission()
+        this.nxStore.pipe(select(curCenter), takeUntil(this.unSubscriber$)).subscribe((cc) => {
+            if (!_.isEmpty(cc)) {
+                this.isRemovePaymentApproved = this.centerPermissionHelperService.getRemovePaymentHistoryPermission()
+            }
+        })
         this.menuDropDownItemObj.removePayment.visible = this.isRemovePaymentApproved
     }
     ngAfterViewInit(): void {
@@ -103,6 +115,10 @@ export class UserDetailPaymentItemComponent implements OnInit, AfterViewInit {
         this.total = this.payment.card + this.payment.cash + this.payment.trans + this.payment.unpaid
 
         this.setMenuDropdownShow()
+    }
+    ngOnDestroy(): void {
+        this.unSubscriber$.next()
+        this.unSubscriber$.complete()
     }
 
     setMenuDropdownShow() {

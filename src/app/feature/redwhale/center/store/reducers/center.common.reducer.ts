@@ -17,6 +17,7 @@ export interface PermissionObj extends Permission {
 }
 
 export const intialState: State = {
+    curCenterRefreshed: false,
     curCenter: null,
     members: [],
     instructors: [],
@@ -28,6 +29,7 @@ export const intialState: State = {
 }
 
 export interface State {
+    curCenterRefreshed: boolean
     curCenter: Center
     members: Array<CenterUser>
     instructors: Array<CenterUser>
@@ -65,6 +67,11 @@ export const centerCommonReducer = createImmerReducer(
         state.permissionObj.administrator = permitObj.administrator
         return state
     }),
+    on(CenterCommonActions.finishGetCurCenter, (state, { center }) => {
+        state.curCenter = center
+        state.curCenterRefreshed = true
+        return state
+    }),
 
     // common
     on(CenterCommonActions.error, (state, { err }) => {
@@ -75,4 +82,10 @@ export const centerCommonReducer = createImmerReducer(
 export const selectCurCenter = (state: State) => state.curCenter
 export const selectInstructors = (state: State) => state.instructors
 export const selectMembers = (state: State) => state.members
-export const selectCenterPemission = (state: State) => state.permissionObj
+export const selectCenterPermission = (state: State) => state.permissionObj
+export const selectCurCenterRefreshed = (state: State) => state.curCenterRefreshed
+
+export const selectCurCenterAndPermission = (state: State) => ({
+    curCenter: state.curCenter,
+    centerPermission: state.permissionObj,
+})

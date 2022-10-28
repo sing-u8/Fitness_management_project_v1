@@ -24,7 +24,7 @@ import { drawerSelector } from '@appStore/selectors'
 import { openDrawer, closeDrawer } from '@appStore/actions/drawer.action'
 import { setCenterPermissionModal } from '@centerStore/actions/center.common.actions'
 import { PermissionObj } from '@centerStore/reducers/center.common.reducer'
-import { centerPermission } from '@centerStore/selectors/center.common.selector'
+import { centerPermission, curCenter, curCenterAndPermission } from '@centerStore/selectors/center.common.selector'
 import { Subject } from 'rxjs'
 import { takeUntil } from 'rxjs/operators'
 import { showModal } from '@appStore/actions/modal.action'
@@ -74,10 +74,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
         this.center = this.storageService.getCenter()
         this.centerTerms = this.center?.contract_terms
 
-        this.isSettingApproved = this.centerPermissionHelperService.getSettingPermission()
-
         this.getCenterList()
 
+        this.nxStore.pipe(select(curCenterAndPermission), takeUntil(this.unSubscriber$)).subscribe((obj) => {
+            if (!_.isEmpty(obj.curCenter)) {
+                this.isSettingApproved = this.centerPermissionHelperService.getSettingPermission()
+            }
+        })
         this.nxStore.pipe(select(centerPermission), takeUntil(this.unSubscriber$)).subscribe((po) => {
             this.centerPermissionObj = po
         })
