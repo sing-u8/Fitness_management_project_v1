@@ -1,3 +1,5 @@
+import { PermissionCode } from '@schemas/permission-category'
+
 export interface Center {
     id: string
     name: string
@@ -12,7 +14,7 @@ export interface Center {
     background: string
     role_code: RoleCode
     role_name: string //
-    permissions: Array<string> // 권한 코드 리스트
+    permissions: Array<PermissionCode> // 권한 코드 리스트
     contract_terms: string
 }
 
