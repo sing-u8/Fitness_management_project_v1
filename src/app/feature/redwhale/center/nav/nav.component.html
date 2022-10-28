@@ -1,7 +1,7 @@
 <div class="nav">
 
     <div
-        *ngIf="centerApiData?.role_code != 'member'"
+        *ngIf="center?.role_code != 'member'"
         class="menu d-flex flex-column justify-content-center align-items-center"
         [routerLink]="['/', address, 'dashboard']"
         routerLinkActive="selected"
@@ -36,7 +36,7 @@
     </div>
 
     <!-- <div
-        *ngIf="centerApiData?.role_code == 'member'"
+        *ngIf="center?.role_code == 'member'"
         class="menu d-flex flex-column justify-content-center align-items-center"
         [routerLink]="['/', address, 'schedule-reservation']"
         routerLinkActive="selected"
@@ -64,7 +64,7 @@
 
     <!-- #r스케줄-->
     <div
-        *ngIf="centerApiData?.role_code != 'member'"
+        *ngIf="center?.role_code != 'member'"
         class="menu d-flex flex-column justify-content-center align-items-center"
         [routerLink]="['/', address, 'schedule']"
         routerLinkActive="selected"
@@ -131,7 +131,7 @@
 
     <!--membership-->
     <div
-        *ngIf="centerApiData?.role_code != 'member'"
+        *ngIf="center?.role_code != 'member'"
         class="menu d-flex flex-column justify-content-center align-items-center"
         [routerLink]="['/', address, 'membership']"
         routerLinkActive="selected"
@@ -183,7 +183,7 @@
 
     <!--lesson-->
   <div
-        *ngIf="centerApiData?.role_code != 'member'"
+        *ngIf="center?.role_code != 'member'"
         class="menu d-flex flex-column justify-content-center align-items-center"
         [routerLink]="['/', address, 'lesson']"
         routerLinkActive="selected"
@@ -216,7 +216,7 @@
 
     <!--locker-->
     <div
-        *ngIf="centerApiData?.role_code != 'member'"
+        *ngIf="center?.role_code != 'member'"
         class="menu d-flex flex-column justify-content-center align-items-center"
         [routerLink]="['/', address, 'locker']"
         routerLinkActive="selected"
@@ -353,7 +353,7 @@
     </div>
 
     <div
-        *ngIf="centerApiData?.role_code != 'member'"
+        *ngIf="center?.role_code != 'member'"
         class="menu d-flex flex-column justify-content-center align-items-center"
         [routerLink]="['/', address, 'message']"
         routerLinkActive="selected"

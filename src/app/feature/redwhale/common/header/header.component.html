@@ -48,27 +48,33 @@
                 </div>
                 <div class="h-line"></div>
                 <div class="sub-menu">
-                    <div class="touchpad d-flex justify-content-center align-items-center" (click)="goTouchPad()">
+                    <div
+                        class="touchpad d-flex justify-content-center align-items-center"
+                        [class.not-approved] = "!isSettingApproved"
+                        (click)="goTouchPad()"
+                    >
                         <img src="assets/icons/header/touchpad.svg" />
                         <span class="rw-typo-bodytext2">터치패드 모드</span>
                     </div>
-                    <div class="v-line-touchpad-settings"></div>
-                    <div
-                        class="settings d-flex justify-content-center align-items-center"
-                        (click)="toggleSettingDropdown()"
-                        (rwClickOutside)="closeSettingDropdown()"
-                    >
-                        <img src="assets/icons/header/settings.svg" />
-                        <span class="rw-typo-bodytext2">센터 설정</span>
-                    </div>
-
-                    <div *ngIf="showSettingDropdown" class="setting-dropdown">
-                        <div class="setting-dropdown-item rw-typo-bodytext2" (click)="goSettingCenter()">
-                            기본 정보 수정
+                    <ng-container *ngIf="isSettingApproved">
+                        <div class="v-line-touchpad-settings"></div>
+                        <div
+                            class="settings d-flex justify-content-center align-items-center"
+                            (click)="toggleSettingDropdown()"
+                            (rwClickOutside)="closeSettingDropdown()"
+                        >
+                            <img src="assets/icons/header/settings.svg" />
+                            <span class="rw-typo-bodytext2">센터 설정</span>
                         </div>
-                        <div class="setting-dropdown-item rw-typo-bodytext2" (click)="openRoleModal()">권한 관리</div>
-                        <div class="setting-dropdown-item rw-typo-bodytext2" (click)="openSettingTermsModal()">약관 설정</div>
-                    </div>
+                        <div *ngIf="showSettingDropdown" class="setting-dropdown">
+                            <div class="setting-dropdown-item rw-typo-bodytext2" (click)="goSettingCenter()">
+                                기본 정보 수정
+                            </div>
+                            <div class="setting-dropdown-item rw-typo-bodytext2" (click)="openRoleModal()">권한 관리</div>
+                            <div class="setting-dropdown-item rw-typo-bodytext2" (click)="openSettingTermsModal()">약관 설정</div>
+                        </div>
+                    </ng-container>
+                    
                 </div>
 
                 <ng-container *ngIf="centerList.length > 1">

@@ -2,11 +2,11 @@ import { Component, OnInit, OnDestroy } from '@angular/core'
 import { Router } from '@angular/router'
 
 import { takeUntil } from 'rxjs/operators'
-import { Subject, Observable, Subscription } from 'rxjs'
-import _ from 'lodash'
+import { Subject } from 'rxjs'
 
 import { StorageService } from '@services/storage.service'
 import { CenterService } from '@services/center.service'
+import { CenterPermissionHelperService } from '@services/helper/center-permission-helper.service'
 
 import { Center, RoleCode } from '@schemas/center'
 import { User } from '@schemas/user'
@@ -39,28 +39,13 @@ export class NavComponent implements OnInit, OnDestroy {
     public showNavs = {
         sale: true,
     }
-    updateShowNavs(permissions: Permission, roleCode: RoleCode) {
-        switch (roleCode) {
-            case 'owner':
-                this.showNavs.sale = true
-                break
-            case 'instructor':
-            case 'administrator':
-                this.showNavs.sale = this.permissions[roleCode]
-                    .find((v) => v.code == 'stats_sales')
-                    .items.find((vi) => vi.code == 'read_stats_sales').approved
-                break
-            default:
-                this.showNavs.sale = false
-                break
-        }
-    }
 
     constructor(
         private nxStore: Store,
         private router: Router,
         private storageService: StorageService,
-        private centerService: CenterService
+        private centerService: CenterService,
+        private centerPermissionHelperService: CenterPermissionHelperService
     ) {
         this.nxStore.pipe(select(CenterCommonSelector.curCenter), takeUntil(this.unSubscriber$)).subscribe((cc) => {
             this.center = cc
@@ -72,18 +57,11 @@ export class NavComponent implements OnInit, OnDestroy {
                     administrator: cp.administrator,
                     instructor: cp.instructor,
                 }
-                this.updateShowNavs(this.permissions, this.center.role_code)
+                this.showNavs.sale = this.centerPermissionHelperService.getReceiveSalePermission()
             })
 
         this.user = this.storageService.getUser()
         this.getCenterAddress()
-        this.centerService
-            .getCenter(this.center.id)
-            .pipe(takeUntil(this.unSubscriber$))
-            .subscribe((centerData) => {
-                this.centerApiData = centerData
-                this.isLoading = true
-            })
     }
 
     ngOnInit(): void {}

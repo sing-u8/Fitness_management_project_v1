@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit } from '@angular/core'
+import { CenterPermissionHelperService } from '@services/helper/center-permission-helper.service'
 
 import _ from 'lodash'
 import { originalOrder } from '@helpers/pipe/keyvalue'
@@ -85,9 +86,14 @@ export class UserDetailPaymentItemComponent implements OnInit, AfterViewInit {
 
     public name = ''
 
-    constructor() {}
+    public isRemovePaymentApproved = false
 
-    ngOnInit(): void {}
+    constructor(private centerPermissionHelperService: CenterPermissionHelperService) {}
+
+    ngOnInit(): void {
+        this.isRemovePaymentApproved = this.centerPermissionHelperService.getRemovePaymentHistoryPermission()
+        this.menuDropDownItemObj.removePayment.visible = this.isRemovePaymentApproved
+    }
     ngAfterViewInit(): void {
         this.pricesObj.cash.value = String(this.payment.cash)
         this.pricesObj.card.value = String(this.payment.card)

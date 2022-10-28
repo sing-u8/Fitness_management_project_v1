@@ -6,6 +6,7 @@ import { CenterService } from '@services/center.service'
 import { UsersCenterService } from '@services/users-center.service'
 import { WsChatService } from '@services/web-socket/ws-chat.service'
 import { CenterRolePermissionService } from '@services/center-role-permission.service'
+import { CenterPermissionHelperService } from '@services/helper/center-permission-helper.service'
 
 import { User } from '@schemas/user'
 import { Center } from '@schemas/center'
@@ -50,6 +51,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     popupGymListVisible: boolean
     avatarMenuVisible: boolean
 
+    public isSettingApproved = false
+
     public unSubscriber$ = new Subject<void>()
 
     constructor(
@@ -60,6 +63,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         private activatedRoute: ActivatedRoute,
         private nxStore: Store,
         private wsChatService: WsChatService,
+        private centerPermissionHelperService: CenterPermissionHelperService,
         private centerRolePermissionService: CenterRolePermissionService
     ) {}
 
@@ -69,6 +73,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
         this.user = this.storageService.getUser()
         this.center = this.storageService.getCenter()
         this.centerTerms = this.center?.contract_terms
+
+        this.isSettingApproved = this.centerPermissionHelperService.getSettingPermission()
 
         this.getCenterList()
 
@@ -218,9 +224,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
     confirmSettingTermsModal(e: SettingTermConfirmOutput) {
         e.loadingFns.showLoading()
-        console.log('confirmSettingTermsModal : ', this.center)
         this.centerService.updateCenter(this.center.id, { contract_terms: e.centerTerm }).subscribe((center) => {
-            console.log('update center : ', center)
             this.center = center
             this.storageService.setCenter(this.center)
             this.centerTerms = center.contract_terms
