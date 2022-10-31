@@ -69,7 +69,14 @@
                     </div>
                     <div class="l-info">
                         <div class="title">이메일</div>
-                        <div class="content">{{ !curUserData.user ? '-' : curUserData.user.email }}</div>
+                        <div
+                            class="content"
+                            [class.changeable]="true || (!curUserData?.user?.email_verified && !curUserData?.user?.email)"
+                            (click)="(true || !curUserData?.user?.email_verified && !curUserData?.user?.email) && toggleShowChangeUserEmailModal()"
+                        >
+                            {{ !curUserData.user ? '-' : (curUserData.user.email ?? '-') }}
+                            <img src="assets/icons/etc/edit.svg" />
+                        </div>
                     </div>
                     <div class="l-info">
                         <div class="title">전화번호</div>
@@ -286,6 +293,11 @@
     (cancel)="toggleShowChangeMembershipNumberModal()"
     (confirm)="onChangeMembershipNumberConfirm($event)"
 ></db-change-membership-number-modal>
+<db-change-user-email-modal
+    [(visible)]="doShowChangeUserEmailModal"
+    (cancel)="toggleShowChangeUserEmailModal()"
+    (confirm)="onChangeUserEmailConfirm($event)"
+></db-change-user-email-modal>
 
 <rw-modal
     [(visible)]="doShowRemoveUserProfile"

@@ -60,6 +60,7 @@ import { ChangeMembershipNumberModalComponent } from './components/change-member
 import { DetailItemRemoveModalComponent } from './components/detail-item-remove-modal/detail-item-remove-modal.component'
 import { TransferMembershipFullmodalComponent } from './components/transfer-membership-fullmodal/transfer-membership-fullmodal.component'
 import { TransferMembershipTicketWindowComponent } from './components/transfer-membership-ticket-window/transfer-membership-ticket-window.component'
+import { ChangeUserEmailModalComponent } from './components/change-user-email-modal/change-user-email-modal.component'
 // // drawer
 import { DwMemberListComponent } from './components/dw-member-list/dw-member-list.component'
 
@@ -128,6 +129,7 @@ import { NgxSpinnerModule } from 'ngx-spinner'
         DetailItemRemoveModalComponent,
         TransferMembershipFullmodalComponent,
         TransferMembershipTicketWindowComponent,
+        ChangeUserEmailModalComponent,
     ],
     imports: [
         DashboardRoutingModule,

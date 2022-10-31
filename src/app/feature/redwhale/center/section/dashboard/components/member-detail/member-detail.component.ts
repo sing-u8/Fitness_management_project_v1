@@ -370,6 +370,14 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
         )
     }
 
+    public doShowChangeUserEmailModal = false
+    toggleShowChangeUserEmailModal() {
+        this.doShowChangeUserEmailModal = !this.doShowChangeUserEmailModal
+    }
+    onChangeUserEmailConfirm(email: string) {
+        this.toggleShowChangeUserEmailModal()
+    }
+
     // update user profile funcs and vars
     public doShowRemoveUserProfile = false
     public removeUserProfileData = {

@@ -1,0 +1,61 @@
+<div class="rw-modal-background" #modalBackgroundElement></div>
+
+
+<div
+    class="rw-modal-wrapper justify-content-center align-items-center"
+    (mouseup)="!isMouseModalDown && onCancel()"
+    (mousedown) = 'resetMouseModalDown()'
+    #modalWrapperElement
+>
+    <div
+        class="rw-modal user-select-none d-flex flex-column justify-content-between"
+        (mousedown) ='onMouseModalDown(); $event.stopPropagation()'
+    >
+        <div class="d-flex flex-column">
+            <div class="title-container">
+                <div class="text rw-typo-title1 ">회원 이메일 주소 입력</div>
+                <div class="sub-text sub-text__first rw-typo-subtext0-regular">입력한 이메일 주소로 회원은 앱에 로그인할 수 있어요.</div>
+                <div class="sub-text rw-typo-subtext0-regular">오류가 발생하지 않도록 정확한 이메일 주소를 입력해주세요.</div>
+            </div>
+            <div
+                id='name'
+                class="input"
+                #inputContainer
+                [class.input-box-error]="isError"
+            >
+                <p class="rw-typo-subtext1">회원 이메일 주소</p>
+                <input
+                    class="rw-input"
+                    type="text"
+                    placeholder="이메일 주소를 입력해주세요."
+                    [(ngModel)]="userEmail"
+                    #email = ngModel
+                    required
+                    pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+[.][a-z]{2,}$"
+                    (keydown)="true"
+                    (keyup.enter) = "email.valid && onConfirm()"
+                >
+                <div class="error" *ngIf="isError">
+                    <img class="warning" src="assets/icons/etc/warning-red.svg" />
+                    <span class="rw-typo-subtext1">{{ '이메일 양식을 확인해주세요.' }}</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="button-group">
+            <div class="cancel " rw-button (click)="onCancel()">
+                취소
+            </div>
+            <div
+                class="confirm"
+                rw-button
+                rwButtonColor="var(--red)"
+                [rwButtonDisabled]= "email.invalid"
+                (click)="email.valid  && onConfirm()"
+            >
+                저장
+            </div>
+        </div>
+    
+    </div>
+</div>

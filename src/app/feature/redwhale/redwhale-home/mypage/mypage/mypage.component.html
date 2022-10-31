@@ -1,76 +1,80 @@
 <section class="user-select-none thin-scroll-y ">
     <div class="header">
-      <div class="header-text-container">
-        <p class="rw-typo-headline1">{{accountUserData.name}}<span class="rw-typo-headline2">님,</span></p>
-        <p class="rw-typo-headline2">반갑습니다. 🙌</p>
-
-      </div>
-
-      <div class="cg-typo-subtext close-button" rw-button rwButtonWidth="85" rwButtonHeight="40"
-        rwButtonBorderColor="var(--font-color)" (click)="goBack()">
-        <span class="mdi mdi-close"></span>
-        <span>닫기</span>
-      </div>
+        <div class="header-text-container">
+            <p class="rw-typo-headline1">{{accountUserData.name}}<span class="rw-typo-headline2">님,</span></p>
+            <p class="rw-typo-headline2">반갑습니다. 🙌</p>
+    
+        </div>
+    
+        <div
+            class="cg-typo-subtext close-button" rw-button rwButtonWidth="85" rwButtonHeight="40"
+            rwButtonBorderColor="var(--font-color)" (click)="goBack()"
+        >
+            <span class="mdi mdi-close"></span>
+            <span>닫기</span>
+        </div>
     </div>
 
 
     <div class="body thin-scroll-x">
         <div class="body-outer-container">
             <div class="body-inner-container">
-              <div class="navigation">
-
-                <div class="profile">
-                  <rw-avatar [image]="accountUserData.avatar" text="{{ accountUserData.name }}" size="80" fontSize="30"
-                    [backgroundColor]="user.color"> </rw-avatar>
-                  <p class="rw-typo-title2 name-mg-top">{{accountUserData.name}}님</p>
-                  <p *ngIf="accountUserData.email != null" class="rw-typo-subtext2">{{accountUserData.email}}</p>
+                <div class="navigation">
+        
+                    <div class="profile">
+                        <rw-avatar
+                            [image]="accountUserData.avatar" text="{{ accountUserData.name }}" size="80" fontSize="30"
+                            [backgroundColor]="user.color"
+                        ></rw-avatar>
+                        <p class="rw-typo-title2 name-mg-top">{{accountUserData.name}}님</p>
+                        <p *ngIf="accountUserData.email != null" class="rw-typo-subtext2">{{accountUserData.email}}</p>
+                    </div>
+        
+                    <div (click)="onClickNavigation('setting-account')" class="setting-account rw-typo-bodytext2">
+                        <img src="assets/icons/etc/settings-grey.svg">
+                        계정 관리
+                    </div>
+        
+                    <!-- <div class="divider"></div> -->
+        
+                    <!-- <div (click)="onClickNavigation('journal')" class="navigate" [class.selected]="currentNavigation == 'journal'">
+                      <img *ngIf="currentNavigation != 'journal'" src="assets/icons/header/journal.svg">
+                      <img *ngIf="currentNavigation == 'journal'" src="assets/icons/etc/journal-white.svg">
+    
+                      운동일지
+                    </div> -->
+                    <!-- <div
+                                    (click) = "onClickNavigation('mission')"
+                                    class="navigate"
+                                    [class.selected] = "currentNavigation == 'mission'"
+                                >
+                                  <img *ngIf="currentNavigation != 'mission'" src="assets/icons/header/mission.svg">
+                                  <img *ngIf="currentNavigation == 'mission'" src="assets/icons/etc/mission-white.svg">
+                                  미션관리
+                                </div> -->
+                    <!-- <div (click)="onClickNavigation('ticket')" class="navigate" [class.selected]="currentNavigation == 'ticket'">
+                      <img *ngIf="currentNavigation != 'ticket'" src="assets/icons/header/ticket.svg">
+                      <img *ngIf="currentNavigation == 'ticket'" src="assets/icons/etc/ticket-white.svg">
+                      회원권/락커
+                    </div>
+                    <div (click)="onClickNavigation('reservation')" class="navigate"
+                      [class.selected]="currentNavigation == 'reservation'">
+                      <img *ngIf="currentNavigation != 'reservation'" src="assets/icons/header/reservation.svg">
+                      <img *ngIf="currentNavigation == 'reservation'" src="assets/icons/etc/reservation-white.svg">
+                      예약리스트
+                    </div> -->
+    
                 </div>
-
-                <div (click)="onClickNavigation('setting-account')" class="setting-account rw-typo-bodytext2">
-                  <img src="assets/icons/etc/settings-grey.svg">
-                  계정 관리
+                <div class="content-container">
+                    <div class="content">
+                        <router-outlet></router-outlet>
+                    </div>
+                    <div class="eula rw-typo-subtext2">
+                        <span (click)="showModal('termsEULA')">이용약관</span>
+                        &nbsp;&nbsp; | &nbsp;&nbsp;
+                        <span (click)="showModal('termsPrivacy')">개인정보보호방침</span>
+                    </div>
                 </div>
-
-                <!-- <div class="divider"></div> -->
-
-                <!-- <div (click)="onClickNavigation('journal')" class="navigate" [class.selected]="currentNavigation == 'journal'">
-                  <img *ngIf="currentNavigation != 'journal'" src="assets/icons/header/journal.svg">
-                  <img *ngIf="currentNavigation == 'journal'" src="assets/icons/etc/journal-white.svg">
-
-                  운동일지
-                </div> -->
-                <!-- <div
-                                (click) = "onClickNavigation('mission')"
-                                class="navigate"
-                                [class.selected] = "currentNavigation == 'mission'"
-                            >
-                              <img *ngIf="currentNavigation != 'mission'" src="assets/icons/header/mission.svg">
-                              <img *ngIf="currentNavigation == 'mission'" src="assets/icons/etc/mission-white.svg">
-                              미션관리
-                            </div> -->
-                <!-- <div (click)="onClickNavigation('ticket')" class="navigate" [class.selected]="currentNavigation == 'ticket'">
-                  <img *ngIf="currentNavigation != 'ticket'" src="assets/icons/header/ticket.svg">
-                  <img *ngIf="currentNavigation == 'ticket'" src="assets/icons/etc/ticket-white.svg">
-                  회원권/락커
-                </div>
-                <div (click)="onClickNavigation('reservation')" class="navigate"
-                  [class.selected]="currentNavigation == 'reservation'">
-                  <img *ngIf="currentNavigation != 'reservation'" src="assets/icons/header/reservation.svg">
-                  <img *ngIf="currentNavigation == 'reservation'" src="assets/icons/etc/reservation-white.svg">
-                  예약리스트
-                </div> -->
-
-              </div>
-              <div class="content-container">
-                <div class="content">
-                  <router-outlet></router-outlet>
-                </div>
-                <div class="eula rw-typo-subtext2">
-                  <span (click)="showModal('termsEULA')">이용약관</span>
-                  &nbsp;&nbsp; | &nbsp;&nbsp;
-                  <span (click)="showModal('termsPrivacy')">개인정보보호방침</span>
-                </div>
-              </div>
 
             </div>
         </div>
