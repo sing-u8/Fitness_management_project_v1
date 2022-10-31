@@ -36,12 +36,14 @@
                 ></ngx-skeleton-loader>
             </ng-container>
             <ng-template #category_done>
-                <gl-center-lesson-category
-                    *ngFor="let categ of lessonCategList;"
-                    [id]="categ.id"
-                    [categ] = "categ"
-                    [centerId]="center.id"
-                ></gl-center-lesson-category>
+                <div class="lesson-category-wrapper" [dragula]="DragularCategory" [(dragulaModel)]="lessonCategList">
+                    <gl-center-lesson-category
+                        *ngFor="let categ of lessonCategList;"
+                        [id]="categ.id"
+                        [categ] = "categ"
+                        [centerId]="center.id"
+                    ></gl-center-lesson-category>
+                </div>
             </ng-template>
             <!--  category list ---- >/ -->
         

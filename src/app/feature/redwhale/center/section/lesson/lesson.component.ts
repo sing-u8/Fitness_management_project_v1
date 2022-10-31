@@ -12,6 +12,7 @@ import { CenterMembershipService } from '@services/center-membership.service'
 import { Center } from '@schemas/center'
 import { Drawer } from '@schemas/store/app/drawer.interface'
 import { MembershipItem } from '@schemas/membership-item'
+import { DragularLessonCategory } from '@schemas/lesson'
 import { UpdateItemRequestBody } from '@services/center-lesson.service'
 
 // ngrx reducer for type
@@ -109,6 +110,8 @@ export class LessonComponent implements OnInit, AfterViewInit, OnDestroy {
             value: 'class_item_type_group',
         },
     ]
+    // dragular vars
+    public DragularCategory = DragularLessonCategory
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -116,6 +119,7 @@ export class LessonComponent implements OnInit, AfterViewInit, OnDestroy {
         private nxStore: Store,
         private storageService: StorageService,
         private centerMembershipService: CenterMembershipService,
+        private dragulaService: DragulaService,
         private fb: FormBuilder
     ) {
         this.center = this.storageService.getCenter()
@@ -170,6 +174,31 @@ export class LessonComponent implements OnInit, AfterViewInit, OnDestroy {
                     this.isReserveMembershipExist = this.selectedLesson.linkableMembershipItems.length > 0
                 }
             })
+
+        // dragula funcs
+        console.log(
+            'this.dragulaService.find(this.DragularCategory) !== undefined --- ',
+            this.dragulaService.find(this.DragularCategory) !== undefined
+        )
+        if (this.dragulaService.find(this.DragularCategory) !== undefined) {
+            this.dragulaService.destroy(this.DragularCategory)
+        }
+        this.dragulaService.createGroup(this.DragularCategory, {
+            direction: 'vertical',
+            invalid: (el, handle) => {
+                console.log(
+                    'dragulaService.createGroup invalid -- ',
+                    el,
+                    el.className,
+                    _.includes(el.className, 'l-lesson-card')
+                )
+                return _.includes(el.className, 'l-lesson-card')
+            },
+            moves: (el, source, handle) => {
+                console.log('dragulaService.createGroup in lesson -- ', el, source, handle)
+                return true // handle.className === 'category-container'
+            },
+        })
     }
 
     ngOnInit(): void {}

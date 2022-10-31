@@ -65,8 +65,8 @@ export class LessonCategoryComponent implements OnInit, AfterViewInit, OnDestroy
     changeLessonItemOrder() {
         console.log('changeLessonItemOrder - items: ', this.items)
         console.log(
-            'onDragLessonItem is in ',
-            _.findIndex(this.items, (v) => v.id == this.onDragLessonItem.id)
+            'onDragLessonItem is in '
+            // _.findIndex(this.items, (v) => v.id == this.onDragLessonItem.id)
         )
     }
 
@@ -85,6 +85,8 @@ export class LessonCategoryComponent implements OnInit, AfterViewInit, OnDestroy
             .subscribe((selectedLesson) => {
                 this.selectedLesson = selectedLesson
             })
+
+        this.DragulaLesson = DragulaLesson
     }
 
     ngOnInit(): void {
@@ -96,7 +98,7 @@ export class LessonCategoryComponent implements OnInit, AfterViewInit, OnDestroy
         this.isAddLessonInputOn = this.categ.initialInputOn
     }
     ngAfterViewInit(): void {
-        this.DragulaLesson = DragulaLesson + this.id
+        // this.DragulaLesson = DragulaLesson  + this.id
         this.dragulaSubs.add(
             this.dragulaService.drop(this.DragulaLesson).subscribe(({ el, target, source, sibling }) => {
                 console.log('drop lesson card -- ', el, ' ', target, ' ', source, sibling)
