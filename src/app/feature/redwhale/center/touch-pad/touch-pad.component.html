@@ -65,13 +65,13 @@
                     출석을 위해 <b>회원 번호</b>를 입력해주세요.
                 </div>
                 <div class="display-title">회원 번호 (전화번호 뒤 4자리 또는 5자리)</div>
-                <div class="input-container">
+                <div class="input-container thin-scroll-x-overlay2">
                     <input
                         type="text"
                         placeholder=""
                         [(ngModel)]="touchPadInput"
                         required
-                        maxlength="5"
+                        maxlength="30"
                         readonly
                         (keyup)="formCheck()"
                     />

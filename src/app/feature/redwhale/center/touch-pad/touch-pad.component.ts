@@ -80,7 +80,7 @@ export class TouchPadComponent implements OnInit, OnDestroy {
         this.touchPadInput = this.touchPadInput.replace(/[^0-9]/gi, '')
     }
     touch(number: string) {
-        if (this.touchPadInput.length > 4) return
+        if (this.touchPadInput.length > 29) return
         this.touchPadInput += number
     }
     erase() {
