@@ -581,4 +581,26 @@ export class MemberComponent implements OnInit, OnDestroy {
             })
         )
     }
+
+    public doShowChangeUserEmailModal = false
+    toggleShowChangeUserEmailModal() {
+        this.doShowChangeUserEmailModal = !this.doShowChangeUserEmailModal
+    }
+    onChangeUserEmailConfirm(email: string) {
+        this.nxStore.dispatch(
+            DashboardActions.startSetCurUserData({
+                centerId: this.center.id,
+                reqBody: { email: email },
+                userId: this.curUserData.user.id,
+                blockEffect: false,
+                callback: () => {
+                    this.toggleShowChangeUserEmailModal()
+                    this.nxStore.dispatch(showToast({ text: `이메일 입력이 완료되었습니다.` }))
+                    this.nxStore.dispatch(CenterCommonActions.startGetMembers({ centerId: this.center.id }))
+                    this.nxStore.dispatch(CenterCommonActions.startGetInstructors({ centerId: this.center.id }))
+                },
+            })
+        )
+        this.toggleShowChangeUserEmailModal()
+    }
 }

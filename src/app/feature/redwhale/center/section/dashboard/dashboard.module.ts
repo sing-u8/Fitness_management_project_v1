@@ -150,6 +150,7 @@ import { NgxSpinnerModule } from 'ngx-spinner'
         ChangeUserNameModalComponent,
         MemberRoleSelectComponent,
         ChangeMembershipNumberModalComponent,
+        ChangeUserEmailModalComponent,
     ],
     schemas: [],
 })

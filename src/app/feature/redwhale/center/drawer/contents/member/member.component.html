@@ -138,7 +138,14 @@
                     </div>
                     <div class="user-data">
                         <span class="rw-typo-bodytext1_grey prop">이메일</span>
-                        <span class="rw-typo-bodytext1 value">{{!curCenterUser ? '-' : curCenterUser.email}}</span>
+                        <div
+                            class="rw-typo-bodytext1 value"
+                            [class.changeable]="(!curUserData?.user?.email_verified && !curUserData?.user?.email)"
+                            (click)="(!curUserData?.user?.email_verified && !curUserData?.user?.email) && toggleShowChangeUserEmailModal()"
+                        >
+                            {{!curCenterUser ? '-' : curCenterUser.email}}
+                            <img src="assets/icons/etc/edit.svg" />
+                        </div>
                     </div>
                     <div class="user-data">
                         <span class="rw-typo-bodytext1_grey prop">생년월일</span>
@@ -234,6 +241,11 @@
     (cancel)="toggleShowChangeMembershipNumberModal()"
     (confirm)="onChangeMembershipNumberConfirm($event)"
 ></db-change-membership-number-modal>
+<db-change-user-email-modal
+    [(visible)]="doShowChangeUserEmailModal"
+    (cancel)="toggleShowChangeUserEmailModal()"
+    (confirm)="onChangeUserEmailConfirm($event)"
+></db-change-user-email-modal>
 
 <rw-modal
     [(visible)]="doShowAttendModal"
