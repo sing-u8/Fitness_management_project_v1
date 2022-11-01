@@ -75,7 +75,7 @@
                             (click)="(!curUserData?.user?.email_verified && !curUserData?.user?.email) && toggleShowChangeUserEmailModal()"
                         >
                             {{ !curUserData.user ? '-' : (curUserData.user.email ?? '-') }}
-                            <img src="assets/icons/etc/edit.svg" />
+                            <img *ngIf="(!curUserData?.user?.email_verified && !curUserData?.user?.email)" src="assets/icons/etc/edit.svg" />
                         </div>
                     </div>
                     <div class="l-info">
