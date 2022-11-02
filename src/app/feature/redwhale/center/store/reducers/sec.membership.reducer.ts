@@ -148,6 +148,17 @@ export const membershipReducer = createImmerReducer(
     }),
 
     // selected membership
+    on(MembershipActions.startMoveMembershipCategory, (state, action) => {
+        _.keys(state.entities).forEach((v) => {
+            const targetItem = action.targetItems.find((ti) => ti.id == v)
+            state.entities[v] = {
+                ...state.entities[v],
+                ...targetItem,
+            }
+        })
+        console.log('MembershipActions.startMoveLessonCategory -- ', _.keys(state.entities), state.entities)
+        return state
+    }),
     on(MembershipActions.startMoveMembershipItem, (state, action) => {
         const targetCategory = state.entities[action.targetCategId]
         state.entities[action.targetCategId].items = action.targetItems.map((v) => ({

@@ -7,6 +7,7 @@ import { MoveItemRequestBody, UpdateItemRequestBody } from '@services/center-les
 import { ClassItem } from '@schemas/class-item'
 import { MembershipItem } from '@schemas/membership-item'
 import { CenterUser } from '@schemas/center-user'
+import { Update } from '@ngrx/entity'
 
 const FeatureKey = 'Center/Lesson'
 
@@ -115,6 +116,19 @@ export const startMoveLessonItem = createAction(
         targetItem: ClassItem
         targetCategId: string
         sourceCategId: string
+    }>()
+)
+
+export const startMoveLessonCategory = createAction(
+    `[${FeatureKey}] Start Move Lesson Category`,
+    props<{
+        apiData: {
+            centerId: string
+            categoryId: string
+            // requestBody: MoveItemRequestBody
+        }
+        targetItems: ClassCategory[]
+        targetItem: ClassCategory
     }>()
 )
 

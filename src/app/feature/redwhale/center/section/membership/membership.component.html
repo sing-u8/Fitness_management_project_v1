@@ -21,7 +21,7 @@
                 ></ngx-skeleton-loader>
             </ng-container>
             <ng-template #category_done>
-                <div class="membership-category-wrapper" [dragula]="DragularCategory" [(dragulaModel)]="membershipCategList">
+                <div class="membership-category-wrapper" [dragula]="DragulaCategory" [(dragulaModel)]="membershipCategList">
                     <gm-center-membership-category
                         *ngFor="let categ of membershipCategList;"
                         [id]="categ.id"

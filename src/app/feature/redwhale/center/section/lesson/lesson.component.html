@@ -36,7 +36,7 @@
                 ></ngx-skeleton-loader>
             </ng-container>
             <ng-template #category_done>
-                <div class="lesson-category-wrapper" [dragula]="DragularCategory" [(dragulaModel)]="lessonCategList">
+                <div class="lesson-category-wrapper" [dragula]="DragulaCategory" [(dragulaModel)]="lessonCategList">
                     <gl-center-lesson-category
                         *ngFor="let categ of lessonCategList;"
                         [id]="categ.id"

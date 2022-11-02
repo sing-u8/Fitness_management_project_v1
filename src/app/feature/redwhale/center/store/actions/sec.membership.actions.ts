@@ -7,6 +7,7 @@ import { MembershipItem } from '@schemas/membership-item'
 import { UpdateItemRequestBody } from '@services/center-membership.service'
 import { ClassItem } from '@schemas/class-item'
 import { MoveItemRequestBody } from '@services/center-membership.service'
+import { ClassCategory } from '@schemas/class-category'
 
 const FeatureKey = 'Center/Membership'
 
@@ -98,6 +99,19 @@ export const startMoveMembershipItem = createAction(
         targetItem: MembershipItem
         targetCategId: string
         sourceCategId: string
+    }>()
+)
+
+export const startMoveMembershipCategory = createAction(
+    `[${FeatureKey}] Start Move Membership Category`,
+    props<{
+        apiData: {
+            centerId: string
+            categoryId: string
+            // requestBody: MoveItemRequestBody
+        }
+        targetItems: MembershipCategory[]
+        targetItem: MembershipCategory
     }>()
 )
 

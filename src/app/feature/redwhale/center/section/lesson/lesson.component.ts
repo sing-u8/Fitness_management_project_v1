@@ -42,6 +42,7 @@ import { originalOrder } from '@helpers/pipe/keyvalue'
 import { Dictionary } from '@ngrx/entity'
 import { startLinkMemberships } from '@centerStore/actions/sec.lesson.actions'
 import { ClassItem } from '@schemas/class-item'
+import { ClassCategory } from '@schemas/class-category'
 
 // screen types
 type SelectedLessonObj = {
@@ -112,7 +113,7 @@ export class LessonComponent implements OnInit, AfterViewInit, OnDestroy {
         },
     ]
     // dragular vars
-    public DragularCategory = DragulaClassCategory
+    public DragulaCategory = DragulaClassCategory
     public dragulaSubs = new Subscription()
 
     constructor(
@@ -178,7 +179,7 @@ export class LessonComponent implements OnInit, AfterViewInit, OnDestroy {
             })
 
         // dragula funcs
-        this.dragulaService.createGroup(this.DragularCategory, {
+        this.dragulaService.createGroup(this.DragulaCategory, {
             direction: 'vertical',
             invalid: (el, handle) => {
                 return _.includes(el.className, 'l-lesson-card')
@@ -190,52 +191,61 @@ export class LessonComponent implements OnInit, AfterViewInit, OnDestroy {
         })
         this.dragulaSubs.add(
             this.dragulaService
-                .dropModel(DragulaClass)
-                .subscribe(
-                    ({
-                        name,
-                        el,
-                        target,
-                        source,
-                        sibling,
-                        sourceModel,
-                        sourceIndex,
-                        targetModel,
-                        targetIndex,
-                        item,
-                    }) => {
-                        const _item = item as ClassItem
-                        const _targetModel = targetModel as ClassItem[]
-                        const _targetCategId = target.id
-                        const _sourceCategId = source.id
+                .dropModel(this.DragulaCategory)
+                .subscribe(({ el, target, source, sourceModel, targetModel, item }) => {
+                    const _item = item as ClassCategory
+                    const _targetModel = targetModel as ClassCategory[]
 
-                        this.nxStore.dispatch(
-                            LessonActions.startMoveLessonItem({
-                                apiData: {
-                                    centerId: this.center.id,
-                                    categoryId: _item.category_id,
-                                    itemId: _item.id,
-                                    requestBody: {
-                                        target_category_id: _targetCategId,
-                                        target_item_sequence_number:
-                                            _targetModel.length -
-                                            _targetModel.findIndex(
-                                                (v) => v.id == _item.id && v.category_id == _item.category_id
-                                            ),
-                                    },
+                    this.nxStore.dispatch(
+                        LessonActions.startMoveLessonCategory({
+                            apiData: {
+                                centerId: this.center.id,
+                                categoryId: _item.id,
+                            },
+                            targetItems: _.map(_targetModel, (v, idx, vs) => ({
+                                ...v,
+                                // sequence_number: vs.length - idx,
+                            })),
+                            targetItem: _item,
+                        })
+                    )
+                })
+        )
+        this.dragulaSubs.add(
+            this.dragulaService
+                .dropModel(DragulaClass)
+                .subscribe(({ el, target, source, sourceModel, targetModel, item }) => {
+                    const _item = item as ClassItem
+                    const _targetModel = targetModel as ClassItem[]
+                    const _targetCategId = target.id
+                    const _sourceCategId = source.id
+
+                    this.nxStore.dispatch(
+                        LessonActions.startMoveLessonItem({
+                            apiData: {
+                                centerId: this.center.id,
+                                categoryId: _item.category_id,
+                                itemId: _item.id,
+                                requestBody: {
+                                    target_category_id: _targetCategId,
+                                    target_item_sequence_number:
+                                        _targetModel.length -
+                                        _targetModel.findIndex(
+                                            (v) => v.id == _item.id && v.category_id == _item.category_id
+                                        ),
                                 },
-                                targetItems: _.map(_targetModel, (v, idx, vs) => ({
-                                    ...v,
-                                    sequence_number: vs.length - idx,
-                                    category_id: _targetCategId,
-                                })),
-                                targetItem: _item,
-                                targetCategId: _targetCategId,
-                                sourceCategId: _sourceCategId,
-                            })
-                        )
-                    }
-                )
+                            },
+                            targetItems: _.map(_targetModel, (v, idx, vs) => ({
+                                ...v,
+                                sequence_number: vs.length - idx,
+                                category_id: _targetCategId,
+                            })),
+                            targetItem: _item,
+                            targetCategId: _targetCategId,
+                            sourceCategId: _sourceCategId,
+                        })
+                    )
+                })
         )
     }
 
@@ -245,7 +255,7 @@ export class LessonComponent implements OnInit, AfterViewInit, OnDestroy {
         this.unSubscriber$.next()
         this.unSubscriber$.complete()
         this.dragulaSubs.unsubscribe()
-        this.dragulaService.destroy(this.DragularCategory)
+        this.dragulaService.destroy(this.DragulaCategory)
     }
 
     // trainerFilter method

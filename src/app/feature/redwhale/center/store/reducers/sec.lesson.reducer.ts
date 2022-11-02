@@ -1,6 +1,6 @@
 import { on } from '@ngrx/store'
 import { createImmerReducer } from 'ngrx-immer/store'
-import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity'
+import { EntityState, EntityAdapter, createEntityAdapter, Dictionary } from '@ngrx/entity'
 import _ from 'lodash'
 
 import * as LessonActions from '../actions/sec.lesson.actions'
@@ -204,6 +204,17 @@ export const lessonReducer = createImmerReducer(
             state.selectedLesson.lessonData.category_id = targetCategory.id
             state.selectedLesson.lessonData.category_name = targetCategory.name
         }
+        return state
+    }),
+    on(LessonActions.startMoveLessonCategory, (state, action) => {
+        _.keys(state.entities).forEach((v) => {
+            const targetItem = action.targetItems.find((ti) => ti.id == v)
+            state.entities[v] = {
+                ...state.entities[v],
+                ...targetItem,
+            }
+        })
+        console.log('LessonActions.startMoveLessonCategory -- ', _.keys(state.entities), state.entities)
         return state
     }),
     on(LessonActions.startSetSelectedLesson, (state, { selectedLesson }) => {
