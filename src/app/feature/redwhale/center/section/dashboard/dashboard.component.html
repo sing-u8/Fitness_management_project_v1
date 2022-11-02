@@ -33,7 +33,22 @@
         </section>
 
         <section class="l-member-detail">
-            <div class="member-detail__header rw-typo-title1">회원 상세 정보</div>
+            <div class="member-detail__header rw-typo-title1">
+                회원 상세 정보
+                
+                <div
+                    *ngIf="(curUserData$ | async)?.user"
+                    class="delete-member-button rw-typo-bodytext2-bold_darkgrey"
+                    rw-button
+                    rwButtonHeight="33"
+                    rwButtonWidth="74"
+                    rwButtonColor="var(--white)"
+                    rwButtonFontColor="var(--darkgrey)"
+                    (click)="openDeleteMemberModal()"
+                >
+                    회원 삭제
+                </div>
+            </div>
             <db-member-detail
                 [curUserData]="curUserData$ | async"
                 [curUserListSelect]="(curUserListSelect$ | async)"
@@ -53,3 +68,10 @@
     (close)="closeDirectRegisterMemberFullModal()"
     (finishRegister)="whenFinishRegisterMember($event)"
 ></db-direct-register-member-fullmodal>
+
+<rw-modal
+    [(visible)]="showDeleteMember"
+    [data]="deleteMemberData"
+    (cancel)="closeDeleteMemberModal()"
+    (confirm)="confirmDeleteMember()"
+></rw-modal>

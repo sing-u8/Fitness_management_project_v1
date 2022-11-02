@@ -169,7 +169,13 @@ article.member-management {
                 text-align: start;
                 vertical-align:middle;
                 margin-bottom: 15px;
+                position: relative;
                 // height --> 23px + 15px
+                .delete-member-button {
+                    position: absolute;
+                    right: 0;
+                    bottom: -5px;
+                }
             }
 
         }

@@ -12,11 +12,12 @@ import { UsersCenterService } from '@services/users-center.service'
 // scehma
 import { Center } from '@schemas/center'
 import { User } from '@schemas/user'
+import { CenterUser } from '@schemas/center-user'
 import { OutputType } from '@schemas/components/direct-register-member-fullmodal'
 
 // rxjs
 import { Subject } from 'rxjs'
-import { take } from 'rxjs/operators'
+import { take, takeUntil } from 'rxjs/operators'
 
 // ngrx
 import { Store, select } from '@ngrx/store'
@@ -25,6 +26,7 @@ import * as FromDashboard from '@centerStore/reducers/sec.dashboard.reducer'
 import * as DashboardSelector from '@centerStore/selectors/sec.dashboard.selector'
 import * as DashboardActions from '@centerStore/actions/sec.dashboard.actions'
 import * as CenterCommonActions from '@centerStore/actions/center.common.actions'
+import { showToast } from '@appStore/actions/toast.action'
 
 @Component({
     selector: 'dashboard',
@@ -200,6 +202,11 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
                 )
             }
         })
+        this.nxStore
+            .pipe(select(DashboardSelector.curUserData), takeUntil(this.unsubscribe$))
+            .subscribe((curUserData) => {
+                this.willBeDeletedCenterUser = curUserData.user
+            })
         this.nxStore.dispatch(DashboardActions.startGetUsersByCategory({ centerId: this.center.id }))
         this.nxStore.dispatch(DashboardActions.setCurCenterId({ centerId: this.center.id }))
     }
@@ -207,5 +214,27 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     ngOnDestroy(): void {
         this.unsubscribe$.next(true)
         this.unsubscribe$.complete()
+    }
+
+    // delete member button
+    public willBeDeletedCenterUser: CenterUser = undefined
+    public showDeleteMember = false
+    public deleteMemberData = {
+        text: '',
+        subText: `매출 정보를 제외한 회원의 모든 정보가 삭제되며,
+            삭제된 정보는 복구하실 수 없어요.`,
+        cancelButtonText: '취소',
+        confirmButtonText: '회원 삭제',
+    }
+    openDeleteMemberModal() {
+        this.deleteMemberData.text = `${this.willBeDeletedCenterUser.center_user_name} 회원을 삭제하시겠어요?`
+        this.showDeleteMember = true
+    }
+    closeDeleteMemberModal() {
+        this.showDeleteMember = false
+    }
+    confirmDeleteMember() {
+        this.nxStore.dispatch(showToast({ text: '회원 삭제가 완료되었습니다.' }))
+        this.closeDeleteMemberModal()
     }
 }
