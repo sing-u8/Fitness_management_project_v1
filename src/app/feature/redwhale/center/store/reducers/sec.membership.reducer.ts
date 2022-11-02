@@ -148,6 +148,28 @@ export const membershipReducer = createImmerReducer(
     }),
 
     // selected membership
+    on(MembershipActions.startMoveMembershipItem, (state, action) => {
+        const targetCategory = state.entities[action.targetCategId]
+        state.entities[action.targetCategId].items = action.targetItems.map((v) => ({
+            ...v,
+            category_id: targetCategory.id,
+            category_name: targetCategory.name,
+        }))
+        state.entities[action.targetCategId].item_count = action.targetItems.length
+        if (action.targetCategId != action.sourceCategId) {
+            state.entities[action.sourceCategId].items = state.entities[action.sourceCategId].items.filter(
+                (v) => v.id != action.targetItem.id
+            )
+            state.entities[action.sourceCategId].item_count -= 1
+        }
+        if (state.selectedMembership.membershipData?.id == action.targetItem.id) {
+            state.selectedMembership.categId = targetCategory.id
+            state.selectedMembership.membershipData.category_id = targetCategory.id
+            state.selectedMembership.membershipData.category_name = targetCategory.name
+        }
+        return state
+    }),
+
     on(MembershipActions.startSetSelectedMembership, (state, { selectedMembership }) => {
         state.selectedMembership = _.assign(state.selectedMembership, {
             ...state.selectedMembership,

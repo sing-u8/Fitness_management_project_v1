@@ -22,3 +22,6 @@ export interface ClassItem {
 export interface FE_ClassItem extends ClassItem {
     membership_items: Array<MembershipItem>
 }
+
+export const DragulaClass = 'D_CLASS'
+export const DragulaClassCategory = 'D_CLASS_CATEGORY'

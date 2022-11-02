@@ -12,6 +12,3 @@ export interface Lesson {
     type_name: string
     trainers: Array<CenterUser>
 }
-
-export const DragulaLesson = 'D_LESSON'
-export const DragularLessonCategory = 'D_LESSON_CATEGORY'

@@ -6,6 +6,7 @@ import { MembershipCategory } from '@schemas/membership-category'
 import { MembershipItem } from '@schemas/membership-item'
 import { UpdateItemRequestBody } from '@services/center-membership.service'
 import { ClassItem } from '@schemas/class-item'
+import { MoveItemRequestBody } from '@services/center-membership.service'
 
 const FeatureKey = 'Center/Membership'
 
@@ -82,6 +83,22 @@ export const startSetSelectedMembership = createAction(
 export const finishSetSelectedMembership = createAction(
     `[${FeatureKey}] Finish Set Selected Membership`,
     props<{ linkedClassItems: Array<ClassItem>; linkableClassItems: Array<ClassItem> }>()
+)
+
+export const startMoveMembershipItem = createAction(
+    `[${FeatureKey}] Start Move Membership Item`,
+    props<{
+        apiData: {
+            centerId: string
+            categoryId: string
+            itemId: string
+            requestBody: MoveItemRequestBody
+        }
+        targetItems: MembershipItem[]
+        targetItem: MembershipItem
+        targetCategId: string
+        sourceCategId: string
+    }>()
 )
 
 export const updateSelectedMembership = createAction(

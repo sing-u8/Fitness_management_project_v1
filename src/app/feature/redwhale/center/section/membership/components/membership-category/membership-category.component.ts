@@ -2,6 +2,9 @@ import { Component, OnInit, Input, AfterViewInit, ChangeDetectionStrategy, OnDes
 import { FormBuilder, FormControl } from '@angular/forms'
 import _ from 'lodash'
 
+import { DragulaService } from 'ng2-dragula'
+import { DragulaMembership, MembershipItem } from '@schemas/membership-item'
+
 // rxjs
 import { Subject } from 'rxjs'
 import { takeUntil } from 'rxjs/operators'
@@ -27,6 +30,7 @@ export class MembershipCategoryComponent implements OnInit, AfterViewInit {
     @Input() categ: FromMembership.MembershipCategoryState
     @Input() centerId: string
 
+    public items: Array<MembershipItem> = []
     public name: string
 
     public isDropdownOpen: boolean
@@ -47,6 +51,9 @@ export class MembershipCategoryComponent implements OnInit, AfterViewInit {
         confirmButtonText: '삭제',
     }
 
+    // dragula vars
+    public DragulaMembership = undefined
+
     constructor(private fb: FormBuilder, private nxStore: Store) {
         this.isDropdownOpen = false
 
@@ -65,9 +72,11 @@ export class MembershipCategoryComponent implements OnInit, AfterViewInit {
     }
 
     ngOnInit(): void {
+        this.DragulaMembership = DragulaMembership
         this.categNameForm.setValue(this.categ.name)
 
         // init input variable
+        this.items = this.categ.items
         this.isAddMembershipInputOn = this.categ.initialInputOn
     }
     ngAfterViewInit(): void {}

@@ -112,6 +112,14 @@
         transition: height 1s ease;
         grid-template-columns: repeat(1, auto);
 
+        .l-membership-card {
+            display: grid;
+            row-gap: 10px;
+            grid-template-columns: repeat(1, auto);
+            min-height: 2px;
+        }
+
+
         &.categ-open {
             height: auto;
         }

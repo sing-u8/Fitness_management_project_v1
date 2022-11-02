@@ -3,7 +3,7 @@ import { createAction, props } from '@ngrx/store'
 import { TrainerFilter, SelectedLesson, LessonCategoryState } from '../reducers/sec.lesson.reducer'
 
 import { ClassCategory } from '@schemas/class-category'
-import { UpdateItemRequestBody } from '@services/center-lesson.service'
+import { MoveItemRequestBody, UpdateItemRequestBody } from '@services/center-lesson.service'
 import { ClassItem } from '@schemas/class-item'
 import { MembershipItem } from '@schemas/membership-item'
 import { CenterUser } from '@schemas/center-user'
@@ -100,6 +100,22 @@ export const startSetSelectedLesson = createAction(
 export const finishSetSelectedLesson = createAction(
     `[${FeatureKey}] Finish Set Selected Lesson`,
     props<{ linkedMembershipItems: Array<MembershipItem>; linkableMembershipItems: Array<MembershipItem> }>()
+)
+
+export const startMoveLessonItem = createAction(
+    `[${FeatureKey}] Start Move Lesson Item`,
+    props<{
+        apiData: {
+            centerId: string
+            categoryId: string
+            itemId: string
+            requestBody: MoveItemRequestBody
+        }
+        targetItems: ClassItem[]
+        targetItem: ClassItem
+        targetCategId: string
+        sourceCategId: string
+    }>()
 )
 
 export const updateSelectedLessonInstructor = createAction(

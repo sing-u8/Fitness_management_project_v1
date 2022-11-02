@@ -43,6 +43,7 @@
         class="category-content"
         [class.categ-open] = 'isCategOpen'
     >
+        
         <ng-template #item_pending [ngIf] = "categ.isCategPending == 'pending' && categ.items.length == 0" [ngIfElse]="item_done">
             <ngx-skeleton-loader
                 *ngFor="let _ of [].constructor(categ.item_count)"
@@ -53,7 +54,12 @@
         </ng-template>
     
         <ng-template #item_done>
-            <div class="l-lesson-card" [dragula]="DragulaLesson" [(dragulaModel)]="items">
+            <div
+                [id]="categ.id"
+                class="l-lesson-card"
+                [dragula]="DragulaClass"
+                [(dragulaModel)]="items"
+            >
                 <gl-lesson-card
                     *ngFor = "let item of items"
                     [categItem] = "item"

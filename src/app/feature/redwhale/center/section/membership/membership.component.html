@@ -21,12 +21,14 @@
                 ></ngx-skeleton-loader>
             </ng-container>
             <ng-template #category_done>
-                <gm-center-membership-category
-                    *ngFor="let categ of (membershipCategEntities$ | async) | keyvalue : originOrder; last as isLast"
-                    [id]="categ.key"
-                    [categ]="categ.value"
-                    [centerId]="center.id"
-                ></gm-center-membership-category>
+                <div class="membership-category-wrapper" [dragula]="DragularCategory" [(dragulaModel)]="membershipCategList">
+                    <gm-center-membership-category
+                        *ngFor="let categ of membershipCategList;"
+                        [id]="categ.id"
+                        [categ]="categ"
+                        [centerId]="center.id"
+                    ></gm-center-membership-category>
+                </div>
             </ng-template>
             <!--  category list ---- >/ -->
             

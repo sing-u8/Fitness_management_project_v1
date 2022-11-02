@@ -3,6 +3,7 @@ import { FormBuilder, FormControl, Validators } from '@angular/forms'
 import _ from 'lodash'
 import * as kvPipe from '@helpers/pipe/keyvalue'
 
+import { DragulaService } from 'ng2-dragula'
 // services
 import { StorageService } from '@services/storage.service'
 import { CenterLessonService } from '@services/center-lesson.service'
@@ -12,13 +13,14 @@ import { UpdateItemRequestBody, CenterMembershipService } from '@services/center
 import { Center } from '@schemas/center'
 import { Drawer } from '@schemas/store/app/drawer.interface'
 import { ClassItem } from '@schemas/class-item'
+import { DragulaMembershipCategory, MembershipItem, DragulaMembership } from '@schemas/membership-item'
 
 // ngrx reducer for type
 
 import { SelectedMembership, initialSelectedMembership } from '@centerStore/reducers/sec.membership.reducer'
 
 // rxjs
-import { Observable, Subject, forkJoin } from 'rxjs'
+import { Observable, Subject, forkJoin, Subscription } from 'rxjs'
 import { takeUntil, take } from 'rxjs/operators'
 
 // ngrx
@@ -33,8 +35,8 @@ import * as MembershipActions from '@centerStore/actions/sec.membership.actions'
 import { ActivatedRoute, Router } from '@angular/router'
 
 import { originalOrder, reverseOrder } from '@helpers/pipe/keyvalue'
-import { Loading } from '@schemas/componentStore/loading'
 import * as LessonActions from '@centerStore/actions/sec.lesson.actions'
+import * as FromLesson from '@centerStore/reducers/sec.lesson.reducer'
 
 // screen types
 type SelectedMembershipObj = {
@@ -54,6 +56,7 @@ export class MembershipComponent implements OnInit {
     // ngrx state
     public drawer$: Observable<Drawer> = this.nxStore.pipe(select(drawerSelector))
     public membershipCategEntities$ = this.nxStore.pipe(select(MembershipSelector.membershipCategEntities))
+    public membershipCategList: FromMembership.MembershipCategoryState[] = []
     public membershipIsloading$ = this.nxStore.pipe(select(MembershipSelector.isLoading))
 
     public selectedMembership: SelectedMembership = _.cloneDeep(initialSelectedMembership)
@@ -78,11 +81,16 @@ export class MembershipComponent implements OnInit {
     // reservable lesson vars in selected membership
     public isReserveLessonExist: boolean
 
+    // dragular vars
+    public DragularCategory = DragulaMembershipCategory
+    public dragulaSubs = new Subscription()
+
     constructor(
         private activatedRoute: ActivatedRoute,
         private route: Router,
         private nxStore: Store,
         private storageService: StorageService,
+        private dragulaService: DragulaService,
         private fb: FormBuilder
     ) {}
 
@@ -96,6 +104,10 @@ export class MembershipComponent implements OnInit {
         })
 
         this.nxStore.dispatch(MembershipActions.setCurrentGym({ currentCenter: this.center.id }))
+
+        this.membershipCategEntities$.pipe(takeUntil(this.unSubscriber$)).subscribe((memCategEn) => {
+            this.membershipCategList = _.values(memCategEn)
+        })
 
         this.nxStore
             .pipe(select(MembershipSelector.selectedMembership), takeUntil(this.unSubscriber$))
@@ -118,11 +130,73 @@ export class MembershipComponent implements OnInit {
                     this.isReserveLessonExist = this.selectedMembership.linkableClassItems.length > 0
                 }
             })
+
+        // dragula funcs
+        this.dragulaService.createGroup(this.DragularCategory, {
+            direction: 'vertical',
+            invalid: (el, handle) => {
+                return _.includes(el.className, 'l-membership-card')
+            },
+            moves: (el, source, handle) => {
+                return true // handle.className === 'category-container'
+            },
+        })
+        this.dragulaSubs.add(
+            this.dragulaService
+                .dropModel(DragulaMembership)
+                .subscribe(
+                    ({
+                        name,
+                        el,
+                        target,
+                        source,
+                        sibling,
+                        sourceModel,
+                        sourceIndex,
+                        targetModel,
+                        targetIndex,
+                        item,
+                    }) => {
+                        const _item = item as MembershipItem
+                        const _targetModel = targetModel as MembershipItem[]
+                        const _targetCategId = target.id
+                        const _sourceCategId = source.id
+
+                        this.nxStore.dispatch(
+                            MembershipActions.startMoveMembershipItem({
+                                apiData: {
+                                    centerId: this.center.id,
+                                    categoryId: _item.category_id,
+                                    itemId: _item.id,
+                                    requestBody: {
+                                        target_category_id: _targetCategId,
+                                        target_item_sequence_number:
+                                            _targetModel.length -
+                                            _targetModel.findIndex(
+                                                (v) => v.id == _item.id && v.category_id == _item.category_id
+                                            ),
+                                    },
+                                },
+                                targetItems: _.map(_targetModel, (v, idx, vs) => ({
+                                    ...v,
+                                    sequence_number: vs.length - idx,
+                                    category_id: _targetCategId,
+                                })),
+                                targetItem: _item,
+                                targetCategId: _targetCategId,
+                                sourceCategId: _sourceCategId,
+                            })
+                        )
+                    }
+                )
+        )
     }
     ngAfterViewInit(): void {}
     ngOnDestroy(): void {
         this.unSubscriber$.next(true)
         this.unSubscriber$.complete()
+        this.dragulaSubs.unsubscribe()
+        this.dragulaService.destroy(this.DragularCategory)
     }
 
     // category methods

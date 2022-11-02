@@ -17,3 +17,6 @@ export interface MembershipItem {
 export interface FE_MembershipItem extends MembershipItem {
     class_items: Array<ClassItem>
 }
+
+export const DragulaMembership = 'D_MEMBERSHIP'
+export const DragulaMembershipCategory = 'D_MEMBERSHIP_CATEGORY'

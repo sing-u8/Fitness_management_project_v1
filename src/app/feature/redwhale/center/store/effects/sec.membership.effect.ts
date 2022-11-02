@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core'
 import { createEffect, Actions, ofType, concatLatestFrom } from '@ngrx/effects'
 import { Store } from '@ngrx/store'
 import { of, forkJoin } from 'rxjs'
-import { catchError, switchMap, map, filter } from 'rxjs/operators'
+import { catchError, switchMap, map, filter, mergeMap, tap } from 'rxjs/operators'
 import * as MembershipActions from '../actions/sec.membership.actions'
 import { MembershipCategoryState, SelectedMembership } from '../reducers/sec.membership.reducer'
 import * as MembershipSelector from '../selectors/sec.membership.selector'
@@ -98,7 +98,7 @@ export class MembershipEffect {
         this.actions$.pipe(
             ofType(MembershipActions.startSetCategIsOpen),
             concatLatestFrom(() => this.store.select(MembershipSelector.currentCenter)),
-            switchMap(([{ id, isOpen }, curCenterId]) => {
+            mergeMap(([{ id, isOpen }, curCenterId]) => {
                 if (isOpen) {
                     return this.centerMembershipApi.getItems(curCenterId, id).pipe(
                         switchMap((items) => [
@@ -229,6 +229,22 @@ export class MembershipEffect {
                 )
             })
         )
+    )
+
+    public moveLessonItem = createEffect(
+        () =>
+            this.actions$.pipe(
+                ofType(MembershipActions.startMoveMembershipItem),
+                mergeMap(({ apiData }) =>
+                    this.centerMembershipApi
+                        .moveItem(apiData.centerId, apiData.categoryId, apiData.itemId, apiData.requestBody)
+                        .pipe(
+                            tap(() => {}),
+                            catchError((err: string) => of(MembershipActions.error({ error: err })))
+                        )
+                )
+            ),
+        { dispatch: false }
     )
 
     // linked class item

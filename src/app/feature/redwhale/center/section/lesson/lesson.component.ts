@@ -12,7 +12,7 @@ import { CenterMembershipService } from '@services/center-membership.service'
 import { Center } from '@schemas/center'
 import { Drawer } from '@schemas/store/app/drawer.interface'
 import { MembershipItem } from '@schemas/membership-item'
-import { DragularLessonCategory } from '@schemas/lesson'
+import { DragulaClass, DragulaClassCategory } from '@schemas/class-item'
 import { UpdateItemRequestBody } from '@services/center-lesson.service'
 
 // ngrx reducer for type
@@ -25,7 +25,7 @@ import {
 } from '@centerStore/reducers/sec.lesson.reducer'
 
 // rxjs
-import { Observable, Subject } from 'rxjs'
+import { Observable, Subject, Subscription } from 'rxjs'
 import { takeUntil, take } from 'rxjs/operators'
 
 // ngrx
@@ -41,6 +41,7 @@ import { ActivatedRoute, Router } from '@angular/router'
 import { originalOrder } from '@helpers/pipe/keyvalue'
 import { Dictionary } from '@ngrx/entity'
 import { startLinkMemberships } from '@centerStore/actions/sec.lesson.actions'
+import { ClassItem } from '@schemas/class-item'
 
 // screen types
 type SelectedLessonObj = {
@@ -111,7 +112,8 @@ export class LessonComponent implements OnInit, AfterViewInit, OnDestroy {
         },
     ]
     // dragular vars
-    public DragularCategory = DragularLessonCategory
+    public DragularCategory = DragulaClassCategory
+    public dragulaSubs = new Subscription()
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -176,22 +178,9 @@ export class LessonComponent implements OnInit, AfterViewInit, OnDestroy {
             })
 
         // dragula funcs
-        console.log(
-            'this.dragulaService.find(this.DragularCategory) !== undefined --- ',
-            this.dragulaService.find(this.DragularCategory) !== undefined
-        )
-        if (this.dragulaService.find(this.DragularCategory) !== undefined) {
-            this.dragulaService.destroy(this.DragularCategory)
-        }
         this.dragulaService.createGroup(this.DragularCategory, {
             direction: 'vertical',
             invalid: (el, handle) => {
-                console.log(
-                    'dragulaService.createGroup invalid -- ',
-                    el,
-                    el.className,
-                    _.includes(el.className, 'l-lesson-card')
-                )
                 return _.includes(el.className, 'l-lesson-card')
             },
             moves: (el, source, handle) => {
@@ -199,6 +188,55 @@ export class LessonComponent implements OnInit, AfterViewInit, OnDestroy {
                 return true // handle.className === 'category-container'
             },
         })
+        this.dragulaSubs.add(
+            this.dragulaService
+                .dropModel(DragulaClass)
+                .subscribe(
+                    ({
+                        name,
+                        el,
+                        target,
+                        source,
+                        sibling,
+                        sourceModel,
+                        sourceIndex,
+                        targetModel,
+                        targetIndex,
+                        item,
+                    }) => {
+                        const _item = item as ClassItem
+                        const _targetModel = targetModel as ClassItem[]
+                        const _targetCategId = target.id
+                        const _sourceCategId = source.id
+
+                        this.nxStore.dispatch(
+                            LessonActions.startMoveLessonItem({
+                                apiData: {
+                                    centerId: this.center.id,
+                                    categoryId: _item.category_id,
+                                    itemId: _item.id,
+                                    requestBody: {
+                                        target_category_id: _targetCategId,
+                                        target_item_sequence_number:
+                                            _targetModel.length -
+                                            _targetModel.findIndex(
+                                                (v) => v.id == _item.id && v.category_id == _item.category_id
+                                            ),
+                                    },
+                                },
+                                targetItems: _.map(_targetModel, (v, idx, vs) => ({
+                                    ...v,
+                                    sequence_number: vs.length - idx,
+                                    category_id: _targetCategId,
+                                })),
+                                targetItem: _item,
+                                targetCategId: _targetCategId,
+                                sourceCategId: _sourceCategId,
+                            })
+                        )
+                    }
+                )
+        )
     }
 
     ngOnInit(): void {}
@@ -206,6 +244,8 @@ export class LessonComponent implements OnInit, AfterViewInit, OnDestroy {
     ngOnDestroy(): void {
         this.unSubscriber$.next()
         this.unSubscriber$.complete()
+        this.dragulaSubs.unsubscribe()
+        this.dragulaService.destroy(this.DragularCategory)
     }
 
     // trainerFilter method

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core'
 import { createEffect, Actions, ofType, concatLatestFrom } from '@ngrx/effects'
 import { Store } from '@ngrx/store'
 import { of, forkJoin } from 'rxjs'
-import { catchError, switchMap, tap, map, filter } from 'rxjs/operators'
+import { catchError, switchMap, mergeMap, map, filter, tap } from 'rxjs/operators'
 
 import * as LessonActions from '../actions/sec.lesson.actions'
 import {
@@ -105,7 +105,7 @@ export class LessonEffect {
         this.actions$.pipe(
             ofType(LessonActions.startSetCategIsOpen),
             concatLatestFrom(() => this.store.select(LessonSelector.currentCenter)),
-            switchMap(([{ id, isOpen }, curCenterId]) => {
+            mergeMap(([{ id, isOpen }, curCenterId]) => {
                 if (isOpen) {
                     return this.centerLessonApi.getItems(curCenterId, id).pipe(
                         switchMap((items) => [
@@ -272,6 +272,22 @@ export class LessonEffect {
                 )
             )
         )
+    )
+
+    public moveLessonItem = createEffect(
+        () =>
+            this.actions$.pipe(
+                ofType(LessonActions.startMoveLessonItem),
+                mergeMap(({ apiData }) =>
+                    this.centerLessonApi
+                        .moveItem(apiData.centerId, apiData.categoryId, apiData.itemId, apiData.requestBody)
+                        .pipe(
+                            tap(() => {}),
+                            catchError((err: string) => of(LessonActions.error({ error: err })))
+                        )
+                )
+            ),
+        { dispatch: false }
     )
 
     // linked class item

@@ -2,9 +2,7 @@ import { Component, OnInit, Input, AfterViewInit, ChangeDetectionStrategy, OnDes
 import { FormBuilder, FormControl } from '@angular/forms'
 import _ from 'lodash'
 
-import { ClassItem } from '@schemas/class-item'
-import { DragulaLesson } from '@schemas/lesson'
-
+import { ClassItem, DragulaClass } from '@schemas/class-item'
 import { DragulaService } from 'ng2-dragula'
 
 // rxjs
@@ -55,20 +53,7 @@ export class LessonCategoryComponent implements OnInit, AfterViewInit, OnDestroy
     }
 
     // dragula vars
-    public DragulaLesson = undefined
-    public dragulaSubs = new Subscription()
-
-    public onDragLessonItem: ClassItem = undefined
-    onLessonDragStart(item: ClassItem) {
-        this.onDragLessonItem = item
-    }
-    changeLessonItemOrder() {
-        console.log('changeLessonItemOrder - items: ', this.items)
-        console.log(
-            'onDragLessonItem is in '
-            // _.findIndex(this.items, (v) => v.id == this.onDragLessonItem.id)
-        )
-    }
+    public DragulaClass = undefined
 
     constructor(private fb: FormBuilder, private nxStore: Store, private dragulaService: DragulaService) {
         this.isDropdownOpen = false
@@ -85,11 +70,10 @@ export class LessonCategoryComponent implements OnInit, AfterViewInit, OnDestroy
             .subscribe((selectedLesson) => {
                 this.selectedLesson = selectedLesson
             })
-
-        this.DragulaLesson = DragulaLesson
     }
 
     ngOnInit(): void {
+        this.DragulaClass = DragulaClass
         this.categNameForm.setValue(this.categ.name)
 
         // init input variable
@@ -97,21 +81,10 @@ export class LessonCategoryComponent implements OnInit, AfterViewInit, OnDestroy
         this.isCategOpen = this.categ.isCategOpen
         this.isAddLessonInputOn = this.categ.initialInputOn
     }
-    ngAfterViewInit(): void {
-        // this.DragulaLesson = DragulaLesson  + this.id
-        this.dragulaSubs.add(
-            this.dragulaService.drop(this.DragulaLesson).subscribe(({ el, target, source, sibling }) => {
-                console.log('drop lesson card -- ', el, ' ', target, ' ', source, sibling)
-                this.changeLessonItemOrder()
-            })
-        )
-        this.dragulaSubs.add(this.dragulaService.drag(this.DragulaLesson).subscribe(({ el }) => {}))
-    }
+    ngAfterViewInit(): void {}
     ngOnDestroy(): void {
         this.unSubscriber$.next()
         this.unSubscriber$.complete()
-
-        this.dragulaSubs.unsubscribe()
     }
 
     // flag methods

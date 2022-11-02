@@ -10,6 +10,7 @@ import { ClassItem } from '@schemas/class-item'
 import { Loading } from '@schemas/store/loading'
 import { CenterUser } from '@schemas/center-user'
 import { MembershipItem } from '@schemas/membership-item'
+import { startMoveLessonItem } from '../actions/sec.lesson.actions'
 
 export interface SelectedLesson {
     lessonData: ClassItem
@@ -184,6 +185,27 @@ export const lessonReducer = createImmerReducer(
     }),
 
     // selected lesson
+    on(LessonActions.startMoveLessonItem, (state, action) => {
+        const targetCategory = state.entities[action.targetCategId]
+        state.entities[action.targetCategId].items = action.targetItems.map((v) => ({
+            ...v,
+            category_id: targetCategory.id,
+            category_name: targetCategory.name,
+        }))
+        state.entities[action.targetCategId].item_count = action.targetItems.length
+        if (action.targetCategId != action.sourceCategId) {
+            state.entities[action.sourceCategId].items = state.entities[action.sourceCategId].items.filter(
+                (v) => v.id != action.targetItem.id
+            )
+            state.entities[action.sourceCategId].item_count -= 1
+        }
+        if (state.selectedLesson.lessonData?.id == action.targetItem.id) {
+            state.selectedLesson.categId = targetCategory.id
+            state.selectedLesson.lessonData.category_id = targetCategory.id
+            state.selectedLesson.lessonData.category_name = targetCategory.name
+        }
+        return state
+    }),
     on(LessonActions.startSetSelectedLesson, (state, { selectedLesson }) => {
         state.selectedLesson = _.assign(state.selectedLesson, {
             ...state.selectedLesson,
