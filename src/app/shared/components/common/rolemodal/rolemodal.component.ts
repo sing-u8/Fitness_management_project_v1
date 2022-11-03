@@ -86,7 +86,6 @@ export class RolemodalComponent implements OnChanges, AfterViewChecked, OnDestro
     }
     onSave(clickEmitter: ClickEmitterType): void {
         clickEmitter.showLoading()
-        console.log('rolemodal -- on save : ', this.roleModal)
         this.nxStore.dispatch(
             startCloseRoleModal({
                 clickEmitter,
