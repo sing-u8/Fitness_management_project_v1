@@ -100,6 +100,7 @@ export const startMoveMembershipItem = createAction(
         targetItem: MembershipItem
         targetCategId: string
         sourceCategId: string
+        cb?: () => void
     }>()
 )
 

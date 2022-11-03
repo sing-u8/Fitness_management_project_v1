@@ -278,11 +278,13 @@ export class LessonEffect {
         () =>
             this.actions$.pipe(
                 ofType(LessonActions.startMoveLessonItem),
-                mergeMap(({ apiData }) =>
+                mergeMap(({ apiData, cb }) =>
                     this.centerLessonApi
                         .moveItem(apiData.centerId, apiData.categoryId, apiData.itemId, apiData.requestBody)
                         .pipe(
-                            tap(() => {}),
+                            tap(() => {
+                                cb ? cb() : null
+                            }),
                             catchError((err: string) => of(LessonActions.error({ error: err })))
                         )
                 )

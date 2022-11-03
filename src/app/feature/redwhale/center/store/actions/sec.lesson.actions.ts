@@ -116,6 +116,7 @@ export const startMoveLessonItem = createAction(
         targetItem: ClassItem
         targetCategId: string
         sourceCategId: string
+        cb?: () => void
     }>()
 )
 

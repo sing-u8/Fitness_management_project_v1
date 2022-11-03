@@ -235,11 +235,13 @@ export class MembershipEffect {
         () =>
             this.actions$.pipe(
                 ofType(MembershipActions.startMoveMembershipItem),
-                mergeMap(({ apiData }) =>
+                mergeMap(({ apiData, cb }) =>
                     this.centerMembershipApi
                         .moveItem(apiData.centerId, apiData.categoryId, apiData.itemId, apiData.requestBody)
                         .pipe(
-                            tap(() => {}),
+                            tap(() => {
+                                cb ? cb() : null
+                            }),
                             catchError((err: string) => of(MembershipActions.error({ error: err })))
                         )
                 )

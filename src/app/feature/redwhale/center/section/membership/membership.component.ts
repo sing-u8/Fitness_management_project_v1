@@ -31,12 +31,12 @@ import { showToast } from '@appStore/actions/toast.action'
 import * as FromMembership from '@centerStore/reducers/sec.membership.reducer'
 import * as MembershipSelector from '@centerStore/selectors/sec.membership.selector'
 import * as MembershipActions from '@centerStore/actions/sec.membership.actions'
+import * as LessonActions from '@centerStore/actions/sec.lesson.actions'
+import * as FromLesson from '@centerStore/reducers/sec.lesson.reducer'
 
 import { ActivatedRoute, Router } from '@angular/router'
 
 import { originalOrder, reverseOrder } from '@helpers/pipe/keyvalue'
-import * as LessonActions from '@centerStore/actions/sec.lesson.actions'
-import * as FromLesson from '@centerStore/reducers/sec.lesson.reducer'
 import { ClassCategory } from '@schemas/class-category'
 
 // screen types
@@ -201,6 +201,11 @@ export class MembershipComponent implements OnInit {
                             targetItem: _item,
                             targetCategId: _targetCategId,
                             sourceCategId: _sourceCategId,
+                            cb: () => {
+                                if (_targetCategId != _sourceCategId) {
+                                    this.nxStore.dispatch(LessonActions.refreshSelectedLesson())
+                                }
+                            },
                         })
                     )
                 })
