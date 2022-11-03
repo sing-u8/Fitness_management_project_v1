@@ -3,7 +3,7 @@ import { createAction, props } from '@ngrx/store'
 import { TrainerFilter, SelectedLesson, LessonCategoryState } from '../reducers/sec.lesson.reducer'
 
 import { ClassCategory } from '@schemas/class-category'
-import { MoveItemRequestBody, UpdateItemRequestBody } from '@services/center-lesson.service'
+import { MoveCategoryRequestBody, MoveItemRequestBody, UpdateItemRequestBody } from '@services/center-lesson.service'
 import { ClassItem } from '@schemas/class-item'
 import { MembershipItem } from '@schemas/membership-item'
 import { CenterUser } from '@schemas/center-user'
@@ -125,7 +125,7 @@ export const startMoveLessonCategory = createAction(
         apiData: {
             centerId: string
             categoryId: string
-            // requestBody: MoveItemRequestBody
+            requestBody: MoveCategoryRequestBody
         }
         targetItems: ClassCategory[]
         targetItem: ClassCategory

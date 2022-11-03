@@ -207,15 +207,11 @@ export const lessonReducer = createImmerReducer(
         return state
     }),
     on(LessonActions.startMoveLessonCategory, (state, action) => {
-        _.keys(state.entities).forEach((v) => {
-            const targetItem = action.targetItems.find((ti) => ti.id == v)
-            state.entities[v] = {
-                ...state.entities[v],
-                ...targetItem,
-            }
-        })
-        console.log('LessonActions.startMoveLessonCategory -- ', _.keys(state.entities), state.entities)
-        return state
+        const updates = action.targetItems.map((v) => ({
+            id: v.id,
+            changes: v,
+        }))
+        return adapter.updateMany(updates, state)
     }),
     on(LessonActions.startSetSelectedLesson, (state, { selectedLesson }) => {
         state.selectedLesson = _.assign(state.selectedLesson, {

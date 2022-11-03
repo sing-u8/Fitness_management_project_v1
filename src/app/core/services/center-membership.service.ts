@@ -110,6 +110,24 @@ export class CenterMembershipService {
         )
     }
 
+    // 카테고리 이동
+    moveCategory(centerId: string, categoryId: string, requestBody: MoveCategoryRequestBody): Observable<Response> {
+        const url = this.SERVER + `/${centerId}/membership/${categoryId}/move`
+
+        const options = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json',
+            }),
+        }
+
+        return this.http.put<Response>(url, requestBody, options).pipe(
+            map((res) => {
+                return res
+            }),
+            catchError(handleError)
+        )
+    }
+
     // 아이템 생성
     createItem(gymId: string, categoryId: string, requestBody: CreateItemRequestBody): Observable<MembershipItem> {
         const url = this.SERVER + `/${gymId}/membership/${categoryId}/item`
@@ -296,6 +314,10 @@ export interface UpdateItemRequestBody {
 export interface MoveItemRequestBody {
     target_category_id: string
     target_item_sequence_number: number
+}
+
+export interface MoveCategoryRequestBody {
+    target_category_sequence_number: number
 }
 
 export interface LinkClassRequestBody {

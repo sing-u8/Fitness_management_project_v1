@@ -231,13 +231,29 @@ export class MembershipEffect {
         )
     )
 
-    public moveLessonItem = createEffect(
+    public moveMembershipItem$ = createEffect(
         () =>
             this.actions$.pipe(
                 ofType(MembershipActions.startMoveMembershipItem),
                 mergeMap(({ apiData }) =>
                     this.centerMembershipApi
                         .moveItem(apiData.centerId, apiData.categoryId, apiData.itemId, apiData.requestBody)
+                        .pipe(
+                            tap(() => {}),
+                            catchError((err: string) => of(MembershipActions.error({ error: err })))
+                        )
+                )
+            ),
+        { dispatch: false }
+    )
+
+    public moveMembershipCategory = createEffect(
+        () =>
+            this.actions$.pipe(
+                ofType(MembershipActions.startMoveMembershipCategory),
+                mergeMap(({ apiData }) =>
+                    this.centerMembershipApi
+                        .moveCategory(apiData.centerId, apiData.categoryId, apiData.requestBody)
                         .pipe(
                             tap(() => {}),
                             catchError((err: string) => of(MembershipActions.error({ error: err })))

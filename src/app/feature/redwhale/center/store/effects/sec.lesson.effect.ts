@@ -290,6 +290,20 @@ export class LessonEffect {
         { dispatch: false }
     )
 
+    public moveLessonCategory = createEffect(
+        () =>
+            this.actions$.pipe(
+                ofType(LessonActions.startMoveLessonCategory),
+                mergeMap(({ apiData }) =>
+                    this.centerLessonApi.moveCategory(apiData.centerId, apiData.categoryId, apiData.requestBody).pipe(
+                        tap(() => {}),
+                        catchError((err: string) => of(MembershipActions.error({ error: err })))
+                    )
+                )
+            ),
+        { dispatch: false }
+    )
+
     // linked class item
 
     public getLinkedMemberships$ = createEffect(() =>

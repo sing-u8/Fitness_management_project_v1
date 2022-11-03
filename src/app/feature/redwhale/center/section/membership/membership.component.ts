@@ -107,7 +107,8 @@ export class MembershipComponent implements OnInit {
         this.nxStore.dispatch(MembershipActions.setCurrentGym({ currentCenter: this.center.id }))
 
         this.membershipCategEntities$.pipe(takeUntil(this.unSubscriber$)).subscribe((memCategEn) => {
-            this.membershipCategList = _.values(memCategEn)
+            this.membershipCategList = _.orderBy(_.values(memCategEn), ['sequence_number'], ['asc'])
+            console.log('this.membershipCategList  -- ', this.membershipCategList)
         })
 
         this.nxStore
@@ -150,14 +151,18 @@ export class MembershipComponent implements OnInit {
                     const _targetModel = targetModel as ClassCategory[]
 
                     this.nxStore.dispatch(
-                        LessonActions.startMoveLessonCategory({
+                        MembershipActions.startMoveMembershipCategory({
                             apiData: {
                                 centerId: this.center.id,
                                 categoryId: _item.id,
+                                requestBody: {
+                                    target_category_sequence_number:
+                                        1 + _targetModel.findIndex((v) => v.id == _item.id),
+                                },
                             },
                             targetItems: _.map(_targetModel, (v, idx, vs) => ({
                                 ...v,
-                                // sequence_number: vs.length - idx,
+                                sequence_number: idx + 1,
                             })),
                             targetItem: _item,
                         })

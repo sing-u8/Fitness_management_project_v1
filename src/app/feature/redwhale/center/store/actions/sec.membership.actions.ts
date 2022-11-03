@@ -4,10 +4,11 @@ import { SelectedMembership, MembershipCategoryState } from '../reducers/sec.mem
 
 import { MembershipCategory } from '@schemas/membership-category'
 import { MembershipItem } from '@schemas/membership-item'
-import { UpdateItemRequestBody } from '@services/center-membership.service'
+import { MoveCategoryRequestBody, UpdateItemRequestBody } from '@services/center-membership.service'
 import { ClassItem } from '@schemas/class-item'
 import { MoveItemRequestBody } from '@services/center-membership.service'
-import { ClassCategory } from '@schemas/class-category'
+import { LessonCategoryState } from '@centerStore/reducers/sec.lesson.reducer'
+import { Update } from '@ngrx/entity'
 
 const FeatureKey = 'Center/Membership'
 
@@ -108,7 +109,7 @@ export const startMoveMembershipCategory = createAction(
         apiData: {
             centerId: string
             categoryId: string
-            // requestBody: MoveItemRequestBody
+            requestBody: MoveCategoryRequestBody
         }
         targetItems: MembershipCategory[]
         targetItem: MembershipCategory

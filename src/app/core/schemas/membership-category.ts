@@ -2,6 +2,7 @@ import { MembershipItem } from './membership-item'
 export interface MembershipCategory {
     id: string
     name: string
+    sequence_number: number
     item_count: number
 }
 

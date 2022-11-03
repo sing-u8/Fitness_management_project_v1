@@ -149,15 +149,11 @@ export const membershipReducer = createImmerReducer(
 
     // selected membership
     on(MembershipActions.startMoveMembershipCategory, (state, action) => {
-        _.keys(state.entities).forEach((v) => {
-            const targetItem = action.targetItems.find((ti) => ti.id == v)
-            state.entities[v] = {
-                ...state.entities[v],
-                ...targetItem,
-            }
-        })
-        console.log('MembershipActions.startMoveLessonCategory -- ', _.keys(state.entities), state.entities)
-        return state
+        const updates = action.targetItems.map((v) => ({
+            id: v.id,
+            changes: v,
+        }))
+        return adapter.updateMany(updates, state)
     }),
     on(MembershipActions.startMoveMembershipItem, (state, action) => {
         const targetCategory = state.entities[action.targetCategId]

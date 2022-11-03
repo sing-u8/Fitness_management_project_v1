@@ -138,16 +138,14 @@ export class LessonComponent implements OnInit, AfterViewInit, OnDestroy {
         this.nxStore.dispatch(LessonActions.startGetTrainerFilterList({ centerId: this.center.id }))
 
         this.lessonCategEntities$.pipe(takeUntil(this.unSubscriber$)).subscribe((lesCategEn) => {
-            this.lessonCategList = _.values(lesCategEn)
+            this.lessonCategList = _.orderBy(_.values(lesCategEn), ['sequence_number'], ['asc'])
         })
         this.nxStore
             .pipe(select(LessonSelector.seletedTrainerFilter), takeUntil(this.unSubscriber$))
             .subscribe((tf) => {
-                console.log('select trainer filter : ', tf)
                 this.trainerFilter = tf
             })
         this.nxStore.pipe(select(LessonSelector.trainerFilterList), takeUntil(this.unSubscriber$)).subscribe((tfl) => {
-            console.log('select trainer filter list: ', tfl)
             this.trainerFilterList = tfl
             this.lessonManagerList = tfl.filter((tf) => tf.value != undefined)
         })
@@ -201,10 +199,14 @@ export class LessonComponent implements OnInit, AfterViewInit, OnDestroy {
                             apiData: {
                                 centerId: this.center.id,
                                 categoryId: _item.id,
+                                requestBody: {
+                                    target_category_sequence_number:
+                                        1 + _targetModel.findIndex((v) => v.id == _item.id),
+                                },
                             },
                             targetItems: _.map(_targetModel, (v, idx, vs) => ({
                                 ...v,
-                                // sequence_number: vs.length - idx,
+                                sequence_number: 1 + idx,
                             })),
                             targetItem: _item,
                         })
