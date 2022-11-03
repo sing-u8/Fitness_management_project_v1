@@ -19,7 +19,7 @@ import { CenterRolePermissionService } from '@services/center-role-permission.se
 import { CenterService } from '@services/center.service'
 
 import { Center } from '@schemas/center'
-import { PermissionCategory } from '@schemas/permission-category'
+import { PermissionCategory, RoleCode } from '@schemas/permission-category'
 import { SettingTermConfirmOutput } from '@shared/components/common/setting-terms-modal/setting-terms-modal.component'
 
 import _ from 'lodash'
@@ -27,8 +27,9 @@ import _ from 'lodash'
 import { showRoleModal } from '@appStore/actions/modal.action'
 import { roleModalSelector } from '@appStore/selectors'
 import { Store, select } from '@ngrx/store'
-import { Subject } from 'rxjs'
+import { forkJoin, Subject } from 'rxjs'
 import { takeUntil } from 'rxjs/operators'
+import { Permission } from '@schemas/store/app/modal.interface'
 
 @Component({
     selector: 'center-list-item',
@@ -55,7 +56,11 @@ export class CenterListItemComponent implements OnInit, AfterViewInit, OnDestroy
     public doShowDropDown: boolean
     public doShowModal: boolean
     public centerModalData
-    public centerPermission: Array<PermissionCategory> = []
+    public centerPermissionObj: Permission = {
+        visible: false,
+        administrator: [],
+        instructor: [],
+    }
     public centerTerms: string = undefined
 
     public unSubscriber$ = new Subject<void>()
@@ -86,16 +91,22 @@ export class CenterListItemComponent implements OnInit, AfterViewInit, OnDestroy
         this.initCenterBackground()
         this.centerTerms = this.center.contract_terms
 
-        this.centerRolePermissionService
-            .getCenterRolePermission(this.center.id, 'instructor')
-            .subscribe((permissionCategs) => {
-                this.centerPermission = permissionCategs
-            })
         this.nxStore.pipe(select(roleModalSelector), takeUntil(this.unSubscriber$)).subscribe((roleModal) => {
             if (roleModal.center?.id == this.center.id) {
-                this.centerPermission = _.cloneDeep(roleModal).permissionCateg
+                this.centerPermissionObj = _.cloneDeep(roleModal).permissionCategObj
             }
         })
+        forkJoin([
+            this.centerRolePermissionService.getCenterRolePermission(this.center.id, 'administrator'),
+            this.centerRolePermissionService.getCenterRolePermission(this.center.id, 'instructor'),
+        ]).subscribe(([adminPCList, instPCList]) => {
+            this.centerPermissionObj = {
+                visible: this.centerPermissionObj.visible,
+                administrator: adminPCList,
+                instructor: instPCList,
+            }
+        })
+
         // this.centerRolePermissionService.getCenterRoles(this.center.id).subscribe((role) => {
         //     console.log('center - ', this.center, ' -- ', 'role : ', role)
         // })
@@ -181,7 +192,16 @@ export class CenterListItemComponent implements OnInit, AfterViewInit, OnDestroy
     openRoleModal(event) {
         event.stopPropagation()
         event.preventDefault()
-        this.nxStore.dispatch(showRoleModal({ center: this.center, instPermissionCategs: this.centerPermission }))
+        console.log('openRoleModal -- ', this.centerPermissionObj)
+        this.nxStore.dispatch(
+            showRoleModal({
+                center: this.center,
+                permissionCategObj: {
+                    ...this.centerPermissionObj,
+                    visible: true,
+                },
+            })
+        )
     }
     // <---------------------center service------------------//
 

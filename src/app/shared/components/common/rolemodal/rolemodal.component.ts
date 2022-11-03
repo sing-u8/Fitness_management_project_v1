@@ -15,6 +15,9 @@ import { ClickEmitterType } from '@schemas/components/button'
 import { closeRoleModal, startCloseRoleModal } from '@appStore/actions/modal.action'
 import { RoleModal } from '@schemas/store/app/modal.interface'
 import { Store } from '@ngrx/store'
+import { Center } from '@schemas/center'
+import { StorageService } from '@services/storage.service'
+import { setCenterPermissionModal, startUpdateCenterPermission } from '@centerStore/actions/center.common.actions'
 
 @Component({
     selector: 'rw-rolemodal',
@@ -26,9 +29,12 @@ export class RolemodalComponent implements OnChanges, AfterViewChecked, OnDestro
     @Output() visibleChange = new EventEmitter<boolean>()
 
     @Input() roleModal: RoleModal = {
-        visible: false,
         center: undefined,
-        permissionCateg: [],
+        permissionCategObj: {
+            administrator: [],
+            instructor: [],
+            visible: false,
+        },
     }
 
     @ViewChild('modalBackgroundElement') modalBackgroundElement
@@ -36,8 +42,11 @@ export class RolemodalComponent implements OnChanges, AfterViewChecked, OnDestro
 
     public changed: boolean
     public isMouseModalDown = false
+    public center: Center
 
-    constructor(private renderer: Renderer2, private nxStore: Store) {}
+    public ownerCheckApprove = true
+
+    constructor(private renderer: Renderer2, private nxStore: Store, private storageService: StorageService) {}
 
     ngOnChanges(changes: SimpleChanges) {
         if (!changes['visible']?.firstChange) {
@@ -58,6 +67,7 @@ export class RolemodalComponent implements OnChanges, AfterViewChecked, OnDestro
                     this.renderer.addClass(this.modalBackgroundElement.nativeElement, 'rw-modal-background-show')
                     this.renderer.addClass(this.modalWrapperElement.nativeElement, 'rw-modal-wrapper-show')
                 }, 0)
+                this.center = this.storageService.getCenter()
             } else {
                 this.renderer.removeClass(this.modalBackgroundElement.nativeElement, 'rw-modal-background-show')
                 this.renderer.removeClass(this.modalWrapperElement.nativeElement, 'rw-modal-wrapper-show')
@@ -76,10 +86,11 @@ export class RolemodalComponent implements OnChanges, AfterViewChecked, OnDestro
     }
     onSave(clickEmitter: ClickEmitterType): void {
         clickEmitter.showLoading()
+        console.log('rolemodal -- on save : ', this.roleModal)
         this.nxStore.dispatch(
             startCloseRoleModal({
                 clickEmitter,
-                instPermissionCategs: this.roleModal.permissionCateg,
+                permissionCategObj: this.roleModal.permissionCategObj,
                 center: this.roleModal.center,
             })
         )
@@ -93,3 +104,10 @@ export class RolemodalComponent implements OnChanges, AfterViewChecked, OnDestro
         this.isMouseModalDown = false
     }
 }
+
+/*
+
+ 
+
+
+ */

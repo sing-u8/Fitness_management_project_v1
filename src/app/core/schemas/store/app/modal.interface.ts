@@ -11,8 +11,13 @@ export interface ModalData {
     confirmButtonText?: string
 }
 
-export interface RoleModal {
+export interface Permission {
+    administrator: Array<PermissionCategory>
+    instructor: Array<PermissionCategory>
     visible: boolean
+}
+
+export interface RoleModal {
     center: Center
-    permissionCateg: Array<PermissionCategory>
+    permissionCategObj: Permission
 }

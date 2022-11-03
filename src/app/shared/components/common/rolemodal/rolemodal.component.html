@@ -11,26 +11,96 @@
             <span class="close" (click)="onCancel()"></span>
         </div>
         <div class="body">
-            <div class="body-title rw-typo-bodytext0-bold">매출 페이지 조회</div>
-            <div class="body-content rw-typo-bodytext0-regular">
-                비공개 시, 운영자에게만 매출 페이지가 보여지며<br />
-                공개 시, 강사에게도 매출 페이지가 공개돼요.
-            </div>
-            <div class="show-sale">
-                <ng-container *ngFor="let item of roleModal.permissionCateg">
-                    <ng-container *ngFor="let subItem of item.items">
-                        <rw-switch
-                            *ngIf="subItem.code == 'read_stats_sales'"
-                            [text]="subItem.approved ? '강사에게도 매출 공개  🙉' : '강사에게 매출 비공개  🙈'"
-                            [(ngModel)]="subItem.approved"
-                        ></rw-switch>
+            <div class="body-item">
+                <div class="d-flex flex-column">
+                    <div class="body-title rw-typo-bodytext0-bold">매출 페이지 조회 권한</div>
+                    <div class="body-content rw-typo-bodytext0-regular">
+                        매출 페이지 조회 권한이 있는 직원은 센터 매출에<br />
+                        대한 모든 정보를 조회할 수 있어요.
+                    </div>
+                </div>
+                <div class="l-check-box">
+                    <rw-switch
+                        [text]="'운영자 조회 가능'"
+                        [disabled]="true"
+                        [(ngModel)]="ownerCheckApprove"
+                    ></rw-switch>
+                    <ng-container *ngFor="let item of roleModal.permissionCategObj.administrator">
+                        <ng-container *ngFor="let subItem of item.items">
+                            <div
+                                *ngIf="subItem.code == 'read_stats_sales'"
+                                class="checkbox-margin-top"
+                            >
+                                <rw-switch
+                                    [text]="subItem.approved ? '관리자 조회 가능' : '관리자 조회 불가능'"
+                                    [(ngModel)]="subItem.approved"
+                                ></rw-switch>
+                            </div>
+                        </ng-container>
                     </ng-container>
-                </ng-container>
+                    <ng-container *ngFor="let item of roleModal.permissionCategObj.instructor">
+                        <ng-container *ngFor="let subItem of item.items">
+                            <div
+                                *ngIf="subItem.code == 'read_stats_sales'"
+                                class="checkbox-margin-top"
+                            >
+                                <rw-switch
+                                    [text]="subItem.approved ? '강사 조회 가능' : '강사 조회 불가능'"
+                                    [(ngModel)]="subItem.approved"
+                                ></rw-switch>
+                            </div>
+                        </ng-container>
+                    </ng-container>
+                </div>
             </div>
+            <div class="body-item">
+                <div class="d-flex flex-column">
+                    <div class="body-title rw-typo-bodytext0-bold">결제 내역 삭제 권한</div>
+                    <div class="body-content rw-typo-bodytext0-regular">
+                        삭제 권한이 있는 직원은 회원의 결제 내역을 자유<br />
+                        롭게 삭제할 수 있어요. 삭제된 내역은 복구가 불가<br />
+                        하니 주의해주세요!
+                    </div>
+                </div>
+                <div class="l-check-box">
+                    <rw-switch
+                        [text]="'운영자 삭제 가능'"
+                        [disabled]="true"
+                        [(ngModel)]="ownerCheckApprove"
+                    ></rw-switch>
+                    <ng-container *ngFor="let item of roleModal.permissionCategObj.administrator">
+                        <ng-container *ngFor="let subItem of item.items">
+                            <div
+                                *ngIf="subItem.code == 'delete_user_membership_payment'"
+                                class="checkbox-margin-top"
+                            >
+                                <rw-switch
+                                    [text]="subItem.approved ? '관리자 삭제 가능' : '관리자 삭제 불가능'"
+                                    [(ngModel)]="subItem.approved"
+                                ></rw-switch>
+                            </div>
+                        </ng-container>
+                    </ng-container>
+                    <ng-container *ngFor="let item of roleModal.permissionCategObj.instructor">
+                        <ng-container *ngFor="let subItem of item.items">
+                            <div
+                                *ngIf="subItem.code == 'delete_user_membership_payment'"
+                                class="checkbox-margin-top"
+                            >
+                                <rw-switch
+                                    [text]="subItem.approved ? '강사 삭제 가능' : '강사 삭제 불가능'"
+                                    [(ngModel)]="subItem.approved"
+                                ></rw-switch>
+                            </div>
+                        </ng-container>
+                    </ng-container>
+                </div>
+            </div>
+        
         </div>
         <div class="save-button">
             <rw-button
-                [width]="'320'"
+                [width]="'650'"
                 [height]="'50'"
                 [color]="'var(--red)'"
                 [loadingName]="'role-change-button'"

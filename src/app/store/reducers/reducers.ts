@@ -50,8 +50,11 @@ const initialState: AppStateInterface = {
     // role
     roleModal: {
         center: null,
-        visible: false,
-        permissionCateg: [],
+        permissionCategObj: {
+            visible: false,
+            administrator: [],
+            instructor: [],
+        },
     },
 }
 
@@ -111,25 +114,32 @@ export const appReducer = createImmerReducer(
         return state
     }),
     on(showRoleModal, (state, action) => {
-        state.roleModal.center = action.center
-        state.roleModal.visible = true
-        state.roleModal.permissionCateg = action.instPermissionCategs
+        state.roleModal = {
+            center: action.center,
+            permissionCategObj: action.permissionCategObj,
+        }
         return state
     }),
     on(closeRoleModal, (state, action) => {
         state.roleModal.center = null
-        state.roleModal.visible = false
-        state.roleModal.permissionCateg = []
+        state.roleModal.permissionCategObj = {
+            visible: false,
+            administrator: [],
+            instructor: [],
+        }
         return state
     }),
     on(startCloseRoleModal, (state, action) => {
-        state.roleModal.permissionCateg = action.instPermissionCategs
+        state.roleModal.permissionCategObj = action.permissionCategObj
         return state
     }),
     on(finishCloseRoleModal, (state, action) => {
         state.roleModal.center = null
-        state.roleModal.visible = false
-        state.roleModal.permissionCateg = []
+        state.roleModal.permissionCategObj = {
+            visible: false,
+            administrator: [],
+            instructor: [],
+        }
         return state
     }),
     // -------------------------------------------------------------------------------------//

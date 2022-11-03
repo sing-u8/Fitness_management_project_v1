@@ -82,7 +82,6 @@ export class CenterCommonEffect {
                     this.centerRolePermissionApi.getCenterRolePermission(centerId, 'instructor'),
                 ]).pipe(
                     switchMap(([adminPCList, instPCList]) => {
-                        console.log('getCenterPermission$ effect : ', adminPCList, ' -- ', instPCList)
                         return [
                             centerCommonActions.finishGetCenterPermission({
                                 permissionObj: {

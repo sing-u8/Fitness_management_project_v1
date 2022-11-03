@@ -43,6 +43,7 @@ export class AppComponent implements OnDestroy, OnInit {
         })
         this.nxStore.pipe(select(roleModalSelector), takeUntil(this.unSubscriber$)).subscribe((roleModal) => {
             this.roleModalState = _.cloneDeep(roleModal)
+            console.log('roleModalSelector -- ', this.roleModalState)
         })
         this.nxStore
             .pipe(select(CenterCommonSelector.centerPermission), takeUntil(this.unSubscriber$))
