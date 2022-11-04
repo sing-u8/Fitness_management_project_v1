@@ -294,6 +294,38 @@ export const dashboardReducer = createImmerReducer(
         }
         return state
     }),
+    on(DashboardActions.setCurUserData, (state, { userId, reqBody, centerId }) => {
+        if (state.curCenterId == centerId) {
+            if (state.curUserData.user.id == userId) state.curUserData.user = _.assign(state.curUserData.user, reqBody)
+
+            const userListsKeys = _.keys(state.usersLists) as MemberSelectCateg[]
+            userListsKeys.forEach((key) => {
+                state.usersLists[key].find((v, i) => {
+                    if (v.user.id == userId) {
+                        state.usersLists[key][i].user = _.assign(state.usersLists[key][i].user, reqBody)
+                        return true
+                    }
+                    return false
+                })
+            })
+        }
+        if (state.drawerCurCenterId == centerId) {
+            if (state.drawerCurUserData.user.id == userId)
+                state.drawerCurUserData.user = _.assign(state.drawerCurUserData.user, reqBody)
+
+            const userListsKeys = _.keys(state.drawerUsersLists) as MemberSelectCateg[]
+            userListsKeys.forEach((key) => {
+                state.drawerUsersLists[key].find((v, i) => {
+                    if (v.user.id == userId) {
+                        state.drawerUsersLists[key][i].user = _.assign(state.drawerUsersLists[key][i].user, reqBody)
+                        return true
+                    }
+                    return false
+                })
+            })
+        }
+        return state
+    }),
 
     on(DashboardActions.startDelegate, (state, { centerId, reqBody }) => {
         return state

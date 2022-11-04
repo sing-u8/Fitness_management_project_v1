@@ -112,6 +112,15 @@ export const startSetCurUserData = createAction(
     }>()
 )
 
+export const setCurUserData = createAction(
+    `[${FeatureKey}] Set Current User Data`,
+    props<{
+        centerId: string
+        userId: string
+        reqBody: UpdateUserRequestBody
+    }>()
+)
+
 export const startDelegate = createAction(
     `[${FeatureKey}] Start Delegate Owner To Another Member`,
     props<{ centerId: string; reqBody: DelegateRequestBody; callback?: () => void }>()

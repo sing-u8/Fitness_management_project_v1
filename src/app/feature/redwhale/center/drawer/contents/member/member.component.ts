@@ -32,6 +32,7 @@ import { ScheduleHelperService } from '@services/center/schedule-helper.service'
 import { CommunityHelperService } from '@services/center/community-helper.service'
 
 import _ from 'lodash'
+import { UpdateUserRequestBody } from '@services/center-users.service'
 
 @Component({
     selector: 'dr-member',
@@ -586,21 +587,17 @@ export class MemberComponent implements OnInit, OnDestroy {
     toggleShowChangeUserEmailModal() {
         this.doShowChangeUserEmailModal = !this.doShowChangeUserEmailModal
     }
-    onChangeUserEmailConfirm(email: string) {
+    onChangeUserEmailConfirm(res: { centerId: string; userId: string; reqBody: UpdateUserRequestBody }) {
         this.nxStore.dispatch(
-            DashboardActions.startSetCurUserData({
-                centerId: this.center.id,
-                reqBody: { email: email },
-                userId: this.curUserData.user.id,
-                blockEffect: false,
-                callback: () => {
-                    this.toggleShowChangeUserEmailModal()
-                    this.nxStore.dispatch(showToast({ text: `이메일 입력이 완료되었습니다.` }))
-                    this.nxStore.dispatch(CenterCommonActions.startGetMembers({ centerId: this.center.id }))
-                    this.nxStore.dispatch(CenterCommonActions.startGetInstructors({ centerId: this.center.id }))
-                },
+            DashboardActions.setCurUserData({
+                centerId: res.centerId,
+                reqBody: res.reqBody,
+                userId: res.userId,
             })
         )
+        this.nxStore.dispatch(showToast({ text: `이메일 입력이 완료되었습니다.` }))
+        this.nxStore.dispatch(CenterCommonActions.startGetMembers({ centerId: this.center.id }))
+        this.nxStore.dispatch(CenterCommonActions.startGetInstructors({ centerId: this.center.id }))
         this.toggleShowChangeUserEmailModal()
     }
 }

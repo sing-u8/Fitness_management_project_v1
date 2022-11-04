@@ -12,7 +12,7 @@ import {
 } from '@angular/core'
 
 import { InputHelperService } from '@services/helper/input-helper.service'
-import { CenterUsersService } from '@services/center-users.service'
+import { CenterUsersService, UpdateUserRequestBody } from '@services/center-users.service'
 import { StorageService } from '@services/storage.service'
 
 import { Center } from '@schemas/center'
@@ -33,7 +33,7 @@ export class ChangeUserEmailModalComponent {
 
     @Output() visibleChange = new EventEmitter<boolean>()
     @Output() cancel = new EventEmitter<any>()
-    @Output() confirm = new EventEmitter<string>()
+    @Output() confirm = new EventEmitter<{ centerId: string; userId: string; reqBody: UpdateUserRequestBody }>()
 
     public changed: boolean
     public center: Center
@@ -51,7 +51,6 @@ export class ChangeUserEmailModalComponent {
         private storageService: StorageService
     ) {
         this.isMouseModalDown = false
-        this.center = this.storageService.getCenter()
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -68,6 +67,7 @@ export class ChangeUserEmailModalComponent {
             this.changed = false
 
             if (this.visible) {
+                this.center = this.storageService.getCenter()
                 this.renderer.addClass(this.modalBackgroundElement.nativeElement, 'display-block')
                 this.renderer.addClass(this.modalWrapperElement.nativeElement, 'display-flex')
                 setTimeout(() => {
@@ -106,19 +106,24 @@ export class ChangeUserEmailModalComponent {
 
     onConfirm(): void {
         this.isError = false
-        this.confirm.emit(this.userEmail)
-        // this.centerUsersApi
-        //     .updateUser(this.center.id, this.curUser.id, {
-        //         center_membership_number: this.userEmail,
-        //     })
-        //     .subscribe({
-        //         next: () => {
-        //             this.confirm.emit(this.userEmail)
-        //         },
-        //         error: () => {
-        //             this.isError = true
-        //         },
-        //     })
+        this.centerUsersApi
+            .updateUser(this.center.id, this.curUser.id, {
+                email: this.userEmail,
+            })
+            .subscribe({
+                next: () => {
+                    this.confirm.emit({
+                        centerId: this.center.id,
+                        userId: this.curUser.id,
+                        reqBody: {
+                            email: this.userEmail,
+                        },
+                    })
+                },
+                error: (err) => {
+                    this.isError = true
+                },
+            })
     }
 
     // on mouse rw-modal down

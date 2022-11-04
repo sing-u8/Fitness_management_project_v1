@@ -243,6 +243,7 @@
 ></db-change-membership-number-modal>
 <db-change-user-email-modal
     [(visible)]="doShowChangeUserEmailModal"
+    [curUser]="curUserData?.user"
     (cancel)="toggleShowChangeUserEmailModal()"
     (confirm)="onChangeUserEmailConfirm($event)"
 ></db-change-user-email-modal>

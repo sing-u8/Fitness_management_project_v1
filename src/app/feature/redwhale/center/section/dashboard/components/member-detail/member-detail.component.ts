@@ -34,6 +34,8 @@ import { openDrawer } from '@appStore/actions/drawer.action'
 import { CenterUser } from '@schemas/center-user'
 import { ContractTypeCode } from '@schemas/contract'
 import { UserMembership } from '@schemas/user-membership'
+import { UpdateUserRequestBody } from '@services/center-users.service'
+import { setCurUserData } from '@centerStore/actions/sec.dashboard.actions'
 
 @Component({
     selector: 'db-member-detail',
@@ -374,21 +376,17 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
     toggleShowChangeUserEmailModal() {
         this.doShowChangeUserEmailModal = !this.doShowChangeUserEmailModal
     }
-    onChangeUserEmailConfirm(email: string) {
+    onChangeUserEmailConfirm(res: { centerId: string; userId: string; reqBody: UpdateUserRequestBody }) {
         this.nxStore.dispatch(
-            DashboardActions.startSetCurUserData({
+            DashboardActions.setCurUserData({
                 centerId: this.center.id,
-                reqBody: { email: email },
+                reqBody: res.reqBody,
                 userId: this.curUserData.user.id,
-                blockEffect: false,
-                callback: () => {
-                    this.toggleShowChangeUserEmailModal()
-                    this.nxStore.dispatch(showToast({ text: `이메일 입력이 완료되었습니다.` }))
-                    this.nxStore.dispatch(CenterCommonActions.startGetMembers({ centerId: this.center.id }))
-                    this.nxStore.dispatch(CenterCommonActions.startGetInstructors({ centerId: this.center.id }))
-                },
             })
         )
+        this.nxStore.dispatch(showToast({ text: `이메일 입력이 완료되었습니다.` }))
+        this.nxStore.dispatch(CenterCommonActions.startGetMembers({ centerId: this.center.id }))
+        this.nxStore.dispatch(CenterCommonActions.startGetInstructors({ centerId: this.center.id }))
         this.toggleShowChangeUserEmailModal()
     }
 
