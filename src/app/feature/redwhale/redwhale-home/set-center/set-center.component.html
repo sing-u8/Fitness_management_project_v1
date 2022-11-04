@@ -1,18 +1,18 @@
 <section class="user-select-none thin-scroll-y " >
     <div class="header">
         <div class="header-text-container">
-          <p class="rw-typo-headline1">센터 정보를 간편하게</p>
-          <p class="rw-typo-headline1">업데이트해보세요.</p>
-          <p class="rw-typo-subtext1 subtext-margin">센터 이름과 url 주소는 언제든지 변경할 수 있어요.</p>
+            <p class="rw-typo-headline1">센터 정보를 간편하게</p>
+            <p class="rw-typo-headline1">업데이트해보세요.</p>
+            <p class="rw-typo-subtext1 subtext-margin">센터 이름과 url 주소는 언제든지 변경할 수 있어요.</p>
         </div>
 
         <div
-          class="cg-typo-subtext close-button"
-          rw-button
-          rwButtonWidth="84"
-          rwButtonHeight="39"
-          rwButtonBorderColor="var(--font-color)"
-          (click) = "goBack()"
+            class="cg-typo-subtext close-button"
+            rw-button
+            rwButtonWidth="84"
+            rwButtonHeight="39"
+            rwButtonBorderColor="var(--font-color)"
+            (click) = "goBack()"
         >
             <span class="mdi mdi-close close-size"></span>
             <span>닫기</span>
@@ -22,118 +22,121 @@
     <div class="body thin-scroll-x">
         <div class='create-center-outer-container'>
             <div class="create-center-container">
-
-              <div class="center-preview">
-                <p class="rw-typo-subtext2 ">미리보기</p>
-                <div class="item-container">
-                  <center-preview-item centerName={{centerNameForm.value}} centerAddress={{centerAddrForm.value}}
-                    centerAvatar={{photoSrc.file_type_center_picture}} centerBackgroundImage={{photoSrc.file_type_center_background}}>
-                  </center-preview-item>
-                </div>
-              </div>
-
-              <div class="center-setting">
-                <p class="rw-typo-subtext2 setting-info">
-                  <span class="asterisk">* &nbsp;</span>필수 입력 사항
-                </p>
-
-                <form class="setting-input-container">
-                  <label for="center-name" class="rw-typo-subtext2 ">
-                    센터 이름<span class="asterisk"> *</span>
-                  </label>
-                  <input
-                    id="center-name"
-                    rw-input
-                    rwCreateCenterInput
-                    [inputType]="'name'"
-                    [errorMessageObj]="cetnerNameErrObj"
-                    placeholder="센터 이름을 입력해주세요."
-                    class="center-name-input"
-                    [formControl]="centerNameForm"
-                  />
-                </form>
-
-                <div class="setting-input-container">
-                  <label for="center-addr" class="rw-typo-subtext2 ">
-                    센터 url 주소 <span class="asterisk"> *</span>
-                  </label>
-                  <div id="center-addr" class="center-url-container">
-                    <p class="rw-typo-bodytext1 center-url-default">redwhale.xyz/</p>
-                    <input
-                      rw-input
-                      rwCreateCenterInput
-                      [inputType]="'url'"
-                      [errorMessageObj]="centerAddrErrObj"
-                      placeholder="영어/숫자 15자 이내"
-                      class="center-url-input"
-                      [formControl]="centerAddrForm"
-                    />
-                  </div>
-                </div>
-
-                <div class="setting-picture-container picture-container-mb-1">
-                  <p class="rw-typo-subtext2">센터 프로필 사진</p>
-                  <div class="d-flex align-items-center">
-                    <p class="rw-typo-bodytext1 picture-name">{{photoName.file_type_center_picture}}</p>
-                    <div (click)="centerProfile.click()" *ngIf="isCenterProfileRegistered == false "
-                      class="cg-typo-subtext register-button" rw-button rwButtonColor="var(--darkgrey)">
-                      <span class="mdi mdi-plus"></span>
-                      <span>등록하기</span>
-                      <input type="file" accept="image/*" #centerProfile (change)="registerPhoto('file_type_center_picture', centerProfile)"
-                        hidden />
+    
+                <div class="center-preview">
+                    <p class="rw-typo-subtext2 ">미리보기</p>
+                    <div class="item-container">
+                        <center-preview-item
+                            centerName={{centerNameForm.value}} centerAddress={{centerAddrForm.value}}
+                            centerAvatar={{photoSrc.file_type_center_picture}} centerBackgroundImage={{photoSrc.file_type_center_background}}
+                        ></center-preview-item>
                     </div>
-                    <div (click)="removePhoto('file_type_center_picture')" *ngIf="isCenterProfileRegistered == true "
-                      class="cg-typo-subtext remove-button" rw-button rwButtonBorderColor="#c9c9c9"
-                      rwButtonFontColor="var(--darkgrey)">
-                      <span class="mdi mdi-trash-can-outline"></span>
-                      <span>사진 제거</span>
-                    </div>
-                  </div>
                 </div>
-
-                <div class="setting-picture-container picture-container-mb-2">
-                  <p class="rw-typo-subtext2">센터 배경 사진</p>
-                  <div class="d-flex align-items-center">
-                    <p class="rw-typo-bodytext1 picture-name">{{photoName.file_type_center_background}}</p>
-                    <div (click)="centerBackground.click()" *ngIf="isCenterBackgroundRegistered == false "
-                      rw-button rwButtonColor="var(--darkgrey)"
-                      class="cg-typo-subtext register-button"
-                    >
-                      <span class="mdi mdi-plus"></span>
-                      <span>등록하기</span>
-                      <input type="file" accept="image/*" #centerBackground
-                        (change)="registerPhoto('file_type_center_background', centerBackground)" hidden />
+    
+                <div class="center-setting">
+                    <p class="rw-typo-subtext2 setting-info">
+                        <span class="asterisk">* &nbsp;</span>필수 입력 사항
+                    </p>
+        
+                    <form class="setting-input-container">
+                        <label for="center-name" class="rw-typo-subtext2 ">
+                            센터 이름<span class="asterisk"> *</span>
+                        </label>
+                        <input
+                            id="center-name"
+                            rw-input
+                            rwCreateCenterInput
+                            [inputType]="'name'"
+                            [errorMessageObj]="cetnerNameErrObj"
+                            placeholder="센터 이름을 입력해주세요."
+                            class="center-name-input"
+                            [formControl]="centerNameForm"
+                        />
+                    </form>
+        
+                    <div class="setting-input-container">
+                        <label for="center-addr" class="rw-typo-subtext2 ">
+                            센터 url 주소 <span class="asterisk"> *</span>
+                        </label>
+                        <div id="center-addr" class="center-url-container">
+                            <p class="rw-typo-bodytext1 center-url-default">redwhale.xyz/</p>
+                            <input
+                                rw-input
+                                rwCreateCenterInput
+                                [inputType]="'url'"
+                                [errorMessageObj]="centerAddrErrObj"
+                                placeholder="영어/숫자 15자 이내"
+                                class="center-url-input"
+                                [formControl]="centerAddrForm"
+                            />
+                        </div>
                     </div>
-                    <div (click)="removePhoto('file_type_center_background')" *ngIf="isCenterBackgroundRegistered == true "
-                      rw-button rwButtonBorderColor="#c9c9c9"
-                      rwButtonFontColor="var(--darkgrey)"
-                      class="cg-typo-subtext remove-button"
-                    >
-                      <span class="mdi mdi-trash-can-outline"></span>
-                      <span>사진 제거</span>
+        
+                    <div class="setting-picture-container picture-container-mb-2">
+                        <p class="rw-typo-subtext2">센터 프로필 사진</p>
+                        <div class="d-flex align-items-center">
+                            <p class="rw-typo-bodytext1 picture-name">{{photoName.file_type_center_picture}}</p>
+                            <div
+                                (click)="centerProfile.click()" *ngIf="isCenterProfileRegistered == false "
+                                class="cg-typo-subtext register-button" rw-button rwButtonColor="var(--darkgrey)"
+                            >
+                                <span class="mdi mdi-plus"></span>
+                                <span>등록하기</span>
+                                <input type="file" accept="image/*" #centerProfile (change)="registerPhoto('file_type_center_picture', centerProfile)" hidden />
+                            </div>
+                            <div
+                                (click)="removePhoto('file_type_center_picture')" *ngIf="isCenterProfileRegistered == true "
+                                class="cg-typo-subtext remove-button" rw-button rwButtonBorderColor="#c9c9c9"
+                                rwButtonFontColor="var(--darkgrey)"
+                            >
+                                <span class="mdi mdi-trash-can-outline"></span>
+                                <span>사진 제거</span>
+                            </div>
+                        </div>
                     </div>
-                  </div>
-                </div>
-
-                <div class="button_container">
-                  <rw-button
-                    id="create_center"
-                    [height]="'55'"
-                    [width]="'484'"
-                    [color]="'var(--red)'"
-                    [disabled]="!((centerNameForm.value != '' && !centerNameForm.errors)
+        
+                    <div *ngIf="false" class="setting-picture-container picture-container-mb-2">
+                        <p class="rw-typo-subtext2">센터 배경 사진</p>
+                        <div class="d-flex align-items-center">
+                            <p class="rw-typo-bodytext1 picture-name">{{photoName.file_type_center_background}}</p>
+                            <div (click)="centerBackground.click()" *ngIf="isCenterBackgroundRegistered == false "
+                                 rw-button rwButtonColor="var(--darkgrey)"
+                                 class="cg-typo-subtext register-button"
+                            >
+                                <span class="mdi mdi-plus"></span>
+                                <span>등록하기</span>
+                                <input type="file" accept="image/*" #centerBackground
+                                       (change)="registerPhoto('file_type_center_background', centerBackground)" hidden />
+                            </div>
+                            <div (click)="removePhoto('file_type_center_background')" *ngIf="isCenterBackgroundRegistered == true "
+                                 rw-button rwButtonBorderColor="#c9c9c9"
+                                 rwButtonFontColor="var(--darkgrey)"
+                                 class="cg-typo-subtext remove-button"
+                            >
+                                <span class="mdi mdi-trash-can-outline"></span>
+                                <span>사진 제거</span>
+                            </div>
+                        </div>
+                    </div>
+        
+                    <div class="button_container">
+                        <rw-button
+                            id="create_center"
+                            [height]="'55'"
+                            [width]="'484'"
+                            [color]="'var(--red)'"
+                            [disabled]="!((centerNameForm.value != '' && !centerNameForm.errors)
                                 && (centerAddrForm.value != '' && !centerAddrForm.errors ))"
-                    [loadingName]="'create_center'"
-                    (onClick) = "(centerNameForm.value != '' && !centerNameForm.errors)
-                                && (centerAddrForm.value != '' && !centerAddrForm.errors )
-                              ? modifyCenter($event) : '' "
-                  >
-                      <span class="button-text">저장하기</span>
-                  </rw-button>
+                            [loadingName]="'create_center'"
+                            (onClick) = "(centerNameForm.value != '' && !centerNameForm.errors) && (centerAddrForm.value != '' && !centerAddrForm.errors )
+                                ? modifyCenter($event) : '' "
+                        >
+                            <span class="button-text">저장하기</span>
+                        </rw-button>
+                    </div>
+    
+    
                 </div>
-
-
-              </div>
             </div>
         </div>
     </div>
