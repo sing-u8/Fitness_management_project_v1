@@ -127,6 +127,7 @@ export class ModifyPaymentFullmodalComponent implements OnInit, OnChanges, After
                 centerId: this.center.id,
                 categoryId: this.userMembership.membership_category_id,
                 itemId: this.userMembership.membership_item_id,
+                userMembership: this.userMembership,
             })
         }
     }

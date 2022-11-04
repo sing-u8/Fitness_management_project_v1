@@ -141,14 +141,20 @@ export class ModifyPaymentFullModalStore extends ComponentStore<State> {
 
     // effects
     readonly getMembershipItemEffect = this.effect(
-        (param$: Observable<{ centerId: string; categoryId: string; itemId: string }>) =>
+        (
+            param$: Observable<{ centerId: string; categoryId: string; itemId: string; userMembership: UserMembership }>
+        ) =>
             param$.pipe(
                 switchMap((param) =>
                     this.centerMembershipApi.getItems(param.centerId, param.categoryId).pipe(
                         map((items) => _.find(items, (v) => v.id == param.itemId)),
                         tap({
                             next: (membershipItem) => {
-                                this.setMembershipTicketMembershipItem(membershipItem)
+                                this.setMembershipTicketMembershipItem({
+                                    ...membershipItem,
+                                    name: param.userMembership.name,
+                                    // category_name: param.userMembership.category_name,
+                                })
                             },
                             error: (err) => {
                                 console.log('modify payment fullmodal store - getMembershipItemEffect err: ', err)
