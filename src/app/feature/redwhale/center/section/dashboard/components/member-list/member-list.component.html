@@ -120,48 +120,64 @@
                 <ng-container *ngIf="usersLists[selectedUserList.key].length > 0 ">
                     <ng-container *ngIf="selectedUserList.key != 'employee'">
                         <db-user-list-card
-                          *ngFor="let item of usersLists[selectedUserList.key]; index as i"
-                          [cardItem]="item"
-                          [type]="selectedUserList.key"
-                          [holdMode]="holdModeFlags"
-                          [search]="userSearchInput.value"
-                          [holdNumber]="selectedUserListsHolding"
-                          [curUserData]="curUserData"
-                          (onCardClick)="onCardClick($event)"
-                          (onHoldClick)="onPartialHoldClick($event, i)"
+                            *ngFor="let item of usersLists[selectedUserList.key]; index as i"
+                            [cardItem]="item"
+                            [type]="selectedUserList.key"
+                            [holdMode]="holdModeFlags"
+                            [search]="userSearchInput.value"
+                            [holdNumber]="selectedUserListsHolding"
+                            [curUserData]="curUserData"
+                            (onCardClick)="onCardClick($event)"
+                            (onHoldClick)="onPartialHoldClick($event, i)"
                         ></db-user-list-card>
                     </ng-container>
-                    <ng-container *ngIf="selectedUserList.key == 'employee'">
+                    <ng-container *ngIf="selectedUserList.key == 'employee' && !(searchedUsersLists[selectedUserList.key].length == 0 && userSearchInput$_)">
                         <db-user-flip-list
-                          *ngIf="(employeeRoleObj$ | async)['owner']?.length > 0"
-                          [type] = "'운영자'+' '+ (employeeRoleObj$ | async)['owner']?.length"
+                            *ngIf="(employeeRoleObj$ | async)['owner']?.length > 0"
+                            [type] = "'운영자'+' '+ (employeeRoleObj$ | async)['owner']?.length"
                         >
                             <db-user-list-card
-                              *ngFor="let item of (employeeRoleObj$ | async)['owner']; index as i"
-                              [cardItem]="item"
-                              [type]="selectedUserList.key"
-                              [holdMode]="holdModeFlags"
-                              [search]="userSearchInput.value"
-                              [holdNumber]="selectedUserListsHolding"
-                              [curUserData]="curUserData"
-                              (onCardClick)="onCardClick($event)"
-                              (onHoldClick)="onPartialHoldClick($event, i)"
+                                *ngFor="let item of (employeeRoleObj$ | async)['owner']; index as i"
+                                [cardItem]="item"
+                                [type]="selectedUserList.key"
+                                [holdMode]="holdModeFlags"
+                                [search]="userSearchInput.value"
+                                [holdNumber]="selectedUserListsHolding"
+                                [curUserData]="curUserData"
+                                (onCardClick)="onCardClick($event)"
+                                (onHoldClick)="onPartialHoldClick($event, i)"
                             ></db-user-list-card>
                         </db-user-flip-list>
                         <db-user-flip-list
-                          *ngIf="(employeeRoleObj$ | async)['instructor']?.length > 0"
-                          [type] = "'강사'+' '+ (employeeRoleObj$ | async)['instructor']?.length"
+                            *ngIf="(employeeRoleObj$ | async)['administrator']?.length > 0"
+                            [type] = "'관리자'+' '+ (employeeRoleObj$ | async)['administrator']?.length"
                         >
                             <db-user-list-card
-                              *ngFor="let item of (employeeRoleObj$ | async)['instructor']; index as i"
-                              [cardItem]="item"
-                              [type]="selectedUserList.key"
-                              [holdMode]="holdModeFlags"
-                              [search]="userSearchInput.value"
-                              [holdNumber]="selectedUserListsHolding"
-                              [curUserData]="curUserData"
-                              (onCardClick)="onCardClick($event)"
-                              (onHoldClick)="onPartialHoldClick($event, i)"
+                                *ngFor="let item of (employeeRoleObj$ | async)['administrator']; index as i"
+                                [cardItem]="item"
+                                [type]="selectedUserList.key"
+                                [holdMode]="holdModeFlags"
+                                [search]="userSearchInput.value"
+                                [holdNumber]="selectedUserListsHolding"
+                                [curUserData]="curUserData"
+                                (onCardClick)="onCardClick($event)"
+                                (onHoldClick)="onPartialHoldClick($event, i)"
+                            ></db-user-list-card>
+                        </db-user-flip-list>
+                        <db-user-flip-list
+                            *ngIf="(employeeRoleObj$ | async)['instructor']?.length > 0"
+                            [type] = "'강사'+' '+ (employeeRoleObj$ | async)['instructor']?.length"
+                        >
+                            <db-user-list-card
+                                *ngFor="let item of (employeeRoleObj$ | async)['instructor']; index as i"
+                                [cardItem]="item"
+                                [type]="selectedUserList.key"
+                                [holdMode]="holdModeFlags"
+                                [search]="userSearchInput.value"
+                                [holdNumber]="selectedUserListsHolding"
+                                [curUserData]="curUserData"
+                                (onCardClick)="onCardClick($event)"
+                                (onHoldClick)="onPartialHoldClick($event, i)"
                             ></db-user-list-card>
                         </db-user-flip-list>
                     </ng-container>
