@@ -186,7 +186,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
         this.center = this.storageService.getCenter()
 
         this.nxStore.pipe(select(DashboardSelector.curCenterId), take(1)).subscribe((curCenterId) => {
-            console.log('DashboardSelector.curCenterId : ', curCenterId != this.center.id, curCenterId, this.center.id)
             if (curCenterId != this.center.id) {
                 // this.lockerSerState.resetLockerItemList()
                 this.nxStore.dispatch(DashboardActions.resetMainDashboardSstate())
@@ -206,6 +205,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
             .pipe(select(DashboardSelector.curUserData), takeUntil(this.unsubscribe$))
             .subscribe((curUserData) => {
                 this.willBeDeletedCenterUser = curUserData.user
+                this.checkIsDeletableMember()
             })
         this.nxStore.dispatch(DashboardActions.startGetUsersByCategory({ centerId: this.center.id }))
         this.nxStore.dispatch(DashboardActions.setCurCenterId({ centerId: this.center.id }))
@@ -217,6 +217,29 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     // delete member button
+    checkIsDeletableMember() {
+        const centerUserRole = this.center.role_code
+        switch (centerUserRole) {
+            case 'instructor':
+                this.isDeletableMemberUser =
+                    this.willBeDeletedCenterUser.role_code != 'owner' &&
+                    this.willBeDeletedCenterUser.role_code != 'administrator' &&
+                    this.willBeDeletedCenterUser.role_code != 'instructor'
+                break
+            case 'administrator':
+                this.isDeletableMemberUser =
+                    this.willBeDeletedCenterUser.role_code != 'owner' &&
+                    this.willBeDeletedCenterUser.role_code != 'administrator'
+                break
+            case 'owner':
+                this.isDeletableMemberUser = this.willBeDeletedCenterUser.role_code != 'owner'
+                break
+            default:
+                this.isDeletableMemberUser = false
+                break
+        }
+    }
+    public isDeletableMemberUser = false
     public willBeDeletedCenterUser: CenterUser = undefined
     public showDeleteMember = false
     public deleteMemberData = {
@@ -234,6 +257,17 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
         this.showDeleteMember = false
     }
     confirmDeleteMember() {
+        let curUser: CenterUser = undefined
+        this.curUserData$.pipe(take(1)).subscribe((cud) => {
+            curUser = cud.user
+        })
+        this.nxStore.dispatch(
+            DashboardActions.startExportMember({
+                centerId: this.center.id,
+                userId: curUser.id,
+                callback: () => {},
+            })
+        )
         this.nxStore.dispatch(showToast({ text: '회원 삭제가 완료되었습니다.' }))
         this.closeDeleteMemberModal()
     }

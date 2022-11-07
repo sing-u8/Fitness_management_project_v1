@@ -23,7 +23,7 @@ export type UsersListValue = Array<UserListValueItem>
 export type UsersSelectCateg = Record<MemberSelectCateg, { name: string; userSize: number }>
 export type UserListSelect = { key: MemberSelectCateg; value: { name: string; userSize: number } }
 export type UsersLists = Record<MemberSelectCateg, UsersListValue>
-export type CurUseData = {
+export type CurUserData = {
     user: CenterUser
     lockers: UserLocker[]
     memberships: UserMembership[]
@@ -62,7 +62,7 @@ export const UsersListInit: UsersLists = {
     expired: [],
     employee: [],
 }
-export const CurUseDataInit: CurUseData = {
+export const CurUserDataInit: CurUserData = {
     user: undefined,
     lockers: [],
     memberships: [],
@@ -91,7 +91,7 @@ export interface State {
     usersLists: UsersLists
     curMemberManageCateg: MemberManageCategory
     curUserListSelect: UserListSelect
-    curUserData: CurUseData
+    curUserData: CurUserData
 
     // drawer
     drawerCurCenterId: string
@@ -101,7 +101,7 @@ export interface State {
     drawerUsersLists: UsersLists
     drawerCurMemberManageCateg: MemberManageCategory
     drawerCurUserListSelect: UserListSelect
-    drawerCurUserData: CurUseData
+    drawerCurUserData: CurUserData
     // attendance toast
     attendanceToast: AttendanceToast
 }
@@ -120,7 +120,7 @@ export const initialState: State = {
     usersLists: UsersListInit,
     curMemberManageCateg: MemberManageCategoryInit,
     curUserListSelect: UserListSelectInit,
-    curUserData: CurUseDataInit,
+    curUserData: CurUserDataInit,
 
     // drawer
     drawerCurCenterId: undefined,
@@ -130,7 +130,7 @@ export const initialState: State = {
     drawerUsersLists: UsersListInit,
     drawerCurMemberManageCateg: MemberManageCategoryInit,
     drawerCurUserListSelect: UserListSelectInit,
-    drawerCurUserData: CurUseDataInit,
+    drawerCurUserData: CurUserDataInit,
 
     // attendance toast
     attendanceToast: AttendanceToastInit,
@@ -148,7 +148,7 @@ export const MainDashboardInitialState = {
     usersLists: UsersListInit,
     curMemberManageCateg: MemberManageCategoryInit,
     curUserListSelect: UserListSelectInit,
-    curUserData: CurUseDataInit,
+    curUserData: CurUserDataInit,
 }
 export const DrawerDashboardInitialState = {
     // drawer
@@ -159,7 +159,7 @@ export const DrawerDashboardInitialState = {
     drawerUsersLists: UsersListInit,
     drawerCurMemberManageCateg: MemberManageCategoryInit,
     drawerCurUserListSelect: UserListSelectInit,
-    drawerCurUserData: CurUseDataInit,
+    drawerCurUserData: CurUserDataInit,
 }
 
 export const dashboardReducer = createImmerReducer(
@@ -328,6 +328,31 @@ export const dashboardReducer = createImmerReducer(
     }),
 
     on(DashboardActions.startDelegate, (state, { centerId, reqBody }) => {
+        return state
+    }),
+
+    on(DashboardActions.startExportMember, (state, { userId }) => {
+        const keys = _.keys(state.usersLists) as MemberSelectCateg[]
+        keys.forEach((v) => {
+            // main
+            const removedUser = _.remove(state.usersLists[v], (uv) => uv.user.id == userId)
+            if (!_.isEmpty(removedUser)) {
+                state.usersSelectCategs[v].userSize -= 1
+            }
+            // drawer
+            const removeUserDrawer = _.remove(state.drawerUsersLists[v], (uv) => uv.user.id == userId)
+            if (!_.isEmpty(removeUserDrawer)) {
+                state.drawerUsersSelectCategs[v].userSize -= 1
+            }
+        })
+
+        state.curUserListSelect.value.userSize = state.usersSelectCategs[state.curUserListSelect.key].userSize
+        state.curUserData = CurUserDataInit
+
+        state.drawerCurUserListSelect.value.userSize =
+            state.drawerUsersSelectCategs[state.drawerCurUserListSelect.key].userSize
+        if (state.drawerCurUserData.user.id == userId) state.drawerCurUserData = CurUserDataInit
+
         return state
     }),
 

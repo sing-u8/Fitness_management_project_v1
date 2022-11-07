@@ -25,7 +25,7 @@ export class UserListCardComponent implements OnInit, AfterViewInit, OnChanges, 
     @Input() holdMode: boolean
     @Input() holdNumber: number
     @Input() search: string
-    @Input() curUserData: FromDashboardReducer.CurUseData = _.cloneDeep(FromDashboardReducer.CurUseDataInit)
+    @Input() curUserData: FromDashboardReducer.CurUserData = _.cloneDeep(FromDashboardReducer.CurUserDataInit)
 
     public doHide = false
     public searchSubject = new Subject<string>()

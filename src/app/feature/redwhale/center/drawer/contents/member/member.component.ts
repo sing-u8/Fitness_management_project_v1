@@ -68,7 +68,7 @@ export class MemberComponent implements OnInit, OnDestroy {
     public dbCurCenterId = undefined
     public dwCurCenterId = undefined
 
-    public curUserData: DashboardReducer.CurUseData = undefined
+    public curUserData: DashboardReducer.CurUserData = undefined
 
     constructor(
         private centerService: CenterService,

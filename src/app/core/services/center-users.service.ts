@@ -104,6 +104,23 @@ export class CenterUsersService {
             catchError(handleError)
         )
     }
+
+    exportUser(centerId: string, userId: string): Observable<Response> {
+        const url = this.SERVER + `/${centerId}/users/${userId}`
+
+        const options = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json',
+            }),
+        }
+
+        return this.http.delete<Response>(url, options).pipe(
+            map((res) => {
+                return res.dataset[0]
+            }),
+            catchError(handleError)
+        )
+    }
 }
 
 export interface CreateUserRequestBody {

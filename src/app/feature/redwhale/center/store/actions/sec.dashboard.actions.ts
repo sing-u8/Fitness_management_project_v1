@@ -1,6 +1,6 @@
 import { createAction, props } from '@ngrx/store'
 import {
-    CurUseData,
+    CurUserData,
     MemberSelectCateg,
     UserDetailTag,
     UserListSelect,
@@ -125,10 +125,11 @@ export const startDelegate = createAction(
     `[${FeatureKey}] Start Delegate Owner To Another Member`,
     props<{ centerId: string; reqBody: DelegateRequestBody; callback?: () => void }>()
 )
-// export const finishDelegate = createAction(
-//     `[${FeatureKey}] Finish Delegate Owner To Another Member`,
-//     props<{ userId: string; profile: FileList; reqBody: CreateFileRequestBody; callback?: () => void }>()
-// )
+
+export const startExportMember = createAction(
+    `[${FeatureKey}] Start Export Member`,
+    props<{ centerId: string; userId: string; callback?: () => void }>()
+)
 
 export const startRemoveCurUserProfile = createAction(
     `[${FeatureKey}] Start Remove Current User Profile`,
@@ -192,7 +193,7 @@ export const resetUsersListsHoldSelected = createAction(
 // curUserData
 export const setCurUesrData = createAction(
     `[${FeatureKey}] Set Current User Data`,
-    props<{ curUserData: Partial<CurUseData> }>()
+    props<{ curUserData: Partial<CurUserData> }>()
 )
 
 // search user input

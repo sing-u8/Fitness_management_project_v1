@@ -37,7 +37,7 @@
                 회원 상세 정보
                 
                 <div
-                    *ngIf="(curUserData$ | async)?.user"
+                    *ngIf="(curUserData$ | async)?.user && isDeletableMemberUser"
                     class="delete-member-button rw-typo-bodytext2-bold_darkgrey"
                     rw-button
                     rwButtonHeight="33"

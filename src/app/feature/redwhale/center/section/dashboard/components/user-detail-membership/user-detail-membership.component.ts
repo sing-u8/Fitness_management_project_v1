@@ -38,7 +38,7 @@ import { catchError } from 'rxjs'
     styleUrls: ['./user-detail-membership.component.scss'],
 })
 export class UserDetailMembershipComponent implements OnInit {
-    @Input() curUserData: DashboardReducer.CurUseData = _.cloneDeep(DashboardReducer.CurUseDataInit)
+    @Input() curUserData: DashboardReducer.CurUserData = _.cloneDeep(DashboardReducer.CurUserDataInit)
 
     @Output() onRegisterML = new EventEmitter<void>()
     @Output() onReRegisterM = new EventEmitter<UserMembership>()

@@ -35,7 +35,7 @@ export class MemberListComponent implements OnInit, OnDestroy {
     @Input() searchedUsersLists: FromDashboard.UsersLists = _.cloneDeep(FromDashboard.UsersListInit)
     @Input() usersSelectCateg: FromDashboard.UsersSelectCateg = _.cloneDeep(FromDashboard.UsersSelectCategInit)
     @Input() selectedUserList: FromDashboard.UserListSelect = _.cloneDeep(FromDashboard.UserListSelectInit)
-    @Input() curUserData: FromDashboard.CurUseData = _.cloneDeep(FromDashboard.CurUseDataInit)
+    @Input() curUserData: FromDashboard.CurUserData = _.cloneDeep(FromDashboard.CurUserDataInit)
     @Input() selectedUserListsHolding = 0
     @Input() isLoading: Loading = 'idle'
 

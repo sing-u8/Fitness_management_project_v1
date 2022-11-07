@@ -32,7 +32,7 @@ import { showToast } from '@appStore/actions/toast.action'
     styleUrls: ['./user-detail-payment.component.scss'],
 })
 export class UserDetailPaymentComponent implements OnInit {
-    @Input() curUserData: DashboardReducer.CurUseData = _.cloneDeep(DashboardReducer.CurUseDataInit)
+    @Input() curUserData: DashboardReducer.CurUserData = _.cloneDeep(DashboardReducer.CurUserDataInit)
 
     @Output() onRegisterML = new EventEmitter<void>()
     constructor(

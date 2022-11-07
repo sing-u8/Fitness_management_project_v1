@@ -22,7 +22,7 @@ import { SignatureConfirmOutput } from '@shared/components/common/signature-pad-
     styleUrls: ['./user-detail-contract.component.scss'],
 })
 export class UserDetailContractComponent implements OnInit {
-    @Input() curUserData: DashboardReducer.CurUseData = _.cloneDeep(DashboardReducer.CurUseDataInit)
+    @Input() curUserData: DashboardReducer.CurUserData = _.cloneDeep(DashboardReducer.CurUserDataInit)
     @Output() onRegisterML = new EventEmitter<void>()
 
     constructor(

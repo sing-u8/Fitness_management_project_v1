@@ -288,12 +288,28 @@ export class DashboardEffect {
         { dispatch: false }
     )
 
-    public delegate = createEffect(
+    public delegate$ = createEffect(
         () =>
             this.actions$.pipe(
                 ofType(DashboardActions.startDelegate),
                 switchMap(({ centerId, reqBody, callback }) =>
                     this.centerService.delegate(centerId, reqBody).pipe(
+                        tap(() => {
+                            callback ? callback() : null
+                        })
+                    )
+                ),
+                catchError((err: string) => of(DashboardActions.error({ error: err })))
+            ),
+        { dispatch: false }
+    )
+
+    public exportMember$ = createEffect(
+        () =>
+            this.actions$.pipe(
+                ofType(DashboardActions.startExportMember),
+                switchMap(({ centerId, userId, callback }) =>
+                    this.centerUsersApi.exportUser(centerId, userId).pipe(
                         tap(() => {
                             callback ? callback() : null
                         })

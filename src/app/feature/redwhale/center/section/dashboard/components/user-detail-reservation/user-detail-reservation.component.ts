@@ -22,7 +22,7 @@ import { showToast } from '@appStore/actions/toast.action'
     styleUrls: ['./user-detail-reservation.component.scss'],
 })
 export class UserDetailReservationComponent implements OnInit {
-    @Input() curUserData: DashboardReducer.CurUseData = _.cloneDeep(DashboardReducer.CurUseDataInit)
+    @Input() curUserData: DashboardReducer.CurUserData = _.cloneDeep(DashboardReducer.CurUserDataInit)
 
     constructor(
         private nxStore: Store,

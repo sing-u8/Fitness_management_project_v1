@@ -43,7 +43,7 @@ import { setCurUserData } from '@centerStore/actions/sec.dashboard.actions'
     styleUrls: ['./member-detail.component.scss'],
 })
 export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
-    @Input() curUserData: DashboardReducer.CurUseData = _.cloneDeep(DashboardReducer.CurUseDataInit)
+    @Input() curUserData: DashboardReducer.CurUserData = _.cloneDeep(DashboardReducer.CurUserDataInit)
     @Input() curUserListSelect: DashboardReducer.UserListSelect = _.cloneDeep(DashboardReducer.UserListSelectInit)
 
     public memoForm: FormControl = this.fb.control('')
@@ -276,8 +276,9 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
                 })
             }
             if (
+                !_.isEmpty(changes['curUserData'].currentValue['user']) &&
                 changes['curUserData'].previousValue?.user?.user_membership_end_date !=
-                changes['curUserData'].currentValue['user']?.user_membership_end_date
+                    changes['curUserData'].currentValue['user']?.user_membership_end_date
             ) {
                 this.findEndDateToExpired(7)
             }
