@@ -10,6 +10,7 @@ import { CenterMembershipService } from '@services/center-membership.service'
 
 // scehmas
 import { Center } from '@schemas/center'
+import { MultiSelect, MultiSelectValue } from '@schemas/components/multi-select'
 import { Drawer } from '@schemas/store/app/drawer.interface'
 import { MembershipItem } from '@schemas/membership-item'
 import { DragulaClass, DragulaClassCategory } from '@schemas/class-item'
@@ -79,6 +80,11 @@ export class LessonComponent implements OnInit, AfterViewInit, OnDestroy {
     public trainerFilter: TrainerFilter = _.cloneDeep(initialTrainerFilter)
     public selectedLesson: SelectedLesson = _.cloneDeep(initialSelectedLesson)
 
+    public lessonInstructorList: MultiSelect = []
+    public lessonInstructorSelectValue: MultiSelect = []
+
+    public lessonManagerSelectValue: TrainerFilter = { name: '', value: undefined }
+
     public unSubscriber$ = new Subject<void>()
 
     // screen vars
@@ -97,8 +103,6 @@ export class LessonComponent implements OnInit, AfterViewInit, OnDestroy {
         name: '1:1 수업',
         value: 'class_item_type_onetoone',
     }
-
-    public lessonManagerSelectValue: TrainerFilter = { name: '', value: undefined }
 
     // reservable mebership vars in selected lesson
     public isReserveMembershipExist: boolean
@@ -143,13 +147,14 @@ export class LessonComponent implements OnInit, AfterViewInit, OnDestroy {
             this.lessonCategList = _.orderBy(_.values(lesCategEn), ['sequence_number'], ['asc'])
         })
         this.nxStore
-            .pipe(select(LessonSelector.seletedTrainerFilter), takeUntil(this.unSubscriber$))
+            .pipe(select(LessonSelector.selectedTrainerFilter), takeUntil(this.unSubscriber$))
             .subscribe((tf) => {
                 this.trainerFilter = tf
             })
         this.nxStore.pipe(select(LessonSelector.trainerFilterList), takeUntil(this.unSubscriber$)).subscribe((tfl) => {
             this.trainerFilterList = tfl
             this.lessonManagerList = tfl.filter((tf) => tf.value != undefined)
+            this.initInstructorList()
         })
         this.nxStore
             .pipe(select(LessonSelector.selectedLesson), takeUntil(this.unSubscriber$))
@@ -175,6 +180,8 @@ export class LessonComponent implements OnInit, AfterViewInit, OnDestroy {
                     }
 
                     this.isReserveMembershipExist = this.selectedLesson.linkableMembershipItems.length > 0
+
+                    this.initInstructorList()
                 }
             })
 
@@ -309,11 +316,40 @@ export class LessonComponent implements OnInit, AfterViewInit, OnDestroy {
         this.updateSelLesson(this.selectedLesson, reqBody)
     }
 
-    onLessonManagerSelected(event: { prev: TrainerFilter; cur: TrainerFilter }) {
-        console.log(' onLessonManagerSelected ------- ', event)
+    initInstructorList() {
+        if (!_.isEmpty(this.selectedLesson.lessonData)) {
+            const instFilterList = _.filter(
+                this.lessonManagerList,
+                (v) => _.findIndex(this.selectedLesson.lessonData.instructors, (vi) => vi.id == v.value.id) == -1
+            ).map((vii) => ({
+                name: vii.name,
+                value: vii.value,
+                checked: false,
+                disabled: false,
+            }))
+
+            this.lessonInstructorList = _.cloneDeep(
+                _.orderBy(
+                    [
+                        ...this.selectedLesson.lessonData.instructors.map((v) => ({
+                            name: v.center_user_name,
+                            value: v,
+                            checked: true,
+                            disabled: false,
+                        })),
+                        ...instFilterList,
+                    ],
+                    'name'
+                )
+            )
+        }
+    }
+
+    onLessonInstructorSelected(event: { selectedValue: MultiSelectValue; items: MultiSelect }) {
         this.nxStore.dispatch(
-            LessonActions.updateSelectedLessonInstructor({
-                instructor: { prev: event.prev.value, cur: event.cur.value },
+            LessonActions.startUpdateSelectedLessonInstructor({
+                instructor: event.selectedValue,
+                instructorItems: event.items,
                 selectedLesson: this.selectedLesson,
             })
         )

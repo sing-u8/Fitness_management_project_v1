@@ -12,6 +12,7 @@ import { LessonRoutingModule } from './lesson-routing.module'
 import { LessonSelectComponent } from './components/lesson-select/lesson-select.component'
 import { LessonCategoryComponent } from './components/lesson-category/lesson-category.component'
 import { LessonIconComponent } from './components/lesson-icon/lesson-icon.component'
+import { MultiInstructorSelectComponent } from './components/multi-instructor-select/multi-instructor-select.component'
 
 // section module
 import { CommonModule as SectionCommonModule } from '../common/common.module'
@@ -26,6 +27,7 @@ import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader'
         LessonSelectComponent,
         LessonCategoryComponent,
         LessonIconComponent,
+        MultiInstructorSelectComponent,
     ],
     imports: [
         LessonRoutingModule,

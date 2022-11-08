@@ -1,6 +1,6 @@
 * {
-    margin: 0px;
-    padding: 0px;
+    margin: 0;
+    padding: 0;
 }
 
 p {
@@ -25,14 +25,14 @@ p {
 
     &.card-hover-in-category {
         &:hover {
-            box-shadow: 0px 0px 10px rgba(181, 181, 181, 0.109804);
+            box-shadow: 0 0 10px rgba(181, 181, 181, 0.109804);
         }
     }
 
     &.add-reservable-card-hover {
         cursor: pointer;
         &:hover {
-            box-shadow: 0px 0px 10px rgba(181, 181, 181, 0.109804);
+            box-shadow: 0 0 10px rgba(181, 181, 181, 0.109804);
         }
     }
 
@@ -42,7 +42,7 @@ p {
             .reservable-card-delete {
                 display: block;
             }
-            box-shadow: 0px 0px 10px rgba(181, 181, 181, 0.109804);
+            box-shadow: 0 0 10px rgba(181, 181, 181, 0.109804);
         }
     }
 
@@ -151,7 +151,7 @@ p {
         }
     }
     .bar {
-        margin: 0px 10.5px;
+        margin: 0 10.5px;
         color: var(--border-color);
     }
 }

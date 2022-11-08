@@ -1,50 +1,50 @@
 <div
-  class="card-outer-container"
-  [style.borderColor]="isIn=='category' && cardInfo.color && isSelected
+    class="card-outer-container"
+    [style.borderColor]="isIn=='category' && cardInfo.color && isSelected
                         ? cardInfo.color
                         : isIn=='category' && isSelected
                         ? 'var(--red)'
                         : 'var(--border-color)'"
-
-  [class.selected] = "isIn=='category' && isSelected"
-  [class.will-be-linked] = "isIn=='addReservableItemList' && willBeLinked"
-  [class.reservable-card-hover] = "isIn == 'reservableItemList' "
-  [class.add-reservable-card-hover] = "isIn == 'addReservableItemList'"
-  [class.card-hover-in-category] = "isIn == 'category'"
-  (click) = " onClickItem()"
+    
+    [class.selected] = "isIn=='category' && isSelected"
+    [class.will-be-linked] = "isIn=='addReservableItemList' && willBeLinked"
+    [class.reservable-card-hover] = "isIn == 'reservableItemList' "
+    [class.add-reservable-card-hover] = "isIn == 'addReservableItemList'"
+    [class.card-hover-in-category] = "isIn == 'category'"
+    (click) = " onClickItem()"
 >
-  <div
-    *ngIf="isIn == 'reservableItemList'"
-    class="reservable-card-delete"
-    (click)="onReservableCardDeleteClick()"
-  >
-    <img src="assets/icons/etc/close_grey.svg" >
-  </div>
-
-  <div class="card-inner-container">
     <div
-      class="icon"
-      [style.backgroundColor] = "cardInfo.color ? cardInfo.color : 'var(--border-color)'"
+        *ngIf="isIn == 'reservableItemList'"
+        class="reservable-card-delete"
+        (click)="onReservableCardDeleteClick()"
     >
-      <img src="assets/icons/etc/workout_white.svg">
+        <img src="assets/icons/etc/close_grey.svg" >
     </div>
-    <div class="card-desc-container">
-      <p class="categ rw-typo-subtext2 ">{{cardInfo.category_name}}</p>
-      <div class="card-title-container rw-typo-title2">
-        <p class="card-title">{{cardInfo.name}}</p>
-        <!-- <div class="card-desc1 rw-typo-subtext1">
-          {{cardInfo.type_name}}
-          <span class="bar">|</span>
-          <p class="card-desc-tr-name">{{cardInfo.trainer_name}}</p>
-        </div> -->
-      </div>
+    
+    <div class="card-inner-container">
+        <div
+            class="icon"
+            [style.backgroundColor] = "cardInfo.color ? cardInfo.color : 'var(--border-color)'"
+        >
+            <img src="assets/icons/etc/workout_white.svg">
+        </div>
+        <div class="card-desc-container">
+            <p class="categ rw-typo-subtext2 ">{{cardInfo.category_name}}</p>
+            <div class="card-title-container rw-typo-title2">
+                <p class="card-title">{{cardInfo.name}}</p>
+                <!-- <div class="card-desc1 rw-typo-subtext1">
+                  {{cardInfo.type_name}}
+                  <span class="bar">|</span>
+                  <p class="card-desc-tr-name">{{cardInfo.trainer_name}}</p>
+                </div> -->
+            </div>
+        </div>
     </div>
-  </div>
-
-  <div class="card-desc2 rw-typo-subtext1">
-    {{cardInfo.type_name}}
-    <span class="bar">|</span>
-    <p class="card-desc-tr-name">{{cardInfo.trainer_name}}</p>
-  </div>
+    
+    <div class="card-desc2 rw-typo-subtext1">
+        {{cardInfo.type_name}}
+        <span class="bar">|</span>
+        <p class="card-desc-tr-name">{{cardInfo.trainer_name}}</p>
+    </div>
 
 </div>

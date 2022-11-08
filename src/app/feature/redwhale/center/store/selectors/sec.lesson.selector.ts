@@ -15,7 +15,7 @@ export const LessonAll = createSelector(GymLessonFeature, FromLesson.selectLesso
 
 export const lessonLength = createSelector(GymLessonFeature, FromLesson.getLessonLength)
 export const selectedLesson = createSelector(GymLessonFeature, FromLesson.getSelectedLesson)
-export const seletedTrainerFilter = createSelector(GymLessonFeature, FromLesson.selectTrainerFilter)
+export const selectedTrainerFilter = createSelector(GymLessonFeature, FromLesson.selectTrainerFilter)
 export const trainerFilterList = createSelector(GymLessonFeature, FromLesson.selectTrainerFilterList)
 export const currentCenter = createSelector(GymLessonFeature, FromLesson.selectCurrentGym)
 export const isLoading = createSelector(GymLessonFeature, FromLesson.selectIsLoading)
@@ -23,13 +23,16 @@ export const error = createSelector(GymLessonFeature, FromLesson.selectError)
 
 export const FilteredLessonCategEntities = createSelector(
     LessonCategEntities,
-    seletedTrainerFilter,
+    selectedTrainerFilter,
     (lesCategEntities, trainerFilter) => {
         if (!trainerFilter.value) return lesCategEntities
         const newEntities: Dictionary<FromLesson.LessonCategoryState> = Object.create(Object.prototype)
         _.keys(lesCategEntities).forEach((key) => {
             const copyEntity = _.cloneDeep(lesCategEntities[key])
-            copyEntity.items = _.filter(copyEntity.items, (item) => item.instructors[0].id == trainerFilter.value.id)
+            copyEntity.items = _.filter(
+                copyEntity.items,
+                (item) => item.instructors.findIndex((v) => v.id == trainerFilter.value.id) != -1
+            )
             newEntities[key] = copyEntity
         })
         return newEntities

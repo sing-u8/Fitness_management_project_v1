@@ -112,17 +112,24 @@ export class LessonCardComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     parseCardInfo() {
+        const insts = _.orderBy(this.categItem.instructors, 'name')
         if (this.categItem) {
             this.cardInfo.category_name = this.categItem.category_name
             this.cardInfo.color = this.categItem.color
             this.cardInfo.name = this.categItem.name
-            this.cardInfo.trainer_name = this.categItem.instructors[0].center_user_name
+            this.cardInfo.trainer_name =
+                this.categItem.instructors.length > 1
+                    ? insts[0].center_user_name + ` 외 ${insts.length - 1}명`
+                    : insts[0].center_user_name
             this.cardInfo.type_name = this.categItem.type_code == 'class_item_type_onetoone' ? '1:1 수업' : '그룹 수업'
         } else {
             this.cardInfo.category_name = this.memLessonItem.category_name
             this.cardInfo.color = this.memLessonItem.color
             this.cardInfo.name = this.memLessonItem.name
-            this.cardInfo.trainer_name = this.memLessonItem.instructors[0].center_user_name
+            this.cardInfo.trainer_name =
+                this.categItem.instructors.length > 1
+                    ? insts[0].center_user_name + ` 외 ${insts.length - 1}명`
+                    : insts[0].center_user_name
             this.cardInfo.type_name =
                 this.memLessonItem.type_code == 'class_item_type_onetoone' ? '1:1 수업' : '그룹 수업'
         }

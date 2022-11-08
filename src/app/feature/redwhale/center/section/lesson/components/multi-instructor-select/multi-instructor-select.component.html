@@ -1,0 +1,54 @@
+<div class="rw-select user-select-none" #selectElement>
+    <div
+        class="selected rw-typo-bodytext1 d-flex justify-content-center align-items-center"
+        [class.open]="isOpen"
+        [class.disabled]="disabled !== false"
+        [class.height-small] ="height_type == 'small'"
+        #selectedElement
+        (click)="toggle()"
+        (rwClickOutside)="close()"
+    >
+        <div *ngIf="selectedValue" class="avatar">
+            <rw-avatar
+                [image]="selectedValue.value.center_user_picture"
+                [backgroundColor]="selectedValue.value.color"
+                text="{{ selectedValue?.value?.center_user_name}}"
+                size="23"
+                fontSize="10"
+            ></rw-avatar>
+        </div>
+        <span class="text flex-fill">{{ selectedValue?.name ?? noSelectName }}</span>
+        <span class="arrow-icon"></span>
+    </div>
+    <div
+        class="items select-scroll-y"
+        [class.items-small] ="height_type == 'small'"
+        #itemsElement
+        (click)="$event.stopPropagation()"
+    >
+        <div
+            class="item d-flex align-items-center justify-content-between"
+            *ngFor="let item of items; let idx=index"
+            [class.active]="item.checked"
+            [class.disabled]="item.disabled"
+            [class.height-small] ="height_type == 'small'"
+            (click)="onSelect(item, idx)"
+        >
+            <div class="d-flex align-items-center item__user">
+                <div *ngIf="item.value?.membership_number" class="avatar">
+                    <rw-avatar
+                        [image]="item.value.center_user_picture"
+                        [backgroundColor]="item.value.color"
+                        text="{{item.value.center_user_name}}"
+                        size="26"
+                        fontSize="10"
+                    ></rw-avatar>
+                </div>
+                <span class="rw-typo-bodytext0">{{ item.name }}</span>
+            </div>
+            <rw-checkbox
+                [checked]="item.checked"
+            ></rw-checkbox>
+        </div>
+    </div>
+</div>

@@ -27,6 +27,7 @@ import * as DashboardSelector from '@centerStore/selectors/sec.dashboard.selecto
 import * as DashboardActions from '@centerStore/actions/sec.dashboard.actions'
 import * as CenterCommonActions from '@centerStore/actions/center.common.actions'
 import { showToast } from '@appStore/actions/toast.action'
+import _ from 'lodash'
 
 @Component({
     selector: 'dashboard',
@@ -218,6 +219,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
     // delete member button
     checkIsDeletableMember() {
+        if (_.isEmpty(this.willBeDeletedCenterUser)) return
         const centerUserRole = this.center.role_code
         switch (centerUserRole) {
             case 'instructor':

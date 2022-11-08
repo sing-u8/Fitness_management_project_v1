@@ -7,6 +7,7 @@ import { MoveCategoryRequestBody, MoveItemRequestBody, UpdateItemRequestBody } f
 import { ClassItem } from '@schemas/class-item'
 import { MembershipItem } from '@schemas/membership-item'
 import { CenterUser } from '@schemas/center-user'
+import { MultiSelect, MultiSelectValue } from '@schemas/components/multi-select'
 import { Update } from '@ngrx/entity'
 
 const FeatureKey = 'Center/Lesson'
@@ -133,10 +134,11 @@ export const startMoveLessonCategory = createAction(
     }>()
 )
 
-export const updateSelectedLessonInstructor = createAction(
-    `[${FeatureKey} Update Selected Lesson Instructor to Server]`,
-    props<{ instructor: { prev: CenterUser; cur: CenterUser }; selectedLesson: SelectedLesson }>()
+export const startUpdateSelectedLessonInstructor = createAction(
+    `[${FeatureKey} Start Update Selected Lesson Instructor to Server]`,
+    props<{ instructor: MultiSelectValue; instructorItems: MultiSelect; selectedLesson: SelectedLesson }>()
 )
+
 export const updateSelectedLesson = createAction(
     `[${FeatureKey} Update Selected Lesson to Server]`,
     props<{ selectedLesson: SelectedLesson; reqBody: UpdateItemRequestBody }>()

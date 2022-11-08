@@ -123,7 +123,7 @@
                         >
                             <gl-lesson-icon
                                 [backGroundColor]="selectedLesson?.lessonData?.color"
-                                [isLesson]="selectedLesson?.lessonData ? true : false"
+                                [isLesson]="!!selectedLesson?.lessonData"
                                 (onColorSelected)="changeLessonIcon($event)">
                             </gl-lesson-icon>
                         
@@ -159,14 +159,12 @@
                                 ></gl-lesson-select>
                             </div>
                             <div class="selected-lesson-top__trainer-select--margin">
-                                <gl-lesson-select
-                                    [width]="'150'"
-                                    [items]="lessonManagerList"
-                                    [(ngModel)]="lessonManagerSelectValue"
-                                    [height_type]="'small'"
-                                    [noBorder]="true"
-                                    (onSelectChanges)="onLessonManagerSelected($event)"
-                                ></gl-lesson-select>
+                                <gl-multi-instructor-select
+                                    [width]="'165'"
+                                    [items]="lessonInstructorList"
+                                    [(ngModel)]="lessonInstructorSelectValue"
+                                    (onSelectChange)="onLessonInstructorSelected($event)"
+                                ></gl-multi-instructor-select>
                             </div>
                             <div class="selected-lesson-top__delete-lesson-button" (click)="setItemDelOpen()">
                                 <img src="assets/icons/etc/trash_grey.svg">

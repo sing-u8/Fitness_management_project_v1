@@ -227,8 +227,8 @@ export const lessonReducer = createImmerReducer(
         state.selectedLesson.isLoading = 'done'
         return state
     }),
-    on(LessonActions.updateSelectedLessonInstructor, (state, { selectedLesson, instructor }) => {
-        state.selectedLesson.lessonData.instructors = [instructor.cur]
+    on(LessonActions.startUpdateSelectedLessonInstructor, (state, { selectedLesson, instructorItems }) => {
+        state.selectedLesson.lessonData.instructors = instructorItems.filter((v) => v.checked).map((v) => v.value)
         const itemIdx = _.findIndex(
             state.entities[selectedLesson.categId].items,
             (v) => v.id == selectedLesson.lessonData.id

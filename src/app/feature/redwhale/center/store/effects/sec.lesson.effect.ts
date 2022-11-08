@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core'
 import { createEffect, Actions, ofType, concatLatestFrom } from '@ngrx/effects'
 import { Store } from '@ngrx/store'
-import { of, forkJoin } from 'rxjs'
+import { of, forkJoin, iif } from 'rxjs'
 import { catchError, switchMap, mergeMap, map, filter, tap } from 'rxjs/operators'
 
 import * as LessonActions from '../actions/sec.lesson.actions'
@@ -23,6 +23,7 @@ import { CenterUsersService } from '@services/center-users.service'
 import _ from 'lodash'
 
 import { ClassItem } from '@schemas/class-item'
+import { startUpdateSelectedLessonInstructor } from '../actions/sec.lesson.actions'
 
 @Injectable()
 export class LessonEffect {
@@ -174,27 +175,23 @@ export class LessonEffect {
     // selected lesson
     public updateSelectedLessonInstructor = createEffect(() =>
         this.actions$.pipe(
-            ofType(LessonActions.updateSelectedLessonInstructor),
+            ofType(LessonActions.startUpdateSelectedLessonInstructor),
             switchMap(({ instructor, selectedLesson }) =>
-                this.centerLessonApi
-                    .removeInstructor(
+                iif(
+                    () => instructor.checked,
+                    this.centerLessonApi.addInstructor(
                         selectedLesson.centerId,
                         selectedLesson.categId,
                         selectedLesson.lessonData.id,
-                        instructor.prev.id
+                        { instructor_user_id: instructor.value.id }
+                    ),
+                    this.centerLessonApi.removeInstructor(
+                        selectedLesson.centerId,
+                        selectedLesson.categId,
+                        selectedLesson.lessonData.id,
+                        instructor.value.id
                     )
-                    .pipe(
-                        switchMap(() =>
-                            this.centerLessonApi
-                                .addInstructor(
-                                    selectedLesson.centerId,
-                                    selectedLesson.categId,
-                                    selectedLesson.lessonData.id,
-                                    { instructor_user_id: instructor.cur.id }
-                                )
-                                .pipe(switchMap(() => [MembershipActions.startUpsertState()]))
-                        )
-                    )
+                ).pipe(switchMap((res) => [MembershipActions.startUpsertState()]))
             )
         )
     )
