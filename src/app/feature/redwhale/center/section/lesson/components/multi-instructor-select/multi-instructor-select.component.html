@@ -31,7 +31,6 @@
             *ngFor="let item of items; let idx=index"
             [class.active]="item.checked"
             [class.disabled]="item.disabled"
-            [class.height-small] ="height_type == 'small'"
             (click)="onSelect(item, idx)"
         >
             <div class="d-flex align-items-center item__user">
