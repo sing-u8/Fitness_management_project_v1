@@ -6,7 +6,12 @@ import { CalendarTask } from '@schemas/calendar-task'
 import { CenterUser } from '@schemas/center-user'
 import { CalendarOptions } from '@fullcalendar/angular'
 
-import { CreateCalendarReqBody, UpdateCalendarMode, UpdateCalendarTaskReqBody } from '@services/center-calendar.service'
+import {
+    AddFilterInstructorReqBody,
+    CreateCalendarReqBody,
+    UpdateCalendarMode,
+    UpdateCalendarTaskReqBody,
+} from '@services/center-calendar.service'
 
 import * as FromSchReducer from '@centerStore/reducers/sec.schedule.reducer'
 
@@ -20,21 +25,21 @@ export const startLoadScheduleState = createAction(
 )
 export const finishLoadScheduleState = createAction(
     `[${FeatureKey}] Finish Load Schedule State`,
-    props<{ instructorList: FromSchReducer.InstructorType[] }>()
+    props<{ instructorList: FromSchReducer.InstructorType[]; curCenterCalendar: Calendar }>()
 )
 
-export const startCreateInstructor = createAction(
+export const startCreateInstructorFilter = createAction(
     `[${FeatureKey}] Start Create Instructor Calendar`,
-    props<{ centerId: string; reqBody: CreateCalendarReqBody }>()
+    props<{ centerId: string; centerCalendarId: string; reqBody: AddFilterInstructorReqBody }>()
 )
-export const finishCreateInstructor = createAction(
+export const finishCreateInstructorFilter = createAction(
     `[${FeatureKey}] Finish Create Instructor Calendar`,
-    props<{ createdInstructor: FromSchReducer.InstructorType; instructorList?: FromSchReducer.InstructorType[] }>()
+    props<{ createdInstructor: FromSchReducer.InstructorType }>()
 )
 
 export const startRemoveInstructor = createAction(
     `[${FeatureKey}] Start Remove Instructor Calendar`,
-    props<{ centerId: string; calendar: Calendar }>()
+    props<{ centerId: string; instructor: CenterUser }>()
 )
 
 export const startUpdateCalendarTask = createAction(
@@ -91,9 +96,9 @@ export const setSelectedDate = createAction(
     `[${FeatureKey}] Set Selected Date`,
     props<{ selectedDate: FromSchReducer.SelectedDate }>()
 )
-export const setSchedulingInstructor = createAction(
-    `[${FeatureKey}] Set Scheduling Instructor`,
-    props<{ schedulingInstructor: Calendar }>()
+export const setSchedulingInstructors = createAction(
+    `[${FeatureKey}] Set Scheduling Instructors`,
+    props<{ schedulingInstructors: CenterUser[] }>()
 )
 
 export const setIsScheduleEventChanged = createAction(
@@ -140,5 +145,5 @@ export const startSynchronizeInstructorList = createAction(
 )
 export const finishSynchronizeInstructorList = createAction(
     `[${FeatureKey}] Finish Synchronize InstructorList`,
-    props<{ calendar: Calendar }>()
+    props<{ instructor: CenterUser }>()
 )

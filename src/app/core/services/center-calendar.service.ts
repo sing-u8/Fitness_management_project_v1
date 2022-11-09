@@ -11,6 +11,7 @@ import { Calendar } from '@schemas/calendar'
 import { CalendarTask } from '@schemas/calendar-task'
 import { UserAbleToBook } from '@schemas/user-able-to-book'
 import { UserBooked } from '@schemas/user-booked'
+import { CenterUser } from '@schemas/center-user'
 
 @Injectable({
     providedIn: 'root',
@@ -81,6 +82,55 @@ export class CenterCalendarService {
     // 캘린더 삭제
     deleteCalendar(centerId: string, calendarId: string): Observable<Response> {
         const url = this.SERVER + `/${centerId}/calendar/${calendarId}`
+
+        return this.http.delete<Response>(url, this.options).pipe(
+            map((res) => {
+                return res
+            }),
+            catchError(handleError)
+        )
+    }
+
+    // 캘린더 필터 - 강사 추가
+    addFilterInstructor(
+        centerId: string,
+        calendarId: string,
+        reqBody: AddFilterInstructorReqBody
+    ): Observable<CenterUser> {
+        const url = this.SERVER + `/${centerId}/calendar/${calendarId}/filter-instructor`
+
+        return this.http.post<Response>(url, reqBody, this.options).pipe(
+            map((res) => {
+                return res.dataset[0]
+            }),
+            catchError(handleError)
+        )
+    }
+
+    // 캘린더 필터 - 강사 조회
+    getFilterInstructor(
+        centerId: string,
+        calendarId: string,
+        page?: number,
+        pageSize?: number
+    ): Observable<Array<CenterUser>> {
+        const url =
+            this.SERVER +
+            `/${centerId}/calendar/${calendarId}/filter-instructor` +
+            (page ? `page=${page}&` : '') +
+            (pageSize ? `pageSize=${pageSize}` : '')
+
+        return this.http.get<Response>(url, this.options).pipe(
+            map((res) => {
+                return res.dataset
+            }),
+            catchError(handleError)
+        )
+    }
+
+    // 캘린더 필터 - 강사 삭제
+    deleteFilterInstructor(centerId: string, calendarId: string, instructorUserId: string): Observable<Response> {
+        const url = this.SERVER + `/${centerId}/calendar/${calendarId}/filter-instructor/${instructorUserId}`
 
         return this.http.delete<Response>(url, this.options).pipe(
             map((res) => {
@@ -247,7 +297,7 @@ export interface CreateCalendarTaskReqBody {
         | 'calendar_task_group_repeat_termination_type_date'
     repeat_count?: number
     repeat_end_date?: string
-    responsibility_user_id: string
+    responsibility_user_ids: Array<string>
     class?: ClassForCU
 }
 
@@ -280,16 +330,16 @@ export interface UpdateCalendarTaskReqBody {
 }
 
 export interface ClassForCU {
+    class_item_id: string
+    type_code: 'class_item_type_onetoone' | 'class_item_type_group'
+    state_code: 'calendar_task_class_state_active' | 'calendar_task_class_state_inactive'
     category_name: string
     name: string
-    class_item_id?: string
-    type_code?: string
-    state_code?: 'calendar_task_class_state_active' | 'calendar_task_class_state_inactive'
-    duration?: string
-    capacity?: string
-    start_booking_until?: string
-    end_booking_before?: string
-    cancel_booking_before?: string
+    duration: string
+    capacity: string
+    start_booking_until: string
+    end_booking_before: string
+    cancel_booking_before: string
     instructor_user_ids: string[]
 }
 
@@ -298,4 +348,8 @@ export type UpdateMode = DeleteMode
 
 export interface ReserveTaskReqBody {
     user_membership_ids: string[]
+}
+
+export interface AddFilterInstructorReqBody {
+    instructor_user_id: string
 }

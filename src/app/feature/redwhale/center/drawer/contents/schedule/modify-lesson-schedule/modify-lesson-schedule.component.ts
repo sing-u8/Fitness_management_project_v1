@@ -175,7 +175,7 @@ export class ModifyLessonScheduleComponent implements OnInit, OnDestroy, AfterVi
     modifyLessonTask(fn?: () => void) {
         let reqBody: UpdateCalendarTaskReqBody = undefined
         const selectedStaffs = _.filter(this.instructorList, (item) => {
-            const idx = _.findIndex(this.multiStaffSelectValue, (mi) => mi.value.id == item.instructor.calendar_user.id)
+            const idx = _.findIndex(this.multiStaffSelectValue, (mi) => mi.value.id == item.instructor.id)
             return idx != -1
         })
         console.log(
@@ -203,7 +203,7 @@ export class ModifyLessonScheduleComponent implements OnInit, OnDestroy, AfterVi
                 repeat_cycle: 1,
                 repeat_termination_type_code: 'calendar_task_group_repeat_termination_type_date',
                 repeat_end_date: dayjs(this.repeatDatepick.endDate).format('YYYY-MM-DD'),
-                responsibility_user_id: selectedStaffs[0].instructor.calendar_user.id,
+                responsibility_user_id: selectedStaffs[0].instructor.id,
                 class: {
                     name: this.lessonEvent.class.name,
                     category_name: this.lessonEvent.class.category_name,
@@ -215,7 +215,7 @@ export class ModifyLessonScheduleComponent implements OnInit, OnDestroy, AfterVi
                     start_booking_until: this.reserveSettingInputs.reservation_start,
                     end_booking_before: this.reserveSettingInputs.reservation_end,
                     cancel_booking_before: this.reserveSettingInputs.reservation_cancel_end,
-                    instructor_user_ids: selectedStaffs.map((v) => v.instructor.calendar_user.id),
+                    instructor_user_ids: selectedStaffs.map((v) => v.instructor.id),
                 },
             }
         } else {
@@ -228,7 +228,7 @@ export class ModifyLessonScheduleComponent implements OnInit, OnDestroy, AfterVi
                 end_time: this.scheduleHelperService.getLessonEndTime(this.timepick, this.lessonEvent.class.duration),
                 color: this.lessonEvent.color,
                 memo: this.planDetailInputs.detail,
-                responsibility_user_id: selectedStaffs[0].instructor.calendar_user.id,
+                responsibility_user_id: selectedStaffs[0].instructor.id,
                 class: {
                     name: this.lessonEvent.class.name,
                     category_name: this.lessonEvent.class.category_name,
@@ -240,7 +240,7 @@ export class ModifyLessonScheduleComponent implements OnInit, OnDestroy, AfterVi
                     start_booking_until: this.reserveSettingInputs.reservation_start,
                     end_booking_before: this.reserveSettingInputs.reservation_end,
                     cancel_booking_before: this.reserveSettingInputs.reservation_cancel_end,
-                    instructor_user_ids: selectedStaffs.map((v) => v.instructor.calendar_user.id),
+                    instructor_user_ids: selectedStaffs.map((v) => v.instructor.id),
                 },
             }
         }
@@ -386,7 +386,7 @@ export class ModifyLessonScheduleComponent implements OnInit, OnDestroy, AfterVi
             .subscribe((instructors) => {
                 const centerInstructorList = _.cloneDeep(instructors)
                 this.multiStaffSelect_list = centerInstructorList
-                    .filter((ci) => -1 != instructorList.findIndex((v) => ci.id == v.instructor.calendar_user.id))
+                    .filter((ci) => -1 != instructorList.findIndex((v) => ci.id == v.instructor.id))
                     .map((value) => ({
                         name: value.center_user_name,
                         value: value,

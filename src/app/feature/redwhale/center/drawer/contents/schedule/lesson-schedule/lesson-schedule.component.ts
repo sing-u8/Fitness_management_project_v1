@@ -116,7 +116,8 @@ export class LessonScheduleComponent implements OnInit, OnDestroy, AfterViewInit
     public unsubscribe$ = new Subject<void>()
 
     // ngrx vars
-    public schedulingInstructor: Calendar
+    public schedulingInstructors: CenterUser[]
+    public curCenterCalendar: Calendar = undefined
 
     constructor(
         private storageService: StorageService,
@@ -135,10 +136,13 @@ export class LessonScheduleComponent implements OnInit, OnDestroy, AfterViewInit
     }
 
     ngOnInit(): void {
+        this.nxStore.pipe(select(ScheduleSelector.curCenterCalendar), takeUntil(this.unsubscribe$)).subscribe((ccc) => {
+            this.curCenterCalendar = ccc
+        })
         this.nxStore
-            .pipe(select(ScheduleSelector.schedulingInstructor), takeUntil(this.unsubscribe$))
-            .subscribe((schInstructor) => {
-                this.schedulingInstructor = schInstructor
+            .pipe(select(ScheduleSelector.schedulingInstructors), takeUntil(this.unsubscribe$))
+            .subscribe((schInstructors) => {
+                this.schedulingInstructors = schInstructors
             })
         this.nxStore
             .pipe(
@@ -189,7 +193,7 @@ export class LessonScheduleComponent implements OnInit, OnDestroy, AfterViewInit
     initInstructorList() {
         if (this.schInstructorList.length > 0 && this.centerInstructorList.length > 0) {
             this.multiStaffSelect_list = this.centerInstructorList
-                .filter((ci) => -1 != this.schInstructorList.findIndex((v) => ci.id == v.instructor.calendar_user.id))
+                .filter((ci) => -1 != this.schInstructorList.findIndex((v) => ci.id == v.instructor.id))
                 .map((value) => ({
                     name: value.center_user_name,
                     value: value,
@@ -202,10 +206,8 @@ export class LessonScheduleComponent implements OnInit, OnDestroy, AfterViewInit
     registerLessonTask(fn?: () => void) {
         let reqBody: CreateCalendarTaskReqBody = undefined
 
-        const selectedStaffs = _.filter(this.schInstructorList, (item) => {
-            const idx = _.findIndex(this.multiStaffSelectValue, (mi) => mi.value.id == item.instructor.calendar_user.id)
-            return idx != -1
-        })
+        const selectedStaffs = _.filter(this.multiStaffSelectValue, (item) => item.checked)
+        console.log('registerLessonTask --- ', selectedStaffs, this.multiStaffSelectValue, this.schInstructorList)
 
         if (this.dayRepeatSwitch) {
             reqBody = {
@@ -227,7 +229,7 @@ export class LessonScheduleComponent implements OnInit, OnDestroy, AfterViewInit
                 repeat_cycle: 1,
                 repeat_termination_type_code: 'calendar_task_group_repeat_termination_type_date',
                 repeat_end_date: dayjs(this.repeatDatepick.endDate).format('YYYY-MM-DD'),
-                responsibility_user_id: selectedStaffs[0].instructor.calendar_user.id,
+                responsibility_user_ids: selectedStaffs.map((v) => v.value.id),
                 class: {
                     category_name: this.selectedLesson.lessonCateg.name,
                     name: this.selectedLesson.lesson.name,
@@ -239,11 +241,9 @@ export class LessonScheduleComponent implements OnInit, OnDestroy, AfterViewInit
                     start_booking_until: this.reserveSettingInputs.reservation_start,
                     end_booking_before: this.reserveSettingInputs.reservation_end,
                     cancel_booking_before: this.reserveSettingInputs.reservation_cancel_end,
-                    instructor_user_ids: selectedStaffs.map((v) => v.instructor.calendar_user.id), // [selectedStaffs[0].instructor.calendar_user.id],
+                    instructor_user_ids: selectedStaffs.map((v) => v.value.id),
                 },
             }
-
-            // console.log('dayRepeatSwitch req body: ', reqBody)
         } else {
             reqBody = {
                 type_code: 'calendar_task_type_class',
@@ -259,7 +259,7 @@ export class LessonScheduleComponent implements OnInit, OnDestroy, AfterViewInit
                 color: this.color,
                 memo: this.planDetailInputs.detail,
                 repeat: false,
-                responsibility_user_id: selectedStaffs[0].instructor.calendar_user.id,
+                responsibility_user_ids: selectedStaffs.map((v) => v.value.id),
                 class: {
                     class_item_id: this.selectedLesson.lesson.id,
                     type_code: this.selectedLesson.lesson.type_code,
@@ -271,31 +271,29 @@ export class LessonScheduleComponent implements OnInit, OnDestroy, AfterViewInit
                     start_booking_until: this.reserveSettingInputs.reservation_start,
                     end_booking_before: this.reserveSettingInputs.reservation_end,
                     cancel_booking_before: this.reserveSettingInputs.reservation_cancel_end,
-                    instructor_user_ids: selectedStaffs.map((v) => v.instructor.calendar_user.id), // [selectedStaffs[0].instructor.calendar_user.id],
+                    instructor_user_ids: selectedStaffs.map((v) => v.value.id),
                 },
             }
         }
         // console.log('createCalendarTask req body: ', reqBody)
-        this.centerCalendarService
-            .createCalendarTask(this.center.id, selectedStaffs[0].instructor.id, reqBody)
-            .subscribe({
-                next: (res) => {
-                    fn ? fn() : null
-                    this.nxStore.dispatch(ScheduleActions.setIsScheduleEventChanged({ isScheduleEventChanged: true }))
-                    this.closeDrawer()
-                    this.nxStore.dispatch(
-                        showToast({
-                            text: `'${this.wordService.ellipsis(
-                                this.planDetailInputs.plan,
-                                8
-                            )}' 수업 일정이 추가되었습니다.`,
-                        })
-                    )
-                },
-                error: (err) => {
-                    console.log('gymCalendarService.createTask err: ', err)
-                },
-            })
+        this.centerCalendarService.createCalendarTask(this.center.id, this.curCenterCalendar.id, reqBody).subscribe({
+            next: (res) => {
+                fn ? fn() : null
+                this.nxStore.dispatch(ScheduleActions.setIsScheduleEventChanged({ isScheduleEventChanged: true }))
+                this.closeDrawer()
+                this.nxStore.dispatch(
+                    showToast({
+                        text: `'${this.wordService.ellipsis(
+                            this.planDetailInputs.plan,
+                            8
+                        )}' 수업 일정이 추가되었습니다.`,
+                    })
+                )
+            },
+            error: (err) => {
+                console.log('gymCalendarService.createTask err: ', err)
+            },
+        })
     }
 
     // -----------------------------  일정 생성 취소 모달 ------------------------------------
@@ -356,18 +354,29 @@ export class LessonScheduleComponent implements OnInit, OnDestroy, AfterViewInit
         this.reserveSettingInputs.reservation_end = String(res.lesson.end_booking_before)
         this.reserveSettingInputs.reservation_cancel_end = String(res.lesson.cancel_booking_before)
 
-        _.find(this.multiStaffSelect_list, (item) => {
-            if (this.schedulingInstructor != undefined && item.value.id == this.schedulingInstructor.calendar_user.id) {
-                // 캘린더 (일) 모드에서 일정 추가 시 해당 직원이 등록될 수업의 담당자가 됨
-                this.multiStaffSelectValue = [{ name: item.value.center_user_name, value: item.value, checked: true }]
-                this.nxStore.dispatch(ScheduleActions.setSchedulingInstructor({ schedulingInstructor: undefined }))
-                return true
-            } else if (this.schedulingInstructor != undefined && item.value.id == res.lesson.instructors[0].id) {
-                this.multiStaffSelectValue = [{ name: item.value.center_user_name, value: item.value, checked: true }]
-                return true
-            }
-            return false
-        })
+        this.setMultiStaffSelectValue(res.lesson)
+    }
+    setMultiStaffSelectValue(classItem: ClassItem) {
+        if (!_.isEmpty(this.schedulingInstructors)) {
+            this.multiStaffSelectValue = _.filter(
+                this.schedulingInstructors,
+                (cu) => _.findIndex(this.multiStaffSelect_list, (msi) => msi.value.id == cu.id) != -1
+            ).map((v) => ({
+                name: v.center_user_name,
+                value: v,
+                checked: true,
+            }))
+            this.nxStore.dispatch(ScheduleActions.setSchedulingInstructors({ schedulingInstructors: undefined }))
+        } else {
+            this.multiStaffSelectValue = _.filter(
+                classItem.instructors,
+                (cu) => _.findIndex(this.multiStaffSelect_list, (msi) => msi.value.id == cu.id) != -1
+            ).map((v) => ({
+                name: v.center_user_name,
+                value: v,
+                checked: true,
+            }))
+        }
     }
 
     toggleShowRepeatDatePicker() {

@@ -35,6 +35,7 @@ import { MultiSelect } from '@schemas/components/multi-select'
 export class GeneralScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
     public center: Center
     public user: User
+    public curCenterCalendar: Calendar = undefined
 
     public centerOperatingTime: ScheduleReducer.CenterOperatingHour = { start: null, end: null }
 
@@ -153,24 +154,27 @@ export class GeneralScheduleComponent implements OnInit, AfterViewInit, OnDestro
     ) {}
 
     ngOnInit(): void {
+        this.nxStore.pipe(select(ScheduleSelector.curCenterCalendar), takeUntil(this.unsubscribe$)).subscribe((ccc) => {
+            this.curCenterCalendar = ccc
+        })
         this.nxStore
             .pipe(
                 select(scheduleIsResetSelector),
                 concatLatestFrom(() => [
                     this.nxStore.select(drawerSelector),
                     this.nxStore.select(ScheduleSelector.instructorList),
-                    this.nxStore.select(ScheduleSelector.schedulingInstructor),
+                    this.nxStore.select(ScheduleSelector.schedulingInstructors),
                 ]),
                 takeUntil(this.unsubscribe$)
             )
-            .subscribe(([schDrawerIsReset, drawer, instructorList, schedulingInstructor]) => {
-                console.log('schedulingInstructor : ', schedulingInstructor)
+            .subscribe(([schDrawerIsReset, drawer, instructorList, schedulingInstructors]) => {
+                console.log('schedulingInstructor : ', schedulingInstructors)
                 console.log('instructorList : ', instructorList)
 
                 if (schDrawerIsReset == true && drawer['tabName'] == 'general-schedule') {
                     this.initTimePickAndDatePick()
                     this.instructorList = instructorList
-                    this.initStaffList(instructorList, schedulingInstructor)
+                    this.initStaffList(instructorList, schedulingInstructors)
                     this.nxStore.dispatch(setScheduleDrawerIsReset({ isReset: false }))
                 }
             })
@@ -195,11 +199,8 @@ export class GeneralScheduleComponent implements OnInit, AfterViewInit, OnDestro
 
     registerPlan(fn?: () => void) {
         let reqBody: CreateCalendarTaskReqBody = undefined
-        const selectedStaffs = _.filter(this.instructorList, (item) => {
-            const idx = _.findIndex(this.multiStaffSelectValue, (mi) => mi.value.id == item.instructor.calendar_user.id)
-            return idx != -1
-        })
-        console.log('this.timepick.startTime : ', this.timepick.startTime, this.timepick.endTime)
+        const selectedStaffs = _.filter(this.multiStaffSelectValue, (item) => item.checked)
+        console.log('this.timepick.startTime : ', this.timepick.startTime, this.timepick.endTime, selectedStaffs)
         if (this.dayRepeatSwitch) {
             reqBody = {
                 type_code: 'calendar_task_type_normal',
@@ -211,7 +212,7 @@ export class GeneralScheduleComponent implements OnInit, AfterViewInit, OnDestro
                 end_time: this.timepick.endTime.slice(0, 5),
                 memo: this.planTexts.planDetail,
                 repeat: true,
-                responsibility_user_id: selectedStaffs[0].instructor.calendar_user.id,
+                responsibility_user_ids: selectedStaffs.map((v) => v.value.id),
                 repeat_day_of_the_week: this.repeatOfWeek,
                 repeat_cycle_unit_code: 'calendar_task_group_repeat_cycle_unit_week',
                 repeat_cycle: 1,
@@ -229,37 +230,33 @@ export class GeneralScheduleComponent implements OnInit, AfterViewInit, OnDestro
                 end_time: this.timepick.endTime.slice(0, 5),
                 memo: this.planTexts.planDetail,
                 repeat: false,
-                responsibility_user_id: selectedStaffs[0].instructor.calendar_user.id,
+                responsibility_user_ids: selectedStaffs.map((v) => v.value.id),
             }
         }
 
-        this.centerCalendarService
-            .createCalendarTask(this.center.id, selectedStaffs[0].instructor.id, reqBody)
-            .subscribe({
-                next: (_) => {
-                    fn ? fn() : null
-                    this.nxStore.dispatch(ScheduleActions.setIsScheduleEventChanged({ isScheduleEventChanged: true }))
-                    this.closeDrawer()
-                    this.nxStore.dispatch(
-                        showToast({ text: `'${this.planTexts.planTitle}' 기타 일정이 추가되었습니다.` })
-                    )
-                },
-                error: (err) => {
-                    console.log('gymCalendarService.createTask err: ', err)
-                },
-            })
+        this.centerCalendarService.createCalendarTask(this.center.id, this.curCenterCalendar.id, reqBody).subscribe({
+            next: (_) => {
+                fn ? fn() : null
+                this.nxStore.dispatch(ScheduleActions.setIsScheduleEventChanged({ isScheduleEventChanged: true }))
+                this.closeDrawer()
+                this.nxStore.dispatch(showToast({ text: `'${this.planTexts.planTitle}' 기타 일정이 추가되었습니다.` }))
+            },
+            error: (err) => {
+                console.log('gymCalendarService.createTask err: ', err)
+            },
+        })
     }
 
     closeDrawer() {
         this.nxStore.dispatch(closeDrawer())
     }
 
-    initStaffList(instructorList: ScheduleReducer.InstructorType[], schedulingInstructor: Calendar) {
+    initStaffList(instructorList: ScheduleReducer.InstructorType[], schedulingInstructors: CenterUser[]) {
         this.center = this.storageService.getCenter()
         this.user = this.storageService.getUser()
         this.multiStaffSelect_list = []
 
-        const managers = instructorList.map((v) => v.instructor.calendar_user)
+        const managers = instructorList.map((v) => v.instructor)
         // managers.forEach((v) => {
         //     this.staffSelect_list.push({
         //         name: v.center_user_name ?? v.name,
@@ -273,7 +270,7 @@ export class GeneralScheduleComponent implements OnInit, AfterViewInit, OnDestro
             .subscribe((instructors) => {
                 const centerInstructorList = _.cloneDeep(instructors)
                 this.multiStaffSelect_list = centerInstructorList
-                    .filter((ci) => -1 != instructorList.findIndex((v) => ci.id == v.instructor.calendar_user.id))
+                    .filter((ci) => -1 != instructorList.findIndex((v) => ci.id == v.instructor.id))
                     .map((value) => ({
                         name: value.center_user_name,
                         value: value,
@@ -281,17 +278,26 @@ export class GeneralScheduleComponent implements OnInit, AfterViewInit, OnDestro
                     }))
             })
 
-        managers.find((v) => {
-            if (schedulingInstructor != undefined && schedulingInstructor.calendar_user.id == v.id) {
-                this.multiStaffSelectValue = [{ name: v.center_user_name, value: v, checked: true }]
-                this.nxStore.dispatch(ScheduleActions.setSchedulingInstructor({ schedulingInstructor: undefined }))
-                return true
-            } else if (schedulingInstructor == undefined && this.user.id == v.id) {
-                this.multiStaffSelectValue = [{ name: v.center_user_name, value: v, checked: true }]
-                return true
-            }
-            return false
-        })
+        if (!_.isEmpty(schedulingInstructors)) {
+            this.multiStaffSelectValue = _.filter(
+                schedulingInstructors,
+                (cu) => _.findIndex(this.multiStaffSelect_list, (msi) => msi.value.id == cu.id) != -1
+            ).map((v) => ({
+                name: v.center_user_name,
+                value: v,
+                checked: true,
+            }))
+            this.nxStore.dispatch(ScheduleActions.setSchedulingInstructors({ schedulingInstructors: undefined }))
+        } else {
+            this.multiStaffSelectValue = _.filter(
+                this.multiStaffSelect_list,
+                (msi) => msi.value.id == this.user.id
+            ).map((v) => ({
+                name: v.value.center_user_name,
+                value: v.value,
+                checked: true,
+            }))
+        }
     }
 
     initTimePickAndDatePick() {

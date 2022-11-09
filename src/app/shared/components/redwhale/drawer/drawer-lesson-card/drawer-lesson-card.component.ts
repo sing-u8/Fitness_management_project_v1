@@ -3,6 +3,7 @@ import { Component, OnInit, AfterViewInit, Input, OnChanges } from '@angular/cor
 import { WordService } from '@services/helper/word.service'
 
 import { ClassItem } from '@schemas/class-item'
+import _ from 'lodash'
 
 @Component({
     selector: 'rw-drawer-lesson-card',
@@ -43,10 +44,15 @@ export class DrawerLessonCardComponent implements OnInit, AfterViewInit, OnChang
     }
 
     initCardInfo() {
+        const insts = _.orderBy(this.lesson.instructors, 'center_user_name')
         this.cardInfo.category_name = this.lesson.category_name
         this.cardInfo.color = this.lesson.color
         this.cardInfo.name = this.lesson.name
-        this.cardInfo.trainer_name = this.wordService.ellipsis(this.lesson.instructors[0].center_user_name, 15)
+        this.cardInfo.trainer_name =
+            this.lesson.instructors.length > 1
+                ? this.wordService.ellipsis(this.lesson.instructors[0].center_user_name, 6) +
+                  ` 외 ${insts.length - 1}명`
+                : this.wordService.ellipsis(this.lesson.instructors[0].center_user_name, 6)
         this.cardInfo.type_name = this.lesson.type_code_name
         this.cardInfo.minutes = this.lesson.duration
     }

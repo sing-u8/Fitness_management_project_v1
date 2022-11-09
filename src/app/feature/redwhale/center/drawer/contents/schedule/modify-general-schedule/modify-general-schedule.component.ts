@@ -196,14 +196,14 @@ export class ModifyGeneralScheduleComponent implements OnInit, AfterViewInit, On
     modifyPlan(fn?: () => void) {
         let reqBody: UpdateCalendarTaskReqBody = undefined
         const selectedStaffs = _.filter(this.instructorList, (item) => {
-            const idx = _.findIndex(this.multiStaffSelectValue, (mi) => mi.value.id == item.instructor.calendar_user.id)
+            const idx = _.findIndex(this.multiStaffSelectValue, (mi) => mi.value.id == item.instructor.id)
             return idx != -1
         })
         const calIds = selectedStaffs.map((v) => v.instructor.id)
 
         if (this.dayRepeatSwitch && this.generalRepeatOption != 'one') {
             reqBody = {
-                responsibility_user_id: selectedStaffs[0].instructor.calendar_user.id,
+                responsibility_user_id: selectedStaffs[0].instructor.id,
                 name: this.planTexts.planTitle,
                 start_date: dayjs(this.repeatDatepick.startDate).format('YYYY-MM-DD'),
                 end_date: dayjs(this.repeatDatepick.startDate).format('YYYY-MM-DD'),
@@ -219,7 +219,7 @@ export class ModifyGeneralScheduleComponent implements OnInit, AfterViewInit, On
             }
         } else {
             reqBody = {
-                responsibility_user_id: selectedStaffs[0].instructor.calendar_user.id,
+                responsibility_user_id: selectedStaffs[0].instructor.id,
                 name: this.planTexts.planTitle,
                 start_date: dayjs(this.datepick.date).format('YYYY-MM-DD'),
                 end_date: dayjs(this.datepick.date).format('YYYY-MM-DD'),
@@ -264,7 +264,7 @@ export class ModifyGeneralScheduleComponent implements OnInit, AfterViewInit, On
             .subscribe((instructors) => {
                 const centerInstructorList = _.cloneDeep(instructors)
                 this.multiStaffSelect_list = centerInstructorList
-                    .filter((ci) => -1 != instructorList.findIndex((v) => ci.id == v.instructor.calendar_user.id))
+                    .filter((ci) => -1 != instructorList.findIndex((v) => ci.id == v.instructor.id))
                     .map((value) => ({
                         name: value.center_user_name,
                         value: value,

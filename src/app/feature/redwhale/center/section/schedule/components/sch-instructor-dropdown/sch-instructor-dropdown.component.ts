@@ -27,6 +27,7 @@ import { Calendar } from '@schemas/calendar'
 })
 export class SchInstructorDropdownComponent implements OnInit, OnChanges, OnDestroy {
     @Input() instructorList: Array<FromSchedule.InstructorType> = []
+    @Input() curCenterCalendar: Calendar
     @Input() loading: Loading = 'pending'
 
     public center: Center
@@ -64,10 +65,7 @@ export class SchInstructorDropdownComponent implements OnInit, OnChanges, OnDest
         }
         if (changes['instructorList']) {
             this.instructorFilter = (cu: CenterUser) => {
-                return (
-                    cu.role_code != 'member' &&
-                    _.every(this.instructorList, (inst) => inst.instructor.calendar_user.id != cu.id)
-                )
+                return cu.role_code != 'member' && _.every(this.instructorList, (inst) => inst.instructor.id != cu.id)
             }
             this.addableInstLength = _.filter(this.memberList, this.instructorFilter).length
         }
@@ -153,12 +151,11 @@ export class SchInstructorDropdownComponent implements OnInit, OnChanges, OnDest
     onConfirmAddInst() {
         this.toggleAddInstructorModal()
         this.nxStore.dispatch(
-            ScheduleActions.startCreateInstructor({
+            ScheduleActions.startCreateInstructorFilter({
                 centerId: this.center.id,
+                centerCalendarId: this.curCenterCalendar.id,
                 reqBody: {
-                    calendar_user_id: this.willBeAddedInstructor.id,
-                    type_code: 'calendar_type_user_calendar',
-                    name: this.willBeAddedInstructor.center_user_name,
+                    instructor_user_id: this.willBeAddedInstructor.id,
                 },
             })
         )
@@ -210,7 +207,7 @@ export class SchInstructorDropdownComponent implements OnInit, OnChanges, OnDest
         cancelButtonText: '취소',
         confirmButtonText: '삭제하기',
     }
-    public removeInstructor: Calendar = undefined
+    public removeInstructor: CenterUser = undefined
     openRemoveInstructorModal(it: InstructorType) {
         this.removeInstructorModalData.text = `강사별 보기 목록에서
             ${it.instructor.name}님을 삭제하시겠어요?`
@@ -222,15 +219,12 @@ export class SchInstructorDropdownComponent implements OnInit, OnChanges, OnDest
     }
     onRemoveInstructorModalConfirm() {
         this.nxStore.dispatch(
-            ScheduleActions.startRemoveInstructor({ centerId: this.center.id, calendar: this.removeInstructor })
+            ScheduleActions.startRemoveInstructor({ centerId: this.center.id, instructor: this.removeInstructor })
         )
         this.removeInstructorModal = false
     }
 
     instructorFilter(cu: CenterUser): boolean {
-        return (
-            cu.role_code != 'member' &&
-            _.every(this.instructorList, (inst) => inst.instructor.calendar_user.id != cu.id)
-        )
+        return cu.role_code != 'member' && _.every(this.instructorList, (inst) => inst.instructor.id != cu.id)
     }
 }

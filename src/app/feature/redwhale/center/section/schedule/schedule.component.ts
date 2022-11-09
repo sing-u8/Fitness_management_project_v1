@@ -93,6 +93,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
     public selectedDateViewType: ViewType = FromSchedule.CalendarConfigInfoInit.viewType
 
     // ngrx vars
+    public curCenterCalendar$_: Calendar = undefined
     public instructorList$_: FromSchedule.InstructorType[] = []
     public lectureFilter$_: FromSchedule.LectureFilter = FromSchedule.LectureFilterInit
     public isLoading$_: Loading = 'idle'
@@ -112,6 +113,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
         private wordService: WordService
     ) {
         this.center = this.storageService.getCenter()
+
         this.nxStore
             .pipe(select(ScheduleSelector.operatingHour), takeUntil(this.unsubscriber$))
             .subscribe((operatingHour) => {
@@ -130,6 +132,11 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
     ngOnInit(): void {
         this.user = this.storageService.getUser()
 
+        this.nxStore
+            .pipe(select(ScheduleSelector.curCenterCalendar), takeUntil(this.unsubscriber$))
+            .subscribe((ccc) => {
+                this.curCenterCalendar$_ = ccc
+            })
         this.curCenterId$ = this.nxStore.select(ScheduleSelector.curCenterId)
         this.nxStore.pipe(select(ScheduleSelector.isLoading), takeUntil(this.unsubscriber$)).subscribe((loading) => {
             this.isLoading$_ = loading
@@ -405,7 +412,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
                 const resoruces = []
                 _.forEach(_.filter(this.instructorList$_, ['selected', true]), (value) => {
                     resoruces.push({
-                        id: value.instructor.calendar_user.id,
+                        id: value.instructor.id,
                         title: value.instructor.name,
                         instructorData: value.instructor,
                     })
@@ -507,9 +514,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     getTaskList(viewType: ViewType, callback?: (eventList: ScheduleEvent[]) => void) {
-        const calendars: Calendar[] = this.instructorList$_.map((v) => v.instructor) // .filter((v) => v.selected)
-        const calendarIds: string[] = calendars.map((v) => v.id)
-
+        const calendarIds: string[] = [this.curCenterCalendar$_.id]
         this.nxStore.dispatch(
             ScheduleActions.startGetAllCalendarTask({
                 centerId: this.center.id,
@@ -523,8 +528,9 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
             })
         )
     }
+
+    // !!!!!!!!!!!!!!!!!!!!
     makeScheduleEvent(task: CalendarTask, viewType: ViewType): ScheduleEvent {
-        const calendars: Calendar[] = this.instructorList$_.map((v) => v.instructor)
         if (viewType == 'resourceTimeGridDay') {
             return {
                 title: task.name,
@@ -532,10 +538,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
                 end: task.end,
                 resourceId: task.responsibility.id,
                 originItem: task,
-                assginee:
-                    calendars.length > 0
-                        ? _.find(calendars, (cal) => cal.calendar_user.id == task.responsibility.id)
-                        : null,
+                assginee: null, // need to modify
                 textColor: '#212121',
                 color: task.type_code == 'calendar_task_type_normal' ? '#F6F6F6' : '#FFFFFF',
             }
@@ -545,10 +548,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
                 start: task.start,
                 end: task.end,
                 originItem: task,
-                assginee:
-                    calendars.length > 0
-                        ? _.find(calendars, (cal) => cal.calendar_user.id == task.responsibility.id)
-                        : null,
+                assginee: null, // need to modify
                 textColor: '#212121',
                 color: task.type_code == 'calendar_task_type_normal' ? '#F6F6F6' : '#FFFFFF',
             }
@@ -565,10 +565,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
             _.forEach(this.eventList, (event) => {
                 if (
                     _.findIndex(instructors, (instructor) => {
-                        return (
-                            instructor.selected &&
-                            instructor.instructor.calendar_user.id == event.originItem.responsibility.id
-                        )
+                        return instructor.selected && instructor.instructor.id == event.originItem.responsibility.id
                     }) != -1
                 ) {
                     instructorEventList.push(event)
@@ -803,18 +800,15 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
             )
 
             this.nxStore.dispatch(
-                ScheduleActions.setSchedulingInstructor({
-                    schedulingInstructor: arg.resource.extendedProps.instructorData as Calendar,
+                ScheduleActions.setSchedulingInstructors({
+                    schedulingInstructors: [arg.resource.extendedProps.instructorData],
                 })
             )
         } else {
-            const curUserCalendar = this.instructorList$_.find(
-                (v) => v.instructor.calendar_user.id == this.user.id
-            ).instructor
-            if (curUserCalendar) {
+            if (this.curCenterCalendar$_) {
                 this.nxStore.dispatch(
-                    ScheduleActions.setSchedulingInstructor({
-                        schedulingInstructor: curUserCalendar,
+                    ScheduleActions.setSchedulingInstructors({
+                        schedulingInstructors: undefined, // this.curCenterCalendar$_,
                     })
                 )
             }
@@ -945,8 +939,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
         console.log('extendedProps: ', arg.event.extendedProps)
         this.fullCalendar.getApi().render()
         let calTask: CalendarTask = _.cloneDeep(arg.event.extendedProps['originItem'] as CalendarTask)
-        const calId = this.instructorList$_.find((v) => v.instructor.calendar_user.id == calTask.responsibility.id)
-            .instructor.id
+        const calId = this.curCenterCalendar$_.id // !!!!!!!!!!
         const otherInstructor: Calendar = arg.newResource
             ? (arg.newResource._resource.extendedProps['instructorData'] as Calendar)
             : null
@@ -1248,7 +1241,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
     public lessonModalCalId: string = undefined
     getLessonModalCalId(calendarTask: CalendarTask) {
         this.lessonModalCalId = this.instructorList$_.find(
-            (v) => v.selected && v.instructor.calendar_user.id == calendarTask.responsibility.id
+            (v) => v.selected && v.instructor.id == calendarTask.responsibility.id
         ).instructor.id
     }
     public lessonEventData: CalendarTask = undefined
@@ -1353,7 +1346,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
     }
     deleteRepeatGeneralEvent(fn?: () => void) {
         const calId = this.instructorList$_.filter(
-            (v) => v.instructor.calendar_user.id == this.delRepeatGeneralData.responsibility.id
+            (v) => v.instructor.id == this.delRepeatGeneralData.responsibility.id
         )[0].instructor.id
         this.CenterCalendarService.deleteCalendarTask(
             this.center.id,
@@ -1489,9 +1482,8 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
     }
     onDeleteEventConfirm() {
         if (this.deleteEventType == 'general') {
-            const calId = this.instructorList$_.filter(
-                (v) => v.instructor.calendar_user.id == this.deletedEvent.responsibility.id
-            )[0].instructor.id
+            const calId = this.instructorList$_.filter((v) => v.instructor.id == this.deletedEvent.responsibility.id)[0]
+                .instructor.id
             this.CenterCalendarService.deleteCalendarTask(
                 this.center.id,
                 calId,
@@ -1519,9 +1511,8 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     deleteSingleLessonEvent(fn?: () => void) {
-        const calId = this.instructorList$_.filter(
-            (v) => v.instructor.calendar_user.id == this.deletedEvent.responsibility.id
-        )[0].instructor.id
+        const calId = this.instructorList$_.filter((v) => v.instructor.id == this.deletedEvent.responsibility.id)[0]
+            .instructor.id
         this.CenterCalendarService.deleteCalendarTask(
             this.center.id,
             calId,
@@ -1570,7 +1561,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
     }
     deleteRepeatLessonEvent(fn?: () => void) {
         const calId = this.instructorList$_.filter(
-            (v) => v.instructor.calendar_user.id == this.delRepeatLessonData.responsibility.id
+            (v) => v.instructor.id == this.delRepeatLessonData.responsibility.id
         )[0].instructor.id
         this.CenterCalendarService.deleteCalendarTask(
             this.center.id,

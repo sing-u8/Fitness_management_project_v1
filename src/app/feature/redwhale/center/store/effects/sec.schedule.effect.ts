@@ -16,6 +16,7 @@ import * as ScheduleSelector from '../selectors/sec.schedule.selector'
 import _ from 'lodash'
 import { showToast } from '@appStore/actions/toast.action'
 import { Store } from '@ngrx/store'
+import { curCenterCalendar } from '../selectors/sec.schedule.selector'
 
 @Injectable()
 export class ScheduleEffect {
@@ -35,75 +36,94 @@ export class ScheduleEffect {
             switchMap(() => {
                 const center = this.storageService.getCenter()
                 const user = this.storageService.getUser()
-                return forkJoin([
-                    this.centerUsersApi.getUserList(center.id),
-                    this.centerCalendarApi.getCalendars(center.id, {
-                        typeCode: 'calendar_type_user_calendar',
-                    }),
-                    this.centerLessonApi.getCategoryList(center.id),
-                ]).pipe(
-                    map(([centerUsers, calendars, lessonCategs]) => {
-                        const curCenterUser = _.find(centerUsers, (centerUser) => centerUser.id == user.id)
-                        const curCalendar = _.find(calendars, (cal) => cal.calendar_user.id == curCenterUser.id)
-                        const doLessonsExist =
-                            lessonCategs.length > 0 &&
-                            lessonCategs.reduce((acc, curCateg) => acc + curCateg.item_count, 0) > 0
-                        return { curCenterUser, curCalendar, calendars, doLessonsExist }
-                    }),
-                    switchMap((value) => {
-                        const instructorList: ScheduleReducer.InstructorType[] = value.calendars.map((calendar) => ({
-                            selected: true,
-                            instructor: calendar,
-                        }))
-                        if (!value.doLessonsExist) {
-                            return [
-                                ScheduleActions.setCurCenterId({ centerId: center.id }),
-                                ScheduleActions.setDoLessonsExist({ doExist: false }),
-                                ScheduleActions.finishLoadScheduleState({ instructorList }),
-                            ]
-                        } else if (value.curCalendar == undefined && value.curCenterUser.role_code == 'owner') {
-                            return [
-                                ScheduleActions.setCurCenterId({ centerId: center.id }),
-                                ScheduleActions.startCreateInstructor({
-                                    centerId: center.id,
-                                    reqBody: {
-                                        calendar_user_id: user.id,
-                                        type_code: 'calendar_type_user_calendar',
-                                        name: value.curCenterUser.center_user_name,
-                                    },
+                return this.centerCalendarApi
+                    .getCalendars(center.id, {
+                        typeCode: 'calendar_type_center_calendar',
+                    })
+                    .pipe(
+                        switchMap((calendars) => {
+                            return forkJoin([
+                                this.centerUsersApi.getUserList(center.id),
+                                this.centerCalendarApi.getFilterInstructor(center.id, calendars[0].id),
+                                this.centerLessonApi.getCategoryList(center.id),
+                            ]).pipe(
+                                map(([centerUsers, instructorFilter, lessonCategs]) => {
+                                    const curCenterUser = _.find(centerUsers, (centerUser) => centerUser.id == user.id)
+                                    const centerCalendar = calendars[0]
+                                    const doLessonsExist =
+                                        lessonCategs.length > 0 &&
+                                        lessonCategs.reduce((acc, curCateg) => acc + curCateg.item_count, 0) > 0
+                                    return { curCenterUser, centerCalendar, doLessonsExist, instructorFilter }
                                 }),
-                                ScheduleActions.finishLoadScheduleState({ instructorList }),
-                            ]
-                        } else {
-                            return [
-                                ScheduleActions.setCurCenterId({ centerId: center.id }),
-                                ScheduleActions.finishLoadScheduleState({ instructorList }),
-                            ]
-                        }
-                    }),
-                    catchError((err: string) =>
-                        of(ScheduleActions.setError({ error: 'load schedule state err :' + err }))
+                                switchMap((value) => {
+                                    const instructorList: ScheduleReducer.InstructorType[] = value.instructorFilter.map(
+                                        (centerUser) => ({
+                                            selected: true,
+                                            instructor: centerUser,
+                                        })
+                                    )
+                                    if (!value.doLessonsExist) {
+                                        return [
+                                            ScheduleActions.setCurCenterId({ centerId: center.id }),
+                                            ScheduleActions.setDoLessonsExist({ doExist: false }),
+                                            ScheduleActions.finishLoadScheduleState({
+                                                instructorList,
+                                                curCenterCalendar: value.centerCalendar,
+                                            }),
+                                        ]
+                                    } else if (instructorList.length == 0 && value.curCenterUser.role_code == 'owner') {
+                                        return [
+                                            ScheduleActions.setCurCenterId({ centerId: center.id }),
+                                            ScheduleActions.startCreateInstructorFilter({
+                                                centerId: center.id,
+                                                centerCalendarId: value.centerCalendar.id,
+                                                reqBody: {
+                                                    instructor_user_id: user.id,
+                                                },
+                                            }),
+                                            ScheduleActions.finishLoadScheduleState({
+                                                instructorList,
+                                                curCenterCalendar: value.centerCalendar,
+                                            }),
+                                        ]
+                                    } else {
+                                        return [
+                                            ScheduleActions.setCurCenterId({ centerId: center.id }),
+                                            ScheduleActions.finishLoadScheduleState({
+                                                instructorList,
+                                                curCenterCalendar: value.centerCalendar,
+                                            }),
+                                        ]
+                                    }
+                                }),
+                                catchError((err: string) =>
+                                    of(ScheduleActions.setError({ error: 'load schedule state err :' + err }))
+                                )
+                            )
+                        })
                     )
-                )
             })
         )
     })
 
     public createInstructor$ = createEffect(() => {
         return this.actions$.pipe(
-            ofType(ScheduleActions.startCreateInstructor),
-            switchMap(({ centerId, reqBody }) => {
-                return this.centerCalendarApi.createCalendar(centerId, reqBody).pipe(
+            ofType(ScheduleActions.startCreateInstructorFilter),
+            switchMap(({ centerId, centerCalendarId, reqBody }) => {
+                return this.centerCalendarApi.addFilterInstructor(centerId, centerCalendarId, reqBody).pipe(
                     switchMap((newInstructor) => {
                         return [
-                            ScheduleActions.finishCreateInstructor({
+                            ScheduleActions.finishCreateInstructorFilter({
                                 createdInstructor: {
                                     selected: true,
                                     instructor: newInstructor,
                                 },
                             }),
                             showToast({
-                                text: `'${this.wordService.ellipsis(reqBody.name, 6)}' 강사가 추가되었습니다.`,
+                                text: `'${this.wordService.ellipsis(
+                                    newInstructor.center_user_name,
+                                    6
+                                )}' 강사가 추가되었습니다.`,
                             }),
                         ]
                     }),
@@ -116,13 +136,14 @@ export class ScheduleEffect {
     public removeInstructor$ = createEffect(() => {
         return this.actions$.pipe(
             ofType(ScheduleActions.startRemoveInstructor),
-            switchMap(({ centerId, calendar }) => {
-                return this.centerCalendarApi.deleteCalendar(centerId, calendar.id).pipe(
+            concatLatestFrom(() => [this.nxStore.select(ScheduleSelector.curCenterCalendar)]),
+            switchMap(([{ centerId, instructor }, centerCalendar]) => {
+                return this.centerCalendarApi.deleteFilterInstructor(centerId, centerCalendar.id, instructor.id).pipe(
                     switchMap((res) => {
                         return [
                             showToast({
                                 text: `강사별 보기 목록에서 ${this.wordService.ellipsis(
-                                    calendar.name,
+                                    instructor.center_user_name,
                                     6
                                 )}님이 삭제되었습니다.`,
                             }),
@@ -202,7 +223,7 @@ export class ScheduleEffect {
                                 })
                                 .pipe(
                                     switchMap((calendar) => [
-                                        ScheduleActions.finishSynchronizeInstructorList({ calendar }),
+                                        // ScheduleActions.finishSynchronizeInstructorList({ calendar }),
                                     ])
                                 )
                         } else {

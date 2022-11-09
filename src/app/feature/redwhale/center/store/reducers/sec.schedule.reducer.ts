@@ -11,6 +11,7 @@ import { Loading } from '@schemas/store/loading'
 import { Calendar } from '@schemas/calendar'
 import { CalendarTask } from '@schemas/calendar-task'
 import { CalendarOptions } from '@fullcalendar/angular'
+import { CenterUser } from '@schemas/center-user'
 
 import * as ScheduleActions from '../actions/sec.schedule.actions'
 import { setModifyGeneralOption } from '../actions/sec.schedule.actions'
@@ -30,7 +31,7 @@ export const LectureFilterInit: LectureFilter = {
 
 export type InstructorType = {
     selected: boolean
-    instructor: Calendar
+    instructor: CenterUser
 }
 
 export type CalendarViewType = 'resourceTimeGridDay' | 'timeGridWeek' | 'dayGridMonth'
@@ -65,6 +66,7 @@ export const TaskListInit: CalendarTask[] = []
 export interface State {
     // common
     curCenterId: string
+    curCenterCalender: Calendar
     isLoading: Loading
     error: string
     doLessonsExist: boolean
@@ -84,7 +86,7 @@ export interface State {
     operatingHour: CenterOperatingHour
     lectureFilter: LectureFilter
     selectedDate: SelectedDate
-    schedulingInstructor: Calendar
+    schedulingInstructors: CenterUser[]
     isScheduleEventChanged: boolean
     taskTitleTime: string // string type -> MM/DD (dd) a hh:mm
 
@@ -99,6 +101,7 @@ export interface State {
 export const initialState: State = {
     // common
     curCenterId: undefined,
+    curCenterCalender: undefined,
     isLoading: 'idle',
     error: '',
     doLessonsExist: true,
@@ -117,7 +120,7 @@ export const initialState: State = {
     operatingHour: CenterOperationHourInit,
     lectureFilter: LectureFilterInit,
     selectedDate: SelectedDateInit,
-    schedulingInstructor: undefined,
+    schedulingInstructors: [],
     isScheduleEventChanged: false,
     taskTitleTime: '',
 
@@ -136,19 +139,20 @@ export const scheduleReducer = createImmerReducer(
         state.isLoading = 'pending'
         return state
     }),
-    on(ScheduleActions.finishLoadScheduleState, (state, { instructorList }): State => {
+    on(ScheduleActions.finishLoadScheduleState, (state, { instructorList, curCenterCalendar }): State => {
         state.isLoading = 'done'
         state.instructorList = instructorList
+        state.curCenterCalender = curCenterCalendar
         return state
     }),
 
-    on(ScheduleActions.finishCreateInstructor, (state, { createdInstructor }): State => {
+    on(ScheduleActions.finishCreateInstructorFilter, (state, { createdInstructor }): State => {
         state.instructorList.push(createdInstructor)
         return state
     }),
 
-    on(ScheduleActions.startRemoveInstructor, (state, { calendar }): State => {
-        state.instructorList = _.filter(state.instructorList, (v) => v.instructor.id != calendar.id)
+    on(ScheduleActions.startRemoveInstructor, (state, { instructor }): State => {
+        state.instructorList = _.filter(state.instructorList, (v) => v.instructor.id != instructor.id)
         return state
     }),
 
@@ -195,8 +199,8 @@ export const scheduleReducer = createImmerReducer(
         state.isScheduleEventChanged = isScheduleEventChanged
         return state
     }),
-    on(ScheduleActions.setSchedulingInstructor, (state, { schedulingInstructor }) => {
-        state.schedulingInstructor = schedulingInstructor
+    on(ScheduleActions.setSchedulingInstructors, (state, { schedulingInstructors }) => {
+        state.schedulingInstructors = schedulingInstructors
         return state
     }),
 
@@ -249,10 +253,10 @@ export const scheduleReducer = createImmerReducer(
         return state
     }),
     // synchronize
-    on(ScheduleActions.finishSynchronizeInstructorList, (state, { calendar }) => {
+    on(ScheduleActions.finishSynchronizeInstructorList, (state, { instructor }) => {
         if (state.isLoading == 'done') {
-            const instructorIdx = _.findIndex(state.instructorList, (v) => v.instructor.id == calendar.id)
-            state.instructorList[instructorIdx].instructor = calendar
+            const instructorIdx = _.findIndex(state.instructorList, (v) => v.instructor.id == instructor.id)
+            state.instructorList[instructorIdx].instructor = instructor
         }
         return state
     })
@@ -263,6 +267,7 @@ export const selectCurCenterId = (state: State) => state.curCenterId
 export const selectError = (state: State) => state.error
 export const selectIsLoading = (state: State) => state.isLoading
 export const selectDoLessonsExist = (state: State) => state.doLessonsExist
+export const selectCurCenterCalender = (state: State) => state.curCenterCalender
 
 // date pick
 export const selectDatePick = (state: State) => state.datePick
@@ -276,7 +281,7 @@ export const selectCalendarConfigInfo = (state: State) => state.calendarConfig
 export const selectOperatingHour = (state: State) => state.operatingHour
 export const selectLectureFilter = (state: State) => state.lectureFilter
 export const selectSelectedDate = (state: State) => state.selectedDate
-export const selectSchedulingInstructor = (state: State) => state.schedulingInstructor
+export const selectSchedulingInstructors = (state: State) => state.schedulingInstructors
 export const selectIsScheduleEventChanged = (state: State) => state.isScheduleEventChanged
 export const selectModifyGeneralEvent = (state: State) => state.modifyGeneralEvent
 export const selectModifyGeneralOption = (state: State) => state.modifyGeneralOption
