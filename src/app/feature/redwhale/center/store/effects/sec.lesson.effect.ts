@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core'
 import { createEffect, Actions, ofType, concatLatestFrom } from '@ngrx/effects'
 import { Store } from '@ngrx/store'
-import { of, forkJoin, iif } from 'rxjs'
-import { catchError, switchMap, mergeMap, map, filter, tap } from 'rxjs/operators'
+import { of, forkJoin, iif, debounce } from 'rxjs'
+import { catchError, switchMap, mergeMap, map, filter, tap, debounceTime } from 'rxjs/operators'
 
 import * as LessonActions from '../actions/sec.lesson.actions'
 import {
@@ -23,7 +23,6 @@ import { CenterUsersService } from '@services/center-users.service'
 import _ from 'lodash'
 
 import { ClassItem } from '@schemas/class-item'
-import { startUpdateSelectedLessonInstructor } from '../actions/sec.lesson.actions'
 
 @Injectable()
 export class LessonEffect {
@@ -176,8 +175,10 @@ export class LessonEffect {
     public updateSelectedLessonInstructor = createEffect(() =>
         this.actions$.pipe(
             ofType(LessonActions.startUpdateSelectedLessonInstructor),
-            switchMap(({ instructor, selectedLesson }) =>
-                iif(
+            debounceTime(300),
+            switchMap(({ instructor, selectedLesson }) => {
+                console.log('startUpdateSelectedLessonInstructor 0 ', instructor, selectedLesson)
+                return iif(
                     () => instructor.checked,
                     this.centerLessonApi.addInstructor(
                         selectedLesson.centerId,
@@ -192,7 +193,7 @@ export class LessonEffect {
                         instructor.value.id
                     )
                 ).pipe(switchMap((res) => [MembershipActions.startUpsertState()]))
-            )
+            })
         )
     )
 
