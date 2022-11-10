@@ -56,7 +56,6 @@ export class CenterUsersService {
         centerId: string,
         category_code: CenterUsersCategory | '' = '',
         search = '',
-        role_code = '',
         created_date = '',
         page = '',
         pageSize = ''
@@ -68,10 +67,8 @@ export class CenterUsersService {
             `?` +
             (category_code ? `category_code=${category_code}` : '') +
             (search ? `search=${search}&` : '') +
-            (role_code ? `role_code=${role_code}` : '') +
             (created_date ? `created_date=${created_date}&` : '') +
             (page ? `page=${page}&` : '') +
-            (role_code ? `role_code=${role_code}&` : '') +
             (pageSize ? `pageSize=${pageSize}` : '')
 
         const options = {
