@@ -378,8 +378,10 @@ export class MembershipComponent implements OnInit {
         this.isReservLessonListModalOn = this.isReservLessonListModalOn != true
     }
     setReserveLessonModalOff() {
-        this.isReservLessonListModalOn = false
-        this.nxStore.dispatch(MembershipActions.resetWillBeLinkedClassItem())
+        if (this.isReservLessonListModalOn) {
+            this.isReservLessonListModalOn = false
+            this.nxStore.dispatch(MembershipActions.resetWillBeLinkedClassItem())
+        }
     }
     setReserveLessonItems() {
         this.isReservLessonListModalOn = false

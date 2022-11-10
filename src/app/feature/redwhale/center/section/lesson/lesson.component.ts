@@ -469,8 +469,10 @@ export class LessonComponent implements OnInit, AfterViewInit, OnDestroy {
         this.isReservMembershipListModalOn = this.isReservMembershipListModalOn != true
     }
     setReserveMembershipModalOff() {
-        this.isReservMembershipListModalOn = false
-        this.nxStore.dispatch(LessonActions.resetWillBeLinkedMembershipItem())
+        if (this.isReservMembershipListModalOn) {
+            this.isReservMembershipListModalOn = false
+            this.nxStore.dispatch(LessonActions.resetWillBeLinkedMembershipItem())
+        }
     }
     addReserveMembershipItems() {
         this.isReservMembershipListModalOn = false
