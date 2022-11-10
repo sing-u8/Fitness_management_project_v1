@@ -150,7 +150,7 @@ export class CenterSMSService {
         const url =
             this.SERVER +
             `/${centerId}/sms/history_group/${historyGroupId}` +
-            (page ? `page=${page}&` : '') +
+            (page ? `?page=${page}&` : '') +
             (pageSize ? `pageSize=${pageSize}` : '')
 
         return this.http.get<Response>(url, this.options).pipe(
