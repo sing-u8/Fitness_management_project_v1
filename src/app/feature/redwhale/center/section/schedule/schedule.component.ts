@@ -514,11 +514,9 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     getTaskList(viewType: ViewType, callback?: (eventList: ScheduleEvent[]) => void) {
-        const calendarIds: string[] = [this.curCenterCalendar$_.id]
         this.nxStore.dispatch(
             ScheduleActions.startGetAllCalendarTask({
                 centerId: this.center.id,
-                calendar_ids: calendarIds,
                 cb: (taskList: CalendarTask[]) => {
                     if (_.isFunction(callback)) {
                         const eventList = taskList.map((task) => this.makeScheduleEvent(task, viewType))

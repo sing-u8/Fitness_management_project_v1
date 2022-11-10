@@ -176,15 +176,14 @@ export class ScheduleEffect {
     public getTaskList$ = createEffect(() => {
         return this.actions$.pipe(
             ofType(ScheduleActions.startGetAllCalendarTask),
-            concatLatestFrom(() => [this.nxStore.select(ScheduleSelector.calendarConfig)]),
-            switchMap(([{ centerId, calendar_ids, cb }, calConfig]) => {
+            concatLatestFrom(() => [
+                this.nxStore.select(ScheduleSelector.calendarConfig),
+                this.nxStore.select(ScheduleSelector.curCenterCalendar),
+            ]),
+            switchMap(([{ centerId, cb }, calConfig, curCenterCalendar]) => {
                 // console.log('ScheduleActions.startGetAllCalendarTask -- ', reqBody, ' -- ', calConfig)
                 return this.centerCalendarApi
-                    .getAllCalendarTask(centerId, {
-                        calendar_ids,
-                        start_date: calConfig.startDate,
-                        end_date: calConfig.endDate,
-                    })
+                    .getCalendarTasks(centerId, curCenterCalendar.id, calConfig.startDate, calConfig.endDate)
                     .pipe(
                         switchMap((taskList) => {
                             cb ? cb(taskList) : null

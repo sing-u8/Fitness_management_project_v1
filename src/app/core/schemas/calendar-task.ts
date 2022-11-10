@@ -19,6 +19,7 @@ export interface CalendarTask {
     repeat_count: number
     repeat_start_date: string
     repeat_end_date: string
+    // responsibility: Array<CenterUser>
     responsibility: CenterUser
     class: CalendarTaskClass
 }

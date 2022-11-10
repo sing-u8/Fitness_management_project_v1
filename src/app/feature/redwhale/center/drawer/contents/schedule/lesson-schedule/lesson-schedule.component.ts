@@ -205,9 +205,7 @@ export class LessonScheduleComponent implements OnInit, OnDestroy, AfterViewInit
     // ------------------------------------------register lesson task------------------------------------------------
     registerLessonTask(fn?: () => void) {
         let reqBody: CreateCalendarTaskReqBody = undefined
-
         const selectedStaffs = _.filter(this.multiStaffSelectValue, (item) => item.checked)
-        console.log('registerLessonTask --- ', selectedStaffs, this.multiStaffSelectValue, this.schInstructorList)
 
         if (this.dayRepeatSwitch) {
             reqBody = {
@@ -275,7 +273,6 @@ export class LessonScheduleComponent implements OnInit, OnDestroy, AfterViewInit
                 },
             }
         }
-        // console.log('createCalendarTask req body: ', reqBody)
         this.centerCalendarService.createCalendarTask(this.center.id, this.curCenterCalendar.id, reqBody).subscribe({
             next: (res) => {
                 fn ? fn() : null

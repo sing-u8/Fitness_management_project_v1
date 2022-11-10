@@ -58,7 +58,6 @@ export const startGetAllCalendarTask = createAction(
     `[${FeatureKey}] Start Get All Calendar Task`,
     props<{
         centerId: string
-        calendar_ids: string[]
         cb?: (taskList: CalendarTask[]) => void
     }>()
 )

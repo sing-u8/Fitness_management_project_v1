@@ -157,10 +157,13 @@ export class CenterCalendarService {
         centerId: string,
         calendarId: string,
         start_date: string,
-        end_date: string
+        end_date: string,
+        calendar_task_type_code?: 'class_item_type_onetoone' | 'class_item_type_group' | 'calendar_task_type_normal'
     ): Observable<Array<CalendarTask>> {
         const url =
-            this.SERVER + `/${centerId}/calendar/${calendarId}/task?start_date=${start_date}&end_date=${end_date}`
+            this.SERVER +
+            `/${centerId}/calendar/${calendarId}/task?start_date=${start_date}&end_date=${end_date}` +
+            (calendar_task_type_code ? `?calendar_task_type_code=${calendar_task_type_code}` : '')
 
         return this.http.get<Response>(url, this.options).pipe(
             map((res) => {
