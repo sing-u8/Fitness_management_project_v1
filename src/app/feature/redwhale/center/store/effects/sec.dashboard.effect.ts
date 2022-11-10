@@ -238,8 +238,9 @@ export class DashboardEffect {
                     this.centerUsersPaymentApi.getPayments(centerId, centerUser.id),
                     this.centerUsersBookingService.getBookings(centerId, centerUser.id),
                     this.centerContractApi.getContract(centerId, centerUser.id),
+                    this.centerUsersApi.getUserList(centerId, '', centerUser.center_user_name),
                 ]).pipe(
-                    switchMap(([lockers, memberships, payments, reservations, contracts]) => {
+                    switchMap(([lockers, memberships, payments, reservations, contracts, centerUsers]) => {
                         return [
                             DashboardActions.finishGetUserData({
                                 memberships,
@@ -247,6 +248,7 @@ export class DashboardEffect {
                                 payments,
                                 reservations,
                                 contracts,
+                                centerUser: centerUsers.find((v) => v.id == centerUser.id),
                             }),
                         ]
                     })

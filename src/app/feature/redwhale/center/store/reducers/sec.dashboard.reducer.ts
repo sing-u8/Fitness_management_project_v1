@@ -14,6 +14,7 @@ import { Contract } from '@schemas/contract'
 
 import * as DashboardActions from '../actions/sec.dashboard.actions'
 import dayjs from 'dayjs'
+import { User } from '@schemas/user'
 
 export type MemberSelectCateg = 'member' | 'valid' | 'unpaid' | 'imminent' | 'expired' | 'employee' | 'attendance'
 export type MemberManageCategory = 'membershipLocker' | 'reservation' | 'payment'
@@ -228,18 +229,27 @@ export const dashboardReducer = createImmerReducer(
         state.isUserDetailLoading = 'pending'
         return state
     }),
-    on(DashboardActions.finishGetUserData, (state, { memberships, lockers, payments, reservations, contracts }) => {
-        state.curUserData = {
-            ...state.curUserData,
-            reservations,
-            payments,
-            lockers,
-            memberships,
-            contracts,
+    on(
+        DashboardActions.finishGetUserData,
+        (state, { memberships, lockers, payments, reservations, contracts, centerUser }) => {
+            state.curUserData = {
+                ...state.curUserData,
+                reservations,
+                payments,
+                lockers,
+                memberships,
+                contracts,
+            }
+            if (centerUser) {
+                state.curUserData = {
+                    ...state.curUserData,
+                    user: centerUser,
+                }
+            }
+            state.isUserDetailLoading = 'done'
+            return state
         }
-        state.isUserDetailLoading = 'done'
-        return state
-    }),
+    ),
     on(DashboardActions.finishRefreshCenterUser, (state, { categ_type, refreshCenterUser, isUserInCurCateg }) => {
         if (isUserInCurCateg) {
             const refreshUserIdx = _.findIndex(state.usersLists[categ_type], (v) => v.user.id == refreshCenterUser.id)

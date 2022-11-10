@@ -22,6 +22,7 @@ import { Payment } from '@schemas/payment'
 import { User } from '@schemas/user'
 import { Contract } from '@schemas/contract'
 import { File } from '@schemas/file'
+import { Booking } from '@schemas/booking'
 
 const FeatureKey = 'Center/Dashboard'
 
@@ -78,8 +79,9 @@ export const finishGetUserData = createAction(
         lockers: UserLocker[]
         memberships: UserMembership[]
         payments: Payment[]
-        reservations?: any[]
+        reservations: Booking[]
         contracts: Contract[]
+        centerUser?: CenterUser
     }>()
 )
 
