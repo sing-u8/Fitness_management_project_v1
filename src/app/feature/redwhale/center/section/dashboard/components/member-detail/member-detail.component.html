@@ -71,11 +71,11 @@
                         <div class="title">이메일</div>
                         <div
                             class="content"
-                            [class.changeable]="(!curUserData?.user?.email_verified && !curUserData?.user?.email)"
-                            (click)="(!curUserData?.user?.email_verified && !curUserData?.user?.email) && toggleShowChangeUserEmailModal()"
+                            [class.changeable]="(curUserData?.user && !curUserData?.user?.last_logged_at)"
+                            (click)="(curUserData?.user && !curUserData?.user?.last_logged_at) && toggleShowChangeUserEmailModal()"
                         >
                             {{ !curUserData.user ? '-' : (curUserData.user.email ?? '-') }}
-                            <img *ngIf="(!curUserData?.user?.email_verified && !curUserData?.user?.email)" src="assets/icons/etc/edit.svg" />
+                            <img *ngIf="(curUserData?.user && !curUserData?.user?.last_logged_at)" src="assets/icons/etc/edit.svg" />
                         </div>
                     </div>
                     <div class="l-info">

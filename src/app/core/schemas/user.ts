@@ -14,7 +14,6 @@ export interface User {
     phone_number: string
     phone_number_verified: boolean
     color: string
-    last_logged_at: string
 
     // terms
     privacy: boolean

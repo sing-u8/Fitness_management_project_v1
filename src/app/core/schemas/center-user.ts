@@ -31,4 +31,5 @@ export interface CenterUser {
     total_unpaid: number // 미납금
     last_check_in: string // YYYY-MM-DD HH:mm:ss
     service080: string
+    last_logged_at: string
 }
