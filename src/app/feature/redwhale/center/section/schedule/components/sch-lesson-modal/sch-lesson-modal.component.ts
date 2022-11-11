@@ -261,12 +261,16 @@ export class SchLessonModalComponent implements AfterViewChecked, OnChanges {
         instructor: undefined,
     }
     initLessonCardData() {
+        const insts = _.orderBy(this.lessonData.responsibility, 'center_user_name')
         this.lessonCardData = {
             categName: this.lessonData.class.category_name,
             lessonName: this.lessonData.class.name,
             duration: this.lessonData.class.duration,
             lessonType: this.lessonData.class.type_code == 'class_item_type_onetoone' ? '1:1 수업' : '그룹 수업',
-            instructor: this.lessonData.responsibility.center_user_name,
+            instructor:
+                this.lessonData.responsibility.length > 1
+                    ? insts[0].center_user_name + ` 외 ${insts.length - 1}명`
+                    : insts[0].center_user_name,
         }
     }
 

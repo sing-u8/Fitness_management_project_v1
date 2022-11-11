@@ -25,7 +25,6 @@ import { CenterUser } from '@schemas/center-user'
 export class SchGeneralModalComponent implements AfterViewChecked, OnChanges {
     @Input() visible: boolean
     @Input() generalData: CalendarTask
-    @Input() assignee: Calendar
 
     @ViewChild('modalBackgroundElement') modalBackgroundElement: ElementRef
     @ViewChild('modalWrapperElement') modalWrapperElement: ElementRef
@@ -42,7 +41,7 @@ export class SchGeneralModalComponent implements AfterViewChecked, OnChanges {
 
     public isMouseModalDown: boolean
 
-    public curStaff: CenterUser = undefined
+    public curStaffs: CenterUser[] = []
 
     constructor(private el: ElementRef, private renderer: Renderer2) {
         this.isMouseModalDown = false
@@ -57,7 +56,7 @@ export class SchGeneralModalComponent implements AfterViewChecked, OnChanges {
         if (this.generalData) {
             this.initDate()
             this.initTime()
-            this.curStaff = this.assignee.calendar_user
+            this.curStaffs = _.orderBy(this.generalData.responsibility, 'center_user_name')
         }
     }
 

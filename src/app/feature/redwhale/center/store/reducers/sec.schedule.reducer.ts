@@ -151,7 +151,7 @@ export const scheduleReducer = createImmerReducer(
         return state
     }),
 
-    on(ScheduleActions.startRemoveInstructor, (state, { instructor }): State => {
+    on(ScheduleActions.startRemoveInstructorFilter, (state, { instructor }): State => {
         state.instructorList = _.filter(state.instructorList, (v) => v.instructor.id != instructor.id)
         return state
     }),

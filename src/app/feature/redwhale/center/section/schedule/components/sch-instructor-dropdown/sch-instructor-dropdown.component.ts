@@ -219,7 +219,7 @@ export class SchInstructorDropdownComponent implements OnInit, OnChanges, OnDest
     }
     onRemoveInstructorModalConfirm() {
         this.nxStore.dispatch(
-            ScheduleActions.startRemoveInstructor({ centerId: this.center.id, instructor: this.removeInstructor })
+            ScheduleActions.startRemoveInstructorFilter({ centerId: this.center.id, instructor: this.removeInstructor })
         )
         this.removeInstructorModal = false
     }

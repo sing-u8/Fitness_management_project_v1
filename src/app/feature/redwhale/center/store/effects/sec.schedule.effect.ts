@@ -135,7 +135,7 @@ export class ScheduleEffect {
 
     public removeInstructor$ = createEffect(() => {
         return this.actions$.pipe(
-            ofType(ScheduleActions.startRemoveInstructor),
+            ofType(ScheduleActions.startRemoveInstructorFilter),
             concatLatestFrom(() => [this.nxStore.select(ScheduleSelector.curCenterCalendar)]),
             switchMap(([{ centerId, instructor }, centerCalendar]) => {
                 return this.centerCalendarApi.deleteFilterInstructor(centerId, centerCalendar.id, instructor.id).pipe(

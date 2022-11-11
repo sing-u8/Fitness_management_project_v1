@@ -328,7 +328,7 @@ export interface UpdateCalendarTaskReqBody {
         | 'calendar_task_group_repeat_termination_type_date'
     repeat_count?: number
     repeat_end_date?: string
-    responsibility_user_id?: string
+    responsibility_user_ids?: Array<string>
     class?: ClassForCU
 }
 

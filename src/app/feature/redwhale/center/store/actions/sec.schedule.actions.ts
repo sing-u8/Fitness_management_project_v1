@@ -29,16 +29,16 @@ export const finishLoadScheduleState = createAction(
 )
 
 export const startCreateInstructorFilter = createAction(
-    `[${FeatureKey}] Start Create Instructor Calendar`,
+    `[${FeatureKey}] Start Create Instructor Filter`,
     props<{ centerId: string; centerCalendarId: string; reqBody: AddFilterInstructorReqBody }>()
 )
 export const finishCreateInstructorFilter = createAction(
-    `[${FeatureKey}] Finish Create Instructor Calendar`,
+    `[${FeatureKey}] Finish Create Instructor Filter`,
     props<{ createdInstructor: FromSchReducer.InstructorType }>()
 )
 
-export const startRemoveInstructor = createAction(
-    `[${FeatureKey}] Start Remove Instructor Calendar`,
+export const startRemoveInstructorFilter = createAction(
+    `[${FeatureKey}] Start Remove Instructor Filter`,
     props<{ centerId: string; instructor: CenterUser }>()
 )
 

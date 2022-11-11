@@ -40,6 +40,7 @@ import * as FromSchedule from '@centerStore/reducers/sec.schedule.reducer'
 import * as ScheduleSelector from '@centerStore/selectors/sec.schedule.selector'
 import { calendarOptions } from '@centerStore/selectors/sec.schedule.selector'
 import * as ScheduleActions from '@centerStore/actions/sec.schedule.actions'
+import { CenterUser } from '@schemas/center-user'
 
 // temp
 export type GymOperatingTime = { start: string; end: string }
@@ -48,9 +49,8 @@ export type ScheduleEvent = {
     title: string
     start: string
     end: string
-    resourceId?: string
+    resourceIds?: Array<string>
     originItem: CalendarTask
-    assginee: Calendar
     textColor: string
     color: string
 }
@@ -534,9 +534,8 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
                 title: task.name,
                 start: task.start,
                 end: task.end,
-                resourceId: task.responsibility.id,
+                resourceIds: task.responsibility.map((v) => v.id),
                 originItem: task,
-                assginee: null, // need to modify
                 textColor: '#212121',
                 color: task.type_code == 'calendar_task_type_normal' ? '#F6F6F6' : '#FFFFFF',
             }
@@ -546,7 +545,6 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
                 start: task.start,
                 end: task.end,
                 originItem: task,
-                assginee: null, // need to modify
                 textColor: '#212121',
                 color: task.type_code == 'calendar_task_type_normal' ? '#F6F6F6' : '#FFFFFF',
             }
@@ -563,7 +561,10 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
             _.forEach(this.eventList, (event) => {
                 if (
                     _.findIndex(instructors, (instructor) => {
-                        return instructor.selected && instructor.instructor.id == event.originItem.responsibility.id
+                        return (
+                            instructor.selected &&
+                            event.originItem.responsibility.findIndex((v) => v.id == instructor.instructor.id) != -1
+                        )
                     }) != -1
                 ) {
                     instructorEventList.push(event)
@@ -735,11 +736,10 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
 
         if (arg.event.extendedProps['originItem'].type_code == 'calendar_task_type_normal') {
             this.generalEventData = arg.event.extendedProps['originItem']
-            this.generalAssignee = arg.event.extendedProps['assginee']
             this.showModifyGeneralEventModal()
         } else {
             this.lessonEventData = arg.event.extendedProps['originItem']
-            this.getLessonModalCalId(this.lessonEventData)
+            // this.getLessonModalCalId(this.lessonEventData)
             this.showModifyLessonEventModal()
         }
     }
@@ -840,6 +840,8 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
             const eventTitleEl: HTMLElement = arg.el.getElementsByClassName('fc-event-title')[0]
             const eventTimeEl: HTMLElement = arg.el.getElementsByClassName('fc-event-time')[0]
 
+            const insts = _.orderBy(arg.event.extendedProps.originItem.responsibility, 'center_user_name')
+
             if (arg.event.extendedProps.originItem.type_code == 'calendar_task_type_normal') {
                 eventTitleContainerEl.appendChild(eventTimeEl)
                 eventTitleEl.classList.add('rw-typo-subtext3')
@@ -852,7 +854,11 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
                 eventTimeEl.style.fontWeight = '400'
                 eventTimeEl.style.whiteSpace = 'nowrap'
                 eventTimeEl.style.color = '#c9c9c9'
-                eventTimeEl.innerHTML = `${arg.event.extendedProps.originItem.responsibility.name}`
+                eventTimeEl.innerHTML = `${
+                    insts.length > 1
+                        ? insts[0].center_user_name + ` 외 ${insts.length - 1}명`
+                        : insts[0].center_user_name
+                }`
             } else {
                 eventTitleEl.classList.add('rw-typo-subtext0')
                 eventTitleEl.style.fontSize = '1.2rem'
@@ -863,7 +869,13 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
                 eventTimeEl.classList.add('rw-typo-subtext4')
                 eventTimeEl.style.color = '#C9C9C9'
                 eventTimeEl.style.fontSize = '1.1rem'
-                eventTimeEl.innerHTML = `${arg.event.extendedProps.assginee.name} ㆍ ${arg.event.extendedProps.originItem.class.booked_count}/${arg.event.extendedProps.originItem.class.capacity}명`
+                eventTimeEl.innerHTML = `${
+                    insts.length > 1
+                        ? insts[0].center_user_name + ` 외 ${insts.length - 1}명`
+                        : insts[0].center_user_name
+                } ㆍ ${arg.event.extendedProps.originItem.class.booked_count}/${
+                    arg.event.extendedProps.originItem.class.capacity
+                }명`
                 // event color tag
                 eventMainFrame_el.insertAdjacentHTML(
                     'afterbegin',
@@ -938,12 +950,16 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
         this.fullCalendar.getApi().render()
         let calTask: CalendarTask = _.cloneDeep(arg.event.extendedProps['originItem'] as CalendarTask)
         const calId = this.curCenterCalendar$_.id // !!!!!!!!!!
-        const otherInstructor: Calendar = arg.newResource
-            ? (arg.newResource._resource.extendedProps['instructorData'] as Calendar)
+        const otherInstructor: CenterUser = arg.newResource
+            ? (arg.newResource._resource.extendedProps['instructorData'] as CenterUser)
             : null
+
+        // !!!!!!!!! responsibility_user_ids 부분 수정 필요 !!!!!!!!!
         if (arg.event.extendedProps['originItem'].type_code == 'calendar_task_type_normal') {
             const reqBody: UpdateCalendarTaskReqBody = {
-                responsibility_user_id: otherInstructor ? otherInstructor.calendar_user.id : calTask.responsibility.id,
+                responsibility_user_ids: otherInstructor
+                    ? [otherInstructor.id]
+                    : calTask.responsibility.map((v) => v.id),
                 start_date: dayjs(arg.event.startStr).format('YYYY-MM-DD'),
                 start_time: dayjs(arg.event.startStr).format('HH:mm'),
                 end_date: dayjs(arg.event.endStr).format('YYYY-MM-DD'),
@@ -971,11 +987,12 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
         } else {
             const eventData: CalendarTask = arg.event.extendedProps['originItem'] as CalendarTask
             let reqBody: UpdateCalendarTaskReqBody = undefined
+            // !!!!!!!!! responsibility_user_ids 부분 수정 필요 !!!!!!!!!
             if (eventData.calendar_task_group_id) {
                 reqBody = {
-                    responsibility_user_id: otherInstructor
-                        ? otherInstructor.calendar_user.id
-                        : calTask.responsibility.id,
+                    responsibility_user_ids: otherInstructor
+                        ? [otherInstructor.id]
+                        : calTask.responsibility.map((v) => v.id),
                     start_date: dayjs(arg.event.startStr).format('YYYY-MM-DD'),
                     start_time: dayjs(arg.event.startStr).format('HH:mm'),
                     end_date: dayjs(arg.event.endStr).format('YYYY-MM-DD'),
@@ -991,16 +1008,17 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
                         start_booking_until: String(eventData.class.start_booking_until),
                         end_booking_before: String(eventData.class.end_booking_before),
                         cancel_booking_before: String(eventData.class.cancel_booking_before),
-                        instructor_user_ids: [
-                            otherInstructor ? otherInstructor.calendar_user.id : calTask.responsibility.id,
-                        ],
+                        instructor_user_ids: otherInstructor
+                            ? [otherInstructor.id]
+                            : calTask.responsibility.map((v) => v.id),
                     },
                 }
             } else {
+                // !!!!!!!!! responsibility_user_ids 부분 수정 필요 !!!!!!!!!
                 reqBody = {
-                    responsibility_user_id: otherInstructor
-                        ? otherInstructor.calendar_user.id
-                        : calTask.responsibility.id,
+                    responsibility_user_ids: otherInstructor
+                        ? [otherInstructor.id]
+                        : calTask.responsibility.map((v) => v.id),
                     start_date: dayjs(arg.event.startStr).format('YYYY-MM-DD'),
                     start_time: dayjs(arg.event.startStr).format('HH:mm'),
                     end_date: dayjs(arg.event.endStr).format('YYYY-MM-DD'),
@@ -1016,9 +1034,9 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
                         start_booking_until: String(eventData.class.start_booking_until),
                         end_booking_before: String(eventData.class.end_booking_before),
                         cancel_booking_before: String(eventData.class.cancel_booking_before),
-                        instructor_user_ids: [
-                            otherInstructor ? otherInstructor.calendar_user.id : calTask.responsibility.id,
-                        ],
+                        instructor_user_ids: otherInstructor
+                            ? [otherInstructor.id]
+                            : calTask.responsibility.map((v) => v.id),
                     },
                 }
             }
@@ -1236,12 +1254,6 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
     }
     // - //
 
-    public lessonModalCalId: string = undefined
-    getLessonModalCalId(calendarTask: CalendarTask) {
-        this.lessonModalCalId = this.instructorList$_.find(
-            (v) => v.selected && v.instructor.id == calendarTask.responsibility.id
-        ).instructor.id
-    }
     public lessonEventData: CalendarTask = undefined
     updateLessonEventData(calTaskId: string, eventList: ScheduleEvent[]) {
         this.lessonEventData = eventList.find((v) => v.originItem.id == calTaskId).originItem
@@ -1283,7 +1295,6 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     public generalEventData: CalendarTask = undefined
-    public generalAssignee: Calendar = undefined
     public doShowModifyGeneralEventModal = false
     showModifyGeneralEventModal() {
         this.doShowModifyGeneralEventModal = true
@@ -1343,12 +1354,9 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
         this.hideDelRepeatGeneralModal()
     }
     deleteRepeatGeneralEvent(fn?: () => void) {
-        const calId = this.instructorList$_.filter(
-            (v) => v.instructor.id == this.delRepeatGeneralData.responsibility.id
-        )[0].instructor.id
         this.CenterCalendarService.deleteCalendarTask(
             this.center.id,
-            calId,
+            this.curCenterCalendar$_.id,
             String(this.delRepeatGeneralData.id),
             this.delRepeatGeneralType
         ).subscribe((_) => {
@@ -1390,12 +1398,11 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
     onReserveModalConfirm(cmpReturn: { usersAbleToBook: UserAbleToBook[] }) {
         console.log('onReserveModalConfirm : ', cmpReturn, {
             centerId: this.center.id,
-            lesCalId: this.lessonModalCalId,
             reserveLesData: this.reserveLessonData.id,
         })
 
         // !! user_membership_ids를 추가하는 방법 다시 생각해야 함.
-        this.CenterCalendarService.reserveTask(this.center.id, this.lessonModalCalId, this.reserveLessonData.id, {
+        this.CenterCalendarService.reserveTask(this.center.id, this.curCenterCalendar$_.id, this.reserveLessonData.id, {
             user_membership_ids: cmpReturn.usersAbleToBook.map((v) => v.user_memberships[0].id),
         }).subscribe(() => {
             this.hideReserveModal()
@@ -1434,7 +1441,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
     onCancelReserveModalConfirm() {
         this.CenterCalendarService.cancelReservedTask(
             this.center.id,
-            this.lessonModalCalId,
+            this.curCenterCalendar$_.id,
             this.beCanceledReservationData.lessonData.id,
             this.beCanceledReservationData.taskReservation.booking_id
         ).subscribe((__) => {
@@ -1480,11 +1487,9 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
     }
     onDeleteEventConfirm() {
         if (this.deleteEventType == 'general') {
-            const calId = this.instructorList$_.filter((v) => v.instructor.id == this.deletedEvent.responsibility.id)[0]
-                .instructor.id
             this.CenterCalendarService.deleteCalendarTask(
                 this.center.id,
-                calId,
+                this.curCenterCalendar$_.id,
                 String(this.deletedEvent.id),
                 'one'
             ).subscribe((_) => {
@@ -1509,11 +1514,9 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     deleteSingleLessonEvent(fn?: () => void) {
-        const calId = this.instructorList$_.filter((v) => v.instructor.id == this.deletedEvent.responsibility.id)[0]
-            .instructor.id
         this.CenterCalendarService.deleteCalendarTask(
             this.center.id,
-            calId,
+            this.curCenterCalendar$_.id,
             String(this.deletedEvent.id),
             'one'
         ).subscribe((_) => {
@@ -1558,12 +1561,9 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
         this.hideDelRepeatLessonModal()
     }
     deleteRepeatLessonEvent(fn?: () => void) {
-        const calId = this.instructorList$_.filter(
-            (v) => v.instructor.id == this.delRepeatLessonData.responsibility.id
-        )[0].instructor.id
         this.CenterCalendarService.deleteCalendarTask(
             this.center.id,
-            calId,
+            this.curCenterCalendar$_.id,
             String(this.delRepeatLessonData.id),
             this.delRepeatType
         ).subscribe((_) => {

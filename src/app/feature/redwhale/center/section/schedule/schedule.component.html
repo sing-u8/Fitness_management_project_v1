@@ -178,7 +178,7 @@
 <rw-sch-lesson-modal
     [(visible)]="doShowModifyLessonEventModal"
     [lessonData] = "lessonEventData"
-    [responsiblityCalId] = "lessonModalCalId"
+    [responsiblityCalId] = "curCenterCalendar$_?.id"
     (cancel)="hideModifyLessonEventModal()"
     (modify)="onModifyLessonEvent($event)"
     (delete)="onDeleteLessonEvent($event)"
@@ -198,7 +198,7 @@
     [classTask]="reserveLessonData"
     [curCenterId]="(curCenterId$ | async)"
     [bookedUserCount]="usersBookedLength"
-    [responsiblityCalId]="lessonModalCalId"
+    [responsiblityCalId]="curCenterCalendar$_?.id"
     (cancel)="onReserveModalCancel()"
     (confirm)="onReserveModalConfirm($event)"
 ></rw-sch-reserve-member-modal>
@@ -221,7 +221,6 @@
 <rw-sch-general-modal
     [(visible)]="doShowModifyGeneralEventModal"
     [generalData]="generalEventData"
-    [assignee] = "generalAssignee"
     (cancel)="hideModifyGeneralEventModal()"
     (modify)="onModifyGeneralEvent($event)"
     (delete)="onDeleteGeneralEvent($event)"
