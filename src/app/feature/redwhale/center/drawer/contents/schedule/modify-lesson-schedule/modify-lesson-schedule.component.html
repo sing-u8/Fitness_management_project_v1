@@ -142,19 +142,19 @@
                             [class.display-none] = "!doShowRepeatDatePick"
                             (rwClickOutside) = "checkClickRepeatDatePickOutside($event);"
                         >
-                            <rw-datepicker
+                            <db-datepicker
                                 *ngIf="lessonRepeatOption == 'all'"
                                 mode="multiline-component"
                                 [(data)]="repeatDatepick"
                                 (dataChange) = "onRepeatDatePickRangeChange()"
-                            ></rw-datepicker>
-                            <rw-datepicker
+                            ></db-datepicker>
+                            <db-datepicker
                                 *ngIf="lessonRepeatOption == 'after'"
-                                mode="multiline"
-                                [option]="'extend'"
+                                mode="reg-ml"
+                                [option]="'looseOnlyEnd'"
                                 [(data)]="repeatDatepick"
                                 (dataChange) = "onRepeatDatePickRangeChange()"
-                            ></rw-datepicker>
+                            ></db-datepicker>
                         </div>
                     
                     </div>

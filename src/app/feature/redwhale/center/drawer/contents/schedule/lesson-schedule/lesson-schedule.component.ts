@@ -109,7 +109,6 @@ export class LessonScheduleComponent implements OnInit, OnDestroy, AfterViewInit
     public multiStaffSelectValue: MultiSelect = []
 
     public schInstructorList: Array<ScheduleReducer.InstructorType> = []
-    public centerInstructorList: Array<CenterUser> = []
 
     public center: Center
 
@@ -166,13 +165,6 @@ export class LessonScheduleComponent implements OnInit, OnDestroy, AfterViewInit
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe((schInstructorList) => {
                 this.schInstructorList = schInstructorList
-                this.nxStore
-                    .select(CenterCommonSelector.instructors)
-                    .pipe(take(1))
-                    .subscribe((instructors) => {
-                        this.centerInstructorList = instructors
-                        this.initInstructorList()
-                    })
             })
     }
     ngOnDestroy(): void {
@@ -187,19 +179,6 @@ export class LessonScheduleComponent implements OnInit, OnDestroy, AfterViewInit
 
     onTimeClick(time: { key: string; name: string }) {
         this.timepick = time.key
-    }
-
-    // init instructor list
-    initInstructorList() {
-        if (this.schInstructorList.length > 0 && this.centerInstructorList.length > 0) {
-            this.multiStaffSelect_list = this.centerInstructorList
-                .filter((ci) => -1 != this.schInstructorList.findIndex((v) => ci.id == v.instructor.id))
-                .map((value) => ({
-                    name: value.center_user_name,
-                    value: value,
-                    checked: false,
-                }))
-        }
     }
 
     // ------------------------------------------register lesson task------------------------------------------------
@@ -354,26 +333,41 @@ export class LessonScheduleComponent implements OnInit, OnDestroy, AfterViewInit
         this.setMultiStaffSelectValue(res.lesson)
     }
     setMultiStaffSelectValue(classItem: ClassItem) {
+        let instList: Array<{ name: string; value: CenterUser; checked: boolean }> = []
+
         if (!_.isEmpty(this.schedulingInstructors)) {
-            this.multiStaffSelectValue = _.filter(
-                this.schedulingInstructors,
-                (cu) => _.findIndex(this.multiStaffSelect_list, (msi) => msi.value.id == cu.id) != -1
+            instList = _.filter(
+                this.schInstructorList,
+                (v) => _.findIndex(this.schedulingInstructors, (vi) => vi.id == v.instructor.id) == -1
             ).map((v) => ({
+                name: v.instructor.center_user_name,
+                value: v.instructor,
+                checked: false,
+            }))
+
+            this.multiStaffSelectValue = _.filter(this.schedulingInstructors).map((v) => ({
                 name: v.center_user_name,
                 value: v,
                 checked: true,
             }))
             this.nxStore.dispatch(ScheduleActions.setSchedulingInstructors({ schedulingInstructors: undefined }))
         } else {
-            this.multiStaffSelectValue = _.filter(
-                classItem.instructors,
-                (cu) => _.findIndex(this.multiStaffSelect_list, (msi) => msi.value.id == cu.id) != -1
+            instList = _.filter(
+                this.schInstructorList,
+                (v) => _.findIndex(classItem.instructors, (vi) => vi.id == v.instructor.id) == -1
             ).map((v) => ({
+                name: v.instructor.center_user_name,
+                value: v.instructor,
+                checked: false,
+            }))
+
+            this.multiStaffSelectValue = _.filter(classItem.instructors).map((v) => ({
                 name: v.center_user_name,
                 value: v,
                 checked: true,
             }))
         }
+        this.multiStaffSelect_list = _.orderBy([...this.multiStaffSelectValue, ...instList], (v) => v.name)
     }
 
     toggleShowRepeatDatePicker() {

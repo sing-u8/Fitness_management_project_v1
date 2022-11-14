@@ -205,7 +205,7 @@ export const scheduleReducer = createImmerReducer(
     }),
 
     on(ScheduleActions.setModifyGeneralEvent, (state, { event }) => {
-        state.modifyGeneralEvent = event
+        state.modifyGeneralEvent = _.cloneDeep(event)
         return state
     }),
     on(ScheduleActions.setModifyGeneralOption, (state, { option }) => {
@@ -213,7 +213,7 @@ export const scheduleReducer = createImmerReducer(
         return state
     }),
     on(ScheduleActions.setModifyLessonEvent, (state, { event }) => {
-        state.modifyLessonEvent = event
+        state.modifyLessonEvent = _.cloneDeep(event)
         return state
     }),
     on(ScheduleActions.setModifyLessonOption, (state, { option }) => {

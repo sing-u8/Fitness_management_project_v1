@@ -215,6 +215,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
         this.nxStore
             .pipe(select(ScheduleSelector.isScheduleEventChanged), takeUntil(this.unsubscriber$))
             .subscribe((status) => {
+                console.log('isScheduleEventChanged - in schedule -- status ', status)
                 if (status == true) {
                     this.getTaskList(this.selectedDateViewType)
                     this.nxStore.dispatch(ScheduleActions.setIsScheduleEventChanged({ isScheduleEventChanged: false }))
@@ -413,7 +414,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
                 _.forEach(_.filter(this.instructorList$_, ['selected', true]), (value) => {
                     resoruces.push({
                         id: value.instructor.id,
-                        title: value.instructor.name,
+                        title: value.instructor.center_user_name,
                         instructorData: value.instructor,
                     })
                 })
@@ -949,28 +950,19 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
         console.log('extendedProps: ', arg.event.extendedProps)
         this.fullCalendar.getApi().render()
         let calTask: CalendarTask = _.cloneDeep(arg.event.extendedProps['originItem'] as CalendarTask)
-        const calId = this.curCenterCalendar$_.id // !!!!!!!!!!
-        const otherInstructor: CenterUser = arg.newResource
-            ? (arg.newResource._resource.extendedProps['instructorData'] as CenterUser)
-            : null
 
-        // !!!!!!!!! responsibility_user_ids 부분 수정 필요 !!!!!!!!!
         if (arg.event.extendedProps['originItem'].type_code == 'calendar_task_type_normal') {
             const reqBody: UpdateCalendarTaskReqBody = {
-                responsibility_user_ids: otherInstructor
-                    ? [otherInstructor.id]
-                    : calTask.responsibility.map((v) => v.id),
                 start_date: dayjs(arg.event.startStr).format('YYYY-MM-DD'),
                 start_time: dayjs(arg.event.startStr).format('HH:mm'),
                 end_date: dayjs(arg.event.endStr).format('YYYY-MM-DD'),
                 end_time: dayjs(arg.event.endStr).format('HH:mm'),
             }
 
-            const apiCalId = otherInstructor ? otherInstructor.id : calId
             this.nxStore.dispatch(
                 ScheduleActions.startUpdateCalendarTask({
                     centerId: this.center.id,
-                    calendarId: apiCalId,
+                    calendarId: this.curCenterCalendar$_.id,
                     taskId: calTask.id,
                     reqBody: reqBody,
                     mode: 'one',
@@ -987,12 +979,8 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
         } else {
             const eventData: CalendarTask = arg.event.extendedProps['originItem'] as CalendarTask
             let reqBody: UpdateCalendarTaskReqBody = undefined
-            // !!!!!!!!! responsibility_user_ids 부분 수정 필요 !!!!!!!!!
             if (eventData.calendar_task_group_id) {
                 reqBody = {
-                    responsibility_user_ids: otherInstructor
-                        ? [otherInstructor.id]
-                        : calTask.responsibility.map((v) => v.id),
                     start_date: dayjs(arg.event.startStr).format('YYYY-MM-DD'),
                     start_time: dayjs(arg.event.startStr).format('HH:mm'),
                     end_date: dayjs(arg.event.endStr).format('YYYY-MM-DD'),
@@ -1008,17 +996,11 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
                         start_booking_until: String(eventData.class.start_booking_until),
                         end_booking_before: String(eventData.class.end_booking_before),
                         cancel_booking_before: String(eventData.class.cancel_booking_before),
-                        instructor_user_ids: otherInstructor
-                            ? [otherInstructor.id]
-                            : calTask.responsibility.map((v) => v.id),
+                        instructor_user_ids: eventData.class.instructors.map((v) => v.id),
                     },
                 }
             } else {
-                // !!!!!!!!! responsibility_user_ids 부분 수정 필요 !!!!!!!!!
                 reqBody = {
-                    responsibility_user_ids: otherInstructor
-                        ? [otherInstructor.id]
-                        : calTask.responsibility.map((v) => v.id),
                     start_date: dayjs(arg.event.startStr).format('YYYY-MM-DD'),
                     start_time: dayjs(arg.event.startStr).format('HH:mm'),
                     end_date: dayjs(arg.event.endStr).format('YYYY-MM-DD'),
@@ -1034,18 +1016,15 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
                         start_booking_until: String(eventData.class.start_booking_until),
                         end_booking_before: String(eventData.class.end_booking_before),
                         cancel_booking_before: String(eventData.class.cancel_booking_before),
-                        instructor_user_ids: otherInstructor
-                            ? [otherInstructor.id]
-                            : calTask.responsibility.map((v) => v.id),
+                        instructor_user_ids: eventData.class.instructors.map((v) => v.id),
                     },
                 }
             }
             console.log('drop event: ', reqBody)
-            const apiCalId = otherInstructor ? otherInstructor.id : calId
             this.nxStore.dispatch(
                 ScheduleActions.startUpdateCalendarTask({
                     centerId: this.center.id,
-                    calendarId: apiCalId,
+                    calendarId: this.curCenterCalendar$_.id,
                     taskId: calTask.id,
                     reqBody: reqBody,
                     mode: 'one',

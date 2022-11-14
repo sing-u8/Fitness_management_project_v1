@@ -157,10 +157,9 @@ export class ModifyGeneralScheduleComponent implements OnInit, AfterViewInit, On
                     this.dayRepeatSwitch = true
                     this.isAlreadyRepeat = true
 
-                    // !! repeat start 속성 필요
                     this.repeatDatepick.startDate =
                         this.generalRepeatOption == 'all'
-                            ? dayjs(event.start).format('YYYY-MM-DD')
+                            ? dayjs(event.repeat_start_date).format('YYYY-MM-DD')
                             : dayjs(event.start).format('YYYY-MM-DD')
                     this.repeatDatepick.endDate = dayjs(event.repeat_end_date).format('YYYY-MM-DD')
                     this.dayDiff = String(this.getDayDiff(this.repeatDatepick))

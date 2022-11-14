@@ -189,7 +189,9 @@ export class ModifyLessonScheduleComponent implements OnInit, OnDestroy, AfterVi
             this.lessonEvent,
             'dayPick: ',
             this.dayPick,
-            dayjs(this.dayPick.date).format('YYYY-MM-DD')
+            dayjs(this.dayPick.date).format('YYYY-MM-DD'),
+            'selectedStaffs --- ',
+            selectedStaffs
         )
         if (this.dayRepeatSwitch && this.lessonRepeatOption != 'one') {
             reqBody = {
@@ -347,6 +349,7 @@ export class ModifyLessonScheduleComponent implements OnInit, OnDestroy, AfterVi
         _.some(event.path, this.rw_datepicker.nativeElement) ? null : this.closeShowRepeatDatePicker()
     }
     onRepeatDatePickRangeChange() {
+        console.log('onRepeatDatePickRangeChange')
         if (this.repeatDatepick.endDate) {
             this.dayDiff = String(this.getDayDiff(this.repeatDatepick))
         }
@@ -495,26 +498,27 @@ export class ModifyLessonScheduleComponent implements OnInit, OnDestroy, AfterVi
                 this.lesMembershipList = lessonEvent.class.membership_items
 
                 this.people = String(lessonEvent.class.capacity)
-                lessonEvent.start
                 this.timepick = dayjs(lessonEvent.start).format('HH:mm:ss')
                 this.dayPick.date = dayjs(lessonEvent.start).format('YYYY-MM-DD')
 
                 this.repeatDatepick = { startDate: '', endDate: '' }
                 this.repeatOfWeek = lessonEvent.repeat_day_of_the_week ?? []
-
-                if (lessonEvent.calendar_task_group_id) {
+                if (!_.isEmpty(lessonEvent.calendar_task_group_id)) {
                     this.dayRepeatSwitch = true
                     this.isAlreadyRepeat = true
-
-                    // !! repeat start 속성 필요
-                    this.repeatDatepick.startDate =
-                        this.lessonRepeatOption == 'all'
-                            ? dayjs(lessonEvent.start).format('YYYY-MM-DD')
-                            : dayjs(lessonEvent.start).format('YYYY-MM-DD')
-                    this.repeatDatepick.endDate = dayjs(lessonEvent.repeat_end_date).format('YYYY-MM-DD')
+                    this.repeatDatepick = {
+                        startDate:
+                            this.lessonRepeatOption == 'all'
+                                ? dayjs(lessonEvent.repeat_start_date).format('YYYY-MM-DD')
+                                : dayjs(lessonEvent.start).format('YYYY-MM-DD'),
+                        endDate: dayjs(lessonEvent.repeat_end_date).format('YYYY-MM-DD'),
+                    }
                     this.dayDiff = String(this.getDayDiff(this.repeatDatepick))
                 } else {
-                    this.repeatDatepick.startDate = dayjs(lessonEvent.start).format('YYYY-MM-DD')
+                    this.repeatDatepick = this.repeatDatepick = {
+                        startDate: dayjs(lessonEvent.start).format('YYYY-MM-DD'),
+                        endDate: '',
+                    }
                     this.dayRepeatSwitch = false
                 }
                 this.setInitDateVars()
