@@ -268,10 +268,11 @@
                     class="save-button"
                     rw-button
                     rwButtonColor="var(--red)"
-                    [rwButtonDisabled]="!((!dayRepeatSwitch && plan_input.valid)
-                              || (dayRepeatSwitch && repeatDatepick.startDate && repeatDatepick.endDate))"
-                    (click) = " ((!dayRepeatSwitch && plan_input.valid)
-                      || (dayRepeatSwitch && repeatDatepick.startDate && repeatDatepick.endDate)) && showConfirmSaveModal()"
+                    [rwButtonDisabled]="!((!dayRepeatSwitch && plan_input.valid && multiStaffSelectValue.length != 0)
+                                || (dayRepeatSwitch && plan_input.valid && repeatDatepick.startDate && repeatDatepick.endDate && multiStaffSelectValue.length != 0)) "
+                    (click) = " ((!dayRepeatSwitch && plan_input.valid && multiStaffSelectValue.length != 0)
+                            || (dayRepeatSwitch && plan_input.valid && repeatDatepick.startDate && repeatDatepick.endDate && multiStaffSelectValue.length != 0))
+                            && showConfirmSaveModal()"
                 >
                     저장하기
                 </div>

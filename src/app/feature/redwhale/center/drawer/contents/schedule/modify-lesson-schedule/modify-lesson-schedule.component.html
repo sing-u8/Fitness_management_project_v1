@@ -244,7 +244,7 @@
                 rw-button
                 rwButtonColor="var(--red)"
                 [rwButtonDisabled]="!(
-                                plan_input.valid &&
+                                plan_input.valid && multiStaffSelectValue.length != 0 &&
                                 (
                                     (!dayRepeatSwitch || lessonRepeatOption == 'one') ||
                                     (
@@ -253,7 +253,7 @@
                                 )
                             )"
                 (click) = " (
-                            plan_input.valid &&
+                            plan_input.valid && multiStaffSelectValue.length != 0 &&
                             (
                                 (!dayRepeatSwitch || lessonRepeatOption == 'one') ||
                                 (dayRepeatSwitch && repeatDatepick.startDate && repeatDatepick.endDate)

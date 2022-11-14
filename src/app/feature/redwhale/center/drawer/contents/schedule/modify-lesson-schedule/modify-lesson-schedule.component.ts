@@ -150,8 +150,6 @@ export class ModifyLessonScheduleComponent implements OnInit, OnDestroy, AfterVi
     }
 
     ngOnInit(): void {
-        this.titleTime = dayjs().format('M/D (dd) A hh시 mm분')
-
         this.nxStore.pipe(select(ScheduleSelector.curCenterCalendar), takeUntil(this.unsubscribe$)).subscribe((ccc) => {
             this.curCenterCalendar = ccc
         })
@@ -487,6 +485,7 @@ export class ModifyLessonScheduleComponent implements OnInit, OnDestroy, AfterVi
                 this.instructorList = instructors
                 this.isAlreadyRepeat = false
                 this.lessonEvent = lessonEvent
+                this.titleTime = dayjs(this.lessonEvent.start).format('M/D (dd) A hh시 mm분')
 
                 this.initStaffList(instructors, lessonEvent)
 

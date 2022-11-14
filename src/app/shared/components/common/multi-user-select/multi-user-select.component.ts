@@ -148,11 +148,14 @@ export class MultiUserSelectComponent implements AfterViewInit, ControlValueAcce
     public selectedValue: MultiSelectValue = undefined
     getSelectedValueSummary() {
         const checkValues = _.filter(this.items, (v) => v.checked)
-        if (checkValues.length == 0) return
-        this.selectedValue = {
-            name: `${checkValues[0].name}` + (checkValues.length > 1 ? ` 외 ${checkValues.length - 1}명` : ''),
-            value: checkValues[0].value,
-            checked: true,
+        if (checkValues.length == 0) {
+            this.selectedValue = undefined
+        } else {
+            this.selectedValue = {
+                name: `${checkValues[0].name}` + (checkValues.length > 1 ? ` 외 ${checkValues.length - 1}명` : ''),
+                value: checkValues[0].value,
+                checked: true,
+            }
         }
     }
 
@@ -169,10 +172,14 @@ export class MultiUserSelectComponent implements AfterViewInit, ControlValueAcce
         if (this.checkIsAllChecked()) {
             this.items.forEach((v, i) => {
                 this.items[i].checked = false
+                _.remove(this.value, (v) => v.value.id == v.value.id)
             })
         } else {
             this.items.forEach((v, i) => {
                 this.items[i].checked = true
+                if (_.findIndex(this.value, (vi) => vi.value.id == v.value.id) == -1) {
+                    this.value.push(this.items[i])
+                }
             })
         }
         this.getSelectedValueSummary()
@@ -182,6 +189,7 @@ export class MultiUserSelectComponent implements AfterViewInit, ControlValueAcce
     onSelectUnCheckButtonClick() {
         this.items.forEach((v, i) => {
             this.items[i].checked = false
+            _.remove(this.value, (v) => v.value.id == this.items[i].value.id)
         })
         this.selectedValue = undefined
         this.setIsAllChecked()

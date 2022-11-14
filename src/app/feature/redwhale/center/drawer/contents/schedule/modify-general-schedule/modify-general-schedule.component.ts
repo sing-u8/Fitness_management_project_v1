@@ -127,7 +127,6 @@ export class ModifyGeneralScheduleComponent implements OnInit, AfterViewInit, On
 
     ngOnInit(): void {
         this.center = this.storageService.getCenter()
-        this.titleTime = dayjs().format('M/D (dd) A hh시 mm분')
         this.selectGeneralOptions()
         this.nxStore.pipe(select(ScheduleSelector.curCenterCalendar), takeUntil(this.unsubscribe$)).subscribe((ccc) => {
             this.curCenterCalendar = ccc
@@ -146,6 +145,7 @@ export class ModifyGeneralScheduleComponent implements OnInit, AfterViewInit, On
                     planTitle: event.name,
                     planDetail: event.memo,
                 }
+                this.titleTime = dayjs(this.generalEvent.start).format('M/D (dd) A hh시 mm분')
                 // !! 날짜 확인하기
                 this.timepick.startTime = dayjs(event.start).format('HH:mm:ss')
                 this.timepick.endTime = dayjs(event.end).format('HH:mm:ss')

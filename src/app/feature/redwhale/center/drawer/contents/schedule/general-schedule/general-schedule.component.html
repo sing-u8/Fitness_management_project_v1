@@ -163,9 +163,10 @@
             rw-button
             rwButtonColor="var(--red)"
             [rwButtonDisabled]="!((!dayRepeatSwitch && plan_title.valid)
-                            || (dayRepeatSwitch && repeatDatepick.startDate && repeatDatepick.endDate))"
+                            || (dayRepeatSwitch && plan_title.valid && repeatDatepick.startDate && repeatDatepick.endDate))"
             (click) = "((!dayRepeatSwitch && plan_title.valid)
-                || (dayRepeatSwitch && repeatDatepick.startDate && repeatDatepick.endDate)) && showConfirmSaveModal()"
+                || (dayRepeatSwitch && plan_title.valid && repeatDatepick.startDate && repeatDatepick.endDate))
+                && showConfirmSaveModal()"
         >
             저장하기
         </div>

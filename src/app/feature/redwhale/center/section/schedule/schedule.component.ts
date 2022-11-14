@@ -557,6 +557,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
 
         const instructorEventList = []
         const lessonTypeEventList = []
+
         // filter instructor
         if (instructors.length > 0 && this.eventList.length > 0) {
             _.forEach(this.eventList, (event) => {
@@ -603,15 +604,21 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
 
         // apply filtered task list
         if (lessonTypeEventList.length > 0 && instructorEventList.length > 0) {
-            const _intersectList = _.intersectionWith(instructorEventList, lessonTypeEventList, (a, b) => {
+            let _intersectList = _.intersectionWith(instructorEventList, lessonTypeEventList, (a, b) => {
                 return a.originItem.id == b.originItem.id
             })
 
-            console.log('_intersectList: ', _intersectList)
+            _intersectList = [
+                ..._intersectList,
+                ..._.filter(this.eventList, (v) => v.originItem.responsibility.length == 0),
+            ]
 
             this.fullCalendar.options = { ...this.fullCalendar.options, ...{ events: _intersectList } }
         } else {
-            this.fullCalendar.options = { ...this.fullCalendar.options, ...{ events: [] } }
+            this.fullCalendar.options = {
+                ...this.fullCalendar.options,
+                ...{ events: _.filter(this.eventList, (v) => v.originItem.responsibility.length == 0) },
+            }
         }
     }
 
@@ -858,7 +865,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
                 eventTimeEl.innerHTML = `${
                     insts.length > 1
                         ? insts[0].center_user_name + ` 외 ${insts.length - 1}명`
-                        : insts[0].center_user_name
+                        : insts[0]?.center_user_name ?? '담당자 없음'
                 }`
             } else {
                 eventTitleEl.classList.add('rw-typo-subtext0')
@@ -873,7 +880,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
                 eventTimeEl.innerHTML = `${
                     insts.length > 1
                         ? insts[0].center_user_name + ` 외 ${insts.length - 1}명`
-                        : insts[0].center_user_name
+                        : insts[0]?.center_user_name ?? '담당자 없음'
                 } ㆍ ${arg.event.extendedProps.originItem.class.booked_count}/${
                     arg.event.extendedProps.originItem.class.capacity
                 }명`

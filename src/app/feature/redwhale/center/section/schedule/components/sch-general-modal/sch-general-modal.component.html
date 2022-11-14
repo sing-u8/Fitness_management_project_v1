@@ -36,6 +36,7 @@
         <div class="small-title">담당자</div>
         <div class="rw-typo-bodytext1 avatar-container">
             <rw-avatar
+                *ngIf="curStaffs.length > 0"
                 [image]="curStaffs[0] ? curStaffs[0]?.center_user_picture : null"
                 [text]="curStaffs[0] ? curStaffs[0]?.center_user_name : 'null'"
                 size="22"
@@ -45,7 +46,7 @@
                 {{
                     curStaffs.length > 1
                     ? curStaffs[0]?.center_user_name + ' 외 ' + (curStaffs.length - 1) +'명'
-                    : curStaffs[0]?.center_user_name
+                    : curStaffs[0]?.center_user_name ?? '담당자 없음'
                 }}
             </span>
         </div>
