@@ -90,7 +90,7 @@ article.terms-eula {
 
         ol {
             &.first {
-                padding-left: 14px;
+                padding-left: 17px;
                 margin: 0px;
             }
 
@@ -109,7 +109,11 @@ article.terms-eula {
                     &:not(:last-of-type) {
                         margin-bottom: 6px;
                     }
+                    &::marker {
+                        content: counter(list-item) ") ";
+                    }
                 }
+
             }
 
             &.third {
@@ -146,10 +150,39 @@ article.terms-eula {
                         text-align: center;
                         position: absolute;
                         left: -16px;
-                        top: 2px;
+                        top: 1px;
                         font-weight: 400;
                         font-style: normal;
                         font-size: 1.3rem;
+                        line-height: 1.69;
+                        letter-spacing: -0.17px;
+                        color: #606060;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                    }
+                }
+            }
+            &.braket_first {
+                counter-reset: li;
+                list-style-type: none;
+
+                &>li {
+                    position: relative;
+
+                    &:before {
+                        content: counter(li) ')';
+                        counter-increment: li;
+                        height: 14px;
+                        width: 14px;
+                        border-radius: 50%;
+                        text-align: center;
+                        position: absolute;
+                        left: -16px;
+                        top: 2.5px;
+                        font-weight: 400;
+                        font-style: normal;
+                        font-size: 1.4rem;
                         line-height: 1.69;
                         letter-spacing: -0.17px;
                         color: #606060;
@@ -233,7 +266,7 @@ article.terms-eula {
 
             ol {
                 &.first {
-                    padding-left: 15px;
+                    padding-left: 18px;
                     margin: 0px;
                 }
 
@@ -285,6 +318,36 @@ article.terms-eula {
                             font-size: 1.4rem;
                             line-height: 1.86;
                             letter-spacing: -0.2px;
+                        }
+                    }
+                }
+
+                &.braket_first {
+                    counter-reset: li;
+                    list-style-type: none;
+
+                    &>li {
+                        position: relative;
+
+                        &:before {
+                            content: counter(li) ')';
+                            counter-increment: li;
+                            height: 14px;
+                            width: 14px;
+                            border-radius: 50%;
+                            text-align: center;
+                            position: absolute;
+                            left: -17px;
+                            top: 5px;
+                            font-weight: 400;
+                            font-style: normal;
+                            font-size: 1.5rem;
+                            line-height: 1.69;
+                            letter-spacing: -0.17px;
+                            color: #606060;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
                         }
                     }
                 }
@@ -364,7 +427,7 @@ article.terms-eula {
 
             ol {
                 &.first {
-                    padding-left: 16px;
+                    padding-left: 20px;
                     margin: 0px;
                 }
 
@@ -416,6 +479,36 @@ article.terms-eula {
                             font-size: 1.5rem;
                             line-height: 1.73;
                             letter-spacing: -0.23px;
+                        }
+                    }
+                }
+
+                &.braket_first {
+                    counter-reset: li;
+                    list-style-type: none;
+
+                    &>li {
+                        position: relative;
+
+                        &:before {
+                            content: counter(li) ')';
+                            counter-increment: li;
+                            height: 14px;
+                            width: 14px;
+                            border-radius: 50%;
+                            text-align: center;
+                            position: absolute;
+                            left: -18px;
+                            top: 5px;
+                            font-weight: 400;
+                            font-style: normal;
+                            font-size: 1.6rem;
+                            line-height: 1.69;
+                            letter-spacing: -0.17px;
+                            color: #606060;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
                         }
                     }
                 }
