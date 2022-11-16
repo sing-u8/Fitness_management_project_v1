@@ -178,6 +178,9 @@ ol {
         & > li {
             position: relative;
 
+            &::marker {
+                content: '';
+            }
             &:before {
                 content: '(' counter(li) ')';
                 counter-increment: li;

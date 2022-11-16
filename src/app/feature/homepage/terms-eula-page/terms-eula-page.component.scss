@@ -90,7 +90,7 @@ article.terms-eula {
 
         ol {
             &.first {
-                padding-left: 17px;
+                padding-left: 22px;
                 margin: 0px;
             }
 
@@ -141,6 +141,9 @@ article.terms-eula {
                 &>li {
                     position: relative;
 
+                    &::marker {
+                        content: '';
+                    }
                     &:before {
                         content: '(' counter(li) ')';
                         counter-increment: li;
@@ -266,7 +269,7 @@ article.terms-eula {
 
             ol {
                 &.first {
-                    padding-left: 18px;
+                    padding-left: 22px;
                     margin: 0px;
                 }
 
@@ -427,7 +430,7 @@ article.terms-eula {
 
             ol {
                 &.first {
-                    padding-left: 20px;
+                    padding-left: 26px;
                     margin: 0px;
                 }
 
