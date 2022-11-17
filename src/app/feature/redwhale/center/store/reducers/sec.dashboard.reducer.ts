@@ -361,7 +361,7 @@ export const dashboardReducer = createImmerReducer(
 
         state.drawerCurUserListSelect.value.userSize =
             state.drawerUsersSelectCategs[state.drawerCurUserListSelect.key].userSize
-        if (state.drawerCurUserData.user.id == userId) state.drawerCurUserData = CurUserDataInit
+        if (state.drawerCurUserData?.user?.id == userId) state.drawerCurUserData = CurUserDataInit
 
         return state
     }),
