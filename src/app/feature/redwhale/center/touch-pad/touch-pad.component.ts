@@ -162,6 +162,6 @@ export class TouchPadComponent implements OnInit, OnDestroy {
         // setTimeout(() => {
         //     this.spinner.hide('call_employee')
         // }, 2000)
-        this.soundService.callEmployee()
+        // this.soundService.callEmployee()
     }
 }
