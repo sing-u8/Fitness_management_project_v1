@@ -70,6 +70,7 @@
                             <div class="setting-dropdown-item rw-typo-bodytext2" (click)="goSettingCenter()">
                                 기본 정보 수정
                             </div>
+                            <div class="setting-dropdown-item rw-typo-bodytext2" (click)="openSettingNoticeModal()">공지사항 설정</div>
                             <div class="setting-dropdown-item rw-typo-bodytext2" (click)="openRoleModal()">권한 관리</div>
                             <div class="setting-dropdown-item rw-typo-bodytext2" (click)="openSettingTermsModal()">약관 설정</div>
                         </div>
@@ -204,3 +205,11 @@
     (cancel)="cancelSettingTermsModal()"
     (confirm)="confirmSettingTermsModal($event)"
 ></rw-setting-terms-modal>
+
+<rw-setting-notice-modal
+    [(visible)] = "showSettingNoticeModal"
+    [(centerNoticeText)]="centerNoticeText"
+    [center] = "center"
+    (cancel)="cancelSettingNoticeModal()"
+    (confirm)="confirmSettingNoticeModal($event)"
+></rw-setting-notice-modal>

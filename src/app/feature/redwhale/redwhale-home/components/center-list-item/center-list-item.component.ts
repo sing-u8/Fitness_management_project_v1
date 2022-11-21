@@ -19,7 +19,6 @@ import { CenterRolePermissionService } from '@services/center-role-permission.se
 import { CenterService } from '@services/center.service'
 
 import { Center } from '@schemas/center'
-import { PermissionCategory, RoleCode } from '@schemas/permission-category'
 import { SettingTermConfirmOutput } from '@shared/components/common/setting-terms-modal/setting-terms-modal.component'
 
 import _ from 'lodash'
@@ -30,6 +29,7 @@ import { Store, select } from '@ngrx/store'
 import { forkJoin, Subject } from 'rxjs'
 import { takeUntil } from 'rxjs/operators'
 import { Permission } from '@schemas/store/app/modal.interface'
+import { SettingNoticeConfirmOutput } from '@shared/components/common/setting-notice-modal/setting-notice-modal.component'
 
 @Component({
     selector: 'center-list-item',
@@ -169,6 +169,31 @@ export class CenterListItemComponent implements OnInit, AfterViewInit, OnDestroy
             this.showSettingTermsModal = false
             e.loadingFns.hideLoading()
         })
+    }
+
+    // setting notice modal vars and methods
+    public centerNoticeText = ''
+    public showSettingNoticeModal = false
+    openSettingNoticeModal() {
+        this.closeSettingDropdown()
+        this.showSettingNoticeModal = true
+    }
+    cancelSettingNoticeModal() {
+        this.showSettingNoticeModal = false
+        this.centerNoticeText = '' // 이후에 수정 필요
+    }
+    confirmSettingNoticeModal(e: SettingNoticeConfirmOutput) {
+        e.loadingFns.showLoading()
+        e.loadingFns.hideLoading()
+        this.centerNoticeText = e.centerNoticeText
+        this.showSettingNoticeModal = false
+        // this.centerService.updateCenter(this.center.id, { contract_terms: e.centerTerm }).subscribe((center) => {
+        //     this.center = center
+        //     this.storageService.setCenter(this.center)
+        //     this.centerTerms = center.contract_terms
+        //     this.showSettingTermsModal = false
+        //     e.loadingFns.hideLoading()
+        // })
     }
 
     // ---------------------center service------------------>//

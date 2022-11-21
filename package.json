@@ -9,6 +9,8 @@
         "build:dev": "ng build -c development",
         "build:prod": "ng build -c production",
         "deploy:prod": "npm run build:prod &&  aws s3 sync ./dist/redwhale-renew s3://redwhale.xyz --acl public-read --delete --profile redwhale-web && aws cloudfront create-invalidation --distribution-id EIK58AU9N4DDK --paths \"/*\" --profile redwhale-web",
+        "deploy:dev": "npm run build:dev &&  aws s3 sync ./dist/redwhale-renew s3://dev.redwhale.xyz --acl public-read --delete --profile redwhale-web && aws cloudfront create-invalidation --distribution-id E1D9YAR73EHKWE --paths \"/*\" --profile redwhale-web",
+        "deploy-exsiting:dev": "aws s3 sync ./dist/redwhale-renew s3://dev.redwhale.xyz --acl public-read --delete --profile redwhale-web && aws cloudfront create-invalidation --distribution-id E1D9YAR73EHKWE --paths \"/*\" --profile redwhale-web",
         "bulidAndDeploy:prod": "ng build -c production ",
         "watch": "ng build --watch --configuration development && aws s3 sync ./dist/redwhale-renew s3://redwhale.xyz --acl public-read --delete --profile redwhale-web && aws cloudfront create-invalidation --distribution-id EIK58AU9N4DDK --paths '/*' --profile redwhale-web",
         "test": "ng test",

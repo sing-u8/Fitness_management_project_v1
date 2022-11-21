@@ -14,6 +14,9 @@ import { Drawer } from '@schemas/store/app/drawer.interface'
 
 import _ from 'lodash'
 
+import { SettingTermConfirmOutput } from '@shared/components/common/setting-terms-modal/setting-terms-modal.component'
+import { SettingNoticeConfirmOutput } from '@shared/components/common/setting-notice-modal/setting-notice-modal.component'
+
 // rxjs
 import { Observable, Subscription } from 'rxjs'
 
@@ -28,7 +31,6 @@ import { centerPermission, curCenter, curCenterAndPermission } from '@centerStor
 import { Subject } from 'rxjs'
 import { takeUntil } from 'rxjs/operators'
 import { showModal } from '@appStore/actions/modal.action'
-import { SettingTermConfirmOutput } from '@shared/components/common/setting-terms-modal/setting-terms-modal.component'
 
 @Component({
     selector: 'rw-header',
@@ -234,5 +236,31 @@ export class HeaderComponent implements OnInit, OnDestroy {
             this.showSettingTermsModal = false
             e.loadingFns.hideLoading()
         })
+    }
+
+    // setting notice modal vars and methods
+    public centerNoticeText = ''
+    public showSettingNoticeModal = false
+    openSettingNoticeModal() {
+        this.closeSettingDropdown()
+        this.hidePopupGymList()
+        this.showSettingNoticeModal = true
+    }
+    cancelSettingNoticeModal() {
+        this.showSettingNoticeModal = false
+        this.centerNoticeText = '' // 이후에 수정 필요
+    }
+    confirmSettingNoticeModal(e: SettingNoticeConfirmOutput) {
+        e.loadingFns.showLoading()
+        e.loadingFns.hideLoading()
+        this.centerNoticeText = e.centerNoticeText
+        this.showSettingNoticeModal = false
+        // this.centerService.updateCenter(this.center.id, { contract_terms: e.centerTerm }).subscribe((center) => {
+        //     this.center = center
+        //     this.storageService.setCenter(this.center)
+        //     this.centerTerms = center.contract_terms
+        //     this.showSettingTermsModal = false
+        //     e.loadingFns.hideLoading()
+        // })
     }
 }

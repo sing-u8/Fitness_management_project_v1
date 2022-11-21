@@ -14,7 +14,10 @@ export const setCenterPermissionModal = createAction(
     `[${FeatureKey}]  set Center Permission Modal`,
     props<{ visible: boolean }>()
 )
-
+export const setCenterNoticeModal = createAction(
+    `[${FeatureKey}]  set Center Notice Modal`,
+    props<{ visible: boolean }>()
+)
 // async
 
 export const startGetInstructors = createAction(`[${FeatureKey}] Start Get Instructors`, props<{ centerId: string }>())
