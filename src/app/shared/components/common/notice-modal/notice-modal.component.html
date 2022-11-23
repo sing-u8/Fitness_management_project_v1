@@ -1,0 +1,26 @@
+<div class="rw-modal-background" #modalBackgroundElement></div>
+<div
+    class="rw-modal-wrapper justify-content-center align-items-center"
+    (mouseup)="!isMouseModalDown && !blockClickOutside && onCancel()"
+    (mousedown) = 'resetMouseModalDown()'
+    #modalWrapperElement
+>
+    <div
+        class="rw-modal user-select-none"
+        (mousedown) ='onMouseModalDown(); $event.stopPropagation()'
+    >
+        <div class="d-flex align-items-center justify-content-between flex-column">
+            <div class="d-flex justify-content-between align-items-center w-100 header">
+                <div class="d-flex align-items-center rw-typo-headline1">
+                    공지사항
+                    <div class="notice-icon"></div>
+                </div>
+                <div class="close-icon" (click)="onCancel()"></div>
+            </div>
+            
+            <div
+                class="notice-div  rw-typo-title1 thin-scroll-y"
+            >{{ noticeText }}</div>
+        </div>
+    </div>
+</div>

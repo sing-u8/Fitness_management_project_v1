@@ -1,0 +1,115 @@
+.rw-modal-background {
+	display: none;
+	position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	background-color: var(--font-color);
+	opacity: 0;
+	transition: opacity 0.3s cubic-bezier(0.25, 0.8, 0.25, 0.8);
+	-moz-transition: opacity 0.3s cubic-bezier(0.25, 0.8, 0.25, 0.8);
+	-webkit-transition: opacity 0.3s cubic-bezier(0.25, 0.8, 0.25, 0.8);
+	-o-transition: opacity 0.3s cubic-bezier(0.25, 0.8, 0.25, 0.8);
+	z-index: 9999;
+}
+
+.rw-modal-background-show {
+	opacity: 0.3;
+}
+
+.rw-modal-wrapper {
+	display: none;
+	position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	z-index: 10000;
+
+	.rw-modal {
+		width: 552px;
+		min-height: 361px;
+		max-height: 470px;
+		border-radius: 6px;
+		background-color: var(--background-color);
+		box-shadow: 0 0 10px 0 rgba(181, 181, 181, 0.11);
+		opacity: 0;
+		transition: opacity 0s;
+		-moz-transition: opacity 0s;
+		-webkit-transition: opacity 0s;
+		-o-transition: opacity 0s;
+		padding: 40px 0 0 0;
+
+		.header {
+			padding: 0 40px;
+		}
+
+		.sub-title {
+			font-weight: 400;
+			font-size: 1.5rem;
+			line-height: 22px;
+			letter-spacing: -0.225px;
+			margin-top: 11px;
+			margin-bottom: 30px;
+		}
+
+		.close-icon {
+			cursor: pointer;
+			background-repeat: no-repeat;
+			background-image: url("/assets/icons/etc/close.svg");
+			background-size: contain;
+			width: 26px;
+			height: 26px;
+			border-radius: 5px;
+
+			&:hover {
+				background-color: var(--background-color);
+			}
+		}
+
+		.text {
+			margin-top: 41px;
+			white-space: pre-line;
+			text-align: center;
+		}
+
+		.l-equal-list {
+
+			width: 100%;
+			min-height: 153px;
+			max-height: 298px;
+			padding: 0 40px 10px;
+			display: grid;
+			grid-template-columns: repeat(2,226px);
+			grid-gap: 10px;
+			gap: 10px;
+			.equal-list-item {
+				border: 1px solid #F1F1F1;
+				box-shadow: 0 0 10px rgba(181, 181, 181, 0.109804);
+				border-radius: 5px;
+				width: 226px;
+				height: 153px;
+				background-color: var(--white);
+
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
+
+				.item-name {
+					margin-top: 25px;
+				}
+				.item-phone {
+					margin: 5px 0 20px;
+				}
+			}
+		}
+	}
+}
+
+.rw-modal-wrapper-show {
+	.rw-modal {
+		opacity: 1;
+	}
+}

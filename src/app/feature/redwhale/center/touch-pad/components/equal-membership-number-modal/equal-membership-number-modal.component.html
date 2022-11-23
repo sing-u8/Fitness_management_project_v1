@@ -1,0 +1,46 @@
+<div class="rw-modal-background" #modalBackgroundElement></div>
+<div
+    class="rw-modal-wrapper justify-content-center align-items-center"
+    (mouseup)="!isMouseModalDown && !blockClickOutside && onCancel()"
+    (mousedown) = 'resetMouseModalDown()'
+    #modalWrapperElement
+>
+    <div
+        class="rw-modal user-select-none"
+        (mousedown) ='onMouseModalDown(); $event.stopPropagation()'
+    >
+        <div class="d-flex align-items-center justify-content-between flex-column">
+            <div class="header d-flex justify-content-between align-items-start w-100">
+                <div class="d-flex flex-column rw-typo-headline1">
+                    <div class="rw-typo-headline1">
+                        동일한 회원번호가 있어요.<br>
+                        정보 확인 후 본인을 선택해주세요.
+                    </div>
+                    <div class="sub-title">
+                        정확한 출석 체크를 위해 꼭 본인을 선택해주세요!
+                    </div>
+                </div>
+                <div class="close-icon" (click)="onCancel()"></div>
+            </div>
+            
+            <div
+                class="l-equal-list thin-scroll-y"
+            >
+                <div *ngFor="let i of [1,2,3,4,5,6,7]" class="equal-list-item">
+                    <div class="item-name rw-typo-title1">강신호</div>
+                    <div class="item-phone rw-typo-bodytext0-darkgrey">010-**34-5678</div>
+                    <rw-button
+                        [width]="'188'"
+                        [height]="'40'"
+                        [fontColor]="'var(--red)'"
+                        [borderColor]="'var(--red)'"
+                        [borderRadius]="'5px'"
+                        (onClick)="false"
+                    >
+                        <span class="rw-typo-bodytext0-red-bold">선택하기</span>
+                    </rw-button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

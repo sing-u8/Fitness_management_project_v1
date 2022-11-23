@@ -3,34 +3,53 @@
     <section class="left">
         <div class="guideline-container">
 
-            <div class="guide-top__mobile">
-                <div>
-                    <p class="title"><u>{{center.name}}</u>에</p>
-                    <p class="title">오신 것을 환영합니다.</p>
-                </div>
-
-                <div class="call-employee-button" (click)="callEmployee()">
-                    직원 호출하기
-                    <div class="spinner">
-                        <img src="assets/icons/etc/wifi-black.svg">
-                        <ngx-spinner
-                            name="call_employee"
-                            [fullScreen]="false"
-                            bdColor="var(--font-color)"
-                            color="var(--white)"
-                            type="ball-spin-clockwise"
-                            size="small"
-                        ></ngx-spinner>
+            <div class="guide-top__mobile d-flex flex-column">
+                <div class="guide-top__mobile_top d-flex justify-content-between">
+                    <div>
+                        <p class="title" (click)="toggleSameMembershipNumberModal()"><u>{{center.name}}</u>에</p>
+                        <p class="title">오신 것을 환영합니다.</p>
+                    </div>
+    
+                    <div class="call-employee-button" (click)="callEmployee()">
+                        직원 호출하기
+                        <div class="spinner">
+                            <img src="assets/icons/etc/wifi-black.svg">
+                            <ngx-spinner
+                                name="call_employee"
+                                [fullScreen]="false"
+                                bdColor="var(--white)"
+                                color="var(--font-color)"
+                                type="ball-spin-clockwise"
+                                size="small"
+                            ></ngx-spinner>
+                        </div>
                     </div>
                 </div>
+                <ng-container *ngIf="centerNoticeFlag">
+                    <div class="center-notice-divider"></div>
+                    <div class="center-notice-div__mobile" (click)="toggleCenterNoticeModal()">{{centerNotice}}</div>
+                </ng-container>
+                <ng-container *ngIf="!centerNoticeFlag">
+                    <p class="title title-top-margin">출석 체크를 위해</p>
+                    <p class="title title-bottom-margin"><b>회원 번호</b>를 입력해주세요.</p>
+                </ng-container>
             </div>
 
             <div class="guide-top">
                 <p class="title"><u>{{center.name}}</u>에</p>
                 <p class="title">오신 것을 환영합니다.</p>
 
-                <p class="title title-top-margin">출석 체크를 위해</p>
-                <p class="title title-bottom-margin"><b>회원 번호</b>를 입력해주세요.</p>
+                <ng-container *ngIf="centerNoticeFlag">
+                    <div class="center-notice-divider"></div>
+                    <textarea
+                        class="center-notice-textarea thin-scroll-y"
+                        [readonly]="true"
+                    >{{centerNotice}}</textarea>
+                </ng-container>
+                <ng-container *ngIf="!centerNoticeFlag">
+                    <p class="title title-top-margin">출석 체크를 위해</p>
+                    <p class="title title-bottom-margin"><b>회원 번호</b>를 입력해주세요.</p>
+                </ng-container>
             </div>
             <div class="guide-bottom d-flex flex-column align-items-center">
                 <div class="call-employee-button" (click)="callEmployee()">
@@ -40,14 +59,14 @@
                         <ngx-spinner
                             name="call_employee"
                             [fullScreen]="false"
-                            bdColor="var(--font-color)"
-                            color="var(--white)"
+                            bdColor="var(--white)"
+                            color="var(--font-color)"
                             type="ball-spin-clockwise"
                             size="small"
                         ></ngx-spinner>
                     </div>
                 </div>
-                <img class="rw-logo" src="assets/images/logo/redwhale-wording-logo-black-small.png">
+                <img class="rw-logo" src="assets/images/logo/redwhale-wording-logo-black-small.png" (click)="centerNoticeFlag = !centerNoticeFlag">
             </div>
         </div>
     </section>
@@ -55,9 +74,6 @@
     <section class="right">
         <div class="touch-pad-container">
             <div class="touch-pad-display">
-                <div class="display-title__mobile">
-                    출석을 위해 <b>회원 번호</b>를 입력해주세요.
-                </div>
                 <div class="display-title">회원 번호 (전화번호 뒤 4자리 또는 5자리)</div>
                 <div class="input-container thin-scroll-x-overlay2">
                     <input
@@ -90,17 +106,19 @@
                     <ngx-spinner
                         name="touch_pad_check_in"
                         [fullScreen]="false"
-                        bdColor="var(--font-color)"
-                        color="var(--white)"
+                        bdColor="var(--white)"
+                        color="var(--font-color)"
                         type="ball-spin-clockwise"
                         size="small"
                     ></ngx-spinner>
                 </div>
             </div>
-
-            <img class="logo_mobile rw-logo" src="assets/images/logo/redwhale-wording-logo-black-small1.png">
-
         </div>
+        <img
+            class="logo_mobile rw-logo"
+            src="assets/images/logo/redwhale-wording-logo-black-small1.png"
+            (click)="centerNoticeFlag = !centerNoticeFlag"
+        >
     </section>
 
 </section>
@@ -113,3 +131,14 @@
     [membershipList] = "membershipList"
     (cancel)="closeAttendanceModal()"
 ></rw-attendance-modal>
+
+<rw-notice-modal
+    [(visible)] = "showCenterNoticeModal"
+    [noticeText]="centerNotice"
+    (cancel)="cancelCenterNoticeModal()"
+></rw-notice-modal>
+
+<rw-equal-membership-number-modal
+    [(visible)] = "showSameMembershipNumberModal"
+    (cancel)="cancelSameMembershipNumberModal()"
+></rw-equal-membership-number-modal>

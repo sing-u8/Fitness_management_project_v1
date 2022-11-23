@@ -1,6 +1,5 @@
-import { Component, OnInit, OnDestroy } from '@angular/core'
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core'
 
-import dayjs from 'dayjs'
 import _ from 'lodash'
 import { throwError, forkJoin, Subject } from 'rxjs'
 import { map, catchError, takeUntil } from 'rxjs/operators'
@@ -164,4 +163,39 @@ export class TouchPadComponent implements OnInit, OnDestroy {
         // }, 2000)
         // this.soundService.callEmployee()
     }
+
+    // center notice vars and funcs for test
+    public centerNotice = `공지사항 내용 내용 공지사항 내용 공지사항 내용
+공지사항 내용 내용 내용 내용
+공지사항 내용
+내용 내용 내용 내용 내용
+공지사항 내용 내용 내용 내용
+    
+공지사항 내용 내용 내용 내용
+공지사항 내용 내용 내용
+공지사항 내용 내용 내용 내용
+공지사항 내용 내용 내용
+
+공지사항 내용 내용 내용 내용
+공지사항 내용 내용 내용
+`
+    public centerNoticeFlag = false
+    //
+    public showCenterNoticeModal = false
+    toggleCenterNoticeModal() {
+        this.showCenterNoticeModal = !this.showCenterNoticeModal
+    }
+    cancelCenterNoticeModal() {
+        this.showCenterNoticeModal = false
+    }
+
+    // same membership number modal
+    public showSameMembershipNumberModal = false
+    toggleSameMembershipNumberModal() {
+        this.showSameMembershipNumberModal = !this.showSameMembershipNumberModal
+    }
+    cancelSameMembershipNumberModal() {
+        this.showSameMembershipNumberModal = false
+    }
+    confirmSameMembershipNumberModal() {}
 }

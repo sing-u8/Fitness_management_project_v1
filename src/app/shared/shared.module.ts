@@ -34,6 +34,7 @@ import { AttendanceToastComponent } from './components/common/attendance-toast/a
 import { MultiUserSelectComponent } from './components/common/multi-user-select/multi-user-select.component'
 import { ComponentToastComponent } from './components/common/component-toast/component-toast.component'
 import { SettingNoticeModalComponent } from './components/common/setting-notice-modal/setting-notice-modal.component'
+import { NoticeModalComponent } from './components/common/notice-modal/notice-modal.component'
 
 // -drawer- //
 import { LessonFlipListComponent } from './components/redwhale/drawer/lesson-flip-list/lesson-flip-list.component'
@@ -156,6 +157,7 @@ FullCalendarModule.registerPlugins([
         MultiUserSelectComponent,
         ComponentToastComponent,
         SettingNoticeModalComponent,
+        NoticeModalComponent,
         // -- //drawer
         DrawerLessonCardComponent,
         SchDayRepeatSelectComponent,
@@ -261,6 +263,7 @@ FullCalendarModule.registerPlugins([
         ChargeModalComponent,
         DatepickModalComponent,
         DwChattingRoomSelectComponent,
+        NoticeModalComponent,
         // -- //schedule
         DbDatepickerComponent,
         // -- //community
