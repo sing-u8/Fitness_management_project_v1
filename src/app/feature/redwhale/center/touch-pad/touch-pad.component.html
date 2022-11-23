@@ -27,7 +27,12 @@
                 </div>
                 <ng-container *ngIf="centerNoticeFlag">
                     <div class="center-notice-divider"></div>
-                    <div class="center-notice-div__mobile" (click)="toggleCenterNoticeModal()">{{centerNotice}}</div>
+                    <div
+                        class="center-notice-div__mobile"
+                        rwSeeDetail
+                        [text]="centerNotice"
+                        (onSeeMoreClick)="toggleCenterNoticeModal()"
+                    ></div>
                 </ng-container>
                 <ng-container *ngIf="!centerNoticeFlag">
                     <p class="title title-top-margin">출석 체크를 위해</p>

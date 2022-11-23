@@ -70,6 +70,7 @@ import { EllipsisDropdownDirective } from './directives/ellipsis-dropdown.direct
 import { ContenteditableDirective } from './directives/contenteditable.directive'
 import { TextareaHeightResizeDirective } from './directives/textarea-height-resize.directive'
 import { TextareaInfiniteResizeDirective } from './directives/textarea-infinite-resize.directive'
+import { SeeDetailDirective } from './directives/see-detail.directive'
 
 // Pipes
 import { LinkPipe } from './pipes/link.pipe'
@@ -192,6 +193,7 @@ FullCalendarModule.registerPlugins([
         ContenteditableDirective,
         TextareaHeightResizeDirective,
         TextareaInfiniteResizeDirective,
+        SeeDetailDirective,
         // Pipes
         LinkPipe,
         MinuteSecondsPipe,
@@ -290,6 +292,7 @@ FullCalendarModule.registerPlugins([
         ContenteditableDirective,
         TextareaHeightResizeDirective,
         TextareaInfiniteResizeDirective,
+        SeeDetailDirective,
         // Pipes
         LinkPipe,
         MinuteSecondsPipe,

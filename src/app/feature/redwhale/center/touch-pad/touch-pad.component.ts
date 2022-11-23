@@ -165,7 +165,7 @@ export class TouchPadComponent implements OnInit, OnDestroy {
     }
 
     // center notice vars and funcs for test
-    public centerNotice = `공지사항 내용 내용 공지사항 내용 공지사항 내용
+    public centerNotice = `공지사항 내용 내용 공지사항 내용 공지사항 내용1 공지사항 내용 내용 공지사항 내용 공지사항 내용2
 공지사항 내용 내용 내용 내용
 공지사항 내용
 내용 내용 내용 내용 내용
