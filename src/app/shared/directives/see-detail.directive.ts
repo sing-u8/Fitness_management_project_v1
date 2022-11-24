@@ -10,10 +10,12 @@ export class SeeDetailDirective implements AfterViewInit, OnDestroy {
     public _seeMoreCount = 0
     @Input() text: string
     public textList: string[] = []
-    
+
     @Output() onSeeMoreClick = new EventEmitter<any>()
-    
+
     public unitHeight = 0
+    
+    public seeMoreLimitNumber = 20
 
     public resizeUnListener: () => void
 
@@ -44,31 +46,44 @@ export class SeeDetailDirective implements AfterViewInit, OnDestroy {
     setSeeMoreClickButton() {
         this.setUnitHeight()
         this._seeMoreCount = 0
-        const idx =
-            _.findIndex(this.el.nativeElement.children, (v: any) => {
-                console.log('set see more click button findIndex -- ', v.offsetHeight > this.unitHeight, v.offsetHeight ,' - ', this.unitHeight)
-                this._seeMoreCount += v.offsetHeight > this.unitHeight ? 2 : 1
-                return this._seeMoreCount >= this.seeMoreCount
-            })
+        const idx = _.findIndex(this.el.nativeElement.children, (v: any, i) => {
+            console.log(
+                'set see more click button findIndex -- ',
+                i,
+                '--',
+                v.offsetHeight > this.unitHeight,
+                v.offsetHeight,
+                ' - ',
+                this.unitHeight,
+                ' - ',
+                this._seeMoreCount >= this.seeMoreCount,
+                this._seeMoreCount,
+                this.seeMoreCount
+            )
+            this._seeMoreCount += _.round(v.offsetHeight / this.unitHeight)
+            return this._seeMoreCount >= this.seeMoreCount
+        })
         console.log('setSeeMoreClickButton -- idx : ', idx)
         if (idx != -1) {
             this.el.nativeElement.children[idx].innerHTML =
-                this.el.nativeElement.children[idx].innerHTML.length < 15
+                this.el.nativeElement.children[idx].innerHTML.length < this.seeMoreLimitNumber
                     ? this.el.nativeElement.children[idx].innerHTML + '...'
                     : _.truncate(this.el.nativeElement.children[idx].innerHTML, {
-                          length: 15,
+                          length: this.seeMoreLimitNumber,
                           omission: '...',
                       })
             
+            this.renderer.setStyle(this.el.nativeElement, 'height', `${(this._seeMoreCount >= 3 && idx > 0 ? 3 : idx + 1) * 32 + (idx != 0 ? 6 : 0)}px`)
+
             const bt = document.createElement('span')
-            bt.innerHTML='더보기'
+            bt.innerHTML = '더보기'
             bt.style.fontWeight = '700'
             bt.style.textUnderlineOffset = '6px'
             bt.style.textDecoration = 'underline'
             bt.style.textDecorationThickness = '3px'
             bt.style.marginLeft = '5px'
-            bt.style.cursor='pointer'
-            
+            bt.style.cursor = 'pointer'
+
             bt.addEventListener('click', (e) => {
                 this.onSeeMoreClick.emit()
             })
