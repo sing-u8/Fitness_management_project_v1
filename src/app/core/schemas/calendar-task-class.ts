@@ -11,13 +11,13 @@ export interface CalendarTaskClass {
     state_code_name: string
     duration: number
     capacity: number
+    start_booking_until: number
+    end_booking_before: number
+    cancel_booking_before: number
     start_booking: string
     end_booking: string
     cancel_booking: string
     booked_count: number
     instructors: Array<CenterUser>
     membership_items: Array<MembershipItem>
-    cancel_booking_before: number
-    end_booking_before: number
-    start_booking_until: number
 }

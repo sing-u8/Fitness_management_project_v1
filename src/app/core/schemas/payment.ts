@@ -1,4 +1,3 @@
-import { CenterUser } from '@schemas/center-user'
 export interface Payment {
     id: string
     user_membership_id: string
@@ -16,8 +15,7 @@ export interface Payment {
     cash: number
     unpaid: number
     memo: string
-    responsibility_user_id: string
-    responsibility_user_name: string
+    responsibility_center_user_id: string
     responsibility_center_user_name: string
     created_by: string
     created_at: string

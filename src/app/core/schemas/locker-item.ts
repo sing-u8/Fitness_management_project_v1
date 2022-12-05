@@ -7,7 +7,6 @@ export interface LockerItem {
     y: number
     rows: number
     cols: number
-    user_locker_user_name: string
     user_locker_center_user_name: string
     user_locker_end_date: string
 }

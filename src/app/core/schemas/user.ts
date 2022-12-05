@@ -25,6 +25,7 @@ export interface User {
     // etc
     picture: string
     background: string
+    last_logged_at: string
     access_token: string
     refresh_token: string
     custom_token: string

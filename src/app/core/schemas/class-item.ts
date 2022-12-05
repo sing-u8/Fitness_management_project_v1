@@ -10,13 +10,13 @@ export interface ClassItem {
     name: string
     duration: number
     capacity: number
-    instructors: CenterUser[]
     color: string
     memo: string
     start_booking_until: number
     end_booking_before: number
     cancel_booking_before: number
     sequence_number: number
+    instructors: CenterUser[]
 }
 
 export interface FE_ClassItem extends ClassItem {
