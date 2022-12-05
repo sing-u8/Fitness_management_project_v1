@@ -10,43 +10,114 @@
                 무료로 사용해보고 결정하세요.
             </div>
         </div>
-
-        <div class="l-fare-guide-box">
-            <hp-fare-guide-box
-                *ngFor="let box of fareGuideBoxes; index as idx; last as last"
-                [data]="box"
-                (onButtonClick)="fareGuideClickFuncs[idx]()"
-            >
-                <div *ngIf="last" class="small-text">
-                    부가가치세 10%는 별도입니다.
+        
+        <div class="w-100 d-flex flex-column align-items-center sec__bg-lightergrey">
+            <div class="sec1__l-desc">
+                <div class="sec1__desc-title">
+                    런칭 기념, 최대 45%까지
+                    요금을 할인 받아보세요!
                 </div>
-            </hp-fare-guide-box>
+                <div class="sec1__desc-sub">
+                    요금 할인 기간 : 2023년 2월 28일까지
+                </div>
+                <div
+                    rw-button
+                    [rwButtonFontColor]="'var(--white)'"
+                    [rwButtonColor]="'var(--red)'"
+                    class="sec1__button"
+                >
+                    2주 무료 체험하기
+                </div>
+                
+                <div class="sec1__background"></div>
+                
+            </div>
+    
+            <div class="l-fare-guide-box">
+                <hp-fare-guide-box2
+                    *ngFor="let item of fareGuideBoxList"
+                    [data]="item"
+                ></hp-fare-guide-box2>
+            </div>
+            
+            <div class="sec1__footer">
+                2주간의 무료 체험 기간이 끝난 후<br class="pad"> 별도의 결제는 이루어지지 않으며,<br class="mobile"> 유료 이용권 구매 후부터 결제가 진행됩니다.
+            </div>
         </div>
-
     </div>
 
-    <div id="sec2" class="sec--common sec__bg-lightergrey">
-        <hp-fare-guide-option-table
-            *ngFor="let table of optionTables"
-            [data] = "table"
-        ></hp-fare-guide-option-table>
+    <div id="sec2" class="sec--common sec__bg-white">
+        
+        <div class="sec2__title">
+            이용권 종류에 상관 없이<br>
+            모든 기능을 동일하게<br class="mobile">
+            이용하실 수 있어요.
+        </div>
+        
+        <div class="sec2__table" *ngFor="let i of sec2FGOItems">
+            <div class="table__title">{{i.text}}</div>
+            <div class="l-table-items">
+                <hp-fare-guide-option-table2
+                    *ngFor="let data of i.tableData; odd as isOdd;"
+                    [data]="data"
+                    [bgColor]="isOdd ? 'var(--hp-lighergrey)' : 'var(--white)'"
+                ></hp-fare-guide-option-table2>
+            </div>
+        </div>
+        
+        <div class="sec2__footer">
+            <div class="footer--title">
+                번거로운 문의 과정 없이<br>
+                즉시 무료로 써보고 결정하세요.
+            </div>
+            <div class="footer--list">
+                <div class="list-item" *ngFor="let item of sec2FooterItemList">
+                    <div class="check-icon"></div>
+                    {{item}}
+                </div>
+            </div>
+            <div
+                rw-button
+                [rwButtonFontColor]="'var(--white)'"
+                [rwButtonColor]="'var(--red)'"
+                class="sec2__button"
+            >
+                2주 무료 체험하기
+            </div>
+        </div>
     </div>
 
     <div id="sec3" class="sec--common sec__bg-white">
-        <div class="discount-card">
-            <div class="card-title">
-                다지점 센터는<br>
-                30%를 할인해드려요.
-            </div>
-            <hp-find-more-button
-                [text]="'도입 문의하기'"
-                [maxWidth]="'120px'"
-                [whiteMode]="true"
-                (onClick)="routerTo('introduction-inquiry')"
-            ></hp-find-more-button>
-            <div class="gift-image"></div>
+        
+        <div class="sec3__text1 sec3__text1--margin">
+            비용 절약을 위해, 한 번만 결제하면<br>
+            평생 무료로 쓸 수 있는<br class="mobile">
+            평생 이용권을 추천해 드려요!
         </div>
-
+        
+        <div class="sec3__text2">
+            🔍  업계 평균 운영 기간인<br class="pad">
+            10년간의 이용 금액을 비교해 보세요.
+        </div>
+        
+        <div class="fare-guide-graph-image"></div>
+    
+        <div class="sec3__text2">
+            💰 평생 이용권,<br class="mobile">
+            실제로 얼마나 이득일까요?<br>
+            현재 사용 중인 서비스와<br class="mobile">
+            직접 비교해 보세요.
+        </div>
+        
+        <div class="l-charge-calc">
+            사용 중인 서비스의 월 이용료
+            
+            <div class="l-input">
+                <input class="rw-input">
+                <span class="currency">원</span>
+            </div>
+        </div>
+        
         <hp-faq-list
             [faqList]="faqList"
         ></hp-faq-list>

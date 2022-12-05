@@ -17,7 +17,9 @@ import { FreeStartModalComponent } from './free-start-modal/free-start-modal.com
 import { FareGuideBoxComponent } from './fare-guide-box/fare-guide-box.component'
 import { FareGuideOptionTableComponent } from './fare-guide-option-table/fare-guide-option-table.component'
 import { InquirySelectComponent } from './inquiry-select/inquiry-select.component'
-import { FaqListSectionComponent } from './faq-list-section/faq-list-section.component'
+import { FaqListSectionComponent } from './faq-list-section/faq-list-section.component';
+import { FareGuideBox2Component } from './fare-guide-box2/fare-guide-box2.component';
+import { FareGuideOptionTable2Component } from './fare-guide-option-table2/fare-guide-option-table2.component'
 
 @NgModule({
     declarations: [
@@ -35,6 +37,8 @@ import { FaqListSectionComponent } from './faq-list-section/faq-list-section.com
         FareGuideOptionTableComponent,
         InquirySelectComponent,
         FaqListSectionComponent,
+        FareGuideBox2Component,
+        FareGuideOptionTable2Component,
     ],
     imports: [CommonModule, RouterModule, FormsModule, ReactiveFormsModule, SharedModule],
     exports: [
@@ -52,6 +56,8 @@ import { FaqListSectionComponent } from './faq-list-section/faq-list-section.com
         FareGuideOptionTableComponent,
         InquirySelectComponent,
         FaqListSectionComponent,
+        FareGuideBox2Component,
+        FareGuideOptionTable2Component,
     ],
 })
 export class ComponentsModule {}

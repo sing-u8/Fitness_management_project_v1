@@ -1,6 +1,6 @@
 * {
-    padding: 0px;
-    margin: 0px;
+    padding: 0;
+    margin: 0;
     text-align: initial;
 }
 
@@ -29,6 +29,7 @@ article.l-fare-guide {
     position: relative;
     width: 100%;
 
+
     div#sec1{
         // height: 937px;
         display: flex;
@@ -39,36 +40,78 @@ article.l-fare-guide {
             flex-direction: column;
             align-items: center;
             justify-content: space-between;
-            width: 176px;
+            width: 260px;
             position: relative;
-            margin: 45px 0px 50px;
+            margin: 40px 0 40px;
             .sec1__text-title {
                 font-size: 2.5rem;
                 font-weight: 700;
-                font-stretch: normal;
-                font-style: normal;
-                line-height: 1.48;
-                letter-spacing: -0.63px;
+                line-height: 37px;
                 text-align: center;
+                letter-spacing: -0.625px;
                 color: #212121;
-                margin-bottom: 13px;
+                margin-bottom: 8px;
             }
             .sec1__text-desc {
                 font-size: 1.4rem;
                 font-weight: 500;
-                font-stretch: normal;
-                font-style: normal;
-                line-height: 1.64;
-                letter-spacing: -0.2px;
+                line-height: 23px;
                 text-align: center;
+                letter-spacing: -0.196px;
                 color: #606060;
             }
         }
 
-        .l-fare-guide-box {
+        .sec1__l-desc {
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: space-between;
+            width: 260px;
+            position: relative;
+            padding: 80px 0 0 0;
+            margin: 0 0 50px;
+            .sec1__desc-title {
+                font-size: 2.1rem;
+                font-weight: 700;
+                line-height: 33px;
+                text-align: center;
+                letter-spacing: -0.441px;
+                color: #212121;
+                margin-bottom: 12px;
+            }
+            .sec1__desc-sub {
+                font-size: 1.5rem;
+                line-height: 22px;
+                text-align: center;
+                letter-spacing: -0.1px;
+                color: #606060;
+            }
+        }
+
+        .sec1__button {
+            width: 240px !important;
+            height: 49px !important;
+            font-size: 1.5rem;
+            line-height: 22px;
+            letter-spacing: -0.26px;
+            margin-top:30px;
+            margin-bottom: 8.5px;
+        }
+
+        .sec1__background {
+            background-image: url("/assets/homepage/images/fare-guide/confetti.png");
+            background-repeat: no-repeat;
+            background-size: cover;
+            width: 100%;
+            position: absolute;
+            top: 0;
+        }
+
+        .l-fare-guide-box {
+            display: grid;
+            grid-template-columns: repeat(1, auto);
+            gap: 20px;
 
             hp-fare-guide-box {
                 &:not(:first-of-type) {
@@ -89,14 +132,27 @@ article.l-fare-guide {
                 letter-spacing: -0.14px;
                 text-align: left;
                 color: #979797;
-                right: 0px;
+                right: 0;
                 bottom: -39px;
             }
+        }
+
+        .sec1__footer {
+            width: 100%;
+            background-color: var(--font-color);
+            padding: 20px 0;
+
+            font-weight: 700;
+            font-size: 1.5rem;
+            line-height: 24px;
+            text-align: center;
+            letter-spacing: -0.22px;
+            color: var(--white);
         }
     }
 
     div#sec2{
-        padding: 70px 0px;
+        padding: 100px 0 0;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -107,74 +163,219 @@ article.l-fare-guide {
             }
         }
 
-    }
+        .sec2__title {
+            width: 205px;
+            font-weight: 700;
+            font-size: 2.1rem;
+            line-height: 33px;
+            text-align: center;
+            letter-spacing: -0.441px;
+            color: var(--font-color);
+            margin-bottom: 35px;
+        }
 
-    div#sec3{
-        .discount-card {
+        .sec2__table {
             display: flex;
             flex-direction: column;
-            overflow: hidden;
-
-            width: 312px;
-            height: 150px;
-            padding: 31px 0 25px 26px;
-            border-radius: 10px;
-            background-color: #212121;
-            margin-top: 70px;
-
-            position: relative;
-            .card-title {
-                font-size: 1.9rem;
-                line-height: 1.47;
-                letter-spacing: -0.36px;
+            align-items: center;
+            .table__title {
                 font-weight: 700;
-                font-stretch: normal;
-                font-style: normal;
-                color: #ffffff;
-                margin-bottom: 10px;
+                font-size: 1.9rem;
+                line-height: 28px;
+                letter-spacing: -0.5px;
             }
-
-            .gift-image {
-                background-image: url('/assets/homepage/images/sale/wrapped-gift.png');
-                background-size: contain;
-                background-repeat: no-repeat;
-                width:126px;
-                height: 126px;
-                position:absolute;
-                bottom: -20px;
-                right: -32px;
+            .l-table-items {
+                display: grid;
+                grid-template-columns: repeat(1, auto);
+                gap: 17px;
             }
         }
 
+        .sec2__footer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: var(--font-color);
+            width: 100%;
+            padding: 100px 0;
+
+            .footer--title{
+                font-weight: 700;
+                font-size: 2.1rem;
+                line-height: 33px;
+                text-align: center;
+                letter-spacing: -0.441px;
+                margin-bottom: 20px;
+                color: var(--white);
+            }
+            .footer--list {
+                display: grid;
+                grid-template-columns: repeat(1, auto);
+                row-gap: 8px;
+                .list-item {
+                    display: flex;
+                    font-weight: 500;
+                    font-size: 1.5rem;
+                    line-height: 26px;
+                    letter-spacing: -0.22px;
+                    color: var(--white);
+                }
+                .check-icon {
+                    background-image: url("/assets/icons/etc/check_white.svg");
+                    background-size: contain;
+                    background-repeat: no-repeat;
+                    width: 22px;
+                    height: 22px;
+                    margin-right: 4px;
+                }
+            }
+
+            .sec2__button {
+                width: 220px !important;
+                height: 49px !important;
+                font-weight: 700;
+                font-size: 1.5rem;
+                line-height: 26px;
+                letter-spacing: -0.22px;
+                margin-top:40px;
+            }
+        }
+    }
+
+    div#sec3{
+
+        .sec3__text1--margin {
+            margin-top: 100px;
+            margin-bottom: 35px;
+        }
+
+        .sec3__text1 {
+            font-weight: 700;
+            font-size: 2.1rem;
+            line-height: 33px;
+            text-align: center;
+            letter-spacing: -0.441px;
+            color: var(--font-color);
+        }
+        .sec3__text2 {
+            font-weight: 700;
+            font-size: 1.9rem;
+            line-height: 31px;
+            text-align: center;
+            letter-spacing: -0.5px;
+        }
+        .fare-guide-graph-image {
+            background-image: url("/assets/homepage/icons/fare-guide-graph1.svg");
+            width: 301px;
+            height: 588px;
+            background-repeat: no-repeat;
+            background-size: contain;
+            margin: 20px 0 60px;
+        }
+
+        .l-charge-calc {
+            width: 100%;
+            height: 151px;
+            background-color: var(--hp-lighergrey);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            margin: 20px 0 38px;
+
+            font-weight: 500;
+            font-size: 1.6rem;
+            line-height: 26px;
+            letter-spacing: -0.324px;
+            position: relative;
+
+            .l-input {
+                position: relative;
+                span.currency {
+                    font-size: 1.8rem;
+                    line-height: 26px;
+                    letter-spacing: -0.324px;
+                    position: absolute;
+                    right: 15px;
+                    top: 11.5px;
+                }
+                input {
+                    background: #FFFFFF;
+                    border: 2px solid #EAEAEA;
+                    border-radius: 10px;
+                    padding: 15px 45px 14px 15px !important;
+                }
+            }
+
+        }
+
         hp-faq-list {
-            margin: 75px 0 105px 0px;
+            margin: 75px 0 105px 0;
         }
     }
 
     @media (min-width: 768px) {
 
+        br.mobile {
+            display: none;
+        }
+
         div#sec1{
             .sec1__l-text {
-                width: 373px;
-                margin: 73px 0 64px;
+                width: 375px;
+                margin: 65px 0 35px;
                 .sec1__text-title {
                     font-size: 3rem;
-                    line-height: 1.43;
+                    font-weight: 700;
+                    line-height: 43px;
                     letter-spacing: -0.9px;
-                    margin-bottom: 14px;
+                    margin-bottom: 10px;
                 }
                 .sec1__text-desc {
                     font-size: 1.5rem;
-                    line-height: 1.73;
-                    letter-spacing: -0.23px;
-
+                    line-height: 26px;
+                    letter-spacing: -0.225px;
                     br {
                         display: none;
                     }
                 }
             }
 
+            .sec1__l-desc {
+                width: 525px;
+                position: relative;
+                padding: 120px 0 0 0;
+                margin: 0 0 80px;
+                .sec1__desc-title {
+                    font-size: 2.6rem;
+                    line-height: 38px;
+                    letter-spacing: -0.68px;
+                    color: #212121;
+                    margin-bottom: 8px;
+                }
+                .sec1__desc-sub {
+                    font-size: 1.6rem;
+                    line-height: 23px;
+                    text-align: center;
+                    letter-spacing: -0.26px;
+                    color: #606060;
+                }
+            }
+
+            .sec1__button {
+                width: 208px !important;
+                height: 54px !important;
+                font-size: 1.6rem;
+                line-height: 23px;
+                letter-spacing: -0.26px;
+                margin-top: 40px;
+                margin-bottom: 80px;
+            }
+
             .l-fare-guide-box {
+
+                grid-template-columns: repeat(2, auto);
+                gap: 30px;
 
                 hp-fare-guide-box {
                     &:not(:first-of-type) {
@@ -191,14 +392,59 @@ article.l-fare-guide {
                     font-size: 1.4rem;
                     line-height: 1.86;
                     letter-spacing: -0.2px;
-                    right: 0px;
+                    right: 0;
                     bottom: -39px;
                 }
+            }
+            .sec1__footer {
+                background-color: var(--font-color);
+                padding: 15px 0;
+
+                font-size: 1.6rem;
+                line-height: 26px;
+                letter-spacing: -0.256px;
+                color: var(--white);
             }
         }
 
         div#sec2{
-            padding: 85px 0px;
+            padding: 120px 0 0;
+
+            .sec2__title {
+                width: 440px;
+                font-size: 2.6rem;
+                line-height: 43px;
+                text-align: center;
+                letter-spacing: -0.68px;
+                margin-bottom: 40px;
+            }
+
+            .sec2__footer {
+                padding: 60px 0;
+                .footer--title{
+                    row-gap: 10px;
+                }
+                .footer--list {
+                    .list-item {
+                        font-size: 1.6rem;
+                        line-height: 26px;
+                        letter-spacing: -0.256px;
+                    }
+                    .check-icon {
+                        width: 24px;
+                        height: 24px;
+                        margin-right: 4px;
+                    }
+                }
+            }
+
+            .sec2__button {
+                width: 220px !important;
+                height: 50px !important;
+                font-size: 1.6rem;
+                line-height: 26px;
+                letter-spacing: -0.256px;
+            }
 
             hp-fare-guide-option-table {
                 &:not(:first-of-type) {
@@ -208,48 +454,58 @@ article.l-fare-guide {
         }
 
         div#sec3{
-            .discount-card {
 
-                width: 460px;
-                height: 130px;
-                padding: 33px 0 34px 31px;
-                border-radius: 15px;
-                margin-top: 85px;
+            .sec3__text1--margin {
+                margin-top: 120px;
+                margin-bottom: 40px;
+            }
 
-                .card-title {
-                    font-size: 19px;
-                    line-height: 1.63;
-                    letter-spacing: -0.36px;
-                    br {
-                        display: none;
-                    }
-                }
+            .fare-guide-graph-image {
+                background-image: url("/assets/homepage/icons/fare-guide-graph2.svg");
+                width: 609px;
+                height: 485px;
+                margin: 25px 0 80px;
+            }
 
-                .gift-image {
-                    width: 126px;
-                    height: 126px;
-                    position: absolute;
-                    bottom: -22px;
-                    right: -13px;
+            .l-charge-calc {
+                width: 100%;
+                height: 115px;
+                flex-direction: row;
+                justify-content: center;
+                align-items: center;
+
+                margin: 25px 0 40.5px;
+
+                font-size: 1.8rem;
+                line-height: 26px;
+                letter-spacing: -0.324px;
+
+                input {
+                    margin-left: 20px;
                 }
             }
 
             hp-faq-list {
-                margin: 92px 0 155px 0px;
+                margin: 92px 0 155px 0;
             }
         }
     }
 
     @media (min-width: 1280px) {
+        br.mobile, br.pad {
+            display: none;
+        }
         div#sec1 {
             .sec1__l-text {
                 width: 400px;
-                margin: 113px 0 75px;
+                margin: 93px 0 60px;
 
                 .sec1__text-title {
                     font-size: 3.2rem;
-                    line-height: 1.53;
-                    letter-spacing: -1.02px;
+                    font-weight: 700;
+                    line-height: 49px;
+                    letter-spacing: -1.024px;
+                    margin-bottom: 11px;
                 }
 
                 .sec1__text-desc {
@@ -259,19 +515,54 @@ article.l-fare-guide {
                 }
             }
 
+            .sec1__l-desc {
+                width: 585px;
+                position: relative;
+                padding: 140px 0 0 0;
+                margin: 0 0 90px;
+                .sec1__desc-title {
+                    font-size: 2.9rem;
+                    line-height: 42px;
+                    letter-spacing: -0.841px;
+                    color: #212121;
+                    margin-bottom: 8px;
+                }
+                .sec1__desc-sub {
+                    font-size: 1.8rem;
+                    line-height: 26px;
+                    text-align: center;
+                    letter-spacing: -0.5px;
+                    color: #606060;
+                }
+            }
+
+            .sec1__button {
+                width: 221px !important;
+                height: 57px !important;
+                font-size: 1.8rem;
+                line-height: 26px;
+                letter-spacing: -0.5px;
+                margin-top: 45px;
+                margin-bottom: 90px;
+            }
+
             .l-fare-guide-box {
 
+                grid-template-columns: repeat(1, auto);
+                grid-template-rows: repeat(4, auto);
+                gap: 20px;
+
                 flex-direction: row;
-                margin-bottom: 140px;;
+                margin-bottom: 182px;;
 
                 hp-fare-guide-box {
                     &:not(:first-of-type) {
-                        margin-top: 0px;
+                        margin-top: 0;
                         margin-left: 35px;
                     }
 
                     &:last-of-type {
-                        margin-bottom: 0px;
+                        margin-bottom: 0;
                     }
                 }
 
@@ -280,13 +571,47 @@ article.l-fare-guide {
                     font-size: 1.4rem;
                     line-height: 1.86;
                     letter-spacing: -0.2px;
-                    right: 0px;
+                    right: 0;
                     bottom: -39px;
                 }
             }
+            .sec1__footer {
+                background-color: var(--font-color);
+                padding: 15px 0;
+            }
         }
         div#sec2 {
-            padding: 110px 0px;
+            padding: 140px 0 0;
+
+            .sec2__title {
+                width: 480px;
+                font-size: 2.9rem;
+                line-height: 49px;
+                text-align: center;
+                letter-spacing: -0.841px;
+                margin-bottom: 45px;
+            }
+
+            .sec2__footer {
+                padding: 70px 0;
+                .footer--title{
+
+                }
+                .footer--list {
+                    grid-template-columns: repeat(3,auto);
+                    grid-template-rows: repeat(1,auto);
+                    column-gap: 20px;
+                    .list-item {
+                        font-size: 1.6rem;
+                        line-height: 26px;
+                        letter-spacing: -0.256px;
+                    }
+                }
+            }
+
+            .sec2__button {
+                margin-top: 35px;
+            }
 
             hp-fare-guide-option-table {
                 &:not(:first-of-type) {
@@ -295,41 +620,38 @@ article.l-fare-guide {
             }
         }
         div#sec3 {
-            .discount-card {
-                width: 735px;
-                height: 146px;
-                padding: 40px 0 40px 35px;
-                border-radius: 15px;
-                margin-top: 110px;
 
-                .card-title {
-                    font-size: 2.1rem;
-                    line-height: 1.48;
-                    letter-spacing: -0.44px;
-                }
+            .sec3__text1--margin {
+                margin-top: 140px;
+                margin-bottom: 45px;
+            }
 
-                .gift-image {
-                    width: 174px;
-                    height: 174px;
-                    bottom: -55px;
-                    right: -10px;
-                }
+            .fare-guide-graph-image {
+                background-image: url("/assets/homepage/icons/fare-guide-graph3.svg");
+                width: 781px;
+                height: 485px;
+                margin: 30px 0 80px;
+            }
+
+            .l-charge-calc {
+                margin: 30px 0 33.5px;
             }
 
             hp-faq-list {
-                margin: 118px 0 200px 0px;
+                margin: 118px 0 200px 0;
             }
         }
     }
-    @media (min-width: 1440px) {
-        div#sec1 {}
-        div#sec2 {}
-        div#sec3 {}
-    }
-    @media (min-width: 1920px) {
-        div#sec1 {}
-        div#sec2 {}
-        div#sec3 {}
-    }
+
+    //@media (min-width: 1440px) {
+    //    div#sec1 {}
+    //    div#sec2 {}
+    //    div#sec3 {}
+    //}
+    //@media (min-width: 1920px) {
+    //    div#sec1 {}
+    //    div#sec2 {}
+    //    div#sec3 {}
+    //}
 
 }
