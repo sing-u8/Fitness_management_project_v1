@@ -163,8 +163,8 @@ export interface CreateFileRequestBody {
     type_code: FileTypeCode
     center_id?: string
     center_user_id?: string
-    center_chat_room_id?: string
     center_contract_id?: string
+    center_chat_room_id?: string
     // files  : FileList   -- is already in other param
 }
 
@@ -172,8 +172,8 @@ export interface GetFileParam {
     type_code: FileTypeCode
     center_id?: string
     center_user_id?: string
-    center_chat_room_id?: string
     center_contract_id?: string
+    center_chat_room_id?: string
     page?: number
     pageSize?: number
 }

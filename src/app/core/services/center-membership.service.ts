@@ -57,8 +57,12 @@ export class CenterMembershipService {
     }
 
     // 카테고리 조회
-    getCategoryList(gymId: string): Observable<Array<MembershipCategory>> {
-        const url = this.SERVER + `/${gymId}/membership`
+    getCategoryList(gymId: string, page?: number, pageSize?: number): Observable<Array<MembershipCategory>> {
+        const url =
+            this.SERVER +
+            `/${gymId}/membership` +
+            (page ? `page=${page}&` : '') +
+            (pageSize ? `pageSize=${pageSize}` : '')
 
         const options = {
             headers: new HttpHeaders({
@@ -147,8 +151,12 @@ export class CenterMembershipService {
     }
 
     // 아이템 조회
-    getItems(gymId: string, categoryId: string): Observable<Array<MembershipItem>> {
-        const url = this.SERVER + `/${gymId}/membership/${categoryId}/item`
+    getItems(gymId: string, categoryId: string, page?: number, pageSize?: number): Observable<Array<MembershipItem>> {
+        const url =
+            this.SERVER +
+            `/${gymId}/membership/${categoryId}/item` +
+            (page ? `page=${page}&` : '') +
+            (pageSize ? `pageSize=${pageSize}` : '')
 
         const options = {
             headers: new HttpHeaders({
@@ -252,8 +260,18 @@ export class CenterMembershipService {
     }
 
     // 연결된 수업 조회
-    getLinkedClass(centerId: string, categoryId: string, ItemId: string): Observable<Array<ClassItem>> {
-        const url = this.SERVER + `/${centerId}/membership/${categoryId}/item/${ItemId}/class`
+    getLinkedClass(
+        centerId: string,
+        categoryId: string,
+        ItemId: string,
+        page?: number,
+        pageSize?: number
+    ): Observable<Array<ClassItem>> {
+        const url =
+            this.SERVER +
+            `/${centerId}/membership/${categoryId}/item/${ItemId}/class` +
+            (page ? `page=${page}&` : '') +
+            (pageSize ? `pageSize=${pageSize}` : '')
 
         const options = {
             headers: new HttpHeaders({

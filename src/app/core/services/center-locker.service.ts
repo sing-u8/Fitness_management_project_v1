@@ -111,8 +111,12 @@ export class CenterLockerService {
     }
 
     // 아이템 조회
-    getItemList(centerId: string, categoryId: string): Observable<Array<LockerItem>> {
-        const url = this.SERVER + `/${centerId}/locker/${categoryId}/item`
+    getItemList(centerId: string, categoryId: string, page?: number, pageSize?: number): Observable<Array<LockerItem>> {
+        const url =
+            this.SERVER +
+            `/${centerId}/locker/${categoryId}/item` +
+            (page ? `page=${page}&` : '') +
+            (pageSize ? `pageSize=${pageSize}` : '')
 
         const options = {
             headers: new HttpHeaders({
@@ -170,8 +174,18 @@ export class CenterLockerService {
     }
 
     // 아이템 사용내역 조회
-    getItemHistories(centerId: string, categoryId: string, itemId: string): Observable<LockerItemHistory[]> {
-        const url = this.SERVER + `/${centerId}/locker/${categoryId}/item/${itemId}/history`
+    getItemHistories(
+        centerId: string,
+        categoryId: string,
+        itemId: string,
+        page?: number,
+        pageSize?: number
+    ): Observable<LockerItemHistory[]> {
+        const url =
+            this.SERVER +
+            `/${centerId}/locker/${categoryId}/item/${itemId}/history` +
+            (page ? `page=${page}&` : '') +
+            (pageSize ? `pageSize=${pageSize}` : '')
 
         const options = {
             headers: new HttpHeaders({

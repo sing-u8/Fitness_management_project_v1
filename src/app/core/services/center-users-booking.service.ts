@@ -22,8 +22,12 @@ export class CenterUsersBookingService {
     }
 
     // 예약 조회
-    getBookings(centerId: string, userId: string): Observable<Array<Booking>> {
-        const url = this.SERVER + `/${centerId}/users/${userId}/booking`
+    getBookings(centerId: string, userId: string, page?: number, pageSize?: number): Observable<Array<Booking>> {
+        const url =
+            this.SERVER +
+            `/${centerId}/users/${userId}/booking` +
+            (page ? `page=${page}&` : '') +
+            (pageSize ? `pageSize=${pageSize}` : '')
 
         return this.http.get<Response>(url, this.options).pipe(
             map((res) => {

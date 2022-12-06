@@ -215,7 +215,7 @@ export interface SendSMSMessageReqBody {
     sender_phone_number: string
     reservation_datetime?: string
     text: string
-    receiver_user_ids: string[]
+    receiver_center_user_ids: string[]
 }
 export interface UpdateMLAutoSendReqBody {
     phone_number?: string

@@ -41,8 +41,17 @@ export class CenterUsersMembershipService {
         )
     }
     // 회원권 조회
-    getMembershipTickets(centerId: string, userId: string): Observable<Array<UserMembership>> {
-        const url = this.SERVER + `/${centerId}/users/${userId}/membership`
+    getMembershipTickets(
+        centerId: string,
+        userId: string,
+        page?: number,
+        pageSize?: number
+    ): Observable<Array<UserMembership>> {
+        const url =
+            this.SERVER +
+            `/${centerId}/users/${userId}/membership` +
+            (page ? `page=${page}&` : '') +
+            (pageSize ? `pageSize=${pageSize}` : '')
 
         return this.http.get<Response>(url, this.options).pipe(
             map((res) => {
@@ -78,33 +87,6 @@ export class CenterUsersMembershipService {
             catchError(handleError)
         )
     }
-    // // 회원권 일시정지       // !!
-    // stopMembershipTicket(
-    //     centerId: string,
-    //     userId: string,
-    //     membershipId: string,
-    //     reqBody: StopMembershipTicketReqBody
-    // ): Observable<Response> {
-    //     const url = this.SERVER + `/${centerId}/users/${userId}/membership/${membershipId}/pause`
-
-    //     return this.http.post<Response>(url, reqBody, this.options).pipe(
-    //         map((res) => {
-    //             return res.dataset[0]
-    //         }),
-    //         catchError(handleError)
-    //     )
-    // }
-    // // 회원권 재개       // !!
-    // resumeMembershipTicket(centerId: string, userId: string, membershipId: string): Observable<Response> {
-    //     const url = this.SERVER + `/${centerId}/users/${userId}/membership/${membershipId}/resume`
-
-    //     return this.http.post<Response>(url, {}, this.options).pipe(
-    //         map((res) => {
-    //             return res.dataset[0]
-    //         }),
-    //         catchError(handleError)
-    //     )
-    // }
     // 회원권 연장
     extendMembershipTicket(
         centerId: string,
@@ -137,7 +119,7 @@ export class CenterUsersMembershipService {
             catchError(handleError)
         )
     }
-    // 회원권 양도
+    // 회원권 양도 // !!!!!
     transferMembershipTicket(
         centerId: string,
         userId: string,
@@ -170,8 +152,18 @@ export class CenterUsersMembershipService {
         )
     }
     // 회원권 결제 조회
-    getMembershipTicketPayments(centerId: string, userId: string, membershipId: string): Observable<Array<Payment>> {
-        const url = this.SERVER + `/${centerId}/users/${userId}/membership/${membershipId}/payment`
+    getMembershipTicketPayments(
+        centerId: string,
+        userId: string,
+        membershipId: string,
+        page?: number,
+        pageSize?: number
+    ): Observable<Array<Payment>> {
+        const url =
+            this.SERVER +
+            `/${centerId}/users/${userId}/membership/${membershipId}/payment` +
+            (page ? `page=${page}&` : '') +
+            (pageSize ? `pageSize=${pageSize}` : '')
 
         return this.http.get<Response>(url, this.options).pipe(
             map((res) => {
@@ -231,6 +223,28 @@ export class CenterUsersMembershipService {
         )
     }
 
+    // 회원권 - 홀딩 조회
+    getHoldingMembershipTickets(
+        centerId: string,
+        userId: string,
+        membershipId: string,
+        page?: number,
+        pageSize?: number
+    ): Observable<Array<Holding>> {
+        const url =
+            this.SERVER +
+            `/${centerId}/users/${userId}/membership/${membershipId}/holding` +
+            (page ? `page=${page}&` : '') +
+            (pageSize ? `pageSize=${pageSize}` : '')
+
+        return this.http.get<Response>(url, this.options).pipe(
+            map((res) => {
+                return res.dataset
+            }),
+            catchError(handleError)
+        )
+    }
+
     //  회원권 - 홀딩수정
     modifyHoldingMembershipTicket(
         centerId: string,
@@ -267,8 +281,18 @@ export class CenterUsersMembershipService {
     }
 
     // 회원권 수업 조회
-    getMembershipTicketClasses(centerId: string, userId: string, membershipId: string): Observable<Array<ClassItem>> {
-        const url = this.SERVER + `/${centerId}/users/${userId}/membership/${membershipId}/class`
+    getMembershipTicketClasses(
+        centerId: string,
+        userId: string,
+        membershipId: string,
+        page?: number,
+        pageSize?: number
+    ): Observable<Array<ClassItem>> {
+        const url =
+            this.SERVER +
+            `/${centerId}/users/${userId}/membership/${membershipId}/class` +
+            (page ? `page=${page}&` : '') +
+            (pageSize ? `pageSize=${pageSize}` : '')
         return this.http.get<Response>(url, this.options).pipe(
             map((res) => {
                 return res.dataset
@@ -280,8 +304,6 @@ export class CenterUsersMembershipService {
 
 export interface CreateMembershipTicketReqBody {
     membership_item_id: string
-    // category_name: string
-    // name: string
     start_date: string
     end_date: string
     count: number
@@ -296,7 +318,7 @@ export interface CreateMembershipTicketReqBody {
         cash: number
         unpaid: number
         memo: string
-        responsibility_user_id: string
+        responsibility_center_user_id: string
     }
 }
 
@@ -323,7 +345,7 @@ export interface ExtendMembershipTicketReqBody {
         cash: number
         unpaid: number
         memo: string
-        responsibility_user_id: string
+        responsibility_center_user_id: string
     }
 }
 
@@ -335,7 +357,7 @@ export interface RefundMembershipTicketReqBody {
         phone: number
         cash: number
         memo: string
-        responsibility_user_id: string
+        responsibility_center_user_id: string
     }
 }
 
@@ -349,7 +371,7 @@ export interface TransferMembershipTicketReqBody {
         cash: number
         unpaid: number
         memo: string
-        responsibility_user_id: string
+        responsibility_center_user_id: string
     }
 }
 
@@ -362,7 +384,7 @@ export interface CreateMembershipTicketPaymentReqBody {
         cash: number
         unpaid: number
         memo: string
-        responsibility_user_id: string
+        responsibility_center_user_id: string
     }
 }
 
@@ -375,7 +397,7 @@ export interface UpdateMembershipTicketPaymentReqBody {
         cash: number
         unpaid: number
         memo: string
-        responsibility_user_id: string
+        responsibility_center_user_id: string
     }
 }
 

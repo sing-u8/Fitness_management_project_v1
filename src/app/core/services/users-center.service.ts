@@ -17,25 +17,8 @@ export class UsersCenterService {
 
     constructor(private http: HttpClient) {}
 
-    addCenterToUser(userId: string, reqBody: AddCenterToUserReqBody) {
-        const url = this.SERVER + `/${userId}/center`
-
-        const options = {
-            headers: new HttpHeaders({
-                'Content-Type': 'application/json',
-            }),
-        }
-
-        return this.http.post<Response>(url, reqBody, options).pipe(
-            map((res) => {
-                return res.dataset
-            }),
-            catchError(handleError)
-        )
-    }
-
-    getCenterList(userId: string, page = '', pageSize = ''): Observable<Array<Center>> {
-        const url = this.SERVER + `/${userId}/center?page=${page}&pageSize=${pageSize}`
+    getCenterList(userId: string, isApp = false, page = '', pageSize = ''): Observable<Array<Center>> {
+        const url = this.SERVER + `/${userId}/center?page=${page}&pageSize=${pageSize}&app=${isApp}`
 
         const options = {
             headers: new HttpHeaders({

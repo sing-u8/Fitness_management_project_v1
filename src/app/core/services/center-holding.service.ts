@@ -35,6 +35,6 @@ export class CenterHoldingService {
 export interface CenterHoldingReqBody {
     start_date: string
     end_date: string
-    user_ids: Array<string>
+    center_user_ids: Array<string>
     user_locker_included: boolean
 }

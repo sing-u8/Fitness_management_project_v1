@@ -58,8 +58,9 @@ export class CenterLessonService {
     }
 
     // 카테고리 조회
-    getCategoryList(gymId: string): Observable<Array<ClassCategory>> {
-        const url = this.SERVER + `/${gymId}/class`
+    getCategoryList(gymId: string, page?: number, pageSize?: number): Observable<Array<ClassCategory>> {
+        const url =
+            this.SERVER + `/${gymId}/class` + (page ? `page=${page}&` : '') + (pageSize ? `pageSize=${pageSize}` : '')
 
         const options = {
             headers: new HttpHeaders({
@@ -148,8 +149,12 @@ export class CenterLessonService {
     }
 
     // 아이템 조회
-    getItems(gymId: string, categoryId: string): Observable<Array<ClassItem>> {
-        const url = this.SERVER + `/${gymId}/class/${categoryId}/item`
+    getItems(gymId: string, categoryId: string, page?: number, pageSize?: number): Observable<Array<ClassItem>> {
+        const url =
+            this.SERVER +
+            `/${gymId}/class/${categoryId}/item` +
+            (page ? `page=${page}&` : '') +
+            (pageSize ? `pageSize=${pageSize}` : '')
 
         const options = {
             headers: new HttpHeaders({
@@ -253,8 +258,18 @@ export class CenterLessonService {
     }
 
     // 연결된 회원권 조회
-    getLinkedMemberships(centerId: string, categoryId: string, ItemId: string): Observable<Array<MembershipItem>> {
-        const url = this.SERVER + `/${centerId}/class/${categoryId}/item/${ItemId}/membership`
+    getLinkedMemberships(
+        centerId: string,
+        categoryId: string,
+        ItemId: string,
+        page?: number,
+        pageSize?: number
+    ): Observable<Array<MembershipItem>> {
+        const url =
+            this.SERVER +
+            `/${centerId}/class/${categoryId}/item/${ItemId}/membership` +
+            (page ? `page=${page}&` : '') +
+            (pageSize ? `pageSize=${pageSize}` : '')
 
         const options = {
             headers: new HttpHeaders({
@@ -317,8 +332,18 @@ export class CenterLessonService {
     }
 
     // 강사 조회
-    getInstructors(centerId: string, categoryId: string, ItemId: string): Observable<Array<CenterUser>> {
-        const url = this.SERVER + `/${centerId}/class/${categoryId}/item/${ItemId}/instructor`
+    getInstructors(
+        centerId: string,
+        categoryId: string,
+        ItemId: string,
+        page?: number,
+        pageSize?: number
+    ): Observable<Array<CenterUser>> {
+        const url =
+            this.SERVER +
+            `/${centerId}/class/${categoryId}/item/${ItemId}/instructor` +
+            (page ? `page=${page}&` : '') +
+            (pageSize ? `pageSize=${pageSize}` : '')
 
         const options = {
             headers: new HttpHeaders({
@@ -339,9 +364,9 @@ export class CenterLessonService {
         centerId: string,
         categoryId: string,
         ItemId: string,
-        instructorUserId: string
+        instructorCenterUserId: string
     ): Observable<Response> {
-        const url = this.SERVER + `/${centerId}/class/${categoryId}/item/${ItemId}/instructor/${instructorUserId}`
+        const url = this.SERVER + `/${centerId}/class/${categoryId}/item/${ItemId}/instructor/${instructorCenterUserId}`
 
         const options = {
             headers: new HttpHeaders({
@@ -397,5 +422,5 @@ export interface LinkMembershipRequestBody {
 }
 
 export interface AddInstructorRequestBody {
-    instructor_user_id: string
+    instructor_center_user_id: string
 }

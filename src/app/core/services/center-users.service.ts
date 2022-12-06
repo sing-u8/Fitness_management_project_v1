@@ -122,16 +122,22 @@ export class CenterUsersService {
 
 export interface CreateUserRequestBody {
     name: string
-    sex: string
-    birth_date: string
-    email: string
+    sex?: string
+    birth_date?: string
+    email?: string
     phone_number: string
+    color?:string
+    memo?:string
 }
 
 export interface UpdateUserRequestBody {
     role_code?: string
-    center_user_name?: string
-    center_user_memo?: string
-    center_membership_number?: string
+    membership_number?: string
+    name?: string
+    sex?: string
+    birth_date?:string
     email?: string
+    phone_number?:string
+    color?: string
+    memo?: string
 }

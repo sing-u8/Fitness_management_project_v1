@@ -129,8 +129,8 @@ export class CenterCalendarService {
     }
 
     // 캘린더 필터 - 강사 삭제
-    deleteFilterInstructor(centerId: string, calendarId: string, instructorUserId: string): Observable<Response> {
-        const url = this.SERVER + `/${centerId}/calendar/${calendarId}/filter-instructor/${instructorUserId}`
+    deleteFilterInstructor(centerId: string, calendarId: string, instructorCenterUserId: string): Observable<Response> {
+        const url = this.SERVER + `/${centerId}/calendar/${calendarId}/filter-instructor/${instructorCenterUserId}`
 
         return this.http.delete<Response>(url, this.options).pipe(
             map((res) => {
@@ -152,18 +152,15 @@ export class CenterCalendarService {
         )
     }
 
-    // 테스크 조회
+    //!! 테스크 조회
     getCalendarTasks(
         centerId: string,
         calendarId: string,
         start_date: string,
-        end_date: string,
-        calendar_task_type_code?: 'class_item_type_onetoone' | 'class_item_type_group' | 'calendar_task_type_normal'
+        end_date: string
     ): Observable<Array<CalendarTask>> {
         const url =
-            this.SERVER +
-            `/${centerId}/calendar/${calendarId}/task?start_date=${start_date}&end_date=${end_date}` +
-            (calendar_task_type_code ? `?calendar_task_type_code=${calendar_task_type_code}` : '')
+            this.SERVER + `/${centerId}/calendar/${calendarId}/task?start_date=${start_date}&end_date=${end_date}`
 
         return this.http.get<Response>(url, this.options).pipe(
             map((res) => {
@@ -203,9 +200,41 @@ export class CenterCalendarService {
         )
     }
 
+    // 태스크 책임자 조회
+    getTaskManagers(
+        centerId: string,
+        calendarId: string,
+        taskId: string,
+        page?: number,
+        pageSize?: number
+    ): Observable<Array<CenterUser>> {
+        const url =
+            this.SERVER +
+            `/${centerId}/calendar/${calendarId}/task/${taskId}/responsibility` +
+            (page ? `page=${page}&` : '') +
+            (pageSize ? `pageSize=${pageSize}` : '')
+
+        return this.http.get<Response>(url, this.options).pipe(
+            map((res) => {
+                return res.dataset
+            }),
+            catchError(handleError)
+        )
+    }
+
     // 예약 가능한 사용자 조회
-    getReservableUsers(centerId: string, calendarId: string, taskId: string): Observable<Array<UserAbleToBook>> {
-        const url = this.SERVER + `/${centerId}/calendar/${calendarId}/task/${taskId}/users-able-to-book`
+    getReservableUsers(
+        centerId: string,
+        calendarId: string,
+        taskId: string,
+        page?: number,
+        pageSize?: number
+    ): Observable<Array<UserAbleToBook>> {
+        const url =
+            this.SERVER +
+            `/${centerId}/calendar/${calendarId}/task/${taskId}/users-able-to-book` +
+            (page ? `page=${page}&` : '') +
+            (pageSize ? `pageSize=${pageSize}` : '')
 
         return this.http.get<Response>(url, this.options).pipe(
             map((res) => {
@@ -216,8 +245,18 @@ export class CenterCalendarService {
     }
 
     // 예약한 사용자 조회
-    getReservedUsers(centerId: string, calendarId: string, taskId: string): Observable<Array<UserBooked>> {
-        const url = this.SERVER + `/${centerId}/calendar/${calendarId}/task/${taskId}/users-booked`
+    getReservedUsers(
+        centerId: string,
+        calendarId: string,
+        taskId: string,
+        page?: number,
+        pageSize?: number
+    ): Observable<Array<UserBooked>> {
+        const url =
+            this.SERVER +
+            `/${centerId}/calendar/${calendarId}/task/${taskId}/users-booked` +
+            (page ? `page=${page}&` : '') +
+            (pageSize ? `pageSize=${pageSize}` : '')
 
         return this.http.get<Response>(url, this.options).pipe(
             map((res) => {
@@ -262,7 +301,7 @@ export interface GetAllCalendarTaskReqBody {
     end_date: string
 }
 export interface CreateCalendarReqBody {
-    calendar_user_id: string
+    calendar_center_user_id: string
     type_code: 'calendar_type_user_calendar' | 'calendar_type_center_calendar'
     name: string
 }
@@ -354,5 +393,5 @@ export interface ReserveTaskReqBody {
 }
 
 export interface AddFilterInstructorReqBody {
-    instructor_user_id: string
+    instructor_center_user_id: string
 }

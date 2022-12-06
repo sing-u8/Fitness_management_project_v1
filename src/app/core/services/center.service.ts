@@ -134,11 +134,11 @@ export interface UpdateCenterRequestBody {
     open_time?: string
     close_time?: string
     all_day?: boolean
-    day_of_the_week?: Array<number> // [0sun ~ 0sat]
+    day_of_the_week?: Array<number> // [0sun ~ 6sat]
     color?: string
     contract_terms?: string
 }
 
 export interface DelegateRequestBody {
-    user_id: string
+    center_user_id: string
 }

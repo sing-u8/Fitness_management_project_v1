@@ -37,8 +37,12 @@ export class CenterUsersPaymentService {
         )
     }
     // 결제 내역 조회
-    getPayments(centerId: string, userId: string): Observable<Array<Payment>> {
-        const url = this.SERVER + `/${centerId}/users/${userId}/payment`
+    getPayments(centerId: string, userId: string, page?: number, pageSize?: number): Observable<Array<Payment>> {
+        const url =
+            this.SERVER +
+            `/${centerId}/users/${userId}/payment` +
+            (page ? `page=${page}&` : '') +
+            (pageSize ? `pageSize=${pageSize}` : '')
 
         return this.http.get<Response>(url, this.options).pipe(
             map((res) => {
@@ -53,7 +57,7 @@ export interface CreateMLPaymentReqBody {
     type_code: ContractTypeCode
     transfer?: {
         user_membership_id: string
-        transferee_user_id: string
+        transferee_center_user_id: string
     }
     memo?: string
     user_memberships?: Array<{
@@ -72,7 +76,7 @@ export interface CreateMLPaymentReqBody {
             cash: number
             unpaid: number
             memo: string
-            responsibility_user_id: string
+            responsibility_center_user_id: string
         }
     }>
     user_lockers?: Array<{
@@ -87,7 +91,7 @@ export interface CreateMLPaymentReqBody {
             cash: number
             unpaid: number
             memo: string
-            responsibility_user_id: string
+            responsibility_center_user_id: string
         }
     }>
 }

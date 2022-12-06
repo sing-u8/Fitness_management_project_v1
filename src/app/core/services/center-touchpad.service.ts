@@ -45,5 +45,5 @@ export class CenterTouchpadService {
 }
 
 export interface CheckInReqBody {
-    center_membership_number: string
+    membership_number: string
 }

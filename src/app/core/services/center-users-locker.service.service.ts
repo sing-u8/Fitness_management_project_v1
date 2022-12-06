@@ -40,8 +40,17 @@ export class CenterUsersLockerService {
     }
 
     // 락커 이용권 조회
-    getLockerTickets(centerId: string, userId: string): Observable<Array<UserLocker>> {
-        const url = this.SERVER + `/${centerId}/users/${userId}/locker`
+    getLockerTickets(
+        centerId: string,
+        userId: string,
+        page?: number,
+        pageSize?: number
+    ): Observable<Array<UserLocker>> {
+        const url =
+            this.SERVER +
+            `/${centerId}/users/${userId}/locker` +
+            (page ? `page=${page}&` : '') +
+            (pageSize ? `pageSize=${pageSize}` : '')
 
         return this.http.get<Response>(url, this.options).pipe(
             map((res) => {
@@ -242,6 +251,28 @@ export class CenterUsersLockerService {
         )
     }
 
+    // 락커 - 홀딩 조회
+    getHoldingLockerTickets(
+        centerId: string,
+        userId: string,
+        lockerId: string,
+        page?: number,
+        pageSize?: number
+    ): Observable<Array<Holding>> {
+        const url =
+            this.SERVER +
+            `/${centerId}/users/${userId}/locker/${lockerId}/holding` +
+            (page ? `page=${page}&` : '') +
+            (pageSize ? `pageSize=${pageSize}` : '')
+
+        return this.http.get<Response>(url, this.options).pipe(
+            map((res) => {
+                return res.dataset
+            }),
+            catchError(handleError)
+        )
+    }
+
     //  락커 - 홀딩수정
     modifyHoldingLockerTicket(
         centerId: string,
@@ -277,7 +308,7 @@ export class CenterUsersLockerService {
         )
     }
 
-    // 락커 이용권 사용내역 조회  // !!
+    // 락커 이용권 사용내역 조회  // !! !!
     getLockerHistory(centerId: string, userId: string, lockerId: string): Observable<Array<UserLockerHistory>> {
         const url = this.SERVER + `/${centerId}/users/${userId}/locker/${lockerId}/history`
 
@@ -302,7 +333,7 @@ export interface CreateLockerTicketReqBody {
         cash: number
         unpaid: number
         memo: string
-        responsibility_user_id: string
+        responsibility_center_user_id: string
     }
 }
 
@@ -325,7 +356,7 @@ export interface ExtendLockerTicketReqBody {
         cash: number
         unpaid: number
         memo: string
-        responsibility_user_id: string
+        responsibility_center_user_id: string
     }
 }
 
@@ -337,7 +368,7 @@ export interface RefundLockerTicketReqBody {
         phone: number
         cash: number
         memo: string
-        responsibility_user_id: string
+        responsibility_center_user_id: string
     }
 }
 
@@ -349,7 +380,7 @@ export interface ExpireLockerTicketReqBody {
         phone: number
         cash: number
         memo: string
-        responsibility_user_id: string
+        responsibility_center_user_id: string
     }
 }
 
@@ -362,7 +393,7 @@ export interface CreateLockerTicketPaymentReqBody {
         cash: number
         unpaid: number
         memo: string
-        responsibility_user_id: string
+        responsibility_center_user_id: string
     }
 }
 
@@ -373,9 +404,9 @@ export interface UpdateLockerTicektPaymentReqBody {
         vbank: number
         phone: number
         cash: number
-        memo: string
         unpaid: number
-        responsibility_user_id: string
+        memo: string
+        responsibility_center_user_id: string
     }
 }
 
