@@ -4,7 +4,7 @@
             <div class="header-text-container">
                 <ng-container *ngIf="progress == 'one'">
                     <p class="rw-typo-headline1">
-                        {{curUser?.center_user_name + '님이 '+ transferCenterUser?.center_user_name+'님에게'}}
+                        {{curUser?.name + '님이 '+ transferCenterUser?.name+'님에게'}}
                     </p>
                     <p class="rw-typo-headline1">
                         양도받을 회원권 정보를 입력해주세요.
@@ -121,11 +121,11 @@
                                 <rw-avatar
                                     size="83"
                                     fontSize="16"
-                                    [image]="curUser?.center_user_picture"
+                                    [image]="curUser?.picture"
                                     [backgroundColor]="curUser?.color"
-                                    [text]="curUser?.center_user_name"
+                                    [text]="curUser?.name"
                                 ></rw-avatar>
-                                <p class="rw-typo-title1 ">{{curUser?.center_user_name}}</p>
+                                <p class="rw-typo-title1 ">{{curUser?.name}}</p>
                             </div>
                             <div class="user-basic-info">
                                 <div class="l-info">
@@ -210,7 +210,7 @@
                         <db-contract-sign-box
                             [signData]="inputSignData"
                             [contractDate]="today"
-                            [contractorName]="curUser?.center_user_name"
+                            [contractorName]="curUser?.name"
                             (onSign)="onContractSign($event)"
                         ></db-contract-sign-box>
                         <div class="l-button">

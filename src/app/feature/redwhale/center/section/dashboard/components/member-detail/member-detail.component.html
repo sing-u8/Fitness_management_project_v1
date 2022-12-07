@@ -9,14 +9,14 @@
                                 <rw-avatar
                                     size="83"
                                     fontSize="16"
-                                    [image]="curUserData.user.center_user_picture"
+                                    [image]="curUserData.user.picture"
                                     [backgroundColor]="curUserData.user.color"
-                                    [text]="curUserData.user.center_user_name"
+                                    [text]="curUserData.user.name"
                                 ></rw-avatar>
                                 <div class="l-photo-icon" (click)="userProfile.click()">
                                     <div class="photo-icon"></div>
                                     <span class="photo-text">
-                                        {{ curUserData.user.center_user_picture ? '사진 변경' : '사진 추가' }}
+                                        {{ curUserData.user.picture ? '사진 변경' : '사진 추가' }}
                                         <input
                                             type="file"
                                             accept="image/*"
@@ -27,7 +27,7 @@
                                     </span>
 
                                     <div
-                                        *ngIf="curUserData.user.center_user_picture"
+                                        *ngIf="curUserData.user.picture"
                                         class="l-remove-icon"
                                         (click)="toggleRemoveUserProfile(); $event.stopPropagation()"
                                     >
@@ -36,7 +36,7 @@
                                 </div>
                             </div>
                             <div class="user-name rw-typo-title1" (click)="toggleShowChangeNameModal()">
-                                {{ curUserData.user.center_user_name }}
+                                {{ curUserData.user.name }}
                                 <img src="assets/icons/etc/edit.svg" />
                             </div>
                             <div class="l-user-status-tag">
@@ -63,7 +63,7 @@
                     <div class="l-info">
                         <div class="title">회원번호</div>
                         <div class="content changeable" (click)="curUserData.user && toggleShowChangeMembershipNumberModal()">
-                            {{ !curUserData.user ? '-' : (curUserData.user.center_membership_number ?? '-') }}
+                            {{ !curUserData.user ? '-' : (curUserData.user.membership_number ?? '-') }}
                             <img src="assets/icons/etc/edit.svg" />
                         </div>
                     </div>
@@ -71,11 +71,11 @@
                         <div class="title">이메일</div>
                         <div
                             class="content"
-                            [class.changeable]="(curUserData?.user && !curUserData?.user?.last_logged_at)"
-                            (click)="(curUserData?.user && !curUserData?.user?.last_logged_at) && toggleShowChangeUserEmailModal()"
+                            [class.changeable]="(curUserData?.user)"
+                            (click)="(curUserData?.user) && toggleShowChangeUserEmailModal()"
                         >
                             {{ !curUserData.user ? '-' : (curUserData.user.email ?? '-') }}
-                            <img *ngIf="(curUserData?.user && !curUserData?.user?.last_logged_at)" src="assets/icons/etc/edit.svg" />
+                            <img *ngIf="(curUserData?.user)" src="assets/icons/etc/edit.svg" />
                         </div>
                     </div>
                     <div class="l-info">

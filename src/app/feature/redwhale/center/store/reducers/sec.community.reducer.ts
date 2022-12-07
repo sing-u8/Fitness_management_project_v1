@@ -813,23 +813,23 @@ export const selectCurDrawerChatRoomIsTemp = (state: State) =>
 function centerUserToChatRoomMemberUser(members: Array<CenterUser>): Array<ChatRoomUser> {
     return _.map(members, (v) => ({
         id: v.id,
-        name: v.center_user_name,
+        name: v.name,
         permission_code: 'chat_room_user_permission_member',
         permission_code_name: '멤버',
         color: v.color,
-        picture: v.center_user_picture,
-        background: v.center_user_background,
+        picture: v.picture,
+        background: v.background,
     }))
 }
 function centerUserToChatRoomOwnerUser(curUser: CenterUser): ChatRoomUser {
     return {
         id: curUser.id,
-        name: curUser.center_user_name,
+        name: curUser.name,
         permission_code: 'chat_room_user_permission_owner',
         permission_code_name: '소유자',
         color: curUser.color,
-        picture: curUser.center_user_picture,
-        background: curUser.center_user_background,
+        picture: curUser.picture,
+        background: curUser.background,
     }
 }
 
@@ -841,29 +841,29 @@ function makeTempChatRoom(center: Center, curUser: CenterUser, members: Array<Ce
         permission_code: 'chat_room_user_permission_owner',
         permission_code_name: '소유자',
         name: members.reduce(
-            (acc, cur) => acc + (acc == '' ? `${cur.center_user_name}` : `, ${cur.center_user_name}`),
-            members.length == 1 ? '' : `${curUser.center_user_name}`
+            (acc, cur) => acc + (acc == '' ? `${cur.name}` : `, ${cur.name}`),
+            members.length == 1 ? '' : `${curUser.name}`
         ),
         center_name: center.name,
         chat_room_user_count: 1 + members.length,
         chat_room_users: [
             {
                 id: curUser.id,
-                name: curUser.center_user_name,
+                name: curUser.name,
                 permission_code: 'chat_room_user_permission_owner',
                 permission_code_name: '소유자',
                 color: curUser.color,
-                picture: curUser.center_user_picture,
-                background: curUser.center_user_background,
+                picture: curUser.picture,
+                background: curUser.background,
             },
             ...members.map((v) => ({
                 id: v.id,
-                name: v.center_user_name,
+                name: v.name,
                 permission_code: 'chat_room_user_permission_member',
                 permission_code_name: '멤버',
                 color: v.color,
-                picture: v.center_user_picture,
-                background: v.center_user_background,
+                picture: v.picture,
+                background: v.background,
             })),
         ],
         last_message: null,

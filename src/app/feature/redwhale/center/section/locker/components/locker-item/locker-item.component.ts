@@ -138,7 +138,7 @@ export class LockerItemComponent implements OnInit, OnDestroy, AfterViewInit {
                         .getItemUserLocker(this.center.id, this.curLockerCateg.id, this.lockerItem.id)
                         .subscribe((v) => {
                             if (!_.isEmpty(v)) {
-                                this.dashboardHelperService.synchronizeUserLocker(this.center.id, v.user_id)
+                                this.dashboardHelperService.synchronizeUserLocker(this.center.id, v.center_user_id)
                             }
                         })
                 },

@@ -173,9 +173,7 @@ export class LessonComponent implements OnInit, AfterViewInit, OnDestroy {
                         value: this.selectedLesson.lessonData.type_code,
                     }
                     this.lessonManagerSelectValue = {
-                        name:
-                            this.selectedLesson.lessonData.instructors[0].center_user_name ||
-                            this.selectedLesson.lessonData.instructors[0].name,
+                        name: this.selectedLesson.lessonData.instructors[0].name,
                         value: this.selectedLesson.lessonData.instructors[0],
                     }
 
@@ -332,7 +330,7 @@ export class LessonComponent implements OnInit, AfterViewInit, OnDestroy {
                 _.orderBy(
                     [
                         ...this.selectedLesson.lessonData.instructors.map((v) => ({
-                            name: v.center_user_name,
+                            name: v.name,
                             value: v,
                             checked: true,
                             disabled: false,

@@ -158,7 +158,7 @@ export class LessonEffect {
                             .filter((m) => m.role_code != 'member')
                             .forEach((v) => {
                                 newTrainerFilterList.push({
-                                    name: v.center_user_name ?? v.name,
+                                    name: v.name,
                                     value: v,
                                 })
                             })
@@ -184,7 +184,7 @@ export class LessonEffect {
                         selectedLesson.centerId,
                         selectedLesson.categId,
                         selectedLesson.lessonData.id,
-                        { instructor_user_id: instructor.value.id }
+                        { instructor_center_user_id: instructor.value.id }
                     ),
                     this.centerLessonApi.removeInstructor(
                         selectedLesson.centerId,

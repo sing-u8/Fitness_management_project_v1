@@ -254,7 +254,7 @@ export class ModifyGeneralScheduleComponent implements OnInit, AfterViewInit, On
             instructorList,
             (v) => _.findIndex(event.responsibility, (vi) => vi.id == v.instructor.id) == -1
         ).map((v) => ({
-            name: v.instructor.center_user_name,
+            name: v.instructor.name,
             value: v.instructor,
             checked: false,
         }))
@@ -262,7 +262,7 @@ export class ModifyGeneralScheduleComponent implements OnInit, AfterViewInit, On
             _.orderBy(
                 [
                     ...event.responsibility.map((v) => ({
-                        name: v.center_user_name,
+                        name: v.name,
                         value: v,
                         checked: true,
                     })),
@@ -272,7 +272,7 @@ export class ModifyGeneralScheduleComponent implements OnInit, AfterViewInit, On
             )
         )
         this.multiStaffSelectValue = event.responsibility.map((v) => ({
-            name: v.center_user_name,
+            name: v.name,
             value: v,
             checked: true,
         }))

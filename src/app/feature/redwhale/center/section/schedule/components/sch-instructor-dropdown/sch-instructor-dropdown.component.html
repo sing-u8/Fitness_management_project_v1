@@ -58,7 +58,7 @@
                 
                 <div class="l-check-box" *ngFor="let item of instructorList; let idx = index">
                     <rw-checkbox
-                        [text]="item.instructor.center_user_name"
+                        [text]="item.instructor.name"
                         [checked]="item.selected"
                         (click)="onCheckBoxSelect(idx)"
                     ></rw-checkbox>

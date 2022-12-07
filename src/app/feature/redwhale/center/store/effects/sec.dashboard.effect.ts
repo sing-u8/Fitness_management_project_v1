@@ -134,7 +134,7 @@ export class DashboardEffect {
                         .getUserList(centerId, DashboardReducer.matchMemberSelectCategTo(userListSelect.key))
                         .pipe(map((users) => _.find(users, (user) => user.id == centerUser.id))),
                     this.centerUsersApi
-                        .getUserList(centerId, '', centerUser.center_user_name)
+                        .getUserList(centerId, '', centerUser.name)
                         .pipe(map((users) => _.find(users, (user) => user.id == centerUser.id))),
                 ]).pipe(
                     switchMap(([userInCategory, userInAll]) => {
@@ -203,7 +203,7 @@ export class DashboardEffect {
                                 )
                                 .pipe(
                                     switchMap((file) => {
-                                        createdUser.center_user_picture = file[0].url
+                                        createdUser.picture = file[0].url
                                         callback ? callback() : null
                                         return [
                                             showToast({ text: '회원 등록이 완료되었습니다.' }),
@@ -238,7 +238,7 @@ export class DashboardEffect {
                     this.centerUsersPaymentApi.getPayments(centerId, centerUser.id),
                     this.centerUsersBookingService.getBookings(centerId, centerUser.id),
                     this.centerContractApi.getContract(centerId, centerUser.id),
-                    this.centerUsersApi.getUserList(centerId, '', centerUser.center_user_name),
+                    this.centerUsersApi.getUserList(centerId, '', centerUser.name),
                 ]).pipe(
                     switchMap(([lockers, memberships, payments, reservations, contracts, centerUsers]) => {
                         return [
@@ -378,19 +378,19 @@ export class DashboardEffect {
                     this.store.select(DashboardSelector.curUserData),
                 ]),
                 switchMap(([{ centerId, cb, reqBody }, userLists, curUserListSelect, curUserData]) => {
-                    const user_ids = userLists[curUserListSelect.key]
+                    const center_user_ids = userLists[curUserListSelect.key]
                         .filter((v) => v.holdSelected)
                         .map((v) => v.user.id)
                     return this.centerHoldingApi
                         .centerHolding(centerId, {
                             ...reqBody,
-                            user_ids,
+                            center_user_ids,
                         })
                         .pipe(
                             switchMap((profile) => {
                                 cb ? cb() : null
                                 let toastText =
-                                    `${user_ids.length}명의 회원권` +
+                                    `${center_user_ids.length}명의 회원권` +
                                     (reqBody.user_locker_included ? '/ 락커' : '') +
                                     ' 홀딩이 '
                                 toastText =
@@ -535,17 +535,17 @@ export class DashboardEffect {
                 this.store.select(DashboardSelector.drawerCurUserListSelect),
             ]),
             switchMap(([{ centerId, cb, reqBody }, userLists, curUserListSelect]) => {
-                const user_ids = userLists[curUserListSelect.key].filter((v) => v.holdSelected).map((v) => v.user.id)
+                const center_user_ids = userLists[curUserListSelect.key].filter((v) => v.holdSelected).map((v) => v.user.id)
                 return this.centerHoldingApi
                     .centerHolding(centerId, {
                         ...reqBody,
-                        user_ids,
+                        center_user_ids,
                     })
                     .pipe(
                         switchMap(() => {
                             cb ? cb() : null
                             let toastText =
-                                `${user_ids.length}명의 회원권` +
+                                `${center_user_ids.length}명의 회원권` +
                                 (reqBody.user_locker_included ? '/ 락커' : '') +
                                 ' 홀딩이 '
                             toastText =
@@ -585,7 +585,7 @@ export class DashboardEffect {
                         .getUserList(centerId, DashboardReducer.matchMemberSelectCategTo(userListSelect.key))
                         .pipe(map((users) => _.find(users, (user) => user.id == centerUser.id))),
                     this.centerUsersApi
-                        .getUserList(centerId, '', centerUser.center_user_name)
+                        .getUserList(centerId, '', centerUser.name)
                         .pipe(map((users) => _.find(users, (user) => user.id == centerUser.id))),
                 ]).pipe(
                     switchMap(([userInCategory, userInAll]) => {

@@ -41,7 +41,7 @@ export class PaymentLockerWindowComponent implements OnInit, AfterViewInit, OnCh
             this.staffSelect_list = []
             this.instructors.forEach((v) => {
                 this.staffSelect_list.push({
-                    name: v.center_user_name,
+                    name: v.name,
                     value: v,
                     id: v.id,
                 })

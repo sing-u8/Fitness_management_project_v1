@@ -40,7 +40,7 @@ export class DrawerModifyLessonCardComponent implements OnInit, AfterViewInit, O
         this.cardInfo.category_name = this.task.class.category_name
         this.cardInfo.color = this.task.color // !!  class color 필요
         this.cardInfo.name = this.task.class.name
-        this.cardInfo.trainer_name = this.task.class.instructors[0].center_user_name
+        this.cardInfo.trainer_name = this.task.class.instructors[0].name
         this.cardInfo.type_name = this.task.class.type_code == 'class_item_type_group' ? '그룹 수업' : '1:1 수업'
         this.cardInfo.minutes = this.task.class.duration
     }

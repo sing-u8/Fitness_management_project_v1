@@ -269,8 +269,8 @@ export class SchLessonModalComponent implements AfterViewChecked, OnChanges {
             lessonType: this.lessonData.class.type_code == 'class_item_type_onetoone' ? '1:1 수업' : '그룹 수업',
             instructor:
                 this.lessonData.responsibility.length > 1
-                    ? insts[0].center_user_name + ` 외 ${insts.length - 1}명`
-                    : insts[0].center_user_name,
+                    ? insts[0].name + ` 외 ${insts.length - 1}명`
+                    : insts[0].name,
         }
     }
 

@@ -57,7 +57,7 @@
 
 <db-detail-item-remove-modal
     [(visible)] = "showRemovePaymentModal"
-    [userName]="curUserData?.user?.center_user_name"
+    [userName]="curUserData?.user?.name"
     [item]="selectedPayment"
     [type]="'payment'"
     (cancel) = "onRemovePaymentCancel()"

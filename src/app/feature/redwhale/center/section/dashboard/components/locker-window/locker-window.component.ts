@@ -46,12 +46,12 @@ export class LockerWindowComponent implements OnInit, AfterViewInit, OnChanges {
             this.user = this.storageService.getUser()
             this.Instructors.forEach((v) => {
                 this.staffSelect_list.push({
-                    name: v.center_user_name,
+                    name: v.name,
                     value: v,
                 })
 
                 if (!this.lockerState.assignee) {
-                    if (this.user.id == v.id) this.lockerState.assignee = { name: v.center_user_name, value: v }
+                    if (this.user.id == v.id) this.lockerState.assignee = { name: v.name, value: v }
                 }
             })
         }

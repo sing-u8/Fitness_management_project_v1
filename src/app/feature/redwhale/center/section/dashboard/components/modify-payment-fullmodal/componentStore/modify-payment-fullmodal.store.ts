@@ -188,7 +188,7 @@ export class ModifyPaymentFullModalStore extends ComponentStore<State> {
                             cash: Number(membershipTicket.price.cash.replace(/[^0-9]/gi, '')),
                             unpaid: Number(membershipTicket.price.unpaid.replace(/[^0-9]/gi, '')),
                             memo: '',
-                            responsibility_user_id: membershipTicket.assignee.value.id,
+                            responsibility_center_user_id: membershipTicket.assignee.value.id,
                         },
                     }
                     return this.centerUsersMembershipApi
@@ -242,7 +242,7 @@ export class ModifyPaymentFullModalStore extends ComponentStore<State> {
                             cash: Number(lockerTicket.price.cash.replace(/[^0-9]/gi, '')),
                             unpaid: Number(lockerTicket.price.unpaid.replace(/[^0-9]/gi, '')),
                             memo: '',
-                            responsibility_user_id: lockerTicket.assignee.value.id,
+                            responsibility_center_user_id: lockerTicket.assignee.value.id,
                         },
                     }
                     return this.centerUsersLockerApi
@@ -295,7 +295,7 @@ export class ModifyPaymentFullModalStore extends ComponentStore<State> {
             assignee: {
                 name: paymentItem.responsibility_center_user_name,
                 value: undefined,
-                id: paymentItem.responsibility_user_id,
+                id: paymentItem.responsibility_center_user_id,
             },
             userLocker: userLocker,
             status: 'done',
@@ -320,7 +320,7 @@ export class ModifyPaymentFullModalStore extends ComponentStore<State> {
             assignee: {
                 name: paymentItem.responsibility_center_user_name,
                 value: undefined,
-                id: paymentItem.responsibility_user_id,
+                id: paymentItem.responsibility_center_user_id,
             },
             membershipItem: {} as MembershipItem,
             lessonList: [],

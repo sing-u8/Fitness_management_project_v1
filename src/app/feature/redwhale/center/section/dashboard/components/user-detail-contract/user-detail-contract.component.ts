@@ -54,7 +54,7 @@ export class UserDetailContractComponent implements OnInit {
                     this.isSignaturePadVisible = false
                     this.nxStore.dispatch(
                         showToast({
-                            text: `[${this.curUserData.user.center_user_name}] 전자 서명 작성이 완료되었습니다.`,
+                            text: `[${this.curUserData.user.name}] 전자 서명 작성이 완료되었습니다.`,
                         })
                     )
                 },

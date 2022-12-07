@@ -56,10 +56,10 @@
 
                     <ng-template #avatar1>
                         <div *ngIf="willRegisteredMember else avatar2" class="avatar-container">
-                            <rw-avatar [image]="willRegisteredMember.center_user_picture" [text]="willRegisteredMember.center_user_name"
+                            <rw-avatar [image]="willRegisteredMember.picture" [text]="willRegisteredMember.name"
                                 [backgroundColor]="willRegisteredMember.color" size="80" fontSize="18"></rw-avatar>
                             <div class="avatar-texts">
-                                <span class="user-name rw-typo-title2">{{willRegisteredMember.center_user_name}}</span>
+                                <span class="user-name rw-typo-title2">{{willRegisteredMember.name}}</span>
                             </div>
                         </div>
                     </ng-template>
@@ -78,7 +78,7 @@
                             <rw-avatar
                                 [image]="curUserLocker.center_user_picture"
                                 [text]="lockerItem.user_locker_center_user_name"
-                                [backgroundColor]="curUserLocker.user_color"
+                                [backgroundColor]="curUserLocker.center_user_color"
                                 size="80" fontSize="18"
                             ></rw-avatar>
                             <div class="avatar-texts">

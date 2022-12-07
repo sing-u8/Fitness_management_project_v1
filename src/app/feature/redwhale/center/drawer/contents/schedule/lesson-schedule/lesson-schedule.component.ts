@@ -340,13 +340,13 @@ export class LessonScheduleComponent implements OnInit, OnDestroy, AfterViewInit
                 this.schInstructorList,
                 (v) => _.findIndex(this.schedulingInstructors, (vi) => vi.id == v.instructor.id) == -1
             ).map((v) => ({
-                name: v.instructor.center_user_name,
+                name: v.instructor.name,
                 value: v.instructor,
                 checked: false,
             }))
 
             this.multiStaffSelectValue = _.filter(this.schedulingInstructors).map((v) => ({
-                name: v.center_user_name,
+                name: v.name,
                 value: v,
                 checked: true,
             }))
@@ -356,13 +356,13 @@ export class LessonScheduleComponent implements OnInit, OnDestroy, AfterViewInit
                 this.schInstructorList,
                 (v) => _.findIndex(classItem.instructors, (vi) => vi.id == v.instructor.id) == -1
             ).map((v) => ({
-                name: v.instructor.center_user_name,
+                name: v.instructor.name,
                 value: v.instructor,
                 checked: false,
             }))
 
             this.multiStaffSelectValue = _.filter(classItem.instructors).map((v) => ({
-                name: v.center_user_name,
+                name: v.name,
                 value: v,
                 checked: true,
             }))

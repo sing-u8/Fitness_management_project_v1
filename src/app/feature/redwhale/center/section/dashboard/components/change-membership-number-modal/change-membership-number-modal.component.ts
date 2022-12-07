@@ -114,7 +114,7 @@ export class ChangeMembershipNumberModalComponent implements AfterViewChecked, O
         this.isError = false
         this.centerUsersApi
             .updateUser(this.center.id, this.curUser.id, {
-                center_membership_number: this.membershipNumber,
+                membership_number: this.membershipNumber,
             })
             .subscribe({
                 next: () => {

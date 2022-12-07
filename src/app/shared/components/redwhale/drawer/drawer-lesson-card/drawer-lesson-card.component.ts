@@ -50,9 +50,9 @@ export class DrawerLessonCardComponent implements OnInit, AfterViewInit, OnChang
         this.cardInfo.name = this.lesson.name
         this.cardInfo.trainer_name =
             this.lesson.instructors.length > 1
-                ? this.wordService.ellipsis(this.lesson.instructors[0].center_user_name, 6) +
+                ? this.wordService.ellipsis(this.lesson.instructors[0].name, 6) +
                   ` 외 ${insts.length - 1}명`
-                : this.wordService.ellipsis(this.lesson.instructors[0].center_user_name, 6)
+                : this.wordService.ellipsis(this.lesson.instructors[0].name, 6)
         this.cardInfo.type_name = this.lesson.type_code_name
         this.cardInfo.minutes = this.lesson.duration
     }

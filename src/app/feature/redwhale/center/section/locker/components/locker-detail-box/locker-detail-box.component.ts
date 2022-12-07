@@ -317,7 +317,7 @@ export class LockerDetailBoxComponent implements OnInit, OnChanges, OnDestroy {
                     cash: -res.chargeType.pay_cash,
                     unpaid: 0,
                     memo: '',
-                    responsibility_user_id: res.chargeType.assignee_id,
+                    responsibility_center_user_id: res.chargeType.assignee_id,
                 },
             }
         } else if (this.lockerChargeType == 'modify') {
@@ -331,7 +331,7 @@ export class LockerDetailBoxComponent implements OnInit, OnChanges, OnDestroy {
                     cash: res.chargeType.pay_cash,
                     unpaid: res.chargeType.unpaid,
                     memo: '',
-                    responsibility_user_id: res.chargeType.assignee_id,
+                    responsibility_center_user_id: res.chargeType.assignee_id,
                 },
             }
         }
@@ -339,13 +339,13 @@ export class LockerDetailBoxComponent implements OnInit, OnChanges, OnDestroy {
         this.nxStore.dispatch(
             LockerActions.startExtendLockerTicket({
                 centerId: this.center.id,
-                userId: this.curUserLocker.user_id,
+                userId: this.curUserLocker.center_user_id,
                 lockerTicketId: this.curUserLocker.id,
                 reqBody,
                 cb: () => {
                     res.loadingFns.hideLoading()
                     this.closeShowAdditionalChargeModal()
-                    this.dashboardHelperService.synchronizeUserLocker(this.center.id, this.curUserLocker.user_id)
+                    this.dashboardHelperService.synchronizeUserLocker(this.center.id, this.curUserLocker.center_user_id)
                 },
             })
         )
@@ -436,7 +436,7 @@ export class LockerDetailBoxComponent implements OnInit, OnChanges, OnDestroy {
                 cash: res.chargeType.pay_cash,
                 unpaid: res.chargeType.unpaid,
                 memo: '',
-                responsibility_user_id: res.chargeType.assignee_id,
+                responsibility_center_user_id: res.chargeType.assignee_id,
             },
         }
 
@@ -468,7 +468,7 @@ export class LockerDetailBoxComponent implements OnInit, OnChanges, OnDestroy {
             this.nxStore.dispatch(
                 LockerActions.startRefundLockerTicket({
                     centerId: this.center.id,
-                    userId: this.curUserLocker.user_id,
+                    userId: this.curUserLocker.center_user_id,
                     lockerTicketId: this.curUserLocker.id,
                     reqBody: {
                         payment: {
@@ -478,13 +478,13 @@ export class LockerDetailBoxComponent implements OnInit, OnChanges, OnDestroy {
                             phone: 0,
                             cash: res.chargeType.pay_cash,
                             memo: '',
-                            responsibility_user_id: res.chargeType.assignee_id,
+                            responsibility_center_user_id: res.chargeType.assignee_id,
                         },
                     },
                     cb: () => {
                         res.loadingFns.hideLoading()
                         this.closeShowEmptyLockerModal()
-                        this.dashboardHelperService.synchronizeUserLocker(this.center.id, this.curUserLocker.user_id)
+                        this.dashboardHelperService.synchronizeUserLocker(this.center.id, this.curUserLocker.center_user_id)
                     },
                 })
             )
@@ -492,7 +492,7 @@ export class LockerDetailBoxComponent implements OnInit, OnChanges, OnDestroy {
             this.nxStore.dispatch(
                 LockerActions.startExpireLockerTicket({
                     centerId: this.center.id,
-                    userId: this.curUserLocker.user_id,
+                    userId: this.curUserLocker.center_user_id,
                     lockerTicketId: this.curUserLocker.id,
                     reqBody: {
                         payment: {
@@ -502,13 +502,13 @@ export class LockerDetailBoxComponent implements OnInit, OnChanges, OnDestroy {
                             phone: 0,
                             cash: res.chargeType.pay_cash,
                             memo: '',
-                            responsibility_user_id: res.chargeType.assignee_id,
+                            responsibility_center_user_id: res.chargeType.assignee_id,
                         },
                     },
                     cb: () => {
                         res.loadingFns.hideLoading()
                         this.closeShowEmptyLockerModal()
-                        this.dashboardHelperService.synchronizeUserLocker(this.center.id, this.curUserLocker.user_id)
+                        this.dashboardHelperService.synchronizeUserLocker(this.center.id, this.curUserLocker.center_user_id)
                     },
                 })
             )

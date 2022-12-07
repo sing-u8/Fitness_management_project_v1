@@ -414,7 +414,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
                 _.forEach(_.filter(this.instructorList$_, ['selected', true]), (value) => {
                     resoruces.push({
                         id: value.instructor.id,
-                        title: value.instructor.center_user_name,
+                        title: value.instructor.name,
                         instructorData: value.instructor,
                     })
                 })
@@ -1433,7 +1433,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
         ).subscribe((__) => {
             this.hideReserveModal()
             this.showModifyLessonEventModal()
-            const userName = this.beCanceledReservationData.taskReservation.center_user_name
+            const userName = this.beCanceledReservationData.taskReservation.name
             this.nxStore.dispatch(
                 showToast({
                     text: `${userName}님의 예약이 취소되었습니다.`,

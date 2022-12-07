@@ -197,7 +197,7 @@ export class InviteRoomModalComponent implements AfterViewChecked, OnChanges, On
 
     setShowUserList(value: string) {
         this.userList.forEach((user, idx) => {
-            user.user.center_user_name.includes(value) || user.user.phone_number.includes(value)
+            user.user.name.includes(value) || user.user.phone_number.includes(value)
                 ? (this.userList[idx].show = true)
                 : (this.userList[idx].show = false)
         })

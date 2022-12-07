@@ -155,7 +155,7 @@ export class SchInstructorDropdownComponent implements OnInit, OnChanges, OnDest
                 centerId: this.center.id,
                 centerCalendarId: this.curCenterCalendar.id,
                 reqBody: {
-                    instructor_user_id: this.willBeAddedInstructor.id,
+                    instructor_center_user_id: this.willBeAddedInstructor.id,
                 },
             })
         )
@@ -178,7 +178,7 @@ export class SchInstructorDropdownComponent implements OnInit, OnChanges, OnDest
         this.addInstructorList = false
         this.willBeAddedInstructor = centerUser
         this.addlInstructorData.text = `'${this.wordService.ellipsis(
-            centerUser.center_user_name,
+            centerUser.name,
             6
         )}' 강사를 추가하시겠어요?`
         this.toggleAddInstructorModal()

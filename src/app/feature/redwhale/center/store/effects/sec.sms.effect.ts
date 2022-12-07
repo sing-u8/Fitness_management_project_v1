@@ -167,13 +167,13 @@ export class SMSEffect {
                         reqBody = {
                             sender_phone_number: gCaller.phone_number,
                             text: generalIsAdSet ? SMSReducer.getTextWithAd(gText) : gText,
-                            receiver_user_ids: userListIds,
+                            receiver_center_user_ids: userListIds,
                         }
                     } else {
                         reqBody = {
                             sender_phone_number: gCaller.phone_number,
                             text: generalIsAdSet ? SMSReducer.getTextWithAd(gText) : gText,
-                            receiver_user_ids: userListIds,
+                            receiver_center_user_ids: userListIds,
                             reservation_datetime: `${bookDate.date} ${bookTime}`,
                         }
                     }

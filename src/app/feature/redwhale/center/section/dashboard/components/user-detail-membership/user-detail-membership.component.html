@@ -100,7 +100,7 @@
 
 <db-detail-item-remove-modal
     [(visible)] = "showRemoveModal"
-    [userName]="curUserData?.user?.center_user_name"
+    [userName]="curUserData?.user?.name"
     [item]="selectedUserMembership"
     [type]="'membership'"
     (cancel) = "toggleRemoveModal()"

@@ -264,7 +264,7 @@ export class RegisterMembershipLockerFullmodalStore extends ComponentStore<State
                                               vbank: 0,
                                               phone: 0,
                                               memo: '',
-                                              responsibility_user_id: v.assignee.value.id,
+                                              responsibility_center_user_id: v.assignee.value.id,
                                           },
                                       }
                                   })
@@ -284,7 +284,7 @@ export class RegisterMembershipLockerFullmodalStore extends ComponentStore<State
                                               vbank: 0,
                                               phone: 0,
                                               memo: '',
-                                              responsibility_user_id: v.assignee.value.id,
+                                              responsibility_center_user_id: v.assignee.value.id,
                                           },
                                       }
                                   })
@@ -311,7 +311,7 @@ export class RegisterMembershipLockerFullmodalStore extends ComponentStore<State
                                         this.lockerHelperService.synchronizeLockerItemList(reqBody.centerId)
                                         this.nxStore.dispatch(
                                             showToast({
-                                                text: `${reqBody.user.center_user_name}님의 회원권 / 락커 등록이 완료되었습니다. `,
+                                                text: `${reqBody.user.name}님의 회원권 / 락커 등록이 완료되었습니다. `,
                                             })
                                         )
                                     }
@@ -324,7 +324,7 @@ export class RegisterMembershipLockerFullmodalStore extends ComponentStore<State
                                         this.lockerHelperService.synchronizeLockerItemList(reqBody.centerId)
                                         this.nxStore.dispatch(
                                             showToast({
-                                                text: `${reqBody.user.center_user_name}님의 락커 등록이 완료되었습니다. `,
+                                                text: `${reqBody.user.name}님의 락커 등록이 완료되었습니다. `,
                                             })
                                         )
                                     }
@@ -332,7 +332,7 @@ export class RegisterMembershipLockerFullmodalStore extends ComponentStore<State
                                     func = () => {
                                         this.nxStore.dispatch(
                                             showToast({
-                                                text: `${reqBody.user.center_user_name}님의 회원권 등록이 완료되었습니다. `,
+                                                text: `${reqBody.user.name}님의 회원권 등록이 완료되었습니다. `,
                                             })
                                         )
                                     }

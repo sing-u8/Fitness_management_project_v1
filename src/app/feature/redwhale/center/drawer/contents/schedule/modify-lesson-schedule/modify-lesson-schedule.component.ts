@@ -387,7 +387,7 @@ export class ModifyLessonScheduleComponent implements OnInit, OnDestroy, AfterVi
             instructorList,
             (v) => _.findIndex(event.responsibility, (vi) => vi.id == v.instructor.id) == -1
         ).map((v) => ({
-            name: v.instructor.center_user_name,
+            name: v.instructor.name,
             value: v.instructor,
             checked: false,
         }))
@@ -395,7 +395,7 @@ export class ModifyLessonScheduleComponent implements OnInit, OnDestroy, AfterVi
             _.orderBy(
                 [
                     ...event.responsibility.map((v) => ({
-                        name: v.center_user_name,
+                        name: v.name,
                         value: v,
                         checked: true,
                     })),
@@ -405,7 +405,7 @@ export class ModifyLessonScheduleComponent implements OnInit, OnDestroy, AfterVi
             )
         )
         this.multiStaffSelectValue = event.responsibility.map((v) => ({
-            name: v.center_user_name,
+            name: v.name,
             value: v,
             checked: true,
         }))

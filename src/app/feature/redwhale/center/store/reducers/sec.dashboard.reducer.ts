@@ -367,13 +367,13 @@ export const dashboardReducer = createImmerReducer(
     }),
 
     on(DashboardActions.finishRemoveCurUserProfile, (state, { userId, profileUrl }) => {
-        state.curUserData.user.center_user_picture = profileUrl
+        state.curUserData.user.picture = profileUrl
 
         const userListsKeys = _.keys(state.usersLists) as MemberSelectCateg[]
         userListsKeys.forEach((key) => {
             state.usersLists[key].find((v, i) => {
                 if (v.user.id == userId) {
-                    state.usersLists[key][i].user.center_user_picture = profileUrl
+                    state.usersLists[key][i].user.picture = profileUrl
                     return true
                 }
                 return false
@@ -383,13 +383,13 @@ export const dashboardReducer = createImmerReducer(
     }),
 
     on(DashboardActions.finishRegisterCurUserProfile, (state, { userId, profileUrl }) => {
-        state.curUserData.user.center_user_picture = profileUrl
+        state.curUserData.user.picture = profileUrl
 
         const userListsKeys = _.keys(state.usersLists) as MemberSelectCateg[]
         userListsKeys.forEach((key) => {
             state.usersLists[key].find((v, i) => {
                 if (v.user.id == userId) {
-                    state.usersLists[key][i].user.center_user_picture = profileUrl
+                    state.usersLists[key][i].user.picture = profileUrl
                     return true
                 }
                 return false
@@ -610,13 +610,13 @@ export const dashboardReducer = createImmerReducer(
         return state
     }),
     on(DashboardActions.finishRemoveDrawerCurUserProfile, (state, { userId, profileUrl }) => {
-        state.drawerCurUserData.user.center_user_picture = profileUrl
+        state.drawerCurUserData.user.picture = profileUrl
 
         const userListsKeys = _.keys(state.drawerUsersLists) as MemberSelectCateg[]
         userListsKeys.forEach((key) => {
             state.drawerUsersLists[key].find((v, i) => {
                 if (v.user.id == userId) {
-                    state.drawerUsersLists[key][i].user.center_user_picture = profileUrl
+                    state.drawerUsersLists[key][i].user.picture = profileUrl
                     return true
                 }
                 return false
@@ -625,13 +625,13 @@ export const dashboardReducer = createImmerReducer(
         return state
     }),
     on(DashboardActions.finishRegisterDrawerCurUserProfile, (state, { userId, profileUrl }) => {
-        state.drawerCurUserData.user.center_user_picture = profileUrl
+        state.drawerCurUserData.user.picture = profileUrl
 
         const userListsKeys = _.keys(state.drawerUsersLists) as MemberSelectCateg[]
         userListsKeys.forEach((key) => {
             state.drawerUsersLists[key].find((v, i) => {
                 if (v.user.id == userId) {
-                    state.drawerUsersLists[key][i].user.center_user_picture = profileUrl
+                    state.drawerUsersLists[key][i].user.picture = profileUrl
                     return true
                 }
                 return false

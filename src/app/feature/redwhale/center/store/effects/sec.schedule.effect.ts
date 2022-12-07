@@ -78,7 +78,7 @@ export class ScheduleEffect {
                                                 centerId: center.id,
                                                 centerCalendarId: value.centerCalendar.id,
                                                 reqBody: {
-                                                    instructor_user_id: user.id,
+                                                    instructor_center_user_id: user.id,
                                                 },
                                             }),
                                             ScheduleActions.finishLoadScheduleState({
@@ -121,7 +121,7 @@ export class ScheduleEffect {
                             }),
                             showToast({
                                 text: `'${this.wordService.ellipsis(
-                                    newInstructor.center_user_name,
+                                    newInstructor.name,
                                     6
                                 )}' 강사가 추가되었습니다.`,
                             }),
@@ -143,7 +143,7 @@ export class ScheduleEffect {
                         return [
                             showToast({
                                 text: `강사별 보기 목록에서 ${this.wordService.ellipsis(
-                                    instructor.center_user_name,
+                                    instructor.name,
                                     6
                                 )}님이 삭제되었습니다.`,
                             }),
@@ -218,7 +218,7 @@ export class ScheduleEffect {
                         if (!_.isEmpty(existCal)) {
                             return this.centerCalendarApi
                                 .updateCalendar(centerId, existCal.id, {
-                                    name: centerUser.center_user_name,
+                                    name: centerUser.name,
                                 })
                                 .pipe(
                                     switchMap((calendar) => [

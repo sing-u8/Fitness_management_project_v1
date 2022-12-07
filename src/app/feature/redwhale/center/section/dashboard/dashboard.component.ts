@@ -252,7 +252,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
         confirmButtonText: '회원 삭제',
     }
     openDeleteMemberModal() {
-        this.deleteMemberData.text = `${this.willBeDeletedCenterUser.center_user_name} 회원을 삭제하시겠어요?`
+        this.deleteMemberData.text = `${this.willBeDeletedCenterUser.name} 회원을 삭제하시겠어요?`
         this.showDeleteMember = true
     }
     closeDeleteMemberModal() {

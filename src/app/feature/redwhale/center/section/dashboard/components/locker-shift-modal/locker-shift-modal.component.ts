@@ -246,7 +246,7 @@ export class LockerShiftModalComponent implements AfterViewChecked, OnChanges, O
                     this.confirm.emit({ lockerCategory: this.selectedCateg, lockerItem: this.shiftLocker })
                     this.nxStore.dispatch(
                         showToast({
-                            text: `${this.curUser.center_user_name}님의 락커가 '[${this.wordService.ellipsis(
+                            text: `${this.curUser.name}님의 락커가 '[${this.wordService.ellipsis(
                                 this.selectedCateg.name,
                                 10
                             )}] 락커 ${this.wordService.ellipsis(this.shiftLocker.name, 13)}'으로 이동되었습니다.`,

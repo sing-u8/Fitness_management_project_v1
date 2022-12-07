@@ -1,95 +1,88 @@
 <div
-  *ngIf="!doHide"
-  class="user-list-card"
-  [class.selected-user] = "curUserData.user?.id == cardItem.user.id"
-  (click) ="holdMode ? toggleHold() : clickCard()"
+    *ngIf="!doHide"
+    class="user-list-card"
+    [class.selected-user]="curUserData.user?.id == cardItem.user.id"
+    (click)="holdMode ? toggleHold() : clickCard()"
 >
+    <div class="card-left">
+        <div class="user-avatar">
+            <rw-avatar
+                [image]="cardItem.user.picture"
+                [text]="cardItem.user.name"
+                [backgroundColor]="cardItem.user.color"
+                size="45"
+                fontSize="12"
+            ></rw-avatar>
 
-  <div class="card-left">
-    <div class="user-avatar">
-      <rw-avatar
-        [image]="cardItem.user.center_user_picture"
-        [text]="cardItem.user.center_user_name"
-        [backgroundColor]="cardItem.user.color"
-        size="45"
-        fontSize="12"
-      ></rw-avatar>
-
-      <!-- <div *ngIf="cardItem.user.elapsed_days_of_last_expired_membership_ticket" class="expired-avatar">
+            <!-- <div *ngIf="cardItem.user.elapsed_days_of_last_expired_membership_ticket" class="expired-avatar">
         <span class="rw-typo-subtext0">만료</span>
       </div> -->
-    </div>
-
-    <div class="user-info">
-      <span class="rw-typo-bodytext0-bold">{{cardItem.user.center_user_name}}</span>
-      <span class="rw-typo-subtext1">{{cardItem.user.phone_number | phoneNumber}}</span>
-    </div>
-  </div>
-
-  <div class="card-right">
-
-    <div *ngIf="!holdMode; else holding_mode">
-
-      <div
-        *ngIf="type == 'member' && ( cardItem.user.total_unpaid != 0
-              || imminentDateObj.isImminent == true); else unpaid "
-        class="member-right"
-      >
-        <img *ngIf="imminentDateObj.isImminent == true" src="assets/icons/etc/exceed_period.svg">
-        <img *ngIf="cardItem.user.total_unpaid != 0" src="assets/icons/etc/unpaid_amount_grey.svg">
-        <div class="tooltip">
-          <div *ngIf="imminentDateObj.isImminent == true" class="tooltip-text">
-            <img src="assets/icons/etc/exceed_period_white.svg">
-            <span>{{imminentDateObj.imminentDate}}일 후 만료</span>
-          </div>
-          <div *ngIf="cardItem.user.total_unpaid != 0" class="tooltip-text">
-            <img src="assets/icons/etc/unpaid_amount_white.svg">
-            <p class="tooltip-pay">{{cardItem.user.total_unpaid | numberWithCommas}}원 미수</p>
-          </div>
         </div>
-      </div>
 
-      <!-- <ng-template #attendance>
+        <div class="user-info">
+            <span class="rw-typo-bodytext0-bold">{{ cardItem.user.name }}</span>
+            <span class="rw-typo-subtext1">{{ cardItem.user.phone_number | phoneNumber }}</span>
+        </div>
+    </div>
+
+    <div class="card-right">
+        <div *ngIf="!holdMode; else holding_mode">
+            <div
+                *ngIf="
+                    type == 'member' && (cardItem.user.total_unpaid != 0 || imminentDateObj.isImminent == true);
+                    else unpaid
+                "
+                class="member-right"
+            >
+                <img *ngIf="imminentDateObj.isImminent == true" src="assets/icons/etc/exceed_period.svg" />
+                <img *ngIf="cardItem.user.total_unpaid != 0" src="assets/icons/etc/unpaid_amount_grey.svg" />
+                <div class="tooltip">
+                    <div *ngIf="imminentDateObj.isImminent == true" class="tooltip-text">
+                        <img src="assets/icons/etc/exceed_period_white.svg" />
+                        <span>{{ imminentDateObj.imminentDate }}일 후 만료</span>
+                    </div>
+                    <div *ngIf="cardItem.user.total_unpaid != 0" class="tooltip-text">
+                        <img src="assets/icons/etc/unpaid_amount_white.svg" />
+                        <p class="tooltip-pay">{{ cardItem.user.total_unpaid | numberWithCommas }}원 미수</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- <ng-template #attendance>
         <div *ngIf="type == 'attendance' ; else unpaid" class="member-right">
           <span class="rw-typo-subtext0-regular">{{attendanceTime}} 출석</span>
         </div>
       </ng-template> -->
 
-      <ng-template #unpaid>
-        <div *ngIf="type == 'unpaid' ; else imminent" class="member-right">
-          <img src="assets/icons/etc/unpaid_amount_grey.svg">
-          <span class="rw-typo-subtext0 unpaid-price">{{cardItem.user.total_unpaid | numberWithCommas}}</span>
+            <ng-template #unpaid>
+                <div *ngIf="type == 'unpaid'; else imminent" class="member-right">
+                    <img src="assets/icons/etc/unpaid_amount_grey.svg" />
+                    <span class="rw-typo-subtext0 unpaid-price">{{
+                        cardItem.user.total_unpaid | numberWithCommas
+                    }}</span>
+                </div>
+            </ng-template>
+
+            <ng-template #imminent>
+                <div *ngIf="type == 'imminent'; else expired" class="member-right">
+                    <img *ngIf="true" src="assets/icons/etc/exceed_period.svg" />
+                    <span class="rw-typo-subtext0-regular unpaid-price"
+                        >{{ imminentDateObj.imminentDate }}일 후 만료</span
+                    >
+                </div>
+            </ng-template>
+
+            <ng-template #expired>
+                <div *ngIf="type == 'expired'" class="member-right">
+                    <!-- <span class="rw-typo-subtext0-regular unpaid-price">{{cardItem.user.elapsed_days_of_last_expired_membership_ticket}}일 전 만료</span> -->
+                </div>
+            </ng-template>
         </div>
-      </ng-template>
 
-      <ng-template #imminent>
-        <div *ngIf="type == 'imminent' ; else expired" class="member-right">
-          <img *ngIf="true" src="assets/icons/etc/exceed_period.svg">
-          <span class="rw-typo-subtext0-regular unpaid-price">{{imminentDateObj.imminentDate}}일 후 만료</span>
-        </div>
-      </ng-template>
+        <ng-template #holding_mode>
+            <rw-checkbox [checked]="cardItem.holdSelected"></rw-checkbox>
+        </ng-template>
 
-      <ng-template #expired>
-        <div *ngIf="type == 'expired'" class="member-right">
-          <!-- <span class="rw-typo-subtext0-regular unpaid-price">{{cardItem.user.elapsed_days_of_last_expired_membership_ticket}}일 전 만료</span> -->
-        </div>
-      </ng-template>
-
-
+        <!---  체크 박스(holdSelected)를 다른 페이지 전환 시 재 진입 시에도 유지시킬려면 ngif를 쓰지 않아야 한다-->
     </div>
-
-    <ng-template #holding_mode>
-
-      <rw-checkbox
-        [checked]="cardItem.holdSelected"
-      ></rw-checkbox>
-
-    </ng-template>
-
-    <!---  체크 박스(holdSelected)를 다른 페이지 전환 시 재 진입 시에도 유지시킬려면 ngif를 쓰지 않아야 한다-->
-
-  </div>
-
-
-
 </div>

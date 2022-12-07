@@ -151,7 +151,7 @@ export class MemberListModalComponent implements AfterViewChecked, OnChanges, Af
 
     filterMemberList(memberList: CenterUser[], text: string) {
         return memberList.filter(this.filterFn).filter((item) => {
-            return item.center_user_name.includes(text) || item.phone_number.includes(text)
+            return item.name.includes(text) || item.phone_number.includes(text)
         })
     }
 }

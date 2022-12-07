@@ -153,7 +153,7 @@ export const finishRegisterCurUserProfile = createAction(
 
 export const startCenterHolding = createAction(
     `[${FeatureKey}] Start Center Hold`,
-    props<{ centerId: string; reqBody: Omit<CenterHoldingReqBody, 'user_ids'>; cb?: () => void }>()
+    props<{ centerId: string; reqBody: Omit<CenterHoldingReqBody, 'center_user_ids'>; cb?: () => void }>()
 )
 
 export const startContractSign = createAction(
@@ -293,7 +293,7 @@ export const finishRegisterDrawerCurUserProfile = createAction(
 
 export const startDrawerCenterHolding = createAction(
     `[${FeatureKey}] Start Drawer Center Hold`,
-    props<{ centerId: string; reqBody: Omit<CenterHoldingReqBody, 'user_ids'>; cb?: () => void }>()
+    props<{ centerId: string; reqBody: Omit<CenterHoldingReqBody, 'center_user_ids'>; cb?: () => void }>()
 )
 
 export const startSetDrawerCurUserData = createAction(

@@ -37,16 +37,16 @@
         <div class="rw-typo-bodytext1 avatar-container">
             <rw-avatar
                 *ngIf="curStaffs.length > 0"
-                [image]="curStaffs[0] ? curStaffs[0]?.center_user_picture : null"
-                [text]="curStaffs[0] ? curStaffs[0]?.center_user_name : 'null'"
+                [image]="curStaffs[0] ? curStaffs[0]?.picture : null"
+                [text]="curStaffs[0] ? curStaffs[0]?.name : 'null'"
                 size="22"
                 fontSize="10"
             ></rw-avatar>
             <span class="rw-typo-bodytext1">
                 {{
                     curStaffs.length > 1
-                    ? curStaffs[0]?.center_user_name + ' 외 ' + (curStaffs.length - 1) +'명'
-                    : curStaffs[0]?.center_user_name ?? '담당자 없음'
+                    ? curStaffs[0]?.name + ' 외 ' + (curStaffs.length - 1) +'명'
+                    : curStaffs[0]?.name ?? '담당자 없음'
                 }}
             </span>
         </div>

@@ -98,11 +98,11 @@ export class LockerChargeModalComponent implements OnChanges, AfterViewChecked, 
                 this.staffList = instructors
                 instructors.forEach((v) => {
                     this.staffSelect_list.push({
-                        name: v.center_user_name ?? v.name,
+                        name: v.name,
                         value: v,
                     })
                     this.user.id == v.id
-                        ? (this.lockerStaffSelectValue = { name: v.center_user_name ?? v.name, value: v })
+                        ? (this.lockerStaffSelectValue = { name: v.name, value: v })
                         : null
                 })
             },
@@ -174,7 +174,7 @@ export class LockerChargeModalComponent implements OnChanges, AfterViewChecked, 
         this.total = '0'
         this.staffList.forEach((v) => {
             this.user.id == v.id
-                ? (this.lockerStaffSelectValue = { name: v.center_user_name ?? v.name, value: v })
+                ? (this.lockerStaffSelectValue = { name: v.name, value: v })
                 : null
         })
     }

@@ -47,14 +47,14 @@
                             <rw-avatar
                                 size="83"
                                 fontSize="16"
-                                [image]="curCenterUser.center_user_picture"
+                                [image]="curCenterUser.picture"
                                 [backgroundColor]="curCenterUser.color"
-                                [text]="curCenterUser.center_user_name"
+                                [text]="curCenterUser.name"
                             ></rw-avatar>
                             <div class="l-photo-icon" (click)="userProfile.click()">
                                 <div class="photo-icon"></div>
                                 <span class="photo-text">
-                                        {{ curCenterUser.center_user_picture ? '사진 변경' : '사진 추가' }}
+                                        {{ curCenterUser.picture ? '사진 변경' : '사진 추가' }}
                                     <input
                                         type="file"
                                         accept="image/*"
@@ -65,7 +65,7 @@
                                     </span>
 
                                 <div
-                                    *ngIf="curCenterUser.center_user_picture"
+                                    *ngIf="curCenterUser.picture"
                                     class="l-remove-icon"
                                     (click)="toggleRemoveUserProfile(); $event.stopPropagation()"
                                 >
@@ -74,7 +74,7 @@
                             </div>
                         </div>
                         <div class="rw-typo-title1 user-name" (click) = "toggleShowChangeNameModal()">
-                            {{curCenterUser?.center_user_name}}
+                            {{curCenterUser?.name}}
                             <img src="assets/icons/etc/edit.svg">
                         </div>
                         <rw-member-role-select
@@ -128,7 +128,7 @@
                     <div class="user-data">
                         <span class="rw-typo-bodytext1_grey prop">회원번호</span>
                         <div class="rw-typo-bodytext1 value changeable" (click)="curUserData.user && toggleShowChangeMembershipNumberModal()">
-                            {{!curCenterUser ? '-' : curCenterUser.center_membership_number ?? '-'}}
+                            {{!curCenterUser ? '-' : curCenterUser.membership_number ?? '-'}}
                             <img src="assets/icons/etc/edit.svg" />
                         </div>
                     </div>
@@ -140,11 +140,11 @@
                         <span class="rw-typo-bodytext1_grey prop">이메일</span>
                         <div
                             class="rw-typo-bodytext1 value"
-                            [class.changeable]="(!curUserData?.user?.email_verified && !curUserData?.user?.email)"
-                            (click)="(!curUserData?.user?.email_verified && !curUserData?.user?.email) && toggleShowChangeUserEmailModal()"
+                            [class.changeable]="(!curUserData?.user?.email)"
+                            (click)="(!curUserData?.user?.email) && toggleShowChangeUserEmailModal()"
                         >
                             {{!curCenterUser ? '-' : curCenterUser.email}}
-                            <img *ngIf="(!curUserData?.user?.email_verified && !curUserData?.user?.email)" src="assets/icons/etc/edit.svg" />
+                            <img *ngIf="(!curUserData?.user?.email)" src="assets/icons/etc/edit.svg" />
                         </div>
                     </div>
                     <div class="user-data">

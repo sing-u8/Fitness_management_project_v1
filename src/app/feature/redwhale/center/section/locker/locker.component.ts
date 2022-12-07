@@ -299,11 +299,11 @@ export class LockerComponent implements OnInit, AfterViewInit, OnDestroy {
         this.nxStore.dispatch(
             LockerActions.startMoveLockerTicket({
                 centerId: this.center.id,
-                userId: this.curUserLocker.user_id,
+                userId: this.curUserLocker.center_user_id,
                 lockerTicketId: this.curUserLocker.id,
                 startLockerReqBody: { locker_item_id: this.willBeMovedLockerItem.id },
                 cb: () => {
-                    this.dashboardHelperService.synchronizeUserLocker(this.center.id, this.curUserLocker.user_id)
+                    this.dashboardHelperService.synchronizeUserLocker(this.center.id, this.curUserLocker.center_user_id)
                 },
             })
         )

@@ -30,7 +30,7 @@
 
 <rw-signature-pad-modal
     [(visible)]="isSignaturePadVisible"
-    [contractorName]="curUserData?.user?.center_user_name"
+    [contractorName]="curUserData?.user?.name"
     [blockClickOutside]="true"
     (cancel)="onCancelSignaturePad()"
     (confirm)="onConfirmSignaturePad($event)"

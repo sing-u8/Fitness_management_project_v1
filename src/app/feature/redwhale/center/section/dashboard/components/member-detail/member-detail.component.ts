@@ -190,7 +190,7 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
     }
     onAttend() {
         this.attendUserModalText.text = `${this.wordService.ellipsis(
-            this.curUserData.user.center_user_name,
+            this.curUserData.user.name,
             4
         )}님을 출석 처리하시겠어요?`
         this.doShowAttendModal = true
@@ -227,7 +227,7 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
 
     onCancelAttend() {
         this.cancelAttendUserModalText.text = `${this.wordService.ellipsis(
-            this.curUserData.user.center_user_name,
+            this.curUserData.user.name,
             4
         )}님을 출석 취소하시겠어요?`
         this.doShowCancelAttendModal = true
@@ -247,7 +247,7 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
             this.nxStore.dispatch(
                 showToast({
                     text: `${this.wordService.ellipsis(
-                        this.curUserData.user.center_user_name,
+                        this.curUserData.user.name,
                         4
                     )}님이 출석 취소되었습니다.`,
                 })
@@ -268,8 +268,8 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
         if (!_.isEmpty(changes['curUserData'])) {
             if (changes['curUserData'].previousValue?.user?.id != changes['curUserData'].currentValue['user']?.id) {
                 this.memoForm.setValue(changes['curUserData'].currentValue['user']?.['center_user_memo'] ?? '')
-                this.userNameForModal = this.curUserData?.user?.center_user_name ?? ''
-                this.userMembershipNumberForModal = this.curUserData?.user?.center_membership_number ?? ''
+                this.userNameForModal = this.curUserData?.user?.name ?? ''
+                this.userMembershipNumberForModal = this.curUserData?.user?.membership_number ?? ''
 
                 _.forIn(this.userRole, (value, key) => {
                     this.userRole[key] = key == this.curUserData?.user?.role_code
@@ -310,11 +310,11 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
     //
 
     updateUserMemo(memoValue: string) {
-        if (this.curUserData.user.center_user_memo != memoValue) {
+        if (this.curUserData.user.memo != memoValue) {
             this.nxStore.dispatch(
                 DashboardActions.startSetCurUserData({
                     centerId: this.center.id,
-                    reqBody: { center_user_memo: memoValue },
+                    reqBody: { memo: memoValue },
                     userId: this.curUserData.user.id,
                 })
             )
@@ -328,11 +328,11 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
         this.doShowChangeNameModal = !this.doShowChangeNameModal
     }
     onChangeNameConfirm(changedName: string) {
-        if (this.curUserData.user.center_user_name != changedName) {
+        if (this.curUserData.user.name != changedName) {
             this.nxStore.dispatch(
                 DashboardActions.startSetCurUserData({
                     centerId: this.center.id,
-                    reqBody: { center_user_name: changedName },
+                    reqBody: { name: changedName },
                     userId: this.curUserData.user.id,
                     callback: () => {
                         this.toggleShowChangeNameModal()
@@ -341,7 +341,7 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
                         this.nxStore.dispatch(CenterCommonActions.startGetInstructors({ centerId: this.center.id }))
 
                         const userCopy = _.cloneDeep(this.curUserData.user)
-                        userCopy.center_user_name = changedName
+                        userCopy.name = changedName
                         this.scheduleHelperService.startSynchronizeInstructorList(this.center.id, userCopy)
                     },
                 })
@@ -360,7 +360,7 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
         this.nxStore.dispatch(
             DashboardActions.startSetCurUserData({
                 centerId: this.center.id,
-                reqBody: { center_membership_number: membershipNumber },
+                reqBody: { membership_number: membershipNumber },
                 userId: this.curUserData.user.id,
                 blockEffect: true,
                 callback: () => {
@@ -407,12 +407,12 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
             DashboardActions.startRemoveCurUserProfile({
                 centerId: this.center.id,
                 userId: this.curUserData.user.id,
-                profileUrl: this.curUserData.user.center_user_picture,
+                profileUrl: this.curUserData.user.picture,
                 callback: () => {
                     this.toggleRemoveUserProfile()
                     this.nxStore.dispatch(
                         showToast({
-                            text: `${this.curUserData.user.center_user_name}님의 프로필 사진이 삭제되었습니다.`,
+                            text: `${this.curUserData.user.name}님의 프로필 사진이 삭제되었습니다.`,
                         })
                     )
                     this.nxStore.dispatch(CenterCommonActions.startGetMembers({ centerId: this.center.id }))
@@ -424,8 +424,8 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
     registerUserProfile(picture: any) {
         if (!this.isFileExist(picture.files)) return
         const files: FileList = _.assign({ length: 1 }, picture.files)
-        if (!_.isEmpty(this.curUserData.user.center_user_picture)) {
-            this.fileService.deleteFile(this.curUserData.user.center_user_picture).subscribe(() => {
+        if (!_.isEmpty(this.curUserData.user.picture)) {
+            this.fileService.deleteFile(this.curUserData.user.picture).subscribe(() => {
                 this.nxStore.dispatch(
                     DashboardActions.startRegisterCurUserProfile({
                         userId: this.curUserData.user.id,
@@ -438,7 +438,7 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
                         callback: () => {
                             this.nxStore.dispatch(
                                 showToast({
-                                    text: `${this.curUserData.user.center_user_name}님의 프로필 사진이 변경되었습니다.`,
+                                    text: `${this.curUserData.user.name}님의 프로필 사진이 변경되었습니다.`,
                                 })
                             )
                             this.nxStore.dispatch(CenterCommonActions.startGetMembers({ centerId: this.center.id }))
@@ -460,7 +460,7 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
                     callback: () => {
                         this.nxStore.dispatch(
                             showToast({
-                                text: `${this.curUserData.user.center_user_name}님의 프로필 사진이 변경되었습니다.`,
+                                text: `${this.curUserData.user.name}님의 프로필 사진이 변경되었습니다.`,
                             })
                         )
                         this.nxStore.dispatch(CenterCommonActions.startGetMembers({ centerId: this.center.id }))
@@ -523,10 +523,10 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
         const isSameRole = this.curUserData?.user?.role_code == changedRole
         this.changeRoleModalText.text =
             changedRole == 'owner'
-                ? `${this.wordService.ellipsis(this.curUserData.user.center_user_name, 4)}님에게 ${
+                ? `${this.wordService.ellipsis(this.curUserData.user.name, 4)}님에게 ${
                       this.roleName[changedRole]
                   }를 양도하시겠어요?`
-                : `${this.wordService.ellipsis(this.curUserData.user.center_user_name, 4)}님을 ${
+                : `${this.wordService.ellipsis(this.curUserData.user.name, 4)}님을 ${
                       this.roleName[changedRole]
                   }(으)로 변경하시겠어요?`
         this.changeRoleModalText.confirmButtonText = changedRole == 'owner' ? '운영자 양도' : '변경'
@@ -555,13 +555,13 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
                 DashboardActions.startDelegate({
                     centerId: this.center.id,
                     reqBody: {
-                        user_id: this.curUserData.user.id,
+                        center_user_id: this.curUserData.user.id,
                     },
                     callback: () => {
                         this.doShowChangeRoleModal = false
                         this.nxStore.dispatch(
                             showToast({
-                                text: `${this.wordService.ellipsis(this.curUserData.user.center_user_name, 4)}님이 ${
+                                text: `${this.wordService.ellipsis(this.curUserData.user.name, 4)}님이 ${
                                     this.roleName[roleKey]
                                 }로 변경되었습니다.`,
                             })
@@ -596,7 +596,7 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
                         this.doShowChangeRoleModal = false
                         this.nxStore.dispatch(
                             showToast({
-                                text: `${this.wordService.ellipsis(this.curUserData.user.center_user_name, 4)}님이 ${
+                                text: `${this.wordService.ellipsis(this.curUserData.user.name, 4)}님이 ${
                                     this.roleName[roleKey]
                                 }(으)로 변경되었습니다.`,
                             })

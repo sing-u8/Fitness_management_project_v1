@@ -140,7 +140,7 @@ export class RegisterLockerModalComponent implements AfterViewChecked, OnChanges
                             _.filter(members, (member) => {
                                 const input = _.trim(v)
                                 return (
-                                    _.includes(member.center_user_name, input) || _.includes(member.phone_number, input)
+                                    _.includes(member.name, input) || _.includes(member.phone_number, input)
                                 )
                             })
                         )

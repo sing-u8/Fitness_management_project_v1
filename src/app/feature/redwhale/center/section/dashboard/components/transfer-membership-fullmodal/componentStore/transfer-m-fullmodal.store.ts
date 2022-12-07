@@ -138,7 +138,7 @@ export class TransferMembershipFullmodalStore extends ComponentStore<State> {
                         type_code: 'contract_type_transfer',
                         transfer: {
                             user_membership_id: param.transferUserMembership.id,
-                            transferee_user_id: param.transferUser.id,
+                            transferee_center_user_id: param.transferUser.id,
                         },
                         memo: param.memo,
                         user_memberships: [
@@ -161,7 +161,7 @@ export class TransferMembershipFullmodalStore extends ComponentStore<State> {
                                     vbank: 0,
                                     phone: 0,
                                     memo: '',
-                                    responsibility_user_id: mItem.assignee.value.id,
+                                    responsibility_center_user_id: mItem.assignee.value.id,
                                 },
                             },
                         ],

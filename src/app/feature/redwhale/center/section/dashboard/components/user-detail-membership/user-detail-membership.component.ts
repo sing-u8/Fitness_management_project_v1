@@ -268,7 +268,7 @@ export class UserDetailMembershipComponent implements OnInit {
                 vbank: 0,
                 phone: 0,
                 memo: '',
-                responsibility_user_id: this.chargeData.assignee_id,
+                responsibility_center_user_id: this.chargeData.assignee_id,
             },
         }
 
@@ -334,7 +334,7 @@ export class UserDetailMembershipComponent implements OnInit {
                 vbank: 0,
                 phone: 0,
                 memo: '',
-                responsibility_user_id: this.chargeData.assignee_id,
+                responsibility_center_user_id: this.chargeData.assignee_id,
             },
         }
         this.centerUsersMembershipService
@@ -369,7 +369,7 @@ export class UserDetailMembershipComponent implements OnInit {
                 vbank: 0,
                 phone: 0,
                 memo: '',
-                responsibility_user_id: this.chargeData.assignee_id,
+                responsibility_center_user_id: this.chargeData.assignee_id,
             },
         }
         this.centerUsersMembershipService

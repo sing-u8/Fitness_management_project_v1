@@ -7,8 +7,8 @@
     <div class="card-left">
         <div class="user-avatar">
             <rw-avatar
-                [image]="cardItem.user.center_user_picture"
-                [text]="cardItem.user.center_user_name"
+                [image]="cardItem.user.picture"
+                [text]="cardItem.user.name"
                 [backgroundColor]="cardItem.user.color"
                 size="45"
                 fontSize="12"
@@ -16,7 +16,7 @@
         </div>
         
         <div class="user-info">
-            <span class="rw-typo-bodytext0-bold">{{cardItem.user.center_user_name}}</span>
+            <span class="rw-typo-bodytext0-bold">{{cardItem.user.name}}</span>
             <span class="rw-typo-subtext1">{{cardItem.user.phone_number | phoneNumber}}</span>
         </div>
     </div>

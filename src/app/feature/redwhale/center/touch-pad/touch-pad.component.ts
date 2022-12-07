@@ -96,7 +96,7 @@ export class TouchPadComponent implements OnInit, OnDestroy {
         this.isConfirmProcess = true
         this.spinner.show('touch_pad_check_in')
         this.centerTouchPadService
-            .checkIn(this.center.id, { center_membership_number: this.touchPadInput })
+            .checkIn(this.center.id, { membership_number: this.touchPadInput })
             .pipe(
                 map((centerUser) => {
                     return forkJoin([
@@ -121,7 +121,7 @@ export class TouchPadComponent implements OnInit, OnDestroy {
                     value.subscribe(({ lockerTickets, membershipTickets }) => {
                         this.lockerList = lockerTickets
                         this.membershipList = membershipTickets
-                        this.memberName = this.checkedInMember.center_user_name
+                        this.memberName = this.checkedInMember.name
 
                         this.showAttendanceModal()
                         this.isConfirmProcess = false

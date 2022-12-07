@@ -253,7 +253,7 @@ export class GeneralScheduleComponent implements OnInit, AfterViewInit, OnDestro
         this.multiStaffSelect_list = []
 
         this.multiStaffSelect_list = this.instructorList.map((v) => ({
-            name: v.instructor.center_user_name,
+            name: v.instructor.name,
             value: v.instructor,
             checked: false,
         }))
@@ -263,7 +263,7 @@ export class GeneralScheduleComponent implements OnInit, AfterViewInit, OnDestro
                 schedulingInstructors,
                 (cu) => _.findIndex(this.multiStaffSelect_list, (msi) => msi.value.id == cu.id) != -1
             ).map((v) => ({
-                name: v.center_user_name,
+                name: v.name,
                 value: v,
                 checked: true,
             }))
@@ -273,7 +273,7 @@ export class GeneralScheduleComponent implements OnInit, AfterViewInit, OnDestro
                 this.multiStaffSelect_list,
                 (msi) => msi.value.id == this.user.id
             ).map((v) => ({
-                name: v.value.center_user_name,
+                name: v.value.name,
                 value: v.value,
                 checked: true,
             }))

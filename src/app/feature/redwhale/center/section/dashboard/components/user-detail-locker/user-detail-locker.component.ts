@@ -290,7 +290,7 @@ export class UserDetailLockerComponent implements OnInit {
                 vbank: 0,
                 phone: 0,
                 memo: '',
-                responsibility_user_id: this.chargeData.assignee_id,
+                responsibility_center_user_id: this.chargeData.assignee_id,
             },
         }
         this.centerUsersLockerService
@@ -325,7 +325,7 @@ export class UserDetailLockerComponent implements OnInit {
                 vbank: 0,
                 phone: 0,
                 memo: '',
-                responsibility_user_id: this.chargeData.assignee_id,
+                responsibility_center_user_id: this.chargeData.assignee_id,
             },
         }
         this.centerUsersLockerService
@@ -360,7 +360,7 @@ export class UserDetailLockerComponent implements OnInit {
                 vbank: 0,
                 phone: 0,
                 memo: '',
-                responsibility_user_id: this.chargeData.assignee_id,
+                responsibility_center_user_id: this.chargeData.assignee_id,
             },
         }
         this.centerUsersLockerService
