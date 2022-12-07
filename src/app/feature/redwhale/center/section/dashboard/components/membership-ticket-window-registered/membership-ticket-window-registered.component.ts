@@ -26,6 +26,7 @@ export class MembershipTicketWindowRegisteredComponent implements OnInit, AfterV
         if (this.type == 'register') {
             this.getSelectedLessonList()
         }
+        console.log('MembershipTicketWindowRegisteredComponent -- ', this.membershipState)
     }
     ngOnChanges(changes: SimpleChanges): void {}
     // selected lesson item method

@@ -2,7 +2,7 @@
 
     <div class="rw-typo-bodytext1 col1">{{reservation.start | dateFormat:'YYYY.MM.DD (dd) HH:mm'}} - {{reservation.end | dateFormat:'HH:mm'}}</div>
     <div rwEllipsisDropdown [lineClamp]="2" class="rw-typo-bodytext0-bold col2">{{reservation.name}}</div>
-    <div class="rw-typo-bodytext1 col3">{{reservation.instructors[0].center_user_name}}</div>
+    <div class="rw-typo-bodytext1 col3">{{reservation.instructors[0].name}}</div>
     <div class="col4">
         <div class="col4__left">
             <div
