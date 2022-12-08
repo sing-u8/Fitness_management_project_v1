@@ -36,6 +36,7 @@ export class MembershipTicketWindowComponent implements OnInit, AfterViewInit, O
     public staffSelect_list: Array<{ name: string; value: CenterUser }> = []
     public center: Center
     public user: User
+    public centerUser:CenterUser
     // public status: 'modify' | 'done' = 'modify'
 
     constructor(private storageService: StorageService) {}
@@ -43,6 +44,7 @@ export class MembershipTicketWindowComponent implements OnInit, AfterViewInit, O
     ngOnInit(): void {
         this.center = this.storageService.getCenter()
         this.user = this.storageService.getUser()
+        this.centerUser = this.storageService.getCenterUser()
     }
     ngAfterViewInit(): void {
         // _.forEach(this.selectedMembershipTicket.lesson_item_list, (value) => {
@@ -63,10 +65,11 @@ export class MembershipTicketWindowComponent implements OnInit, AfterViewInit, O
                     value: v,
                 })
 
-                if (!this.membershipState.assignee) {
-                    if (this.user.id == v.id) {
-                        this.membershipState.assignee = { name: v.name, value: v }
-                    }
+                if (
+                    _.isEmpty(this.membershipState.assignee) &&
+                    this.centerUser.id == v.id
+                ) {
+                    this.membershipState.assignee = { name: v.name, value: v }
                 }
             })
         }

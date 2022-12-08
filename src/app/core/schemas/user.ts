@@ -1,5 +1,6 @@
 import { Center } from './center'
 import { PermissionCategory } from '@schemas/permission-category'
+import { CenterUser } from "@schemas/center-user";
 
 export interface User {
     // default information
@@ -32,6 +33,7 @@ export interface User {
 
     // -- / frontend props
     selected_center?: Center
+    selected_center_user?:CenterUser
     sign_in_method?: string
     fcm_token: string
 }

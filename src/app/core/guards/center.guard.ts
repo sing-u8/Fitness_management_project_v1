@@ -37,7 +37,8 @@ export class CenterGuard implements CanActivate {
             return of(true)
         } else {
             return this.CenterService.checkMemeber(address).pipe(
-                map((res) => {
+                map((cu) => {
+                    this.storageService.setCenterUser(cu)
                     this.addrData.addr = address
                     this.addrData.isChecked = true
 

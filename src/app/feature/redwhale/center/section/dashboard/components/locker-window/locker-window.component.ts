@@ -30,12 +30,14 @@ export class LockerWindowComponent implements OnInit, AfterViewInit, OnChanges {
 
     public gym: Center
     public user: User
+    public centerUser:CenterUser
 
     constructor(private storageService: StorageService) {}
 
     ngOnInit(): void {
         this.gym = this.storageService.getCenter()
         this.user = this.storageService.getUser()
+        this.centerUser = this.storageService.getCenterUser()
     }
     ngAfterViewInit(): void {
         this.dayDiff = String(this.getDayDiff(this.lockerState.date))
@@ -50,8 +52,11 @@ export class LockerWindowComponent implements OnInit, AfterViewInit, OnChanges {
                     value: v,
                 })
 
-                if (!this.lockerState.assignee) {
-                    if (this.user.id == v.id) this.lockerState.assignee = { name: v.name, value: v }
+                if (
+                    !this.lockerState.assignee &&
+                    this.centerUser.id == v.id
+                ) {
+                    this.lockerState.assignee = { name: v.name, value: v }
                 }
             })
         }

@@ -10,6 +10,7 @@ export const startGetCurCenter = createAction(`[${FeatureKey}] Start Get Cur Cen
 export const finishGetCurCenter = createAction(`[${FeatureKey}] Finish Get Cur Center`, props<{ center: Center }>())
 
 export const setCurCenter = createAction(`[${FeatureKey}] Set Cur Center`, props<{ center: Center }>())
+
 export const setCenterPermissionModal = createAction(
     `[${FeatureKey}]  set Center Permission Modal`,
     props<{ visible: boolean }>()

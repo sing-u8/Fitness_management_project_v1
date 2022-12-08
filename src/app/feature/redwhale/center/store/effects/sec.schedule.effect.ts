@@ -36,6 +36,7 @@ export class ScheduleEffect {
             switchMap(() => {
                 const center = this.storageService.getCenter()
                 const user = this.storageService.getUser()
+                const centerUser = this.storageService.getCenterUser()
                 return this.centerCalendarApi
                     .getCalendars(center.id, {
                         typeCode: 'calendar_type_center_calendar',
@@ -48,7 +49,8 @@ export class ScheduleEffect {
                                 this.centerLessonApi.getCategoryList(center.id),
                             ]).pipe(
                                 map(([centerUsers, instructorFilter, lessonCategs]) => {
-                                    const curCenterUser = _.find(centerUsers, (centerUser) => centerUser.id == user.id)
+                                    
+                                    const curCenterUser = this.storageService.getCenterUser()
                                     const centerCalendar = calendars[0]
                                     const doLessonsExist =
                                         lessonCategs.length > 0 &&
@@ -62,6 +64,7 @@ export class ScheduleEffect {
                                             instructor: centerUser,
                                         })
                                     )
+                                    console.log('start load schedule  state ------- ', value, value.curCenterUser)
                                     if (!value.doLessonsExist) {
                                         return [
                                             ScheduleActions.setCurCenterId({ centerId: center.id }),
@@ -78,7 +81,7 @@ export class ScheduleEffect {
                                                 centerId: center.id,
                                                 centerCalendarId: value.centerCalendar.id,
                                                 reqBody: {
-                                                    instructor_center_user_id: user.id,
+                                                    instructor_center_user_id: centerUser.id,
                                                 },
                                             }),
                                             ScheduleActions.finishLoadScheduleState({

@@ -9,6 +9,7 @@ import { StorageService } from '@services/storage.service'
 
 import { Response } from '@schemas/response'
 import { Center } from '@schemas/center'
+import {CenterUser} from "@schemas/center-user";
 
 @Injectable({
     providedIn: 'root',
@@ -88,7 +89,7 @@ export class CenterService {
         )
     }
 
-    checkMemeber(address: string): Observable<Response> {
+    checkMemeber(address: string): Observable<CenterUser> {
         const url = this.SERVER + `/${address}/check-member`
 
         const options = {
@@ -99,7 +100,7 @@ export class CenterService {
 
         return this.http.get<Response>(url, options).pipe(
             map((res) => {
-                return res
+                return res.dataset[0]
             }),
             catchError(handleError)
         )

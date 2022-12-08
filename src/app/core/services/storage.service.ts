@@ -10,6 +10,7 @@ import { Center } from '@schemas/center'
 // import { WsChatService } from '@services/web-socket/ws-chat.service'
 
 import _ from 'lodash'
+import { CenterUser } from "@schemas/center-user";
 
 type UserOrEmpty = User | { sign_in_method: string }
 
@@ -88,5 +89,19 @@ export class StorageService {
         const user: User = this.getUser()
         user.selected_center = null
         this.setUser(user)
+    }
+    
+    setCenterUser(cu: CenterUser): void {
+        const user: User = this.getUser()
+        user.selected_center_user = cu
+        this.setUser(user)
+    }
+    getCenterUser(): CenterUser {
+        const user: User = this.getUser()
+        if (!_.isEmpty(user) && user.selected_center) {
+            return user.selected_center_user
+        } else {
+            return null
+        }
     }
 }
