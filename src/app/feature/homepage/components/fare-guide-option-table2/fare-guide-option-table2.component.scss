@@ -68,11 +68,11 @@ div.l-fare-guide-option-table {
 		.l-item {
 			grid-template-rows: repeat(2, auto);
 			grid-template-columns: repeat(3, auto);
-			column-gap: 33px;
+			column-gap: 22px;
 			row-gap: 15px;
 
 			.item {
-				width: 157px;
+				width: 168px;
 				display: flex;
 				font-size: 1.6rem;
 				line-height: 26px;
@@ -83,6 +83,8 @@ div.l-fare-guide-option-table {
 	}
 
 	@media(min-width: 1280px) {
+
+		flex-direction: row;
 		width: 735px;
 		padding: 21px 15px 21px 26px;
 
@@ -92,9 +94,9 @@ div.l-fare-guide-option-table {
 		}
 		.l-item {
 
-			column-gap: 40px;
+			column-gap: 22px;
 			.item {
-				width: 142px;
+				width: 160px;
 				display: flex;
 				font-weight: 500;
 				font-size: 1.5rem;
