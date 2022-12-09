@@ -146,14 +146,16 @@ export class ChangeUserBirthDateModalComponent implements OnChanges, AfterViewCh
         const lastStr = this.userBirthDate.value[userDataSize - 1]
         const digitReg = /[\d]/g
         const dotReg = /[.]/g
+    
+        const code = event.which ? event.which : event.keyCode
 
-        if (userDataSize == 5) {
+        if (userDataSize == 5 && code != 8) {
             if (digitReg.test(lastStr)) {
                 this.userBirthDate.patchValue(userData.slice(0, 4) + '.' + userData.slice(4))
             } else if (dotReg.test(lastStr)) {
                 this.userBirthDate.patchValue(userData.slice(0, 4))
             }
-        } else if (userDataSize == 8) {
+        } else if (userDataSize == 8 && code != 8) {
             if (digitReg.test(lastStr)) {
                 this.userBirthDate.patchValue(userData.slice(0, 7) + '.' + userData.slice(7))
             } else if (dotReg.test(lastStr)) {

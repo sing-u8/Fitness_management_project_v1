@@ -216,14 +216,16 @@ export class DirectRegisterMemberFullmodalComponent implements OnInit, OnChanges
         const lastStr = this.birth_date.value[userDataSize - 1]
         const digitReg = /[\d]/g
         const dotReg = /[.]/g
+    
+        const code = event.which ? event.which : event.keyCode
 
-        if (userDataSize == 5) {
+        if (userDataSize == 5 && code != 8) {
             if (digitReg.test(lastStr)) {
                 this.registerForm.patchValue({ birth_date: userData.slice(0, 4) + '.' + userData.slice(4) })
             } else if (dotReg.test(lastStr)) {
                 this.registerForm.patchValue({ birth_date: userData.slice(0, 4) })
             }
-        } else if (userDataSize == 8) {
+        } else if (userDataSize == 8 && code != 8) {
             if (digitReg.test(lastStr)) {
                 this.registerForm.patchValue({ birth_date: userData.slice(0, 7) + '.' + userData.slice(7) })
             } else if (dotReg.test(lastStr)) {
@@ -245,14 +247,16 @@ export class DirectRegisterMemberFullmodalComponent implements OnInit, OnChanges
         const lastStr = this.phone_number.value[userDataSize - 1]
         const digitReg = /\d/g
         const dashReg = /-/g
+    
+        const code = event.which ? event.which : event.keyCode
 
-        if (userDataSize == 4) {
+        if (userDataSize == 4 && code != 8) {
             if (digitReg.test(lastStr)) {
                 this.phone_number.patchValue(userData.slice(0, 3) + '-' + userData.slice(3))
             } else if (dashReg.test(lastStr)) {
                 this.phone_number.patchValue(userData.slice(0, 3))
             }
-        } else if (userDataSize == 9) {
+        } else if (userDataSize == 9 && code != 8) {
             if (digitReg.test(lastStr)) {
                 this.phone_number.patchValue(userData.slice(0, 8) + '-' + userData.slice(8))
             } else if (dashReg.test(lastStr)) {
