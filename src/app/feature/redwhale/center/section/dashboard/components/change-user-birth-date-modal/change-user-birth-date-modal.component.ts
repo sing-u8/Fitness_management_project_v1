@@ -161,4 +161,12 @@ export class ChangeUserBirthDateModalComponent implements OnChanges, AfterViewCh
             }
         }
     }
+
+    onlyNumberCheck(event) {
+        if (this.inputHelperService.restrictToNumber(event)) {
+            this.matchBirthdateForm(event)
+            return true
+        }
+        return false
+    }
 }

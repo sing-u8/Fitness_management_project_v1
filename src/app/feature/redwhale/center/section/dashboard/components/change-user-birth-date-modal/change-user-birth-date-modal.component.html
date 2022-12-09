@@ -30,7 +30,7 @@
                     placeholder="생년월일을 입력해주세요."
                     [formControl]="userBirthDate"
                     required
-                    (keyup)="matchBirthdateForm($event)"
+                    (keydown)="onlyNumberCheck($event)"
                     (keyup.enter) = "userBirthDate.valid && onConfirm()"
                 >
                 <div class="error" *ngIf="isError">

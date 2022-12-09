@@ -31,7 +31,7 @@
                     [formControl]="userPhoneNumber"
                     required
                     maxlength="13"
-                    (keyup)="matchBirthdateForm($event)"
+                    (keydown)="onlyNumberCheck($event)"
                     (keyup.enter) = "userPhoneNumber.valid && onConfirm()"
                 >
                 <div class="error" *ngIf="isError">

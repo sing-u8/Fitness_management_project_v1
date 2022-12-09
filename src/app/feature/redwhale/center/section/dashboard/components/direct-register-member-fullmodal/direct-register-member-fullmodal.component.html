@@ -121,9 +121,10 @@
                                 rw-input
                                 placeholder="전화번호를 입력해주세요."
                                 class="center-name-input"
-                                maxlength="11"
+                                maxlength="13"
                                 [class.input-warning]="!phone_number.pristine && phone_number.errors"
                                 formControlName="phone_number"
+                                (keydown)="phoneNumberCheck($event)"
                             />
                             <p *ngIf="!phone_number.pristine && phone_number.errors" class="warning">
                                 <img src="assets/icons/etc/warning-red.svg" />&nbsp;
@@ -141,8 +142,7 @@
                                 [class.input-warning]="birth_date.invalid"
                                 formControlName="birth_date"
                                 maxlength="10"
-                                (keypress)="birthdateCheck($event)"
-                                (keyup)="matchBirthdateForm($event)"
+                                (keydown)="birthdateCheck($event)"
                             />
                             <p *ngIf="birth_date.invalid" class="warning">
                                 <img src="assets/icons/etc/warning-red.svg" />

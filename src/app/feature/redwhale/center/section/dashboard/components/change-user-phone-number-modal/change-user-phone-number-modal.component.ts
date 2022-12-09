@@ -18,7 +18,7 @@ import { StorageService } from '@services/storage.service'
 import { Center } from '@schemas/center'
 import { CenterUser } from '@schemas/center-user'
 import { FormControl, Validators } from '@angular/forms'
-import _ from "lodash";
+import _ from 'lodash'
 
 @Component({
     selector: 'db-change-user-phone-number-modal',
@@ -57,7 +57,7 @@ export class ChangeUserPhoneNumberModalComponent implements OnChanges, AfterView
         this.userPhoneNumber = new FormControl('', [
             Validators.required,
             Validators.pattern(`\\(?([0-9]{3})\\)?([ .-]?)([0-9]{4})\\2([0-9]{4})`),
-            Validators.maxLength(13)
+            Validators.maxLength(13),
         ])
     }
 
@@ -142,7 +142,7 @@ export class ChangeUserPhoneNumberModalComponent implements OnChanges, AfterView
         this.isMouseModalDown = false
     }
 
-    matchBirthdateForm(event) {
+    matchPhoneNumberForm(event) {
         const userDataSize = this.userPhoneNumber.value.length
         const userData = this.userPhoneNumber.value
         const lastStr = this.userPhoneNumber.value[userDataSize - 1]
@@ -162,5 +162,13 @@ export class ChangeUserPhoneNumberModalComponent implements OnChanges, AfterView
                 this.userPhoneNumber.patchValue(userData.slice(0, 8))
             }
         }
+    }
+
+    onlyNumberCheck(event) {
+        if (this.inputHelperService.restrictToNumber(event)) {
+            this.matchPhoneNumberForm(event)
+            return true
+        }
+        return false
     }
 }

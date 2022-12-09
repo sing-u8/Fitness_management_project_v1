@@ -30,6 +30,7 @@ import { StorageService } from '@services/storage.service'
 import { AuthService } from '@services/auth.service'
 import { CreateUserRequestBody } from '@services/center-users.service'
 import { LocalFileData, PictureManagementService } from '@services/helper/picture-management.service'
+import { InputHelperService } from '@services/helper/input-helper.service'
 
 import { Center } from '@schemas/center'
 import { OutputType } from '@schemas/components/direct-register-member-fullmodal'
@@ -81,7 +82,8 @@ export class DirectRegisterMemberFullmodalComponent implements OnInit, OnChanges
         private fb: FormBuilder,
         private authService: AuthService,
         private nxStore: Store,
-        private renderer: Renderer2
+        private renderer: Renderer2,
+        private inputHelperService: InputHelperService
     ) {
         this.gender = 'male'
         this.localFileData = { src: undefined, file: undefined }
@@ -100,7 +102,10 @@ export class DirectRegisterMemberFullmodalComponent implements OnInit, OnChanges
             phone_number: [
                 '',
                 {
-                    validators: [Validators.required, Validators.pattern('^[0-9]{10,11}$')],
+                    validators: [
+                        Validators.required,
+                        Validators.pattern('\\(?([0-9]{3})\\)?([ .-]?)([0-9]{4})\\2([0-9]{4})'),
+                    ],
                 },
             ],
             birth_date: [
@@ -199,14 +204,11 @@ export class DirectRegisterMemberFullmodalComponent implements OnInit, OnChanges
     }
 
     birthdateCheck(event) {
-        const code = event.which ? event.which : event.keyCode
-
-        if (code < 48 || code > 57) {
-            return false
+        if (this.inputHelperService.restrictToNumber(event)) {
+            this.matchBirthdateForm(event)
+            return true
         }
-
-        this.matchBirthdateForm(event)
-        return true
+        return false
     }
     matchBirthdateForm(event) {
         const userDataSize = this.birth_date.value.length
@@ -230,18 +232,41 @@ export class DirectRegisterMemberFullmodalComponent implements OnInit, OnChanges
         }
     }
 
+    phoneNumberCheck(event) {
+        if (this.inputHelperService.restrictToNumber(event)) {
+            this.matchPhoneNumberForm(event)
+            return true
+        }
+        return false
+    }
+    matchPhoneNumberForm(event) {
+        const userDataSize = this.phone_number.value.length
+        const userData = this.phone_number.value
+        const lastStr = this.phone_number.value[userDataSize - 1]
+        const digitReg = /\d/g
+        const dashReg = /-/g
+
+        if (userDataSize == 4) {
+            if (digitReg.test(lastStr)) {
+                this.phone_number.patchValue(userData.slice(0, 3) + '-' + userData.slice(3))
+            } else if (dashReg.test(lastStr)) {
+                this.phone_number.patchValue(userData.slice(0, 3))
+            }
+        } else if (userDataSize == 9) {
+            if (digitReg.test(lastStr)) {
+                this.phone_number.patchValue(userData.slice(0, 8) + '-' + userData.slice(8))
+            } else if (dashReg.test(lastStr)) {
+                this.phone_number.patchValue(userData.slice(0, 8))
+            }
+        }
+    }
+
     // preview avatar method
     onInputFileChange(photoFile: any) {
         this.pictureService.onInputFileChange(photoFile, this.saveLocalFile.bind(this))
     }
     saveLocalFile(localFileData: LocalFileData) {
         this.localFileData = _.cloneDeep(localFileData)
-        // console.log(
-        //     'localfiledata: ',
-        //     this.localFileData,
-        //     this.localFileData.file,
-        //     _.assign({}, this.localFileData.file)
-        // )
     }
     deletePreviewAvatar() {
         this.pictureService.resetLocalPicData()
@@ -267,12 +292,12 @@ export class DirectRegisterMemberFullmodalComponent implements OnInit, OnChanges
             sex: this.gender as string,
             birth_date: this.birth_date.value as string,
             email: this.emailForm.value as string,
-            phone_number: this.phone_number.value as string,
+            phone_number: _.camelCase(this.phone_number.value as string),
         }
         if (_.isEmpty(registerBody.email)) {
             delete registerBody.email
         }
-        if(_.isEmpty(registerBody.birth_date)){
+        if (_.isEmpty(registerBody.birth_date)) {
             delete registerBody.birth_date
         }
         this.finishRegister.emit({
