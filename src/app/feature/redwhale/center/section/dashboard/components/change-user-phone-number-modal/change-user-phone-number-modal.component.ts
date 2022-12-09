@@ -5,10 +5,10 @@ import {
     Renderer2,
     Output,
     EventEmitter,
-    OnChanges,
     SimpleChanges,
-    AfterViewChecked,
     ViewChild,
+    OnChanges,
+    AfterViewChecked,
 } from '@angular/core'
 
 import { InputHelperService } from '@services/helper/input-helper.service'
@@ -17,13 +17,15 @@ import { StorageService } from '@services/storage.service'
 
 import { Center } from '@schemas/center'
 import { CenterUser } from '@schemas/center-user'
+import { FormControl, Validators } from '@angular/forms'
+import _ from "lodash";
 
 @Component({
-    selector: 'db-change-user-email-modal',
-    templateUrl: './change-user-email-modal.component.html',
-    styleUrls: ['./change-user-email-modal.component.scss'],
+    selector: 'db-change-user-phone-number-modal',
+    templateUrl: './change-user-phone-number-modal.component.html',
+    styleUrls: ['./change-user-phone-number-modal.component.scss'],
 })
-export class ChangeUserEmailModalComponent implements OnChanges, AfterViewChecked{
+export class ChangeUserPhoneNumberModalComponent implements OnChanges, AfterViewChecked {
     @Input() visible: boolean
     @Input() curUser: CenterUser
 
@@ -41,7 +43,7 @@ export class ChangeUserEmailModalComponent implements OnChanges, AfterViewChecke
 
     public isMouseModalDown: boolean
 
-    public userEmail = ''
+    public userPhoneNumber: FormControl
 
     constructor(
         private el: ElementRef,
@@ -51,6 +53,12 @@ export class ChangeUserEmailModalComponent implements OnChanges, AfterViewChecke
         private storageService: StorageService
     ) {
         this.isMouseModalDown = false
+
+        this.userPhoneNumber = new FormControl('', [
+            Validators.required,
+            Validators.pattern(`\\(?([0-9]{3})\\)?([ .-]?)([0-9]{4})\\2([0-9]{4})`),
+            Validators.maxLength(13)
+        ])
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -82,7 +90,7 @@ export class ChangeUserEmailModalComponent implements OnChanges, AfterViewChecke
                     this.renderer.removeClass(this.modalWrapperElement.nativeElement, 'display-flex')
                 }, 200)
 
-                this.userEmail = ''
+                this.userPhoneNumber.reset()
                 this.isError = false
             }
         }
@@ -108,7 +116,7 @@ export class ChangeUserEmailModalComponent implements OnChanges, AfterViewChecke
         this.isError = false
         this.centerUsersApi
             .updateUser(this.center.id, this.curUser.id, {
-                email: this.userEmail,
+                phone_number: _.camelCase(this.userPhoneNumber.value),
             })
             .subscribe({
                 next: () => {
@@ -116,7 +124,7 @@ export class ChangeUserEmailModalComponent implements OnChanges, AfterViewChecke
                         centerId: this.center.id,
                         userId: this.curUser.id,
                         reqBody: {
-                            email: this.userEmail,
+                            phone_number: _.camelCase(this.userPhoneNumber.value),
                         },
                     })
                 },
@@ -132,5 +140,27 @@ export class ChangeUserEmailModalComponent implements OnChanges, AfterViewChecke
     }
     resetMouseModalDown() {
         this.isMouseModalDown = false
+    }
+
+    matchBirthdateForm(event) {
+        const userDataSize = this.userPhoneNumber.value.length
+        const userData = this.userPhoneNumber.value
+        const lastStr = this.userPhoneNumber.value[userDataSize - 1]
+        const digitReg = /\d/g
+        const dashReg = /-/g
+
+        if (userDataSize == 4) {
+            if (digitReg.test(lastStr)) {
+                this.userPhoneNumber.patchValue(userData.slice(0, 3) + '-' + userData.slice(3))
+            } else if (dashReg.test(lastStr)) {
+                this.userPhoneNumber.patchValue(userData.slice(0, 3))
+            }
+        } else if (userDataSize == 9) {
+            if (digitReg.test(lastStr)) {
+                this.userPhoneNumber.patchValue(userData.slice(0, 8) + '-' + userData.slice(8))
+            } else if (dashReg.test(lastStr)) {
+                this.userPhoneNumber.patchValue(userData.slice(0, 8))
+            }
+        }
     }
 }

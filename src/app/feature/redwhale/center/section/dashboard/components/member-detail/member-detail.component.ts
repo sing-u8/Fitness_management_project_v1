@@ -390,6 +390,42 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
         this.nxStore.dispatch(CenterCommonActions.startGetInstructors({ centerId: this.center.id }))
         this.toggleShowChangeUserEmailModal()
     }
+    
+    public doShowChangeUserPhoneNumberModal = false
+    toggleShowChangeUserPhoneNumberModal() {
+        this.doShowChangeUserPhoneNumberModal = !this.doShowChangeUserPhoneNumberModal
+    }
+    onChangeUserPhoneNumberConfirm(res: { centerId: string; userId: string; reqBody: UpdateUserRequestBody }) {
+        this.nxStore.dispatch(
+            DashboardActions.setCurUserData({
+                centerId: this.center.id,
+                reqBody: res.reqBody,
+                userId: this.curUserData.user.id,
+            })
+        )
+        this.nxStore.dispatch(showToast({ text: `전화번호 입력이 완료되었습니다.` }))
+        this.nxStore.dispatch(CenterCommonActions.startGetMembers({ centerId: this.center.id }))
+        this.nxStore.dispatch(CenterCommonActions.startGetInstructors({ centerId: this.center.id }))
+        this.toggleShowChangeUserPhoneNumberModal()
+    }
+    
+    public doShowChangeUserBirthDateModal = false
+    toggleShowChangeUserBirthDateModal() {
+        this.doShowChangeUserBirthDateModal = !this.doShowChangeUserBirthDateModal
+    }
+    onChangeUserBirthDateConfirm(res: { centerId: string; userId: string; reqBody: UpdateUserRequestBody }) {
+        this.nxStore.dispatch(
+            DashboardActions.setCurUserData({
+                centerId: this.center.id,
+                reqBody: res.reqBody,
+                userId: this.curUserData.user.id,
+            })
+        )
+        this.nxStore.dispatch(showToast({ text: `생년월일 입력이 완료되었습니다.` }))
+        this.nxStore.dispatch(CenterCommonActions.startGetMembers({ centerId: this.center.id }))
+        this.nxStore.dispatch(CenterCommonActions.startGetInstructors({ centerId: this.center.id }))
+        this.toggleShowChangeUserBirthDateModal()
+    }
 
     // update user profile funcs and vars
     public doShowRemoveUserProfile = false

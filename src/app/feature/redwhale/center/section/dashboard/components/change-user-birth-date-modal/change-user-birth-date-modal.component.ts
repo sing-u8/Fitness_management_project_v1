@@ -5,10 +5,10 @@ import {
     Renderer2,
     Output,
     EventEmitter,
-    OnChanges,
     SimpleChanges,
-    AfterViewChecked,
     ViewChild,
+    OnChanges,
+    AfterViewChecked,
 } from '@angular/core'
 
 import { InputHelperService } from '@services/helper/input-helper.service'
@@ -17,13 +17,14 @@ import { StorageService } from '@services/storage.service'
 
 import { Center } from '@schemas/center'
 import { CenterUser } from '@schemas/center-user'
+import { FormControl, Validators } from '@angular/forms'
 
 @Component({
-    selector: 'db-change-user-email-modal',
-    templateUrl: './change-user-email-modal.component.html',
-    styleUrls: ['./change-user-email-modal.component.scss'],
+    selector: 'db-change-user-birth-date-modal',
+    templateUrl: './change-user-birth-date-modal.component.html',
+    styleUrls: ['./change-user-birth-date-modal.component.scss'],
 })
-export class ChangeUserEmailModalComponent implements OnChanges, AfterViewChecked{
+export class ChangeUserBirthDateModalComponent implements OnChanges, AfterViewChecked {
     @Input() visible: boolean
     @Input() curUser: CenterUser
 
@@ -41,7 +42,7 @@ export class ChangeUserEmailModalComponent implements OnChanges, AfterViewChecke
 
     public isMouseModalDown: boolean
 
-    public userEmail = ''
+    public userBirthDate: FormControl
 
     constructor(
         private el: ElementRef,
@@ -51,6 +52,11 @@ export class ChangeUserEmailModalComponent implements OnChanges, AfterViewChecke
         private storageService: StorageService
     ) {
         this.isMouseModalDown = false
+
+        this.userBirthDate = new FormControl('', [
+            Validators.required,
+            Validators.pattern('^[0-9]{4}[.](0[1-9]|1[012])[.](0[1-9]|[12][0-9]|3[01])$'),
+        ])
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -82,7 +88,7 @@ export class ChangeUserEmailModalComponent implements OnChanges, AfterViewChecke
                     this.renderer.removeClass(this.modalWrapperElement.nativeElement, 'display-flex')
                 }, 200)
 
-                this.userEmail = ''
+                this.userBirthDate.reset()
                 this.isError = false
             }
         }
@@ -108,7 +114,7 @@ export class ChangeUserEmailModalComponent implements OnChanges, AfterViewChecke
         this.isError = false
         this.centerUsersApi
             .updateUser(this.center.id, this.curUser.id, {
-                email: this.userEmail,
+                birth_date: this.userBirthDate.value,
             })
             .subscribe({
                 next: () => {
@@ -116,7 +122,7 @@ export class ChangeUserEmailModalComponent implements OnChanges, AfterViewChecke
                         centerId: this.center.id,
                         userId: this.curUser.id,
                         reqBody: {
-                            email: this.userEmail,
+                            birth_date: this.userBirthDate.value,
                         },
                     })
                 },
@@ -132,5 +138,27 @@ export class ChangeUserEmailModalComponent implements OnChanges, AfterViewChecke
     }
     resetMouseModalDown() {
         this.isMouseModalDown = false
+    }
+
+    matchBirthdateForm(event) {
+        const userDataSize = this.userBirthDate.value.length
+        const userData = this.userBirthDate.value
+        const lastStr = this.userBirthDate.value[userDataSize - 1]
+        const digitReg = /[\d]/g
+        const dotReg = /[.]/g
+
+        if (userDataSize == 5) {
+            if (digitReg.test(lastStr)) {
+                this.userBirthDate.patchValue(userData.slice(0, 4) + '.' + userData.slice(4))
+            } else if (dotReg.test(lastStr)) {
+                this.userBirthDate.patchValue(userData.slice(0, 4))
+            }
+        } else if (userDataSize == 8) {
+            if (digitReg.test(lastStr)) {
+                this.userBirthDate.patchValue(userData.slice(0, 7) + '.' + userData.slice(7))
+            } else if (dotReg.test(lastStr)) {
+                this.userBirthDate.patchValue(userData.slice(0, 7))
+            }
+        }
     }
 }

@@ -12,7 +12,7 @@
             rwButtonHeight="43"
             rwButtonColor="var(--red)"
             rwButtonFontColor="var(--white)"
-            (click)="toggleRegisterMemberModal()"
+            (click)="toggleDirectRegisterMemberFullModal()"
         >
             신규 회원 등록
         </div>
@@ -57,11 +57,11 @@
     </main>
 </article>
 
-<db-register-member-modal
-    [(visible)]="doShowRegisterMemberModal"
-    (cancel)="closeRegisterMemberModal()"
-    (onDirectRegister)="toggleDirectRegisterMemberFullModal()"
-></db-register-member-modal>
+<!--<db-register-member-modal-->
+<!--    [(visible)]="doShowRegisterMemberModal"-->
+<!--    (cancel)="closeRegisterMemberModal()"-->
+<!--    (onDirectRegister)="toggleDirectRegisterMemberFullModal()"-->
+<!--&gt;</db-register-member-modal>-->
 
 <db-direct-register-member-fullmodal
     [(visible)]="doShowDirectRegisterMemberFullModal"

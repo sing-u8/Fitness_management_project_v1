@@ -62,31 +62,50 @@
                 <div class="member-information__top-right">
                     <div class="l-info">
                         <div class="title">회원번호</div>
-                        <div class="content changeable" (click)="curUserData.user && toggleShowChangeMembershipNumberModal()">
-                            {{ !curUserData.user ? '-' : (curUserData.user.membership_number ?? '-') }}
-                            <img src="assets/icons/etc/edit.svg" />
+                        <div
+                            class="content"
+                            [class.changeable]="curUserData.user"
+                            (click)="curUserData.user && toggleShowChangeMembershipNumberModal()"
+                        >
+                            {{
+                                !curUserData.user
+                                    ? '-'
+                                    : !curUserData.user.membership_number
+                                    ? '-'
+                                    : curUserData.user.membership_number
+                            }}
+                            <img *ngIf="curUserData.user" src="assets/icons/etc/edit.svg" />
                         </div>
                     </div>
                     <div class="l-info">
                         <div class="title">이메일</div>
                         <div
                             class="content"
-                            [class.changeable]="(curUserData?.user)"
-                            (click)="(curUserData?.user) && toggleShowChangeUserEmailModal()"
+                            [class.changeable]="curUserData?.user"
+                            (click)="curUserData?.user && toggleShowChangeUserEmailModal()"
                         >
-                            {{ !curUserData.user ? '-' : (curUserData.user.email ?? '-') }}
-                            <img *ngIf="(curUserData?.user)" src="assets/icons/etc/edit.svg" />
+                            {{ !curUserData.user ? '-' : !curUserData.user.email ? '-' : curUserData.user.email }}
+                            <img *ngIf="curUserData?.user" src="assets/icons/etc/edit.svg" />
                         </div>
                     </div>
                     <div class="l-info">
                         <div class="title">전화번호</div>
-                        <div class="content">
+                        <div
+                            class="content"
+                            [class.changeable]="curUserData.user"
+                            (click)="curUserData?.user && toggleShowChangeUserPhoneNumberModal()"
+                        >
                             {{ !curUserData.user ? '-' : (curUserData.user.phone_number | phoneNumber) }}
+                            <img *ngIf="curUserData.user" src="assets/icons/etc/edit.svg" />
                         </div>
                     </div>
                     <div class="l-info">
                         <div class="title">생년월일</div>
-                        <div class="content">
+                        <div
+                            class="content"
+                            [class.changeable]="curUserData.user"
+                            (click)="curUserData?.user && toggleShowChangeUserBirthDateModal()"
+                        >
                             <span *ngIf="!curUserData.user">-</span>
                             <span *ngIf="curUserData.user">
                                 {{ (curUserData.user.birth_date | dashToDot) ?? '-' }} ({{
@@ -100,6 +119,7 @@
                                         : '-'
                                 }})
                             </span>
+                            <img *ngIf="curUserData.user" src="assets/icons/etc/edit.svg" />
                         </div>
                     </div>
                     <div class="l-info">
@@ -143,7 +163,7 @@
                     rwButtonWidth="142"
                     (click)="curUserData.user && onOneToOneChat()"
                 >
-                    <img src="assets/icons/main/chat.svg">
+                    <img src="assets/icons/main/chat.svg" />
                     <span class="rw-typo-bodytext0-bold">1:1 채팅</span>
                 </div>
                 <div class="vertical-divider"></div>
@@ -156,11 +176,11 @@
                     rwButtonWidth="142"
                     (click)="curUserData.user && onAttend()"
                 >
-                    <img src="assets/icons/etc/attend.svg">
+                    <img src="assets/icons/etc/attend.svg" />
                     <span class="rw-typo-bodytext0-bold">수동 출석</span>
                 </div>
                 <div
-                    *ngIf="(curUserData?.user?.last_check_in | isToday)"
+                    *ngIf="curUserData?.user?.last_check_in | isToday"
                     class="info-button"
                     [class.disabled]="!curUserData.user"
                     rw-button
@@ -168,7 +188,7 @@
                     rwButtonWidth="142"
                     (click)="curUserData.user && onCancelAttend()"
                 >
-                    <img src="assets/icons/etc/leave.svg">
+                    <img src="assets/icons/etc/leave.svg" />
                     <span class="rw-typo-bodytext0-bold">수동 출석 취소</span>
                 </div>
             </div>
@@ -240,9 +260,14 @@
                     *ngIf="(userDetailTag$ | async) == 'membership'"
                     [curUserData]="curUserData"
                     (onRegisterML)="openRegisterMLFullModal('contract_type_new')"
-                    (onReRegisterM)="setReRegisterMLUserMembership($event); openRegisterMLFullModal('contract_type_renewal')"
-                    (onTransferM)="setTransferCenterUser($event.centerUser);setTransferUserMembership($event.userMembership);
-                                openTransferMFullModal()"
+                    (onReRegisterM)="
+                        setReRegisterMLUserMembership($event); openRegisterMLFullModal('contract_type_renewal')
+                    "
+                    (onTransferM)="
+                        setTransferCenterUser($event.centerUser);
+                        setTransferUserMembership($event.userMembership);
+                        openTransferMFullModal()
+                    "
                 ></db-user-detail-membership>
                 <db-user-detail-locker
                     *ngIf="(userDetailTag$ | async) == 'locker'"
@@ -299,6 +324,19 @@
     (cancel)="toggleShowChangeUserEmailModal()"
     (confirm)="onChangeUserEmailConfirm($event)"
 ></db-change-user-email-modal>
+<db-change-user-phone-number-modal
+    [(visible)]="doShowChangeUserPhoneNumberModal"
+    [curUser]="curUserData?.user"
+    (cancel)="toggleShowChangeUserPhoneNumberModal()"
+    (confirm)="onChangeUserPhoneNumberConfirm($event)"
+></db-change-user-phone-number-modal>
+<db-change-user-birth-date-modal
+    [(visible)]="doShowChangeUserBirthDateModal"
+    [curUser]="curUserData?.user"
+    (cancel)="toggleShowChangeUserBirthDateModal()"
+    (confirm)="onChangeUserBirthDateConfirm($event)"
+></db-change-user-birth-date-modal>
+
 
 <rw-modal
     [(visible)]="doShowRemoveUserProfile"
@@ -346,4 +384,3 @@
     (cancel)="onCancelAttendModalClose()"
     (confirm)="onCancelAttendConfirm()"
 ></rw-modal>
-

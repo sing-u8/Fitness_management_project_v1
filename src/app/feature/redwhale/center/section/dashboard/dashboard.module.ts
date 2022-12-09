@@ -61,6 +61,8 @@ import { DetailItemRemoveModalComponent } from './components/detail-item-remove-
 import { TransferMembershipFullmodalComponent } from './components/transfer-membership-fullmodal/transfer-membership-fullmodal.component'
 import { TransferMembershipTicketWindowComponent } from './components/transfer-membership-ticket-window/transfer-membership-ticket-window.component'
 import { ChangeUserEmailModalComponent } from './components/change-user-email-modal/change-user-email-modal.component'
+import { ChangeUserPhoneNumberModalComponent } from './components/change-user-phone-number-modal/change-user-phone-number-modal.component';
+import { ChangeUserBirthDateModalComponent } from './components/change-user-birth-date-modal/change-user-birth-date-modal.component'
 // // drawer
 import { DwMemberListComponent } from './components/dw-member-list/dw-member-list.component'
 
@@ -71,7 +73,8 @@ import { CommonModule as SectionCommonModule } from '../common/common.module'
 
 // ngxSkeletonLoader module
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader'
-import { NgxSpinnerModule } from 'ngx-spinner'
+import { NgxSpinnerModule } from 'ngx-spinner';
+
 
 @NgModule({
     declarations: [
@@ -130,6 +133,8 @@ import { NgxSpinnerModule } from 'ngx-spinner'
         TransferMembershipFullmodalComponent,
         TransferMembershipTicketWindowComponent,
         ChangeUserEmailModalComponent,
+        ChangeUserPhoneNumberModalComponent,
+        ChangeUserBirthDateModalComponent,
     ],
     imports: [
         DashboardRoutingModule,

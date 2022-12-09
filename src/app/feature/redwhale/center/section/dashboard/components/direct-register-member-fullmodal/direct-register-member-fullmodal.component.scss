@@ -45,7 +45,7 @@ section.direct-regitser-member-fullmodal-wrapper {
 
             .header-text-container {
                 width: $containerWidth;
-                margin-bottom: 27px;
+                margin-bottom: 57px;
 
                 .l-guide-text {
                     text-decoration-line: underline;
@@ -341,8 +341,8 @@ section.direct-regitser-member-fullmodal-wrapper {
 }
 
 .red {
-    color: var(--red);
+    color: var(--red) !important;
 }
 .bold {
-    font-weight: 700;
+    font-weight: 700 !important;
 }

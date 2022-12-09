@@ -13,7 +13,15 @@ import {
     ViewChild,
 } from '@angular/core'
 import { Router } from '@angular/router'
-import { AbstractControl, AsyncValidatorFn, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms'
+import {
+    AbstractControl,
+    AsyncValidatorFn,
+    FormBuilder,
+    FormControl,
+    FormGroup,
+    ValidationErrors,
+    Validators,
+} from '@angular/forms'
 
 import { Observable, of } from 'rxjs'
 import { catchError, map } from 'rxjs/operators'
@@ -56,16 +64,15 @@ export class DirectRegisterMemberFullmodalComponent implements OnInit, OnChanges
 
     public registerForm: FormGroup
     public inputErrs: {
-        email: string
         name: string
         phone_number: string
         birth_date: string
     } = {
-        email: '',
         name: '',
         phone_number: '',
         birth_date: '',
     }
+    public emailForm: FormControl
 
     constructor(
         private router: Router,
@@ -84,13 +91,6 @@ export class DirectRegisterMemberFullmodalComponent implements OnInit, OnChanges
 
     ngOnInit(): void {
         this.registerForm = this.fb.group({
-            email: [
-                '',
-                {
-                    validators: [Validators.required, Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+[.][a-z]{2,}$')],
-                    asyncValidators: [this.emailAsyncValidator()],
-                },
-            ],
             name: [
                 '',
                 {
@@ -109,6 +109,10 @@ export class DirectRegisterMemberFullmodalComponent implements OnInit, OnChanges
                     validators: [Validators.pattern('^[0-9]{4}[.](0[1-9]|1[012])[.](0[1-9]|[12][0-9]|3[01])$')],
                 },
             ],
+        })
+        this.emailForm = this.fb.control('', {
+            validators: [Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+[.][a-z]{2,}$')],
+            asyncValidators: [this.emailAsyncValidator()],
         })
     }
 
@@ -139,11 +143,11 @@ export class DirectRegisterMemberFullmodalComponent implements OnInit, OnChanges
                 this.pictureService.resetLocalPicData()
                 this.localFileData = { src: undefined, file: undefined }
                 this.gender = 'male'
-                this.email.setValue('')
+                this.emailForm.setValue('')
                 this.name.setValue('')
                 this.phone_number.setValue('')
                 this.birth_date.setValue('')
-                this.email.markAsPristine()
+                this.emailForm.markAsPristine()
                 this.name.markAsPristine()
                 this.phone_number.markAsPristine()
                 this.birth_date.markAsPristine()
@@ -155,9 +159,6 @@ export class DirectRegisterMemberFullmodalComponent implements OnInit, OnChanges
         this.pictureService.resetLocalPicData()
     }
     // relative to form group
-    get email() {
-        return this.registerForm.get('email')
-    }
     get name() {
         return this.registerForm.get('name')
     }
@@ -265,8 +266,14 @@ export class DirectRegisterMemberFullmodalComponent implements OnInit, OnChanges
             name: this.name.value as string,
             sex: this.gender as string,
             birth_date: this.birth_date.value as string,
-            email: this.email.value as string,
+            email: this.emailForm.value as string,
             phone_number: this.phone_number.value as string,
+        }
+        if (_.isEmpty(registerBody.email)) {
+            delete registerBody.email
+        }
+        if(_.isEmpty(registerBody.birth_date)){
+            delete registerBody.birth_date
         }
         this.finishRegister.emit({
             reqBody: registerBody,
