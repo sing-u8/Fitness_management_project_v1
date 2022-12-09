@@ -123,10 +123,10 @@
                 <span class="currency">원</span>
             </div>
             
-            <div class="arrow-icon"></div>
+            <div *ngIf="chargeCalcNum > 0" class="arrow-icon"></div>
         </div>
         
-        <div class="charge-calc-text">
+        <div *ngIf="chargeCalcNum > 0" class="charge-calc-text">
             <div class="text-item">
                 <div class="d-flex align-items-center justify-content-center">
                     현재 서비스를 <div class="calc-block">{{chargeCalcMonth}}개월</div>이상 사용하신다면,

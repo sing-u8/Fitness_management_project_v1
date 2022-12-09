@@ -199,6 +199,7 @@ export class FareGuideComponent implements OnInit, OnDestroy {
 
     // -- charge calc vars ---//
     public chargeCalc: FormControl
+    public chargeCalcNum: number = 0
     public allPassCharge = 759000
     public chargeCalcMonth: number = 0
     public chargeSaving: number = 0
@@ -206,6 +207,7 @@ export class FareGuideComponent implements OnInit, OnDestroy {
         const v = Number(_.camelCase(this.chargeCalc.value))
         this.chargeCalcMonth = _.isFinite(_.ceil(this.allPassCharge / v)) ? _.ceil(this.allPassCharge / v) : 0
         this.chargeSaving = 10 * 12 * v - this.allPassCharge > 0 ? 10 * 12 * v - this.allPassCharge : 0
+        this.chargeCalcNum = Number(_.camelCase(this.chargeCalc.value))
     }
 
     public unSubscriber$ = new Subject<boolean>()
