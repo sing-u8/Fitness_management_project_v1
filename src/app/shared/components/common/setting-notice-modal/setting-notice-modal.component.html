@@ -24,7 +24,7 @@
                     [(ngModel)]="centerNoticeText"
                     (keydown)="limitNoticeTextByte($event)"
                 ></textarea>
-                <span class="notice-text-byte">{{centerNoticeText.length}} / {{noticeTextMax}}자</span>
+                <span class="notice-text-byte">{{centerNoticeText?.length ?? 0}} / {{noticeTextMax}}자</span>
             </div>
         </div>
         

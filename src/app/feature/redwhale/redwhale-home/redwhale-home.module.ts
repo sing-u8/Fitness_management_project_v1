@@ -10,7 +10,7 @@ import { RedwhaleHomeComponent } from './redwhale-home.component'
 
 import { CreateGymComponent } from './create-gym/create-gym.component'
 
-import { GymListSectionComponent } from './components/gym-list-section/gym-list-section.component'
+import { CenterListSectionComponent } from './components/center-list-section/center-list-section.component'
 import { CenterListItemComponent } from './components/center-list-item/center-list-item.component'
 import { CenterPreviewItemComponent } from './components/center-preview-item/center-preview-item.component'
 import { CreateCenterDirective } from './directives/create-center.directive'
@@ -22,7 +22,7 @@ import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader'
 @NgModule({
     declarations: [
         RedwhaleHomeComponent,
-        GymListSectionComponent,
+        CenterListSectionComponent,
         CenterListItemComponent,
         CreateGymComponent,
         CenterPreviewItemComponent,

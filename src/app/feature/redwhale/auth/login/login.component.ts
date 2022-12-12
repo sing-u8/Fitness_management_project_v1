@@ -89,7 +89,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     signInWithKakao(btLoadingFns: ClickEmitterType) {
         // btLoadingFns.showLoading()
         this.kakaoBtLoadingFns = btLoadingFns
-        this.kakaoBtLoadingFns.showLoading()
+        // this.kakaoBtLoadingFns.showLoading()
         this.signInMethod = 'kakao'
         const kakao$ = new Observable(function subscribe(observer) {
             Kakao.Auth.loginForm({
@@ -114,12 +114,12 @@ export class LoginComponent implements OnInit, OnDestroy {
                     signInWithCustomToken(this.fireAuth, String(user.custom_token)).then(() => {
                         this.storageService.setSignInMethod(this.signInMethod)
                         this.router.navigateByUrl('/redwhale-home')
-                        btLoadingFns.hideLoading()
+                        // btLoadingFns.hideLoading()
                     })
                 })
             },
             error: (e) => {
-                btLoadingFns.hideLoading()
+                // btLoadingFns.hideLoading()
                 this.nxStore.dispatch(showModal({ data: { text: this.TAG, subText: e.message } }))
             },
         })

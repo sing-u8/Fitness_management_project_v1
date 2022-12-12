@@ -21,11 +21,11 @@ import { Observable } from 'rxjs'
 
 @Component({
     selector: 'center-list-section',
-    templateUrl: './gym-list-section.component.html',
-    styleUrls: ['./gym-list-section.component.scss'],
+    templateUrl: './center-list-section.component.html',
+    styleUrls: ['./center-list-section.component.scss'],
     providers: [GymsStore],
 })
-export class GymListSectionComponent implements OnInit, AfterViewInit, OnDestroy {
+export class CenterListSectionComponent implements OnInit, AfterViewInit, OnDestroy {
     public user: User
     public centers$: Observable<Array<Center>>
     public centersLoading$: Observable<Loading>
