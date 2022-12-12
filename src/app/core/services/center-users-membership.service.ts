@@ -50,7 +50,7 @@ export class CenterUsersMembershipService {
         const url =
             this.SERVER +
             `/${centerId}/users/${userId}/membership` +
-            (page ? `page=${page}&` : '') +
+            (page ? `?page=${page}&` : '') +
             (pageSize ? `pageSize=${pageSize}` : '')
 
         return this.http.get<Response>(url, this.options).pipe(
@@ -162,7 +162,7 @@ export class CenterUsersMembershipService {
         const url =
             this.SERVER +
             `/${centerId}/users/${userId}/membership/${membershipId}/payment` +
-            (page ? `page=${page}&` : '') +
+            (page ? `?page=${page}&` : '') +
             (pageSize ? `pageSize=${pageSize}` : '')
 
         return this.http.get<Response>(url, this.options).pipe(
@@ -234,7 +234,7 @@ export class CenterUsersMembershipService {
         const url =
             this.SERVER +
             `/${centerId}/users/${userId}/membership/${membershipId}/holding` +
-            (page ? `page=${page}&` : '') +
+            (page ? `?page=${page}&` : '') +
             (pageSize ? `pageSize=${pageSize}` : '')
 
         return this.http.get<Response>(url, this.options).pipe(
@@ -291,7 +291,7 @@ export class CenterUsersMembershipService {
         const url =
             this.SERVER +
             `/${centerId}/users/${userId}/membership/${membershipId}/class` +
-            (page ? `page=${page}&` : '') +
+            (page ? `?page=${page}&` : '') +
             (pageSize ? `pageSize=${pageSize}` : '')
         return this.http.get<Response>(url, this.options).pipe(
             map((res) => {

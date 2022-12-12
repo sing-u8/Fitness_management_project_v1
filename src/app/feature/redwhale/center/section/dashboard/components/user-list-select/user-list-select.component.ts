@@ -56,6 +56,7 @@ export class UserListSelectComponent implements AfterViewInit, ControlValueAcces
             // this.renderer.setStyle(this.selectedElement.nativeElement, 'width', `${this.width}px`)
             this.renderer.setStyle(this.itemsElement.nativeElement, 'width', `${this.width}px`)
         }
+        console.log('UserListSelectComponent : ', this.value)
     }
 
     toggle() {
@@ -77,7 +78,6 @@ export class UserListSelectComponent implements AfterViewInit, ControlValueAcces
     }
 
     onSelect(item: { name: string; userSize: number }, type: string) {
-        console.log('user list select onSelect : ', this.items)
         this.close()
         this.onChanged(item, type)
     }

@@ -246,10 +246,7 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
             }
             this.nxStore.dispatch(
                 showToast({
-                    text: `${this.wordService.ellipsis(
-                        this.curUserData.user.name,
-                        4
-                    )}님이 출석 취소되었습니다.`,
+                    text: `${this.wordService.ellipsis(this.curUserData.user.name, 4)}님이 출석 취소되었습니다.`,
                 })
             )
             this.onCancelAttendModalClose()
@@ -390,7 +387,7 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
         this.nxStore.dispatch(CenterCommonActions.startGetInstructors({ centerId: this.center.id }))
         this.toggleShowChangeUserEmailModal()
     }
-    
+
     public doShowChangeUserPhoneNumberModal = false
     toggleShowChangeUserPhoneNumberModal() {
         this.doShowChangeUserPhoneNumberModal = !this.doShowChangeUserPhoneNumberModal
@@ -408,7 +405,7 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
         this.nxStore.dispatch(CenterCommonActions.startGetInstructors({ centerId: this.center.id }))
         this.toggleShowChangeUserPhoneNumberModal()
     }
-    
+
     public doShowChangeUserBirthDateModal = false
     toggleShowChangeUserBirthDateModal() {
         this.doShowChangeUserBirthDateModal = !this.doShowChangeUserBirthDateModal

@@ -738,7 +738,9 @@ export const selectSearchedUsersLists = (state: State) => {
     const usersLists = state.usersLists
     _.forEach(_.keys(usersLists), (typeKey) => {
         searchUserList[typeKey] = _.filter(usersLists[typeKey], (item) => {
-            return _.includes(item.user.center_user_name, searchInput) || _.includes(item.user.phone_number, searchInput)
+            return (
+                _.includes(item.user.center_user_name, searchInput) || _.includes(item.user.phone_number, searchInput)
+            )
         })
     })
     return searchUserList
@@ -777,7 +779,9 @@ export const selectDrawerSearchedUsersLists = (state: State) => {
     const usersLists = state.drawerUsersLists
     _.forEach(_.keys(usersLists), (typeKey) => {
         searchUserList[typeKey] = _.filter(usersLists[typeKey], (item) => {
-            return item.user.center_user_name.includes(searchInput) || item.user.phone_number.includes(searchInput)
+            return (
+                _.includes(item.user.center_user_name, searchInput) || _.includes(item.user.phone_number, searchInput)
+            )
         })
     })
     return searchUserList

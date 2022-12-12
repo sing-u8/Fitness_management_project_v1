@@ -36,7 +36,7 @@ export class MembershipTicketWindowComponent implements OnInit, AfterViewInit, O
     public staffSelect_list: Array<{ name: string; value: CenterUser }> = []
     public center: Center
     public user: User
-    public centerUser:CenterUser
+    public centerUser: CenterUser
     // public status: 'modify' | 'done' = 'modify'
 
     constructor(private storageService: StorageService) {}
@@ -58,6 +58,7 @@ export class MembershipTicketWindowComponent implements OnInit, AfterViewInit, O
         if (changes['instructors']) {
             this.center = this.storageService.getCenter()
             this.user = this.storageService.getUser()
+            this.centerUser = this.storageService.getCenterUser()
             this.staffSelect_list = []
             this.instructors.forEach((v) => {
                 this.staffSelect_list.push({
@@ -65,10 +66,7 @@ export class MembershipTicketWindowComponent implements OnInit, AfterViewInit, O
                     value: v,
                 })
 
-                if (
-                    _.isEmpty(this.membershipState.assignee) &&
-                    this.centerUser.id == v.id
-                ) {
+                if (_.isEmpty(this.membershipState.assignee) && this.centerUser.id == v.id) {
                     this.membershipState.assignee = { name: v.name, value: v }
                 }
             })

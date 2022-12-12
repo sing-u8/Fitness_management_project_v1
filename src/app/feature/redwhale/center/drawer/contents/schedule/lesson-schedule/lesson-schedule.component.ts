@@ -206,7 +206,7 @@ export class LessonScheduleComponent implements OnInit, OnDestroy, AfterViewInit
                 repeat_cycle: 1,
                 repeat_termination_type_code: 'calendar_task_group_repeat_termination_type_date',
                 repeat_end_date: dayjs(this.repeatDatepick.endDate).format('YYYY-MM-DD'),
-                responsibility_user_ids: selectedStaffs.map((v) => v.value.id),
+                responsibility_center_user_ids: selectedStaffs.map((v) => v.value.id),
                 class: {
                     category_name: this.selectedLesson.lessonCateg.name,
                     name: this.selectedLesson.lesson.name,
@@ -218,7 +218,7 @@ export class LessonScheduleComponent implements OnInit, OnDestroy, AfterViewInit
                     start_booking_until: this.reserveSettingInputs.reservation_start,
                     end_booking_before: this.reserveSettingInputs.reservation_end,
                     cancel_booking_before: this.reserveSettingInputs.reservation_cancel_end,
-                    instructor_user_ids: selectedStaffs.map((v) => v.value.id),
+                    instructor_center_user_ids: selectedStaffs.map((v) => v.value.id),
                 },
             }
         } else {
@@ -236,7 +236,7 @@ export class LessonScheduleComponent implements OnInit, OnDestroy, AfterViewInit
                 color: this.color,
                 memo: this.planDetailInputs.detail,
                 repeat: false,
-                responsibility_user_ids: selectedStaffs.map((v) => v.value.id),
+                responsibility_center_user_ids: selectedStaffs.map((v) => v.value.id),
                 class: {
                     class_item_id: this.selectedLesson.lesson.id,
                     type_code: this.selectedLesson.lesson.type_code,
@@ -248,7 +248,7 @@ export class LessonScheduleComponent implements OnInit, OnDestroy, AfterViewInit
                     start_booking_until: this.reserveSettingInputs.reservation_start,
                     end_booking_before: this.reserveSettingInputs.reservation_end,
                     cancel_booking_before: this.reserveSettingInputs.reservation_cancel_end,
-                    instructor_user_ids: selectedStaffs.map((v) => v.value.id),
+                    instructor_center_user_ids: selectedStaffs.map((v) => v.value.id),
                 },
             }
         }

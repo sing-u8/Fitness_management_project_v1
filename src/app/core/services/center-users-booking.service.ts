@@ -26,7 +26,7 @@ export class CenterUsersBookingService {
         const url =
             this.SERVER +
             `/${centerId}/users/${userId}/booking` +
-            (page ? `page=${page}&` : '') +
+            (page ? `?page=${page}&` : '') +
             (pageSize ? `pageSize=${pageSize}` : '')
 
         return this.http.get<Response>(url, this.options).pipe(

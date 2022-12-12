@@ -117,7 +117,7 @@ export class CenterCalendarService {
         const url =
             this.SERVER +
             `/${centerId}/calendar/${calendarId}/filter-instructor` +
-            (page ? `page=${page}&` : '') +
+            (page ? `?page=${page}&` : '') +
             (pageSize ? `pageSize=${pageSize}` : '')
 
         return this.http.get<Response>(url, this.options).pipe(
@@ -157,10 +157,15 @@ export class CenterCalendarService {
         centerId: string,
         calendarId: string,
         start_date: string,
-        end_date: string
+        end_date: string,
+        page?: number,
+        pageSize?: number
     ): Observable<Array<CalendarTask>> {
         const url =
-            this.SERVER + `/${centerId}/calendar/${calendarId}/task?start_date=${start_date}&end_date=${end_date}`
+            this.SERVER +
+            `/${centerId}/calendar/${calendarId}/task?start_date=${start_date}&end_date=${end_date}` +
+            (page ? `?page=${page}&` : '') +
+            (pageSize ? `pageSize=${pageSize}` : '')
 
         return this.http.get<Response>(url, this.options).pipe(
             map((res) => {
@@ -211,7 +216,7 @@ export class CenterCalendarService {
         const url =
             this.SERVER +
             `/${centerId}/calendar/${calendarId}/task/${taskId}/responsibility` +
-            (page ? `page=${page}&` : '') +
+            (page ? `?page=${page}&` : '') +
             (pageSize ? `pageSize=${pageSize}` : '')
 
         return this.http.get<Response>(url, this.options).pipe(
@@ -233,7 +238,7 @@ export class CenterCalendarService {
         const url =
             this.SERVER +
             `/${centerId}/calendar/${calendarId}/task/${taskId}/users-able-to-book` +
-            (page ? `page=${page}&` : '') +
+            (page ? `?page=${page}&` : '') +
             (pageSize ? `pageSize=${pageSize}` : '')
 
         return this.http.get<Response>(url, this.options).pipe(
@@ -255,7 +260,7 @@ export class CenterCalendarService {
         const url =
             this.SERVER +
             `/${centerId}/calendar/${calendarId}/task/${taskId}/users-booked` +
-            (page ? `page=${page}&` : '') +
+            (page ? `?page=${page}&` : '') +
             (pageSize ? `pageSize=${pageSize}` : '')
 
         return this.http.get<Response>(url, this.options).pipe(
@@ -339,7 +344,7 @@ export interface CreateCalendarTaskReqBody {
         | 'calendar_task_group_repeat_termination_type_date'
     repeat_count?: number
     repeat_end_date?: string
-    responsibility_user_ids: Array<string>
+    responsibility_center_user_ids: Array<string>
     class?: ClassForCU
 }
 
@@ -367,7 +372,7 @@ export interface UpdateCalendarTaskReqBody {
         | 'calendar_task_group_repeat_termination_type_date'
     repeat_count?: number
     repeat_end_date?: string
-    responsibility_user_ids?: Array<string>
+    responsibility_center_user_ids?: Array<string>
     class?: ClassForCU
 }
 
@@ -382,7 +387,7 @@ export interface ClassForCU {
     start_booking_until: string
     end_booking_before: string
     cancel_booking_before: string
-    instructor_user_ids: string[]
+    instructor_center_user_ids: string[]
 }
 
 export type DeleteMode = 'one' | 'after' | 'all'

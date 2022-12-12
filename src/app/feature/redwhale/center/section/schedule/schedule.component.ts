@@ -1003,7 +1003,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
                         start_booking_until: String(eventData.class.start_booking_until),
                         end_booking_before: String(eventData.class.end_booking_before),
                         cancel_booking_before: String(eventData.class.cancel_booking_before),
-                        instructor_user_ids: eventData.class.instructors.map((v) => v.id),
+                        instructor_center_user_ids: eventData.class.instructors.map((v) => v.id),
                     },
                 }
             } else {
@@ -1023,7 +1023,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
                         start_booking_until: String(eventData.class.start_booking_until),
                         end_booking_before: String(eventData.class.end_booking_before),
                         cancel_booking_before: String(eventData.class.cancel_booking_before),
-                        instructor_user_ids: eventData.class.instructors.map((v) => v.id),
+                        instructor_center_user_ids: eventData.class.instructors.map((v) => v.id),
                     },
                 }
             }

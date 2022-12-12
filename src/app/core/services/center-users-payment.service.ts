@@ -41,7 +41,7 @@ export class CenterUsersPaymentService {
         const url =
             this.SERVER +
             `/${centerId}/users/${userId}/payment` +
-            (page ? `page=${page}&` : '') +
+            (page ? `?page=${page}&` : '') +
             (pageSize ? `pageSize=${pageSize}` : '')
 
         return this.http.get<Response>(url, this.options).pipe(

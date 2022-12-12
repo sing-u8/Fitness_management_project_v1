@@ -1,10 +1,10 @@
 export interface ChatRoomMessage {
     id: string
-    user_id: string
-    user_name: string
-    user_picture: string
-    user_background: string
-    user_color: string
+    center_user_id: string
+    center_user_name: string
+    center_user_color: string
+    center_user_picture: string
+    center_user_background: string
     type_code: ChatRoomMessageType
     type_code_name: string
     text: string
@@ -13,7 +13,7 @@ export interface ChatRoomMessage {
     mimetype?: string // !! need to be removed later
     contentType: string
     size: number
-    unread_user_ids: string[]
+    unread_center_user_ids: string[]
     created_at: string
     deleted_at: string
 }

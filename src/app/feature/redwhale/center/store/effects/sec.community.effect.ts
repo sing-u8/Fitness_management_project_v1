@@ -69,7 +69,7 @@ export class CommunityEffect {
                                     spot,
                                     reqBody: {
                                         type_code: 'chat_room_type_chat_with_me',
-                                        user_ids: [curUserId],
+                                        center_user_ids: [curUserId],
                                     },
                                 }),
                             ]
@@ -199,7 +199,7 @@ export class CommunityEffect {
             switchMap(([{ centerId, invitedMembers, spot }, curChatRoom]) =>
                 this.centerChatRoomApi
                     .inviteMemberToChatRoom(centerId, curChatRoom.id, {
-                        user_ids: invitedMembers.map((v) => v.id),
+                        center_user_ids: invitedMembers.map((v) => v.id),
                     })
                     .pipe(
                         switchMap((__) =>
@@ -260,11 +260,11 @@ export class CommunityEffect {
                                 // msgId = fileList[0].file.name.slice(0, 10) + fileList[0].file.lastModified
                                 const message: ChatRoomLoadingMessage = {
                                     id: res.msgId,
-                                    user_id: user.id,
-                                    user_name: user.name,
-                                    user_picture: user.picture,
-                                    user_background: user.background,
-                                    user_color: user.color,
+                                    center_user_id: user.id,
+                                    center_user_name: user.name,
+                                    center_user_picture: user.picture,
+                                    center_user_background: user.background,
+                                    center_user_color: user.color,
                                     type_code: 'chat_room_message_type_file',
                                     type_code_name: '임시 메시지 - 파일',
                                     text: text,
@@ -272,7 +272,7 @@ export class CommunityEffect {
                                     originalname: fileList[0].file.name,
                                     contentType: fileList[0].contentType,
                                     size: fileList[0].file.size,
-                                    unread_user_ids: [], // !! 추후에 필요에 따라 수정 필요
+                                    unread_center_user_ids: [], // !! 추후에 필요에 따라 수정 필요
                                     created_at: dayjs().format('YYYY-MM-DD HH:mm:ss'),
                                     deleted_at: null,
                                     gauge: {
@@ -410,121 +410,127 @@ export class CommunityEffect {
         this.actions$.pipe(
             ofType(CommunityActions.startSendMessageWithFileToTempRoom),
             switchMap(({ centerId, text, fileList, user_ids, spot, user }) =>
-                this.centerChatRoomApi.createChatRoom(centerId, { type_code: 'chat_room_type_general', user_ids }).pipe(
-                    switchMap((chatRoom) =>
-                        this.commonCommunityService.createChatFilesWithReport(fileList, centerId, chatRoom.id).pipe(
-                            map((event: HttpEvent<any>) => ({
-                                event,
-                                msgId: fileList[0].file.name.slice(0, 10) + fileList[0].file.lastModified,
-                            })),
-                            switchMap((res) => {
-                                switch (res.event.type) {
-                                    case HttpEventType.Sent:
-                                        // msgId = fileList[0].file.name.slice(0, 10) + fileList[0].file.lastModified
-                                        const message: ChatRoomLoadingMessage = {
-                                            id: res.msgId,
-                                            user_id: user.id,
-                                            user_name: user.name,
-                                            user_picture: user.picture,
-                                            user_background: user.background,
-                                            user_color: user.color,
-                                            type_code: 'chat_room_message_type_file',
-                                            type_code_name: '임시 메시지 - 파일',
-                                            text: text,
-                                            url: fileList[0].result,
-                                            originalname: fileList[0].file.name,
-                                            contentType: fileList[0].contentType,
-                                            size: fileList[0].file.size,
-                                            unread_user_ids: [], // !! 추후에 필요에 따라 수정 필요
-                                            created_at: dayjs().format('YYYY-MM-DD HH:mm:ss'),
-                                            deleted_at: null,
-                                            gauge: {
+                this.centerChatRoomApi
+                    .createChatRoom(centerId, { type_code: 'chat_room_type_general', center_user_ids: user_ids })
+                    .pipe(
+                        switchMap((chatRoom) =>
+                            this.commonCommunityService.createChatFilesWithReport(fileList, centerId, chatRoom.id).pipe(
+                                map((event: HttpEvent<any>) => ({
+                                    event,
+                                    msgId: fileList[0].file.name.slice(0, 10) + fileList[0].file.lastModified,
+                                })),
+                                switchMap((res) => {
+                                    switch (res.event.type) {
+                                        case HttpEventType.Sent:
+                                            // msgId = fileList[0].file.name.slice(0, 10) + fileList[0].file.lastModified
+                                            const message: ChatRoomLoadingMessage = {
                                                 id: res.msgId,
-                                                value: 0,
-                                            },
-                                        }
-                                        this.store.dispatch(
-                                            CommunityActions.addChatRoomLoadingMsgs({ msg: message, spot })
-                                        )
-                                        return []
-
-                                    case HttpEventType.UploadProgress:
-                                        const gauge = Math.floor((res.event.loaded / res.event.total) * 100)
-                                        this.store.dispatch(
-                                            CommunityActions.updateChatRoomLoadingMsg({ msgId: res.msgId, spot, gauge })
-                                        )
-                                        return []
-
-                                    case HttpEventType.Response:
-                                        const _flieList: Array<ServiceFile> = res.event.body.dataset.map(
-                                            (data, idx) => {
-                                                // 썸네일 여부 확인 코드 필요
-                                                return {
-                                                    ...data,
-                                                    thumbnail: '',
-                                                }
+                                                center_user_id: user.id,
+                                                center_user_name: user.name,
+                                                center_user_picture: user.picture,
+                                                center_user_background: user.background,
+                                                center_user_color: user.color,
+                                                type_code: 'chat_room_message_type_file',
+                                                type_code_name: '임시 메시지 - 파일',
+                                                text: text,
+                                                url: fileList[0].result,
+                                                originalname: fileList[0].file.name,
+                                                contentType: fileList[0].contentType,
+                                                size: fileList[0].file.size,
+                                                unread_center_user_ids: [], // !! 추후에 필요에 따라 수정 필요
+                                                created_at: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+                                                deleted_at: null,
+                                                gauge: {
+                                                    id: res.msgId,
+                                                    value: 0,
+                                                },
                                             }
-                                        )
-                                        const reqBody: SendMessageReqBody = {
-                                            type_code: 'chat_room_message_type_file',
-                                            text: text,
-                                            url: _flieList[0].url,
-                                            originalname: _flieList[0].originalname,
-                                            contentType: _flieList[0].contentType,
-                                            size: _flieList[0].size,
-                                        }
+                                            this.store.dispatch(
+                                                CommunityActions.addChatRoomLoadingMsgs({ msg: message, spot })
+                                            )
+                                            return []
 
-                                        return forkJoin([
-                                            this.centerChatRoomApi.getChatRoomMessage(centerId, chatRoom.id),
-                                            this.centerChatRoomApi.sendMeesageToChatRoom(
-                                                centerId,
-                                                chatRoom.id,
-                                                reqBody
-                                            ),
-                                        ]).pipe(
-                                            switchMap(([existingMsgs, chatRoomMessage]) => {
-                                                const chatRoomMessages = _.sortBy(
-                                                    _.uniqBy([...existingMsgs, chatRoomMessage], 'id'),
-                                                    [
-                                                        (o) => {
-                                                            return -dayjs(o.created_at).unix()
-                                                        },
+                                        case HttpEventType.UploadProgress:
+                                            const gauge = Math.floor((res.event.loaded / res.event.total) * 100)
+                                            this.store.dispatch(
+                                                CommunityActions.updateChatRoomLoadingMsg({
+                                                    msgId: res.msgId,
+                                                    spot,
+                                                    gauge,
+                                                })
+                                            )
+                                            return []
+
+                                        case HttpEventType.Response:
+                                            const _flieList: Array<ServiceFile> = res.event.body.dataset.map(
+                                                (data, idx) => {
+                                                    // 썸네일 여부 확인 코드 필요
+                                                    return {
+                                                        ...data,
+                                                        thumbnail: '',
+                                                    }
+                                                }
+                                            )
+                                            const reqBody: SendMessageReqBody = {
+                                                type_code: 'chat_room_message_type_file',
+                                                text: text,
+                                                url: _flieList[0].url,
+                                                originalname: _flieList[0].originalname,
+                                                contentType: _flieList[0].contentType,
+                                                size: _flieList[0].size,
+                                            }
+
+                                            return forkJoin([
+                                                this.centerChatRoomApi.getChatRoomMessage(centerId, chatRoom.id),
+                                                this.centerChatRoomApi.sendMeesageToChatRoom(
+                                                    centerId,
+                                                    chatRoom.id,
+                                                    reqBody
+                                                ),
+                                            ]).pipe(
+                                                switchMap(([existingMsgs, chatRoomMessage]) => {
+                                                    const chatRoomMessages = _.sortBy(
+                                                        _.uniqBy([...existingMsgs, chatRoomMessage], 'id'),
+                                                        [
+                                                            (o) => {
+                                                                return -dayjs(o.created_at).unix()
+                                                            },
+                                                        ]
+                                                    )
+                                                    return [
+                                                        CommunityActions.finishSendMessageToTempRoom({
+                                                            spot,
+                                                            chatRoomMessages,
+                                                            chatRoom,
+                                                        }),
+                                                        CommunityActions.removeChatRoomLoadingMsgs({
+                                                            loadingMsgId: res.msgId,
+                                                            spot,
+                                                        }),
                                                     ]
-                                                )
-                                                return [
-                                                    CommunityActions.finishSendMessageToTempRoom({
-                                                        spot,
-                                                        chatRoomMessages,
-                                                        chatRoom,
-                                                    }),
-                                                    CommunityActions.removeChatRoomLoadingMsgs({
-                                                        loadingMsgId: res.msgId,
-                                                        spot,
-                                                    }),
-                                                ]
-                                            })
-                                        )
+                                                })
+                                            )
 
-                                    // return this.centerChatRoomApi
-                                    //     .sendMeesageToChatRoom(centerId, chatRoom.id, reqBody)
-                                    //     .pipe(
-                                    //         switchMap((chatRoomMessage) => {
-                                    //             return [
-                                    //                 CommunityActions.finishSendMessage({ spot, chatRoomMessage }),
-                                    //                 CommunityActions.removeChatRoomLoadingMsgs({
-                                    //                     loadingMsgId: res.msgId,
-                                    //                     spot,
-                                    //                 }),
-                                    //             ]
-                                    //         })
-                                    //     )
-                                    default:
-                                        return []
-                                }
-                            })
+                                        // return this.centerChatRoomApi
+                                        //     .sendMeesageToChatRoom(centerId, chatRoom.id, reqBody)
+                                        //     .pipe(
+                                        //         switchMap((chatRoomMessage) => {
+                                        //             return [
+                                        //                 CommunityActions.finishSendMessage({ spot, chatRoomMessage }),
+                                        //                 CommunityActions.removeChatRoomLoadingMsgs({
+                                        //                     loadingMsgId: res.msgId,
+                                        //                     spot,
+                                        //                 }),
+                                        //             ]
+                                        //         })
+                                        //     )
+                                        default:
+                                            return []
+                                    }
+                                })
+                            )
                         )
                     )
-                )
             ),
             catchError((err: string) => of(CommunityActions.error({ error: err })))
         )

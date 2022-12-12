@@ -56,7 +56,7 @@ export class SMSEffect {
                             const type = SMSReducer.matchUsersCategoryTo(usersByCateg.category_code)
                             userSelectCateg[type] = {
                                 name: usersByCateg.category_name,
-                                userSize: usersByCateg.user_count,
+                                userSize: usersByCateg.center_user_count,
                             }
                         })
                         return SMSActions.finishGetUsersByCategory({ userSelectCateg })

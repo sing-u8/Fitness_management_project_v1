@@ -285,7 +285,7 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
             CommunityActions.startCreateChatRoom({
                 centerId: this.center.id,
                 reqBody: {
-                    user_ids: user_ids,
+                    center_user_ids: user_ids,
                     type_code: 'chat_room_type_general',
                 },
                 spot: 'main',
@@ -480,10 +480,10 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
     showUser(index: number): boolean {
         return !(
             this.chatRoomMsgs_.length > index + 1 &&
-            this.chatRoomMsgs_[index].user_id &&
+            this.chatRoomMsgs_[index].center_user_id &&
             this.chatRoomMsgs_[index + 1].type_code != 'chat_room_message_type_system' &&
             this.chatRoomMsgs_[index + 1].type_code != 'fe_chat_room_message_type_date' &&
-            this.chatRoomMsgs_[index].user_id == this.chatRoomMsgs_[index + 1].user_id &&
+            this.chatRoomMsgs_[index].center_user_id == this.chatRoomMsgs_[index + 1].center_user_id &&
             dayjs(this.chatRoomMsgs_[index].created_at).format('YYYY-MM-DD_HH_mm') ==
                 dayjs(this.chatRoomMsgs_[index + 1].created_at).format('YYYY-MM-DD_HH_mm')
         )
@@ -492,8 +492,8 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
     isLastSuccessiveMsg(index: number): boolean {
         return (
             index != 0 &&
-            (this.chatRoomMsgs_[index].user_id != this.chatRoomMsgs_[index - 1].user_id ||
-                (this.chatRoomMsgs_[index].user_id == this.chatRoomMsgs_[index - 1].user_id &&
+            (this.chatRoomMsgs_[index].center_user_id != this.chatRoomMsgs_[index - 1].center_user_id ||
+                (this.chatRoomMsgs_[index].center_user_id == this.chatRoomMsgs_[index - 1].center_user_id &&
                     dayjs(this.chatRoomMsgs_[index].created_at).format('YYYY-MM-DD_HH_mm') !=
                         dayjs(this.chatRoomMsgs_[index - 1].created_at).format('YYYY-MM-DD_HH_mm')))
             //  &&
@@ -615,7 +615,7 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
         if (_.includes(this.curChatRoom_.id, IsTmepRoom)) {
             const createRoom: CenterChatRoomApi.CreateChatRoomReqBody = {
                 type_code: 'chat_room_type_general',
-                user_ids: this.curChatRoom_.chat_room_users.map((v) => v.id),
+                center_user_ids: this.curChatRoom_.chat_room_users.map((v) => v.id),
             }
             const sendMsg: CenterChatRoomApi.SendMessageReqBody = {
                 type_code: 'chat_room_message_type_text',

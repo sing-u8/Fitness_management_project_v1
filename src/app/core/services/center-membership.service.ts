@@ -61,7 +61,7 @@ export class CenterMembershipService {
         const url =
             this.SERVER +
             `/${gymId}/membership` +
-            (page ? `page=${page}&` : '') +
+            (page ? `?page=${page}&` : '') +
             (pageSize ? `pageSize=${pageSize}` : '')
 
         const options = {
@@ -155,7 +155,7 @@ export class CenterMembershipService {
         const url =
             this.SERVER +
             `/${gymId}/membership/${categoryId}/item` +
-            (page ? `page=${page}&` : '') +
+            (page ? `?page=${page}&` : '') +
             (pageSize ? `pageSize=${pageSize}` : '')
 
         const options = {
@@ -270,7 +270,7 @@ export class CenterMembershipService {
         const url =
             this.SERVER +
             `/${centerId}/membership/${categoryId}/item/${ItemId}/class` +
-            (page ? `page=${page}&` : '') +
+            (page ? `?page=${page}&` : '') +
             (pageSize ? `pageSize=${pageSize}` : '')
 
         const options = {

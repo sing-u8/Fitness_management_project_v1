@@ -60,7 +60,7 @@ export class CenterLessonService {
     // 카테고리 조회
     getCategoryList(gymId: string, page?: number, pageSize?: number): Observable<Array<ClassCategory>> {
         const url =
-            this.SERVER + `/${gymId}/class` + (page ? `page=${page}&` : '') + (pageSize ? `pageSize=${pageSize}` : '')
+            this.SERVER + `/${gymId}/class` + (page ? `?page=${page}&` : '') + (pageSize ? `pageSize=${pageSize}` : '')
 
         const options = {
             headers: new HttpHeaders({
@@ -153,7 +153,7 @@ export class CenterLessonService {
         const url =
             this.SERVER +
             `/${gymId}/class/${categoryId}/item` +
-            (page ? `page=${page}&` : '') +
+            (page ? `?page=${page}&` : '') +
             (pageSize ? `pageSize=${pageSize}` : '')
 
         const options = {
@@ -268,7 +268,7 @@ export class CenterLessonService {
         const url =
             this.SERVER +
             `/${centerId}/class/${categoryId}/item/${ItemId}/membership` +
-            (page ? `page=${page}&` : '') +
+            (page ? `?page=${page}&` : '') +
             (pageSize ? `pageSize=${pageSize}` : '')
 
         const options = {
@@ -342,7 +342,7 @@ export class CenterLessonService {
         const url =
             this.SERVER +
             `/${centerId}/class/${categoryId}/item/${ItemId}/instructor` +
-            (page ? `page=${page}&` : '') +
+            (page ? `?page=${page}&` : '') +
             (pageSize ? `pageSize=${pageSize}` : '')
 
         const options = {

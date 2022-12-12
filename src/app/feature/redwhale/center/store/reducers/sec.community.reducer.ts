@@ -647,10 +647,10 @@ export const communityReducer = createImmerReducer(
         if (state.mainCurChatRoom?.id == ws_data.info.chat_room_id) {
             _.find(state.mainChatRoomMsgs, (msg, idx) => {
                 if (msg.type_code == 'fe_chat_room_message_type_date') return false
-                const unread_users_ids = msg.unread_user_ids
+                const unread_users_ids = msg.unread_center_user_ids
                 const readUserId = _.remove(unread_users_ids, (id) => id == ws_data.info.user_id)
                 if (!_.isEmpty(readUserId)) {
-                    state.mainChatRoomMsgs[idx].unread_user_ids = unread_users_ids
+                    state.mainChatRoomMsgs[idx].unread_center_user_ids = unread_users_ids
                     return false
                 }
                 return true
@@ -659,10 +659,10 @@ export const communityReducer = createImmerReducer(
         if (state.drawerCurChatRoom?.id == ws_data.info.chat_room_id) {
             _.find(state.drawerChatRoomMsgs, (msg, idx) => {
                 if (msg.type_code == 'fe_chat_room_message_type_date') return false
-                const unread_users_ids = msg.unread_user_ids
+                const unread_users_ids = msg.unread_center_user_ids
                 const readUserId = _.remove(unread_users_ids, (id) => id == ws_data.info.user_id)
                 if (!_.isEmpty(readUserId)) {
-                    state.drawerChatRoomMsgs[idx].unread_user_ids = unread_users_ids
+                    state.drawerChatRoomMsgs[idx].unread_center_user_ids = unread_users_ids
                     return false
                 }
                 return true
@@ -844,6 +844,7 @@ function makeTempChatRoom(center: Center, curUser: CenterUser, members: Array<Ce
             (acc, cur) => acc + (acc == '' ? `${cur.name}` : `, ${cur.name}`),
             members.length == 1 ? '' : `${curUser.name}`
         ),
+        center_id: center.id,
         center_name: center.name,
         chat_room_user_count: 1 + members.length,
         chat_room_users: [
@@ -896,11 +897,11 @@ function checkDayDiffBtMsgAndMsg(currentMsg: ChatRoomMessage, prevMsg: ChatRoomM
 function makeDateMessage(created_at: string): ChatRoomMessage {
     return {
         id: `crmd-${dayjs(created_at).format('YYYY-MM-DD HH:mm:ss')}`,
-        user_id: undefined,
-        user_name: undefined,
-        user_picture: undefined,
-        user_background: undefined,
-        user_color: undefined,
+        center_user_id: undefined,
+        center_user_name: undefined,
+        center_user_picture: undefined,
+        center_user_background: undefined,
+        center_user_color: undefined,
         type_code: 'fe_chat_room_message_type_date',
         type_code_name: '메시지 - 날짜',
         text: undefined,
@@ -908,7 +909,7 @@ function makeDateMessage(created_at: string): ChatRoomMessage {
         originalname: undefined,
         contentType: undefined,
         size: undefined,
-        unread_user_ids: [],
+        unread_center_user_ids: [],
         created_at: dayjs(created_at).format('YYYY-MM-DD HH:mm:ss'),
         deleted_at: null,
     }

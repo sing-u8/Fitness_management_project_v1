@@ -8,7 +8,7 @@ export interface CenterUsersByCategory {
         | '만료된 회원'
         | '센터 직원'
         | '오늘 출석한 회원'
-    user_count: number
+    center_user_count: number
 }
 
 export type CenterUsersCategory = 'all' | 'valid' | 'unpaid' | 'to_expire' | 'expired' | 'employee' | 'check_in'

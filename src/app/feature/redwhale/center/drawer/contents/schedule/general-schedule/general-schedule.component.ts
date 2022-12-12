@@ -208,7 +208,7 @@ export class GeneralScheduleComponent implements OnInit, AfterViewInit, OnDestro
                 end_time: this.timepick.endTime.slice(0, 5),
                 memo: this.planTexts.planDetail,
                 repeat: true,
-                responsibility_user_ids: selectedStaffs.map((v) => v.value.id),
+                responsibility_center_user_ids: selectedStaffs.map((v) => v.value.id),
                 repeat_day_of_the_week: this.repeatOfWeek,
                 repeat_cycle_unit_code: 'calendar_task_group_repeat_cycle_unit_week',
                 repeat_cycle: 1,
@@ -226,7 +226,7 @@ export class GeneralScheduleComponent implements OnInit, AfterViewInit, OnDestro
                 end_time: this.timepick.endTime.slice(0, 5),
                 memo: this.planTexts.planDetail,
                 repeat: false,
-                responsibility_user_ids: selectedStaffs.map((v) => v.value.id),
+                responsibility_center_user_ids: selectedStaffs.map((v) => v.value.id),
             }
         }
 

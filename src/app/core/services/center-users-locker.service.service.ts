@@ -49,7 +49,7 @@ export class CenterUsersLockerService {
         const url =
             this.SERVER +
             `/${centerId}/users/${userId}/locker` +
-            (page ? `page=${page}&` : '') +
+            (page ? `?page=${page}&` : '') +
             (pageSize ? `pageSize=${pageSize}` : '')
 
         return this.http.get<Response>(url, this.options).pipe(
@@ -262,7 +262,7 @@ export class CenterUsersLockerService {
         const url =
             this.SERVER +
             `/${centerId}/users/${userId}/locker/${lockerId}/holding` +
-            (page ? `page=${page}&` : '') +
+            (page ? `?page=${page}&` : '') +
             (pageSize ? `pageSize=${pageSize}` : '')
 
         return this.http.get<Response>(url, this.options).pipe(

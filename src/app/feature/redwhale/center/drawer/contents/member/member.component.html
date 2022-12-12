@@ -4,7 +4,10 @@
         <div class="d-flex align-items-center">
             <span
                 class="dashboard-icon"
-                rw-tooltip [detailAdj]="-37" [rwTooltipPlacement]="'bottom-right'" [rwTooltipTitle]="'회원관리 페이지로 이동'"
+                rw-tooltip
+                [detailAdj]="-37"
+                [rwTooltipPlacement]="'bottom-right'"
+                [rwTooltipTitle]="'회원관리 페이지로 이동'"
                 (click)="routeToDashboard()"
             ></span>
             <span class="close-icon" (click)="closeDrawer()"></span>
@@ -54,7 +57,7 @@
                             <div class="l-photo-icon" (click)="userProfile.click()">
                                 <div class="photo-icon"></div>
                                 <span class="photo-text">
-                                        {{ curCenterUser.picture ? '사진 변경' : '사진 추가' }}
+                                    {{ curCenterUser.picture ? '사진 변경' : '사진 추가' }}
                                     <input
                                         type="file"
                                         accept="image/*"
@@ -62,7 +65,7 @@
                                         (change)="registerUserProfile(userProfile)"
                                         hidden
                                     />
-                                    </span>
+                                </span>
 
                                 <div
                                     *ngIf="curCenterUser.picture"
@@ -73,9 +76,9 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="rw-typo-title1 user-name" (click) = "toggleShowChangeNameModal()">
-                            {{curCenterUser?.name}}
-                            <img src="assets/icons/etc/edit.svg">
+                        <div class="rw-typo-title1 user-name" (click)="toggleShowChangeNameModal()">
+                            {{ curCenterUser?.name }}
+                            <img src="assets/icons/etc/edit.svg" />
                         </div>
                         <rw-member-role-select
                             *ngIf="curCenterUser"
@@ -93,13 +96,8 @@
                     </div>
                 </div>
                 <div class="chat-attend">
-                    <div
-                        class="chat-button"
-                        rw-button
-                        [rwButtonColor] = "'var(--white)'"
-                        (click) = "onOneToOneChat()"
-                    >
-                        <img src="assets/icons/main/chat.svg" >
+                    <div class="chat-button" rw-button [rwButtonColor]="'var(--white)'" (click)="onOneToOneChat()">
+                        <img src="assets/icons/main/chat.svg" />
                         <span class="rw-typo-bodytext0-bold">1:1 채팅</span>
                     </div>
                     <div class="divider"></div>
@@ -107,86 +105,106 @@
                         *ngIf="!(curUserData?.user?.last_check_in | isToday)"
                         class="attend-button"
                         rw-button
-                        [rwButtonColor] = "'var(--white)'"
-                        (click) = "curUserData.user && onAttend()"
+                        [rwButtonColor]="'var(--white)'"
+                        (click)="curUserData.user && onAttend()"
                     >
-                        <img src="assets/icons/etc/attend.svg" >
+                        <img src="assets/icons/etc/attend.svg" />
                         <span class="rw-typo-bodytext0-bold">수동 출석</span>
                     </div>
                     <div
-                        *ngIf = "(curUserData?.user?.last_check_in | isToday)"
+                        *ngIf="curUserData?.user?.last_check_in | isToday"
                         class="attend-button"
                         rw-button
-                        [rwButtonColor] = "'var(--white)'"
-                        (click) = "curUserData.user && onCancelAttend()"
+                        [rwButtonColor]="'var(--white)'"
+                        (click)="curUserData.user && onCancelAttend()"
                     >
-                        <img src="assets/icons/etc/leave.svg" >
+                        <img src="assets/icons/etc/leave.svg" />
                         <span class="rw-typo-bodytext0-bold">수동 출석 취소</span>
                     </div>
                 </div>
                 <div class="user-info">
                     <div class="user-data">
                         <span class="rw-typo-bodytext1_grey prop">회원번호</span>
-                        <div class="rw-typo-bodytext1 value changeable" (click)="curUserData.user && toggleShowChangeMembershipNumberModal()">
-                            {{!curCenterUser ? '-' : curCenterUser.membership_number ?? '-'}}
-                            <img src="assets/icons/etc/edit.svg" />
+                        <div
+                            class="rw-typo-bodytext1 value"
+                            [class.changeable]="curUserData.user"
+                            (click)="curUserData.user && toggleShowChangeMembershipNumberModal()"
+                        >
+                            {{
+                                !curUserData.user
+                                    ? '-'
+                                    : !curUserData.user.membership_number
+                                    ? '-'
+                                    : curUserData.user.membership_number
+                            }}
+                            <img *ngIf="curUserData.user" src="assets/icons/etc/edit.svg" />
                         </div>
-                    </div>
-                    <div class="user-data">
-                        <span class="rw-typo-bodytext1_grey prop">전화번호</span>
-                        <span class="rw-typo-bodytext1 value">{{!curCenterUser ? '-' : (curCenterUser.phone_number | phoneNumber)}}</span>
                     </div>
                     <div class="user-data">
                         <span class="rw-typo-bodytext1_grey prop">이메일</span>
                         <div
                             class="rw-typo-bodytext1 value"
-                            [class.changeable]="(!curUserData?.user?.email)"
-                            (click)="(!curUserData?.user?.email) && toggleShowChangeUserEmailModal()"
+                            [class.changeable]="curUserData.user"
+                            (click)="curUserData?.user && toggleShowChangeUserEmailModal()"
                         >
-                            {{!curCenterUser ? '-' : curCenterUser.email}}
-                            <img *ngIf="(!curUserData?.user?.email)" src="assets/icons/etc/edit.svg" />
+                            {{ !curUserData.user ? '-' : !curUserData.user.email ? '-' : curUserData.user.email }}
+                            <img *ngIf="curUserData.user" src="assets/icons/etc/edit.svg" />
                         </div>
                     </div>
                     <div class="user-data">
+                        <span class="rw-typo-bodytext1_grey prop">전화번호</span>
+                        <span
+                            class="rw-typo-bodytext1 value"
+                            [class.changeable]="curUserData.user"
+                            (click)="curUserData?.user && toggleShowChangeUserPhoneNumberModal()"
+                        >
+                            {{ !curUserData.user ? '-' : (curUserData.user.phone_number | phoneNumber) }}
+                            <img *ngIf="curUserData.user" src="assets/icons/etc/edit.svg" />
+                        </span>
+                    </div>
+                    <div class="user-data">
                         <span class="rw-typo-bodytext1_grey prop">생년월일</span>
-                        <span class="rw-typo-bodytext1 value">
-                    {{ (curCenterUser.birth_date | dashToDot) ?? '-' }} ({{
-                            (curCenterUser.birth_date | birthDate: '세') ?? '-세'
-                            }},
-                            {{
-                            curCenterUser.sex == 'male'
-                                ? '남성'
-                                : curCenterUser.sex == 'female'
-                                    ? '여성'
-                                    : '-'
-                            }})
-                </span>
+                        <span
+                            class="rw-typo-bodytext1 value"
+                            [class.changeable]="curUserData.user"
+                            (click)="curUserData?.user && toggleShowChangeUserBirthDateModal()"
+                        >
+                            <span *ngIf="!curUserData.user">-</span>
+                            <span *ngIf="curUserData.user">
+                                {{ (curUserData.user.birth_date | dashToDot) ?? '-' }} ({{
+                                    (curUserData.user.birth_date | birthDate: '세') ?? '-세'
+                                }},
+                                {{
+                                    curUserData.user.sex == 'male'
+                                        ? '남성'
+                                        : curUserData.user.sex == 'female'
+                                        ? '여성'
+                                        : '-'
+                                }})
+                            </span>
+                            <img *ngIf="curUserData.user" src="assets/icons/etc/edit.svg" />
+                        </span>
                     </div>
 
                     <textarea
                         placeholder="메모를 입력해주세요."
                         class="rw-typo-bodytext1 thin-scroll-y"
-                        (blur) = "updateUserMemo(memoForm.value)"
+                        (blur)="updateUserMemo(memoForm.value)"
                         [formControl]="memoForm"
                     ></textarea>
                     <div class="l-user-detail-button">
-                        <div
-                            class="rw-typo-bodytext0-bold go-back-button"
-                            rw-button
-                            (click) = "showUserDetail = false"
-                        >
+                        <div class="rw-typo-bodytext0-bold go-back-button" rw-button (click)="showUserDetail = false">
                             <span class="back-icon"></span>
                             뒤로
                         </div>
                         <div
                             class="rw-typo-bodytext0-bold register-locker-membership-button"
                             rw-button
-                            (click) = "toggleRegisterMLFullModal()"
+                            (click)="toggleRegisterMLFullModal()"
                         >
                             회원권 / 락커 등록하기
                         </div>
                     </div>
-
                 </div>
             </div>
         </ng-container>
@@ -247,6 +265,18 @@
     (cancel)="toggleShowChangeUserEmailModal()"
     (confirm)="onChangeUserEmailConfirm($event)"
 ></db-change-user-email-modal>
+<db-change-user-phone-number-modal
+    [(visible)]="doShowChangeUserPhoneNumberModal"
+    [curUser]="curUserData?.user"
+    (cancel)="toggleShowChangeUserPhoneNumberModal()"
+    (confirm)="onChangeUserPhoneNumberConfirm($event)"
+></db-change-user-phone-number-modal>
+<db-change-user-birth-date-modal
+    [(visible)]="doShowChangeUserBirthDateModal"
+    [curUser]="curUserData?.user"
+    (cancel)="toggleShowChangeUserBirthDateModal()"
+    (confirm)="onChangeUserBirthDateConfirm($event)"
+></db-change-user-birth-date-modal>
 
 <rw-modal
     [(visible)]="doShowAttendModal"

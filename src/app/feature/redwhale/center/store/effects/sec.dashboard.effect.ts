@@ -87,7 +87,7 @@ export class DashboardEffect {
                             const type = DashboardReducer.matchUsersCategoryTo(usersByCateg.category_code)
                             userSelectCateg[type] = {
                                 name: usersByCateg.category_name,
-                                userSize: usersByCateg.user_count,
+                                userSize: usersByCateg.center_user_count,
                             }
                         })
                         return DashboardActions.finishGetUsersByCategory({ userSelectCateg })
@@ -490,7 +490,7 @@ export class DashboardEffect {
                             const type = DashboardReducer.matchUsersCategoryTo(usersByCateg.category_code)
                             userSelectCateg[type] = {
                                 name: usersByCateg.category_name,
-                                userSize: usersByCateg.user_count,
+                                userSize: usersByCateg.center_user_count,
                             }
                         })
                         return DashboardActions.finishGetDrawerUsersByCategory({ userSelectCateg })
@@ -535,7 +535,9 @@ export class DashboardEffect {
                 this.store.select(DashboardSelector.drawerCurUserListSelect),
             ]),
             switchMap(([{ centerId, cb, reqBody }, userLists, curUserListSelect]) => {
-                const center_user_ids = userLists[curUserListSelect.key].filter((v) => v.holdSelected).map((v) => v.user.id)
+                const center_user_ids = userLists[curUserListSelect.key]
+                    .filter((v) => v.holdSelected)
+                    .map((v) => v.user.id)
                 return this.centerHoldingApi
                     .centerHolding(centerId, {
                         ...reqBody,

@@ -115,7 +115,7 @@ export class CenterLockerService {
         const url =
             this.SERVER +
             `/${centerId}/locker/${categoryId}/item` +
-            (page ? `page=${page}&` : '') +
+            (page ? `?page=${page}&` : '') +
             (pageSize ? `pageSize=${pageSize}` : '')
 
         const options = {
@@ -184,7 +184,7 @@ export class CenterLockerService {
         const url =
             this.SERVER +
             `/${centerId}/locker/${categoryId}/item/${itemId}/history` +
-            (page ? `page=${page}&` : '') +
+            (page ? `?page=${page}&` : '') +
             (pageSize ? `pageSize=${pageSize}` : '')
 
         const options = {

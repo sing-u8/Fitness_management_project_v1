@@ -8,6 +8,7 @@ export interface ChatRoom {
     permission_code: ChatRoomPermissionCode
     permission_code_name: ChatRoomPermissionCodeName
     name: string
+    center_id: string
     center_name: string
     chat_room_user_count: number
     chat_room_users: Array<ChatRoomUser>

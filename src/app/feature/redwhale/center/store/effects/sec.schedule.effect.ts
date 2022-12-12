@@ -49,7 +49,6 @@ export class ScheduleEffect {
                                 this.centerLessonApi.getCategoryList(center.id),
                             ]).pipe(
                                 map(([centerUsers, instructorFilter, lessonCategs]) => {
-                                    
                                     const curCenterUser = this.storageService.getCenterUser()
                                     const centerCalendar = calendars[0]
                                     const doLessonsExist =
@@ -123,10 +122,7 @@ export class ScheduleEffect {
                                 },
                             }),
                             showToast({
-                                text: `'${this.wordService.ellipsis(
-                                    newInstructor.name,
-                                    6
-                                )}' 강사가 추가되었습니다.`,
+                                text: `'${this.wordService.ellipsis(newInstructor.name, 6)}' 강사가 추가되었습니다.`,
                             }),
                         ]
                     }),

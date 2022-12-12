@@ -36,13 +36,19 @@ export class CenterChatRoomService {
     }
 
     // 채팅방 조회
-    getChatRoom(centerId: string): Observable<Array<ChatRoom>> {
-        const url = this.SERVER + `/${centerId}/chat_room`
+    getChatRoom(centerId: string, page?: number, pageSize?: number): Observable<Array<ChatRoom>> {
+        const url =
+            this.SERVER +
+            `/${centerId}/chat_room` +
+            (page ? `?page=${page}&` : '') +
+            (pageSize ? `pageSize=${pageSize}` : '')
+
         const options = {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json',
             }),
         }
+
         return this.http.get<Response>(url, options).pipe(
             map((res) => {
                 return res.dataset
@@ -104,8 +110,18 @@ export class CenterChatRoomService {
     }
 
     // 채팅방 회원 조회
-    getChatRoomMember(centerId: string, chatRoomId: string, includeMe = false): Observable<Array<ChatRoomUser>> {
-        const url = this.SERVER + `/${centerId}/chat_room/${chatRoomId}/users?me=${includeMe}`
+    getChatRoomMember(
+        centerId: string,
+        chatRoomId: string,
+        includeMe = false,
+        page?: number,
+        pageSize?: number
+    ): Observable<Array<ChatRoomUser>> {
+        const url =
+            this.SERVER +
+            `/${centerId}/chat_room/${chatRoomId}/users?me=${includeMe}` +
+            (page ? `?page=${page}&` : '') +
+            (pageSize ? `pageSize=${pageSize}` : '')
         const options = {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json',
@@ -114,6 +130,22 @@ export class CenterChatRoomService {
         return this.http.get<Response>(url, options).pipe(
             map((res) => {
                 return res.dataset
+            }),
+            catchError(handleError)
+        )
+    }
+
+    // 채팅 메시지 읽음
+    readChatRoomMessage(centerId: string, chatRoomId: string): Observable<Response> {
+        const url = this.SERVER + `/${centerId}/chat_room/${chatRoomId}/read`
+        const options = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json',
+            }),
+        }
+        return this.http.post<Response>(url, {}, options).pipe(
+            map((res) => {
+                return res.dataset[0]
             }),
             catchError(handleError)
         )
@@ -149,7 +181,8 @@ export class CenterChatRoomService {
         const url =
             this.SERVER +
             `/${centerId}/chat_room/${chatRoomId}/message` +
-            (page && pageSize ? `?page=${page}&pageSize=${pageSize}` : '')
+            (page ? `?page=${page}&` : '') +
+            (pageSize ? `pageSize=${pageSize}` : '')
         const options = {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json',
@@ -178,27 +211,11 @@ export class CenterChatRoomService {
             catchError(handleError)
         )
     }
-
-    // 채팅 메시지 읽음
-    readChatRoomMessage(centerId: string, chatRoomId: string): Observable<Response> {
-        const url = this.SERVER + `/${centerId}/chat_room/${chatRoomId}/read`
-        const options = {
-            headers: new HttpHeaders({
-                'Content-Type': 'application/json',
-            }),
-        }
-        return this.http.post<Response>(url, {}, options).pipe(
-            map((res) => {
-                return res.dataset[0]
-            }),
-            catchError(handleError)
-        )
-    }
 }
 
 export interface CreateChatRoomReqBody {
     type_code: ChatRoomTypeCode
-    user_ids: Array<string>
+    center_user_ids: Array<string>
 }
 
 export interface UpdateCenterRoomReqBody {
@@ -206,15 +223,15 @@ export interface UpdateCenterRoomReqBody {
 }
 
 export interface InviteMemberToChatRoomReqBody {
-    user_ids: Array<string>
+    center_user_ids: Array<string>
 }
 
 export interface SendMessageReqBody {
     type_code: ChatRoomMessageType
-    text: string
-    url: string
-    originalname: string
-    // mimetype: string
-    contentType: string
-    size: number
+    text?: string
+    url?: string
+    originalname?: string
+    mimetype?: string
+    contentType?: string
+    size?: number
 }

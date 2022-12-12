@@ -195,7 +195,7 @@ export class ModifyGeneralScheduleComponent implements OnInit, AfterViewInit, On
 
         if (this.dayRepeatSwitch && this.generalRepeatOption != 'one') {
             reqBody = {
-                responsibility_user_ids: selectedStaffs.map((v) => v.value.id),
+                responsibility_center_user_ids: selectedStaffs.map((v) => v.value.id),
                 name: this.planTexts.planTitle,
                 start_date: dayjs(this.repeatDatepick.startDate).format('YYYY-MM-DD'),
                 end_date: dayjs(this.repeatDatepick.startDate).format('YYYY-MM-DD'),
@@ -211,7 +211,7 @@ export class ModifyGeneralScheduleComponent implements OnInit, AfterViewInit, On
             }
         } else {
             reqBody = {
-                responsibility_user_ids: selectedStaffs.map((v) => v.value.id),
+                responsibility_center_user_ids: selectedStaffs.map((v) => v.value.id),
                 name: this.planTexts.planTitle,
                 start_date: dayjs(this.datepick.date).format('YYYY-MM-DD'),
                 end_date: dayjs(this.datepick.date).format('YYYY-MM-DD'),
