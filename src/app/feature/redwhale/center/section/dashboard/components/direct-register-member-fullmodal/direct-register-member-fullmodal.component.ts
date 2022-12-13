@@ -216,7 +216,7 @@ export class DirectRegisterMemberFullmodalComponent implements OnInit, OnChanges
         const lastStr = this.birth_date.value[userDataSize - 1]
         const digitReg = /[\d]/g
         const dotReg = /[.]/g
-    
+
         const code = event.which ? event.which : event.keyCode
 
         if (userDataSize == 5 && code != 8) {
@@ -247,7 +247,7 @@ export class DirectRegisterMemberFullmodalComponent implements OnInit, OnChanges
         const lastStr = this.phone_number.value[userDataSize - 1]
         const digitReg = /\d/g
         const dashReg = /-/g
-    
+
         const code = event.which ? event.which : event.keyCode
 
         if (userDataSize == 4 && code != 8) {

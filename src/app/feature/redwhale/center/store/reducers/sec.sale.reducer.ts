@@ -115,6 +115,7 @@ export const saleReducer = createImmerReducer(
     }),
     on(SaleActions.finishGetSaleData, (state, { saleData }) => {
         state.saleData = saleData
+        console.log('finishGetSaleData --- ', state.saleData)
         return state
     }),
 

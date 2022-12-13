@@ -108,9 +108,7 @@ export class ChargeModalComponent implements OnChanges, AfterViewChecked, OnDest
                         name: v.name,
                         value: v,
                     })
-                    this.user.id == v.id
-                        ? (this.lockerStaffSelectValue = { name: v.name, value: v })
-                        : null
+                    this.user.id == v.id ? (this.lockerStaffSelectValue = { name: v.name, value: v }) : null
                 })
             },
         })
@@ -177,9 +175,7 @@ export class ChargeModalComponent implements OnChanges, AfterViewChecked, OnDest
         this.inputs = { pay_card: '', pay_cash: '', pay_trans: '', unpaid: '' }
         this.total = '0'
         this.staffList.forEach((v) => {
-            this.user.id == v.id
-                ? (this.lockerStaffSelectValue = { name: v.name, value: v })
-                : null
+            this.user.id == v.id ? (this.lockerStaffSelectValue = { name: v.name, value: v }) : null
         })
     }
 
@@ -194,7 +190,7 @@ export class ChargeModalComponent implements OnChanges, AfterViewChecked, OnDest
     // input helper functions
     restrictToNumber(event) {
         const code = event.which ? event.which : event.keyCode
-        if (code < 48 || code > 57 || code < 96  || code > 105) {
+        if (code < 48 || code > 57) {
             return false
         }
         return true

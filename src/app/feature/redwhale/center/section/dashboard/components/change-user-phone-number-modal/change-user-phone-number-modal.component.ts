@@ -148,12 +148,11 @@ export class ChangeUserPhoneNumberModalComponent implements OnChanges, AfterView
         const lastStr = this.userPhoneNumber.value[userDataSize - 1]
         const digitReg = /\d/g
         const dashReg = /-/g
-        
+
         const code = event.which ? event.which : event.keyCode
 
         if (userDataSize == 4 && code != 8) {
             if (digitReg.test(lastStr)) {
-                
                 this.userPhoneNumber.patchValue(userData.slice(0, 3) + '-' + userData.slice(3))
             } else if (dashReg.test(lastStr)) {
                 this.userPhoneNumber.patchValue(userData.slice(0, 3))
