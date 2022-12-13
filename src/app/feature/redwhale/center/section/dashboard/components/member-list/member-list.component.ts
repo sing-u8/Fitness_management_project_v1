@@ -193,7 +193,7 @@ export class MemberListComponent implements OnInit, OnDestroy {
             title: '아직 출석한 회원이 없어요.',
         },
         valid: {
-            title: '유효한 회원이 없어요.',
+            title: '회원권 있는 회원이 없어요.',
             desc: ['센터에 회원을 등록해보세요!'],
             emptyButton: {
                 text: '신규 회원 등록하기',
@@ -204,11 +204,11 @@ export class MemberListComponent implements OnInit, OnDestroy {
         },
         unpaid: {
             today: this.today,
-            title: '미수금이 있는 회원이 없어요.',
+            title: '미수금 있는 회원이 없어요.',
         },
         imminent: {
             today: this.today,
-            title: '만료 예정인 회원이 없어요.',
+            title: '7일 내 만료 예정 회원이 없어요.',
         },
         expired: {
             today: this.today,
