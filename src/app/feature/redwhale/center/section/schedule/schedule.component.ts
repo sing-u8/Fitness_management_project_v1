@@ -345,8 +345,6 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
         this.setCalendarTitle(this.selectedDateViewType)
 
         const calView = this.fullCalendar.getApi().view
-        // this.activeStart = dayjs(calView.activeStart).format('YYYY-MM-DD')
-        // this.activeEnd = dayjs(calView.activeEnd).format('YYYY-MM-DD')
         this.nxStore.dispatch(ScheduleActions.setDatePick({ date: rDate.date }))
         this.nxStore.dispatch(
             ScheduleActions.setCalendarConfig({
@@ -364,14 +362,12 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
         this.setCalendarTitle(this.selectedDateViewType)
 
         const calView = calendarApi.view
-        // this.activeStart = dayjs(calView.activeStart).format('YYYY-MM-DD')
-        // this.activeEnd = dayjs(calView.activeEnd).format('YYYY-MM-DD')
         this.nxStore.dispatch(ScheduleActions.setWeekPick({ startDate: rDate.startDate, endDate: rDate.endDate }))
         this.nxStore.dispatch(
             ScheduleActions.setCalendarConfig({
                 calendarConfig: {
-                    startDate: dayjs(calView.activeStart).format('YYYY-MM-DD'),
-                    endDate: dayjs(calView.activeEnd).format('YYYY-MM-DD'),
+                    startDate: dayjs(rDate.startDate).format('YYYY-MM-DD'),
+                    endDate: dayjs(rDate.endDate).format('YYYY-MM-DD'),
                 },
             })
         )

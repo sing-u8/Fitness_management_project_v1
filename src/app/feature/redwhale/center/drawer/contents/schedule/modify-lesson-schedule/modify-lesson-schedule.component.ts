@@ -199,7 +199,7 @@ export class ModifyLessonScheduleComponent implements OnInit, OnDestroy, AfterVi
                 end_date: dayjs(this.repeatDatepick.startDate).format('YYYY-MM-DD'),
                 start_time: this.timepick.slice(0, 5),
                 end_time: this.scheduleHelperService.getLessonEndTime(this.timepick, this.lessonEvent.class.duration),
-                color: this.lessonEvent.color,
+                color: this.color,
                 memo: this.planDetailInputs.detail,
                 repeat: true,
                 repeat_day_of_the_week: this.repeatOfWeek,
@@ -230,7 +230,7 @@ export class ModifyLessonScheduleComponent implements OnInit, OnDestroy, AfterVi
                 end_date: this.dayPick.date,
                 start_time: this.timepick.slice(0, 5),
                 end_time: this.scheduleHelperService.getLessonEndTime(this.timepick, this.lessonEvent.class.duration),
-                color: this.lessonEvent.color,
+                color: this.color,
                 memo: this.planDetailInputs.detail,
                 responsibility_center_user_ids: selectedStaffs.map((v) => v.value.id),
                 class: {

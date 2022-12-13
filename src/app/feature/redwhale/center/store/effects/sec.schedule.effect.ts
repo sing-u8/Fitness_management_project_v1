@@ -180,7 +180,6 @@ export class ScheduleEffect {
                 this.nxStore.select(ScheduleSelector.curCenterCalendar),
             ]),
             switchMap(([{ centerId, cb }, calConfig, curCenterCalendar]) => {
-                // console.log('ScheduleActions.startGetAllCalendarTask -- ', reqBody, ' -- ', calConfig)
                 return this.centerCalendarApi
                     .getCalendarTasks(centerId, curCenterCalendar.id, calConfig.startDate, calConfig.endDate)
                     .pipe(
