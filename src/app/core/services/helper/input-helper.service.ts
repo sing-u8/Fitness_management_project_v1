@@ -10,6 +10,13 @@ export class InputHelperService {
     restrictToNumber(event) {
         const code = event.which ? event.which : event.keyCode
         // 8: backspace, 37: <- , 39: ->, 13: enter, 9: tab
-        return !(code < 48 || code > 57) || code == 8 || code == 39 || code == 37 || code == 13 || code == 9
+        return (
+            !(code < 48 || code > 57 || code < 97 || code > 105) ||
+            code == 8 ||
+            code == 39 ||
+            code == 37 ||
+            code == 13 ||
+            code == 9
+        )
     }
 }

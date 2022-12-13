@@ -70,7 +70,7 @@ export class TimeService {
         return undefined
     }
     isRegisteredToday(inputDate: string) {
-        return dayjs.utc().diff(inputDate, 'day') < 1 ? true : false
+        return dayjs.utc().diff(inputDate, 'day') < 1
     }
     getMemberAge(inputDate: string) {
         return parseInt(`${dayjs.utc().diff(inputDate, 'year')}`)
