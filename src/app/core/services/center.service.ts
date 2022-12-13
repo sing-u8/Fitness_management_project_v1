@@ -137,6 +137,7 @@ export interface UpdateCenterRequestBody {
     all_day?: boolean
     day_of_the_week?: Array<number> // [0sun ~ 6sat]
     color?: string
+    notice?: string
     contract_terms?: string
 }
 

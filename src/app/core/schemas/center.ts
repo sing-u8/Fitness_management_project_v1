@@ -15,6 +15,7 @@ export interface Center {
     role_code: RoleCode
     role_name: string //
     permissions: Array<PermissionCode> // 권한 코드 리스트
+    notice: string
     contract_terms: string
 }
 

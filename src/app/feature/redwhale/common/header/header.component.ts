@@ -31,6 +31,7 @@ import { centerPermission, curCenter, curCenterAndPermission } from '@centerStor
 import { Subject } from 'rxjs'
 import { takeUntil } from 'rxjs/operators'
 import { showModal } from '@appStore/actions/modal.action'
+import {showToast} from "@appStore/actions/toast.action";
 
 @Component({
     selector: 'rw-header',
@@ -74,7 +75,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
         this.drawer$ = this.nxStore.pipe(select(drawerSelector))
         this.user = this.storageService.getUser()
         this.center = this.storageService.getCenter()
-        this.centerTerms = this.center?.contract_terms
+        this.centerTerms = this.center?.contract_terms ?? ''
+        this.centerNoticeText = this.center?.notice ?? ''
 
         this.getCenterList()
 
@@ -234,6 +236,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
             this.storageService.setCenter(this.center)
             this.centerTerms = center.contract_terms
             this.showSettingTermsModal = false
+            this.nxStore.dispatch(showToast({ text: '센터 약관 설정이 수정되었습니다.' }))
             e.loadingFns.hideLoading()
         })
     }
@@ -252,15 +255,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
     confirmSettingNoticeModal(e: SettingNoticeConfirmOutput) {
         e.loadingFns.showLoading()
-        e.loadingFns.hideLoading()
-        this.centerNoticeText = e.centerNoticeText
-        this.showSettingNoticeModal = false
-        // this.centerService.updateCenter(this.center.id, { contract_terms: e.centerTerm }).subscribe((center) => {
-        //     this.center = center
-        //     this.storageService.setCenter(this.center)
-        //     this.centerTerms = center.contract_terms
-        //     this.showSettingTermsModal = false
-        //     e.loadingFns.hideLoading()
-        // })
+        this.centerService.updateCenter(this.center.id, { notice: e.centerNoticeText }).subscribe((center) => {
+            this.center = center
+            this.storageService.setCenter(this.center)
+            this.centerNoticeText = e.centerNoticeText
+            this.showSettingNoticeModal = false
+            this.nxStore.dispatch(showToast({ text: '센터 공지사항이 수정되었습니다.' }))
+            e.loadingFns.hideLoading()
+        })
     }
 }

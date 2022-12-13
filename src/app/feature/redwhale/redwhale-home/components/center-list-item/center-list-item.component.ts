@@ -30,6 +30,7 @@ import { forkJoin, Subject } from 'rxjs'
 import { takeUntil } from 'rxjs/operators'
 import { Permission } from '@schemas/store/app/modal.interface'
 import { SettingNoticeConfirmOutput } from '@shared/components/common/setting-notice-modal/setting-notice-modal.component'
+import { showToast } from '@appStore/actions/toast.action'
 
 @Component({
     selector: 'center-list-item',
@@ -90,6 +91,7 @@ export class CenterListItemComponent implements OnInit, AfterViewInit, OnDestroy
         this.initCenterAvatar()
         this.initCenterBackground()
         this.centerTerms = this.center.contract_terms
+        this.centerNoticeText = this.center.notice
 
         this.nxStore.pipe(select(roleModalSelector), takeUntil(this.unSubscriber$)).subscribe((roleModal) => {
             if (roleModal.center?.id == this.center.id) {
@@ -167,6 +169,7 @@ export class CenterListItemComponent implements OnInit, AfterViewInit, OnDestroy
             this.center = center
             this.centerTerms = center.contract_terms
             this.showSettingTermsModal = false
+            this.nxStore.dispatch(showToast({ text: '센터 약관 설정이 수정되었습니다.' }))
             e.loadingFns.hideLoading()
         })
     }
@@ -180,20 +183,17 @@ export class CenterListItemComponent implements OnInit, AfterViewInit, OnDestroy
     }
     cancelSettingNoticeModal() {
         this.showSettingNoticeModal = false
-        this.centerNoticeText = '' // 이후에 수정 필요
+        this.centerNoticeText = this.center.notice
     }
     confirmSettingNoticeModal(e: SettingNoticeConfirmOutput) {
         e.loadingFns.showLoading()
-        e.loadingFns.hideLoading()
-        this.centerNoticeText = e.centerNoticeText
-        this.showSettingNoticeModal = false
-        // this.centerService.updateCenter(this.center.id, { contract_terms: e.centerTerm }).subscribe((center) => {
-        //     this.center = center
-        //     this.storageService.setCenter(this.center)
-        //     this.centerTerms = center.contract_terms
-        //     this.showSettingTermsModal = false
-        //     e.loadingFns.hideLoading()
-        // })
+        this.centerService.updateCenter(this.center.id, { notice: e.centerNoticeText }).subscribe((center) => {
+            this.center = center
+            this.centerNoticeText = e.centerNoticeText
+            this.showSettingNoticeModal = false
+            this.nxStore.dispatch(showToast({ text: '센터 공지사항이 수정되었습니다.' }))
+            e.loadingFns.hideLoading()
+        })
     }
 
     // ---------------------center service------------------>//
@@ -217,7 +217,6 @@ export class CenterListItemComponent implements OnInit, AfterViewInit, OnDestroy
     openRoleModal(event) {
         event.stopPropagation()
         event.preventDefault()
-        console.log('openRoleModal -- ', this.centerPermissionObj)
         this.nxStore.dispatch(
             showRoleModal({
                 center: this.center,

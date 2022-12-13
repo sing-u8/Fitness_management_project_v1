@@ -78,7 +78,7 @@ export class SettingTermsModalComponent implements OnChanges, AfterViewChecked {
 
     onCancel(): void {
         this.cancel.emit()
-        this.centerTerm = this.center.contract_terms
+        this.centerTerm = this.center?.contract_terms ?? ''
     }
 
     onConfirm(loadingFns: ClickEmitterType): void {

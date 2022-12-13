@@ -80,11 +80,10 @@ export class SettingNoticeModalComponent implements OnChanges, AfterViewChecked 
 
     onCancel(): void {
         this.cancel.emit()
-        this.centerNoticeText = this.center.contract_terms
+        this.centerNoticeText = this.center?.notice ?? ''
     }
 
     onConfirm(loadingFns: ClickEmitterType): void {
-        console.log('setting notice modal -- onConfirm : ', this.centerNoticeText)
         this.confirm.emit({
             loadingFns,
             centerNoticeText: this.centerNoticeText,

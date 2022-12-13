@@ -68,6 +68,7 @@ export class TouchPadComponent implements OnInit, OnDestroy {
         this.dwCurCenterId$.pipe(takeUntil(this.unSubscribe$)).subscribe((dwCurCenterId) => {
             this.dwCurCenterId = dwCurCenterId
         })
+        this.checkIsNoticeExisted()
     }
     ngOnDestroy() {
         this.unSubscribe$.next(true)
@@ -165,21 +166,13 @@ export class TouchPadComponent implements OnInit, OnDestroy {
     }
 
     // center notice vars and funcs for test
-    public centerNotice = `공지사항 내용 내용 공지사항 내용 공지사항 내용1
-공지사항 내용 내용
-공지사항 내용
-내용 내용 내용 내용 내용
-공지사항 내용 내용 내용 내용
-    
-공지사항 내용 내용 내용 내용
-공지사항 내용 내용 내용
-공지사항 내용 내용 내용 내용
-공지사항 내용 내용 내용
-
-공지사항 내용 내용 내용 내용
-공지사항 내용 내용 내용
-`
+    public centerNotice = ''
     public centerNoticeFlag = false
+    checkIsNoticeExisted() {
+        this.center = this.storageService.getCenter()
+        this.centerNotice = this.center.notice
+        this.centerNoticeFlag = !_.isEmpty(this.centerNotice)
+    }
     //
     public showCenterNoticeModal = false
     toggleCenterNoticeModal() {
