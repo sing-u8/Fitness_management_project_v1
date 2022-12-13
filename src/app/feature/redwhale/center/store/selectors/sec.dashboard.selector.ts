@@ -15,7 +15,6 @@ export const error = createSelector(DashboardFeature, FromDashboard.selectError)
 export const searchInput = createSelector(DashboardFeature, FromDashboard.selectSearchInput)
 export const userDeatilTag = createSelector(DashboardFeature, FromDashboard.selectUserDetailTag)
 export const isUserDetailLoading = createSelector(DashboardFeature, FromDashboard.selectIsUserDetailLoading)
-export const userInCenter = createSelector(DashboardFeature, FromDashboard.selectUserInCenter)
 
 // main
 export const usersSelectCategs = createSelector(DashboardFeature, FromDashboard.selectUsersSelectCategs)

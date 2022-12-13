@@ -215,11 +215,8 @@ export const resetMainDashboardSstate = createAction(`[${FeatureKey}] Reset Main
 export const resetDrawerDashboardSstate = createAction(`[${FeatureKey}] Reset Drawer Dashboard All State`)
 export const error = createAction(`[${FeatureKey}] Dashboard State Error`, props<{ error: string }>())
 
-export const startSetUserInCenter = createAction(
-    `[${FeatureKey}] Start Set User In Center`,
-    props<{ centerId: string; user: User }>()
-)
-export const finishSetUserInCenter = createAction(
+
+export const setUserInCenter = createAction(
     `[${FeatureKey}] Finish Set User In Center`,
     props<{ centerUser: CenterUser }>()
 )

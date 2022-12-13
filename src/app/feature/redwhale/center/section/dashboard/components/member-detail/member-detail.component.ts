@@ -83,6 +83,7 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
     ) {
         this.center = this.storageService.getCenter()
         this.user = this.storageService.getUser()
+        this.userInCenter = this.storageService.getCenterUser()
         this.staffRole = this.center.role_code as Role
 
         this.spinner.show('ud_loading')
@@ -105,18 +106,6 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
         this.dwCurCenterId$.pipe(takeUntil(this.unSubscriber$)).subscribe((dwCurCenterId) => {
             this.dwCurCenterId = dwCurCenterId
         })
-
-        this.nxStore
-            .select(DashboardSelector.userInCenter)
-            .pipe(takeUntil(this.unSubscriber$))
-            .subscribe((userInCenter) => {
-                this.userInCenter = userInCenter
-                if (_.isEmpty(userInCenter) || this.user.id != userInCenter?.id) {
-                    this.nxStore.dispatch(
-                        DashboardActions.startSetUserInCenter({ centerId: this.center.id, user: this.user })
-                    )
-                }
-            })
     }
 
     // oneToOne Chat

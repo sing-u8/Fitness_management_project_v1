@@ -90,6 +90,7 @@ export class MemberComponent implements OnInit, OnDestroy {
         this.drawer$ = this.nxStore.pipe(select(drawerSelector))
         this.centerStaff = this.storageService.getUser()
         this.center = this.storageService.getCenter()
+        this.userInCenter = this.storageService.getCenterUser()
         this.staffRole = this.center.role_code as Role
 
         this.nxStore.pipe(select(DashboardSelector.drawerCurCenterId), take(1)).subscribe((curCenterId) => {
@@ -131,17 +132,6 @@ export class MemberComponent implements OnInit, OnDestroy {
             })
         })
 
-        this.nxStore
-            .select(DashboardSelector.userInCenter)
-            .pipe(takeUntil(this.unSubscriber$))
-            .subscribe((userInCenter) => {
-                this.userInCenter = userInCenter
-                if (_.isEmpty(userInCenter) || this.user.id != userInCenter?.id) {
-                    this.nxStore.dispatch(
-                        DashboardActions.startSetUserInCenter({ centerId: this.center.id, user: this.user })
-                    )
-                }
-            })
     }
     ngOnDestroy() {
         this.unSubscriber$.next(true)

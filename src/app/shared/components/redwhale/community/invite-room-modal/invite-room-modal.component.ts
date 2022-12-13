@@ -77,6 +77,7 @@ export class InviteRoomModalComponent implements AfterViewChecked, OnChanges, On
     ) {
         this.gym = this.storageService.getCenter()
         this.user = this.storageService.getUser()
+        this.curCenterUser = this.storageService.getCenterUser()
         this.searchInput = this.fb.control('', {
             asyncValidators: [this.searchMemberValidator()],
         })
@@ -159,10 +160,7 @@ export class InviteRoomModalComponent implements AfterViewChecked, OnChanges, On
                     return { show: true, selected: false, user: user, joinedAlready: false }
                 })
                 .filter((listData) => {
-                    if (listData.user.id == this.user.id) {
-                        this.curCenterUser = listData.user
-                    }
-                    return listData.user.id != this.user.id
+                    return listData.user.id != this.curCenterUser.id
                 })
             this.checkMemberJoined()
         })

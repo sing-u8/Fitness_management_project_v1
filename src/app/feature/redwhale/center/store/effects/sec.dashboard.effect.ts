@@ -39,20 +39,6 @@ export class DashboardEffect {
         private centerContractApi: CenterContractService
     ) {}
 
-    public setCurCenterUser$ = createEffect(() =>
-        this.actions$.pipe(
-            ofType(DashboardActions.startSetUserInCenter),
-            switchMap(({ centerId, user }) => {
-                return this.centerUsersApi.getUserList(centerId).pipe(
-                    switchMap((centerUsers) => {
-                        const centerUser = _.find(centerUsers, (v) => v.id == user.id)
-                        return [DashboardActions.finishSetUserInCenter({ centerUser })]
-                    })
-                )
-            })
-        )
-    )
-
     public loadMemberList$ = createEffect(() =>
         this.actions$.pipe(
             ofType(DashboardActions.startLoadMemberList),
