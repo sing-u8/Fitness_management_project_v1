@@ -194,7 +194,7 @@ export class ChargeModalComponent implements OnChanges, AfterViewChecked, OnDest
     // input helper functions
     restrictToNumber(event) {
         const code = event.which ? event.which : event.keyCode
-        if (code < 48 || code > 57) {
+        if (code < 48 || code > 57 || code < 96  || code > 105) {
             return false
         }
         return true
