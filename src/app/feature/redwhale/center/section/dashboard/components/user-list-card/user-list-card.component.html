@@ -30,7 +30,7 @@
             <div
                 *ngIf="
                     type == 'member' && (cardItem.user.total_unpaid != 0 || imminentDateObj.isImminent == true);
-                    else unpaid
+                    else attendance
                 "
                 class="member-right"
             >
@@ -48,11 +48,11 @@
                 </div>
             </div>
 
-            <!-- <ng-template #attendance>
-        <div *ngIf="type == 'attendance' ; else unpaid" class="member-right">
-          <span class="rw-typo-subtext0-regular">{{attendanceTime}} 출석</span>
-        </div>
-      </ng-template> -->
+            <ng-template #attendance>
+                <div *ngIf="type == 'attendance'; else unpaid" class="member-right">
+                    <span class="rw-typo-subtext0-regular">{{ attendanceTime }} 출석</span>
+                </div>
+            </ng-template>
 
             <ng-template #unpaid>
                 <div *ngIf="type == 'unpaid'; else imminent" class="member-right">

@@ -54,8 +54,7 @@ export class UserListCardComponent implements OnInit, AfterViewInit, OnChanges, 
             .pipe(distinctUntilChanged())
             .subscribe((value) => {
                 this.doHide = !(
-                    this.cardItem.user.name.includes(value) ||
-                    this.cardItem.user.phone_number.includes(value)
+                    this.cardItem.user.name.includes(value) || this.cardItem.user.phone_number.includes(value)
                 )
             })
     }
@@ -93,8 +92,8 @@ export class UserListCardComponent implements OnInit, AfterViewInit, OnChanges, 
     }
     //
     initAttendanceTime() {
-        // if (this.cardItem.user.attended_datetime) {
-        //     this.attendanceTime = this.timeService.getTodayRegisteredTime(this.cardItem.user.attended_datetime)
-        // }
+        if (this.cardItem.user.last_check_in) {
+            this.attendanceTime = this.timeService.getTodayRegisteredTime(this.cardItem.user.last_check_in)
+        }
     }
 }
