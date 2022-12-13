@@ -19,6 +19,7 @@ import { StorageService } from '@services/storage.service'
 import { setCenterPermissionModal, startUpdateCenterPermission } from '@centerStore/actions/center.common.actions'
 import { PermissionObj } from '@centerStore/reducers/center.common.reducer'
 import { Store } from '@ngrx/store'
+import { showToast } from '@appStore/actions/toast.action'
 
 @Component({
     selector: 'rw-center-rolemodal',
@@ -93,6 +94,7 @@ export class CenterRolemodalComponent implements OnChanges, AfterViewChecked, On
                 },
                 cb: () => {
                     clickEmitter.hideLoading()
+                    this.nxStore.dispatch(showToast({ text: '센터 권한이 수정되었습니다.' }))
                     this.onCancel()
                 },
             })

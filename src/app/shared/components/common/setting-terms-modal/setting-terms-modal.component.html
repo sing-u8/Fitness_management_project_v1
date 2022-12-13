@@ -1,8 +1,9 @@
-<div class="rw-modal-background" #modalBackgroundElement></div>
+<div class="rw-modal-background" #modalBackgroundElement (click)="$event.stopPropagation()"></div>
 <div
     class="rw-modal-wrapper justify-content-center align-items-center"
     (mouseup)="!isMouseModalDown && !blockClickOutside && onCancel()"
     (mousedown) = 'resetMouseModalDown()'
+    (click)="$event.stopPropagation()"
     #modalWrapperElement
 >
     <div
