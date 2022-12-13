@@ -30,7 +30,7 @@ export class LockerWindowComponent implements OnInit, AfterViewInit, OnChanges {
 
     public gym: Center
     public user: User
-    public centerUser:CenterUser
+    public centerUser: CenterUser
 
     constructor(private storageService: StorageService) {}
 
@@ -46,16 +46,14 @@ export class LockerWindowComponent implements OnInit, AfterViewInit, OnChanges {
         if (changes['Instructors']) {
             this.gym = this.storageService.getCenter()
             this.user = this.storageService.getUser()
+            this.centerUser = this.storageService.getCenterUser()
             this.Instructors.forEach((v) => {
                 this.staffSelect_list.push({
                     name: v.name,
                     value: v,
                 })
 
-                if (
-                    !this.lockerState.assignee &&
-                    this.centerUser.id == v.id
-                ) {
+                if (!this.lockerState.assignee && this.centerUser.id == v.id) {
                     this.lockerState.assignee = { name: v.name, value: v }
                 }
             })
