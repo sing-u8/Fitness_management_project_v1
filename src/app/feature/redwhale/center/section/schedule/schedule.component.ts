@@ -560,8 +560,10 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
                 if (
                     _.findIndex(instructors, (instructor) => {
                         return (
-                            instructor.selected &&
-                            event.originItem.responsibility.findIndex((v) => v.id == instructor.instructor.id) != -1
+                            (instructor.selected &&
+                                event.originItem.responsibility.findIndex((v) => v.id == instructor.instructor.id) !=
+                                    -1) ||
+                            event.originItem.responsibility.length == 0
                         )
                     }) != -1
                 ) {
@@ -574,12 +576,15 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
         if (scheduleType && this.eventList.length > 0) {
             _.forEach(this.eventList, (event) => {
                 const isNormalType =
-                    scheduleType['calendar_task_type_normal'].selected == true && event.originItem.class == null
+                    scheduleType['calendar_task_type_normal'].selected == true &&
+                    event.originItem.type_code == 'calendar_task_type_normal'
                 const isOneToOneType =
                     scheduleType['calendar_task_type_onetoone'].selected == true &&
+                    event.originItem.type_code == 'calendar_task_type_class' &&
                     event.originItem.class?.type_code == 'class_item_type_onetoone'
                 const isGroupType =
                     scheduleType['calendar_task_type_group'].selected == true &&
+                    event.originItem.type_code == 'calendar_task_type_class' &&
                     event.originItem.class?.type_code == 'class_item_type_group'
 
                 if (isNormalType || isOneToOneType || isGroupType) {
@@ -588,26 +593,12 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
             })
         }
 
-        console.log(
-            'setEventsFiltersChange ---------------- ',
-            instructors,
-            'scheduleType: ',
-            scheduleType,
-            'eventList : ',
-            this.eventList
-        )
-        console.log('lessonTypeEventList : ', lessonTypeEventList, ',  instructorEventList : ', instructorEventList)
-
         // apply filtered task list
         if (lessonTypeEventList.length > 0 && instructorEventList.length > 0) {
             let _intersectList = _.intersectionWith(instructorEventList, lessonTypeEventList, (a, b) => {
                 return a.originItem.id == b.originItem.id
             })
-
-            _intersectList = [
-                ..._intersectList,
-                ..._.filter(this.eventList, (v) => v.originItem.responsibility.length == 0),
-            ]
+            _intersectList = _.uniqBy(_intersectList, (v) => v.originItem.id)
 
             this.fullCalendar.options = { ...this.fullCalendar.options, ...{ events: _intersectList } }
         } else {

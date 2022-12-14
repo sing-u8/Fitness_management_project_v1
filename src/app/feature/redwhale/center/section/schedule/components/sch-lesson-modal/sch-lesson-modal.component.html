@@ -176,7 +176,7 @@
                                             fontSize="12"
                                         ></rw-avatar>
                                         <span class="rw-typo-bodytext2">
-                                            {{ reservation.name }} ({{ reservation.membership_number }})
+                                            {{ reservation.name }} {{ reservation.membership_number ? (reservation.membership_number) : ''}}
                                         </span>
                                     </div>
                                     <div class="item-right">

@@ -56,11 +56,11 @@
             (click)="onSelect(item, idx)"
         >
             <div class="d-flex align-items-center">
-                <div *ngIf="item.value?.membership_number" class="avatar">
+                <div class="avatar">
                     <rw-avatar
-                        [image]="item.value.picture"
-                        [backgroundColor]="item.value.color"
-                        text="{{item.value.name}}"
+                        [image]="item?.value?.picture"
+                        [backgroundColor]="item?.value?.color"
+                        text="{{item?.value?.name}}"
                         size="26"
                         fontSize="10"
                     ></rw-avatar>
