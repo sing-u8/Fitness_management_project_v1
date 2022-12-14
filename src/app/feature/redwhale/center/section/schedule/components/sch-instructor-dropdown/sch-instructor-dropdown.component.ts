@@ -53,7 +53,7 @@ export class SchInstructorDropdownComponent implements OnInit, OnChanges, OnDest
 
     ngOnInit(): void {
         this.nxStore
-            .select(CenterCommonSelector.members)
+            .select(CenterCommonSelector.instructors)
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe((memberList) => {
                 this.memberList = memberList
