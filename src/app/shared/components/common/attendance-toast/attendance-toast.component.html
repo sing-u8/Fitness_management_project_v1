@@ -14,11 +14,11 @@
         <div class="rw-typo-title2 top">{{ member?.name }}님({{ member?.membership_number }})이 출석하셨어요! 👋</div>
         <div class="bottom rw-typo-subtext0">
             <div *ngIf="imminentDateObj.isImminent" class="alert-text">
-                <img src="assets/icons/etc/unpaid_amount_lightgrey.svg" alt="unpaid_amount.svg" />
+                <img src="assets/icons/etc/exceed_period_lightgrey.svg" alt="exceed_period.svg"/>
                 <span class="rw-typo-subtext0">{{ imminentDateObj.imminentDate }}일 후 만료</span>
             </div>
             <div *ngIf="member?.total_unpaid > 0" class="alert-text">
-                <img src="assets/icons/etc/exceed_period_lightgrey.svg" alt="exceed_period.svg" />
+                <img src="assets/icons/etc/unpaid_amount_lightgrey.svg" alt="unpaid_amount.svg"/>
                 <span class="rw-typo-subtext0">{{ member?.total_unpaid | numberWithCommas }}</span>
             </div>
         </div>
