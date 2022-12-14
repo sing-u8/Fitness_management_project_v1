@@ -7,6 +7,7 @@ import { DragulaService } from 'ng2-dragula'
 // services
 import { StorageService } from '@services/storage.service'
 import { CenterMembershipService } from '@services/center-membership.service'
+import { InputHelperService } from '@services/helper/input-helper.service'
 
 // scehmas
 import { Center } from '@schemas/center'
@@ -129,6 +130,7 @@ export class LessonComponent implements OnInit, AfterViewInit, OnDestroy {
         private storageService: StorageService,
         private centerMembershipService: CenterMembershipService,
         private dragulaService: DragulaService,
+        private inputHelperService: InputHelperService,
         private fb: FormBuilder
     ) {
         this.center = this.storageService.getCenter()
@@ -437,11 +439,7 @@ export class LessonComponent implements OnInit, AfterViewInit, OnDestroy {
     kvOriginOrder = kvPipe.originalOrder
 
     restrictToNumber(event) {
-        const code = event.which ? event.which : event.keyCode
-        if (code < 48 || code > 57) {
-            return false
-        }
-        return true
+        return this.inputHelperService.restrictToNumber(event)
     }
 
     onSelectedItemInputKeyup(event, inputType: SelectedLessonType) {

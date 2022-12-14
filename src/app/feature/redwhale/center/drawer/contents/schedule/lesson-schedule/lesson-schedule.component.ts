@@ -8,6 +8,7 @@ import { CenterLessonService } from '@services/center-lesson.service'
 import { CenterCalendarService, CreateCalendarTaskReqBody } from '@services/center-calendar.service'
 import { ScheduleHelperService } from '@services/center/schedule-helper.service'
 import { WordService } from '@services/helper/word.service'
+import { InputHelperService } from '@services/helper/input-helper.service'
 
 import { CenterUser } from '@schemas/center-user'
 import { Center } from '@schemas/center'
@@ -15,7 +16,7 @@ import { ClassCategory } from '@schemas/class-category'
 import { ClassItem } from '@schemas/class-item'
 import { MembershipItem } from '@schemas/membership-item'
 import { Calendar } from '@schemas/calendar'
-import { MultiSelectValue, MultiSelect } from '@schemas/components/multi-select'
+import { MultiSelect } from '@schemas/components/multi-select'
 
 // rxjs
 import { Subject } from 'rxjs'
@@ -125,7 +126,8 @@ export class LessonScheduleComponent implements OnInit, OnDestroy, AfterViewInit
         private centerCalendarService: CenterCalendarService,
         private nxStore: Store,
         private scheduleHelperService: ScheduleHelperService,
-        private wordService: WordService
+        private wordService: WordService,
+        private inputHelperService: InputHelperService
     ) {
         this.center = this.storageService.getCenter()
         this.selectLessonCategories()
@@ -397,11 +399,7 @@ export class LessonScheduleComponent implements OnInit, OnDestroy, AfterViewInit
 
     // onKeypress and keyup --------------------------------------------------------------------------------
     restrictToNumber(event) {
-        const code = event.which ? event.which : event.keyCode
-        if (code < 48 || code > 57) {
-            return false
-        }
-        return true
+        return this.inputHelperService.restrictToNumber(event)
     }
     onPeopleKeyUp(event) {
         if (event.code == 'Enter') return

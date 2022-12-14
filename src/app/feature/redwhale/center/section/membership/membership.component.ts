@@ -6,8 +6,9 @@ import * as kvPipe from '@helpers/pipe/keyvalue'
 import { DragulaService } from 'ng2-dragula'
 // services
 import { StorageService } from '@services/storage.service'
-import { CenterLessonService } from '@services/center-lesson.service'
-import { UpdateItemRequestBody, CenterMembershipService } from '@services/center-membership.service'
+import { UpdateItemRequestBody } from '@services/center-membership.service'
+import { InputHelperService } from '@services/helper/input-helper.service'
+
 
 // scehmas
 import { Center } from '@schemas/center'
@@ -92,7 +93,9 @@ export class MembershipComponent implements OnInit {
         private nxStore: Store,
         private storageService: StorageService,
         private dragulaService: DragulaService,
-        private fb: FormBuilder
+        private fb: FormBuilder,
+        private inputHelperService: InputHelperService
+
     ) {}
 
     ngOnInit(): void {
@@ -341,11 +344,8 @@ export class MembershipComponent implements OnInit {
     kvOriginOrder = kvPipe.originalOrder
 
     restrictToNumber(event) {
-        const code = event.which ? event.which : event.keyCode
-        if (code < 48 || code > 57) {
-            return false
-        }
-        return true
+        return this.inputHelperService.restrictToNumber(event)
+
     }
 
     onSelectedItemInputKeyup(event, inputType: SelectedMembershipType) {

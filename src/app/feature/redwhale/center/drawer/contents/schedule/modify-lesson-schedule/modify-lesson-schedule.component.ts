@@ -9,9 +9,9 @@ import { CenterLessonService } from '@services/center-lesson.service'
 import { CenterCalendarService, UpdateCalendarTaskReqBody, UpdateMode } from '@services/center-calendar.service'
 import { ScheduleHelperService } from '@services/center/schedule-helper.service'
 import { WordService } from '@services/helper/word.service'
+import { InputHelperService } from '@services/helper/input-helper.service'
 
 import { User } from '@schemas/user'
-import { CenterUser } from '@schemas/center-user'
 import { Center } from '@schemas/center'
 import { MembershipItem } from '@schemas/membership-item'
 import { CalendarTask } from '@schemas/calendar-task'
@@ -141,7 +141,8 @@ export class ModifyLessonScheduleComponent implements OnInit, OnDestroy, AfterVi
         private centerCalendarService: CenterCalendarService,
         private nxStore: Store,
         private scheduleHelperService: ScheduleHelperService,
-        private wordService: WordService
+        private wordService: WordService,
+        private inputHelperService: InputHelperService
     ) {
         this.center = this.storageService.getCenter()
         this.selectLessonOptions()
@@ -365,11 +366,7 @@ export class ModifyLessonScheduleComponent implements OnInit, OnDestroy, AfterVi
 
     // onKeypress and keyup --------------------------------------------------------------------------------
     restrictToNumber(event) {
-        const code = event.which ? event.which : event.keyCode
-        if (code < 48 || code > 57) {
-            return false
-        }
-        return true
+        return this.inputHelperService.restrictToNumber(event)
     }
     onPeopleKeyUp(event) {
         if (event.code == 'Enter') return

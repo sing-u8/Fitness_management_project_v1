@@ -19,6 +19,8 @@ import { takeUntil } from 'rxjs/operators'
 import { CenterUsersService } from '@services/center-users.service'
 import { CenterUserListService } from '@services/helper/center-user-list.service'
 import { StorageService } from '@services/storage.service'
+import { InputHelperService } from '@services/helper/input-helper.service'
+
 
 import { User } from '@schemas/user'
 import { CenterUser } from '@schemas/center-user'
@@ -86,7 +88,8 @@ export class ChargeModalComponent implements OnChanges, AfterViewChecked, OnDest
         private renderer: Renderer2,
         private centerUsersService: CenterUsersService,
         private centerUserListService: CenterUserListService,
-        private storageService: StorageService
+        private storageService: StorageService,
+        private inputHelperService: InputHelperService
     ) {
         interval(60000)
             .pipe(takeUntil(this.unsubscribe$))
@@ -189,11 +192,8 @@ export class ChargeModalComponent implements OnChanges, AfterViewChecked, OnDest
 
     // input helper functions
     restrictToNumber(event) {
-        const code = event.which ? event.which : event.keyCode
-        if (code < 48 || code > 57) {
-            return false
-        }
-        return true
+        return this.inputHelperService.restrictToNumber(event)
+
     }
     onInputKeyup(event, type: ModalInput) {
         if (event.code == 'Enter') return

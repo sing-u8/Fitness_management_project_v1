@@ -329,20 +329,22 @@
     }
 
     .col3 {
+        width: 257px !important;
         min-width: 257px;
-        padding-right: 60px;
-        width: calc(257 / 1319) * 100%;
+        padding-right: 30px;
+        //width: calc(257 / 1319) * 100%;
     }
 
     .col4 {
+        width: 184px !important;
         min-width: 184px;
-        padding-right: 50px;
-        width: calc(184 / 1319) * 100%;
+        padding-right: 20px;
+        //width: calc(184 / 1319) * 100%;
     }
 
     .col5 {
         min-width: calc(100% - 386px - 109px - 257px - 184px);
-        width: calc(100% - ( calc(257 / 1319) * 100% + calc(184 / 1319) * 100% ));
+        //width: calc(100% - ( calc(257 / 1319) * 100% + calc(184 / 1319) * 100% ));
     }
 
     .col-notification {

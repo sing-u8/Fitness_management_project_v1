@@ -10,6 +10,8 @@ import {
     AfterViewChecked,
     ViewChild,
 } from '@angular/core'
+import { InputHelperService } from '@services/helper/input-helper.service'
+
 
 @Component({
     selector: 'rw-empty-locker-modal',
@@ -33,7 +35,8 @@ export class EmptyLockerModalComponent implements AfterViewChecked, OnChanges {
     public isMouseModalDown: boolean
     public refundInput: string
 
-    constructor(private el: ElementRef, private renderer: Renderer2) {
+    constructor(private el: ElementRef, private renderer: Renderer2, private inputHelperService: InputHelperService
+    ) {
         this.isMouseModalDown = false
         this.refundInput = '' // this.fb.control('')
     }
@@ -90,11 +93,7 @@ export class EmptyLockerModalComponent implements AfterViewChecked, OnChanges {
 
     // input helper functions
     restrictToNumber(event) {
-        const code = event.which ? event.which : event.keyCode
-        if (code < 48 || code > 57) {
-            return false
-        }
-        return true
+        return this.inputHelperService.restrictToNumber(event)
     }
     onInputKeyup(event) {
         if (event.code == 'Enter') return

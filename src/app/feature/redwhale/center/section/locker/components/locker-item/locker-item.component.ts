@@ -11,6 +11,8 @@ import { Center } from '@schemas/center'
 
 import { DashboardHelperService } from '@services/center/dashboard-helper.service'
 import { CenterLockerService } from '@services/center-locker.service'
+import { InputHelperService } from '@services/helper/input-helper.service'
+
 
 // ngrx
 import { Store, select } from '@ngrx/store'
@@ -55,7 +57,9 @@ export class LockerItemComponent implements OnInit, OnDestroy, AfterViewInit {
         private nxStore: Store,
         private fb: FormBuilder,
         private dashboardHelperService: DashboardHelperService,
-        private centerLockerService: CenterLockerService
+        private centerLockerService: CenterLockerService,
+        private inputHelperService: InputHelperService
+
     ) {
         this.nameInput = this.fb.control('')
     }
@@ -180,12 +184,8 @@ export class LockerItemComponent implements OnInit, OnDestroy, AfterViewInit {
 
     // input eventlistener
     restrictToNumber(event) {
-        const code = event.which ? event.which : event.keyCode
-        if (code < 48 || code > 57) {
-            return false
-        } else {
-            return true
-        }
+        return this.inputHelperService.restrictToNumber(event)
+
     }
     onInputKeyUp(event) {
         if (event.code == 'Enter') return

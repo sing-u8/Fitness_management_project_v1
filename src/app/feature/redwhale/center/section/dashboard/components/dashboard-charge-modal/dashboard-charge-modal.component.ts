@@ -19,6 +19,7 @@ import { takeUntil } from 'rxjs/operators'
 import { CenterUsersService } from '@services/center-users.service'
 import { CenterUserListService } from '@services/helper/center-user-list.service'
 import { StorageService } from '@services/storage.service'
+import { InputHelperService } from '@services/helper/input-helper.service'
 
 import { User } from '@schemas/user'
 import { CenterUser } from '@schemas/center-user'
@@ -80,13 +81,15 @@ export class DashboardChargeModalComponent implements OnChanges, AfterViewChecke
     public staffList: Array<CenterUser> = []
     public center: Center
     public user: User
+    public centerUser: CenterUser
 
     constructor(
         private el: ElementRef,
         private renderer: Renderer2,
         private centerUsersService: CenterUsersService,
         private centerUserListService: CenterUserListService,
-        private storageService: StorageService
+        private storageService: StorageService,
+        private inputHelperService: InputHelperService
     ) {
         interval(60000)
             .pipe(takeUntil(this.unsubscribe$))
@@ -100,6 +103,8 @@ export class DashboardChargeModalComponent implements OnChanges, AfterViewChecke
         this.isMouseModalDown = false
         this.center = this.storageService.getCenter()
         this.user = this.storageService.getUser()
+        this.centerUser = this.storageService.getCenterUser()
+
         this.centerUserListService.getCenterInstructorList(this.center.id).subscribe({
             next: (instructors) => {
                 this.staffList = instructors
@@ -108,7 +113,9 @@ export class DashboardChargeModalComponent implements OnChanges, AfterViewChecke
                         name: v.name ?? v.name,
                         value: v,
                     })
-                    this.user.id == v.id ? (this.lockerStaffSelectValue = { name: v.name ?? v.name, value: v }) : null
+                    this.centerUser.id == v.id
+                        ? (this.lockerStaffSelectValue = { name: v.name ?? v.name, value: v })
+                        : null
                 })
             },
         })
@@ -190,11 +197,7 @@ export class DashboardChargeModalComponent implements OnChanges, AfterViewChecke
 
     // input helper functions
     restrictToNumber(event) {
-        const code = event.which ? event.which : event.keyCode
-        if (code < 48 || code > 57) {
-            return false
-        }
-        return true
+        return this.inputHelperService.restrictToNumber(event)
     }
     onInputKeyup(event, type: ModalInput) {
         if (event.code == 'Enter') return

@@ -844,7 +844,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
             const eventTitleEl: HTMLElement = arg.el.getElementsByClassName('fc-event-title')[0]
             const eventTimeEl: HTMLElement = arg.el.getElementsByClassName('fc-event-time')[0]
 
-            const insts = _.orderBy(arg.event.extendedProps.originItem.responsibility, 'center_user_name')
+            const insts = _.orderBy(arg.event.extendedProps.originItem.responsibility, 'name')
 
             if (arg.event.extendedProps.originItem.type_code == 'calendar_task_type_normal') {
                 eventTitleContainerEl.appendChild(eventTimeEl)
@@ -859,9 +859,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
                 eventTimeEl.style.whiteSpace = 'nowrap'
                 eventTimeEl.style.color = '#c9c9c9'
                 eventTimeEl.innerHTML = `${
-                    insts.length > 1
-                        ? insts[0].center_user_name + ` 외 ${insts.length - 1}명`
-                        : insts[0]?.center_user_name ?? '담당자 없음'
+                    insts.length > 1 ? insts[0].name + ` 외 ${insts.length - 1}명` : insts[0]?.name ?? '담당자 없음'
                 }`
             } else {
                 eventTitleEl.classList.add('rw-typo-subtext0')
@@ -874,9 +872,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
                 eventTimeEl.style.color = '#C9C9C9'
                 eventTimeEl.style.fontSize = '1.1rem'
                 eventTimeEl.innerHTML = `${
-                    insts.length > 1
-                        ? insts[0].center_user_name + ` 외 ${insts.length - 1}명`
-                        : insts[0]?.center_user_name ?? '담당자 없음'
+                    insts.length > 1 ? insts[0].name + ` 외 ${insts.length - 1}명` : insts[0]?.name ?? '담당자 없음'
                 } ㆍ ${arg.event.extendedProps.originItem.class.booked_count}/${
                     arg.event.extendedProps.originItem.class.capacity
                 }명`
