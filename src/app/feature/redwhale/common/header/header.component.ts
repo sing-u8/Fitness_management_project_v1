@@ -251,7 +251,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
     cancelSettingNoticeModal() {
         this.showSettingNoticeModal = false
-        this.centerNoticeText = '' // 이후에 수정 필요
+        this.centerNoticeText = this.center.notice
     }
     confirmSettingNoticeModal(e: SettingNoticeConfirmOutput) {
         e.loadingFns.showLoading()

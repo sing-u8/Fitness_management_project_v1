@@ -24,6 +24,8 @@
                     class="rw-textarea thin-scroll-y-overlay2"
                     [(ngModel)]="centerNoticeText"
                     (keydown)="limitNoticeTextByte($event)"
+                    (keyup)="keyupEvent()"
+                    #textAreaElement
                 ></textarea>
                 <span class="notice-text-byte">{{centerNoticeText?.length ?? 0}} / {{noticeTextMax}}자</span>
             </div>

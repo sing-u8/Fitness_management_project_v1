@@ -9,6 +9,8 @@ import {
     SimpleChanges,
     AfterViewChecked,
     ViewChild,
+    AfterViewInit,
+    OnDestroy,
 } from '@angular/core'
 import { Center } from '@schemas/center'
 import { ClickEmitterType } from '@schemas/components/button'
@@ -26,7 +28,7 @@ export interface SettingNoticeConfirmOutput {
     templateUrl: './setting-notice-modal.component.html',
     styleUrls: ['./setting-notice-modal.component.scss'],
 })
-export class SettingNoticeModalComponent implements OnChanges, AfterViewChecked {
+export class SettingNoticeModalComponent implements OnChanges, AfterViewChecked, AfterViewInit, OnDestroy {
     @Input() visible: boolean
     @Output() visibleChange = new EventEmitter<boolean>()
     @Input() centerNoticeText = ''
@@ -44,6 +46,8 @@ export class SettingNoticeModalComponent implements OnChanges, AfterViewChecked 
     changed: boolean
     public isMouseModalDown: boolean
 
+    @ViewChild('textAreaElement') textAreaEl: ElementRef
+
     constructor(private el: ElementRef, private renderer: Renderer2, private wordService: WordService) {
         this.isMouseModalDown = false
     }
@@ -55,6 +59,8 @@ export class SettingNoticeModalComponent implements OnChanges, AfterViewChecked 
             }
         }
     }
+
+    ngAfterViewInit() {}
 
     ngAfterViewChecked() {
         if (this.changed) {
@@ -78,6 +84,8 @@ export class SettingNoticeModalComponent implements OnChanges, AfterViewChecked 
         }
     }
 
+    ngOnDestroy() {}
+
     onCancel(): void {
         this.cancel.emit()
         this.centerNoticeText = this.center?.notice ?? ''
@@ -100,7 +108,23 @@ export class SettingNoticeModalComponent implements OnChanges, AfterViewChecked 
 
     // notice text byte
     noticeTextMax = 250
-    limitNoticeTextByte(e) {
-        return this.centerNoticeText.length < this.noticeTextMax
+    limitNoticeTextByte(event) {
+        console.log('limitNoticeTextByte -- ', this.centerNoticeText.length, ' - ', this.noticeTextMax)
+        const code = event.which ? event.which : event.keyCode
+
+        return (
+            this.centerNoticeText.length < this.noticeTextMax ||
+            code == 8 ||
+            code == 39 ||
+            code == 37 ||
+            code == 13 ||
+            code == 9
+        )
+    }
+    keyupEvent() {
+        this.centerNoticeText =
+            this.centerNoticeText.length > this.noticeTextMax
+                ? _.join(_.slice(this.centerNoticeText, 0, this.noticeTextMax), '')
+                : this.centerNoticeText
     }
 }
