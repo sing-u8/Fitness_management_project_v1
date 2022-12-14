@@ -53,16 +53,10 @@
             <div class="empty-member-list">
                 <img src="assets/icons/etc/empty_screen.svg" />
                 <div class="empty-guide">
-                    <p
-                        *ngIf="emptyGuideText[this.selectedUserList.key].today"
-                        class="rw-typo-subtext0-regular"
-                    >
+                    <p *ngIf="emptyGuideText[this.selectedUserList.key].today" class="rw-typo-subtext0-regular">
                         {{ emptyGuideText[this.selectedUserList.key].today }}
                     </p>
-                    <p
-                        *ngIf="emptyGuideText[this.selectedUserList.key].title"
-                        class="rw-typo-subtext0-regular"
-                    >
+                    <p *ngIf="emptyGuideText[this.selectedUserList.key].title" class="rw-typo-subtext0-regular">
                         {{ emptyGuideText[this.selectedUserList.key].title }}
                     </p>
                     <ng-container *ngIf="emptyGuideText[this.selectedUserList.key].desc">
@@ -117,7 +111,7 @@
             </div>
 
             <div class="l-member-card thin-scroll-y-overlay2" [class.l-hold-mode-card]="holdModeFlags">
-                <ng-container *ngIf="usersLists[selectedUserList.key].length > 0 ">
+                <ng-container *ngIf="usersLists[selectedUserList.key].length > 0">
                     <ng-container *ngIf="selectedUserList.key != 'employee'">
                         <db-user-list-card
                             *ngFor="let item of usersLists[selectedUserList.key]; index as i"
@@ -131,10 +125,15 @@
                             (onHoldClick)="onPartialHoldClick($event, i)"
                         ></db-user-list-card>
                     </ng-container>
-                    <ng-container *ngIf="selectedUserList.key == 'employee' && !(searchedUsersLists[selectedUserList.key].length == 0 && userSearchInput$_)">
+                    <ng-container
+                        *ngIf="
+                            selectedUserList.key == 'employee' &&
+                            !(searchedUsersLists[selectedUserList.key].length == 0 && userSearchInput$_)
+                        "
+                    >
                         <db-user-flip-list
                             *ngIf="(employeeRoleObj$ | async)['owner']?.length > 0"
-                            [type] = "'운영자'+' '+ (employeeRoleObj$ | async)['owner']?.length"
+                            [type]="'운영자' + ' ' + (employeeRoleObj$ | async)['owner']?.length"
                         >
                             <db-user-list-card
                                 *ngFor="let item of (employeeRoleObj$ | async)['owner']; index as i"
@@ -150,7 +149,7 @@
                         </db-user-flip-list>
                         <db-user-flip-list
                             *ngIf="(employeeRoleObj$ | async)['administrator']?.length > 0"
-                            [type] = "'관리자'+' '+ (employeeRoleObj$ | async)['administrator']?.length"
+                            [type]="'관리자' + ' ' + (employeeRoleObj$ | async)['administrator']?.length"
                         >
                             <db-user-list-card
                                 *ngFor="let item of (employeeRoleObj$ | async)['administrator']; index as i"
@@ -166,7 +165,7 @@
                         </db-user-flip-list>
                         <db-user-flip-list
                             *ngIf="(employeeRoleObj$ | async)['instructor']?.length > 0"
-                            [type] = "'강사'+' '+ (employeeRoleObj$ | async)['instructor']?.length"
+                            [type]="'강사' + ' ' + (employeeRoleObj$ | async)['instructor']?.length"
                         >
                             <db-user-list-card
                                 *ngFor="let item of (employeeRoleObj$ | async)['instructor']; index as i"
@@ -181,22 +180,21 @@
                             ></db-user-list-card>
                         </db-user-flip-list>
                     </ng-container>
-
                 </ng-container>
 
-<!--                <ng-container *ngIf="searchedUsersLists[selectedUserList.key].length > 0 && userSearchInput$_">-->
-<!--                    <db-user-list-card-->
-<!--                        *ngFor="let item of usersLists[selectedUserList.key]; index as i"-->
-<!--                        [cardItem]="item"-->
-<!--                        [type]="selectedUserList.key"-->
-<!--                        [holdMode]="holdModeFlags"-->
-<!--                        [search]="userSearchInput.value"-->
-<!--                        [holdNumber]="selectedUserListsHolding"-->
-<!--                        [curUserData]="curUserData"-->
-<!--                        (onCardClick)="onCardClick($event)"-->
-<!--                        (onHoldClick)="onPartialHoldClick($event, i)"-->
-<!--                    ></db-user-list-card>-->
-<!--                </ng-container>-->
+                <!--                <ng-container *ngIf="searchedUsersLists[selectedUserList.key].length > 0 && userSearchInput$_">-->
+                <!--                    <db-user-list-card-->
+                <!--                        *ngFor="let item of usersLists[selectedUserList.key]; index as i"-->
+                <!--                        [cardItem]="item"-->
+                <!--                        [type]="selectedUserList.key"-->
+                <!--                        [holdMode]="holdModeFlags"-->
+                <!--                        [search]="userSearchInput.value"-->
+                <!--                        [holdNumber]="selectedUserListsHolding"-->
+                <!--                        [curUserData]="curUserData"-->
+                <!--                        (onCardClick)="onCardClick($event)"-->
+                <!--                        (onHoldClick)="onPartialHoldClick($event, i)"-->
+                <!--                    ></db-user-list-card>-->
+                <!--                </ng-container>-->
 
                 <ng-container *ngIf="searchedUsersLists[selectedUserList.key].length == 0 && userSearchInput$_">
                     <div class="empty-guide-search">

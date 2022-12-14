@@ -45,8 +45,10 @@
 
 	.content {
 		height: 46px;
+		display: flex;
 		flex-direction: column;
 		align-items: flex-start;
+		justify-content: center;
 		margin-left: 13px;
 		.top {
 			color: var(--white) !important;

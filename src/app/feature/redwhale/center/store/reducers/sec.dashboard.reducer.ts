@@ -729,11 +729,10 @@ export const selectSearchedUsersLists = (state: State) => {
     const usersLists = state.usersLists
     _.forEach(_.keys(usersLists), (typeKey) => {
         searchUserList[typeKey] = _.filter(usersLists[typeKey], (item) => {
-            return (
-                _.includes(item.user.center_user_name, searchInput) || _.includes(item.user.phone_number, searchInput)
-            )
+            return _.includes(item.user.name, searchInput) || _.includes(item.user.phone_number, searchInput)
         })
     })
+    console.log('selectSearchedUsersLists db -- : ', searchUserList, usersLists)
     return searchUserList
 }
 export const selectEmployeeRoleObj = (state: State) => {
@@ -770,9 +769,7 @@ export const selectDrawerSearchedUsersLists = (state: State) => {
     const usersLists = state.drawerUsersLists
     _.forEach(_.keys(usersLists), (typeKey) => {
         searchUserList[typeKey] = _.filter(usersLists[typeKey], (item) => {
-            return (
-                _.includes(item.user.center_user_name, searchInput) || _.includes(item.user.phone_number, searchInput)
-            )
+            return _.includes(item.user.name, searchInput) || _.includes(item.user.phone_number, searchInput)
         })
     })
     return searchUserList
