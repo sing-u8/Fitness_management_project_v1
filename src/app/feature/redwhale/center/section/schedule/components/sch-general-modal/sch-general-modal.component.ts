@@ -56,7 +56,7 @@ export class SchGeneralModalComponent implements AfterViewChecked, OnChanges {
         if (this.generalData) {
             this.initDate()
             this.initTime()
-            this.curStaffs = _.orderBy(this.generalData.responsibility, 'center_user_name')
+            this.curStaffs = _.orderBy(this.generalData.responsibility, 'name')
         }
     }
 

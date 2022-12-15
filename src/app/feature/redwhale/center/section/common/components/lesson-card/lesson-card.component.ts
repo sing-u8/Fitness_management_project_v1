@@ -113,7 +113,7 @@ export class LessonCardComponent implements OnInit, AfterViewInit, OnDestroy {
 
     parseCardInfo() {
         if (this.categItem) {
-            const insts = _.orderBy(this.categItem.instructors, 'center_user_name')
+            const insts = _.orderBy(this.categItem.instructors, 'name')
             this.cardInfo.category_name = this.categItem.category_name
             this.cardInfo.color = this.categItem.color
             this.cardInfo.name = this.categItem.name
@@ -123,7 +123,7 @@ export class LessonCardComponent implements OnInit, AfterViewInit, OnDestroy {
                     : insts[0].name
             this.cardInfo.type_name = this.categItem.type_code == 'class_item_type_onetoone' ? '1:1 수업' : '그룹 수업'
         } else {
-            const insts = _.orderBy(this.memLessonItem.instructors, 'center_user_name')
+            const insts = _.orderBy(this.memLessonItem.instructors, 'name')
             this.cardInfo.category_name = this.memLessonItem.category_name
             this.cardInfo.color = this.memLessonItem.color
             this.cardInfo.name = this.memLessonItem.name

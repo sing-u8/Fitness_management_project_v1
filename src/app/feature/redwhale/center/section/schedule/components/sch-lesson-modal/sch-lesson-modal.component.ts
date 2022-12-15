@@ -261,7 +261,7 @@ export class SchLessonModalComponent implements AfterViewChecked, OnChanges {
         instructor: undefined,
     }
     initLessonCardData() {
-        const insts = _.orderBy(this.lessonData.responsibility, 'center_user_name')
+        const insts = _.orderBy(this.lessonData.responsibility, 'name')
         this.lessonCardData = {
             categName: this.lessonData.class.category_name,
             lessonName: this.lessonData.class.name,

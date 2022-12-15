@@ -44,7 +44,7 @@ export class DrawerLessonCardComponent implements OnInit, AfterViewInit, OnChang
     }
 
     initCardInfo() {
-        const insts = _.orderBy(this.lesson.instructors, 'center_user_name')
+        const insts = _.orderBy(this.lesson.instructors, 'name')
         this.cardInfo.category_name = this.lesson.category_name
         this.cardInfo.color = this.lesson.color
         this.cardInfo.name = this.lesson.name
