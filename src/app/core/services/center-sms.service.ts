@@ -209,7 +209,6 @@ export interface UpdateSMSPointReqBody {
 }
 export interface RegisterSMSCallerIdReqBody {
     phone_number: string
-    verified: boolean
 }
 export interface SendSMSMessageReqBody {
     sender_phone_number: string

@@ -9,17 +9,27 @@
             (onAddNumber)="onAddNumber.emit()"
         ></msg-phone-number-selector>
     </div>
+    <div *ngIf="curCaller && !curCaller?.verified" class="warning-not-verified-number">
+        <div class="warning-icon"></div>
+        <div class="warning-text">
+            발신번호 인증 승인 후부터 문자 전송이 가능하며,
+            신청일 기준 다음 영업일 오후 5시 이전까지 승인
+            처리됩니다. 잠시만 기다려주세요!
+        </div>
+    </div>
     <div
         #text_field_container
         class="text-field__content thin-scroll-y-overlay2"
+        [class.warning-not-verified]="curCaller && !curCaller?.verified"
         tabindex="0"
         (focus)="onFocusTextArea()"
         (focusout)="onFocusTextAreaOut()"
     >
-        <div class="ad_msg" *ngIf="showAdditionalText">{{additionalText.top}}</div>
+        <div class="ad_msg" *ngIf="showAdditionalText">{{ additionalText.top }}</div>
         <textarea
             #text_field
             class="rw-textarea"
+            [readonly]="curCaller && !curCaller?.verified"
             placeholder="문자 내용을 입력해주세요."
             rw-TextareaHeightResize
             [padding]="0"
@@ -27,10 +37,10 @@
             [formControl]="textControl"
             (keydown)="checkTextIsOver($event)"
         ></textarea>
-        <div class="ad_msg" *ngIf="showAdditionalText">{{additionalText.bottom}}</div>
+        <div class="ad_msg" *ngIf="showAdditionalText">{{ additionalText.bottom }}</div>
     </div>
     <div class="text-field__footer">
-        <span class="rw-typo-bodytext1 ">{{textByte > 90 ? '장문' : '단문'}}</span>
-        <span class="rw-typo-bodytext1 ">{{textByte}} {{textByte > 90 ? '/ 2000' : '/ 90'}} byte</span>
+        <span class="rw-typo-bodytext1">{{ textByte > 90 ? '장문' : '단문' }}</span>
+        <span class="rw-typo-bodytext1">{{ textByte }} {{ textByte > 90 ? '/ 2000' : '/ 90' }} byte</span>
     </div>
 </div>

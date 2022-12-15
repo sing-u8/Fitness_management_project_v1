@@ -23,10 +23,10 @@
     
     <div class="card-right">
         <rw-checkbox
-            *ngIf="!(includeAd && cardItem.user.service080)"
+            *ngIf="!(cardItem.user.service080)"
             [checked]="cardItem.selected"
         ></rw-checkbox>
-        <div class="receive-ad-block" *ngIf="includeAd && cardItem.user.service080">
+        <div class="receive-ad-block" *ngIf="(cardItem.user.service080)">
             <div class="ad-block-icon"></div>
             광고 수신 거부
         </div>

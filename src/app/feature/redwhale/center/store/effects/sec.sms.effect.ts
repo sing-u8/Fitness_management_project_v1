@@ -302,6 +302,25 @@ export class SMSEffect {
         )
     )
 
+    registerCallingNumber$ = createEffect(
+        () =>
+            this.actions$.pipe(
+                ofType(SMSActions.startRegisterCallingNumber),
+                concatLatestFrom(() => [this.store.select(SMSSelector.curCenterId)]),
+                switchMap(([{ reqBody, cb }, curCenterId]) => {
+                    return this.centerSMSApi.registerSMSCallerId(curCenterId, reqBody).pipe(
+                        tap(() => {
+                            cb ? cb() : null
+                        })
+                    )
+                }),
+                catchError((err: string) => of(SMSActions.error({ error: err })))
+            ),
+        {
+            dispatch: false,
+        }
+    )
+
     // helper
     isSameValueAutoSetting(value: UpdateMLAutoSendReqBody, reference: SMSAutoSend) {
         const valueKeys = _.keys(value)

@@ -40,6 +40,11 @@ type AutoTransmitType = 'membership' | 'locker'
     styleUrls: ['./message.component.scss'],
 })
 export class MessageComponent implements OnInit, OnDestroy {
+    public readonly pointPerMsg = {
+        short: 12,
+        long: 32,
+    }
+
     public center: Center
 
     // ngrx -- common
@@ -152,6 +157,8 @@ export class MessageComponent implements OnInit, OnDestroy {
         this.historyDateRange$.pipe(takeUntil(this.unsubscribe$)).subscribe((dateRange) => {
             this.selectedHistoryDate = _.cloneDeep(dateRange)
         })
+
+        this.selectedHistoryDate = this.getDateRange(this.selectedHistoryDate)
         this.nxStore.dispatch(
             SMSActions.startGetHistoryGroup({
                 centerId: this.center.id,
@@ -164,8 +171,8 @@ export class MessageComponent implements OnInit, OnDestroy {
             this.smsPoint = smsPoint
             this.checkIsMsgAbleToBeSent()
             this.textCountForSMSPoint = {
-                short: Math.floor(this.smsPoint / 11),
-                long: Math.floor(this.smsPoint / 33),
+                short: Math.floor(this.smsPoint / this.pointPerMsg.short),
+                long: Math.floor(this.smsPoint / this.pointPerMsg.long),
             }
         })
         this.selectSMSType$.pipe(takeUntil(this.unsubscribe$)).subscribe((smsType) => {
@@ -260,10 +267,10 @@ export class MessageComponent implements OnInit, OnDestroy {
     calculateSubtractPoint(gtb: number, selectedUsers: number) {
         if (gtb <= 90) {
             this.subtractText = '단문 12P'
-            this.subtractPoint = 12 * selectedUsers
+            this.subtractPoint = this.pointPerMsg.short * selectedUsers
         } else {
             this.subtractText = '장문 33P'
-            this.subtractPoint = 33 * selectedUsers
+            this.subtractPoint = this.pointPerMsg.long * selectedUsers
         }
     }
 
@@ -612,7 +619,19 @@ export class MessageComponent implements OnInit, OnDestroy {
         this.showRegisterSenderPhone = false
     }
     onRegisterSenderPhoneConfirm(res: { loadingFns: ClickEmitterType; data: { name: string; phone: string } }) {
-        res.loadingFns.hideLoading()
-        this.showRegisterSenderPhone = false
+        res.loadingFns.showLoading()
+        this.nxStore.dispatch(
+            SMSActions.startRegisterCallingNumber({
+                reqBody: {
+                    phone_number: res.data.phone,
+                },
+                cb: () => {
+                    this.nxStore.dispatch(showToast({ text: '발신번호 등록 요청이 완료되었습니다.' }))
+                    this.nxStore.dispatch(SMSActions.startGetCallerList({ centerId: this.center.id }))
+                    res.loadingFns.hideLoading()
+                    this.showRegisterSenderPhone = false
+                },
+            })
+        )
     }
 }

@@ -9,6 +9,7 @@ div.l-text-field {
     box-shadow: 0 4px 10px rgba(181, 181, 181, 0.1098);
     border-radius: 35px;
     min-width: 300px;
+    max-width: 300px;
     min-height: 558px;
 
     display: flex;
@@ -22,6 +23,29 @@ div.l-text-field {
             &:first-of-type{
                 margin-top: 14px;
             }
+        }
+    }
+    .warning-not-verified-number {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        position: relative;
+        margin-top: 5px;
+        .warning-icon {
+            background-image: url("/assets/icons/etc/warning-orange.svg");
+            background-repeat: no-repeat;
+            background-size: contain;
+            width: 18.27px;
+            height: 14.93px;
+            margin-top: 2px;
+        }
+        .warning-text {
+            width: calc(100% - 16.4px);
+            font-weight: 400;
+            font-size: 1.2rem;
+            line-height: 17px;
+            letter-spacing: -0.144px;
+            color: #C96B12;
         }
     }
     .text-field__content{
@@ -58,6 +82,17 @@ div.l-text-field {
             &:focus {
                 font-weight: 500;
                 border: none;
+            }
+        }
+
+        &.warning-not-verified {
+            height: 344px;
+            background-color: var(--border-color);
+            textarea {
+                &::placeholder {
+                    background-color: var(--border-color);
+                    color: var(--grey)
+                }
             }
         }
 

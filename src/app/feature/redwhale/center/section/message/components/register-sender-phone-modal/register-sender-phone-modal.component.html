@@ -42,8 +42,8 @@
         type="text"
         placeholder="발신번호를 입력해주세요."
         minlength="10"
-        maxlength="11"
-        (keydown)="inputHelper.restrictToNumber($event)"
+        maxlength="13"
+        (keydown)="onlyNumberCheck($event)"
         [formControl]="phoneForm"
       >
       <div class="error" *ngIf="!phoneForm.pristine && phoneForm.invalid">

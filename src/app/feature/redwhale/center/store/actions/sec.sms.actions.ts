@@ -12,7 +12,7 @@ import { SMSAutoSend } from '@schemas/sms-auto-send'
 import { SMSHistory } from '@schemas/sms-history'
 import { SMSHistoryGroup } from '@schemas/sms-history-group'
 
-import { UpdateMLAutoSendReqBody } from '@services/center-sms.service'
+import { UpdateMLAutoSendReqBody, RegisterSMSCallerIdReqBody } from '@services/center-sms.service'
 import { SMSCaller } from '@schemas/sms-caller'
 
 const FeatureKey = 'Center/SMS'
@@ -114,6 +114,12 @@ export const finishGetHistoryGroupDetail = createAction(
     `[${FeatureKey}] Finish Get History Group Detail`,
     props<{ smsHistoryList: SMSHistory[] }>()
 )
+
+export const startRegisterCallingNumber = createAction(
+    `[${FeatureKey}] Start Register Calling Number`,
+    props<{ reqBody: RegisterSMSCallerIdReqBody; cb ?: () => void }>()
+)
+export const finishRegisterCallingNumber = createAction(`[${FeatureKey}] Finish Register Calling Number`)
 
 // sync
 export const setSMSType = createAction(`[${FeatureKey}] Set SMS Type`, props<{ smsType: SMSType }>())

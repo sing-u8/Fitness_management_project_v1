@@ -9,8 +9,8 @@
 		(rwClickOutside)="close()"
 	>
 		<div *ngIf="value?.phone_number" class="d-flex align-items-center">
-			<span class="text">{{ value?.phone_number }}</span>
-<!--			<div *ngIf="value?.being_verified" class="verification-icon">{{'승인중'}}</div>-->
+			<span class="text">{{ value?.phone_number | phoneNumber }}</span>
+			<div *ngIf="!value?.verified" class="verification-icon">{{'승인중'}}</div>
 		</div>
 		<div *ngIf="items.length == 0 && !value?.phone_number">
 			<span class="text_empty rw-typo-bodytext1_grey">등록된 번호가 없어요.</span>
@@ -34,8 +34,8 @@
 			[class.active]="item.phone_number == value?.phone_number"
 			(click)="onSelect(item)"
 		>
-			<span class="rw-typo-bodytext0">{{ item.phone_number }}</span>
-<!--			<div *ngIf="value?.being_verified" class="verification-icon">{{'승인중'}}</div>-->
+			<span class="rw-typo-bodytext0">{{ item.phone_number | phoneNumber }}</span>
+			<div *ngIf="!item?.verified" class="verification-icon">{{'승인중'}}</div>
 		</div>
 		<div
 			class="item add-number d-flex align-items-center"

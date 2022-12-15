@@ -200,7 +200,7 @@ export const smsReducer = createImmerReducer(
         return state
     }),
     on(SMSActions.finishGetCallerList, (state, { callerList }) => {
-        state.callerList = callerList.filter((v) => v.verified)
+        state.callerList = callerList // .filter((v) => v.verified)
         if (!state.isGeneralCallerInit && state.callerList.length > 0) {
             state.isGeneralCallerInit = true
             state.generalCaller = state.callerList[0]

@@ -15,6 +15,7 @@ import { AbstractControl, FormBuilder, FormControl, ValidationErrors, ValidatorF
 import { ClickEmitterType } from '@schemas/components/button'
 
 import { InputHelperService } from '@services/helper/input-helper.service'
+import _ from 'lodash'
 
 @Component({
     selector: 'msg-register-sender-phone-modal',
@@ -52,7 +53,12 @@ export class RegisterSenderPhoneModalComponent implements OnChanges, AfterViewCh
             validators: [Validators.required, Validators.pattern('^[가-힣|a-z|A-Z]{1,20}$'), this.nameValidator()],
         })
         this.phoneForm = this.fb.control('', {
-            validators: [Validators.required, Validators.pattern('^[0-9]{10,11}$'), this.phoneValidator()],
+            validators: [
+                Validators.required,
+                Validators.pattern('\\(?([0-9]{3})\\)?([ .-]?)([0-9]{4})\\2([0-9]{4})'),
+                Validators.maxLength(13),
+                this.phoneValidator(),
+            ],
         })
     }
 
@@ -93,8 +99,7 @@ export class RegisterSenderPhoneModalComponent implements OnChanges, AfterViewCh
     }
 
     onConfirm(loadingFns: ClickEmitterType): void {
-        loadingFns.showLoading()
-        this.confirm.emit({ loadingFns, data: { name: this.nameForm.value, phone: this.phoneForm.value } })
+        this.confirm.emit({ loadingFns, data: { name: this.nameForm.value, phone: _.camelCase(this.phoneForm.value) } })
     }
 
     // on mouse rw-modal down
@@ -105,18 +110,49 @@ export class RegisterSenderPhoneModalComponent implements OnChanges, AfterViewCh
         this.isMouseModalDown = false
     }
 
+    matchPhoneNumberForm(event) {
+        const userDataSize = this.phoneForm.value.length
+        const userData = this.phoneForm.value
+        const lastStr = this.phoneForm.value[userDataSize - 1]
+        const digitReg = /\d/g
+        const dashReg = /-/g
+
+        const code = event.which ? event.which : event.keyCode
+
+        if (userDataSize == 4 && code != 8) {
+            if (digitReg.test(lastStr)) {
+                this.phoneForm.patchValue(userData.slice(0, 3) + '-' + userData.slice(3))
+            } else if (dashReg.test(lastStr)) {
+                this.phoneForm.patchValue(userData.slice(0, 3))
+            }
+        } else if (userDataSize == 9 && code != 8) {
+            if (digitReg.test(lastStr)) {
+                this.phoneForm.patchValue(userData.slice(0, 8) + '-' + userData.slice(8))
+            } else if (dashReg.test(lastStr)) {
+                this.phoneForm.patchValue(userData.slice(0, 8))
+            }
+        }
+    }
+
+    onlyNumberCheck(event) {
+        if (this.inputHelper.restrictToNumber(event)) {
+            this.matchPhoneNumberForm(event)
+            return true
+        }
+        return false
+    }
+
     // validators
     public nameError = ''
     public phoneError = ''
     nameValidator(): ValidatorFn {
         return (control: AbstractControl): ValidationErrors | null => {
             const nameRegex = /^[가-힣|a-z|A-Z]{1,20}$/
-            console.log('name validator : ', control, ' -- ', control.pending)
             if (!control.pristine && control.value == '') {
                 this.nameError = '이름을 입력해주세요.'
                 return { nameNone: true }
             } else if (!nameRegex.test(control.value)) {
-                this.nameError = '이메일 양식을 확인해주세요.'
+                this.nameError = '이름 양식을 확인해주세요.'
                 return { nameFormError: true }
             }
 
@@ -125,7 +161,7 @@ export class RegisterSenderPhoneModalComponent implements OnChanges, AfterViewCh
     }
     phoneValidator(): ValidatorFn {
         return (control: AbstractControl): ValidationErrors | null => {
-            const phoneRegex = /^[0-9]{10,11}$/
+            const phoneRegex = /\(?([0-9]{3})\)?([ .-]?)([0-9]{4})\2([0-9]{4})/
             if (!control.pristine && control.value == '') {
                 this.phoneError = '발신번호를 입력해주세요.'
                 return { phoneNone: true }
