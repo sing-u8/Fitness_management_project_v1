@@ -27,7 +27,7 @@ export class SMSEffect {
         this.actions$.pipe(
             ofType(SMSActions.startLoadMemberList),
             switchMap(({ centerId }) =>
-                this.centerUsersApi.getUserList(centerId, 'all').pipe(
+                this.centerUsersApi.getUserList(centerId, 'member').pipe(
                     map((memberlist) => {
                         const userListValue: SMSReducer.UsersListValue = memberlist.map((v) => ({
                             user: v,

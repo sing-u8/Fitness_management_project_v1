@@ -11,4 +11,4 @@ export interface CenterUsersByCategory {
     center_user_count: number
 }
 
-export type CenterUsersCategory = 'all' | 'valid' | 'unpaid' | 'to_expire' | 'expired' | 'employee' | 'check_in'
+export type CenterUsersCategory = 'member' | 'valid' | 'unpaid' | 'to_expire' | 'expired' | 'employee' | 'check_in'

@@ -409,7 +409,7 @@ export const selectSearchedUsersLists = (state: State) => {
 // helper functions
 export const matchUsersCategoryTo = (categType: CenterUsersCategory): MemberSelectCateg => {
     switch (categType) {
-        case 'all':
+        case 'member':
             return 'member'
         case 'valid':
             return 'valid'
@@ -428,7 +428,7 @@ export const matchUsersCategoryTo = (categType: CenterUsersCategory): MemberSele
 export const matchMemberSelectCategTo = (categType: MemberSelectCateg): CenterUsersCategory => {
     switch (categType) {
         case 'member':
-            return 'all'
+            return 'member'
         case 'valid':
             return 'valid'
         case 'unpaid':

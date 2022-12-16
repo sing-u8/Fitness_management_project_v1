@@ -43,7 +43,7 @@ export class DashboardEffect {
         this.actions$.pipe(
             ofType(DashboardActions.startLoadMemberList),
             switchMap(({ centerId, cb }) =>
-                this.centerUsersApi.getUserList(centerId, 'all').pipe(
+                this.centerUsersApi.getUserList(centerId, 'member').pipe(
                     map((memberlist) => {
                         const userListValue: DashboardReducer.UsersListValue = memberlist.map((v) => ({
                             user: v,
