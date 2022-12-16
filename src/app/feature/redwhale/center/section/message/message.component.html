@@ -2,7 +2,11 @@
     <header class="header">
         <div class="header-text">
             <span class="title rw-typo-headline1">문자</span>
-            <span class="title-desc rw-typo-subtext1">남은 포인트 : {{smsPoint$ | async | numberWithCommas}}P (단문 {{textCountForSMSPoint.short}}건 / 장문 {{textCountForSMSPoint.long}}건)</span>
+            <span class="title-desc rw-typo-subtext1"
+                >남은 포인트 : {{ smsPoint$ | async | numberWithCommas }}P (단문
+                {{ textCountForSMSPoint.short | numberWithCommas }}건 / 장문
+                {{ textCountForSMSPoint.long | numberWithCommas }}건)</span
+            >
             <div class="help-icon">
                 <div class="help">
                     <div class="help-text-container">
@@ -12,7 +16,7 @@
                                 <div class="rw-typo-bodytext2">
                                     <p>01</p>
                                     <div class="help-text-item">
-                                        <span>단문 : 건당 {{pointPerMsg.short}}원 최대</span>
+                                        <span>단문 : 건당 {{ pointPerMsg.short }}원 최대</span>
                                         <span>90byte까지 입력 가능하며,</span>
                                         <span>국문 기준 약 40~45자 입력 가능해요.</span>
                                     </div>
@@ -20,7 +24,7 @@
                                 <div class="rw-typo-bodytext2">
                                     <p>02</p>
                                     <div class="help-text-item">
-                                        <span>장문 : 건당 {{pointPerMsg.long}}원</span>
+                                        <span>장문 : 건당 {{ pointPerMsg.long }}원</span>
                                         <span>최대 2,000byte까지 입력 가능하며,</span>
                                         <span>국문 기준 약 1,000자 입력 가능해요.</span>
                                     </div>
@@ -35,20 +39,31 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
         <div class="l-message-route d-flex align-items-center">
-            <div class="message-route rw-typo-title1" [class.selected] = "smsType == 'general'" (click)="setSMSType('general')">
+            <div
+                class="message-route rw-typo-title1"
+                [class.selected]="smsType == 'general'"
+                (click)="setSMSType('general')"
+            >
                 일반 전송
                 <div class="under-bar"></div>
             </div>
-            <div class="message-route rw-typo-title1" [class.selected] = "smsType == 'auto-transmission'" (click)="setSMSType('auto-transmission')">
+            <div
+                class="message-route rw-typo-title1"
+                [class.selected]="smsType == 'auto-transmission'"
+                (click)="setSMSType('auto-transmission')"
+            >
                 자동 전송
                 <div class="under-bar"></div>
             </div>
-            <div class="message-route  rw-typo-title1" [class.selected] = "smsType == 'history'" (click)="setSMSType('history')">
+            <div
+                class="message-route rw-typo-title1"
+                [class.selected]="smsType == 'history'"
+                (click)="setSMSType('history')"
+            >
                 전송 내역
                 <div class="under-bar"></div>
             </div>
@@ -75,25 +90,23 @@
                 [isLoading]="isLoading$ | async"
             ></msg-member-list>
             <div class="general-right">
-                <div class="general-right__header rw-typo-title1 ">
-                    내용 작성
-                </div>
+                <div class="general-right__header rw-typo-title1">내용 작성</div>
                 <div class="general-right__content">
                     <msg-text-field
                         [callerList]="(callerList$ | async).callerList"
                         [curCaller]="generalCaller"
-                        [text]="(generalText$ | async)"
+                        [text]="generalText$ | async"
                         [textByte]="generalTextByte"
                         [errText]="callerListErrText"
                         [showAdditionalText]="generalIsAdSet"
                         [additionalText]="adMegObj"
-                        (onAddNumber)="toggleRegisterSenderPhone();setRegisterSenderPhoneType('cover')"
+                        (onAddNumber)="toggleRegisterSenderPhone(); setRegisterSenderPhoneType('cover')"
                         (textChange)="updateGeneralText($event)"
                         (onSelectChange)="onGeneralCallerChange($event)"
                     ></msg-text-field>
                     <div class="general-setting-box">
                         <div class="setting-ad-box">
-                            <p class="rw-typo-subtext1 ">광고성 문자</p>
+                            <p class="rw-typo-subtext1">광고성 문자</p>
                             <div class="d-flex align-items-start flex-column">
                                 <rw-checkbox
                                     [checked]="generalIsAdSet"
@@ -102,13 +115,13 @@
                                     (click)="onSetGeneralAdSetClick()"
                                 ></rw-checkbox>
                                 <div class="rw-typo-bodytext2-regular_darkgrey ad-text-content">
-                                    특가/할인 안내, 프로모션, 이벤트<br>
-                                    등의 정보가 포함된 경우, 광고 문자<br>
+                                    특가/할인 안내, 프로모션, 이벤트<br />
+                                    등의 정보가 포함된 경우, 광고 문자<br />
                                     미표기 시 법적 처벌 대상이 됩니다.
                                 </div>
                                 <div class="ad-text-guide-logo">
                                     <div class="ad-text-guide-title">
-                                        꼭 확인해주세요!<img src="assets/icons/etc/short_right_arrow_red.svg">
+                                        꼭 확인해주세요!<img src="assets/icons/etc/short_right_arrow_red.svg" />
                                         <div class="ad-text-guide-box">
                                             <div class="help-text">
                                                 <div class="help-text-title">광고 표기 의무 안내</div>
@@ -117,8 +130,10 @@
                                                         광고성 문자 전송 시, 꼭 ‘광고성 정보가 포함됨’에 체크해주세요!
                                                     </p>
                                                     <p class="text_second">
-                                                        정보통신망법 제50조 제4항에 따라 영리 목적의 광고성 정보 전송 시<br>
-                                                        수신자의 명시적인 사전 동의를 받아야 하며, 이를 위반할 경우 3천만원<br>
+                                                        정보통신망법 제50조 제4항에 따라 영리 목적의 광고성 정보 전송
+                                                        시<br />
+                                                        수신자의 명시적인 사전 동의를 받아야 하며, 이를 위반할 경우
+                                                        3천만원<br />
                                                         이하의 과태료가 부과될 수 있습니다.
                                                     </p>
                                                     <div class="d-flex">
@@ -130,14 +145,14 @@
                                                                 </div>
                                                                 <div class="msg-image-text">
                                                                     <div class="rw-typo-subtext0-regular red-box">
-                                                                        {{adMsgRef.top}}
+                                                                        {{ adMsgRef.top }}
                                                                     </div>
                                                                     <p class="rw-typo-subtext0-regular plain-box">
-                                                                        쾌적한 OO센터에서<br>
+                                                                        쾌적한 OO센터에서<br />
                                                                         건강한 삶을 시작하세요.
                                                                     </p>
                                                                     <div class="rw-typo-subtext0-regular red-box">
-                                                                        <p>{{adMsgRef.bottom.one}}</p>
+                                                                        <p>{{ adMsgRef.bottom.one }}</p>
                                                                         <p>000-000-0000</p>
                                                                     </div>
                                                                 </div>
@@ -148,8 +163,12 @@
                                                                 <p>01</p>
                                                                 <div class="help-text-item">
                                                                     <span>메시지 맨 앞에 (광고) 표기</span>
-                                                                    <span class="rw-typo-subtext1">반드시 (광고)로 표기해야 하며,</span>
-                                                                    <span class="rw-typo-subtext1">(광/고), (광 고), [광고] 등 변칙 금지</span>
+                                                                    <span class="rw-typo-subtext1"
+                                                                        >반드시 (광고)로 표기해야 하며,</span
+                                                                    >
+                                                                    <span class="rw-typo-subtext1"
+                                                                        >(광/고), (광 고), [광고] 등 변칙 금지</span
+                                                                    >
                                                                 </div>
                                                             </div>
                                                             <div class="item rw-typo-bodytext2">
@@ -168,22 +187,22 @@
                                                                 <p>04</p>
                                                                 <div class="help-text-item">
                                                                     <span>수신 거부 요청자에게 결과 통지</span>
-                                                                    <span class="rw-typo-subtext1">안내 사항 추가 예정</span>
+                                                                    <span class="rw-typo-subtext1"
+                                                                        >안내 사항 추가 예정</span
+                                                                    >
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
-            
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    
                                 </div>
                             </div>
                         </div>
                         <div class="setting-transmission-time">
-                            <div class="setting-transmission-time__title rw-typo-subtext1 ">
+                            <div class="setting-transmission-time__title rw-typo-subtext1">
                                 전송 시점 (야간 전송 불가)
                                 <div class="setting-trans-time-guide__logo">
                                     <div class="setting-trans-time-guide__box">
@@ -191,13 +210,13 @@
                                             <div class="help-text-title">문자 야간 전송 안내</div>
                                             <div class="help-text-content rw-typo-bodytext2">
                                                 <p class="text_first">
-                                                    오후 9시부터 다음날 오전 8시 사이에는<br>
+                                                    오후 9시부터 다음날 오전 8시 사이에는<br />
                                                     문자를 전송하실 수 없어요.
                                                 </p>
                                                 <p>
-                                                    정보통신망법 제76조 제1항에 따라 별도의<br>
-                                                    동의 없이 오후 9시부터 그 다음날 오전 8시<br>
-                                                    사이에 문자를 전송할 경우, 3천만원 이하의<br>
+                                                    정보통신망법 제76조 제1항에 따라 별도의<br />
+                                                    동의 없이 오후 9시부터 그 다음날 오전 8시<br />
+                                                    사이에 문자를 전송할 경우, 3천만원 이하의<br />
                                                     과태료가 부과될 수 있습니다.
                                                 </p>
                                             </div>
@@ -208,13 +227,13 @@
                             <div class="d-flex align-items-center">
                                 <rw-radio-button
                                     [checked]="generalTransmissionTime.immediate"
-                                    [text] = "'즉시 전송'"
+                                    [text]="'즉시 전송'"
                                     [textSize]="'14'"
                                     (click)="onGeneralTransmissionTimeClick('immediate')"
                                 ></rw-radio-button>
                                 <rw-radio-button
                                     [checked]="generalTransmissionTime.book"
-                                    [text] = "'예약 전송'"
+                                    [text]="'예약 전송'"
                                     [textSize]="'14'"
                                     (click)="onGeneralTransmissionTimeClick('book')"
                                 ></rw-radio-button>
@@ -227,11 +246,11 @@
                                         (rwClickOutside)="closeBookDate()"
                                         (click)="toggleBookDate()"
                                     >
-                                        {{bookDateText}}
+                                        {{ bookDateText }}
                                         <db-datepicker
                                             *ngIf="showBookDate"
                                             mode="date"
-                                            [(data)] = "bookDate"
+                                            [(data)]="bookDate"
                                             (dataChange)="onBookDateChange($event)"
                                         ></db-datepicker>
                                     </div>
@@ -250,13 +269,19 @@
                             </div>
                         </div>
                         <div class="deduction-box">
-                            <p [class.red]="!isPointEnough" class="rw-typo-bodytext0-bold ">보유한 {{smsPoint$ | async | numberWithCommas}}P 중</p>
-                            <p [class.red]="!isPointEnough" class="rw-typo-bodytext0-bold "> <span class="red">{{subtractPoint | numberWithCommas}}P</span> 차감 예정</p>
-                            <p class="rw-typo-bodytext2-regular_darkgrey ">수신자 {{selectedUserListSelected$ | async}}명 * {{subtractText}}</p>
+                            <p [class.red]="!isPointEnough" class="rw-typo-bodytext0-bold">
+                                보유한 {{ smsPoint$ | async | numberWithCommas }}P 중
+                            </p>
+                            <p [class.red]="!isPointEnough" class="rw-typo-bodytext0-bold">
+                                <span class="red">{{ subtractPoint | numberWithCommas }}P</span> 차감 예정
+                            </p>
+                            <p class="rw-typo-bodytext2-regular_darkgrey">
+                                수신자 {{ selectedUserListSelected$ | async }}명 * {{ subtractText }}
+                            </p>한
                             <ng-container *ngIf="!isPointEnough">
                                 <p class="rw-typo-subtext0-regular error">
                                     <span class="error-icon"></span>
-                                    보유한 포인트가 차감 예정 포인트보다<br>적어서 문자를 전송할 수 없어요.
+                                    보유한 포인트가 차감 예정 포인트보다<br />적어서 문자를 전송할 수 없어요.
                                 </p>
                             </ng-container>
                         </div>
@@ -271,7 +296,6 @@
                         </rw-button>
                     </div>
                 </div>
-
             </div>
         </div>
 
@@ -281,20 +305,20 @@
                 <div class="message__ticket">
                     <msg-text-field
                         [callerList]="(callerList$ | async).callerList"
-                        [curCaller]="{phone_number: membershipAutoSendSetting.phone_number, verified: true}"
+                        [curCaller]="{ phone_number: membershipAutoSendSetting.phone_number, verified: true }"
                         [text]="membershipAutoSendSetting.text"
                         [textByte]="membershipAutoSendSettingTextByte"
                         [errText]="callerListErrText"
-                        (onAddNumber)="toggleRegisterSenderPhone();setRegisterSenderPhoneType('cover')"
+                        (onAddNumber)="toggleRegisterSenderPhone(); setRegisterSenderPhoneType('cover')"
                         (textChange)="onMLTextChange($event, 'membership')"
-                        (onSelectChange)="onMLCallerChange($event,'membership')"
+                        (onSelectChange)="onMLCallerChange($event, 'membership')"
                     ></msg-text-field>
                     <msg-auto-trans-setting-box
                         [autoTransmitTextObj]="membershipSettingObj"
                         [smsAutoSend]="membershipAutoSendSetting"
                         [smsAutoSendDays]="membershipAutoSendSetting.days"
                         [guideText]="'회원권 만기 문자 내용을 변경하시나요?'"
-                        (OnAutoTransmitChange)="updateTransmitChange($event,'membership')"
+                        (OnAutoTransmitChange)="updateTransmitChange($event, 'membership')"
                         (OnAutoTransmitDayChange)="updateTransmitDay($event, 'membership')"
                         (OnAutoTransmitTimeChange)="updateTransmitTime($event, 'membership')"
                     ></msg-auto-trans-setting-box>
@@ -305,25 +329,24 @@
                 <div class="message__ticket">
                     <msg-text-field
                         [callerList]="(callerList$ | async).callerList"
-                        [curCaller]="{phone_number: lockerAutoSendSetting.phone_number, verified: true}"
+                        [curCaller]="{ phone_number: lockerAutoSendSetting.phone_number, verified: true }"
                         [text]="lockerAutoSendSetting.text"
                         [textByte]="lockerAutoSendSettingTextByte"
                         [errText]="callerListErrText"
-                        (onAddNumber)="toggleRegisterSenderPhone();setRegisterSenderPhoneType('cover')"
+                        (onAddNumber)="toggleRegisterSenderPhone(); setRegisterSenderPhoneType('cover')"
                         (textChange)="onMLTextChange($event, 'locker')"
-                        (onSelectChange)="onMLCallerChange($event,'locker')"
+                        (onSelectChange)="onMLCallerChange($event, 'locker')"
                     ></msg-text-field>
                     <msg-auto-trans-setting-box
                         [autoTransmitTextObj]="lockerSettingObj"
                         [smsAutoSend]="lockerAutoSendSetting"
                         [smsAutoSendDays]="lockerAutoSendSetting.days"
                         [guideText]="'락커 만기 문자 내용을 변경하시나요?'"
-                        (OnAutoTransmitChange)="updateTransmitChange($event,'locker')"
+                        (OnAutoTransmitChange)="updateTransmitChange($event, 'locker')"
                         (OnAutoTransmitDayChange)="updateTransmitDay($event, 'locker')"
                         (OnAutoTransmitTimeChange)="updateTransmitTime($event, 'locker')"
                     ></msg-auto-trans-setting-box>
                 </div>
-
             </div>
         </div>
 
@@ -338,18 +361,16 @@
                 ></msg-transmission-history-date-selector>
             </div>
             <msg-transmission-history-table
-                [historyGroupLoading]="(historyGroupLoading$ | async)"
-                [historyLoading]="(historyLoading$ | async)"
-                [smsHistoryGroupList]="(smsHistoryGroupList$ | async)"
-                [smsHistoryList]="(smsHistoryList$ | async)"
-                [curHistoryGroup]="(curHistoryGroup$ | async)"
+                [historyGroupLoading]="historyGroupLoading$ | async"
+                [historyLoading]="historyLoading$ | async"
+                [smsHistoryGroupList]="smsHistoryGroupList$ | async"
+                [smsHistoryList]="smsHistoryList$ | async"
+                [curHistoryGroup]="curHistoryGroup$ | async"
                 (onHistoryGroupClick)="onHistoryGroupItemClick($event)"
             ></msg-transmission-history-table>
         </div>
     </article>
 </section>
-
-
 
 <rw-modal
     [(visible)]="showTransmitMsgModal"
