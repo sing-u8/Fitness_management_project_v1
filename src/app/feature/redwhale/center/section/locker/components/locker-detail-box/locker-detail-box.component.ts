@@ -58,6 +58,8 @@ export class LockerDetailBoxComponent implements OnInit, OnChanges, OnDestroy {
     public doShowAdditionalChargeModal = false
     public additionalChargeDisabled = false
     setAdditionalChargeDisable() {
+        console.log('setAdditionalChargeDisable -- ', this.curUserLocker)
+        if (_.isEmpty(this.curUserLocker)) return
         const userLockerDay: number = dayjs(this.lockerDate.endDate).diff(this.lockerDate.startDate, 'day')
         const originUserLockerDay: number = dayjs(this.curUserLocker.end_date).diff(
             this.curUserLocker.start_date,
@@ -67,6 +69,8 @@ export class LockerDetailBoxComponent implements OnInit, OnChanges, OnDestroy {
     }
     public lockerChargeType: ChargeMode = 'modify'
     setLockerChargeType() {
+        console.log('setLockerChargeType -- ', this.curUserLocker)
+        if (_.isEmpty(this.curUserLocker)) return
         const userLockerDay: number = dayjs(this.lockerDate.endDate).diff(this.lockerDate.startDate, 'day')
         const originUserLockerDay: number = dayjs(this.curUserLocker.end_date).diff(
             this.curUserLocker.start_date,
@@ -484,7 +488,10 @@ export class LockerDetailBoxComponent implements OnInit, OnChanges, OnDestroy {
                     cb: () => {
                         res.loadingFns.hideLoading()
                         this.closeShowEmptyLockerModal()
-                        this.dashboardHelperService.synchronizeUserLocker(this.center.id, this.curUserLocker.center_user_id)
+                        this.dashboardHelperService.synchronizeUserLocker(
+                            this.center.id,
+                            this.curUserLocker.center_user_id
+                        )
                     },
                 })
             )
@@ -508,7 +515,10 @@ export class LockerDetailBoxComponent implements OnInit, OnChanges, OnDestroy {
                     cb: () => {
                         res.loadingFns.hideLoading()
                         this.closeShowEmptyLockerModal()
-                        this.dashboardHelperService.synchronizeUserLocker(this.center.id, this.curUserLocker.center_user_id)
+                        this.dashboardHelperService.synchronizeUserLocker(
+                            this.center.id,
+                            this.curUserLocker.center_user_id
+                        )
                     },
                 })
             )

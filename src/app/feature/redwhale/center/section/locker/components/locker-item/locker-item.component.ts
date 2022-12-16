@@ -108,7 +108,7 @@ export class LockerItemComponent implements OnInit, OnDestroy, AfterViewInit {
             const date1 = dayjs().format('YYYY-MM-DD')
             const date2 = dayjs(this.lockerItem.user_locker_end_date)
             const dayDiff = date2.diff(date1, 'day')
-            if (dayDiff < 8 && dayDiff >= 0) {
+            if (dayDiff < 7 && dayDiff >= 0) {
                 this.isSevenDaysRemain = true
                 this.isExceed = false
             } else if (dayDiff < 0) {

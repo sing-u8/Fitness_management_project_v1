@@ -75,6 +75,7 @@ export class LockerChargeModalComponent implements OnChanges, AfterViewChecked, 
     public staffList: Array<CenterUser> = []
     public center: Center
     public user: User
+    public centerUser: CenterUser
 
     constructor(
         private el: ElementRef,
@@ -97,6 +98,7 @@ export class LockerChargeModalComponent implements OnChanges, AfterViewChecked, 
         this.isMouseModalDown = false
         this.center = this.storageService.getCenter()
         this.user = this.storageService.getUser()
+        this.centerUser = this.storageService.getCenterUser()
         this.centerUserListService.getCenterInstructorList(this.center.id).subscribe({
             next: (instructors) => {
                 this.staffList = instructors
@@ -105,7 +107,7 @@ export class LockerChargeModalComponent implements OnChanges, AfterViewChecked, 
                         name: v.name,
                         value: v,
                     })
-                    this.user.id == v.id ? (this.lockerStaffSelectValue = { name: v.name, value: v }) : null
+                    this.centerUser.id == v.id ? (this.lockerStaffSelectValue = { name: v.name, value: v }) : null
                 })
             },
         })
@@ -175,7 +177,7 @@ export class LockerChargeModalComponent implements OnChanges, AfterViewChecked, 
         this.inputs = { pay_card: '', pay_cash: '', pay_trans: '', unpaid: '' }
         this.total = '0'
         this.staffList.forEach((v) => {
-            this.user.id == v.id ? (this.lockerStaffSelectValue = { name: v.name, value: v }) : null
+            this.centerUser.id == v.id ? (this.lockerStaffSelectValue = { name: v.name, value: v }) : null
         })
     }
 

@@ -20,8 +20,6 @@ export class CenterUserListService {
     }
 
     getCenterInstructorList(centerId: string) {
-        return this.centerUsersApi
-            .getUserList(centerId, 'employee')
-            .pipe(map((centerUserList) => _.filter(centerUserList, (centerUser) => centerUser.role_code != 'member')))
+        return this.centerUsersApi.getUserList(centerId, 'employee')
     }
 }
