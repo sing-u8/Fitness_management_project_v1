@@ -34,7 +34,7 @@
             (click)="onSelect(item, idx)"
         >
             <div class="d-flex align-items-center item__user">
-                <div *ngIf="item.value?.membership_number" class="avatar">
+                <div *ngIf="item.value?.id" class="avatar">
                     <rw-avatar
                         [image]="item.value.picture"
                         [backgroundColor]="item.value.color"

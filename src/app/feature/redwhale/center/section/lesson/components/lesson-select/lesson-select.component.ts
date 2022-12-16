@@ -12,6 +12,12 @@ import {
     EventEmitter,
 } from '@angular/core'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
+import {CenterUser} from "@schemas/center-user";
+
+interface TrainerFilter {
+    name: string
+    value: CenterUser
+}
 
 @Component({
     selector: 'gl-lesson-select',
@@ -42,7 +48,7 @@ export class LessonSelectComponent implements AfterViewInit, ControlValueAccesso
 
     @ViewChildren('.item') itemElememnts: QueryList<any>
 
-    value: any
+    value: TrainerFilter
     isOpen: boolean
 
     constructor(private el: ElementRef, private renderer: Renderer2) {
@@ -99,7 +105,7 @@ export class LessonSelectComponent implements AfterViewInit, ControlValueAccesso
     onChange = (_) => {}
     onTouched = (_) => {}
 
-    writeValue(value: any): void {
+    writeValue(value: TrainerFilter): void {
         this.value = value
     }
 
@@ -111,7 +117,7 @@ export class LessonSelectComponent implements AfterViewInit, ControlValueAccesso
         this.onTouched = fn
     }
 
-    onChanged(value: any) {
+    onChanged(value: TrainerFilter) {
         this.value = value
 
         this.onChange(value)
