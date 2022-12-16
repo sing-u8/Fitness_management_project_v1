@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core'
 import { Actions, concatLatestFrom, createEffect, ofType } from '@ngrx/effects'
 import { Store } from '@ngrx/store'
 import { EMPTY, forkJoin, from, of } from 'rxjs'
-import { catchError, map, switchMap, tap } from 'rxjs/operators'
+import { catchError, map, switchMap, tap, mergeMap } from 'rxjs/operators'
 
 import _ from 'lodash'
 import dayjs from 'dayjs'
@@ -226,7 +226,7 @@ export class DashboardEffect {
                     this.centerContractApi.getContract(centerId, centerUser.id),
                     this.centerUsersApi.getUserList(centerId, '', centerUser.name),
                 ]).pipe(
-                    switchMap(([lockers, memberships, payments, reservations, contracts, centerUsers]) => {
+                    switchMap(([lockers, memberships, payments, reservations, contracts, centerUsers ]) => {
                         return [
                             DashboardActions.finishGetUserData({
                                 memberships,
@@ -237,19 +237,19 @@ export class DashboardEffect {
                                 centerUser: centerUsers.find((v) => v.id == centerUser.id),
                             }),
                         ]
-                    })
-                )
-            ),
-            catchError((err: string) =>
-                of(
-                    DashboardActions.error({ error: err }),
-                    DashboardActions.finishGetUserData({
-                        memberships: [],
-                        lockers: [],
-                        payments: [],
-                        reservations: [],
-                        contracts: [],
-                    })
+                    }),
+                    catchError((err: string) =>
+                        of(
+                            DashboardActions.error({ error: err }),
+                            DashboardActions.finishGetUserData({
+                                memberships: [],
+                                lockers: [],
+                                payments: [],
+                                reservations: [],
+                                contracts: [],
+                            })
+                        )
+                    )
                 )
             )
         )

@@ -102,7 +102,7 @@ export class AttendanceModalComponent implements AfterViewChecked, OnChanges {
 
     // close number function
     initCloseCount() {
-        this.timeOutCount = 3
+        this.timeOutCount = 5
         this.timeOutId = setInterval(() => {
             this.timeOutCount = this.timeOutCount - 1
             if (this.timeOutCount == 0) {

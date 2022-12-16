@@ -25,8 +25,7 @@ export class MsgMemberListCardComponent implements OnInit, AfterViewInit, OnChan
             .pipe(distinctUntilChanged())
             .subscribe((value) => {
                 this.doHide = !(
-                    this.cardItem.user.name.includes(value) ||
-                    this.cardItem.user.phone_number.includes(value)
+                    this.cardItem.user.name.includes(value) || this.cardItem.user.phone_number.includes(value)
                 )
             })
     }

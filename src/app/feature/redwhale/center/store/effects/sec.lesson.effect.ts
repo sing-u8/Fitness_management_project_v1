@@ -150,18 +150,16 @@ export class LessonEffect {
         this.actions$.pipe(
             ofType(LessonActions.startGetTrainerFilterList),
             switchMap(({ centerId }) => {
-                return this.centerUserApi.getUserList(centerId, '', '').pipe(
+                return this.centerUserApi.getUserList(centerId, 'employee', '').pipe(
                     map((managers) => {
                         const newTrainerFilterList: Array<TrainerFilter> = _.cloneDeep(initialTrainerFilterList)
 
-                        managers
-                            .filter((m) => m.role_code != 'member')
-                            .forEach((v) => {
-                                newTrainerFilterList.push({
-                                    name: v.name,
-                                    value: v,
-                                })
+                        managers.forEach((v) => {
+                            newTrainerFilterList.push({
+                                name: v.name,
+                                value: v,
                             })
+                        })
 
                         return LessonActions.finishGetTrainerFilterList({ trainerFilterList: newTrainerFilterList })
                     }),

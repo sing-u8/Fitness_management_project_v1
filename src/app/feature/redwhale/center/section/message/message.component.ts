@@ -266,10 +266,10 @@ export class MessageComponent implements OnInit, OnDestroy {
 
     calculateSubtractPoint(gtb: number, selectedUsers: number) {
         if (gtb <= 90) {
-            this.subtractText = '단문 12P'
+            this.subtractText = `단문 ${this.pointPerMsg.short}P`
             this.subtractPoint = this.pointPerMsg.short * selectedUsers
         } else {
-            this.subtractText = '장문 33P'
+            this.subtractText = `장문 ${this.pointPerMsg.long}P`
             this.subtractPoint = this.pointPerMsg.long * selectedUsers
         }
     }
