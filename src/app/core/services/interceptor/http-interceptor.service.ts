@@ -31,7 +31,8 @@ export class HttpInterceptorService implements HttpInterceptor {
                     if (err.status == 401) {
                         return this.handle401Error(req, next)
                     }
-                    return throwError(() => new Error(err.message))
+                    console.log('interceptor err : ', err)
+                    return throwError(() => new Error(err.error.message))
                 })
             )
         } else {
