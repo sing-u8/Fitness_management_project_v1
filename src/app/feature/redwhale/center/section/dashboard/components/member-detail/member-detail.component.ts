@@ -259,7 +259,7 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
     ngOnChanges(changes: SimpleChanges): void {
         if (!_.isEmpty(changes['curUserData'])) {
             if (changes['curUserData'].previousValue?.user?.id != changes['curUserData'].currentValue['user']?.id) {
-                this.memoForm.setValue(changes['curUserData'].currentValue['user']?.['center_user_memo'] ?? '')
+                this.memoForm.setValue(changes['curUserData'].currentValue['user']?.['memo'] ?? '')
                 this.userNameForModal = this.curUserData?.user?.name ?? ''
                 this.userMembershipNumberForModal = this.curUserData?.user?.membership_number ?? ''
 
