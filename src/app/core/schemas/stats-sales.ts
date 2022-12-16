@@ -7,7 +7,7 @@ export interface StatsSales {
     product_type_code: string
     product_type_code_name: string
     product_name: string
-    responsibility_user_name: string
+    responsibility_center_user_name: string
     card: number
     cash: number
     trans: number
