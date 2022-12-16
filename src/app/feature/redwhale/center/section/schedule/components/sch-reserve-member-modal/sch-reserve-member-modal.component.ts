@@ -14,7 +14,7 @@ import {
 import _ from 'lodash'
 
 import { Subject, Observable } from 'rxjs'
-import { distinctUntilChanged, debounceTime, map, takeUntil } from 'rxjs/operators'
+import { distinctUntilChanged, debounceTime, map } from 'rxjs/operators'
 import { FormBuilder, FormControl, ValidationErrors, AsyncValidatorFn, AbstractControl } from '@angular/forms'
 
 import { CenterCalendarService } from '@services/center-calendar.service'

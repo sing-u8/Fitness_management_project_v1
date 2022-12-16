@@ -1,54 +1,49 @@
-<div
-  class="chat-intro-message"
-  [class.is-sidebar] = "isSideBar"
-  *ngIf="isTempRoom || isNewRoom"
->
-  <div id="dm-with-me" *ngIf="selectedRoom?.type_code == 'chat_room_type_chat_with_me'; else dm">
-    <p class="icon">💌</p>
-    <p class="rw-typo-bodytext0-bold title">
-      <span class="rw-typo-bodytext0-bold">{{selectedRoom?.name}}</span>님에게 메시지를 보내보세요.
-    </p>
-    <p class="rw-typo-bodytext1 dm-with-me__content">
-      앗, 본인이신가요?
-    </p>
-    <p class="rw-typo-bodytext1 content last-p">
-      그렇다면 이 공간을 나만의 <br *ngIf="isSideBar"/> 메모장으로 활용해보세요!
-    </p>
-  </div>
-
-  <ng-template #dm >
-    <div
-      id="dm"
-      *ngIf="selectedRoom?.type_code == 'chat_room_type_general'
-            && selectedRoom?.chat_room_users.length == 1; else group"
-    >
-      <p class="rw-typo-bodytext0-bold title">💌
-        <span class="rw-typo-bodytext0-bold">{{dmChatRoomName}}</span>님에게 메시지를 보내보세요.
-      </p>
+<!-- *ngIf="isTempRoom || isNewRoom" -->
+<div class="chat-intro-message" [class.is-sidebar]="isSideBar">
+    <div id="dm-with-me" *ngIf="selectedRoom?.type_code == 'chat_room_type_chat_with_me'; else dm">
+        <p class="icon">💌</p>
+        <p class="rw-typo-bodytext0-bold title">
+            <span class="rw-typo-bodytext0-bold">{{ selectedRoom?.name }}</span
+            >님에게 메시지를 보내보세요.
+        </p>
+        <p class="rw-typo-bodytext1 dm-with-me__content">앗, 본인이신가요?</p>
+        <p class="rw-typo-bodytext1 content last-p">
+            그렇다면 이 공간을 나만의 <br *ngIf="isSideBar" />
+            메모장으로 활용해보세요!
+        </p>
     </div>
-  </ng-template>
 
-  <ng-template #group>
-    <div
-      id="group"
-      *ngIf="selectedRoom?.type_code == 'chat_room_type_general'
-          && selectedRoom?.chat_room_users.length > 1"
-    >
-      <p class="icon">💌</p>
-      <p class="rw-typo-bodytext0-bold title">
-        새로운 그룹 채팅방이 개설되었어요!
-      </p>
-      <p class="rw-typo-bodytext1 content">
-        이 공간에 첫 메시지를 남겨보세요.
-      </p>
-      <p class="rw-typo-bodytext1 content last-p">
-        {{user.name}}님이 첫 메시지를 보낸 직후부터
-        <br *ngIf="isSideBar" /> 다른 멤버들도 채팅에 참여할 수 있어요.
-      </p>
-    </div>
-  </ng-template>
+    <ng-template #dm>
+        <div
+            id="dm"
+            *ngIf="
+                selectedRoom?.type_code == 'chat_room_type_general' && selectedRoom?.chat_room_users.length == 1;
+                else group
+            "
+        >
+            <p class="rw-typo-bodytext0-bold title">
+                💌 <span class="rw-typo-bodytext0-bold">{{ dmChatRoomName }}</span
+                >님에게 메시지를 보내보세요.
+            </p>
+        </div>
+    </ng-template>
 
-  <!-- <ng-template #general>
+    <ng-template #group>
+        <div
+            id="group"
+            *ngIf="selectedRoom?.type_code == 'chat_room_type_general' && selectedRoom?.chat_room_users.length > 1"
+        >
+            <p class="icon">💌</p>
+            <p class="rw-typo-bodytext0-bold title">새로운 그룹 채팅방이 개설되었어요!</p>
+            <p class="rw-typo-bodytext1 content">이 공간에 첫 메시지를 남겨보세요.</p>
+            <p class="rw-typo-bodytext1 content last-p">
+                {{ user.name }}님이 첫 메시지를 보낸 직후부터 <br *ngIf="isSideBar" />
+                다른 멤버들도 채팅에 참여할 수 있어요.
+            </p>
+        </div>
+    </ng-template>
+
+    <!-- <ng-template #general>
     <div id="general">
       <p class="icon">💌</p>
       <p class="rw-typo-bodytext0-bold title">
@@ -63,5 +58,4 @@
       </p>
     </div>
   </ng-template> -->
-
 </div>
