@@ -21,7 +21,7 @@ import { User } from '@schemas/user'
 import { MemberRole as Role } from '@schemas/center/dashboard/member-role'
 
 import { Subject } from 'rxjs'
-import {take, takeUntil} from 'rxjs/operators'
+import { take, takeUntil } from 'rxjs/operators'
 
 // ngrx
 import { select, Store } from '@ngrx/store'

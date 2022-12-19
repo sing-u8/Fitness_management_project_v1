@@ -1,7 +1,7 @@
 <div
     *ngIf="!doHide"
     class="user-list-card"
-    [class.selected-user]="curUserData.user?.id == cardItem.user.id"
+    [class.selected-user]="curUserData?.user?.id == cardItem.user.id"
     (click)="holdMode ? toggleHold() : clickCard()"
 >
     <div class="card-left">
