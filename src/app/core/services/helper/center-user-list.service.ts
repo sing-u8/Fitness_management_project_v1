@@ -15,7 +15,7 @@ export class CenterUserListService {
 
     getCenterUserList(centerId: string, filterFn: (v: CenterUser, i?: number) => boolean) {
         return this.centerUsersApi
-            .getUserList(centerId)
+            .getUserList(centerId, '')
             .pipe(map((centerUserList) => _.filter(centerUserList, filterFn)))
     }
 
