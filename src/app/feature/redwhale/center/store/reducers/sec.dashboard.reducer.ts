@@ -714,8 +714,9 @@ export const selectUsersLists = (state: State) => state.usersLists
 export const selectCurMemberManageCateg = (state: State) => state.curMemberManageCateg
 export const selectCurUserListSelect = (state: State) => state.curUserListSelect
 export const selectCurUserData = (state: State) => {
-    state.curUserData.payments = getPaymentsWithoutTotalZero(state.curUserData.payments)
-    return state.curUserData
+    const curUserDataCopy = _.cloneDeep(state.curUserData)
+    curUserDataCopy.payments = getPaymentsWithoutTotalZero(state.curUserData.payments)
+    return curUserDataCopy
 }
 
 export const selectCurUserMemberhsipData = (state: State) => state.curUserData.memberships
@@ -735,7 +736,6 @@ export const selectSearchedUsersLists = (state: State) => {
             return _.includes(item.user.name, searchInput) || _.includes(item.user.phone_number, searchInput)
         })
     })
-    console.log('selectSearchedUsersLists db -- : ', searchUserList, usersLists)
     return searchUserList
 }
 export const selectEmployeeRoleObj = (state: State) => {
@@ -833,5 +833,5 @@ export const matchMemberSelectCategTo = (categType: MemberSelectCateg): CenterUs
 }
 
 export const getPaymentsWithoutTotalZero = (payments: Payment[]): Payment[] => {
-    return payments.filter((v) => v.card + v.trans + v.cash + v.unpaid != 0)
+    return _.filter(payments, (v) => v.card + v.trans + v.cash + v.unpaid != 0)
 }
