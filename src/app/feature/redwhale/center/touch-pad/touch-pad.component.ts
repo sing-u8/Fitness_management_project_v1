@@ -13,6 +13,7 @@ import { SoundService } from '@services/helper/sound.service'
 
 import { UserLocker } from '@schemas/user-locker'
 import { UserMembership } from '@schemas/user-membership'
+import { AuthErrors } from '@schemas/errors/auth-errors'
 
 import { Center } from '@schemas/center'
 
@@ -23,6 +24,7 @@ import { select, Store } from '@ngrx/store'
 import { showToast } from '@appStore/actions/toast.action'
 import { CenterUser } from '@schemas/center-user'
 import * as DashboardSelector from '@centerStore/selectors/sec.dashboard.selector'
+import { CreateCenterErrors } from '@schemas/errors/create-center-errors'
 
 @Component({
     selector: 'touch-pad',
@@ -96,8 +98,34 @@ export class TouchPadComponent implements OnInit, OnDestroy {
 
         this.isConfirmProcess = true
         this.spinner.show('touch_pad_check_in')
+        this.centerTouchPadService.SearchCheckInUsers(this.center.id, this.touchPadInput).subscribe({
+            next: (cus) => {
+                if (cus.length == 1) {
+                    this.checkInUser(cus[0])
+                } else {
+                    this.equalMembershipUsers = cus
+                    this.toggleSameMembershipNumberModal()
+                }
+                this.spinner.hide('touch_pad_check_in')
+            },
+            error: (e) => {
+                this.spinner.hide('touch_pad_check_in')
+                if (e.code == 'AUTHENTICATION_001') {
+                    this.nxStore.dispatch(showToast({ text: CreateCenterErrors.AUTHENTICATION_001.message }))
+                } else if (e.code == 'AUTHENTICATION_002') {
+                    this.nxStore.dispatch(showToast({ text: CreateCenterErrors.AUTHENTICATION_002.message }))
+                } else if (e.code == 'AUTHENTICATION_003') {
+                    this.nxStore.dispatch(showToast({ text: CreateCenterErrors.AUTHENTICATION_003.message }))
+                } else if (e.code == 'FUNCTION_CENTER_001') {
+                    this.nxStore.dispatch(showToast({ text: CreateCenterErrors.FUNCTION_CENTER_001.message }))
+                }
+            },
+        })
+    }
+
+    checkInUser(cu: CenterUser) {
         this.centerTouchPadService
-            .checkIn(this.center.id, { membership_number: this.touchPadInput })
+            .checkIn(this.center.id, { center_user_id: cu.id })
             .pipe(
                 map((centerUser) => {
                     return forkJoin([
@@ -126,8 +154,6 @@ export class TouchPadComponent implements OnInit, OnDestroy {
 
                         this.showAttendanceModal()
                         this.isConfirmProcess = false
-                        this.spinner.hide('touch_pad_check_in')
-
                         if (!_.isEmpty(this.dbCurCenterId) && this.dbCurCenterId == this.center.id) {
                             this.dashboardHelper.synchronizeCheckIn(this.center.id, this.checkedInMember)
                         }
@@ -136,9 +162,16 @@ export class TouchPadComponent implements OnInit, OnDestroy {
                         }
                     })
                 },
-                error: (err) => {
-                    this.nxStore.dispatch(showToast({ text: '입력하신 회원 번호를 다시 확인해주세요.' }))
-                    this.spinner.hide('touch_pad_check_in')
+                error: (e) => {
+                    if (e.code == 'AUTHENTICATION_001') {
+                        this.nxStore.dispatch(showToast({ text: CreateCenterErrors.AUTHENTICATION_001.message }))
+                    } else if (e.code == 'AUTHENTICATION_002') {
+                        this.nxStore.dispatch(showToast({ text: CreateCenterErrors.AUTHENTICATION_002.message }))
+                    } else if (e.code == 'AUTHENTICATION_003') {
+                        this.nxStore.dispatch(showToast({ text: '입력하신 회원 번호를 다시 확인해주세요.' }))
+                    } else if (e.code == 'FUNCTION_CENTER_001') {
+                        this.nxStore.dispatch(showToast({ text: CreateCenterErrors.FUNCTION_CENTER_001.message }))
+                    }
                     this.isConfirmProcess = false
                 },
             })
@@ -183,12 +216,17 @@ export class TouchPadComponent implements OnInit, OnDestroy {
     }
 
     // same membership number modal
+    public equalMembershipUsers: CenterUser[] = []
     public showSameMembershipNumberModal = false
     toggleSameMembershipNumberModal() {
         this.showSameMembershipNumberModal = !this.showSameMembershipNumberModal
     }
     cancelSameMembershipNumberModal() {
         this.showSameMembershipNumberModal = false
+        this.equalMembershipUsers = []
     }
-    confirmSameMembershipNumberModal() {}
+    confirmSameMembershipNumberModal(cu: CenterUser) {
+        this.checkInUser(cu)
+        this.toggleSameMembershipNumberModal()
+    }
 }

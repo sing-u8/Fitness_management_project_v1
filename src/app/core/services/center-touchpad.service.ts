@@ -32,6 +32,17 @@ export class CenterTouchpadService {
         )
     }
 
+    SearchCheckInUsers(centerId: string, membership_number: string): Observable<Array<CenterUser>> {
+        const url = this.SERVER + `/${centerId}/touchpad/users?membership_number=${membership_number}`
+
+        return this.http.get<Response>(url, this.options).pipe(
+            map((res) => {
+                return res.dataset
+            }),
+            catchError(handleError)
+        )
+    }
+
     checkIn(centerId: string, reqBody: CheckInReqBody): Observable<CenterUser> {
         const url = this.SERVER + `/${centerId}/touchpad/check_in`
 
@@ -45,5 +56,5 @@ export class CenterTouchpadService {
 }
 
 export interface CheckInReqBody {
-    membership_number: string
+    center_user_id: string
 }
