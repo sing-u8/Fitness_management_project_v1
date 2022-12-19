@@ -68,7 +68,7 @@ export class MemberListModalComponent implements AfterViewChecked, OnChanges, Af
         this.centerUsers = []
         this.memberSearchInput = this.fb.control('', { asyncValidators: [this.searchMemberValidator()] })
         this.nxStore
-            .select(CenterCommonSelector.instructors)
+            .select(CenterCommonSelector.members)
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe((memberList) => {
                 const memberListCopy = _.cloneDeep(memberList)
