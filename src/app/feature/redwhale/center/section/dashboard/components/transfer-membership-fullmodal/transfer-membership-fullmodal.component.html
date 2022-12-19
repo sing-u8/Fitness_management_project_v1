@@ -4,7 +4,7 @@
             <div class="header-text-container">
                 <ng-container *ngIf="progress == 'one'">
                     <p class="rw-typo-headline1">
-                        {{curUser?.name + '님이 '+ transferCenterUser?.name+'님에게'}}
+                        {{transferCenterUser?.name + '님이 '+ curUser?.name +'님에게'}}
                     </p>
                     <p class="rw-typo-headline1">
                         양도받을 회원권 정보를 입력해주세요.
@@ -121,34 +121,34 @@
                                 <rw-avatar
                                     size="83"
                                     fontSize="16"
-                                    [image]="curUser?.picture"
-                                    [backgroundColor]="curUser?.color"
-                                    [text]="curUser?.name"
+                                    [image]="transferCenterUser?.picture"
+                                    [backgroundColor]="transferCenterUser?.color"
+                                    [text]="transferCenterUser?.name"
                                 ></rw-avatar>
-                                <p class="rw-typo-title1 ">{{curUser?.name}}</p>
+                                <p class="rw-typo-title1 ">{{transferCenterUser?.name}}</p>
                             </div>
                             <div class="user-basic-info">
                                 <div class="l-info">
                                     <div class="title">회원번호</div>
-                                    <div class="content">{{ curUser?.membership_number }}</div>
+                                    <div class="content">{{ transferCenterUser?.membership_number }}</div>
                                 </div>
                                 <div class="l-info">
                                     <div class="title">이메일</div>
-                                    <div class="content">{{ curUser?.email }}</div>
+                                    <div class="content">{{ transferCenterUser?.email }}</div>
                                 </div>
                                 <div class="l-info">
                                     <div class="title">전화번호</div>
                                     <div class="content">
-                                        {{ curUser?.phone_number | phoneNumber }}
+                                        {{ transferCenterUser?.phone_number | phoneNumber }}
                                     </div>
                                 </div>
                                 <div class="l-info">
                                     <div class="title">생년월일</div>
                                     <div class="content">
                                         <span>
-                                            {{ (curUser?.birth_date | dashToDot) ?? '-' }}
-                                            ({{(curUser?.birth_date | birthDate: '세') ?? '-세'}},
-                                            {{curUser?.sex == 'male' ? '남성' : curUser?.sex == 'female' ? '여성' : '-'}})
+                                            {{ (transferCenterUser?.birth_date | dashToDot) ?? '-' }}
+                                            ({{(transferCenterUser?.birth_date | birthDate: '세') ?? '-세'}},
+                                            {{transferCenterUser?.sex == 'male' ? '남성' : transferCenterUser?.sex == 'female' ? '여성' : '-'}})
                                         </span>
                                     </div>
                                 </div>
@@ -210,7 +210,7 @@
                         <db-contract-sign-box
                             [signData]="inputSignData"
                             [contractDate]="today"
-                            [contractorName]="curUser?.name"
+                            [contractorName]="transferCenterUser?.name"
                             (onSign)="onContractSign($event)"
                         ></db-contract-sign-box>
                         <div class="l-button">

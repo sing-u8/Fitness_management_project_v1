@@ -713,11 +713,14 @@ export const selectUsersSelectCategs = (state: State) => state.usersSelectCategs
 export const selectUsersLists = (state: State) => state.usersLists
 export const selectCurMemberManageCateg = (state: State) => state.curMemberManageCateg
 export const selectCurUserListSelect = (state: State) => state.curUserListSelect
-export const selectCurUserData = (state: State) => state.curUserData
+export const selectCurUserData = (state: State) => {
+    state.curUserData.payments = getPaymentsWithoutTotalZero(state.curUserData.payments)
+    return state.curUserData
+}
 
 export const selectCurUserMemberhsipData = (state: State) => state.curUserData.memberships
 export const selectCurUserLockerData = (state: State) => state.curUserData.lockers
-export const selectCurUserPaymentData = (state: State) => state.curUserData.payments
+export const selectCurUserPaymentData = (state: State) => getPaymentsWithoutTotalZero(state.curUserData.payments)
 export const selectCurUserReservationData = (state: State) => state.curUserData.reservations
 
 export const selectedUserListsHolding = (state: State) =>
@@ -827,4 +830,8 @@ export const matchMemberSelectCategTo = (categType: MemberSelectCateg): CenterUs
         case 'attendance':
             return 'check_in'
     }
+}
+
+export const getPaymentsWithoutTotalZero = (payments: Payment[]): Payment[] => {
+    return payments.filter((v) => v.card + v.trans + v.cash + v.unpaid != 0)
 }

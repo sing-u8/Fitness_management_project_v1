@@ -34,12 +34,14 @@ export class TransferMembershipTicketWindowComponent implements OnInit, AfterVie
     public staffSelect_list: Array<{ name: string; value: CenterUser }> = []
     public center: Center
     public user: User
+    public centerUser: CenterUser
 
     constructor(private storageService: StorageService) {}
 
     ngOnInit(): void {
         this.center = this.storageService.getCenter()
         this.user = this.storageService.getUser()
+        this.centerUser = this.storageService.getCenterUser()
     }
     ngAfterViewInit(): void {
         // _.forEach(this.selectedMembershipTicket.lesson_item_list, (value) => {
@@ -53,6 +55,7 @@ export class TransferMembershipTicketWindowComponent implements OnInit, AfterVie
         if (changes['instructors']) {
             this.center = this.storageService.getCenter()
             this.user = this.storageService.getUser()
+            this.centerUser = this.storageService.getCenterUser()
             this.staffSelect_list = []
             this.instructors.forEach((v) => {
                 this.staffSelect_list.push({
@@ -61,7 +64,7 @@ export class TransferMembershipTicketWindowComponent implements OnInit, AfterVie
                 })
 
                 if (!this.membershipState.assignee) {
-                    if (this.user.id == v.id) {
+                    if (this.centerUser.id == v.id) {
                         this.membershipState.assignee = { name: v.name, value: v }
                     }
                 }

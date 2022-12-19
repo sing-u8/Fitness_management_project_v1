@@ -840,10 +840,7 @@ function makeTempChatRoom(center: Center, curUser: CenterUser, members: Array<Ce
         type_code_name: '일반',
         permission_code: 'chat_room_user_permission_owner',
         permission_code_name: '소유자',
-        name: members.reduce(
-            (acc, cur) => acc + (acc == '' ? `${cur.name}` : `, ${cur.name}`),
-            members.length == 1 ? '' : `${curUser.name}`
-        ),
+        name: members.reduce((acc, cur) => acc + (acc == '' ? `${cur.name}` : `, ${cur.name}`), ''),
         center_id: center.id,
         center_name: center.name,
         chat_room_user_count: 1 + members.length,

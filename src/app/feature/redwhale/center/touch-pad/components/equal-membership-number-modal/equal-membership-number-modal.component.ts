@@ -10,6 +10,7 @@ import {
     AfterViewChecked,
     ViewChild,
 } from '@angular/core'
+import {CenterUser} from "@schemas/center-user";
 
 @Component({
     selector: 'rw-equal-membership-number-modal',
@@ -18,7 +19,7 @@ import {
 })
 export class EqualMembershipNumberModalComponent implements OnChanges, AfterViewChecked {
     @Input() visible: boolean
-
+    @Input() centerUsers: CenterUser[]
     @Input() blockClickOutside = false
 
     @ViewChild('modalBackgroundElement') modalBackgroundElement
@@ -26,7 +27,7 @@ export class EqualMembershipNumberModalComponent implements OnChanges, AfterView
 
     @Output() visibleChange = new EventEmitter<boolean>()
     @Output() cancel = new EventEmitter<any>()
-    @Output() confirm = new EventEmitter<any>()
+    @Output() confirm = new EventEmitter<CenterUser>()
 
     changed: boolean
 
@@ -68,6 +69,9 @@ export class EqualMembershipNumberModalComponent implements OnChanges, AfterView
 
     onCancel(): void {
         this.cancel.emit({})
+    }
+    onConfirm(cu: CenterUser) {
+        this.confirm.emit(cu)
     }
 
     // on mouse rw-modal down
