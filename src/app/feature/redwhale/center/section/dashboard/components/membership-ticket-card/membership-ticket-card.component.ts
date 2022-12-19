@@ -10,6 +10,7 @@ import { MembershipItem } from '@schemas/membership-item'
 export class MembershipTicketCardComponent implements OnInit, AfterViewInit {
     @Input() cardInfo: MembershipItem
     @Input() isInWindow: boolean
+    @Input() showDetail = true
     @Output() onCardClick = new EventEmitter<MembershipItem>()
 
     emitCardInfo() {

@@ -101,6 +101,36 @@ export class CenterContractService {
     }
 
     /**
+     * @todo 계약 회원권 상세 조회
+     * @param centerId
+     * @param userId
+     * @param contractId
+     * @param contractUserMembershpId
+     */
+    getContractMembershipDetail(
+        centerId: string,
+        userId,
+        contractId: string,
+        contractUserMembershpId: string
+    ): Observable<ContractUserMembership> {
+        const url =
+            this.SERVER + `/${centerId}/users/${userId}/contract/${contractId}/membership/${contractUserMembershpId}`
+
+        const options = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json',
+            }),
+        }
+
+        return this.http.get<Response>(url, options).pipe(
+            map((res) => {
+                return res.dataset[0][0]
+            }),
+            catchError(handleError)
+        )
+    }
+
+    /**
      * @todo 계약 결제 조회
      * @param centerId
      * @param userId

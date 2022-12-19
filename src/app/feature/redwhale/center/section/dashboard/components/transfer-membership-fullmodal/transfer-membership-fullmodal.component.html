@@ -4,10 +4,10 @@
             <div class="header-text-container">
                 <ng-container *ngIf="progress == 'one'">
                     <p class="rw-typo-headline1">
-                        {{transferCenterUser?.name + '님이 '+ curUser?.name +'님에게'}}
+                        {{curUser?.name + '님이 '+ transferCenterUser?.name +'님에게'}}
                     </p>
                     <p class="rw-typo-headline1">
-                        양도받을 회원권 정보를 입력해주세요.
+                        양도할 회원권 정보를 입력해주세요.
                     </p>
                 </ng-container>
                 <ng-container *ngIf="progress == 'two'">

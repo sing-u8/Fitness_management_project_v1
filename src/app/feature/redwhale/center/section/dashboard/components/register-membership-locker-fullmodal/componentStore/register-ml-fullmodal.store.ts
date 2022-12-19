@@ -13,6 +13,7 @@ import { StorageService } from '@services/storage.service'
 import { LockerHelperService } from '@services/center/locker-helper.service'
 import { CenterUsersPaymentService, CreateMLPaymentReqBody } from '@services/center-users-payment.service'
 import { CenterLockerService } from '@services/center-locker.service'
+import { CenterContractService } from '@services/center-users-contract.service'
 import { FileService } from '@services/file.service'
 
 import {
@@ -35,6 +36,7 @@ import { Store } from '@ngrx/store'
 import { showToast } from '@appStore/actions/toast.action'
 import { ContractTypeCode } from '@schemas/contract'
 import { Loading } from '@schemas/store/loading'
+import { ContractUserMembership } from '@schemas/contract-user-membership'
 
 export interface State {
     mlItems: MembershipLockerItem[]
@@ -97,7 +99,8 @@ export class RegisterMembershipLockerFullmodalStore extends ComponentStore<State
         private fileService: FileService,
         private nxStore: Store,
         private centerLockerApi: CenterLockerService,
-        private lockerHelperService: LockerHelperService
+        private lockerHelperService: LockerHelperService,
+        private centerContractService: CenterContractService
     ) {
         super(_.cloneDeep(stateInit))
     }
@@ -472,7 +475,7 @@ export class RegisterMembershipLockerFullmodalStore extends ComponentStore<State
     }
 
     // 회원권을 지웠을 경우에 연결된 수업을 얻을 수 없음
-    async initMembershipItemByUM(userMembership: UserMembership): Promise<MembershipTicket> {
+    async initMembershipItemByUM(userMembership: UserMembership, curUser: CenterUser): Promise<MembershipTicket> {
         const center = this.storageService.getCenter()
         const linkedClass = await firstValueFrom(
             this.centerMembershipApi.getLinkedClass(
@@ -481,6 +484,16 @@ export class RegisterMembershipLockerFullmodalStore extends ComponentStore<State
                 userMembership.membership_item_id
             )
         )
+        const contractMembership: ContractUserMembership = await firstValueFrom(
+            this.centerContractService.getContractMembershipDetail(
+                center.id,
+                curUser.id,
+                userMembership.contract_id,
+                userMembership.contract_user_membership_id
+            )
+        )
+        const cmTotalPrice =
+            contractMembership.cash + contractMembership.card + contractMembership.trans + contractMembership.unpaid
         return {
             type: 'membership',
             date: {
@@ -490,7 +503,7 @@ export class RegisterMembershipLockerFullmodalStore extends ComponentStore<State
                     .format('YYYY-MM-DD'),
             },
             amount: {
-                normalAmount: String(userMembership.total_price).replace(/\B(?=(\d{3})+(?!\d))/g, ','),
+                normalAmount: String(cmTotalPrice).replace(/\B(?=(\d{3})+(?!\d))/g, ','),
                 paymentAmount: '0',
             },
             price: {
@@ -505,12 +518,12 @@ export class RegisterMembershipLockerFullmodalStore extends ComponentStore<State
                 id: userMembership.membership_item_id,
                 category_id: userMembership.membership_category_id,
                 category_name: userMembership.category_name,
-                name: userMembership.name,
-                days: dayjs(userMembership.end_date).diff(userMembership.start_date, 'day'),
-                count: userMembership.count - userMembership.used_count,
-                unlimited: userMembership.unlimited,
-                price: userMembership.total_price,
-                color: userMembership.color,
+                name: contractMembership.name,
+                days: dayjs(contractMembership.end_date).diff(contractMembership.start_date, 'day') + 1 ,
+                count: contractMembership.count, // userMembership.count - userMembership.used_count,
+                unlimited: contractMembership.unlimited,
+                price: cmTotalPrice,
+                color: contractMembership.color,
                 memo: '',
                 sequence_number: 0,
             },

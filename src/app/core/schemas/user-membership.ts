@@ -3,8 +3,10 @@ import { ContractTypeCode } from '@schemas/contract'
 
 export interface UserMembership {
     id: string
+    contract_id: string
     contract_type_code: ContractTypeCode
     contract_type_code_name: string
+    contract_user_membership_id: string
     state_code:
         | 'user_membership_state_in_use'
         | 'user_membership_state_paused'

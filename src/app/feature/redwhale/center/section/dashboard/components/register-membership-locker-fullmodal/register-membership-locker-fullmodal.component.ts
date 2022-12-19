@@ -370,7 +370,7 @@ export class RegisterMembershipLockerFullmodalComponent implements OnInit, OnCha
     async initByType() {
         if (this.type == 'contract_type_renewal' && !_.isEmpty(this.rerUserMembership)) {
             this.cmpStore.setRenewalMLLoading('pending')
-            const membershipTicket = await this.cmpStore.initMembershipItemByUM(this.rerUserMembership)
+            const membershipTicket = await this.cmpStore.initMembershipItemByUM(this.rerUserMembership, this.curUser)
             this.cmpStore.addMlItem(membershipTicket)
             this.cmpStore.setRenewalMLLoading('done')
         }

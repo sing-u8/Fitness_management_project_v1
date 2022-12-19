@@ -229,7 +229,7 @@ export class TransferMembershipFullmodalComponent implements OnInit, OnChanges, 
 
     async init() {
         this.cmpStore.setMLoading('pending')
-        const membershipTicket = await this.cmpStore.initMembershipItemByUM(this.transferUserMembership)
+        const membershipTicket = await this.cmpStore.initMembershipItemByUM(this.transferUserMembership, this.curUser)
         this.cmpStore.addMItem(membershipTicket)
         this.cmpStore.setMLoading('done')
     }
