@@ -21,7 +21,7 @@
         </div>
         <div class="pay">
             <span class="rw-typo-subtext0-regular small-title2">결제 금액 / 담당자</span>
-            <span class="rw-typo-bodytext1">￦{{membershipState.amount.paymentAmount ?? 0}} / {{membershipState.assignee?.name}}</span>
+            <span class="rw-typo-bodytext1">￦{{membershipState.amount.paymentAmount ?? 0 | numberWithCommas }} / {{membershipState.assignee?.name}}</span>
         </div>
     </div>
 </section>
@@ -50,7 +50,7 @@
         <div class="pay">
             <span class="rw-typo-subtext0-regular small-title2">결제 금액 / 담당자</span>
             <span class="rw-typo-bodytext1">
-                ￦{{contractUserMembership?.card + contractUserMembership?.trans + contractUserMembership?.cash + contractUserMembership?.unpaid?? 0}}
+                ￦{{contractUserMembership?.card + contractUserMembership?.trans + contractUserMembership?.cash + contractUserMembership?.unpaid?? 0 | numberWithCommas}}
                 / {{contractUserMembership?.responsibility}}
             </span>
         </div>
