@@ -74,8 +74,8 @@
             <div class="the-price">{{v.value | numberWithCommas}}원</div>
 
             <div class="rw-typo-subtext0 price-change">
-              <img class="mdi" *ngIf="curTotal >= prevTotal" src="assets/icons/etc/sale-up-arrow-lightgrey.svg">
-              <img class="mdi" *ngIf="curTotal < prevTotal" src="assets/icons/etc/sale-down-arrow-lightgrey.svg">
+              <img class="mdi" *ngIf="v.value >= SaleSummary.prev[v.key]" src="assets/icons/etc/sale-up-arrow-lightgrey.svg">
+              <img class="mdi" *ngIf="v.value < SaleSummary.prev[v.key]" src="assets/icons/etc/sale-down-arrow-lightgrey.svg">
               <p *ngIf="SaleSummary.prev[v.key] != 0">{{ (v.value - SaleSummary.prev[v.key]) | absNumber | numberWithCommas}}원</p>
               <p *ngIf="SaleSummary.prev[v.key] == 0">0원</p>
             </div>
