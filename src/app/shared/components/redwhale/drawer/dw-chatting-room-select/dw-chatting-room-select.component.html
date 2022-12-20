@@ -1,35 +1,35 @@
 <div class="chatting-room-select">
-	<div
-		class="select rw-typo-title2 d-flex justify-content-center align-items-center"
-		[class.open]="isOpen"
-		#selectedElement
-		(click)="toggle()"
-		(rwClickOutside)="close()"
-	>
+    <div
+        class="select rw-typo-title2 d-flex justify-content-center align-items-center"
+        [class.open]="isOpen"
+        #selectedElement
+        (click)="toggle()"
+        (rwClickOutside)="close()"
+    >
         <span class="text rw-typo-title2 flex-fill active">
-            {{ selectedRoom?.name}}
+            {{ selectedRoom?.name }}
         </span>
-		<span class="grey rw-typo-title2 room-size">
+        <span class="grey rw-typo-title2 room-size">
             {{
-				selectedRoom?.chat_room_users && selectedRoom?.chat_room_users[0] == selectedRoom?.chat_room_users[1]
-				? '나'
-				: selectedRoom?.chat_room_user_count
-			}}
+                selectedRoom?.chat_room_users && selectedRoom?.chat_room_users[0] == selectedRoom?.chat_room_users[1]
+                    ? '나'
+                    : selectedRoom?.chat_room_user_count > 2
+                    ? selectedRoom?.chat_room_user_count
+                    : ''
+            }}
         </span>
-		<img *ngIf="selectedRoom" class="fill-arrow" src="assets/icons/etc/arrow-down-fill-darkgrey.svg" alt="">
-	</div>
+        <img *ngIf="selectedRoom" class="fill-arrow" src="assets/icons/etc/arrow-down-fill-darkgrey.svg" alt="" />
+    </div>
 
-	<div class="chatting-room-dropdown thin-scroll-y-overlay2" #itemsElement (click)="$event.stopPropagation()">
-		<div class="l-chat-room-card" *ngFor="let room of userRoomList; let i = index">
-			<rw-chatting-room-card
-				[isLoading]="isLoading"
-				[curUser]="user"
-				[room]="room"
-				[selectedRoom]="selectedRoom"
-				(onCardClick)="roomClick($event)"
-			></rw-chatting-room-card>
-		</div>
-	</div>
-
-
+    <div class="chatting-room-dropdown thin-scroll-y-overlay2" #itemsElement (click)="$event.stopPropagation()">
+        <div class="l-chat-room-card" *ngFor="let room of userRoomList; let i = index">
+            <rw-chatting-room-card
+                [isLoading]="isLoading"
+                [curUser]="user"
+                [room]="room"
+                [selectedRoom]="selectedRoom"
+                (onCardClick)="roomClick($event)"
+            ></rw-chatting-room-card>
+        </div>
+    </div>
 </div>
