@@ -17,6 +17,7 @@ import { CenterService } from '@services/center.service'
 import { CenterUsersService } from '@services/center-users.service'
 import { CalendarTaskService } from '@services/helper/calendar-task.service'
 import { WordService } from '@services/helper/word.service'
+import { DashboardHelperService } from '@services/center/dashboard-helper.service'
 
 // schemas
 import { Center } from '@schemas/center'
@@ -40,7 +41,6 @@ import * as FromSchedule from '@centerStore/reducers/sec.schedule.reducer'
 import * as ScheduleSelector from '@centerStore/selectors/sec.schedule.selector'
 import { calendarOptions } from '@centerStore/selectors/sec.schedule.selector'
 import * as ScheduleActions from '@centerStore/actions/sec.schedule.actions'
-import { CenterUser } from '@schemas/center-user'
 
 // temp
 export type GymOperatingTime = { start: string; end: string }
@@ -110,7 +110,8 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
         private activatedRoute: ActivatedRoute,
         private router: Router,
         private location: Location,
-        private wordService: WordService
+        private wordService: WordService,
+        private dashboardHelperService: DashboardHelperService
     ) {
         this.center = this.storageService.getCenter()
 
@@ -1378,6 +1379,8 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
             this.showModifyLessonEventModal()
             this.nxStore.dispatch(showToast({ text: `${this.reserveLessonData.name} 일정에 회원이 예약되었습니다.` }))
 
+            this.dashboardHelperService.synchronizeSchedule(this.center.id)
+
             this.getTaskList(this.selectedDateViewType, (eventList) => {
                 this.updateLessonEventData(this.lessonEventData.id, eventList)
                 this.reserveLessonData = undefined
@@ -1422,6 +1425,9 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
                     text: `${userName}님의 예약이 취소되었습니다.`,
                 })
             )
+
+            this.dashboardHelperService.synchronizeSchedule(this.center.id)
+
             this.getTaskList(this.selectedDateViewType, (eventList) => {
                 this.updateLessonEventData(this.lessonEventData.id, eventList)
                 this.beCanceledReservationData = undefined
