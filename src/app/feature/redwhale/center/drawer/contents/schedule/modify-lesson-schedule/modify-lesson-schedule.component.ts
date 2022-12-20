@@ -499,6 +499,11 @@ export class ModifyLessonScheduleComponent implements OnInit, OnDestroy, AfterVi
 
                 this.repeatDatepick = { startDate: '', endDate: '' }
                 this.repeatOfWeek = lessonEvent.repeat_day_of_the_week ?? []
+
+                this.reserveSettingInputs.reservation_start = String(lessonEvent.class.start_booking_until)
+                this.reserveSettingInputs.reservation_end = String(lessonEvent.class.end_booking_before)
+                this.reserveSettingInputs.reservation_cancel_end = String(lessonEvent.class.cancel_booking_before)
+
                 if (!_.isEmpty(lessonEvent.calendar_task_group_id)) {
                     this.dayRepeatSwitch = true
                     this.isAlreadyRepeat = true
