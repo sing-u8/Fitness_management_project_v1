@@ -499,7 +499,7 @@ export class RegisterMembershipLockerFullmodalStore extends ComponentStore<State
             date: {
                 startDate: dayjs().format('YYYY-MM-DD'),
                 endDate: dayjs()
-                    .add(dayjs(userMembership.end_date).diff(userMembership.start_date, 'day'), 'day')
+                    .add(dayjs(contractMembership.end_date).diff(contractMembership.start_date, 'day'), 'day')
                     .format('YYYY-MM-DD'),
             },
             amount: {
@@ -519,7 +519,7 @@ export class RegisterMembershipLockerFullmodalStore extends ComponentStore<State
                 category_id: userMembership.membership_category_id,
                 category_name: userMembership.category_name,
                 name: contractMembership.name,
-                days: dayjs(contractMembership.end_date).diff(contractMembership.start_date, 'day') + 1 ,
+                days: dayjs(contractMembership.end_date).diff(contractMembership.start_date, 'day') + 1,
                 count: contractMembership.count, // userMembership.count - userMembership.used_count,
                 unlimited: contractMembership.unlimited,
                 price: cmTotalPrice,
