@@ -246,7 +246,7 @@ export class TransferMembershipFullmodalStore extends ComponentStore<State> {
             date: {
                 startDate: dayjs().format('YYYY-MM-DD'),
                 endDate: dayjs()
-                    .add(dayjs(contractMembership.end_date).diff(contractMembership.start_date, 'day'), 'day')
+                    .add(dayjs(contractMembership.end_date).diff(dayjs().format('YYYY-MM-DD'), 'day'), 'day')
                     .format('YYYY-MM-DD'),
             },
             amount: {
@@ -259,7 +259,7 @@ export class TransferMembershipFullmodalStore extends ComponentStore<State> {
                 trans: '',
                 unpaid: '',
             },
-            count: { count: String(contractMembership.count), infinite: contractMembership.unlimited },
+            count: { count: String(userMembership.count - userMembership.used_count), infinite: userMembership.unlimited },
             assignee: undefined,
             membershipItem: {
                 id: userMembership.membership_item_id,
@@ -267,7 +267,7 @@ export class TransferMembershipFullmodalStore extends ComponentStore<State> {
                 category_name: userMembership.category_name,
                 name: contractMembership.name,
                 days: dayjs(contractMembership.end_date).diff(contractMembership.start_date, 'day') + 1,
-                count: contractMembership.count, // userMembership.count - userMembership.used_count,  한 번 물어보기
+                count: contractMembership.count,
                 unlimited: contractMembership.unlimited,
                 price: cmTotalPrice,
                 color: contractMembership.color,
