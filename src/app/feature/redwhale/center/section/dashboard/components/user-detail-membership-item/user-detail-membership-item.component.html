@@ -18,7 +18,7 @@
                 ({{membership.start_date | period: membership.end_date}}일)
             </div>
             <div class="col4" >
-                {{restDate}}일 / {{membership.unlimited ? '무제한' : membership.count < 1 || isExpired ? 0 : membership.count + '회' }} 남음
+                {{restDate}}일 / {{membership.unlimited ? '무제한' : membership.count < 1 || isExpired ? 0 : (membership.count - membership.used_count) + '회' }} 남음
             </div>
             <div class="col5" >
                 <div
