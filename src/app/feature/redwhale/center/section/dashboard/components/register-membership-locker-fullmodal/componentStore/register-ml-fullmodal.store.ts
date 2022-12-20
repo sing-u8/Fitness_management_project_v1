@@ -512,7 +512,7 @@ export class RegisterMembershipLockerFullmodalStore extends ComponentStore<State
                 trans: '',
                 unpaid: '',
             },
-            count: { count: String(userMembership.count), infinite: userMembership.unlimited },
+            count: { count: String(contractMembership.count), infinite: contractMembership.unlimited },
             assignee: undefined,
             membershipItem: {
                 id: userMembership.membership_item_id,
