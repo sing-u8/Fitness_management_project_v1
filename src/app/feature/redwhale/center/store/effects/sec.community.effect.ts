@@ -261,6 +261,7 @@ export class CommunityEffect {
                                 const message: ChatRoomLoadingMessage = {
                                     id: res.msgId,
                                     center_user_id: user.id,
+                                    center_user_email: user.email,
                                     center_user_name: user.name,
                                     center_user_picture: user.picture,
                                     center_user_background: user.background,
@@ -426,6 +427,7 @@ export class CommunityEffect {
                                             const message: ChatRoomLoadingMessage = {
                                                 id: res.msgId,
                                                 center_user_id: user.id,
+                                                center_user_email: user.email,
                                                 center_user_name: user.name,
                                                 center_user_picture: user.picture,
                                                 center_user_background: user.background,

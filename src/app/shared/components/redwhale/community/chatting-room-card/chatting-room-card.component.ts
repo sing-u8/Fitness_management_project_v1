@@ -47,6 +47,7 @@ export class ChattingRoomCardComponent implements OnInit, AfterViewInit, OnChang
                       {
                           id: this.curUser.id,
                           name: this.curUser.name,
+                          email: this.curUser.email,
                           permission_code: undefined,
                           permission_code_name: undefined,
                           color: this.curUser.color,

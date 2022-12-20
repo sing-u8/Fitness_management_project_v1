@@ -814,6 +814,7 @@ function centerUserToChatRoomMemberUser(members: Array<CenterUser>): Array<ChatR
     return _.map(members, (v) => ({
         id: v.id,
         name: v.name,
+        email: v.email,
         permission_code: 'chat_room_user_permission_member',
         permission_code_name: '멤버',
         color: v.color,
@@ -825,6 +826,7 @@ function centerUserToChatRoomOwnerUser(curUser: CenterUser): ChatRoomUser {
     return {
         id: curUser.id,
         name: curUser.name,
+        email: curUser.email,
         permission_code: 'chat_room_user_permission_owner',
         permission_code_name: '소유자',
         color: curUser.color,
@@ -848,6 +850,7 @@ function makeTempChatRoom(center: Center, curUser: CenterUser, members: Array<Ce
             {
                 id: curUser.id,
                 name: curUser.name,
+                email: curUser.email,
                 permission_code: 'chat_room_user_permission_owner',
                 permission_code_name: '소유자',
                 color: curUser.color,
@@ -857,6 +860,7 @@ function makeTempChatRoom(center: Center, curUser: CenterUser, members: Array<Ce
             ...members.map((v) => ({
                 id: v.id,
                 name: v.name,
+                email: v.email,
                 permission_code: 'chat_room_user_permission_member',
                 permission_code_name: '멤버',
                 color: v.color,
@@ -895,6 +899,7 @@ function makeDateMessage(created_at: string): ChatRoomMessage {
     return {
         id: `crmd-${dayjs(created_at).format('YYYY-MM-DD HH:mm:ss')}`,
         center_user_id: undefined,
+        center_user_email: undefined,
         center_user_name: undefined,
         center_user_picture: undefined,
         center_user_background: undefined,

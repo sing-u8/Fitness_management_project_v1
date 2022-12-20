@@ -2,6 +2,7 @@ export interface ChatRoomMessage {
     id: string
     center_user_id: string
     center_user_name: string
+    center_user_email: string
     center_user_color: string
     center_user_picture: string
     center_user_background: string
