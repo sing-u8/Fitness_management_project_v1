@@ -122,11 +122,6 @@ export class RegisterMembershipLockerFullmodalComponent implements OnInit, OnCha
     }
     public progressChanged = false
 
-    public dbCurCenterId$ = this.nxStore.select(DashboardSelector.curCenterId)
-    public dwCurCenterId$ = this.nxStore.select(DashboardSelector.drawerCurCenterId)
-    public dbCurCenterId = undefined
-    public dwCurCenterId = undefined
-
     public unSubscribe$ = new Subject<boolean>()
 
     constructor(
@@ -146,13 +141,6 @@ export class RegisterMembershipLockerFullmodalComponent implements OnInit, OnCha
         this.cmpStore.checkMembershipItemsExist(this.center.id)
         // this.cmpStore.getInstructorsEffect(this.center.id)
         // this.cmpStore.getmembershipItemsEffect(this.center.id)
-
-        this.dbCurCenterId$.pipe(takeUntil(this.unSubscribe$)).subscribe((dbCurCenterId) => {
-            this.dbCurCenterId = dbCurCenterId
-        })
-        this.dwCurCenterId$.pipe(takeUntil(this.unSubscribe$)).subscribe((dwCurCenterId) => {
-            this.dwCurCenterId = dwCurCenterId
-        })
     }
     ngOnDestroy(): void {
         this.TotalPriceSumSubscriber.unsubscribe()
@@ -344,12 +332,9 @@ export class RegisterMembershipLockerFullmodalComponent implements OnInit, OnCha
             memo: this.memoTerms,
             callback: () => {
                 btLoadingFns.hideLoading()
-                if (!_.isEmpty(this.dbCurCenterId) && this.dbCurCenterId == this.center.id) {
-                    this.dashboardHelper.refreshCurUser(this.center.id, this.curUser)
-                }
-                if (!_.isEmpty(this.dwCurCenterId) && this.dwCurCenterId == this.center.id) {
-                    this.dashboardHelper.refreshDrawerCurUser(this.center.id, this.curUser)
-                }
+
+                this.dashboardHelper.refreshCurUser(this.center.id, this.curUser)
+                this.dashboardHelper.refreshDrawerCurUser(this.center.id, this.curUser)
 
                 this.resetMemoTerms()
                 this.closeModal()
