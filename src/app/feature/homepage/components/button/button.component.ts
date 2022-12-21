@@ -25,6 +25,7 @@ export class ButtonComponent implements OnInit, OnChanges, AfterViewChecked, Aft
     @Input() bgColor: string
     @Input() borderColor: string
     @Input() fontColor: string
+    @Input() fontSize: string
     @Input() disabled: boolean
     @Input() text: string
 
@@ -52,18 +53,18 @@ export class ButtonComponent implements OnInit, OnChanges, AfterViewChecked, Aft
         if (this.height) {
             this.renderer.setStyle(this.button_el.nativeElement, 'height', `${this.height}px`)
         }
-
         if (this.bgColor) {
             this.renderer.setStyle(this.button_el.nativeElement, 'backgroundColor', `${this.bgColor}`)
             this.renderer.setStyle(this.button_el.nativeElement, 'color', 'var(--white)', RendererStyleFlags2.Important)
         }
-
         if (this.borderColor) {
             this.renderer.setStyle(this.button_el.nativeElement, 'border', `1px solid ${this.borderColor}`)
         }
-
         if (this.fontColor) {
             this.renderer.setStyle(this.button_el.nativeElement, 'color', `${this.fontColor}`)
+        }
+        if (this.fontColor) {
+            this.renderer.setStyle(this.button_el.nativeElement, 'fontSize', `${this.fontSize}`)
         }
     }
 

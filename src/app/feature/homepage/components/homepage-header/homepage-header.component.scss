@@ -13,12 +13,12 @@ section.l-header {
     z-index: 5;
 
     width: 100vw;
-    height: 55px; // 50px in mobile version
+    height: 65px; // 50px in mobile version
     display: none; //flex;
     align-items: center;
     justify-content: center;
     background-color: var(--white);
-    padding: 0px 18px;
+    padding: 0 18px;
 
     div.header__left {
         position: absolute;
@@ -42,7 +42,7 @@ section.l-header {
 
         .header__nav {
             &:not(:first-of-type) {
-                margin-left: 25px;
+                margin-left: 26px;
             }
         }
     }
@@ -55,7 +55,7 @@ section.l-header {
 
         hp-button {
             &:first-of-type {
-                margin-right: 12px;
+                margin-right: 10px;
             }
         }
     }
@@ -70,14 +70,17 @@ section.l-header {
         cursor: pointer;
         text-decoration: none;
 
-        font-size: 1.4rem;
         font-weight: 500;
-        line-height: 1.43;
-        letter-spacing: -0.2px;
+        font-size: 15px;
+        line-height: 22px;
+        letter-spacing: -0.225px;
 
         &.active {
             font-weight: 700;
             color: var(--hp-black);
+            text-decoration: underline;
+            text-underline-offset: 6px;
+            text-decoration-thickness: 3px;
         }
 
         &:hover {
