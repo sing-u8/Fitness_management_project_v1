@@ -109,7 +109,7 @@ section.fap-list {
 }
 
 hp-find-more-button {
-    margin-top: 25px;
+    margin-top: 30px;
 }
 
 @media (min-width: 768px) {
@@ -127,12 +127,12 @@ hp-find-more-button {
             }
             div.faq-header {
                 height: 58px;
-                padding: 0px 24px;
+                padding: 0 21px 0 24px;
 
                 font-weight: 500;
                 font-size: 1.6rem;
                 letter-spacing: -0.256px;
-                line-height: 1.5;
+                line-height: 1.56;
 
                 .arrow {
                     width: 27px;
@@ -145,7 +145,7 @@ hp-find-more-button {
                 font-weight: 500;
                 font-size: 1.6rem;
                 letter-spacing: -0.256px;
-                line-height: 1.5;
+                line-height: 1.56;
 
                 &.isOpen {
                     margin-top: 10px;
@@ -171,7 +171,7 @@ hp-find-more-button {
 
                 font-size: 1.6rem;
                 letter-spacing: -0.256px;
-                line-height: 1.5;
+                line-height: 1.56;
 
                 .arrow {
                     width: 27px;
@@ -185,7 +185,7 @@ hp-find-more-button {
 
                 font-size: 1.6rem;
                 letter-spacing: -0.256px;
-                line-height: 1.5;
+                line-height: 1.56;
 
                 &.isOpen {
                     margin-top: 10px;

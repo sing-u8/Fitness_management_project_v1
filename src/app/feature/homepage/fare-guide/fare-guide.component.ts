@@ -1,9 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core'
 import { AbstractControl, FormBuilder, FormControl, ValidationErrors, ValidatorFn, Validators } from '@angular/forms'
 import { Router } from '@angular/router'
-import { DomSanitizer, SafeHtml } from "@angular/platform-browser";
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser'
 import { DeviceDetectorService } from 'ngx-device-detector'
-import {WordService} from "@services/helper/word.service";
+import { WordService } from '@services/helper/word.service'
 import _ from 'lodash'
 
 import { FaqListType } from '../components/faq-list/faq-list.component'
@@ -12,7 +12,7 @@ import { DataType } from '../components/fare-guide-box2/fare-guide-box2.componen
 import { FGOTable } from '../components/fare-guide-option-table2/fare-guide-option-table2.component'
 
 import { Subject } from 'rxjs'
-import { debounceTime, distinctUntilChanged, takeUntil } from "rxjs/operators";
+import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators'
 
 @Component({
     selector: 'rw-fare-guide',
@@ -36,7 +36,7 @@ export class FareGuideComponent implements OnInit, OnDestroy {
                 { left: '기능 제한', right: '없음' },
                 { left: '결제 방식', right: '자동 결제' },
                 { left: '결제 금액', right: '37,000원 / 월' },
-                { left: '혜택', right: '7일 이내 환불 가능' },
+                { left: '환불 기간', right: '7일 이내 환불 가능' },
             ],
         },
         {
@@ -54,7 +54,7 @@ export class FareGuideComponent implements OnInit, OnDestroy {
                 { left: '기능 제한', right: '없음' },
                 { left: '결제 방식', right: '직접 결제 (선납)' },
                 { left: '결제 금액', right: '396,000원 / 1년' },
-                { left: '혜택', right: '30일 이내 환불 가능' },
+                { left: '환불 기간', right: '30일 이내 환불 가능' },
             ],
             highlight: '🎉  가장 인기가 많아요!',
         },
@@ -73,7 +73,7 @@ export class FareGuideComponent implements OnInit, OnDestroy {
                 { left: '기능 제한', right: '없음' },
                 { left: '결제 방식', right: '직접 결제 (선납)' },
                 { left: '결제 금액', right: '655,000원 / 2년' },
-                { left: '혜택', right: '7일 이내 환불 가능' },
+                { left: '환불 기간', right: '30일 이내 환불 가능' },
             ],
         },
         {
@@ -91,7 +91,7 @@ export class FareGuideComponent implements OnInit, OnDestroy {
                 { left: '기능 제한', right: '없음' },
                 { left: '결제 방식', right: '직접 결제 (선납)' },
                 { left: '결제 금액', right: '759,000원 / 평생' },
-                { left: '혜택', right: '90일 이내 환불 가능' },
+                { left: '환불 기간', right: '90일 이내 환불 가능' },
             ],
             highlight: '👍  레드웨일 추천',
         },
@@ -100,7 +100,7 @@ export class FareGuideComponent implements OnInit, OnDestroy {
     public sec2FGOItems: Array<{ text: string | SafeHtml; tableData: FGOTable[] }> = [
         {
             text: this.domSanitizer.bypassSecurityTrustHtml(
-                '👀  <span style="text-decoration: underline; text-underline-offset: -2px; text-decoration-thickness: 6px; text-decoration-color: var(--red);">센터 관리자</span>를 위한 기능 미리보기'
+                '👀  <span style="text-decoration: underline; text-underline-offset: -1.5px; text-decoration-thickness: 7px; text-decoration-color: var(--red);">센터 관리자</span>를 위한 기능 미리보기'
             ),
             tableData: [
                 { title: '기본', items: ['관리자용 웹 제공', '터치패드 출석', '회원 정보 이동'] },
@@ -120,7 +120,7 @@ export class FareGuideComponent implements OnInit, OnDestroy {
         },
         {
             text: this.domSanitizer.bypassSecurityTrustHtml(
-                '👀 <span style="text-decoration: underline; text-underline-offset: -2px; text-decoration-thickness: 6px; text-decoration-color: var(--red);">센터 회원</span>을 위한 기능 미리보기'
+                '👀 <span style="text-decoration: underline; text-underline-offset: -1.5px; text-decoration-thickness: 7px; text-decoration-color: var(--red);">센터 회원</span>을 위한 기능 미리보기'
             ),
             tableData: [
                 { title: '기본', items: ['회원용 앱 제공'] },
@@ -227,10 +227,12 @@ export class FareGuideComponent implements OnInit, OnDestroy {
         })
         this.calcChargeVars()
 
-        this.chargeCalc.valueChanges.pipe(takeUntil(this.unSubscriber$), distinctUntilChanged(), debounceTime(100)).subscribe((value) => {
-            this.calcChargeVars()
-            this.chargeCalc.setValue(this.wordService.getNumberWithCommas(_.camelCase(_.trimStart(value, '0'))))
-        })
+        this.chargeCalc.valueChanges
+            .pipe(takeUntil(this.unSubscriber$), distinctUntilChanged(), debounceTime(100))
+            .subscribe((value) => {
+                this.calcChargeVars()
+                this.chargeCalc.setValue(this.wordService.getNumberWithCommas(_.camelCase(_.trimStart(value, '0'))))
+            })
     }
 
     ngOnInit(): void {}

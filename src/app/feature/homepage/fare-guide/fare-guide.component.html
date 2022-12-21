@@ -1,157 +1,137 @@
 <article class="l-fare-guide">
     <div id="sec1" class="sec--common sec__bg-white">
-
         <div class="sec1__l-text">
-            <div class="sec1__text-title">
-                요금 안내
-            </div>
+            <div class="sec1__text-title">요금 안내</div>
             <div class="sec1__text-desc">
-                기간 제한 없이, 기능 제한 없이<br>
-                무료로 사용해보고 결정하세요.
+                2주간 기능 제한 없이 무료로 사용해 보고 결정하세요.
             </div>
         </div>
-        
+
         <div class="w-100 d-flex flex-column align-items-center sec__bg-lightergrey">
             <div class="sec1__l-desc">
                 <div class="sec1__desc-title">
-                    런칭 기념, 최대 45%까지<br class="mobile">
+                    런칭 기념, 최대 45%까지<br class="mobile" />
                     요금을 할인 받아보세요!
                 </div>
-                <div class="sec1__desc-sub">
-                    요금 할인 기간 : 2023년 2월 28일까지
-                </div>
-                <div
-                    rw-button
-                    [rwButtonFontColor]="'var(--white)'"
-                    [rwButtonColor]="'var(--red)'"
-                    class="sec1__button"
-                >
+                <div class="sec1__desc-sub">요금 할인 기간 : 2023년 2월 28일까지</div>
+                <div rw-button [rwButtonFontColor]="'var(--white)'" [rwButtonColor]="'var(--red)'" class="sec1__button">
                     2주 무료 체험하기
                 </div>
-                
+
                 <div class="sec1__background"></div>
-                
             </div>
-    
+
             <div class="l-fare-guide-box">
-                <hp-fare-guide-box2
-                    *ngFor="let item of fareGuideBoxList"
-                    [data]="item"
-                ></hp-fare-guide-box2>
+                <hp-fare-guide-box2 *ngFor="let item of fareGuideBoxList" [data]="item"></hp-fare-guide-box2>
             </div>
-            
+
             <div class="fare-guide-desc">
-                부가가치세 10%와 문자 요금<br class="mobile"> (단문 12원, 장문 32원)은 별도입니다.
+                부가가치세 10%와 문자 요금<br class="mobile" />
+                (단문 12원, 장문 32원)은 별도입니다.
             </div>
-            
+
             <div class="sec1__footer">
-                2주간의 무료 체험 기간이 끝난 후<br class="pad"> 별도의 결제는 이루어지지 않으며,<br class="mobile"> 유료 이용권 구매 후부터 결제가 진행됩니다.
+                2주간의 무료 체험 기간이 끝난 후<br class="pad" />
+                별도의 결제는 이루어지지 않으며,<br class="mobile" />
+                유료 이용권 구매 후부터 결제가 진행됩니다.
             </div>
         </div>
     </div>
 
     <div id="sec2" class="sec--common sec__bg-white">
-        
         <div class="sec2__title">
-            이용권 종류에 상관 없이<br>
-            모든 기능을 동일하게<br class="mobile">
+            이용권 종류에 상관 없이<br />
+            모든 기능을 동일하게<br class="mobile" />
             이용하실 수 있어요.
         </div>
-        
-        <div class="sec2__table" *ngFor="let i of sec2FGOItems">
+
+        <div class="sec2__table" [class.last-table]="lt" *ngFor="let i of sec2FGOItems; let lt = last">
             <div class="table__title" [innerHTML]="i.text"></div>
             <div class="l-table-items">
                 <hp-fare-guide-option-table2
-                    *ngFor="let data of i.tableData; odd as isOdd;"
+                    *ngFor="let data of i.tableData; odd as isOdd"
                     [data]="data"
                     [bgColor]="isOdd ? 'var(--hp-lighergrey)' : 'var(--white)'"
                 ></hp-fare-guide-option-table2>
             </div>
         </div>
-        
+
         <div class="sec2__footer">
             <div class="footer-bg-1"></div>
             <div class="footer-bg-2"></div>
             <div class="footer--title">
-                번거로운 문의 과정 없이<br>
+                번거로운 문의 과정 없이<br />
                 즉시 무료로 써보고 결정하세요.
             </div>
             <div class="footer--list">
                 <div class="list-item" *ngFor="let item of sec2FooterItemList">
                     <div class="check-icon"></div>
-                    {{item}}
+                    {{ item }}
                 </div>
             </div>
-            <div
-                rw-button
-                [rwButtonFontColor]="'var(--white)'"
-                [rwButtonColor]="'var(--red)'"
-                class="sec2__button"
-            >
+            <div rw-button [rwButtonFontColor]="'var(--white)'" [rwButtonColor]="'var(--red)'" class="sec2__button">
                 2주 무료 체험하기
             </div>
         </div>
     </div>
 
     <div id="sec3" class="sec--common sec__bg-white">
-        
         <div class="sec3__text1 sec3__text1--margin">
-            비용 절약을 위해, 한 번만 결제하면<br>
-            평생 무료로 쓸 수 있는<br class="mobile">
+            비용 절약을 위해, 한 번만 결제하면<br />
+            평생 무료로 쓸 수 있는<br class="mobile" />
             평생 이용권을 추천해 드려요!
         </div>
-        
+
         <div class="sec3__text2">
-            🔍  업계 평균 운영 기간인<br class="pad">
+            🔍 업계 평균 운영 기간인<br class="pad" />
             10년간의 이용 금액을 비교해 보세요.
         </div>
-        
+
         <div class="fare-guide-graph-image"></div>
-    
+
         <div class="sec3__text2">
-            💰 평생 이용권,<br class="mobile">
-            실제로 얼마나 이득일까요?<br>
-            현재 사용 중인 서비스와<br class="mobile">
+            💰 평생 이용권,<br class="mobile" />
+            실제로 얼마나 이득일까요?<br />
+            현재 사용 중인 서비스와<br class="mobile" />
             직접 비교해 보세요.
         </div>
-        
+
         <div class="l-charge-calc">
             사용 중인 서비스의 월 이용료
-            
+
             <div class="l-input">
-                <input class="rw-input" [formControl]="chargeCalc">
+                <input class="rw-input" [formControl]="chargeCalc" />
                 <span class="currency">원</span>
             </div>
-            
+
             <div *ngIf="chargeCalcNum > 0" class="arrow-icon"></div>
         </div>
-        
+
         <div *ngIf="chargeCalcNum > 0" class="charge-calc-text">
             <div class="text-item">
                 <div class="d-flex align-items-center justify-content-center">
-                    현재 서비스를 <div class="calc-block">{{chargeCalcMonth}}개월</div>이상 사용하신다면,
+                    현재 서비스를
+                    <div class="calc-block">{{ chargeCalcMonth | numberWithCommas }}개월</div>
+                    이상 사용하신다면,
                 </div>
-                <div class="d-flex align-items-center justify-content-center"><b>평생 이용권 구매가 더 이득</b>이에요.</div>
+                <div class="d-flex align-items-center justify-content-center">
+                    <b>평생 이용권 구매가 더 이득</b>이에요.
+                </div>
             </div>
             <div class="text-item">
+                <div class="d-flex align-items-center justify-content-center">10년을 사용하신다면 무려</div>
                 <div class="d-flex align-items-center justify-content-center">
-                    10년을 사용하신다면 무려
+                    <div class="calc-block">{{ chargeSaving | numberWithCommas }}원</div>
+                    을 아끼실 수 있어요!
                 </div>
-                <div class="d-flex align-items-center justify-content-center">
-                    <div class="calc-block">{{chargeSaving | numberWithCommas}}원</div>을 아끼실 수 있어요!
-                </div>
-                
             </div>
         </div>
-        
-        <hp-faq-list
-            [faqList]="faqList"
-        ></hp-faq-list>
+
+        <hp-faq-list [faqList]="faqList"></hp-faq-list>
 
         <hp-homepage-footer></hp-homepage-footer>
     </div>
 </article>
-
 
 <hp-free-start-modal
     [(visible)]="isFreeStartModalVisible"

@@ -85,23 +85,23 @@ div.l-fare-guide-option-table {
 
 		flex-direction: row;
 		width: 735px;
-		padding: 21px 15px 21px 26px;
+		padding: 20px 15px 20px 26px;
 
 		.title {
-			width: 80px;
+			width: 70px;
 			margin-right: 73px;
 			margin-bottom: 0;
 		}
 		.l-item {
 
-			column-gap: 22px;
+			column-gap: 14px;
 			.item {
-				width: 160px;
+				width: 168px;
 				display: flex;
 				font-weight: 500;
-				font-size: 1.5rem;
+				font-size: 1.6rem;
 				line-height: 26px;
-				letter-spacing: -0.22px;
+				letter-spacing: -0.256px;
 				color: var(--font-color);
 			}
 		}

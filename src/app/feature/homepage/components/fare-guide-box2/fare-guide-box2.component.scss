@@ -27,8 +27,9 @@ div.l-fare-guide-box {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		padding: 30px;
+		padding: 30px 20px;
 		width: 100%;
+		height: 440px;
 		position: relative;
 
 		background: #FFFFFF;
@@ -47,23 +48,27 @@ div.l-fare-guide-box {
 		div {
 			width: 100%;
 		}
-
+		$pad-width: calc(100% - 20px);
 		.top {
+			width: $pad-width !important;
 			.top__text1 {
 				font-weight: 700;
 				font-size: 1.9rem;
 				line-height: 28px;
 				letter-spacing: -0.4px;
+				margin-bottom: 1px;
 			}
 			.top__text2 {
 				font-weight: 400;
 				font-size: 1.5rem;
 				line-height: 22px;
 				letter-spacing: -0.225px;
+				color: var(--hp-grey);
 			}
 		}
 
 		.middle {
+			width: $pad-width !important;
 			.l-middle-main {
 				display: flex;
 				justify-content: flex-start;
@@ -81,6 +86,7 @@ div.l-fare-guide-box {
 				line-height: 22px;
 				letter-spacing: -0.225px;
 				color: var(--font-color);
+				margin-top: 4px;
 			}
 			.middle__discount {
 				font-weight: 700;
@@ -88,6 +94,7 @@ div.l-fare-guide-box {
 				line-height: 22px;
 				letter-spacing: -0.225px;
 				color: var(--red);
+				margin-bottom: 8px;
 			}
 			.middle__discounted {
 				font-weight: 400;
@@ -104,7 +111,7 @@ div.l-fare-guide-box {
 		}
 
 		.bottom {
-
+			width: $pad-width !important;
 			.bottom__left {
 				font-weight: 400;
 				font-size: 1.5rem;
@@ -152,10 +159,9 @@ div.l-fare-guide-box {
 
 @media(min-width: 768px) {
 	div.l-fare-guide-box {
-
 		div.fare-guide-box {
 			margin-top: 41.5px;
-
+			height: 461px;
 			.top {
 				.top__text1 {
 					font-size: 2.2rem;
