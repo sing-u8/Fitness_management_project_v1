@@ -151,8 +151,15 @@ export class TouchPadComponent implements OnInit, OnDestroy {
             .subscribe({
                 next: (value) => {
                     value.subscribe(({ lockerTickets, membershipTickets }) => {
-                        this.lockerList = lockerTickets
-                        this.membershipList = membershipTickets
+                        this.lockerList = lockerTickets.filter(
+                            (v) =>
+                                v.state_code == 'user_locker_state_in_use' || v.state_code == 'user_locker_state_paused'
+                        )
+                        this.membershipList = membershipTickets.filter(
+                            (v) =>
+                                v.state_code == 'user_membership_state_in_use' ||
+                                v.state_code == 'user_membership_state_paused'
+                        )
                         this.memberName = this.checkedInMember.name
 
                         this.showAttendanceModal()
