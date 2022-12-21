@@ -13,7 +13,6 @@ import { SoundService } from '@services/helper/sound.service'
 
 import { UserLocker } from '@schemas/user-locker'
 import { UserMembership } from '@schemas/user-membership'
-import { AuthErrors } from '@schemas/errors/auth-errors'
 
 import { Center } from '@schemas/center'
 
@@ -100,7 +99,11 @@ export class TouchPadComponent implements OnInit, OnDestroy {
         this.spinner.show('touch_pad_check_in')
         this.centerTouchPadService.SearchCheckInUsers(this.center.id, this.touchPadInput).subscribe({
             next: (cus) => {
-                if (cus.length == 1) {
+                if (cus.length == 0) {
+                    this.isConfirmProcess = false
+                    // this.touchPadInput = ''
+                    this.nxStore.dispatch(showToast({ text: '회원이 존재하지 않습니다.' }))
+                } else if (cus.length == 1) {
                     this.checkInUser(cus[0])
                 } else {
                     this.equalMembershipUsers = cus
