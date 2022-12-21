@@ -36,7 +36,7 @@
                     rwButtonHeight="45"
                     rwButtonColor="var(--red)"
                     rwButtonFontColor="var(--white)"
-                    (click)="toggleRegisterMemberModal()"
+                    (click)="toggleDirectRegisterMemberFullModal()"
                 >
                     신규 회원 등록
                 </div>
@@ -80,6 +80,19 @@
                             {{ curCenterUser?.name }}
                             <img src="assets/icons/etc/edit.svg" />
                         </div>
+                        <div class="l-user-status-tag">
+                            <div *ngIf="curUserData.user.total_unpaid != 0" class="user-status-tag">
+                                <div class="unpaid-icon"></div>
+                                <span class="tooltip-pay"
+                                >{{ curUserData.user.total_unpaid | numberWithCommas }}원 미수</span
+                                >
+                            </div>
+                            <div *ngIf="imminentDateObj.isImminent == true" class="user-status-tag">
+                                <div class="expire-icon"></div>
+                                <span>{{ imminentDateObj.imminentDate }}일 후 만료</span>
+                            </div>
+                        </div>
+
                         <rw-member-role-select
                             *ngIf="curCenterUser"
                             [staffId]="centerStaff.id"

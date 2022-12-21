@@ -30,9 +30,11 @@ import { FileService } from '@services/file.service'
 import { CenterUsersCheckInService } from '@services/center-users-check-in.service'
 import { ScheduleHelperService } from '@services/center/schedule-helper.service'
 import { CommunityHelperService } from '@services/center/community-helper.service'
+import { TimeService } from '@services/helper/time.service'
 
 import _ from 'lodash'
 import { UpdateUserRequestBody } from '@services/center-users.service'
+import dayjs from 'dayjs'
 
 @Component({
     selector: 'dr-member',
@@ -63,11 +65,6 @@ export class MemberComponent implements OnInit, OnDestroy {
 
     public showUserDetail = false
 
-    public dbCurCenterId$ = this.nxStore.select(DashboardSelector.curCenterId)
-    public dwCurCenterId$ = this.nxStore.select(DashboardSelector.drawerCurCenterId)
-    public dbCurCenterId = undefined
-    public dwCurCenterId = undefined
-
     public curUserData: DashboardReducer.CurUserData = undefined
 
     constructor(
@@ -83,7 +80,8 @@ export class MemberComponent implements OnInit, OnDestroy {
         private activatedRoute: ActivatedRoute,
         private centerUsersCheckInService: CenterUsersCheckInService,
         private scheduleHelperService: ScheduleHelperService,
-        private communityHelperService: CommunityHelperService
+        private communityHelperService: CommunityHelperService,
+        private timeService: TimeService
     ) {}
 
     ngOnInit(): void {
@@ -111,17 +109,10 @@ export class MemberComponent implements OnInit, OnDestroy {
             this.curUserListSelect = culs
         })
 
-        this.dbCurCenterId$.pipe(takeUntil(this.unSubscriber$)).subscribe((dbCurCenterId) => {
-            this.dbCurCenterId = dbCurCenterId
-        })
-        this.dwCurCenterId$.pipe(takeUntil(this.unSubscriber$)).subscribe((dwCurCenterId) => {
-            this.dwCurCenterId = dwCurCenterId
-        })
         this.curUserData$.pipe(takeUntil(this.unSubscriber$)).subscribe((curUserData) => {
             this.curUserData = curUserData
-        })
+            this.findEndDateToExpired(7)
 
-        this.curUserData$.pipe(takeUntil(this.unSubscriber$)).subscribe((curUserData) => {
             this.curCenterUser = curUserData.user
             this.memoForm.setValue(this.curCenterUser?.memo ?? '')
             this.userNameForModal = this.curCenterUser?.name
@@ -131,7 +122,6 @@ export class MemberComponent implements OnInit, OnDestroy {
                 this.userRole[key] = key == this.curCenterUser?.role_code
             })
         })
-
     }
     ngOnDestroy() {
         this.unSubscriber$.next(true)
@@ -182,14 +172,14 @@ export class MemberComponent implements OnInit, OnDestroy {
                     this.nxStore.dispatch(DashboardActions.startGetUsersByCategory({ centerId: this.center.id }))
                     value.cb ? value.cb() : null
                     this.toggleDirectRegisterMemberFullModal()
-                    this.toggleRegisterMemberModal()
+                    // this.toggleRegisterMemberModal()
                 },
             })
         )
     }
     closeDirectRegisterMemberFullModal() {
         this.toggleDirectRegisterMemberFullModal()
-        this.toggleRegisterMemberModal()
+        // this.toggleRegisterMemberModal()
     }
 
     // register membership locker full modal vars and funcs
@@ -465,6 +455,29 @@ export class MemberComponent implements OnInit, OnDestroy {
         return !(fileList && fileList.length == 0)
     }
 
+    // tag
+    public imminentDateObj = {
+        isImminent: false,
+        imminentDate: 0,
+    }
+    findEndDateToExpired(dateToExpired: number) {
+        const remainDate = this.timeService.getRestPeriod(
+            dayjs().format(),
+            this.curUserData.user.user_membership_end_date
+        )
+        if (remainDate <= dateToExpired) {
+            this.imminentDateObj = {
+                isImminent: true,
+                imminentDate: remainDate,
+            }
+        } else {
+            this.imminentDateObj = {
+                isImminent: false,
+                imminentDate: 0,
+            }
+        }
+    }
+
     // check in
     public doShowAttendModal = false
     public doShowCancelAttendModal = false
@@ -495,12 +508,8 @@ export class MemberComponent implements OnInit, OnDestroy {
     onAttendModalConfirm() {
         this.centerUsersCheckInService.checkIn(this.center.id, this.curUserData.user.id).subscribe((res) => {
             const centerUser = this.curUserData.user
-            if (!_.isEmpty(this.dbCurCenterId) && this.dbCurCenterId == this.center.id) {
-                this.dashboardHelperService.synchronizeCheckIn(this.center.id, centerUser)
-            }
-            if (!_.isEmpty(this.dwCurCenterId) && this.dwCurCenterId == this.center.id) {
-                this.dashboardHelperService.synchronizeCheckInDrawer(this.center.id, centerUser)
-            }
+            this.dashboardHelperService.synchronizeCheckIn(this.center.id, centerUser)
+            this.dashboardHelperService.synchronizeCheckInDrawer(this.center.id, centerUser)
             // this.nxStore.dispatch(
             //     showToast({
             //         text: `${this.wordService.ellipsis(
@@ -532,12 +541,8 @@ export class MemberComponent implements OnInit, OnDestroy {
     onCancelAttendConfirm() {
         this.centerUsersCheckInService.removeCheckIn(this.center.id, this.curUserData.user.id).subscribe((res) => {
             const centerUser = this.curUserData.user
-            if (!_.isEmpty(this.dbCurCenterId) && this.dbCurCenterId == this.center.id) {
-                this.dashboardHelperService.synchronizeRemoveCheckIn(this.center.id, centerUser)
-            }
-            if (!_.isEmpty(this.dwCurCenterId) && this.dwCurCenterId == this.center.id) {
-                this.dashboardHelperService.synchronizeRemoveCheckInDrawer(this.center.id, centerUser)
-            }
+            this.dashboardHelperService.synchronizeRemoveCheckIn(this.center.id, centerUser)
+            this.dashboardHelperService.synchronizeRemoveCheckInDrawer(this.center.id, centerUser)
             this.nxStore.dispatch(
                 showToast({
                     text: `${this.wordService.ellipsis(this.curUserData.user.name, 4)}님이 출석 취소되었습니다.`,

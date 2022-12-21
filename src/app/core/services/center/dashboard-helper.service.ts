@@ -49,12 +49,20 @@ export class DashboardHelperService {
     }
     // // by check in
     synchronizeCheckIn(centerId: string, centerUser: CenterUser) {
-        this.nxStore.dispatch(DashboardActions.startGetUsersByCategory({ centerId }))
-        this.nxStore.dispatch(DashboardActions.synchronizeCheckIn({ centerId, centerUser }))
+        this.nxStore.pipe(select(DashboardSelector.curCenterId), take(1)).subscribe((curCenterId) => {
+            if (!_.isEmpty(curCenterId) && curCenterId == centerId) {
+                this.nxStore.dispatch(DashboardActions.startGetUsersByCategory({ centerId }))
+                this.nxStore.dispatch(DashboardActions.synchronizeCheckIn({ centerId, centerUser }))
+            }
+        })
     }
     synchronizeCheckInDrawer(centerId: string, centerUser: CenterUser) {
-        this.nxStore.dispatch(DashboardActions.startGetDrawerUsersByCategory({ centerId }))
-        this.nxStore.dispatch(DashboardActions.synchronizeCheckInDrawer({ centerId, centerUser }))
+        this.nxStore.pipe(select(DashboardSelector.drawerCurCenterId), take(1)).subscribe((dwCurCenterId) => {
+            if (!_.isEmpty(dwCurCenterId) && dwCurCenterId == centerId) {
+                this.nxStore.dispatch(DashboardActions.startGetDrawerUsersByCategory({ centerId }))
+                this.nxStore.dispatch(DashboardActions.synchronizeCheckInDrawer({ centerId, centerUser }))
+            }
+        })
     }
     synchronizeRemoveCheckIn(centerId: string, centerUser: CenterUser) {
         this.nxStore.dispatch(DashboardActions.startGetUsersByCategory({ centerId }))
