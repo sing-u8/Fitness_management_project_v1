@@ -2,9 +2,7 @@
     <div id="sec1" class="sec--common sec__bg-white">
         <div class="sec1__l-text">
             <div class="sec1__text-title">요금 안내</div>
-            <div class="sec1__text-desc">
-                2주간 기능 제한 없이 무료로 사용해 보고 결정하세요.
-            </div>
+            <div class="sec1__text-desc">2주간 기능 제한 없이 무료로 사용해 보고 결정하세요.</div>
         </div>
 
         <div class="w-100 d-flex flex-column align-items-center sec__bg-lightergrey">
@@ -14,11 +12,18 @@
                     요금을 할인 받아보세요!
                 </div>
                 <div class="sec1__desc-sub">요금 할인 기간 : 2023년 2월 28일까지</div>
-                <div rw-button [rwButtonFontColor]="'var(--white)'" [rwButtonColor]="'var(--red)'" class="sec1__button">
+                <div
+                    rw-button
+                    [rwButtonFontColor]="'var(--white)'"
+                    [rwButtonColor]="'var(--red)'"
+                    class="sec1__button"
+                    (click)="routerTo('/auth/login')"
+                >
                     2주 무료 체험하기
                 </div>
 
                 <div class="sec1__background"></div>
+<!--                <img src="/assets/homepage/images/fare-guide/confetti.png">-->
             </div>
 
             <div class="l-fare-guide-box">
@@ -69,7 +74,13 @@
                     {{ item }}
                 </div>
             </div>
-            <div rw-button [rwButtonFontColor]="'var(--white)'" [rwButtonColor]="'var(--red)'" class="sec2__button">
+            <div
+                rw-button
+                [rwButtonFontColor]="'var(--white)'"
+                [rwButtonColor]="'var(--red)'"
+                class="sec2__button"
+                (click)="routerTo('/auth/login')"
+            >
                 2주 무료 체험하기
             </div>
         </div>
@@ -115,7 +126,7 @@
                     이상 사용하신다면,
                 </div>
                 <div class="d-flex align-items-center justify-content-center">
-                    <b>평생 이용권 구매가 더 이득</b>이에요.
+                    <b> 평생 이용권 구매가 더 이득</b>이에요.
                 </div>
             </div>
             <div class="text-item">

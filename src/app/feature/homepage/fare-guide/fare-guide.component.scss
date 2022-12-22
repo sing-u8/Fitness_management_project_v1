@@ -69,6 +69,7 @@ article.l-fare-guide {
             position: relative;
             padding: 80px 0 0 0;
             margin: 0 0 50px;
+            overflow: hidden;
             .sec1__desc-title {
                 font-size: 2.1rem;
                 font-weight: 700;
@@ -97,16 +98,19 @@ article.l-fare-guide {
             margin-top: 30px;
             margin-bottom: 0;
             box-shadow: 0 4px 8px rgba(227, 74, 94, 0.25);
+            z-index: 500;
         }
 
         .sec1__background {
             background-image: url('/assets/homepage/images/fare-guide/confetti.png');
             background-repeat: no-repeat;
             background-size: cover;
+            background-position: center;
             width: 100%;
-            height: 150px;
+            height: 130px;
             position: absolute;
-            top: 0;
+            left: 4px;
+            top: -17px;
         }
 
         .l-fare-guide-box {
@@ -221,24 +225,24 @@ article.l-fare-guide {
             overflow: hidden;
 
             .footer-bg-1 {
-                height: 100%;
-                width: 560px;
-                background-size: cover;
+                height: 510px;
+                width: 500px;
+                background-size: contain;
                 background-repeat: no-repeat;
                 background-image: url('/assets/homepage/images/fare-guide/b_left.png');
                 position: absolute;
-                left: -207px;
-                top: -100px;
+                left: -170px;
+                top: -95px;
             }
             .footer-bg-2 {
-                height: 100%;
+                height: 500px;
                 width: 560px;
-                background-size: cover;
+                background-size: contain;
                 background-repeat: no-repeat;
                 background-image: url('/assets/homepage/images/fare-guide/b_right.png');
                 position: absolute;
-                top: 0;
-                right: -430px;
+                top: 260px;
+                right: -210px;
             }
 
             .footer--title {
@@ -353,7 +357,7 @@ article.l-fare-guide {
                     letter-spacing: -0.324px;
                     position: absolute;
                     right: 20px;
-                    top: 14px;
+                    top: 13.5px;
                 }
                 input {
                     text-align: end;
@@ -361,7 +365,10 @@ article.l-fare-guide {
                     border: 2px solid #eaeaea;
                     border-radius: 10px;
                     font-weight: 700;
-                    padding: 15px 45px 14px 15px !important;
+                    font-size: 1.8rem;
+                    line-height: 26px;
+                    letter-spacing: -0.324px;
+                    padding: 15px 40px 14px 15px !important;
                     width: 196px !important;
                     height: 55px !important;
                 }
@@ -475,10 +482,9 @@ article.l-fare-guide {
             }
 
             .sec1__background {
-                width: 100%;
-                height: 230px;
-                position: absolute;
+                height: 291px;
                 top: 0;
+                left: initial;
             }
 
             .l-fare-guide-box {
@@ -563,16 +569,16 @@ article.l-fare-guide {
                 padding: 60px 0;
 
                 .footer-bg-1 {
-                    height: 100%;
-                    width: 440px;
-                    left: -160px;
-                    top: 0;
+                    height: 560px;
+                    width: 470px;
+                    left: -173px;
+                    top: -50px;
                 }
                 .footer-bg-2 {
-                    height: 100%;
-                    width: 440px;
-                    top: 0;
-                    right: -100px;
+                    height: 570px;
+                    width: 520px;
+                    top: -87px;
+                    right: -195px;
                 }
 
                 .footer--title {
@@ -618,6 +624,13 @@ article.l-fare-guide {
                 margin-top: 120px;
                 margin-bottom: 40px;
             }
+            .sec3__text1 {
+                font-weight: 700;
+                font-size: 2.6rem;
+                line-height: 43px;
+                text-align: center;
+                letter-spacing: -0.68px;
+            }
             .sec3__text2 {
                 font-weight: 700;
                 font-size: 2rem;
@@ -635,7 +648,7 @@ article.l-fare-guide {
 
             .l-charge-calc {
                 width: 100%;
-                height: 115px;
+                height: 114px;
                 flex-direction: row;
                 justify-content: center;
                 align-items: center;
@@ -652,6 +665,10 @@ article.l-fare-guide {
                     height: 46.51px;
                     bottom: -20px;
                     margin-right: 5px;
+                }
+
+                .l-input {
+                    margin: 0;
                 }
 
                 input {
@@ -742,10 +759,10 @@ article.l-fare-guide {
             }
 
             .sec1__background {
-                width: 100%;
-                height: 360px;
-                position: absolute;
-                top: 0;
+                background-size: contain;
+                background-position: center;
+                width: 1233.2px;
+                height: 300px;
             }
 
             .l-fare-guide-box {
@@ -823,16 +840,16 @@ article.l-fare-guide {
                 padding: 70px 0;
 
                 .footer-bg-1 {
-                    height: 100%;
-                    width: 400px;
-                    left: 0;
-                    top: 0;
+                    height: 700px;
+                    width: 459px;
+                    left: -138px;
+                    top: -45px;
                 }
                 .footer-bg-2 {
-                    height: 100%;
-                    width: 400px;
-                    top: 0;
-                    right: 0;
+                    height: 650px;
+                    width: 490px;
+                    top: -60px;
+                    right: -113px;
                 }
 
                 .footer--title {
@@ -868,6 +885,13 @@ article.l-fare-guide {
                 margin-top: 140px;
                 margin-bottom: 45px;
             }
+            .sec3__text1 {
+                font-weight: 700;
+                font-size: 2.9rem;
+                line-height: 49px;
+                text-align: center;
+                letter-spacing: -0.841px;
+            }
             .sec3__text2 {
                 font-weight: 700;
                 font-size: 2.2rem;
@@ -896,7 +920,7 @@ article.l-fare-guide {
             }
 
             .charge-calc-text {
-                margin-top: 33.5px;
+                margin-top: 30px;
             }
 
             hp-faq-list {

@@ -222,7 +222,7 @@ export class FareGuideComponent implements OnInit, OnDestroy {
         const h = document.getElementById('l-homepage')
         h.scrollTo({ top: 0 })
 
-        this.chargeCalc = this.fb.control('50,000', {
+        this.chargeCalc = this.fb.control('0', {
             validators: [Validators.pattern(`^[0-9]{10,11}$`)],
         })
         this.calcChargeVars()
