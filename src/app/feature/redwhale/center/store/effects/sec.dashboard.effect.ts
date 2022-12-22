@@ -36,8 +36,7 @@ export class DashboardEffect {
         private centerUsersBookingService: CenterUsersBookingService,
         private centerService: CenterService,
         private centerHoldingApi: CenterHoldingService,
-        private centerContractApi: CenterContractService,
-
+        private centerContractApi: CenterContractService
     ) {}
 
     public loadMemberList$ = createEffect(() =>
@@ -50,8 +49,9 @@ export class DashboardEffect {
                             user: v,
                             holdSelected: false,
                         }))
-                        // usersSelectCateg.member.userSize = usersList['member'].length
-                        cb ? cb(memberlist[0]) : null
+                        if (!_.isEmpty(cb) && memberlist.length > 0) {
+                            cb(memberlist[0])
+                        }
                         return DashboardActions.finishLoadMemberList({
                             categ_type: 'member',
                             userListValue,
