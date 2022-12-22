@@ -6,24 +6,32 @@
             <!-- <span class="header--left-desc rw-typo-subtext1">회원권을 만들고, 예약 가능한 수업을 추가해보세요.</span> -->
         </div>
     </header>
-    
+
     <main class="l-main">
-        <section class="main__left thin-scroll-y " [ngClass]="{
-                'main__left--flex' : (drawer$ | async).tabName == 'none',
-                'main__left--flex-drawer' : (drawer$ | async).tabName != 'none'
-            }">
+        <section
+            class="main__left thin-scroll-y"
+            [ngClass]="{
+                'main__left--flex': (drawer$ | async).tabName == 'none',
+                'main__left--flex-drawer': (drawer$ | async).tabName != 'none'
+            }"
+        >
             <!-- /< ----- category list -->
-            <ng-container #category_peding *ngIf="(membershipIsloading$ | async) != 'done'; else category_done ">
+            <ng-container #category_peding *ngIf="(membershipIsloading$ | async) != 'done'; else category_done">
                 <ngx-skeleton-loader
-                    *ngFor="let _ of [1,2,3,4,5,6]"
-                    count=1 appearance="circle"
-                    [theme]="{width: '100%', height: '48px', 'border-radius': '5px', 'margin-top': '2px'}"
+                    *ngFor="let _ of [1, 2, 3, 4, 5, 6]"
+                    count="1"
+                    appearance="circle"
+                    [theme]="{ width: '100%', height: '48px', 'border-radius': '5px', 'margin-top': '2px' }"
                 ></ngx-skeleton-loader>
             </ng-container>
             <ng-template #category_done>
-                <div class="membership-category-wrapper" [dragula]="DragulaCategory" [(dragulaModel)]="membershipCategList">
+                <div
+                    class="membership-category-wrapper"
+                    [dragula]="DragulaCategory"
+                    [(dragulaModel)]="membershipCategList"
+                >
                     <gm-center-membership-category
-                        *ngFor="let categ of membershipCategList;"
+                        *ngFor="let categ of membershipCategList"
                         [id]="categ.id"
                         [categ]="categ"
                         [centerId]="center.id"
@@ -31,271 +39,325 @@
                 </div>
             </ng-template>
             <!--  category list ---- >/ -->
-            
+
             <!-- /< ----- add category button -->
             <ng-container>
                 <div
-                    #AddCategInputOpen *ngIf="!isAddCategOn else AddCategInputOpen" (click)="onAddCategClick($event)"
+                    #AddCategInputOpen
+                    *ngIf="!isAddCategOn; else AddCategInputOpen"
+                    (click)="onAddCategClick($event)"
                     class="add-category-button"
                     [class.add-category-button--top-margin]="(membershipCategEntities$ | async | keyvalue).length > 0"
                 >
-                    <img src="assets/icons/etc/add-category.svg">
+                    <img src="assets/icons/etc/add-category.svg" />
                     카테고리 추가
                 </div>
-                
+
                 <ng-template #AddCategInputOpen>
                     <form
-                        *ngIf="isAddCategOn" class="l-add-category-input"
-                        [class.l-add-category-input--top-margin]="(membershipCategEntities$ | async | keyvalue).length > 0"
+                        *ngIf="isAddCategOn"
+                        class="l-add-category-input"
+                        [class.l-add-category-input--top-margin]="
+                            (membershipCategEntities$ | async | keyvalue).length > 0
+                        "
                     >
                         <input
-                            rw-autoFocus (rwClickOutside)="addCategory()" (keyup.enter)="addCategory()" [formControl]="addCategForm"
-                            class="rw-input add-category-input" type="text" placeholder="카테고리명을 입력해주세요."
-                        >
-                        <img src="assets/icons/etc/add-category.svg">
+                            rw-autoFocus
+                            (blur)="addCategory()"
+                            (keyup.enter)="addCategory()"
+                            [formControl]="addCategForm"
+                            class="rw-input add-category-input"
+                            type="text"
+                            placeholder="카테고리명을 입력해주세요."
+                        />
+                        <img src="assets/icons/etc/add-category.svg" />
                     </form>
                 </ng-template>
             </ng-container>
             <!--  add category button ---- >/ -->
-        
         </section>
-        
+
         <section
-            class="main__right thin-scroll-y "
-            [ngClass] = "{
-                'main__right--flex' : (drawer$ | async).tabName == 'none',
-                'main__right--flex-drawer' : (drawer$ | async).tabName != 'none'
+            class="main__right thin-scroll-y"
+            [ngClass]="{
+                'main__right--flex': (drawer$ | async).tabName == 'none',
+                'main__right--flex-drawer': (drawer$ | async).tabName != 'none'
             }"
         >
             <p class="rw-typo-title1 p__selected-membership--margin">회원권 상세 정보</p>
-            
-            <ng-container #selected_membership_pending *ngIf="(membershipIsloading$ | async) != 'done' else selected_membership_done">
+
+            <ng-container
+                #selected_membership_pending
+                *ngIf="(membershipIsloading$ | async) != 'done'; else selected_membership_done"
+            >
                 <div class="selected-membership">
                     <div class="selected-membership-top h-pos-relative">
                         <ngx-skeleton-loader
-                            count = 1
+                            count="1"
                             appearance="circle"
-                            [theme]="{ 'width': '100%' ,'height': '42px', 'border-radius': '5px'}"
-                            [ngStyle]="{'width':'100%'}"
+                            [theme]="{ width: '100%', height: '42px', 'border-radius': '5px' }"
+                            [ngStyle]="{ width: '100%' }"
                         ></ngx-skeleton-loader>
                     </div>
                     <div class="divider"></div>
                     <div class="selected-membership-middle">
                         <ngx-skeleton-loader
-                            count = 1
+                            count="1"
                             appearance="circle"
-                            [theme]="{width: '100%', height: '100%', 'border-radius': '5px'}"
-                            [ngStyle]="{'width': '100%'}"
+                            [theme]="{ width: '100%', height: '100%', 'border-radius': '5px' }"
+                            [ngStyle]="{ width: '100%' }"
                         ></ngx-skeleton-loader>
                     </div>
                 </div>
             </ng-container>
             <ng-template #selected_membership_done>
-                
                 <div class="selected-membership">
                     <div class="selected-membership-top">
-                        
                         <div
                             class="d-flex align-items-center selected-membership-top__left"
-                            [style.width] = "selectedMembership?.membershipData ? '' : '100% !important'"
+                            [style.width]="selectedMembership?.membershipData ? '' : '100% !important'"
                         >
                             <div class="selected-membership-top__icon" [style.backgroundColor]="'var(--border-color)'">
-                                <img src="assets/icons/etc/ticket-white.svg">
+                                <img src="assets/icons/etc/ticket-white.svg" />
                             </div>
-                            <div class="rw-typo-title1 selected-membership-top__title ">
+                            <div class="rw-typo-title1 selected-membership-top__title">
                                 <p
                                     *ngIf="!selMembershipInputObj.name.isOn"
-                                    (click)="selectedMembership?.membershipData && onTextClick($event,'name')"
+                                    (click)="selectedMembership?.membershipData && onTextClick($event, 'name')"
                                     [style.cursor]="selectedMembership?.membershipData ? 'pointer' : 'auto'"
                                 >
-                                    {{selectedMembership?.membershipData ? selectedMembership.membershipData.name : '왼쪽 카테고리에서 회원권을 선택해주세요.'}}
+                                    {{
+                                        selectedMembership?.membershipData
+                                            ? selectedMembership.membershipData.name
+                                            : '왼쪽 카테고리에서 회원권을 선택해주세요.'
+                                    }}
                                 </p>
-                                <img *ngIf="selectedMembership?.membershipData && !selMembershipInputObj.name.isOn" class='edit-item-icon' src="assets/icons/etc/edit.svg" alt="">
+                                <img
+                                    *ngIf="selectedMembership?.membershipData && !selMembershipInputObj.name.isOn"
+                                    class="edit-item-icon"
+                                    src="assets/icons/etc/edit.svg"
+                                    alt=""
+                                />
                                 <input
                                     *ngIf="selMembershipInputObj.name.isOn"
                                     class="rw-input"
                                     rw-autoFocus
                                     [formControl]="selMembershipInputObj.name.value"
-                                    (keyup.enter)=" updateMembershipItemInput('name')"
-                                    (rwClickOutside)=" updateMembershipItemInput('name')"
-                                >
+                                    (keyup.enter)="updateMembershipItemInput('name')"
+                                    (blur)="updateMembershipItemInput('name')"
+                                />
                             </div>
                         </div>
-                        
-                        <div *ngIf="selectedMembership?.membershipData " class="d-flex ">
+
+                        <div *ngIf="selectedMembership?.membershipData" class="d-flex">
                             <div class="selected-membership-top__delete-membership-button" (click)="setItemDelOpen()">
-                                <img src="assets/icons/etc/trash_grey.svg">
+                                <img src="assets/icons/etc/trash_grey.svg" />
                                 <span class="rw-typo-subtext2-1">회원권 삭제</span>
                             </div>
                         </div>
-                    
-                    </div> <!--selected-membership-top end-->
-                    
+                    </div>
+                    <!--selected-membership-top end-->
+
                     <div class="divider"></div>
-                    
+
                     <div class="selected-membership-middle">
-                        
                         <div
-                            *ngFor="let btItem of (btItems | keyvalue : kvOriginOrder)"
+                            *ngFor="let btItem of btItems | keyvalue: kvOriginOrder"
                             class="selected-membership-middle__item"
                         >
                             <div
                                 class="l-item"
-                                (click)="selectedMembership?.membershipData
-                                    && !selMembershipInputObj[btItem.value.property].isOn
-                                    && onTextClick($event, btItem.value.property)"
-                                [style.cursor]="selectedMembership?.membershipData
-                                    && !selMembershipInputObj[btItem.value.property].isOn ? 'pointer' : 'auto'"
+                                (click)="
+                                    selectedMembership?.membershipData &&
+                                        !selMembershipInputObj[btItem.value.property].isOn &&
+                                        onTextClick($event, btItem.value.property)
+                                "
+                                [style.cursor]="
+                                    selectedMembership?.membershipData &&
+                                    !selMembershipInputObj[btItem.value.property].isOn
+                                        ? 'pointer'
+                                        : 'auto'
+                                "
                             >
-                                <p class="rw-typo-subtext2-1">{{btItem.value.title}}</p>
+                                <p class="rw-typo-subtext2-1">{{ btItem.value.title }}</p>
                                 <div
                                     class="rw-typo-bodytext0 item-text"
                                     *ngIf="!selMembershipInputObj[btItem.value.property].isOn"
                                 >
-
-                  <span *ngIf="btItem.value.property == 'count'">
-                    {{!selectedMembership?.membershipData ?
-                      'ㅡ' :
-                      selectedMembership?.membershipData?.unlimited == true ?
-                          '무제한' :
-                          selectedMembership.membershipData[btItem.value.property]+btItem.value.suffix
-                      }}
-                  </span>
-                                    <span *ngIf="btItem.value.property == 'days'">
-                    {{!selectedMembership?.membershipData ?
-                                        'ㅡ' :
-                                        selectedMembership.membershipData[btItem.value.property]+btItem.value.suffix
+                                    <span *ngIf="btItem.value.property == 'count'">
+                                        {{
+                                            !selectedMembership?.membershipData
+                                                ? 'ㅡ'
+                                                : selectedMembership?.membershipData?.unlimited == true
+                                                ? '무제한'
+                                                : selectedMembership.membershipData[btItem.value.property] +
+                                                  btItem.value.suffix
                                         }}
-                  </span>
+                                    </span>
+                                    <span *ngIf="btItem.value.property == 'days'">
+                                        {{
+                                            !selectedMembership?.membershipData
+                                                ? 'ㅡ'
+                                                : selectedMembership.membershipData[btItem.value.property] +
+                                                  btItem.value.suffix
+                                        }}
+                                    </span>
                                     <span *ngIf="btItem.value.property == 'price'">
-                    {{selectedMembership?.membershipData ? (selectedMembership.membershipData[btItem.value.property] | numberWithCommas)+btItem.value.suffix : 'ㅡ'}}
-                  </span>
-                                    
-                                    <img *ngIf="selectedMembership?.membershipData" class='edit-item-icon' src="assets/icons/etc/edit.svg" alt="">
+                                        {{
+                                            selectedMembership?.membershipData
+                                                ? (selectedMembership.membershipData[btItem.value.property]
+                                                      | numberWithCommas) + btItem.value.suffix
+                                                : 'ㅡ'
+                                        }}
+                                    </span>
+
+                                    <img
+                                        *ngIf="selectedMembership?.membershipData"
+                                        class="edit-item-icon"
+                                        src="assets/icons/etc/edit.svg"
+                                        alt=""
+                                    />
                                 </div>
-                                <div
-                                    class="l-item-input"
-                                    *ngIf="selMembershipInputObj[btItem.value.property].isOn"
-                                >
+                                <div class="l-item-input" *ngIf="selMembershipInputObj[btItem.value.property].isOn">
                                     <input
-                                        rw-autoFocus class="rw-input"
-                                        [class.input-price-width] = "btItem.value.property == 'price'"
+                                        rw-autoFocus
+                                        class="rw-input"
+                                        [class.input-price-width]="btItem.value.property == 'price'"
                                         [formControl]="selMembershipInputObj[btItem.value.property].value"
                                         (keypress)="restrictToNumber($event)"
                                         (keyup)="onSelectedItemInputKeyup($event, btItem.value.property)"
-                                        (keyup.enter)=" updateMembershipItemInput(btItem.value.property)"
-                                        (rwClickOutside)=" updateMembershipItemInput(btItem.value.property)"
-                                    >
+                                        (keyup.enter)="updateMembershipItemInput(btItem.value.property)"
+                                        (blur)="updateMembershipItemInput(btItem.value.property)"
+                                    />
                                     <span
                                         class="rw-typo-bodytext0"
-                                        [style.color] ="selMembershipInputObj[btItem.value.property]?.isInfinit ? 'var(--grey)' : 'var(--font-color)' "
+                                        [style.color]="
+                                            selMembershipInputObj[btItem.value.property]?.isInfinit
+                                                ? 'var(--grey)'
+                                                : 'var(--font-color)'
+                                        "
                                     >
-                    {{btItem.value.suffix}}
-                  </span>
-                                    
+                                        {{ btItem.value.suffix }}
+                                    </span>
+
                                     <rw-checkbox
                                         *ngIf="btItem.value.property == 'count'"
-                                        (click) = "toggleInfinitCount($event)"
-                                        [checked] = "selMembershipInputObj[btItem.value.property].isInfinit"
-                                        [text] = "'무제한'"
+                                        (click)="toggleInfinitCount($event)"
+                                        [checked]="selMembershipInputObj[btItem.value.property].isInfinit"
+                                        [text]="'무제한'"
                                     ></rw-checkbox>
                                 </div>
                             </div>
                         </div>
-                    
-                    </div> <!--selected-membership-middle end-->
-                    
-                    <div class="selected-membership-bottom"
-                         [style.display] = "selectedMembership?.membershipData == undefined ? 'none' : 'block' "
+                    </div>
+                    <!--selected-membership-middle end-->
+
+                    <div
+                        class="selected-membership-bottom"
+                        [style.display]="selectedMembership?.membershipData == undefined ? 'none' : 'block'"
                     >
                         <p class="rw-typo-subtext2-1">메모</p>
                         <textarea
                             #membership_memo
                             placeholder="메모를 입력해주세요."
-                            cols="30" rows="10"
+                            cols="30"
+                            rows="10"
                             class="rw-typo-bodytext1 thin-scroll-y"
                             (blur)="updateItemMemo(selMembershipMemo.value)"
                             [formControl]="selMembershipMemo"
                         >
-            </textarea>
-                    </div> <!--selected-membership-bottom end-->
+                        </textarea>
+                    </div>
+                    <!--selected-membership-bottom end-->
                 </div>
             </ng-template>
-            
-            
+
             <!-- reservable membership -->
             <div
                 *ngIf="(membershipIsloading$ | async) != 'done'; else selected_memLessonList_done"
                 class="selected-membership-lessonlist"
             >
-                <p class="rw-typo-subtext2-1 selected-membership-lessonlist--margin">
-                    예약 가능한 수업
-                </p>
+                <p class="rw-typo-subtext2-1 selected-membership-lessonlist--margin">예약 가능한 수업</p>
                 <ngx-skeleton-loader
-                    count=4
+                    count="4"
                     appearance="circle"
-                    [theme]="{'width':'calc(50% - 10px)', 'height' : '92px', 'border-radius' : '5px'}"
+                    [theme]="{ width: 'calc(50% - 10px)', height: '92px', 'border-radius': '5px' }"
                 ></ngx-skeleton-loader>
             </div>
             <ng-template #selected_memLessonList_done>
                 <div class="selected-membership-lessonlist">
-                    
-                    <p class="rw-typo-subtext2-1 selected-membership-lessonlist--margin">
-                        예약 가능한 수업
-                    </p>
-                    
+                    <p class="rw-typo-subtext2-1 selected-membership-lessonlist--margin">예약 가능한 수업</p>
+
                     <div
                         class="l-guide-image"
-                        *ngIf="!selectedMembership.membershipData && selectedMembership.isLoading == 'idle';else linked_classes_pending"
+                        *ngIf="
+                            !selectedMembership.membershipData && selectedMembership.isLoading == 'idle';
+                            else linked_classes_pending
+                        "
                     >
                         <div class="guide-image">
                             <div class="guide-image__icon">
                                 <div class="icon" [style.backgroundColor]="'var(--border-color)'">
-                                    <img src="assets/icons/etc/workout_white.svg">
+                                    <img src="assets/icons/etc/workout_white.svg" />
                                 </div>
                                 <div class="guide-image-icon__contents">
-                                    <p class="categ rw-typo-subtext4 ">레드웨일</p>
+                                    <p class="categ rw-typo-subtext4">레드웨일</p>
                                     <div class="card-title-container rw-typo-bodytext2">
                                         <p class="card-title">레드웨일 회원권</p>
-                                        <p class="card-desc1 rw-typo-subtext3">기간<span class="guide-image-bar">|</span>횟수<span
-                                            class="guide-image-bar">|</span>가격</p>
+                                        <p class="card-desc1 rw-typo-subtext3">
+                                            기간<span class="guide-image-bar">|</span>횟수<span class="guide-image-bar"
+                                                >|</span
+                                            >가격
+                                        </p>
                                     </div>
                                 </div>
                             </div>
-                            <img class="pointer" src="assets/icons/etc/cursor_pointer.svg">
+                            <img class="pointer" src="assets/icons/etc/cursor_pointer.svg" />
                         </div>
                         <div class="guide-text rw-typo-subtext2-1">
                             <p>카테고리에서 회원권을 선택하신 후,</p>
                             <p>예약 가능한 수업을 추가해보세요!</p>
                         </div>
                     </div>
-                    
-                    <ng-template
-                        #linked_classes_pending
-                    >
-                        <ng-container *ngIf="selectedMembership.membershipData && selectedMembership.isLoading == 'pending';else linked_classes_done">
+
+                    <ng-template #linked_classes_pending>
+                        <ng-container
+                            *ngIf="
+                                selectedMembership.membershipData && selectedMembership.isLoading == 'pending';
+                                else linked_classes_done
+                            "
+                        >
                             <ngx-skeleton-loader
-                                *ngFor="let _ of [1,2,3,4]" count="1" appearance="circle"
-                                [theme]="{'width':'calc(50% - 10px)', height: '92px', 'border-radius':'5px'}"
+                                *ngFor="let _ of [1, 2, 3, 4]"
+                                count="1"
+                                appearance="circle"
+                                [theme]="{ width: 'calc(50% - 10px)', height: '92px', 'border-radius': '5px' }"
                             ></ngx-skeleton-loader>
                         </ng-container>
                     </ng-template>
-                    <ng-template #linked_classes_done >
+                    <ng-template #linked_classes_done>
                         <div class="l-lesson-item thin-scroll-y">
-                            <gl-lesson-card *ngFor="let memClassItem of selectedMembership.linkedClassItems" [memLessonItem]="memClassItem"
-                                            [categId]="selectedMembership.categId" [categName]="selectedMembership.categName" [centerId]="center.id"
-                                            [isIn]="'reservableItemList'" (onReservableCardDelete)="removeReservationLesson(memClassItem)">
+                            <gl-lesson-card
+                                *ngFor="let memClassItem of selectedMembership.linkedClassItems"
+                                [memLessonItem]="memClassItem"
+                                [categId]="selectedMembership.categId"
+                                [categName]="selectedMembership.categName"
+                                [centerId]="center.id"
+                                [isIn]="'reservableItemList'"
+                                (onReservableCardDelete)="removeReservationLesson(memClassItem)"
+                            >
                             </gl-lesson-card>
-                            
-                            <div class="add-lesson-button" (click)=" setReserveLessonModalOn(); $event.stopPropagation()">
-                                <img src="assets/icons/etc/plus-darkgrey.svg">
-                                <p class="add-lesson-button__text">
-                                    예약 가능한 수업 추가
-                                </p>
+
+                            <div
+                                class="add-lesson-button"
+                                (click)="setReserveLessonModalOn(); $event.stopPropagation()"
+                            >
+                                <img src="assets/icons/etc/plus-darkgrey.svg" />
+                                <p class="add-lesson-button__text">예약 가능한 수업 추가</p>
                             </div>
                         </div>
                     </ng-template>
-                    
+
                     <div
                         class="reserve-lesson-modal h-show-off"
                         (rwClickOutside)="setReserveLessonModalOff()"
@@ -303,35 +365,40 @@
                     >
                         <div class="modal-header">
                             <p class="rw-typo-subtext2-1">수업 목록</p>
-                            <img src="assets/icons/etc/close_grey.svg" (click)="setReserveLessonModalOff()">
+                            <img src="assets/icons/etc/close_grey.svg" (click)="setReserveLessonModalOff()" />
                         </div>
-                        
+
                         <div
                             class="card-container thin-scroll-y h-display-off"
                             [class.h-display-on]="isReserveLessonExist"
                         >
-                            
                             <div
                                 class="lesson-guide-div"
-                                *ngIf="!selectedMembership.membershipData && selectedMembership.isLoading == 'idle';else linkable_classes_exist"
+                                *ngIf="
+                                    !selectedMembership.membershipData && selectedMembership.isLoading == 'idle';
+                                    else linkable_classes_exist
+                                "
                             >
                                 <p class="rw-typo-subtext2-1">추가해야 할 수업이 목록에 없으신가요?</p>
                                 <p class="rw-typo-subtext2-1">수업 페이지에서 수업을 바로 만들어보세요!</p>
                                 <div class="go-lesson-button" (click)="goToLessonSection()">
                                     <p>수업 만들러 가기</p>
-                                    <img src="assets/icons/etc/short_right_arrow_grey.svg">
+                                    <img src="assets/icons/etc/short_right_arrow_grey.svg" />
                                 </div>
                             </div>
                             <ng-template #linkable_classes_exist>
                                 <ng-container
                                     #linkable_classes_pending
-                                    *ngIf="selectedMembership.membershipData && selectedMembership.isLoading == 'pending';else linkable_classes_done"
+                                    *ngIf="
+                                        selectedMembership.membershipData && selectedMembership.isLoading == 'pending';
+                                        else linkable_classes_done
+                                    "
                                 >
                                     <ngx-skeleton-loader
-                                        *ngFor="let _ of [1,2,3,4]"
+                                        *ngFor="let _ of [1, 2, 3, 4]"
                                         count="1"
                                         appearance="line"
-                                        [theme]="{width:'100%', height: '92px', 'border-radius':'5px'}"
+                                        [theme]="{ width: '100%', height: '92px', 'border-radius': '5px' }"
                                     ></ngx-skeleton-loader>
                                 </ng-container>
                                 <ng-template #linkable_classes_done>
@@ -341,41 +408,39 @@
                                             [centerId]="center.id"
                                             [categName]="item.category_name"
                                             [isIn]="'addReservableItemList'"
-                                            (onAddReservableCard)="false"
+                                            (onAddReservableCard)="(false)"
                                         ></gl-lesson-card>
                                     </div>
                                 </ng-template>
                             </ng-template>
                         </div>
-                        
+
                         <div
                             class="reservable-save-button"
-                            *ngIf="selectedMembership.membershipData && selectedMembership.isLoading =='done'"
+                            *ngIf="selectedMembership.membershipData && selectedMembership.isLoading == 'done'"
                             rw-button
                             rwButtonColor="var(--red)"
                             rwButtonFontColor="var(--white)"
-                            [rwButtonDisabled] = "(selectedMembership.willBeLinkedClassItemRecord | keyvalue)?.length < 1"
+                            [rwButtonDisabled]="(selectedMembership.willBeLinkedClassItemRecord | keyvalue)?.length < 1"
                             rwButtonHeight="50"
                             (click)="setReserveLessonItems()"
                         >
-                            {{(selectedMembership.willBeLinkedClassItemRecord | keyvalue)?.length ?? 0}}개 수업 저장하기
+                            {{ (selectedMembership.willBeLinkedClassItemRecord | keyvalue)?.length ?? 0 }}개 수업
+                            저장하기
                         </div>
-                        
-                        
-                        <div *ngIf=!isReserveLessonExist class="none-lesson">
-                            <img src="assets/icons/etc/empty_screen.svg">
+
+                        <div *ngIf="!isReserveLessonExist" class="none-lesson">
+                            <img src="assets/icons/etc/empty_screen.svg" />
                             <p class="rw-typo-subtext2-1">더 이상 추가할 수 있는 수업이 없어요.</p>
                             <p class="rw-typo-subtext2-1">수업 페이지에서 수업을 바로 만들어보세요!</p>
                             <div class="go-lesson-button" (click)="goToLessonSection()">
                                 <p>수업 만들러 가기</p>
-                                <img src="assets/icons/etc/short_right_arrow_grey.svg">
+                                <img src="assets/icons/etc/short_right_arrow_grey.svg" />
                             </div>
                         </div>
                     </div>
-                
                 </div>
             </ng-template>
-        
         </section>
     </main>
 </div>

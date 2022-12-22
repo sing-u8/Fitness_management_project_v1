@@ -351,12 +351,12 @@ export class MembershipComponent implements OnInit {
     onSelectedItemInputKeyup(event, inputType: SelectedMembershipType) {
         if (event.code == 'Enter' || _.includes(event.code, 'Arrow')) return
         if (inputType == 'price') {
-            const preValue: string = this.selMembershipInputObj[inputType].value.value
+            const preValue = String(this.selMembershipInputObj[inputType].value.value)
             this.selMembershipInputObj[inputType].value.setValue(
                 preValue.replace(/[^0-9]/gi, '').replace(/\B(?=(\d{3})+(?!\d))/g, ',')
             )
         } else {
-            const preValue: string = this.selMembershipInputObj[inputType].value.value
+            const preValue = String(this.selMembershipInputObj[inputType].value.value)
             this.selMembershipInputObj[inputType].value.setValue(preValue.replace(/[^0-9]/gi, ''))
         }
     }
