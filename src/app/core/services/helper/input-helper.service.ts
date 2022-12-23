@@ -20,6 +20,4 @@ export class InputHelperService {
             code == 9
         )
     }
-
-
 }

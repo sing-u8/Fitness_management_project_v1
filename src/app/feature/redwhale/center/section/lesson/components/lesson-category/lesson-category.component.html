@@ -85,7 +85,7 @@
         >
             <input
                 rw-autoFocus
-                (rwClickOutside) = "addCategItem( newLessonForm.value )"
+                (blur) = "addCategItem( newLessonForm.value )"
                 (keyup.enter) = "addCategItem( newLessonForm.value )"
                 [formControl] = newLessonForm
                 class="rw-input add-item-input"
