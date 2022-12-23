@@ -144,7 +144,13 @@ export const finishRemoveCurUserProfile = createAction(
 
 export const startRegisterCurUserProfile = createAction(
     `[${FeatureKey}] Start Register Current User Profile`,
-    props<{ userId: string; profile: FileList; reqBody: CreateFileRequestBody; callback?: () => void }>()
+    props<{
+        userId: string
+        profile: FileList
+        reqBody: CreateFileRequestBody
+        centerUser: CenterUser
+        callback?: (cu: CenterUser) => void
+    }>()
 )
 export const finishRegisterCurUserProfile = createAction(
     `[${FeatureKey}] Finish Register Current User Profile`,
@@ -215,7 +221,6 @@ export const resetMainDashboardSstate = createAction(`[${FeatureKey}] Reset Main
 export const resetDrawerDashboardSstate = createAction(`[${FeatureKey}] Reset Drawer Dashboard All State`)
 export const error = createAction(`[${FeatureKey}] Dashboard State Error`, props<{ error: string }>())
 
-
 export const setUserInCenter = createAction(
     `[${FeatureKey}] Finish Set User In Center`,
     props<{ centerUser: CenterUser }>()
@@ -281,7 +286,13 @@ export const finishRemoveDrawerCurUserProfile = createAction(
 
 export const startRegisterDrawerCurUserProfile = createAction(
     `[${FeatureKey}] Start Register Drawer Current User Profile`,
-    props<{ userId: string; profile: FileList; reqBody: CreateFileRequestBody; callback?: () => void }>()
+    props<{
+        userId: string
+        profile: FileList
+        reqBody: CreateFileRequestBody
+        centerUser: CenterUser
+        callback?: (cu: CenterUser) => void
+    }>()
 )
 export const finishRegisterDrawerCurUserProfile = createAction(
     `[${FeatureKey}] Finish Register Drawer Current User Profile`,

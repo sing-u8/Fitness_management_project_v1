@@ -308,6 +308,13 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
                     centerId: this.center.id,
                     reqBody: { memo: memoValue },
                     userId: this.curUserData.user.id,
+                    callback: () => {
+                        const _centerUser = {
+                            ..._.cloneDeep(this.curUserData.user),
+                            memo: memoValue,
+                        }
+                        this.storageService.updateCenterUser(_centerUser)
+                    },
                 })
             )
         }
@@ -335,6 +342,8 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
                         const userCopy = _.cloneDeep(this.curUserData.user)
                         userCopy.name = changedName
                         this.scheduleHelperService.startSynchronizeInstructorList(this.center.id, userCopy)
+
+                        this.storageService.updateCenterUser(userCopy)
                     },
                 })
             )
@@ -360,6 +369,12 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
                     this.nxStore.dispatch(showToast({ text: `회원번호 변경이 완료되었습니다.` }))
                     this.nxStore.dispatch(CenterCommonActions.startGetMembers({ centerId: this.center.id }))
                     this.nxStore.dispatch(CenterCommonActions.startGetInstructors({ centerId: this.center.id }))
+
+                    const _centerUser = {
+                        ..._.cloneDeep(this.curUserData.user),
+                        membership_number: membershipNumber,
+                    }
+                    this.storageService.updateCenterUser(_centerUser)
                 },
             })
         )
@@ -381,6 +396,12 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
         this.nxStore.dispatch(CenterCommonActions.startGetMembers({ centerId: this.center.id }))
         this.nxStore.dispatch(CenterCommonActions.startGetInstructors({ centerId: this.center.id }))
         this.toggleShowChangeUserEmailModal()
+
+        const _centerUser = {
+            ..._.cloneDeep(this.curUserData.user),
+            ...res.reqBody,
+        }
+        this.storageService.updateCenterUser(_centerUser)
     }
 
     public doShowChangeUserPhoneNumberModal = false
@@ -399,6 +420,12 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
         this.nxStore.dispatch(CenterCommonActions.startGetMembers({ centerId: this.center.id }))
         this.nxStore.dispatch(CenterCommonActions.startGetInstructors({ centerId: this.center.id }))
         this.toggleShowChangeUserPhoneNumberModal()
+
+        const _centerUser = {
+            ..._.cloneDeep(this.curUserData.user),
+            ...res.reqBody,
+        }
+        this.storageService.updateCenterUser(_centerUser)
     }
 
     public doShowChangeUserBirthDateModal = false
@@ -417,6 +444,12 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
         this.nxStore.dispatch(CenterCommonActions.startGetMembers({ centerId: this.center.id }))
         this.nxStore.dispatch(CenterCommonActions.startGetInstructors({ centerId: this.center.id }))
         this.toggleShowChangeUserBirthDateModal()
+
+        const _centerUser = {
+            ..._.cloneDeep(this.curUserData.user),
+            ...res.reqBody,
+        }
+        this.storageService.updateCenterUser(_centerUser)
     }
 
     // update user profile funcs and vars
@@ -457,13 +490,14 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
                 this.nxStore.dispatch(
                     DashboardActions.startRegisterCurUserProfile({
                         userId: this.curUserData.user.id,
+                        centerUser: this.curUserData.user,
                         reqBody: {
                             type_code: 'file_type_center_user_picture',
                             center_id: this.center.id,
                             center_user_id: this.curUserData.user.id,
                         },
                         profile: files,
-                        callback: () => {
+                        callback: (cu: CenterUser) => {
                             this.nxStore.dispatch(
                                 showToast({
                                     text: `${this.curUserData.user.name}님의 프로필 사진이 변경되었습니다.`,
@@ -471,6 +505,7 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
                             )
                             this.nxStore.dispatch(CenterCommonActions.startGetMembers({ centerId: this.center.id }))
                             this.nxStore.dispatch(CenterCommonActions.startGetInstructors({ centerId: this.center.id }))
+                            this.storageService.updateCenterUser(cu)
                         },
                     })
                 )
@@ -479,13 +514,14 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
             this.nxStore.dispatch(
                 DashboardActions.startRegisterCurUserProfile({
                     userId: this.curUserData.user.id,
+                    centerUser: this.curUserData.user,
                     reqBody: {
                         type_code: 'file_type_center_user_picture',
                         center_id: this.center.id,
                         center_user_id: this.curUserData.user.id,
                     },
                     profile: files,
-                    callback: () => {
+                    callback: (cu: CenterUser) => {
                         this.nxStore.dispatch(
                             showToast({
                                 text: `${this.curUserData.user.name}님의 프로필 사진이 변경되었습니다.`,
@@ -493,6 +529,7 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
                         )
                         this.nxStore.dispatch(CenterCommonActions.startGetMembers({ centerId: this.center.id }))
                         this.nxStore.dispatch(CenterCommonActions.startGetInstructors({ centerId: this.center.id }))
+                        this.storageService.updateCenterUser(cu)
                     },
                 })
             )
@@ -640,6 +677,12 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
                             this.curUserData.user,
                             this.curUserListSelect.key
                         )
+
+                        const _centerUser = {
+                            ..._.cloneDeep(this.curUserData.user),
+                            role_code: roleKey,
+                        }
+                        this.storageService.updateCenterUser(_centerUser)
                     },
                 })
             )

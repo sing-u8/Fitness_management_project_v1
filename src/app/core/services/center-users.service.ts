@@ -126,8 +126,8 @@ export interface CreateUserRequestBody {
     birth_date?: string
     email?: string
     phone_number: string
-    color?:string
-    memo?:string
+    color?: string
+    memo?: string
 }
 
 export interface UpdateUserRequestBody {
@@ -135,9 +135,9 @@ export interface UpdateUserRequestBody {
     membership_number?: string
     name?: string
     sex?: string
-    birth_date?:string
+    birth_date?: string
     email?: string
-    phone_number?:string
+    phone_number?: string
     color?: string
     memo?: string
 }
