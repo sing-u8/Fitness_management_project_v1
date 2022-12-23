@@ -5,6 +5,7 @@ import { ControlValueAccessor } from '@angular/forms'
 import { ChatRoom } from '@schemas/chat-room'
 import { User } from '@schemas/user'
 import { Loading } from '@schemas/store/loading'
+import { CenterUser } from "@schemas/center-user";
 
 @Component({
     selector: 'dw-chatting-room-select',
@@ -14,7 +15,7 @@ import { Loading } from '@schemas/store/loading'
 export class DwChattingRoomSelectComponent implements AfterViewInit, ControlValueAccessor {
     @Input() userRoomList: Array<ChatRoom>
     @Input() selectedRoom: ChatRoom
-    @Input() user: User
+    @Input() centerUser: CenterUser
     @Input() disabled: boolean
     @Input() width: string
     @Input() isLoading: Loading

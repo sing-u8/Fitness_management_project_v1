@@ -41,7 +41,7 @@
                     <rw-chatting-room-card
                         *ngFor="let room of chatRoomList$ | async; let i = index"
                         [isLoading]="(mainIsJoinRoomLoading$ | async)"
-                        [curUser]="user"
+                        [curUser]="centerUser"
                         [room]="room"
                         [selectedRoom]="(curChatRoom$ | async)"
                         (onCardClick)="joinRoom($event)"
@@ -171,7 +171,7 @@
                         *ngIf="(curChatRoom$ | async)"
                         [isSideBar]="false"
                         [selectedRoom]="(curChatRoom$ | async)"
-                        [user]="user"
+                        [centerUser]="centerUser"
                         [msgList]="(chatRoomMsgs$ | async)"
                     >
                     </rw-chat-intro-message>

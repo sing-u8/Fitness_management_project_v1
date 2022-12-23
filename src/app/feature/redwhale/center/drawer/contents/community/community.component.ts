@@ -47,6 +47,7 @@ import * as CommunityActions from '@centerStore/actions/sec.community.actions'
 export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
     public chatInput: FormControl
     public user: User
+    public centerUser: CenterUser
     public center: Center
 
     // ngrx vars
@@ -87,6 +88,7 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
 
         this.center = this.storageService.getCenter()
         this.user = this.storageService.getUser()
+        this.centerUser = this.storageService.getCenterUser()
 
         this.isLoading$.pipe(takeUntil(this.unsubscribe$)).subscribe((isLoading) => {
             this.isLoading_ = isLoading

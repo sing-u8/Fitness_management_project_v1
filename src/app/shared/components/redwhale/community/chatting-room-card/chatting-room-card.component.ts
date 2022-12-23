@@ -8,6 +8,7 @@ import { Loading } from '@schemas/store/loading'
 import { StorageService } from '@services/storage.service'
 
 import _ from 'lodash'
+import { CenterUser } from '@schemas/center-user'
 
 @Component({
     selector: 'rw-chatting-room-card',
@@ -15,7 +16,7 @@ import _ from 'lodash'
     styleUrls: ['./chatting-room-card.component.scss'],
 })
 export class ChattingRoomCardComponent implements OnInit, AfterViewInit, OnChanges {
-    @Input() curUser: User
+    @Input() curUser: CenterUser
     @Input() room: ChatRoom
     @Input() selectedRoom: ChatRoom
     @Input() isLoading: Loading
@@ -34,8 +35,7 @@ export class ChattingRoomCardComponent implements OnInit, AfterViewInit, OnChang
     ngOnInit(): void {
         this.initUserListInScreen()
     }
-    ngAfterViewInit(): void {
-    }
+    ngAfterViewInit(): void {}
     ngOnChanges(): void {}
 
     initUserListInScreen() {

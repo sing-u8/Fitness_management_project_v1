@@ -25,7 +25,7 @@
         <div class="l-chat-room-card" *ngFor="let room of userRoomList; let i = index">
             <rw-chatting-room-card
                 [isLoading]="isLoading"
-                [curUser]="user"
+                [curUser]="centerUser"
                 [room]="room"
                 [selectedRoom]="selectedRoom"
                 (onCardClick)="roomClick($event)"

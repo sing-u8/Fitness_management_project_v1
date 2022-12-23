@@ -589,7 +589,6 @@ export const communityReducer = createImmerReducer(
                 (v) => v.id != ws_data.info.chat_room_user_id
             )
         }
-
         return state
     }),
 

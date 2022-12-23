@@ -3,6 +3,7 @@ import { Component, OnInit, Input, OnChanges } from '@angular/core'
 import { ChatRoom } from '@schemas/chat-room'
 import { ChatRoomMessage } from '@schemas/chat-room-message'
 import { User } from '@schemas/user'
+import { CenterUser } from "@schemas/center-user";
 
 @Component({
     selector: 'rw-chat-intro-message',
@@ -14,7 +15,7 @@ export class ChatIntroMessageComponent implements OnInit, OnChanges {
     @Input() selectedRoom: ChatRoom
     @Input() msgList: Array<ChatRoomMessage>
     @Input() isTempRoom: boolean
-    @Input() user: User
+    @Input() centerUser: CenterUser
 
     constructor() {}
 
@@ -29,12 +30,12 @@ export class ChatIntroMessageComponent implements OnInit, OnChanges {
     }
 
     updateIsNewRoom() {
-        this.isNewRoom = this.msgList.length == 0 ? true : false
+        this.isNewRoom = this.msgList.length == 0
     }
 
     initDmChatRoomName() {
         if (this.selectedRoom.chat_room_users.length == 1) {
-            this.dmChatRoomName = this.selectedRoom.chat_room_users.find((v) => v.id != this.user.id).name
+            this.dmChatRoomName = this.selectedRoom.chat_room_users.find((v) => v.id != this.centerUser.id).name
         }
     }
     // || (this.msgList.length == 1 && this.msgList[0].type == 'date')
