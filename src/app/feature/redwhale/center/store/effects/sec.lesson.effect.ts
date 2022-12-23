@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core'
 import { createEffect, Actions, ofType, concatLatestFrom } from '@ngrx/effects'
 import { Store } from '@ngrx/store'
-import { of, forkJoin, iif, debounce } from 'rxjs'
+import { of, forkJoin, iif } from 'rxjs'
 import { catchError, switchMap, mergeMap, map, filter, tap, debounceTime } from 'rxjs/operators'
 
 import * as LessonActions from '../actions/sec.lesson.actions'
@@ -13,8 +13,6 @@ import {
 } from '../reducers/sec.lesson.reducer'
 import * as LessonSelector from '../selectors/sec.lesson.selector'
 import * as MembershipActions from '../actions/sec.membership.actions'
-
-import { showToast } from '@appStore/actions/toast.action'
 
 import { CenterLessonService } from '@services/center-lesson.service'
 import { CenterMembershipService } from '@services/center-membership.service'
@@ -63,12 +61,16 @@ export class LessonEffect {
     public addLessonCateg = createEffect(() =>
         this.actions$.pipe(
             ofType(LessonActions.startAddLessonCateg),
-            switchMap(({ centerId, categName }) =>
-                this.centerLessonApi.createCategory(centerId, { name: categName }).pipe(
-                    map((categ) => LessonActions.FinishAddLessonCateg({ lessonCateg: categ })),
-                    catchError((err: string) => of(LessonActions.error({ error: err })))
-                )
-            )
+            concatLatestFrom(() => [this.store.select(LessonSelector.LessonCategEntities)]),
+            switchMap(([{ centerId, categName }, lcEn]) => {
+                const categLength = _.values(lcEn).length
+                return this.centerLessonApi
+                    .createCategory(centerId, { name: categName, sequence_number: categLength + 1 })
+                    .pipe(
+                        map((categ) => LessonActions.FinishAddLessonCateg({ lessonCateg: categ })),
+                        catchError((err: string) => of(LessonActions.error({ error: err })))
+                    )
+            })
         )
     )
 

@@ -16,6 +16,7 @@ import { CenterLessonService } from '@services/center-lesson.service'
 import _ from 'lodash'
 
 import { MembershipItem } from '@schemas/membership-item'
+import * as LessonSelector from '@centerStore/selectors/sec.lesson.selector'
 
 @Injectable()
 export class MembershipEffect {
@@ -55,12 +56,16 @@ export class MembershipEffect {
     public addMembershipCateg = createEffect(() =>
         this.actions$.pipe(
             ofType(MembershipActions.startAddMembershipCateg),
-            switchMap(({ centerId, categName }) =>
-                this.centerMembershipApi.createCategory(centerId, { name: categName }).pipe(
-                    map((categ) => MembershipActions.FinishAddMembershipCateg({ membershipCateg: categ })),
-                    catchError((err: string) => of(MembershipActions.error({ error: err })))
-                )
-            )
+            concatLatestFrom(() => [this.store.select(MembershipSelector.membershipCategEntities)]),
+            switchMap(([{ centerId, categName }, mcEn]) => {
+                const categLength = _.values(mcEn).length
+                return this.centerMembershipApi
+                    .createCategory(centerId, { name: categName, sequence_number: categLength + 1 })
+                    .pipe(
+                        map((categ) => MembershipActions.FinishAddMembershipCateg({ membershipCateg: categ })),
+                        catchError((err: string) => of(MembershipActions.error({ error: err })))
+                    )
+            })
         )
     )
 

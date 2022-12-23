@@ -308,6 +308,7 @@ export class CenterMembershipService {
 
 export interface CreateCategoryRequestBody {
     name: string
+    sequence_number: number
 }
 
 export interface UpdateCategoryRequestBody {
