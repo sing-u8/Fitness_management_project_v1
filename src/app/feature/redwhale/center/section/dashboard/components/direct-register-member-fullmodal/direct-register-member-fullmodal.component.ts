@@ -176,14 +176,18 @@ export class DirectRegisterMemberFullmodalComponent implements OnInit, OnChanges
 
     emailAsyncValidator(): AsyncValidatorFn {
         return (control: AbstractControl): Observable<ValidationErrors | null> => {
-            return this.authService.checkDuplicateMail({ email: control.value }).pipe(
-                map((v) => {
-                    return null
-                }),
-                catchError((e) => {
-                    return e.code == 'FUNCTION_AUTH_005' ? of({ isExisted: true }) : of({ isNonEmailForm: true })
-                })
-            )
+            if (_.isEmpty(control.value)) {
+                return of({ isNonEmailForm: true })
+            } else {
+                return this.authService.checkDuplicateMail({ email: control.value }).pipe(
+                    map((v) => {
+                        return null
+                    }),
+                    catchError((e) => {
+                        return e.code == 'FUNCTION_AUTH_005' ? of({ isExisted: true }) : of({ isNonEmailForm: true })
+                    })
+                )
+            }
 
             // 그냥 참고 사항
             // return control.valueChanges.pipe(
