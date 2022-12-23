@@ -28,16 +28,13 @@ export class ChattingRoomCardComponent implements OnInit, AfterViewInit, OnChang
     }
 
     public userList: ChatRoomUser[] = []
-    public chatRoomName = ''
 
     constructor(private storageService: StorageService) {}
 
     ngOnInit(): void {
         this.initUserListInScreen()
     }
-    ngAfterViewInit(): void {
-        this.limitChatRoomName()
-    }
+    ngAfterViewInit(): void {}
     ngOnChanges(): void {}
 
     initUserListInScreen() {
@@ -58,12 +55,12 @@ export class ChattingRoomCardComponent implements OnInit, AfterViewInit, OnChang
                 : this.room.chat_room_users.filter((v) => v.id != this.curUser.id).map((v) => v)
     }
 
-    limitChatRoomName() {
-        if (this.room.chat_room_users.length == 1) {
-            this.chatRoomName = _.filter(this.room.chat_room_users, (v) => v.id != this.curUser.id)[0].name
-        } else {
-            const userNames = _.split(this.room.name, ', ', 3)
-            this.chatRoomName = userNames.length > 2 ? `${userNames[0]}, ${userNames[1]}, ...` : this.room.name
-        }
-    }
+    // limitChatRoomName() {
+    //     if (this.room.chat_room_users.length == 1) {
+    //         this.chatRoomName = _.filter(this.room.chat_room_users, (v) => v.id != this.curUser.id)[0].name
+    //     } else {
+    //         const userNames = _.split(this.room.name, ', ', 3)
+    //         this.chatRoomName = userNames.length > 2 ? `${userNames[0]}, ${userNames[1]}, ...` : this.room.name
+    //     }
+    // }
 }

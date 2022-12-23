@@ -94,6 +94,7 @@ import { IsAfterPipe } from './pipes/isAfter.pipe'
 import { CallbackPipe } from './pipes/callback.pipe'
 import { IsTodayPipe } from './pipes/is-today.pipe'
 import { FilterZeroPaymentPipe } from './pipes/filter-zero-payment.pipe'
+import { NameEllipsisPipe } from './pipes/name-ellipsis.pipe'
 
 // Dragula
 // import { DragulaModule } from 'ng2-dragula'
@@ -114,7 +115,8 @@ import { DragulaModule } from 'ng2-dragula'
 // // ngx libraries
 import { NgxGaugeModule } from 'ngx-gauge'
 import { NgxSpinnerModule } from 'ngx-spinner'
-import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader'
+import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
+
 
 // import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader'
 
@@ -218,6 +220,7 @@ FullCalendarModule.registerPlugins([
         IsTodayPipe,
         ContenteditableDirective,
         FilterZeroPaymentPipe,
+        NameEllipsisPipe,
     ],
     imports: [
         CommonModule,
@@ -317,6 +320,7 @@ FullCalendarModule.registerPlugins([
         CallbackPipe,
         IsTodayPipe,
         FilterZeroPaymentPipe,
+        NameEllipsisPipe,
         // FullCalendar
         FullCalendarModule,
         // Angular-Gridstar2
