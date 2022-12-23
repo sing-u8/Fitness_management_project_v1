@@ -229,7 +229,7 @@ export class CommunityEffect {
                     ? this.store.select(CommunitySelector.mainCurChatRoom)
                     : this.store.select(CommunitySelector.drawerCurChatRoom)
             ),
-            switchMap(([{ centerId, reqBody, spot }, curChatRoom]) =>
+            mergeMap(([{ centerId, reqBody, spot }, curChatRoom]) =>
                 this.centerChatRoomApi.sendMeesageToChatRoom(centerId, curChatRoom.id, reqBody).pipe(
                     switchMap((chatRoomMessage) => {
                         return [CommunityActions.finishSendMessage({ spot, chatRoomMessage })]
@@ -248,7 +248,7 @@ export class CommunityEffect {
                     ? this.store.select(CommunitySelector.mainCurChatRoom)
                     : this.store.select(CommunitySelector.drawerCurChatRoom)
             ),
-            switchMap(([{ centerId, text, fileList, spot, user }, curChatRoom]) =>
+            mergeMap(([{ centerId, text, fileList, spot, user }, curChatRoom]) =>
                 this.commonCommunityService.createChatFilesWithReport(fileList, centerId, curChatRoom.id).pipe(
                     map((event: HttpEvent<any>) => ({
                         event,
@@ -382,7 +382,7 @@ export class CommunityEffect {
     public startSendMessageToTempRoom$ = createEffect(() =>
         this.actions$.pipe(
             ofType(CommunityActions.startSendMessageToTempRoom),
-            switchMap(({ centerId, reqBody, spot }) =>
+            mergeMap(({ centerId, reqBody, spot }) =>
                 this.centerChatRoomApi.createChatRoom(centerId, reqBody.createRoom).pipe(
                     switchMap((chatRoom) =>
                         forkJoin([
@@ -410,7 +410,7 @@ export class CommunityEffect {
     public startSendMessageWithFileToTempRoom$ = createEffect(() =>
         this.actions$.pipe(
             ofType(CommunityActions.startSendMessageWithFileToTempRoom),
-            switchMap(({ centerId, text, fileList, user_ids, spot, user }) =>
+            mergeMap(({ centerId, text, fileList, user_ids, spot, user }) =>
                 this.centerChatRoomApi
                     .createChatRoom(centerId, { type_code: 'chat_room_type_general', center_user_ids: user_ids })
                     .pipe(
