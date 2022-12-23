@@ -32,7 +32,7 @@ export class HttpInterceptorService implements HttpInterceptor {
                         return this.handle401Error(req, next)
                     }
                     console.log('interceptor err : ', err)
-                    return throwError(() => new Error(err.error.message))
+                    return throwError(() => err)
                 })
             )
         } else {
