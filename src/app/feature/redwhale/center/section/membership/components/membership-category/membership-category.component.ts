@@ -76,7 +76,7 @@ export class MembershipCategoryComponent implements OnInit, AfterViewInit {
         this.categNameForm.setValue(this.categ.name)
 
         // init input variable
-        this.items = this.categ.items
+        this.items = _.sortBy(this.categ.items, (item) => item.sequence_number)
         this.isAddMembershipInputOn = this.categ.initialInputOn
     }
     ngAfterViewInit(): void {}

@@ -77,7 +77,7 @@ export class LessonCategoryComponent implements OnInit, AfterViewInit, OnDestroy
         this.categNameForm.setValue(this.categ.name)
 
         // init input variable
-        this.items = this.categ.items
+        this.items = _.sortBy(this.categ.items, (item) => item.sequence_number)
         this.isCategOpen = this.categ.isCategOpen
         this.isAddLessonInputOn = this.categ.initialInputOn
     }
