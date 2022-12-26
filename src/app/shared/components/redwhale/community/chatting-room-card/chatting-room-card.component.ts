@@ -33,6 +33,8 @@ export class ChattingRoomCardComponent implements OnInit, AfterViewInit, OnChang
     constructor(private storageService: StorageService) {}
 
     ngOnInit(): void {
+        this.curUser = this.storageService.getCenterUser()
+        console.log('ChattingRoomCardComponent -- ', this.curUser, this.room)
         this.initUserListInScreen()
     }
     ngAfterViewInit(): void {}
