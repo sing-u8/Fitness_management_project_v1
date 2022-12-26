@@ -49,8 +49,8 @@ export class DashboardEffect {
                             user: v,
                             holdSelected: false,
                         }))
-                        if (!_.isEmpty(cb) && memberlist.length > 0) {
-                            cb(memberlist[0])
+                        if (memberlist.length > 0) {
+                            cb ? cb(memberlist[0]) : null
                         }
                         return DashboardActions.finishLoadMemberList({
                             categ_type: 'member',
@@ -338,10 +338,12 @@ export class DashboardEffect {
     public registerUserProfile = createEffect(() =>
         this.actions$.pipe(
             ofType(DashboardActions.startRegisterCurUserProfile),
-            switchMap(({ reqBody, profile, userId, callback }) =>
+            switchMap(({ reqBody, profile, userId, callback, centerUser }) =>
                 this.fileApi.createFile(reqBody, profile).pipe(
                     switchMap((profile) => {
-                        callback ? callback() : null
+                        const _centerUser = _.cloneDeep(centerUser)
+                        _centerUser.picture = profile[0].url
+                        callback ? callback(_centerUser) : null
                         return [
                             DashboardActions.finishRegisterCurUserProfile({
                                 userId: userId,
