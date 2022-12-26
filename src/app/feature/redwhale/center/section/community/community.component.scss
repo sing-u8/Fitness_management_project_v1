@@ -232,27 +232,29 @@
                 flex-direction: column;
 
                 .chatting-screen-content {
-                    height: calc(100% - 110px);
+                    height: calc(100% - 100px);
                     width: 100%;
                     position: relative;
                     display: flex;
                     flex-direction: column-reverse;
                     justify-content: flex-start;
+                    padding-bottom: 30px;
+                    box-sizing: content-box;
                 }
 
                 .chatting-input-container {
                     display: flex;
                     width: calc(100% - 30px);
                     min-height: 70px;
-                    margin: 30px 15px 15px;
-                    padding: 10px;
+                    margin: 0 15px 15px;
+                    padding: 10px 0 10px 10px;
                     background-color: var(--white);
                     border-radius: 5px;
                     position: relative;
 
                     &.isFocused {
-                        margin: 30px 15px 15px;
-                        padding: 9px;
+                        margin: 0 15px 15px;
+                        padding: 9px 0 9px 9px;
                         border: 1px solid var(--lightgrey);
                         .send-button {
                             bottom: 9px !important;
@@ -276,7 +278,7 @@
                     }
 
                     .input-box {
-                        width: calc(100% - 144px);
+                        width: calc(100% - 40px);
                         position: relative;
                         margin: 4px 0 0 14px;
                         display: flex;
@@ -289,6 +291,7 @@
                             outline: none;
                             border: none;
                             min-height: 30px !important;
+                            padding-right: 100px;
                             &::placeholder {
                                 font-weight: 400 !important;
                                 color: var(--grey) !important;
