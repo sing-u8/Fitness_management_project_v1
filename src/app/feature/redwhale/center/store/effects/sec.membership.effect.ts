@@ -331,7 +331,12 @@ export class MembershipEffect {
                         curSelectedMembership.membershipData.id,
                         unlinkClass.id
                     )
-                    .pipe(switchMap(() => [LessonActions.startUpsertState()]))
+                    .pipe(
+                        switchMap(() => [
+                            LessonActions.startUpsertState(),
+                            showToast({ text: '예약 가능한 수업 1개가 삭제되었습니다.' }),
+                        ])
+                    )
             )
         )
     )

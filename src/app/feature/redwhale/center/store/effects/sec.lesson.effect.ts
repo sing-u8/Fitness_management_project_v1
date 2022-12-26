@@ -21,6 +21,7 @@ import { CenterUsersService } from '@services/center-users.service'
 import _ from 'lodash'
 
 import { ClassItem } from '@schemas/class-item'
+import { showToast } from '@appStore/actions/toast.action'
 
 @Injectable()
 export class LessonEffect {
@@ -367,7 +368,12 @@ export class LessonEffect {
                         curSelecteLesson.lessonData.id,
                         unlinkMembership.id
                     )
-                    .pipe(switchMap(() => [MembershipActions.startUpsertState()]))
+                    .pipe(
+                        switchMap(() => [
+                            MembershipActions.startUpsertState(),
+                            showToast({ text: '예약 가능한 회원권 1개가 삭제되었습니다.' }),
+                        ])
+                    )
             )
         )
     )
