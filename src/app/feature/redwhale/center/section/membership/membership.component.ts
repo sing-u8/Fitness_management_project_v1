@@ -228,7 +228,7 @@ export class MembershipComponent implements OnInit {
 
     onAddCategClick(event) {
         this.addCategOn()
-        event.stopPropagation()
+        // event.stopPropagation()
     }
     addCategOff() {
         this.isAddCategOn = false

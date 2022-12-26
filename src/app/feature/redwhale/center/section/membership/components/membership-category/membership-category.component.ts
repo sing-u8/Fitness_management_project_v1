@@ -87,7 +87,7 @@ export class MembershipCategoryComponent implements OnInit, AfterViewInit {
 
     // flag methods
     setDropdonwOpen(event?: Event) {
-        this.isDropdownOpen = true
+        this.isDropdownOpen = !this.isDropdownOpen
         event ? event.stopPropagation() : null
     }
     setDropdonwClose() {
@@ -116,7 +116,7 @@ export class MembershipCategoryComponent implements OnInit, AfterViewInit {
 
     setAddMembershipItemOn(event: Event) {
         this.isAddMembershipInputOn = true
-        event.stopPropagation()
+        // event.stopPropagation()
     }
     setAddMembershipItemOff() {
         this.isAddMembershipInputOn = false
@@ -126,7 +126,7 @@ export class MembershipCategoryComponent implements OnInit, AfterViewInit {
     onChangeName(event: Event) {
         this.setDropdonwClose()
         this.setCategInputOpen()
-        event.stopPropagation()
+        // event.stopPropagation()
     }
 
     // categ name change method

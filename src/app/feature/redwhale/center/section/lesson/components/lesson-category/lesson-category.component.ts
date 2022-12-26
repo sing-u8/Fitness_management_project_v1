@@ -89,7 +89,7 @@ export class LessonCategoryComponent implements OnInit, AfterViewInit, OnDestroy
 
     // flag methods
     setDropdonwOpen(event?: Event) {
-        this.isDropdownOpen = true
+        this.isDropdownOpen = !this.isDropdownOpen
         event ? event.stopPropagation() : null
     }
     setDropdonwClose() {
@@ -118,7 +118,7 @@ export class LessonCategoryComponent implements OnInit, AfterViewInit, OnDestroy
 
     setAddLessonItemOn(event: Event) {
         this.isAddLessonInputOn = true
-        event.stopPropagation()
+        // event.stopPropagation()
     }
     setAddLessonItemOff() {
         this.isAddLessonInputOn = false
@@ -128,7 +128,7 @@ export class LessonCategoryComponent implements OnInit, AfterViewInit, OnDestroy
     onChangeName(event: Event) {
         this.setDropdonwClose()
         this.setCategInputOpen()
-        event.stopPropagation()
+        // event.stopPropagation()
     }
 
     // categ name change method

@@ -11,7 +11,7 @@
             <input
                 *ngIf="isChangeNameOn"
                 rw-autoFocus
-                (rwClickOutside) = "changeCategName()"
+                (blur) = "changeCategName()"
                 (keyup.enter) = "changeCategName()"
                 class="rw-input"
                 [formControl] = "categNameForm"

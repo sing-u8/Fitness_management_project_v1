@@ -11,7 +11,7 @@
             <input
                 *ngIf="isChangeNameOn"
                 rw-autoFocus
-                (rwClickOutside) = "changeCategName()"
+                (blur) = "changeCategName()"
                 (keyup.enter) = "changeCategName()"
                 class="rw-input"
                 [formControl]="categNameForm"
@@ -23,8 +23,10 @@
         <div class="header-right">
             <img (click)="setDropdonwOpen($event)" src="assets/icons/etc/menu-vertical-grey.svg">
             <div
+                tabindex="0"
+                rw-autoFocus
                 class="dropdown"
-                (rwClickOutside) = "setDropdonwClose();"
+                (rwClickOutside)="setDropdonwClose();"
                 [style.visibility] = "isDropdownOpen ? 'visible' : 'hidden'"
             >
                 <div
@@ -84,7 +86,7 @@
         >
             <input
                 rw-autoFocus
-                (blur) = "addCategItem( newMembershipForm.value )"
+                (blur)="addCategItem( newMembershipForm.value )"
                 (keyup.enter) = "addCategItem( newMembershipForm.value )"
                 [formControl]="newMembershipForm"
                 class="rw-input add-item-input"

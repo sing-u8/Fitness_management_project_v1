@@ -47,8 +47,7 @@
             <!-- /< ----- add category button -->
             <ng-container>
                 <div
-                    #AddCategInputOpen
-                    *ngIf="!isAddCategOn; else AddCategInputOpen"
+                    *ngIf="!isAddCategOn"
                     (click)="onAddCategClick($event)"
                     class="add-category-button"
                     [class.add-category-button--top-margin]="(lessonCategEntities$ | async | keyvalue).length > 0"
@@ -57,24 +56,22 @@
                     카테고리 추가
                 </div>
 
-                <ng-template #AddCategInputOpen>
-                    <form
-                        *ngIf="isAddCategOn"
-                        class="l-add-category-input"
-                        [class.l-add-category-input--top-margin]="(lessonCategEntities$ | async | keyvalue).length > 0"
-                    >
-                        <input
-                            rw-autoFocus
-                            (blur)="addCategory()"
-                            (keyup.enter)="addCategory()"
-                            [formControl]="addCategForm"
-                            class="rw-input add-category-input"
-                            type="text"
-                            placeholder="카테고리명을 입력해주세요."
-                        />
-                        <img src="assets/icons/etc/add-category.svg" />
-                    </form>
-                </ng-template>
+                <form
+                    *ngIf="isAddCategOn"
+                    class="l-add-category-input"
+                    [class.l-add-category-input--top-margin]="(lessonCategEntities$ | async | keyvalue).length > 0"
+                >
+                    <input
+                        rw-autoFocus
+                        (blur)="addCategory()"
+                        (keyup.enter)="addCategory()"
+                        [formControl]="addCategForm"
+                        class="rw-input add-category-input"
+                        type="text"
+                        placeholder="카테고리명을 입력해주세요."
+                    />
+                    <img src="assets/icons/etc/add-category.svg" />
+                </form>
             </ng-container>
             <!--  add category button ---- >/ -->
         </section>
