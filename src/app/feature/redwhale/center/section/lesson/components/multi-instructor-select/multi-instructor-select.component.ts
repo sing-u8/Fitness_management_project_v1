@@ -121,14 +121,12 @@ export class MultiInstructorSelectComponent implements AfterViewInit, ControlVal
         if (this.value.length > 0) {
             if (!_value.checked) {
                 this.value = _.filter(this.value, (v) => v.value.id != _value.value.id)
-                // _.remove(this.value, (v) => v.value.id == _value.value.id)
             } else {
                 this.value = [...this.value, _value]
             }
         } else {
             this.value = [...this.value, _value]
         }
-
         this.setIsAllChecked()
         this.getSelectedValueSummary()
     }

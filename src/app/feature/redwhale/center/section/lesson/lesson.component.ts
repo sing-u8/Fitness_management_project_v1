@@ -175,8 +175,8 @@ export class LessonComponent implements OnInit, AfterViewInit, OnDestroy {
                         value: this.selectedLesson.lessonData.type_code,
                     }
                     this.lessonManagerSelectValue = {
-                        name: this.selectedLesson.lessonData.instructors[0].name,
-                        value: this.selectedLesson.lessonData.instructors[0],
+                        name: this.selectedLesson.lessonData.instructors[0]?.name ?? '',
+                        value: this.selectedLesson.lessonData.instructors[0] ?? undefined,
                     }
 
                     this.isReserveMembershipExist = this.selectedLesson.linkableMembershipItems.length > 0
@@ -339,7 +339,7 @@ export class LessonComponent implements OnInit, AfterViewInit, OnDestroy {
                         })),
                         ...instFilterList,
                     ],
-                    'name'
+                    (i) => i.name && i.value.id
                 )
             )
         }
