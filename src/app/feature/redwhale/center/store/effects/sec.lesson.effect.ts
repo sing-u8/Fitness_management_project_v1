@@ -131,7 +131,6 @@ export class LessonEffect {
                 this.centerLessonApi.createItem(centerId, categId, reqBody).pipe(
                     switchMap((newItem) => [
                         LessonActions.finishAddLessonToCateg({ categId: categId, newLessonData: newItem }),
-
                         LessonActions.startSetSelectedLesson({
                             selectedLesson: {
                                 centerId: centerId,
@@ -140,6 +139,7 @@ export class LessonEffect {
                                 lessonData: newItem,
                             },
                         }),
+                        MembershipActions.refreshSelectedMembership(),
                     ]),
                     catchError((err: string) => of(LessonActions.error({ error: err })))
                 )

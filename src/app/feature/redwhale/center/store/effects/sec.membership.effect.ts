@@ -138,6 +138,7 @@ export class MembershipEffect {
                                 membershipData: newItem,
                             },
                         }),
+                        LessonActions.refreshSelectedLesson(),
                     ]),
                     catchError((err: string) => of(MembershipActions.error({ error: err })))
                 )
