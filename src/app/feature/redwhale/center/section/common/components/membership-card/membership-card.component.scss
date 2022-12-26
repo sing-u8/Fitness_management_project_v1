@@ -10,7 +10,7 @@ p {
 .card-outer-container {
     cursor: pointer;
 
-    padding: 13px 14px 11px 14px;
+    padding: 15.5px 13px 14.5px 14px;
     min-height: 92px;
     // min-height: 30px;
     width: 100%;
@@ -20,7 +20,7 @@ p {
     align-items: flex-start;
 
     background-color: var(--white);
-    border: 1px solid var(--white);
+    border: 1px solid var(--border-color);
     border-radius: 5px;
 
     &.card-hover-in-category {
@@ -68,12 +68,12 @@ p {
     &.selected {
         border-color: var(--red) !important;
         border-width: 2px;
-        padding: 12px 13px 10px 13px;
+        padding: 14.5px 12px 13.5px 13px;
     }
     &.will-be-linked {
         border-color: var(--red) !important;
         border-width: 2px;
-        padding: 12px 13px 10px 13px;
+        padding: 14.5px 12px 13.5px 13px;
     }
 
     .card-inner-container {
@@ -83,7 +83,10 @@ p {
         position: relative;
         .card-desc-container {
             width: calc(100% - 46px);
-            margin-left: 10px;
+            margin-left: 12px;
+            .categ {
+                line-height: 17px !important;
+            }
             .card-title-container {
                 margin-top: 1px;
                 display: flex;
@@ -114,7 +117,7 @@ p {
         align-self: flex-end;
         text-overflow: ellipsis;
         overflow: hidden;
-        margin-top: 7px;
+        margin-top: 5px;
     }
     .icon {
         display: flex;

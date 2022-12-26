@@ -332,7 +332,7 @@ export const selectLessonAll = selectAll
 export const getLessonLength = (state: State) => {
     let lessonLength = 0
     state.ids.forEach((id) => {
-        lessonLength += state.entities[id].items.length
+        lessonLength += state.entities[id].item_count
     })
     return lessonLength
 }

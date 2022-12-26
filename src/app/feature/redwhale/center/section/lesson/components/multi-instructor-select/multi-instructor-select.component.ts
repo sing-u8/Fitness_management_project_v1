@@ -34,7 +34,6 @@ import _ from 'lodash'
 export class MultiInstructorSelectComponent implements AfterViewInit, ControlValueAccessor, OnChanges {
     @Input() items: MultiSelect
     @Input() disabled: boolean
-    @Input() width: string
     @Input() height: string
     @Input() height_type: 'small' | 'medium' = 'small'
     @Input() closeBgColor: string
@@ -58,7 +57,6 @@ export class MultiInstructorSelectComponent implements AfterViewInit, ControlVal
 
     constructor(private el: ElementRef, private renderer: Renderer2) {
         this.disabled = false
-        this.width = '130px'
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -72,13 +70,8 @@ export class MultiInstructorSelectComponent implements AfterViewInit, ControlVal
         // this.onChanged(this.items[0])
 
         // setting elements style
-        this.renderer.setStyle(this.selectedElement.nativeElement, 'width', this.width)
-        this.renderer.setStyle(this.itemsElement.nativeElement, 'width', this.width)
-
-        if (this.width) {
-            this.renderer.setStyle(this.selectedElement.nativeElement, 'width', `${this.width}px`)
-            this.renderer.setStyle(this.itemsElement.nativeElement, 'width', `${this.width}px`)
-        }
+        this.renderer.setStyle(this.selectedElement.nativeElement, 'width', `104px`)
+        this.renderer.setStyle(this.itemsElement.nativeElement, 'width', `104px`)
 
         if (this.closeBgColor) {
             this.renderer.setStyle(this.selectedElement.nativeElement, 'backgroundColor', `${this.closeBgColor}`)
@@ -115,6 +108,15 @@ export class MultiInstructorSelectComponent implements AfterViewInit, ControlVal
 
         this.onChanged(item)
         this.onSelectChange.emit({ selectedValue: this.items[idx], items: this.items })
+
+        const checkedItems = this.items.filter((v) => v.checked)
+        if (checkedItems.length > 1) {
+            this.renderer.setStyle(this.selectedElement.nativeElement, 'width', `145px`)
+            this.renderer.setStyle(this.itemsElement.nativeElement, 'width', `145px`)
+        } else {
+            this.renderer.setStyle(this.selectedElement.nativeElement, 'width', `104px`)
+            this.renderer.setStyle(this.itemsElement.nativeElement, 'width', `104px`)
+        }
     }
 
     onChange = (_value: MultiSelectValue) => {
@@ -127,6 +129,7 @@ export class MultiInstructorSelectComponent implements AfterViewInit, ControlVal
         } else {
             this.value = [...this.value, _value]
         }
+
         this.setIsAllChecked()
         this.getSelectedValueSummary()
     }

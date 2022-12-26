@@ -59,7 +59,7 @@ main {
     section.main__left {
         display: flex;
         flex-direction: column;
-        padding-right: 17px;
+        padding-right: 18px;
         position: relative;
         transition: max-width 0.2s ease-in;
         -moz-transition: max-width 0.2s ease-in;
@@ -136,7 +136,7 @@ main {
                 background-color: var(--lightgrey);
             }
             &--top-margin {
-                margin-top: 15px;
+                margin-top: 33px;
             }
         }
 
@@ -176,7 +176,7 @@ main {
         .divider {
             width: 100%;
             border-top: 1px solid var(--border-color);
-            margin: 16px 0 18px 0;
+            margin: 16px 0 22px 0;
         }
 
         .p__selected-membership--margin {
@@ -264,6 +264,7 @@ main {
                     border: 1px solid #f1f1f1;
                     border-radius: 4px;
                     img {
+                        margin-top: 2px;
                         width: 18px;
                         height: 20px;
                     }
@@ -278,6 +279,7 @@ main {
                 height: 44px;
                 position: relative;
                 .selected-membership-middle__item {
+                    display: flex;
                     width: 25%;
                     height: 100%;
                     &:not(:last-child) {
@@ -297,7 +299,7 @@ main {
                             }
                         }
                         & .edit-item-icon {
-                            margin-left: 2px;
+                            margin-left: 3px;
                             width: 21px;
                             height: 21px;
                             display: none;
@@ -343,13 +345,13 @@ main {
             &-bottom {
                 margin-top: 22px;
                 p {
-                    margin-bottom: 6px;
+                    margin-bottom: 7px;
                 }
                 textarea {
                     resize: none;
                     width: 100%;
                     height: 70px;
-                    padding: 15px 15px;
+                    padding: 12px 15px 12px;
                     outline: none;
                     border-radius: 5px;
                     border: 1px solid var(--border-color);
@@ -375,7 +377,7 @@ main {
                 position: relative;
                 overflow: hidden;
                 &--margin {
-                    margin-bottom: 10px;
+                    margin-bottom: 13px;
                 }
 
                 .l-lesson-item {
@@ -594,6 +596,7 @@ main {
                         width: 100%;
                         left: 0;
                         bottom: 0;
+                        border-radius: 0;
                     }
                 }
             }
@@ -603,7 +606,7 @@ main {
             -ms-flex: 0 0 66.5798611%;
             flex: 0 0 66.5798611%;
             max-width: 66.5798611%;
-            padding-left: 30px;
+            padding-left: 35px;
 
             .selected-membership-middle__item {
                 &:nth-child(n + 2) {

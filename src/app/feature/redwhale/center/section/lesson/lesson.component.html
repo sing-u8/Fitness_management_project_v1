@@ -2,7 +2,7 @@
     <header>
         <div class="header--left">
             <span class="header--left-margin rw-typo-headline1">수업</span>
-            <span class="header--left-desc rw-typo-subtext1">수업을 만들고, 예약 가능한 회원권을 추가해보세요.</span>
+            <span class="header--left-desc rw-typo-subtext1">수업을 분류해서 관리해보세요.</span>
         </div>
         <div></div>
 
@@ -165,7 +165,6 @@
                             </div>
                             <div class="selected-lesson-top__trainer-select--margin">
                                 <gl-multi-instructor-select
-                                    [width]="'145'"
                                     [items]="lessonInstructorList"
                                     [(ngModel)]="lessonInstructorSelectValue"
                                     (onSelectChange)="onLessonInstructorSelected($event)"

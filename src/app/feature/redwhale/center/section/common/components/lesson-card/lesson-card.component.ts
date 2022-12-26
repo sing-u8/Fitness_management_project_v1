@@ -130,9 +130,9 @@ export class LessonCardComponent implements OnInit, AfterViewInit, OnDestroy {
             this.cardInfo.color = this.memLessonItem.color
             this.cardInfo.name = this.memLessonItem.name
             this.cardInfo.trainer_name =
-                this.categItem.instructors.length == 0
+                this.memLessonItem.instructors.length == 0
                     ? '담당자 없음'
-                    : this.categItem.instructors.length == 1
+                    : this.memLessonItem.instructors.length == 1
                     ? insts[0].name
                     : insts[0].name + ` 외 ${insts.length - 1}명`
             this.cardInfo.type_name =
