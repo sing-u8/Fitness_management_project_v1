@@ -569,12 +569,12 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
     }
     resizeChatScreen() {
         if (this.fileList.length > 0) {
-            const screenPadMar = 188 + this.resizeHeight // 90px --> padding-t,b: 22px + input-bt: 50px + fileHeight: 85px + margin-top : 30px
+            const screenPadMar = 158 + this.resizeHeight // 90px --> padding-t,b: 22px + input-bt: 50px + fileHeight: 85px + margin-top : 30px
             const inputHeight = 157 + this.resizeHeight // 90px --> padding-t,b: 22px + input-bt: 50px + + fileHeight: 85px
             this.renderer.setStyle(this.chatting_screen.nativeElement, 'height', `calc(100% - ${screenPadMar}px)`)
             this.renderer.setStyle(this.chatting_input.nativeElement, 'height', `${inputHeight}px`)
         } else {
-            const screenPadMar = 103 + this.resizeHeight // 62px --> padding-t,b: 22px + input-bt: 50px + margin-top : 30px
+            const screenPadMar = 73 + this.resizeHeight // 62px --> padding-t,b: 22px + input-bt: 50px + margin-top : 30px
             const inputHeight = 72 + this.resizeHeight // 62px --> padding-t,b: 22px + input-bt: 50px
             this.renderer.setStyle(this.chatting_screen.nativeElement, 'height', `calc(100% - ${screenPadMar}px)`)
             this.renderer.setStyle(this.chatting_input.nativeElement, 'height', `${inputHeight}px`)

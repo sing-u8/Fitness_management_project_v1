@@ -147,8 +147,8 @@
             <div #chat_screen class="chatting-screen">
 
                 <div
-                    #chatting_screen
                     class="chatting-screen-content thin-scroll-y-overlay2"
+                    #chatting_screen
                     (scroll)="scrolled($event)"
                 >
                     <rw-chat-message
@@ -176,7 +176,6 @@
                     >
                     </rw-chat-intro-message>
                 </div>
-
                 <div #chatting_input class="chatting-input-container" [class.isFocused] = "isTextAreaFoucsed">
 
                     <div class="plus-box">
