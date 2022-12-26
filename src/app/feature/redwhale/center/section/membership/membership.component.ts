@@ -278,6 +278,7 @@ export class MembershipComponent implements OnInit {
     onTextClick(event: Event, inputType: SelectedMembershipType) {
         _.keys(this.selMembershipInputObj).find((key: SelectedMembershipType) => {
             if (this.selMembershipInputObj[key].isOn == true && key != inputType) {
+                this.updateMembershipItemInput(key)
                 this.selMembershipInputObj[key].isOn = false
                 return true
             }

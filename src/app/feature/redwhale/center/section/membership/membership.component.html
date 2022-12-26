@@ -227,7 +227,7 @@
                                         (keypress)="restrictToNumber($event)"
                                         (keyup)="onSelectedItemInputKeyup($event, btItem.value.property)"
                                         (keyup.enter)="updateMembershipItemInput(btItem.value.property)"
-                                        (blur)="updateMembershipItemInput(btItem.value.property)"
+                                        (rwClickOutside)="updateMembershipItemInput(btItem.value.property)"
                                     />
                                     <span
                                         class="rw-typo-bodytext0"
