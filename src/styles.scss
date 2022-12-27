@@ -374,15 +374,15 @@
     color: var(--font-color);
 
     &::placeholder {
-        font-weight: 400 !important;
+        font-weight: 500 !important;
         color: var(--grey) !important;
     }
     &::-webkit-input-placeholder{
-        font-weight: 400 !important;
+        font-weight: 500 !important;
         color: var(--grey) !important;
     }
     &:-ms-input-placeholder{
-        font-weight: 400 !important;
+        font-weight: 500 !important;
         color: var(--grey) !important;
     }
 
@@ -392,15 +392,15 @@
     }
 
     &:focus::placeholder{
-        font-weight: 400 !important;
+        font-weight: 500 !important;
         color: var(--grey) !important;
     }
     &:focus::-webkit-input-placeholder{
-        font-weight: 400 !important;
+        font-weight: 500 !important;
         color: var(--grey) !important;
     }
     &:focus:-ms-input-placeholder {
-        font-weight: 400 !important;
+        font-weight: 500 !important;
         color: var(--grey) !important;
     }
 
