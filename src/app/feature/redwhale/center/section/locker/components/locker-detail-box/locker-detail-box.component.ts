@@ -368,7 +368,7 @@ export class LockerDetailBoxComponent implements OnInit, OnChanges, OnDestroy {
                 curItemList: _.cloneDeep(this.curLockerItems),
             })
         )
-        this.nxStore.dispatch(showToast({ text: `[락커 ${this.lockerItem.name}]사용 불가 설정되었습니다.` }))
+        this.nxStore.dispatch(showToast({ text: `[락커 ${this.lockerItem.name}] 사용 불가 설정이 완료되었습니다.` }))
     }
     setLockerAvailable() {
         this.closeShowRestartLockerModal()
@@ -380,7 +380,7 @@ export class LockerDetailBoxComponent implements OnInit, OnChanges, OnDestroy {
                 curItemList: _.cloneDeep(this.curLockerItems),
             })
         )
-        this.nxStore.dispatch(showToast({ text: `[락커 ${this.lockerItem.name}]사용 불가 설정이 해제되었습니다.` }))
+        this.nxStore.dispatch(showToast({ text: `[락커 ${this.lockerItem.name}] 사용 불가 설정이 해제되었습니다.` }))
     }
 
     // locker status color method
