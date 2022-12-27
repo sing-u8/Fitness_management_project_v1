@@ -10,5 +10,7 @@
             <div class="circle"></div>
         </div>
     </div>
-    <div class="text rw-typo-bodytext1" *ngIf="text">{{ text }}</div>
+    <div class="text rw-typo-bodytext1" [style.color]="disabled ? disabledColor : 'var(--font-color)'" *ngIf="text">
+        {{ text }}
+    </div>
 </div>

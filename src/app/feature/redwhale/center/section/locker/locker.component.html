@@ -105,9 +105,10 @@
                     <p class="rw-typo-title1 ">락커</p>
                     <rw-switch
                         [text]="!isEditMode ? '변경모드 끄기' : '변경모드 켜기'"
+                        [disabledColor]="'var(--font-color)'"
                         [(ngModel)] = "isEditMode"
                         (change)="LockerGlobalMode == 'normal'&& onEditModeChange($event)"
-                        [disabled] = "LockerGlobalMode == 'moveLockerTicket' ? true : false"
+                        [disabled] = "LockerGlobalMode == 'moveLockerTicket'"
                     ></rw-switch>
                 </div>
 

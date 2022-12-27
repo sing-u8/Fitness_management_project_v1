@@ -16,6 +16,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
 export class SwitchComponent implements ControlValueAccessor {
     @Input() text: string
     @Input() disabled: boolean
+    @Input() disabledColor: string = 'var(--font-color)'
 
     @Output() change = new EventEmitter<boolean>()
 
