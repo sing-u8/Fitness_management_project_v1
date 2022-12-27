@@ -374,7 +374,7 @@ export class LockerEffect {
                                                 LockerActions.resetWillBeMovedLockerItem(),
                                                 LockerActions.setLockerGlobalMode({ lockerMode: 'normal' }),
                                                 showToast({
-                                                    text: `${curLockerItem.user_locker_center_user_name}님의 자리가 '[락커 ${movedLockerItem.name}]'으로 이동되었습니다.`,
+                                                    text: `${curLockerItem.user_locker_center_user_name}님의 자리가 [락커 ${movedLockerItem.name}]으로 이동되었습니다.`,
                                                 }),
                                             ]
                                         })
