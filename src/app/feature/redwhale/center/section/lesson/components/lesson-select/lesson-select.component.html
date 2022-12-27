@@ -1,6 +1,6 @@
 <div class="rw-select user-select-none" #selectElement>
     <div
-        class="selected rw-typo-bodytext0 d-flex justify-content-center align-items-center"
+        class="selected rw-typo-bodytext0 d-flex justify-content-between align-items-center"
         [class.open]="isOpen"
         [class.disabled]="disabled !== false"
         [class.height-small]="height_type == 'small'"
@@ -18,7 +18,7 @@
                 fontSize="10"
             ></rw-avatar>
         </div>
-        <span class="text flex-fill" [class.text--open]="isOpen">
+        <span #value_name_el class="text" [class.text--open]="isOpen">
             {{ value?.name }}
         </span>
         <span class="arrow-icon"></span>

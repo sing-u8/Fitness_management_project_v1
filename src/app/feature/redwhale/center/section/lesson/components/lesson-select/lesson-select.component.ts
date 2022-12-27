@@ -8,11 +8,13 @@ import {
     ViewChildren,
     QueryList,
     AfterViewInit,
+    AfterViewChecked,
     Output,
     EventEmitter,
 } from '@angular/core'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
-import {CenterUser} from "@schemas/center-user";
+import { CenterUser } from '@schemas/center-user'
+import _ from 'lodash'
 
 interface TrainerFilter {
     name: string
@@ -31,7 +33,7 @@ interface TrainerFilter {
         },
     ],
 })
-export class LessonSelectComponent implements AfterViewInit, ControlValueAccessor {
+export class LessonSelectComponent implements AfterViewInit, ControlValueAccessor, AfterViewChecked {
     @Input() items: Array<{ name: string; value: any; disabled?: boolean }>
     @Input() disabled: boolean
     @Input() width: string
@@ -42,18 +44,21 @@ export class LessonSelectComponent implements AfterViewInit, ControlValueAccesso
     @Output() onSelectChange = new EventEmitter<any>()
     @Output() onSelectChanges = new EventEmitter<{ prev: any; cur: any }>()
 
-    @ViewChild('selectElement') selectElement
-    @ViewChild('selectedElement') selectedElement
-    @ViewChild('itemsElement') itemsElement
+    @ViewChild('selectElement') selectElement: ElementRef
+    @ViewChild('selectedElement') selectedElement: ElementRef
+    @ViewChild('itemsElement') itemsElement: ElementRef
+    @ViewChild('value_name_el') value_name_el: ElementRef
 
     @ViewChildren('.item') itemElememnts: QueryList<any>
 
     value: TrainerFilter
     isOpen: boolean
 
+    public initItemsWidth = 0
+
     constructor(private el: ElementRef, private renderer: Renderer2) {
         this.disabled = false
-        this.width = '130px'
+        this.width = ''
     }
 
     ngAfterViewInit(): void {
@@ -64,13 +69,31 @@ export class LessonSelectComponent implements AfterViewInit, ControlValueAccesso
         this.renderer.setStyle(this.selectedElement.nativeElement, 'width', this.width)
         this.renderer.setStyle(this.itemsElement.nativeElement, 'width', this.width)
 
-        if (this.width) {
+        console.log(
+            'ngAfterViewInit in lesson select : ',
+            this.selectedElement.nativeElement,
+            this.selectedElement,
+            !_.isEmpty(this.width)
+        )
+
+        if (!_.isEmpty(this.width)) {
             this.renderer.setStyle(this.selectedElement.nativeElement, 'width', `${this.width}px`)
             this.renderer.setStyle(this.itemsElement.nativeElement, 'width', `${this.width}px`)
         }
+        this.initItemsWidth = this.itemsElement.nativeElement.clientWidth
 
         if (this.closeBgColor) {
             this.renderer.setStyle(this.selectedElement.nativeElement, 'backgroundColor', `${this.closeBgColor}`)
+        }
+    }
+    ngAfterViewChecked() {
+        if (_.isEmpty(this.width) && this.initItemsWidth != this.itemsElement.nativeElement.clientWidth) {
+            this.renderer.setStyle(
+                this.itemsElement.nativeElement,
+                'width',
+                `${this.selectedElement.nativeElement.clientWidth}px`
+            )
+            this.initItemsWidth = this.itemsElement.nativeElement.clientWidth
         }
     }
 
