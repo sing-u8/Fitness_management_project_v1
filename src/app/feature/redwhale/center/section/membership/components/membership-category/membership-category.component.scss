@@ -148,7 +148,6 @@
         }
         .add-item-container {
             position: relative;
-            margin-bottom: 10px;
             min-height: 50px;
             width: 100%;
             .add-item-input {
@@ -163,6 +162,12 @@
                 width: 21px;
                 height: 21px;
             }
+        }
+        .add-item--pending {
+            margin-top: 12px;
+        }
+        .add-item--pending2 {
+            margin-top: 0 !important;
         }
     }
 }

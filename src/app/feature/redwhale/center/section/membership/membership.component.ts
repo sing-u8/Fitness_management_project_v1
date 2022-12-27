@@ -9,7 +9,6 @@ import { StorageService } from '@services/storage.service'
 import { UpdateItemRequestBody } from '@services/center-membership.service'
 import { InputHelperService } from '@services/helper/input-helper.service'
 
-
 // scehmas
 import { Center } from '@schemas/center'
 import { Drawer } from '@schemas/store/app/drawer.interface'
@@ -95,7 +94,6 @@ export class MembershipComponent implements OnInit {
         private dragulaService: DragulaService,
         private fb: FormBuilder,
         private inputHelperService: InputHelperService
-
     ) {}
 
     ngOnInit(): void {
@@ -189,16 +187,14 @@ export class MembershipComponent implements OnInit {
                                 itemId: _item.id,
                                 requestBody: {
                                     target_category_id: _targetCategId,
-                                    target_item_sequence_number:
-                                        _targetModel.length -
-                                        _targetModel.findIndex(
-                                            (v) => v.id == _item.id && v.category_id == _item.category_id
-                                        ),
+                                    target_item_sequence_number: _targetModel.findIndex(
+                                        (v) => v.id == _item.id && v.category_id == _item.category_id
+                                    ),
                                 },
                             },
                             targetItems: _.map(_targetModel, (v, idx, vs) => ({
                                 ...v,
-                                sequence_number: vs.length - idx,
+                                sequence_number: idx,
                                 category_id: _targetCategId,
                             })),
                             targetItem: _item,
@@ -343,10 +339,10 @@ export class MembershipComponent implements OnInit {
     }
 
     kvOriginOrder = kvPipe.originalOrder
+    kvReverseOrder = kvPipe.reverseOrder
 
     restrictToNumber(event) {
         return this.inputHelperService.restrictToNumber(event)
-
     }
 
     onSelectedItemInputKeyup(event, inputType: SelectedMembershipType) {

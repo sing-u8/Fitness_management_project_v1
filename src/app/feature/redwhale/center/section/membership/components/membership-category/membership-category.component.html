@@ -50,7 +50,7 @@
                 *ngFor="let _ of [].constructor(categ.item_count)"
                 count="1"
                 appearance="line"
-                [theme]="{width: '100%', height: '92px', 'border-radius':'5px', margin: '0px'}"
+                [theme]="{width: '100%', height: '91px', 'border-radius':'5px', margin: '0px'}"
             ></ngx-skeleton-loader>
         </ng-template>
         
@@ -75,6 +75,8 @@
         <div
             *ngIf="!isAddMembershipInputOn"
             class="add-item"
+            [class.add-item--pending] = "categ.isCategPending == 'pending' && categ.item_count == 0"
+            [class.add-item--pending2] = "categ.isCategPending == 'pending' && categ.item_count > 0"
             (click) = "setAddMembershipItemOn($event)"
         >
             <img src="assets/icons/etc/plus-darkgrey.svg" />
@@ -83,6 +85,8 @@
         <div
             *ngIf="isAddMembershipInputOn"
             class="add-item-container"
+            [class.add-item--pending] = "categ.isCategPending == 'pending' && categ.item_count == 0"
+            [class.add-item--pending2] = "categ.isCategPending == 'pending' && categ.item_count > 0"
         >
             <input
                 rw-autoFocus

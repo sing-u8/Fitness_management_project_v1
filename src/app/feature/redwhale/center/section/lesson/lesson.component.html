@@ -155,7 +155,6 @@
                         <div *ngIf="selectedLesson?.lessonData" class="d-flex">
                             <div class="selected-lesson-top__lesson-type--margin">
                                 <gl-lesson-select
-                                    [width]="'110'"
                                     [items]="lessonType_list"
                                     [(ngModel)]="selectedLessonTypeObj"
                                     [height_type]="'small'"
@@ -384,11 +383,17 @@
                                     ></ngx-skeleton-loader>
                                 </ng-container>
                                 <ng-template #linkable_membership_done>
-                                    <div *ngFor="let item of selectedLesson.linkableMembershipItems" class="card">
+                                    <div
+                                        *ngFor="
+                                            let item of selectedLesson.linkableMembershipItems
+                                                | keyvalue: kvReverseOrder
+                                        "
+                                        class="card"
+                                    >
                                         <gm-membership-card
-                                            [categItem]="item"
+                                            [categItem]="item.value"
                                             [centerId]="center.id"
-                                            [categName]="item.category_name"
+                                            [categName]="item.value.category_name"
                                             [isIn]="'addReservableItemList'"
                                             (onAddReservableCard)="(false)"
                                         ></gm-membership-card>

@@ -239,16 +239,14 @@ export class LessonComponent implements OnInit, AfterViewInit, OnDestroy {
                                 itemId: _item.id,
                                 requestBody: {
                                     target_category_id: _targetCategId,
-                                    target_item_sequence_number:
-                                        _targetModel.length -
-                                        _targetModel.findIndex(
-                                            (v) => v.id == _item.id && v.category_id == _item.category_id
-                                        ),
+                                    target_item_sequence_number: _targetModel.findIndex(
+                                        (v) => v.id == _item.id && v.category_id == _item.category_id
+                                    ),
                                 },
                             },
                             targetItems: _.map(_targetModel, (v, idx, vs) => ({
                                 ...v,
-                                sequence_number: vs.length - idx,
+                                sequence_number: idx,
                                 category_id: _targetCategId,
                             })),
                             targetItem: _item,
@@ -437,6 +435,7 @@ export class LessonComponent implements OnInit, AfterViewInit, OnDestroy {
         },
     }
     kvOriginOrder = kvPipe.originalOrder
+    kvReverseOrder = kvPipe.reverseOrder
 
     restrictToNumber(event) {
         return this.inputHelperService.restrictToNumber(event)

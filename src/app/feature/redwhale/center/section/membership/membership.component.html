@@ -397,11 +397,16 @@
                                     ></ngx-skeleton-loader>
                                 </ng-container>
                                 <ng-template #linkable_classes_done>
-                                    <div *ngFor="let item of selectedMembership.linkableClassItems" class="card">
+                                    <div
+                                        *ngFor="
+                                            let item of selectedMembership.linkableClassItems | keyvalue: kvReverseOrder
+                                        "
+                                        class="card"
+                                    >
                                         <gl-lesson-card
-                                            [categItem]="item"
+                                            [categItem]="item.value"
                                             [centerId]="center.id"
-                                            [categName]="item.category_name"
+                                            [categName]="item.value.category_name"
                                             [isIn]="'addReservableItemList'"
                                             (onAddReservableCard)="(false)"
                                         ></gl-lesson-card>

@@ -10,7 +10,6 @@ import { ClassItem } from '@schemas/class-item'
 import { Loading } from '@schemas/store/loading'
 import { CenterUser } from '@schemas/center-user'
 import { MembershipItem } from '@schemas/membership-item'
-import { startMoveLessonItem } from '../actions/sec.lesson.actions'
 
 export interface SelectedLesson {
     lessonData: ClassItem
