@@ -10,6 +10,7 @@ import { MembershipItem } from '@schemas/membership-item'
 import { Loading } from '@schemas/store/loading'
 import { ClassItem } from '@schemas/class-item'
 import * as LessonActions from '@centerStore/actions/sec.lesson.actions'
+import { finishRefreshLinkedLessons, startRefreshLinkedLessons } from '../actions/sec.membership.actions'
 
 export interface SelectedMembership {
     membershipData: MembershipItem
@@ -186,6 +187,19 @@ export const membershipReducer = createImmerReducer(
         return state
     }),
     on(MembershipActions.finishSetSelectedMembership, (state, { linkedClassItems, linkableClassItems }) => {
+        state.selectedMembership.linkedClassItems = linkedClassItems
+        state.selectedMembership.linkableClassItems = linkableClassItems
+        state.selectedMembership.isLoading = 'done'
+        return state
+    }),
+    on(MembershipActions.startRefreshLinkedLessons, (state) => {
+        state.selectedMembership = _.assign(state.selectedMembership, {
+            ...state.selectedMembership,
+            isLoading: 'pending',
+        })
+        return state
+    }),
+    on(MembershipActions.finishRefreshLinkedLessons, (state, { linkedClassItems, linkableClassItems }) => {
         state.selectedMembership.linkedClassItems = linkedClassItems
         state.selectedMembership.linkableClassItems = linkableClassItems
         state.selectedMembership.isLoading = 'done'

@@ -259,11 +259,13 @@ export class MembershipEffect {
         () =>
             this.actions$.pipe(
                 ofType(MembershipActions.startMoveMembershipCategory),
-                mergeMap(({ apiData }) =>
+                mergeMap(({ apiData, cb }) =>
                     this.centerMembershipApi
                         .moveCategory(apiData.centerId, apiData.categoryId, apiData.requestBody)
                         .pipe(
-                            tap(() => {}),
+                            tap(() => {
+                                cb ? cb() : null
+                            }),
                             catchError((err: string) => of(MembershipActions.error({ error: err })))
                         )
                 )
@@ -290,6 +292,34 @@ export class MembershipEffect {
                     })
                 )
             )
+        )
+    )
+
+    public refreshLinkedLessons$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(MembershipActions.startRefreshLinkedLessons),
+            concatLatestFrom(() => [this.store.select(MembershipSelector.selectedMembership)]),
+            switchMap(([action, selectedMembership]) => {
+                if (!_.isEmpty(selectedMembership.membershipData)) {
+                    return forkJoin([
+                        this.centerMembershipApi.getLinkedClass(
+                            selectedMembership.centerId,
+                            selectedMembership.categId,
+                            selectedMembership.membershipData.id
+                        ),
+                        this.centerLessonApi.getAllClasses(selectedMembership.centerId),
+                    ]).pipe(
+                        switchMap(([linkedClassItems, allClassItems]) => {
+                            const linkableClassItems = _.differenceBy(allClassItems, linkedClassItems, 'id')
+                            return [
+                                MembershipActions.finishSetSelectedMembership({ linkedClassItems, linkableClassItems }),
+                            ]
+                        })
+                    )
+                } else {
+                    return []
+                }
+            })
         )
     )
 

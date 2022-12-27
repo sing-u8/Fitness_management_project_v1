@@ -166,6 +166,9 @@ export class MembershipComponent implements OnInit {
                                 sequence_number: idx + 1,
                             })),
                             targetItem: _item,
+                            cb: () => {
+                                this.nxStore.dispatch(LessonActions.startRefreshLinkedMemberships())
+                            },
                         })
                     )
                 })
@@ -204,6 +207,7 @@ export class MembershipComponent implements OnInit {
                                 if (_targetCategId != _sourceCategId) {
                                     this.nxStore.dispatch(LessonActions.refreshSelectedLesson())
                                 }
+                                this.nxStore.dispatch(LessonActions.startRefreshLinkedMemberships())
                             },
                         })
                     )

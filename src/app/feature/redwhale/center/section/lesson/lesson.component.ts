@@ -218,6 +218,9 @@ export class LessonComponent implements OnInit, AfterViewInit, OnDestroy {
                                 sequence_number: 1 + idx,
                             })),
                             targetItem: _item,
+                            cb: () => {
+                                this.nxStore.dispatch(MembershipActions.startRefreshLinkedLessons())
+                            },
                         })
                     )
                 })
@@ -256,6 +259,7 @@ export class LessonComponent implements OnInit, AfterViewInit, OnDestroy {
                                 if (_targetCategId != _sourceCategId) {
                                     this.nxStore.dispatch(MembershipActions.refreshSelectedMembership())
                                 }
+                                this.nxStore.dispatch(MembershipActions.startRefreshLinkedLessons())
                             },
                         })
                     )

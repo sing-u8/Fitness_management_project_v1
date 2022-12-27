@@ -295,9 +295,11 @@ export class LessonEffect {
         () =>
             this.actions$.pipe(
                 ofType(LessonActions.startMoveLessonCategory),
-                mergeMap(({ apiData }) =>
+                mergeMap(({ apiData, cb }) =>
                     this.centerLessonApi.moveCategory(apiData.centerId, apiData.categoryId, apiData.requestBody).pipe(
-                        tap(() => {}),
+                        tap(() => {
+                            cb ? cb() : null
+                        }),
                         catchError((err: string) => of(MembershipActions.error({ error: err })))
                     )
                 )
@@ -327,6 +329,42 @@ export class LessonEffect {
                     })
                 )
             )
+        )
+    )
+
+    public refreshLinkedMemberships$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(LessonActions.startRefreshLinkedMemberships),
+            concatLatestFrom(() => [this.store.select(LessonSelector.selectedLesson)]),
+            switchMap(([action, selectedLesson]) => {
+                console.log('startRefreshLinkedMemberships !!! , ', !_.isEmpty(selectedLesson), selectedLesson)
+                if (!_.isEmpty(selectedLesson.lessonData)) {
+                    return forkJoin([
+                        this.centerLessonApi.getLinkedMemberships(
+                            selectedLesson.centerId,
+                            selectedLesson.categId,
+                            selectedLesson.lessonData.id
+                        ),
+                        this.centerMembershipApi.getAllMemberships(selectedLesson.centerId),
+                    ]).pipe(
+                        switchMap(([linkedMembershipItems, allMembershipItems]) => {
+                            const linkableMembershipItems = _.differenceBy(
+                                allMembershipItems,
+                                linkedMembershipItems,
+                                'id'
+                            )
+                            return [
+                                LessonActions.finishRefreshLinkedMemberships({
+                                    linkedMembershipItems,
+                                    linkableMembershipItems,
+                                }),
+                            ]
+                        })
+                    )
+                } else {
+                    return []
+                }
+            })
         )
     )
 

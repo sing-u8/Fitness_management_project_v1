@@ -104,6 +104,12 @@ export const finishSetSelectedLesson = createAction(
     props<{ linkedMembershipItems: Array<MembershipItem>; linkableMembershipItems: Array<MembershipItem> }>()
 )
 
+export const startRefreshLinkedMemberships = createAction(`[${FeatureKey}] Start Refresh Linked Memberships`)
+export const finishRefreshLinkedMemberships = createAction(
+    `[${FeatureKey}] Finish Refresh Linked Memberships`,
+    props<{ linkedMembershipItems: Array<MembershipItem>; linkableMembershipItems: Array<MembershipItem> }>()
+)
+
 export const startMoveLessonItem = createAction(
     `[${FeatureKey}] Start Move Lesson Item`,
     props<{
@@ -131,6 +137,7 @@ export const startMoveLessonCategory = createAction(
         }
         targetItems: ClassCategory[]
         targetItem: ClassCategory
+        cb?: () => void
     }>()
 )
 
