@@ -2,7 +2,6 @@ import { Component, OnInit, Input, AfterViewInit, ChangeDetectionStrategy, OnDes
 import { FormBuilder, FormControl } from '@angular/forms'
 import _ from 'lodash'
 
-import { DragulaService } from 'ng2-dragula'
 import { DragulaMembership, MembershipItem } from '@schemas/membership-item'
 
 // rxjs
