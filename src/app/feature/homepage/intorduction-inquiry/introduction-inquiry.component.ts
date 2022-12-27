@@ -126,10 +126,8 @@ export class IntroductionInquiryComponent implements OnInit {
     }
     phoneCheck(event: KeyboardEvent) {
         const code = event.key
-        if (_.isNaN(Number(code))) {
-            return false
-        }
-        return true
+        return !_.isNaN(Number(code))
+
         // this.matchPhoneForm()
     }
     matchPhoneForm(keyup: KeyboardEvent) {

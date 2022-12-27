@@ -47,6 +47,9 @@ export class DashboardHelperService {
     synchronizeUserLocker(centerId: string, userId: string) {
         this.nxStore.dispatch(DashboardActions.startSynchronizeUserLocker({ centerId, userId }))
     }
+    synchronizeUserLockerCategory(centerId: string) {
+        this.nxStore.dispatch(DashboardActions.startSynchronizeUserLocker({ centerId, userId: '', ignoreUserId: true }))
+    }
     // // by check in
     synchronizeCheckIn(centerId: string, centerUser: CenterUser) {
         this.nxStore.pipe(select(DashboardSelector.curCenterId), take(1)).subscribe((curCenterId) => {

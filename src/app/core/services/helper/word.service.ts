@@ -23,7 +23,7 @@ export class WordService {
         for (b = i = 0; (c = text.charCodeAt(i++)); b += c >> 7 ? 2 : 1);
         return b
     }
-    
+
     getNumberWithCommas(x) {
         let isNegative = false
         if (!x) {

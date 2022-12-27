@@ -436,12 +436,12 @@ export class DashboardEffect {
                 this.store.select(DashboardSelector.curCenterId),
                 this.store.select(DashboardSelector.curUserData),
             ]),
-            switchMap(([{ centerId, userId }, curCenterId, curUserData]) => {
+            switchMap(([{ centerId, userId, ignoreUserId }, curCenterId, curUserData]) => {
                 if (
                     !_.isEmpty(curCenterId) &&
-                    !_.isEmpty(curUserData) &&
+                    !_.isEmpty(curUserData.user) &&
                     centerId == curCenterId &&
-                    userId == curUserData.user.id
+                    (ignoreUserId || userId == curUserData.user.id)
                 ) {
                     return forkJoin([
                         this.centerUsersLockerApi.getLockerTickets(centerId, curUserData.user.id),

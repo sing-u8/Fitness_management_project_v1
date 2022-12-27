@@ -51,7 +51,7 @@ export const finishDeleteLockerCategory = createAction(
 
 export const startUpdateLockerCategory = createAction(
     `[${FeatureKey}] Start Update Locker Category`,
-    props<{ centerId: string; categoryId: string; updateName: string }>()
+    props<{ centerId: string; categoryId: string; updateName: string; cb?:() => void }>()
 )
 export const finishUpdateLockerCategory = createAction(`[${FeatureKey}] finish Update Locker Category`)
 

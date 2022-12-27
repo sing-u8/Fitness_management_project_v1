@@ -1,5 +1,4 @@
 <section class="locker">
-
     <header id="locker-header">
         <div class="header-text">
             <span class="title rw-typo-headline1">락커</span>
@@ -10,38 +9,40 @@
     </header>
 
     <main class="l-main thin-scroll-y">
-
         <ng-template #loading [ngIf]="(isLoading$ | async) == 'pending'" [ngIfElse]="loading_done">
             <div class="main-left">
-                <p class="rw-typo-title1 main-title-margin">
-                    락커 상세 정보
-                </p>
+                <p class="rw-typo-title1 main-title-margin">락커 상세 정보</p>
                 <div class="main-left__content">
                     <ngx-skeleton-loader
-                        count=1 appearance="line"
-                        [theme]="{width:'250px', height: '242px', 'border-radius':'5px'}"
+                        count="1"
+                        appearance="line"
+                        [theme]="{ width: '250px', height: '242px', 'border-radius': '5px' }"
                     ></ngx-skeleton-loader>
                 </div>
             </div>
             <div class="main-right">
                 <div class="main-right__header main-title-margin">
-                    <p class="rw-typo-title1 ">락커</p>
+                    <p class="rw-typo-title1">락커</p>
                 </div>
 
                 <div class="l-locker">
                     <div class="l-locker__header">
                         <div class="l-locker-category">
                             <ngx-skeleton-loader
-                                *ngFor = "let _ of [1,2,3]" count=1 appearance="line"
-                                [theme]="{width:'135px', height: '38px', 'border-radius':'5px'}"
+                                *ngFor="let _ of [1, 2, 3]"
+                                count="1"
+                                appearance="line"
+                                [theme]="{ width: '135px', height: '38px', 'border-radius': '5px' }"
                             ></ngx-skeleton-loader>
                         </div>
                         <div class="l-locker-categ-index"></div>
                     </div>
                     <div class="l-locker__section loading-item">
                         <ngx-skeleton-loader
-                            *ngFor = "let _ of [1,2,3,4,5]" count=1 appearance="line"
-                            [theme]="{width: '65px', 'height': '65px', 'border-radius': '5px'}"
+                            *ngFor="let _ of [1, 2, 3, 4, 5]"
+                            count="1"
+                            appearance="line"
+                            [theme]="{ width: '65px', height: '65px', 'border-radius': '5px' }"
                         ></ngx-skeleton-loader>
                     </div>
                 </div>
@@ -50,86 +51,68 @@
 
         <ng-template #loading_done>
             <div class="main-left">
-                <p *ngIf="!isEditMode " class="rw-typo-title1 main-title-margin">
-                    락커 상세 정보
-                </p>
-                <p *ngIf="isEditMode" class="rw-typo-title1 main-title-margin">
-                    도움말
-                </p>
+                <p *ngIf="!isEditMode" class="rw-typo-title1 main-title-margin">락커 상세 정보</p>
+                <p *ngIf="isEditMode" class="rw-typo-title1 main-title-margin">도움말</p>
 
-                <div
-                    class="main-left__content"
-                    [class.thin-scroll-y] = "isEditMode"
-                >
-                    <div
-                        *ngIf="!isEditMode && !curLockerItem"
-                        class="select-locker-guide-box rw-typo-bodytext0"
-                    >
+                <div class="main-left__content" [class.thin-scroll-y]="isEditMode">
+                    <div *ngIf="!isEditMode && !curLockerItem" class="select-locker-guide-box rw-typo-bodytext0">
                         락커를 선택해주세요.
                     </div>
 
                     <ng-container *ngIf="isEditMode">
-                        <rw-locker-tip-dropdown
-                            [title]="'변경모드가 무엇인가요'"
-                        >
+                        <rw-locker-tip-dropdown [title]="'변경모드가 무엇인가요'">
                             <span class="rw-typo-bodytext1">
-                                센터 구조에 따라, 자유롭게 락커를 배치하고 한 눈에 관리하기 위한 <span class="bold">초기 설정을 변경 모드에서 진행</span>할 수 있어요. ex. <span class="bold">카테고리 생성, 락커 생성, 락커 배치 등</span>
+                                센터 구조에 따라, 자유롭게 락커를 배치하고 한 눈에 관리하기 위한
+                                <span class="bold">초기 설정을 변경 모드에서 진행</span>할 수 있어요. ex.
+                                <span class="bold">카테고리 생성, 락커 생성, 락커 배치 등</span>
                             </span>
                         </rw-locker-tip-dropdown>
-                        <rw-locker-tip-dropdown
-                            [title]="'락커 배치는 어떻게 하나요'"
-                        >
+                        <rw-locker-tip-dropdown [title]="'락커 배치는 어떻게 하나요'">
                             <span class="rw-typo-bodytext1">
-                                카테고리 내 락커를 <span class="bold">드래그 앤 드랍</span>으로 원하는 자리로 이동할 수 있어요.
+                                카테고리 내 락커를 <span class="bold">드래그 앤 드랍</span>으로 원하는 자리로 이동할 수
+                                있어요.
                             </span>
                         </rw-locker-tip-dropdown>
-                        <rw-locker-tip-dropdown
-                            [title]="'몇 개까지 만들 수 있나요?'"
-                        >
+                        <rw-locker-tip-dropdown [title]="'몇 개까지 만들 수 있나요?'">
                             <span class="rw-typo-bodytext1">
-                                카테고리 내 락커는 <span class="bold">최대 200개</span>까지 생성하실 수 있으며, 락커 카테고리는 필요하신 만큼 추가하실 수 있어요.
+                                카테고리 내 락커는 <span class="bold">최대 200개</span>까지 생성하실 수 있으며, 락커
+                                카테고리는 필요하신 만큼 추가하실 수 있어요.
                             </span>
                         </rw-locker-tip-dropdown>
                     </ng-container>
 
-                    <ng-container
-                        *ngIf="curLockerItem && !isEditMode"
-                    >
+                    <ng-container *ngIf="curLockerItem && !isEditMode">
                         <rw-locker-detail-box></rw-locker-detail-box>
                     </ng-container>
                 </div>
             </div>
 
-            <div class="main-right" >
+            <div class="main-right">
                 <div class="main-right__header main-title-margin">
-                    <p class="rw-typo-title1 ">락커</p>
+                    <p class="rw-typo-title1">락커</p>
                     <rw-switch
                         [text]="!isEditMode ? '변경모드 끄기' : '변경모드 켜기'"
                         [disabledColor]="'var(--font-color)'"
-                        [(ngModel)] = "isEditMode"
-                        (change)="LockerGlobalMode == 'normal'&& onEditModeChange($event)"
-                        [disabled] = "LockerGlobalMode == 'moveLockerTicket'"
+                        [(ngModel)]="isEditMode"
+                        (change)="LockerGlobalMode == 'normal' && onEditModeChange($event)"
+                        [disabled]="LockerGlobalMode == 'moveLockerTicket'"
                     ></rw-switch>
                 </div>
 
                 <div class="l-locker" (rwClickOutside)="onClickOutsideOfLocker($event)">
-                    <div
-                        *ngIf="!(lockerCategLength == 0 && !isEditMode)"
-                        class="l-locker__header"
-                    >
+                    <div *ngIf="!(lockerCategLength == 0 && !isEditMode)" class="l-locker__header">
                         <div
                             #l_locker_category
                             class="l-locker-category locker-scroll-x"
-                            [class.full-width] = "!(isEditMode  && curLockerCateg)"
+                            [class.full-width]="!(isEditMode && curLockerCateg)"
                         >
                             <rw-locker-category
-                                *ngFor = "let categ of lockerCategList"
-                                [category] ="categ"
-                                [isEditMode] = "isEditMode"
-                                (onDeleteCategory) = "setWillBeDeletedCategory($event)"
+                                *ngFor="let categ of lockerCategList"
+                                [category]="categ"
+                                [isEditMode]="isEditMode"
+                                (onDeleteCategory)="setWillBeDeletedCategory($event)"
                             ></rw-locker-category>
                             <div *ngIf="isEditMode" class="l-add-locker-category">
-
                                 <ng-container [ngSwitch]="isCategInputOpen">
                                     <div
                                         *ngSwitchCase="false"
@@ -139,7 +122,7 @@
                                         <img
                                             [class.word-x]="lockerCategLength != 0"
                                             src="assets/icons/etc/add-category.svg"
-                                        >
+                                        />
                                         <span *ngIf="lockerCategLength == 0" class="rw-typo-bodytext0">
                                             카테고리 추가
                                         </span>
@@ -149,48 +132,44 @@
                                         rw-autoFocus
                                         (rwClickOutside)="createCategory(categInput.value)"
                                         (keyup.enter)="createCategory(categInput.value)"
-                                        type="text" class="rw-input rw-typo-bodytext0"
+                                        type="text"
+                                        class="rw-input rw-typo-bodytext0"
                                         placeholder="카테고리명을 입력해주세요."
                                         [formControl]="categInput"
-                                    >
+                                    />
                                 </ng-container>
-
                             </div>
                         </div>
 
-                        <div
-                            *ngIf="isEditMode && curLockerCateg"
-                            class="l-locker-categ-index rw-typo-bodytext0"
-                        >
+                        <div *ngIf="isEditMode && curLockerCateg" class="l-locker-categ-index rw-typo-bodytext0">
                             <div class="locker-index">
                                 <input
                                     type="text"
                                     class="rw-input"
                                     [formControl]="lockerItemCountInput"
-                                >
-                                <p
-                                    class="index-text"
-                                    [class.grey]="curLockerItemList.length >= maxLockerLength"
-                                >
+                                    (keydown)="restrictToNumber($event)"
+                                    (keyup)="replaceToNumber()"
+                                />
+                                <p class="index-text" [class.grey]="curLockerItemList.length >= maxLockerLength">
                                     번부터
                                 </p>
                             </div>
-                            <div class="add-locker-item-button"
-                                rw-button rwButtonWidth="138"
+                            <div
+                                class="add-locker-item-button"
+                                rw-button
+                                rwButtonWidth="138"
                                 rwButtonHeight="38"
                                 rwButtonColor="var(--darkgrey)"
                                 rwButtonFontColor="var(--white)"
                                 [rwButtonDisabled]="curLockerItemList.length >= maxLockerLength"
                                 (click)="curLockerItemList.length < maxLockerLength && addGridItem()"
                             >
-                                <img src="assets/icons/etc/plus-white.svg">
+                                <img src="assets/icons/etc/plus-white.svg" />
                                 <span>락커 추가하기</span>
                             </div>
                         </div>
-
                     </div>
                     <div class="l-locker__section">
-
                         <ng-template #LockerItemsEmpty [ngIf]="!curLockerCateg" [ngIfElse]="LockerItemsExist">
                             <div class="guide-image-container">
                                 <div *ngIf="!isEditMode && !curLockerCateg" class="alter-mode-guide-image">
@@ -200,33 +179,33 @@
                                             [disabled]="true"
                                             [(ngModel)]="alterGuide"
                                         ></rw-switch>
-                                        <img src="assets/icons/etc/cursor_pointer.svg">
+                                        <img src="assets/icons/etc/cursor_pointer.svg" />
                                     </div>
                                     <p class="rw-typo-subtext2">변경하기 모드를 켜신 후,</p>
                                     <p class="rw-typo-subtext2">락커 카테고리 및 락커를 추가해보세요!</p>
                                 </div>
 
                                 <div *ngIf="isEditMode && !curLockerCateg" class="create-category-guide-image">
-                                    <img src="assets/icons/etc/cursor_pointer.svg">
+                                    <img src="assets/icons/etc/cursor_pointer.svg" />
                                     <div class="locker-item-container">
                                         <div class="locker-item">
                                             <div class="item-header rw-typo-subtext2">
                                                 <span>0</span>
-                                                <img src="assets/icons/etc/password-grey.svg">
+                                                <img src="assets/icons/etc/password-grey.svg" />
                                             </div>
                                             <div class="bottom rw-typo-subtext2">레드웨일</div>
                                         </div>
                                         <div class="locker-item">
                                             <div class="item-header rw-typo-subtext2">
                                                 <span>0</span>
-                                                <img src="assets/icons/etc/password-grey.svg">
+                                                <img src="assets/icons/etc/password-grey.svg" />
                                             </div>
                                             <div class="bottom rw-typo-subtext2">레드웨일</div>
                                         </div>
                                         <div class="locker-item">
                                             <div class="item-header rw-typo-subtext2">
                                                 <span>0</span>
-                                                <img src="assets/icons/etc/password-grey.svg">
+                                                <img src="assets/icons/etc/password-grey.svg" />
                                             </div>
                                             <div class="bottom rw-typo-subtext2">레드웨일</div>
                                         </div>
@@ -239,23 +218,20 @@
 
                         <ng-template #LockerItemsExist>
                             <div
-                                *ngIf="(curLockerItemListIsLoading$ | async) == 'pending'" class="l-locker__section loading-item"
+                                *ngIf="(curLockerItemListIsLoading$ | async) == 'pending'"
+                                class="l-locker__section loading-item"
                             >
                                 <ngx-skeleton-loader
-                                    *ngFor="let _ of [1,2,3,4,5,6,7,8]" count=1 appearance="line"
-                                    [theme]="{width: '65px', 'height': '65px', 'border-radius': '5px'}"
+                                    *ngFor="let _ of [1, 2, 3, 4, 5, 6, 7, 8]"
+                                    count="1"
+                                    appearance="line"
+                                    [theme]="{ width: '65px', height: '65px', 'border-radius': '5px' }"
                                 ></ngx-skeleton-loader>
                             </div>
-                            <div
-                                *ngIf="(curLockerItemListIsLoading$ | async) == 'done'"
-                                class="l-locker-item"
-                            >
-                                <gridster
-                                    class="thin-scroll-x thin-scroll-y"
-                                    [options]="gridsterOptions"
-                                >
+                            <div *ngIf="(curLockerItemListIsLoading$ | async) == 'done'" class="l-locker-item">
+                                <gridster class="thin-scroll-x thin-scroll-y" [options]="gridsterOptions">
                                     <rw-locker-item
-                                        *ngFor="let item of curLockerItemList; let i =index"
+                                        *ngFor="let item of curLockerItemList; let i = index"
                                         [lockerItem]="item"
                                         [selectedLockerItem]="curLockerItem"
                                         [curLockerItems]="curLockerItemList"
@@ -269,20 +245,17 @@
 
                         <div
                             *ngIf="LockerGlobalMode == 'moveLockerTicket'"
-                            class="move-locker-ticket-guide-image rw-typo-bodytext0-bold">
+                            class="move-locker-ticket-guide-image rw-typo-bodytext0-bold"
+                        >
                             <span>이동할 자리를 선택해주세요.</span>
                             <div class="edge"></div>
                         </div>
-
                     </div>
                 </div>
             </div>
         </ng-template>
-
     </main>
-
 </section>
-
 
 <rw-modal
     [(visible)]="delCategModalVisible"
@@ -296,6 +269,13 @@
     [data]="blockDelCategTexts"
     (cancel)="closeShowBlockDelCategory()"
     (confirm)="closeShowBlockDelCategory()"
+    type="type2"
+></rw-modal>
+<rw-modal
+    [(visible)]="doShowBlockDelLockerItem"
+    [data]="blockDelLockerItemTexts"
+    (cancel)="closeShowBlockDelLockerItem()"
+    (confirm)="closeShowBlockDelLockerItem()"
     type="type2"
 ></rw-modal>
 

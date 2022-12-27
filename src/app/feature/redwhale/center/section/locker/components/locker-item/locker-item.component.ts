@@ -13,7 +13,6 @@ import { DashboardHelperService } from '@services/center/dashboard-helper.servic
 import { CenterLockerService } from '@services/center-locker.service'
 import { InputHelperService } from '@services/helper/input-helper.service'
 
-
 // ngrx
 import { Store, select } from '@ngrx/store'
 import * as LockerSelector from '@centerStore/selectors/sec.locker.selector'
@@ -59,7 +58,6 @@ export class LockerItemComponent implements OnInit, OnDestroy, AfterViewInit {
         private dashboardHelperService: DashboardHelperService,
         private centerLockerService: CenterLockerService,
         private inputHelperService: InputHelperService
-
     ) {
         this.nameInput = this.fb.control('')
     }
@@ -185,10 +183,11 @@ export class LockerItemComponent implements OnInit, OnDestroy, AfterViewInit {
     // input eventlistener
     restrictToNumber(event) {
         return this.inputHelperService.restrictToNumber(event)
-
     }
     onInputKeyUp(event) {
         if (event.code == 'Enter') return
+        const input = this.nameInput.value.replace(/[^0-9]/gi, '')
+        this.nameInput.setValue(input)
         if (this.nameInput.value.length > 3) {
             this.nameInput.setValue(this.nameInput.value.slice(0, 3))
         }

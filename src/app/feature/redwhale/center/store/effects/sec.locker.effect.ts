@@ -87,9 +87,10 @@ export class LockerEffect {
     public updateLockerCateg = createEffect(() =>
         this.actions$.pipe(
             ofType(LockerActions.startUpdateLockerCategory),
-            switchMap(({ centerId, categoryId, updateName }) =>
+            switchMap(({ centerId, categoryId, updateName, cb }) =>
                 this.centerLokcerApi.updateCategory(centerId, categoryId, { name: updateName }).pipe(
                     map((_) => {
+                        cb ? cb() : null
                         return LockerActions.finishUpdateLockerCategory()
                     }),
                     catchError((err: string) => of(LockerActions.error({ error: err })))

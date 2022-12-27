@@ -1,6 +1,6 @@
 * {
-    padding: 0px;
-    margin: 0px;
+    padding: 0;
+    margin: 0;
     text-align: initial;
 }
 
@@ -9,6 +9,7 @@
     border: 1px solid rgba(207, 207, 207, 0.5) !important;
     border-radius: 5px;
     overflow: visible;
+    padding: 1px;
 
     &:hover {
         border: 1px solid rgba(207, 207, 207, 1) !important;
@@ -18,15 +19,16 @@
         background-color: var(--background-color) !important;
     }
     &.selected {
-        box-shadow: 0px 0px 10px #b5b5b526;
+        box-shadow: 0 0 10px #b5b5b526;
         border: 2px solid var(--font-color) !important;
+        padding: 0;
         &:hover {
             border: 2px solid var(--font-color) !important;
         }
     }
     // move locker ticket css
     &.move-locker-ticket-X {
-        box-shadow: 0px 0px 10px #b5b5b526;
+        box-shadow: 0 0 10px #b5b5b526;
         background-color: #cfcfcf !important;
         opacity: 0.35;
         .grid-locker-item-inner-container {
@@ -36,7 +38,7 @@
     &.move-locker-ticket-O {
         opacity: 1;
         &:hover {
-            box-shadow: 0px 0px 10px #e34a5e26;
+            box-shadow: 0 0 10px #e34a5e26;
             border: 2px solid var(--red) !important;
             background-color: #e34a5e0d !important ;
 
@@ -48,15 +50,17 @@
     &.move-locker-ticket-selected {
         border: 2px solid #212121 !important;
         background-color: var(--background-color) !important ;
+        padding: 0;
         opacity: 1;
         .grid-locker-item-inner-container {
             cursor: pointer;
         }
     }
     &.be-moved-locker {
-        box-shadow: 0px 0px 10px #e34a5e26;
+        box-shadow: 0 0 10px #e34a5e26;
         border: 2px solid var(--red) !important;
         background-color: #e34a5e0d !important ;
+        padding: 0;
 
         .locker-name {
             color: var(--red) !important;
@@ -100,7 +104,7 @@
     .grid-locker-item-inner-container {
         width: 100%;
         height: 100%;
-        padding: 6px 0px 10px;
+        padding: 6px 0 12px;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
@@ -124,7 +128,7 @@
         .grid-locker-item-header {
             display: flex;
             justify-content: space-between;
-            padding: 0 3px 0 6px;
+            padding: 0 4px 0 8px;
 
             .locker-name {
                 display: flex;

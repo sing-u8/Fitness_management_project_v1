@@ -19,6 +19,8 @@ import { StorageService } from '@services/storage.service'
 import { LockerCategory } from '@schemas/locker-category'
 import { Center } from '@schemas/center'
 
+import { DashboardHelperService } from '@services/center/dashboard-helper.service'
+
 // ngrx
 import { Store, select } from '@ngrx/store'
 import * as FromLocker from '@centerStore/reducers/sec.locker.reducer'
@@ -62,7 +64,8 @@ export class LockerCategoryComponent implements OnInit, OnDestroy, AfterViewInit
         private nxStore: Store,
         private storageService: StorageService,
         private fb: FormBuilder,
-        private renderer: Renderer2
+        private renderer: Renderer2,
+        private dashboardHelperService: DashboardHelperService
     ) {
         this.changeNameInput = this.fb.control('')
     }
@@ -119,12 +122,11 @@ export class LockerCategoryComponent implements OnInit, OnDestroy, AfterViewInit
     }
     closeDropdown(e) {
         // 선택된 카테고리와 이 카테고리와 같고 locker-category-image-container 클래스를 가지는 엘리먼트를 눌렀을 때는 드롭다운 보여주고 아니면 감추기
-        this.isDropdownOpen =
+        this.isDropdownOpen = !!(
             this.curLockerCateg != FromLocker.initialLockerState.curLockerCateg &&
             this.curLockerCateg.id == this.category.id &&
             e.path.includes(this.lockerCategoryImage.nativeElement)
-                ? true
-                : false
+        )
     }
 
     toggleIsChangeName(e) {
@@ -146,6 +148,9 @@ export class LockerCategoryComponent implements OnInit, OnDestroy, AfterViewInit
                     centerId: this.center.id,
                     categoryId: this.category.id,
                     updateName: changedName,
+                    cb: () => {
+                        this.dashboardHelperService.synchronizeUserLockerCategory(this.center.id)
+                    },
                 })
             )
             this.isChangeName = false

@@ -230,12 +230,13 @@ export const setUserInCenter = createAction(
 // // by locker
 export const startSynchronizeUserLocker = createAction(
     '[${FeatureKey}] Start Synchronize User Data - Locker',
-    props<{ centerId: string; userId: string }>()
+    props<{ centerId: string; userId: string; ignoreUserId?: boolean }>()
 )
 export const finishSynchronizeUserLocker = createAction(
     '[${FeatureKey}] Finish Synchronize User Data - Locker',
     props<{ success: boolean; lockers?: Array<UserLocker>; payments?: Payment[]; contracts?: Contract[] }>()
 )
+
 // // by check in
 export const synchronizeCheckIn = createAction(
     '[${FeatureKey}] Synchronize Center User - Check In',

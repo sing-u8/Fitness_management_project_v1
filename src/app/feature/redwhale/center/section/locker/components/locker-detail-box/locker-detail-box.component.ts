@@ -162,7 +162,7 @@ export class LockerDetailBoxComponent implements OnInit, OnChanges, OnDestroy {
     }
     // check gloabl locker ticket -  move locker ticket
     checkMoveLockerTicketMode() {
-        return this.lockerGlobalMode == 'moveLockerTicket' ? true : false
+        return this.lockerGlobalMode == 'moveLockerTicket'
     }
     // locker history method
     getLockerHistory() {
@@ -303,6 +303,8 @@ export class LockerDetailBoxComponent implements OnInit, OnChanges, OnDestroy {
     // <---- strongly coupled !
     cancelChangeDate() {
         this.dateEditMode = false
+        this.initLockerDate()
+
     }
 
     // 결제 가격 수정되는 방식에 따라 수정 필요!  결제 담당자 에러 때문에  주석 처리 ; 나중에 수정되면 수정하기!

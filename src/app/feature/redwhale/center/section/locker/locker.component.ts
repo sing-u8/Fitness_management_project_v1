@@ -19,6 +19,7 @@ import { LockerCategoryComponent } from '@redwhale/center/section/locker/compone
 // services
 import { StorageService } from '@services/storage.service'
 import { DashboardHelperService } from '@services/center/dashboard-helper.service'
+import { InputHelperService } from '@services/helper/input-helper.service'
 
 // schemas
 import { LockerCategory } from '@schemas/locker-category'
@@ -69,6 +70,10 @@ export class LockerComponent implements OnInit, AfterViewInit, OnDestroy {
     public isCategInputOpen = false
     // public lockerIndexInput: FormControl
     public lockerItemCountInput: FormControl
+    replaceToNumber() {
+        const input = this.lockerItemCountInput.value.replace(/[^0-9]/gi, '')
+        this.lockerItemCountInput.setValue(input)
+    }
 
     // vars related to delete categ
     public delCategModalVisible = false
@@ -96,6 +101,27 @@ export class LockerComponent implements OnInit, AfterViewInit, OnDestroy {
         다시 카테고리를 삭제해주세요.`,
         confirmButtonText: '확인',
     }
+    toggleShowBlockDelCategory() {
+        this.doShowBlockDelCategory = !this.doShowBlockDelCategory
+    }
+    closeShowBlockDelCategory() {
+        this.doShowBlockDelCategory = false
+    }
+
+    // block delete locker item vars
+    public doShowBlockDelLockerItem = false
+    public blockDelLockerItemTexts = {
+        text: '앗! 등록된 회원이 있어요.😮',
+        subText: `락커를 비우신 후,
+        다시 삭제해주세요.`,
+        confirmButtonText: '확인',
+    }
+    toggleShowBlockDelLockerItem() {
+        this.doShowBlockDelLockerItem = !this.doShowBlockDelLockerItem
+    }
+    closeShowBlockDelLockerItem() {
+        this.doShowBlockDelLockerItem = false
+    }
 
     public unSubscriber$ = new Subject<boolean>()
 
@@ -110,7 +136,8 @@ export class LockerComponent implements OnInit, AfterViewInit, OnDestroy {
         private nxStore: Store,
         private storageService: StorageService,
         private fb: FormBuilder,
-        private dashboardHelperService: DashboardHelperService
+        private dashboardHelperService: DashboardHelperService,
+        private inputHelperService: InputHelperService
     ) {}
 
     ngOnInit(): void {
@@ -351,16 +378,15 @@ export class LockerComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     // bloack delete category modal method
-    toggleShowBlockDelCategory() {
-        this.doShowBlockDelCategory = !this.doShowBlockDelCategory
-    }
-    closeShowBlockDelCategory() {
-        this.doShowBlockDelCategory = false
-    }
 
     // locker item methods
 
     onDeleteLockerItem(lockerItem: LockerItem) {
+        if (lockerItem.state_code == 'locker_item_state_in_use') {
+            this.toggleShowBlockDelLockerItem()
+            return
+        }
+
         this.curLockerItemList = _.filter(this.curLockerItemList, (v) => !_.isEqual(lockerItem, v))
         this.nxStore.dispatch(
             LockerActions.startDeleteLockerItem({
@@ -441,7 +467,9 @@ export class LockerComponent implements OnInit, AfterViewInit, OnDestroy {
             cols: 1,
         } as LockerItem
         this.curLockerItemList.push(newItem)
-        this.lockerItemCountInput.setValue(String(Number(this.lockerItemCountInput.value) + 1))
+        if (this.curLockerItemList.length < this.maxLockerLength) {
+            this.lockerItemCountInput.setValue(String(Number(this.lockerItemCountInput.value) + 1))
+        }
         // this.lockerItemCountInput.setValue(String(this.getMaximumLockerId(this.curLockerItemList) + 1))
     }
     createGridItem(item: GridsterItem) {
@@ -486,5 +514,9 @@ export class LockerComponent implements OnInit, AfterViewInit, OnDestroy {
         ) {
             this.nxStore.dispatch(LockerActions.setLockerGlobalMode({ lockerMode: 'normal' }))
         }
+    }
+
+    restrictToNumber(event) {
+        return this.inputHelperService.restrictToNumber(event)
     }
 }
