@@ -18,11 +18,6 @@ import * as SaleSelector from '@centerStore/selectors/sec.sale.selector'
 import { Observable, Subject } from 'rxjs'
 import { takeUntil } from 'rxjs/operators'
 
-type SaleSummary = {
-    prev: { cash: number; card: number; trans: number; unpaid: number }
-    cur: { cash: number; card: number; trans: number; unpaid: number }
-}
-
 @Component({
     selector: 'rw-sale-summary-box',
     templateUrl: './sale-summary-box.component.html',
@@ -84,12 +79,39 @@ export class SaleSummaryBoxComponent implements OnInit, AfterViewInit, OnDestroy
 
     getSaleDashboard(type: 'day' | 'month') {
         this.nxStore.pipe(select(SaleSelector.saleSummaryData), takeUntil(this.unsubscriber$)).subscribe((v) => {
+            console.log('getSaleDashboard -- ', v)
             if (type == 'day') {
-                this.SaleSummary = v.saleSummary.day
+                this.SaleSummary = {
+                    cur: {
+                        cash: v.saleSummary.day.cur.cash,
+                        card: v.saleSummary.day.cur.card,
+                        trans: v.saleSummary.day.cur.trans,
+                        unpaid: v.saleSummary.day.cur.unpaid,
+                    },
+                    prev: {
+                        cash: v.saleSummary.day.prev.cash,
+                        card: v.saleSummary.day.prev.card,
+                        trans: v.saleSummary.day.prev.trans,
+                        unpaid: v.saleSummary.day.prev.unpaid,
+                    },
+                }
                 this.prevTotal = v.totalSummary.day.prev
                 this.curTotal = v.totalSummary.day.cur
             } else {
-                this.SaleSummary = v.saleSummary.month
+                this.SaleSummary = {
+                    cur: {
+                        cash: v.saleSummary.month.cur.cash,
+                        card: v.saleSummary.month.cur.card,
+                        trans: v.saleSummary.month.cur.trans,
+                        unpaid: v.saleSummary.month.cur.unpaid,
+                    },
+                    prev: {
+                        cash: v.saleSummary.month.prev.cash,
+                        card: v.saleSummary.month.prev.card,
+                        trans: v.saleSummary.month.prev.trans,
+                        unpaid: v.saleSummary.month.prev.unpaid,
+                    },
+                }
                 this.prevTotal = v.totalSummary.month.prev
                 this.curTotal = v.totalSummary.month.cur
             }

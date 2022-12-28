@@ -23,7 +23,7 @@
         padding: 0px 5px;
 
         width: calc(100% - 25px);
-        height: 46px;
+        height: 45px;
         cursor: pointer;
 
         .mdi {
@@ -59,7 +59,7 @@
         padding: 20px 0px;
 
         .summary-value {
-            margin-bottom: 4px;
+            margin-bottom: 3.5px;
         }
         .summary-difference-value {
             display: flex;
@@ -82,13 +82,14 @@
 
         .summary-desc {
             width: 180px;
-            height: 40px;
+            min-height: 40px;
+            max-height: 40px;
             display: flex;
             justify-content: center;
             align-items: center;
             background-color: var(--background-color);
             border-radius: 4px;
-            margin-top: 15px;
+            margin-top: 14.5px;
 
             @media (min-width: 1440px) {
                 width: 212px;
