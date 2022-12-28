@@ -82,7 +82,8 @@ export class MobileResetPasswordComponent implements OnInit, OnDestroy, AfterVie
     }
 
     navigateOnClose() {
-        this.router.navigate(['auth/login'])
+        // this.router.navigate(['auth/login'])
+        window.close()
     }
 
     public errorTextObj = {
@@ -162,6 +163,7 @@ export class MobileResetPasswordComponent implements OnInit, OnDestroy, AfterVie
                 this.isTokenValid = true
             },
             error: (e) => {
+                console.log('checkResetPasswordLinkMail -- err : ',e)
                 this.isTokenValid = false
                 if (e.code == 'FUNCTION_AUTH_008') {
                     this.showMrpToast('만료된 비밀번호 재설정 링크입니다.')
@@ -186,7 +188,11 @@ export class MobileResetPasswordComponent implements OnInit, OnDestroy, AfterVie
                 },
                 error: (e) => {
                     btLoadingFns.hideLoading()
-                    this.showMrpToast(e.message)
+                    if (e.code == 'FUNCTION_AUTH_008') {
+                        this.showMrpToast('만료된 비밀번호 재설정 링크입니다.')
+                    } else if (e.code == 'FUNCTION_AUTH_011') {
+                        this.showMrpToast('유효하지 않은 토큰입니다.')
+                    }
                 },
             })
     }
