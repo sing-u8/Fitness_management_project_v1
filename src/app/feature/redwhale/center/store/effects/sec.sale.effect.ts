@@ -21,12 +21,12 @@ export class SaleEffect {
     public getSaleData = createEffect(() =>
         this.actions$.pipe(
             ofType(SaleActions.startGetSaleData),
-            switchMap(({ centerId, start_date, end_date, option }) =>
-                this.centerStatApi.getStatsSales(centerId, start_date, end_date, option).pipe(
+            switchMap(({ centerId, start_date, end_date, option }) => {
+                return this.centerStatApi.getStatsSales(centerId, start_date, end_date, option).pipe(
                     map((saleData) => SaleActions.finishGetSaleData({ saleData })),
                     catchError((err: string) => of(SaleActions.setError({ error: err })))
                 )
-            )
+            })
         )
     )
 

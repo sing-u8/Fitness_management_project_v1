@@ -329,13 +329,7 @@ export class SaleTableComponent implements OnInit, OnDestroy, AfterViewInit, Aft
     public isScrollableTableBody = false
     checkIsSaleTableBodyScrollable() {
         if (this.saleData.length > 0 && this.sale_table_body_el) {
-            if (
-                this.sale_table_body_el.nativeElement.scrollHeight > this.sale_table_body_el.nativeElement.offsetHeight
-            ) {
-                this.isScrollableTableBody = true
-            } else {
-                this.isScrollableTableBody = false
-            }
+            this.isScrollableTableBody = this.sale_table_body_el.nativeElement.scrollHeight > this.sale_table_body_el.nativeElement.offsetHeight;
         }
     }
 }

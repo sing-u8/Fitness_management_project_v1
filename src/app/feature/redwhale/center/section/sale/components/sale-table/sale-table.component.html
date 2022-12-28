@@ -9,7 +9,6 @@
                     <img
                         *ngIf="
                             !(
-                                showEmptyTableFlag == 'register' &&
                                 saleData?.length == 0 &&
                                 !(
                                     isFiltered.member ||
@@ -26,10 +25,7 @@
                         src="assets/icons/etc/filter_white.svg"
                     />
                     <img
-                        *ngIf="
-                            (!(showEmptyTableFlag == 'register' && saleData?.length == 0) && isTypeOpen) ||
-                            isFiltered.type
-                        "
+                        *ngIf="(!(saleData?.length == 0) && isTypeOpen) || isFiltered.type"
                         (click)="toggleType($event); restoreTypeCheckToApplied()"
                         src="assets/icons/etc/filter_fill_white.svg"
                     />
@@ -90,13 +86,13 @@
                     <img
                         *ngIf="
                             !(
-                                showEmptyTableFlag == 'register' &&
                                 saleData?.length == 0 &&
                                 !(
                                     isFiltered.member ||
                                     isFiltered.membershipLocker ||
                                     isFiltered.personInCharge ||
-                                    (isFiltered.type && !isFiltered.member)
+                                    isFiltered.type ||
+                                    (isFiltered.product && !isFiltered.member)
                                 )
                             ) &&
                             !isMemberOpen &&
@@ -106,10 +102,7 @@
                         src="assets/icons/etc/filter_white.svg"
                     />
                     <img
-                        *ngIf="
-                            (!(showEmptyTableFlag == 'register' && saleData?.length == 0) && isMemberOpen) ||
-                            isFiltered.member
-                        "
+                        *ngIf="(!(saleData?.length == 0) && isMemberOpen) || isFiltered.member"
                         (click)="toggleMember($event); restoreInputToApplied('member')"
                         src="assets/icons/etc/filter_fill_white.svg"
                     />
@@ -164,7 +157,6 @@
                     <img
                         *ngIf="
                             !(
-                                showEmptyTableFlag == 'register' &&
                                 saleData?.length == 0 &&
                                 !(
                                     isFiltered.member ||
@@ -181,10 +173,7 @@
                         src="assets/icons/etc/filter_white.svg"
                     />
                     <img
-                        *ngIf="
-                            (!(showEmptyTableFlag == 'register' && saleData?.length == 0) && isProductOpen) ||
-                            isFiltered.product
-                        "
+                        *ngIf="(!(saleData?.length == 0) && isProductOpen) || isFiltered.product"
                         (click)="toggleProduct($event); restoreProductCheckToApplied()"
                         src="assets/icons/etc/filter_fill_white.svg"
                     />
@@ -238,7 +227,6 @@
                     <img
                         *ngIf="
                             !(
-                                showEmptyTableFlag == 'register' &&
                                 saleData?.length == 0 &&
                                 !(
                                     isFiltered.member ||
@@ -255,10 +243,7 @@
                         src="assets/icons/etc/filter_white.svg"
                     />
                     <img
-                        *ngIf="
-                            (!(showEmptyTableFlag == 'register' && saleData?.length == 0) && isMembershipLockerOpen) ||
-                            isFiltered.membershipLocker
-                        "
+                        *ngIf="(!(saleData?.length == 0) && isMembershipLockerOpen) || isFiltered.membershipLocker"
                         (click)="toggleMembershipLocker($event); restoreInputToApplied('membershipLocker')"
                         src="assets/icons/etc/filter_fill_white.svg"
                     />
@@ -316,7 +301,6 @@
                     <img
                         *ngIf="
                             !(
-                                showEmptyTableFlag == 'register' &&
                                 saleData?.length == 0 &&
                                 !(
                                     isFiltered.member ||
@@ -333,10 +317,7 @@
                         src="assets/icons/etc/filter_white.svg"
                     />
                     <img
-                        *ngIf="
-                            (!(showEmptyTableFlag == 'register' && saleData?.length == 0) && isPersonInChargeOpen) ||
-                            isFiltered.personInCharge
-                        "
+                        *ngIf="(!(saleData?.length == 0) && isPersonInChargeOpen) || isFiltered.personInCharge"
                         (click)="togglePersonInCharge($event); restoreInputToApplied('personInCharge')"
                         src="assets/icons/etc/filter_fill_white.svg"
                     />

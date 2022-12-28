@@ -78,5 +78,5 @@ export type getStatsSaleOption = {
     center_user_name?: string
     product_type_code?: GetStatsProductTypeCode
     product_name?: string
-    responsibility_user_name?: string
+    responsibility_center_user_name?: string
 }

@@ -173,7 +173,7 @@ table.sale-table {
             height: 70px;
 
             td {
-                padding: 14px 0 14px 0;
+                padding: 12px 0 12px 0;
                 vertical-align: text-top;
 
                 .product-name {
@@ -200,7 +200,7 @@ table.sale-table {
             .l-price-detail {
                 display: flex;
                 flex-direction: row;
-                margin-top: 6px;
+                margin-top: 7px;
                 .price-detail {
                     display: flex;
                     width: 25%;
@@ -246,7 +246,8 @@ table.sale-table {
                 display: flex;
                 justify-content: flex-start;
                 align-items: center;
-                margin-left: 25px;
+                font-weight: 500 !important;
+                margin-left: 22px;
             }
             .cash-container {
                 height: 100%;
@@ -305,7 +306,7 @@ table.sale-table {
     position: absolute !important;
     top: 27px;
     z-index: 2;
-    box-shadow: 0 0 10px 0 rgba(181, 181, 181, 0.15);
+    box-shadow: 0 0 10px #b5b5b545;
     width: 258px;
     height: 172px;
     border-radius: 5px;
@@ -366,9 +367,9 @@ table.sale-table {
     position: absolute !important;
     top: 27px;
     z-index: 2;
-    box-shadow: 0 0 10px 0 rgba(181, 181, 181, 0.15);
+    box-shadow: 0 0 10px #b5b5b545;
     width: 258px;
-    height: 232px;
+    //height: 232px;
     border-radius: 5px;
     padding: 13px 13px 16px;
 

@@ -7,7 +7,7 @@
 .rw-sale-date-selector {
     position: relative;
     display: inline-flex;
-    width: 225px;
+    width: 222px;
     height: 42px;
 
     & > .selected {
@@ -24,6 +24,7 @@
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
+            line-height: 20px;
         }
 
         .mdi {
@@ -79,7 +80,7 @@
             .month-picker-header,
             .date-picker-header {
                 width: 50%;
-                height: 100%;
+                height: 45px;
                 display: inline-flex;
                 justify-content: center;
                 // align-items: center;
@@ -117,9 +118,11 @@
 
                 & > .mdi-chevron-left {
                     left: -40px;
+                    margin-top: 1px;
                 }
                 & > .mdi-chevron-right {
-                    right: -40px;;
+                    right: -40px;
+                    margin-top: 1px;
                 }
 
             }

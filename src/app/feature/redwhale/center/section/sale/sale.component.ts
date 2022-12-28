@@ -312,6 +312,7 @@ export class SaleComponent implements OnInit, OnDestroy {
         }
     }
     makeInputTagObj(filterType: FromSale.InputString) {
+        console.log('makeInputTagObj --- ', filterType)
         const type = this.filterMatcher(filterType)
         const category = this.queryMatcher(filterType)
         const value = this.inputs[filterType]
@@ -430,7 +431,7 @@ export class SaleComponent implements OnInit, OnDestroy {
             case 'membershipLocker':
                 return 'product_name'
             case 'personInCharge':
-                return 'responsibility_user_name'
+                return 'responsibility_center_user_name'
             case 'type':
                 return 'type_code'
             case 'product':

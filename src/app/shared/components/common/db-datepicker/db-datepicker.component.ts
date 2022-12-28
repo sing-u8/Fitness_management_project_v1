@@ -217,6 +217,7 @@ export class DbDatepickerComponent implements OnInit, OnChanges, AfterViewChecke
                     weekCol['color'] = '#CFCFCF'
                 } else {
                     weekCol['color'] = '#606060'
+                    weekCol['fontWeight'] = 400
                 }
 
                 if (this.mode == 'date') {
@@ -249,6 +250,7 @@ export class DbDatepickerComponent implements OnInit, OnChanges, AfterViewChecke
                     year: date.format('YYYY'),
                     date: date.format('YYYY-MM-DD'),
                     color: 'rgb(228, 233, 242)',
+                    fontWeight: 500,
                     selected: false,
                 }
 
