@@ -14,15 +14,18 @@
 
     // 나중에 수정하기 -  1440 부터는 사이드바가 밀고 나오지 않고, 한 레이어 위로 나오게
     min-width: 1213px;
+    @media (min-width: 1280px) {
+        min-width: 1220px;
+    }
 
     @media (min-width: 1440px) {
-        min-width: 1440px;
+        min-width: 1380px;
     }
 
     .header {
         display: flex;
         align-items: center;
-        justify-content:  space-between;
+        justify-content: space-between;
         border-bottom: 1px solid var(--border-color);
         height: 58px;
 
@@ -52,7 +55,7 @@
             img {
                 width: 18px;
                 height: 18px;
-                margin: 2px 2px 0 0 ;
+                margin: 2px 2px 0 0;
             }
         }
     }
