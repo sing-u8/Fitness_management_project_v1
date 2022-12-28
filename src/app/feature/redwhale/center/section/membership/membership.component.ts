@@ -190,14 +190,15 @@ export class MembershipComponent implements OnInit {
                                 itemId: _item.id,
                                 requestBody: {
                                     target_category_id: _targetCategId,
-                                    target_item_sequence_number: _targetModel.findIndex(
-                                        (v) => v.id == _item.id && v.category_id == _item.category_id
-                                    ),
+                                    target_item_sequence_number:
+                                        _targetModel.findIndex(
+                                            (v) => v.id == _item.id && v.category_id == _item.category_id
+                                        ) + 1,
                                 },
                             },
                             targetItems: _.map(_targetModel, (v, idx, vs) => ({
                                 ...v,
-                                sequence_number: idx,
+                                sequence_number: idx + 1,
                                 category_id: _targetCategId,
                             })),
                             targetItem: _item,
