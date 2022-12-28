@@ -14,6 +14,7 @@ import {
     Renderer2,
 } from '@angular/core'
 import moment from 'moment-timezone'
+import _ from "lodash";
 
 // 멀티 라인일 떄 현재 날짜 이전은 선택 불가 기능 추가하기
 @Component({
@@ -409,7 +410,6 @@ export class DbDatepickerComponent implements OnInit, OnChanges, AfterViewChecke
             }
         }
         this.dataChange.emit(this.lineSelectedDateObj)
-        console.log('set multi component initNormalDateweekCol - ', weekCol, ' -- ', this.lineSelectedDateObj)
     }
     initRegisterDate(weekCol) {
         // 초기 시작일 설정을 수정해야할 수도 있음
@@ -467,22 +467,18 @@ export class DbDatepickerComponent implements OnInit, OnChanges, AfterViewChecke
     // deprecated 메세지가 나타났음 - 나중에 수정하기 !
     isEdgeDate(weekCol) {
         return this.lineSelectedDateObj.startDate == weekCol.date || this.lineSelectedDateObj.endDate == weekCol.date
-            ? true
-            : false
     }
     isStartDate(weekCol) {
-        return this.lineSelectedDateObj.startDate == weekCol.date ? true : false
+        return this.lineSelectedDateObj.startDate == weekCol.date
     }
     isEndDate(weekCol) {
-        return this.lineSelectedDateObj.endDate == weekCol.date ? true : false
+        return this.lineSelectedDateObj.endDate == weekCol.date
     }
     isSameDate(weekCol) {
         return weekCol.date == this.lineSelectedDateObj.startDate && weekCol.date == this.lineSelectedDateObj.endDate
     }
     isBetween(weekCol) {
         return moment(weekCol.date).isBetween(this.lineSelectedDateObj.startDate, this.lineSelectedDateObj.endDate)
-            ? true
-            : false
     }
     getDayFromStartDate(weekCol) {
         if (this.lineSelectedDateObj.startDate) {
@@ -495,9 +491,7 @@ export class DbDatepickerComponent implements OnInit, OnChanges, AfterViewChecke
     }
     pastDisable(weekCol) {
         return !this.lineSelectedDateObj.startDate ||
-            moment(weekCol.date).isSameOrBefore(this.lineSelectedDateObj.startDate)
-            ? true
-            : false
+          moment(weekCol.date).isSameOrBefore(this.lineSelectedDateObj.startDate)
     }
     isAvailableDate(weekCol) {
         switch (this.option) {

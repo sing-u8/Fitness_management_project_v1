@@ -58,6 +58,8 @@ export class SaleDateSelectorComponent implements OnInit, AfterViewInit, OnChang
     }
     close() {
         if (_.isArray(this.selectedDate)) {
+            this.selectedDate[0] = _.replace(this.selectedDate[0], /-/g, '.')
+            this.selectedDate[1] = _.replace(this.selectedDate[1], /-/g, '.')
             const _start = _.split(this.selectedDate[0], '.')
             const _end = _.split(this.selectedDate[1], '.')
 
@@ -119,7 +121,7 @@ export class SaleDateSelectorComponent implements OnInit, AfterViewInit, OnChang
         this.RangeDateData.startDate = startDate ?? undefined
         this.RangeDateData.endDate = endDate ?? undefined
     }
-    applyRangeDateDate() {
+    applyRangeDate() {
         this.selectedDate = [
             dayjs(this.RangeDateData.startDate).format('YYYY.MM.DD'),
             dayjs(this.RangeDateData.endDate).format('YYYY.MM.DD') == 'Invalid Date'
