@@ -35,10 +35,11 @@
             <ng-template #category_done>
                 <div class="lesson-category-wrapper" [dragula]="DragulaCategory" [(dragulaModel)]="lessonCategList">
                     <gl-center-lesson-category
-                        *ngFor="let categ of lessonCategList"
+                        *ngFor="let categ of lessonCategList; last as isLast"
                         [id]="categ.id"
                         [categ]="categ"
                         [centerId]="center.id"
+                        [isLast]="isLast"
                     ></gl-center-lesson-category>
                 </div>
             </ng-template>

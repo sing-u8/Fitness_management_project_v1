@@ -31,10 +31,11 @@
                     [(dragulaModel)]="membershipCategList"
                 >
                     <gm-center-membership-category
-                        *ngFor="let categ of membershipCategList"
+                        *ngFor="let categ of membershipCategList; last as isLast"
                         [id]="categ.id"
                         [categ]="categ"
                         [centerId]="center.id"
+                        [isLast]="isLast"
                     ></gm-center-membership-category>
                 </div>
             </ng-template>

@@ -29,6 +29,8 @@ export class MembershipCategoryComponent implements OnInit, AfterViewInit {
     @Input() categ: FromMembership.MembershipCategoryState
     @Input() centerId: string
 
+    @Input() isLast: boolean = false
+
     public items: Array<MembershipItem> = []
     public name: string
 

@@ -1,6 +1,6 @@
-<div class="category-container">
+<div class="category-container" [class.open]="categ.isCategOpen">
 
-    <div class="category-header">
+    <div class="category-header" [class.open]="categ.isCategOpen">
         <form class="header-left" (click)= "toggleCategOpen()">
             <div class="mdi mdi-chevron-down" [class.open]="isCategOpen"></div>
             <span
@@ -74,6 +74,7 @@
         <div
             *ngIf="!isAddLessonInputOn"
             class="add-item"
+            [class.is-last]="isLast"
             [class.add-item--pending] = "categ.isCategPending == 'pending' && categ.item_count == 0"
             [class.add-item--pending2] = "categ.isCategPending == 'pending' && categ.item_count > 0"
             (click) = "setAddLessonItemOn($event)"
@@ -84,6 +85,7 @@
         <form
             *ngIf="isAddLessonInputOn"
             class="add-item-container"
+            [class.is-last]="isLast"
             [class.add-item--pending] = "categ.isCategPending == 'pending' && categ.item_count == 0"
             [class.add-item--pending2] = "categ.isCategPending == 'pending' && categ.item_count > 0"
         >

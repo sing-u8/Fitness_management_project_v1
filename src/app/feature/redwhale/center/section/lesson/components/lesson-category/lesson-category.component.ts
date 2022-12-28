@@ -30,6 +30,8 @@ export class LessonCategoryComponent implements OnInit, AfterViewInit, OnDestroy
     @Input() categ: FromLesson.LessonCategoryState
     @Input() centerId: string
 
+    @Input() isLast: boolean = false
+
     public items: Array<ClassItem> = []
     public name: string
     public isCategOpen: boolean
