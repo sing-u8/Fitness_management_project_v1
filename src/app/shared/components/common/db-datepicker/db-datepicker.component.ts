@@ -250,7 +250,7 @@ export class DbDatepickerComponent implements OnInit, OnChanges, AfterViewChecke
                     month: date.format('MM'),
                     year: date.format('YYYY'),
                     date: date.format('YYYY-MM-DD'),
-                    color: 'rgb(228, 233, 242)',
+                    color: '#CFCFCF',
                     fontWeight: 400,
                     selected: false,
                 }
