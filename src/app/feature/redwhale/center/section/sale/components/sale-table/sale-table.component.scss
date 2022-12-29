@@ -11,7 +11,7 @@ table.sale-table {
     width: 100%;
     height: calc(100% - 65px);
     border-radius: 5px;
-    box-shadow: 0 0 10px #b5b5b545
+    box-shadow: 0 0 10px #b5b5b545;
     background-color: var(--white);
 
     overflow: hidden;
@@ -306,7 +306,7 @@ table.sale-table {
     position: absolute !important;
     top: 27px;
     z-index: 2;
-    box-shadow: 0 0 10px #b5b5b545;
+    box-shadow: 0 0 10px #b5b5b545;;
     width: 258px;
     height: 172px;
     border-radius: 5px;
@@ -367,7 +367,7 @@ table.sale-table {
     position: absolute !important;
     top: 27px;
     z-index: 2;
-    box-shadow: 0 0 10px #b5b5b545;
+    box-shadow: 0 0 10px #b5b5b545;;
     width: 258px;
     //height: 232px;
     border-radius: 5px;

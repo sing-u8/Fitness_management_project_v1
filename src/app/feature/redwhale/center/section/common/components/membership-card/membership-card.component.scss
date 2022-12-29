@@ -25,14 +25,14 @@ p {
 
     &.card-hover-in-category {
         &:hover {
-            box-shadow: 0 0 10px #b5b5b545
+            box-shadow: 0 0 10px #b5b5b545;
         }
     }
 
     &.add-reservable-card-hover {
         cursor: pointer;
         &:hover {
-            box-shadow: 0 0 10px #b5b5b545
+            box-shadow: 0 0 10px #b5b5b545;
         }
     }
 
@@ -42,7 +42,7 @@ p {
             .reservable-card-delete {
                 display: block;
             }
-            box-shadow: 0 0 10px #b5b5b545
+            box-shadow: 0 0 10px #b5b5b545;
         }
     }
 
