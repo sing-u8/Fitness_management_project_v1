@@ -91,6 +91,7 @@ export class ChangeUserPhoneNumberModalComponent implements OnChanges, AfterView
                 }, 200)
 
                 this.userPhoneNumber.reset()
+                this.userPhoneNumber.setValue('')
                 this.isError = false
             }
         }
@@ -167,6 +168,7 @@ export class ChangeUserPhoneNumberModalComponent implements OnChanges, AfterView
     }
 
     onlyNumberCheck(event) {
+        console.log('onlyNumberCheck -- ', event)
         if (this.inputHelperService.restrictToNumber(event)) {
             this.matchPhoneNumberForm(event)
             return true

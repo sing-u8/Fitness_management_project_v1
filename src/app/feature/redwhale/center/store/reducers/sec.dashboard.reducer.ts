@@ -269,8 +269,10 @@ export const dashboardReducer = createImmerReducer(
         return state
     }),
     on(DashboardActions.startSetCurUserData, (state, { userId, reqBody, centerId }) => {
-        if (state.curCenterId == centerId && !_.isEmpty(state.curUserData.user)) {
-            if (state.curUserData.user.id == userId) state.curUserData.user = _.assign(state.curUserData.user, reqBody)
+        if (state.curCenterId == centerId) {
+            if (!_.isEmpty(state.curUserData.user) && state.curUserData.user.id == userId) {
+                state.curUserData.user = _.assign(state.curUserData.user, reqBody)
+            }
 
             const userListsKeys = _.keys(state.usersLists) as MemberSelectCateg[]
             userListsKeys.forEach((key) => {
@@ -283,9 +285,11 @@ export const dashboardReducer = createImmerReducer(
                 })
             })
         }
-        if (state.drawerCurCenterId == centerId && !_.isEmpty(state.drawerCurUserData.user)) {
-            if (state.drawerCurUserData.user.id == userId)
+        if (state.drawerCurCenterId == centerId) {
+            if (!_.isEmpty(state.drawerCurUserData.user) && state.drawerCurUserData.user.id == userId) {
                 state.drawerCurUserData.user = _.assign(state.drawerCurUserData.user, reqBody)
+                console.log('startSetCurUserData in dw : ', state.drawerCurUserData.user.memo)
+            }
 
             const userListsKeys = _.keys(state.drawerUsersLists) as MemberSelectCateg[]
             userListsKeys.forEach((key) => {
@@ -302,7 +306,8 @@ export const dashboardReducer = createImmerReducer(
     }),
     on(DashboardActions.setCurUserData, (state, { userId, reqBody, centerId }) => {
         if (state.curCenterId == centerId) {
-            if (state.curUserData.user.id == userId) state.curUserData.user = _.assign(state.curUserData.user, reqBody)
+            if (!_.isEmpty(state.curUserData.user) && state.curUserData.user.id == userId)
+                state.curUserData.user = _.assign(state.curUserData.user, reqBody)
 
             const userListsKeys = _.keys(state.usersLists) as MemberSelectCateg[]
             userListsKeys.forEach((key) => {
@@ -316,7 +321,7 @@ export const dashboardReducer = createImmerReducer(
             })
         }
         if (state.drawerCurCenterId == centerId) {
-            if (state.drawerCurUserData.user.id == userId)
+            if (!_.isEmpty(state.drawerCurUserData.user) && state.drawerCurUserData.user.id == userId)
                 state.drawerCurUserData.user = _.assign(state.drawerCurUserData.user, reqBody)
 
             const userListsKeys = _.keys(state.drawerUsersLists) as MemberSelectCateg[]

@@ -43,7 +43,6 @@ import { UpdateUserRequestBody } from '@services/center-users.service'
     styleUrls: ['./member-detail.component.scss'],
 })
 export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
-    @Input() curUserData: DashboardReducer.CurUserData = _.cloneDeep(DashboardReducer.CurUserDataInit)
     @Input() curUserListSelect: DashboardReducer.UserListSelect = _.cloneDeep(DashboardReducer.UserListSelectInit)
 
     public memoForm: FormControl = this.fb.control('')
@@ -59,6 +58,9 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
     setUserDetailTag(tag: DashboardReducer.UserDetailTag) {
         this.nxStore.dispatch(DashboardActions.setUserDetailTag({ tag }))
     }
+
+    public curUserData: DashboardReducer.CurUserData = _.cloneDeep(DashboardReducer.CurUserDataInit)
+    public curUserData$ = this.nxStore.select(DashboardSelector.curUserData)
 
     public dbCurCenterId$ = this.nxStore.select(DashboardSelector.curCenterId)
     public dwCurCenterId$ = this.nxStore.select(DashboardSelector.drawerCurCenterId)
@@ -99,6 +101,19 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
                     this.spinner.hide('ud_loading')
                 }
             })
+
+        this.curUserData$.pipe(takeUntil(this.unSubscriber$)).subscribe((curUserData) => {
+            this.curUserData = curUserData
+            this.findEndDateToExpired(7)
+
+            this.memoForm.setValue(this.curUserData?.user?.memo ?? '')
+            this.userNameForModal = this.curUserData?.user?.name ?? ''
+            this.userMembershipNumberForModal = this.curUserData?.user?.membership_number ?? ''
+
+            _.forIn(this.userRole, (value, key) => {
+                this.userRole[key] = key == this.curUserData?.user?.role_code
+            })
+        })
 
         this.dbCurCenterId$.pipe(takeUntil(this.unSubscriber$)).subscribe((dbCurCenterId) => {
             this.dbCurCenterId = dbCurCenterId
@@ -257,24 +272,24 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     ngOnChanges(changes: SimpleChanges): void {
-        if (!_.isEmpty(changes['curUserData'])) {
-            if (changes['curUserData'].previousValue?.user?.id != changes['curUserData'].currentValue['user']?.id) {
-                this.memoForm.setValue(changes['curUserData'].currentValue['user']?.['memo'] ?? '')
-                this.userNameForModal = this.curUserData?.user?.name ?? ''
-                this.userMembershipNumberForModal = this.curUserData?.user?.membership_number ?? ''
-
-                _.forIn(this.userRole, (value, key) => {
-                    this.userRole[key] = key == this.curUserData?.user?.role_code
-                })
-            }
-            if (
-                !_.isEmpty(changes['curUserData'].currentValue['user']) &&
-                changes['curUserData'].previousValue?.user?.user_membership_end_date !=
-                    changes['curUserData'].currentValue['user']?.user_membership_end_date
-            ) {
-                this.findEndDateToExpired(7)
-            }
-        }
+        // if (!_.isEmpty(changes['curUserData'])) {
+        //     if (changes['curUserData'].previousValue?.user?.id != changes['curUserData'].currentValue['user']?.id) {
+        //         this.memoForm.setValue(changes['curUserData'].currentValue['user']?.['memo'] ?? '')
+        //         this.userNameForModal = this.curUserData?.user?.name ?? ''
+        //         this.userMembershipNumberForModal = this.curUserData?.user?.membership_number ?? ''
+        //
+        //         _.forIn(this.userRole, (value, key) => {
+        //             this.userRole[key] = key == this.curUserData?.user?.role_code
+        //         })
+        //     }
+        //     if (
+        //         !_.isEmpty(changes['curUserData'].currentValue['user']) &&
+        //         changes['curUserData'].previousValue?.user?.user_membership_end_date !=
+        //             changes['curUserData'].currentValue['user']?.user_membership_end_date
+        //     ) {
+        //         this.findEndDateToExpired(7)
+        //     }
+        // }
     }
 
     //
@@ -283,6 +298,7 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
         imminentDate: 0,
     }
     findEndDateToExpired(dateToExpired: number) {
+        if (_.isEmpty(this.curUserData.user)) return
         const remainDate = this.timeService.getRestPeriod(
             dayjs().format(),
             this.curUserData.user.user_membership_end_date

@@ -34,6 +34,7 @@ export class UserListCardComponent implements OnInit, AfterViewInit, OnChanges, 
     @Output() onHoldClick = new EventEmitter<boolean>()
 
     public attendanceTime = undefined
+    public expiredBefore = 0
 
     clickCard() {
         this.onCardClick.emit(this.cardItem.user)
@@ -65,6 +66,7 @@ export class UserListCardComponent implements OnInit, AfterViewInit, OnChanges, 
     }
     ngAfterViewInit(): void {
         this.initAttendanceTime()
+        this.initExpiredBefore()
         this.findEndDateToExpired(7)
     }
     ngOnDestroy(): void {
@@ -94,6 +96,15 @@ export class UserListCardComponent implements OnInit, AfterViewInit, OnChanges, 
     initAttendanceTime() {
         if (this.cardItem.user.last_check_in) {
             this.attendanceTime = this.timeService.getTodayRegisteredTime(this.cardItem.user.last_check_in)
+        }
+    }
+
+    initExpiredBefore() {
+        if (this.cardItem.user.user_membership_end_date) {
+            this.expiredBefore = dayjs(dayjs().format('YYYY-MM-DD')).diff(
+                this.cardItem.user.user_membership_end_date,
+                'd'
+            )
         }
     }
 }

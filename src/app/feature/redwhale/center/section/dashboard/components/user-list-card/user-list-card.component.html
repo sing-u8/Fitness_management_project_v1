@@ -74,7 +74,7 @@
 
             <ng-template #expired>
                 <div *ngIf="type == 'expired'" class="member-right">
-                    <!-- <span class="rw-typo-subtext0-regular unpaid-price">{{cardItem.user.elapsed_days_of_last_expired_membership_ticket}}일 전 만료</span> -->
+                    <span class="rw-typo-subtext0-regular unpaid-price">{{ expiredBefore }}일 전 만료</span>
                 </div>
             </ng-template>
         </div>

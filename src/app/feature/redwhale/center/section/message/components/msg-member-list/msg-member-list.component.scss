@@ -43,15 +43,15 @@ section.l-member-list {
         position: relative;
 
         .l-input {
-            margin: 20px 20px 5px;
-            width: calc(100% - 40px);
+            margin: 21px 21px 0 21px;
+            width: calc(100% - 42px);
             height: 48px;
             position: relative;
 
             input {
                 width: 100%;
                 height: 48px;
-                padding: 12px 15px 10px 33px;
+                padding: 12px 33px 10px 15px;
             }
 
             & > img {
@@ -59,8 +59,8 @@ section.l-member-list {
                 height: 20px;
                 width: 20px;
                 border-radius: 3px;
-                top: 15.5px;
-                left: 10px;
+                top: 15px;
+                right: 10px;
             }
         }
 
@@ -99,7 +99,7 @@ section.l-member-list {
         .l-member-card {
             width: 100%;
             //height: calc(100% - 88px);
-            padding: 8px 14px;
+            padding: 11px 16px;
             height: calc(100% - 135px);
             position: relative;
 

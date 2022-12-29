@@ -90,6 +90,8 @@ export class RegisterSenderPhoneModalComponent implements OnChanges, AfterViewCh
                 }, 200)
                 this.nameForm.reset()
                 this.phoneForm.reset()
+                this.nameForm.setValue('')
+                this.phoneForm.setValue('')
             }
         }
     }

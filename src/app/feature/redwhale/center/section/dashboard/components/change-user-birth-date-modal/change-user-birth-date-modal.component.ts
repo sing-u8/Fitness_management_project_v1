@@ -89,6 +89,7 @@ export class ChangeUserBirthDateModalComponent implements OnChanges, AfterViewCh
                 }, 200)
 
                 this.userBirthDate.reset()
+                this.userBirthDate.setValue('')
                 this.isError = false
             }
         }

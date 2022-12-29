@@ -11,14 +11,12 @@
 // 55px  + 60px(wholePaddingTop) + 73px (header height,margin,padding) + (25px + (15px + 23px)[title])
 $innerHeight: calc(100vh - (55px + 60px + 73px + 63px));
 
-
-
 article.member-management {
     height: 100%;
     //width: calc(100vw - 60px);
     position: relative;
     // padding: 25px 32px 35px 32px;
-    padding: 35px ;
+    padding: 35px;
 
     header {
         display: flex;
@@ -47,8 +45,8 @@ article.member-management {
         }
     }
 
-    $large:47px;
-    $x_large:56px;
+    $large: 53px;
+    $x_large: 62px;
     main.l-main {
         display: flex;
         width: 100%;
@@ -63,9 +61,9 @@ article.member-management {
             position: relative;
 
             margin-right: $large;
-            -ms-flex: 0 0 26.703%;
-            flex: 0 0 26.703%;
-            max-width: 26.703%;
+            -ms-flex: 0 0 25.42%;
+            flex: 0 0 25.42%;
+            max-width: 25.42%;
             min-width: 290px;
 
             @media (min-width: 1440px) {
@@ -75,10 +73,10 @@ article.member-management {
                 max-width: 26.942%;
             }
             @media (min-width: 1920px) {
-                -ms-flex: 0 0 23.846%;
-                flex: 0 0 23.846%;
-                max-width: 23.846%;
-                min-width: 426.83px; // !!
+                -ms-flex: 0 0 22.794%;
+                flex: 0 0 22.794%;
+                max-width: 22.794%;
+                min-width: 407.83px; // !!
             }
             @media (min-width: 2480px) {
                 max-width: 560px;
@@ -143,33 +141,33 @@ article.member-management {
 
         section.l-member-detail {
             position: relative;
-            -ms-flex: 0 0 calc(73.297% - $large);
-            flex: 0 0 calc(73.297% - $large);
+            -ms-flex: 0 0 calc(100% - 25.42% - $large);
+            flex: 0 0 calc(100% - 25.42% - $large);
             //max-width: calc(73.297% - $large);
 
             @media (min-width: 1440px) {
-                -ms-flex: 0 0 calc(73.058% - $x_large);
-                flex: 0 0 calc(73.058% - $x_large);
+                -ms-flex: 0 0 calc(100% - 26.942% - $x_large);
+                flex: 0 0 calc(100% - 26.942% - $x_large);
                 //max-width: calc(73.058% - $x_large);
             }
 
             @media (min-width: 1920px) {
-                -ms-flex: 0 0 calc(76.154% - $x_large);
-                flex: 0 0 calc(76.154% - $x_large);
-                min-width: 1307.16px;
+                -ms-flex: 0 0 calc(100% - 22.794%  - $x_large);
+                flex: 0 0 calc(100% -  22.794% - $x_large);
+                min-width: 1301.16px;
                 //max-width: calc(76.154% - $x_large);
             }
 
             @media (min-width: 2480px) {
-                -ms-flex: 0 0 calc(100% - 616px);
-                flex: 0 0 calc(100% - 616px);
+                -ms-flex: 0 0 calc(100% - 622px);
+                flex: 0 0 calc(100% - 622px);
                 //max-width: calc(100% - 620px);
             }
 
             div.member-detail__header {
                 width: 100%;
                 text-align: start;
-                vertical-align:middle;
+                vertical-align: middle;
                 margin-bottom: 15px;
                 position: relative;
                 // height --> 23px + 15px
@@ -179,9 +177,7 @@ article.member-management {
                     bottom: -5px;
                 }
             }
-
         }
-
     }
 }
 
@@ -190,4 +186,3 @@ article.member-management {
     margin-bottom: 12px;
 }
 // -------------------------- elements ---------------------------------
-
