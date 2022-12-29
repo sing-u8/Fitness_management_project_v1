@@ -15,7 +15,7 @@ $innerHeight: calc(100vh - (55px + 60px + 73px + 63px));
 
 article.member-management {
     height: 100%;
-    width: calc(100vw - 60px);
+    //width: calc(100vw - 60px);
     position: relative;
     // padding: 25px 32px 35px 32px;
     padding: 35px ;
@@ -78,6 +78,7 @@ article.member-management {
                 -ms-flex: 0 0 23.846%;
                 flex: 0 0 23.846%;
                 max-width: 23.846%;
+                min-width: 426.83px; // !!
             }
             @media (min-width: 2480px) {
                 max-width: 560px;
@@ -155,6 +156,7 @@ article.member-management {
             @media (min-width: 1920px) {
                 -ms-flex: 0 0 calc(76.154% - $x_large);
                 flex: 0 0 calc(76.154% - $x_large);
+                min-width: 1307.16px;
                 //max-width: calc(76.154% - $x_large);
             }
 
