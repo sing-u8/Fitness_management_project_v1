@@ -213,11 +213,13 @@ export class DbDatepickerComponent implements OnInit, OnChanges, AfterViewChecke
 
                 if (date.format('YYYYMMDD') == this.today.format('YYYYMMDD')) {
                     weekCol['color'] = 'rgb(227, 74, 94)'
+
                 } else if (date.format('MM') != currentDate.format('MM')) {
                     weekCol['color'] = '#CFCFCF'
+                    weekCol['fontWeight'] = 400
                 } else {
                     weekCol['color'] = '#606060'
-                    weekCol['fontWeight'] = 400
+                    weekCol['fontWeight'] = 500
                 }
 
                 if (this.mode == 'date') {
@@ -250,7 +252,7 @@ export class DbDatepickerComponent implements OnInit, OnChanges, AfterViewChecke
                     year: date.format('YYYY'),
                     date: date.format('YYYY-MM-DD'),
                     color: 'rgb(228, 233, 242)',
-                    fontWeight: 500,
+                    fontWeight: 400,
                     selected: false,
                 }
 
