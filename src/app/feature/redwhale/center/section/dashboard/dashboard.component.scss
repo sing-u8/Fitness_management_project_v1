@@ -144,24 +144,24 @@ article.member-management {
             position: relative;
             -ms-flex: 0 0 calc(73.297% - $large);
             flex: 0 0 calc(73.297% - $large);
-            max-width: calc(73.297% - $large);
+            //max-width: calc(73.297% - $large);
 
             @media (min-width: 1440px) {
                 -ms-flex: 0 0 calc(73.058% - $x_large);
                 flex: 0 0 calc(73.058% - $x_large);
-                max-width: calc(73.058% - $x_large);
+                //max-width: calc(73.058% - $x_large);
             }
 
             @media (min-width: 1920px) {
                 -ms-flex: 0 0 calc(76.154% - $x_large);
                 flex: 0 0 calc(76.154% - $x_large);
-                max-width: calc(76.154% - $x_large);
+                //max-width: calc(76.154% - $x_large);
             }
 
             @media (min-width: 2480px) {
-                -ms-flex: 0 0 calc(100% - 620px);
-                flex: 0 0 calc(100% - 620px);
-                max-width: calc(100% - 620px);
+                -ms-flex: 0 0 calc(100% - 616px);
+                flex: 0 0 calc(100% - 616px);
+                //max-width: calc(100% - 620px);
             }
 
             div.member-detail__header {
