@@ -269,7 +269,7 @@ export const dashboardReducer = createImmerReducer(
         return state
     }),
     on(DashboardActions.startSetCurUserData, (state, { userId, reqBody, centerId }) => {
-        if (state.curCenterId == centerId) {
+        if (state.curCenterId == centerId && !_.isEmpty(state.curUserData.user)) {
             if (state.curUserData.user.id == userId) state.curUserData.user = _.assign(state.curUserData.user, reqBody)
 
             const userListsKeys = _.keys(state.usersLists) as MemberSelectCateg[]
@@ -283,7 +283,7 @@ export const dashboardReducer = createImmerReducer(
                 })
             })
         }
-        if (state.drawerCurCenterId == centerId) {
+        if (state.drawerCurCenterId == centerId && !_.isEmpty(state.drawerCurUserData.user)) {
             if (state.drawerCurUserData.user.id == userId)
                 state.drawerCurUserData.user = _.assign(state.drawerCurUserData.user, reqBody)
 
@@ -363,34 +363,64 @@ export const dashboardReducer = createImmerReducer(
     }),
 
     on(DashboardActions.finishRemoveCurUserProfile, (state, { userId, profileUrl }) => {
-        state.curUserData.user.picture = profileUrl
-
-        const userListsKeys = _.keys(state.usersLists) as MemberSelectCateg[]
-        userListsKeys.forEach((key) => {
-            state.usersLists[key].find((v, i) => {
-                if (v.user.id == userId) {
-                    state.usersLists[key][i].user.picture = profileUrl
-                    return true
-                }
-                return false
+        if (!_.isEmpty(state.curUserData.user)) {
+            state.curUserData.user.picture = profileUrl
+            const userListsKeys = _.keys(state.usersLists) as MemberSelectCateg[]
+            userListsKeys.forEach((key) => {
+                state.usersLists[key].find((v, i) => {
+                    if (v.user.id == userId) {
+                        state.usersLists[key][i].user.picture = profileUrl
+                        return true
+                    }
+                    return false
+                })
             })
-        })
+        }
+        if (!_.isEmpty(state.drawerCurUserData.user)) {
+            state.drawerCurUserData.user.picture = profileUrl
+            const userListsKeys = _.keys(state.drawerUsersLists) as MemberSelectCateg[]
+            userListsKeys.forEach((key) => {
+                state.drawerUsersLists[key].find((v, i) => {
+                    if (v.user.id == userId) {
+                        state.drawerUsersLists[key][i].user.picture = profileUrl
+                        return true
+                    }
+                    return false
+                })
+            })
+        }
+
         return state
     }),
 
     on(DashboardActions.finishRegisterCurUserProfile, (state, { userId, profileUrl }) => {
-        state.curUserData.user.picture = profileUrl
-
-        const userListsKeys = _.keys(state.usersLists) as MemberSelectCateg[]
-        userListsKeys.forEach((key) => {
-            state.usersLists[key].find((v, i) => {
-                if (v.user.id == userId) {
-                    state.usersLists[key][i].user.picture = profileUrl
-                    return true
-                }
-                return false
+        if (!_.isEmpty(state.curUserData.user)) {
+            state.curUserData.user.picture = profileUrl
+            const userListsKeys = _.keys(state.usersLists) as MemberSelectCateg[]
+            userListsKeys.forEach((key) => {
+                state.usersLists[key].find((v, i) => {
+                    if (v.user.id == userId) {
+                        state.usersLists[key][i].user.picture = profileUrl
+                        return true
+                    }
+                    return false
+                })
             })
-        })
+        }
+        if (!_.isEmpty(state.drawerCurUserData.user)) {
+            state.drawerCurUserData.user.picture = profileUrl
+            const userListsKeys = _.keys(state.drawerUsersLists) as MemberSelectCateg[]
+            userListsKeys.forEach((key) => {
+                state.drawerUsersLists[key].find((v, i) => {
+                    if (v.user.id == userId) {
+                        state.drawerUsersLists[key][i].user.picture = profileUrl
+                        return true
+                    }
+                    return false
+                })
+            })
+        }
+
         return state
     }),
     on(DashboardActions.finishContractSign, (state, { file, centerContractId }) => {
@@ -599,36 +629,6 @@ export const dashboardReducer = createImmerReducer(
     on(DashboardActions.finishGetDrawerUserList, (state, { categ_type, userListValue }) => {
         state.drawerUsersLists[categ_type] = userListValue
         state.drawerIsLoading = 'done'
-        return state
-    }),
-    on(DashboardActions.finishRemoveDrawerCurUserProfile, (state, { userId, profileUrl }) => {
-        state.drawerCurUserData.user.picture = profileUrl
-
-        const userListsKeys = _.keys(state.drawerUsersLists) as MemberSelectCateg[]
-        userListsKeys.forEach((key) => {
-            state.drawerUsersLists[key].find((v, i) => {
-                if (v.user.id == userId) {
-                    state.drawerUsersLists[key][i].user.picture = profileUrl
-                    return true
-                }
-                return false
-            })
-        })
-        return state
-    }),
-    on(DashboardActions.finishRegisterDrawerCurUserProfile, (state, { userId, profileUrl }) => {
-        state.drawerCurUserData.user.picture = profileUrl
-
-        const userListsKeys = _.keys(state.drawerUsersLists) as MemberSelectCateg[]
-        userListsKeys.forEach((key) => {
-            state.drawerUsersLists[key].find((v, i) => {
-                if (v.user.id == userId) {
-                    state.drawerUsersLists[key][i].user.picture = profileUrl
-                    return true
-                }
-                return false
-            })
-        })
         return state
     }),
     on(DashboardActions.startSetDrawerCurUserData, (state, { userId, reqBody }) => {

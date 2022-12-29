@@ -335,7 +335,7 @@ export class DashboardEffect {
         )
     )
 
-    public registerUserProfile = createEffect(() =>
+    public registerUserProfile$ = createEffect(() =>
         this.actions$.pipe(
             ofType(DashboardActions.startRegisterCurUserProfile),
             switchMap(({ reqBody, profile, userId, callback, centerUser }) =>

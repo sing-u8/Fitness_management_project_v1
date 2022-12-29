@@ -276,30 +276,6 @@ export const finishGetDrawerUserList = createAction(
     props<{ centerId: string; categ_type: MemberSelectCateg; userListValue: UsersListValue }>()
 )
 
-export const startRemoveDrawerCurUserProfile = createAction(
-    `[${FeatureKey}] Start Remove Drawer Current User Profile`,
-    props<{ centerId: string; userId: string; profileUrl: string; callback?: () => void }>()
-)
-export const finishRemoveDrawerCurUserProfile = createAction(
-    `[${FeatureKey}] Finish Remove Drawer Current User Profile`,
-    props<{ userId: string; profileUrl: string }>()
-)
-
-export const startRegisterDrawerCurUserProfile = createAction(
-    `[${FeatureKey}] Start Register Drawer Current User Profile`,
-    props<{
-        userId: string
-        profile: FileList
-        reqBody: CreateFileRequestBody
-        centerUser: CenterUser
-        callback?: (cu: CenterUser) => void
-    }>()
-)
-export const finishRegisterDrawerCurUserProfile = createAction(
-    `[${FeatureKey}] Finish Register Drawer Current User Profile`,
-    props<{ userId: string; profileUrl: string }>()
-)
-
 export const startDrawerCenterHolding = createAction(
     `[${FeatureKey}] Start Drawer Center Hold`,
     props<{ centerId: string; reqBody: Omit<CenterHoldingReqBody, 'center_user_ids'>; cb?: () => void }>()

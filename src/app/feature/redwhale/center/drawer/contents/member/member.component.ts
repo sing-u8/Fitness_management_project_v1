@@ -197,6 +197,7 @@ export class MemberComponent implements OnInit, OnDestroy {
     toggleShowChangeNameModal() {
         this.doShowChangeNameModal = !this.doShowChangeNameModal
     }
+
     onChangeNameConfirm(changedName: string) {
         if (this.curCenterUser.name != changedName) {
             this.nxStore.dispatch(
@@ -205,7 +206,7 @@ export class MemberComponent implements OnInit, OnDestroy {
                     reqBody: { name: changedName },
                     userId: this.curCenterUser.id,
                     callback: () => {
-                        this.toggleShowChangeNameModal()
+                        this.doShowChangeNameModal = false
                         this.nxStore.dispatch(showToast({ text: `회원 이름 변경이 완료되었습니다.` }))
                         this.nxStore.dispatch(CenterCommonActions.startGetMembers({ centerId: this.center.id }))
                         this.nxStore.dispatch(CenterCommonActions.startGetInstructors({ centerId: this.center.id }))
@@ -400,7 +401,7 @@ export class MemberComponent implements OnInit, OnDestroy {
     }
     public removeUserProfile() {
         this.nxStore.dispatch(
-            DashboardActions.startRemoveDrawerCurUserProfile({
+            DashboardActions.startRemoveCurUserProfile({
                 centerId: this.center.id,
                 userId: this.curCenterUser.id,
                 profileUrl: this.curCenterUser.picture,
@@ -420,34 +421,10 @@ export class MemberComponent implements OnInit, OnDestroy {
     registerUserProfile(picture: any) {
         if (!this.isFileExist(picture.files)) return
         const files: FileList = _.assign({ length: 1 }, picture.files)
-        if (!_.isEmpty(this.curCenterUser.picture)) {
-            this.fileService.deleteFile(this.curCenterUser.picture).subscribe(() => {
-                this.nxStore.dispatch(
-                    DashboardActions.startRegisterDrawerCurUserProfile({
-                        userId: this.curCenterUser.id,
-                        centerUser: this.curUserData.user,
-                        reqBody: {
-                            type_code: 'file_type_center_user_picture',
-                            center_id: this.center.id,
-                            center_user_id: this.curCenterUser.id,
-                        },
-                        profile: files,
-                        callback: (cu: CenterUser) => {
-                            this.nxStore.dispatch(
-                                showToast({
-                                    text: `${this.curCenterUser.name}님의 프로필 사진이 변경되었습니다.`,
-                                })
-                            )
-                            this.nxStore.dispatch(CenterCommonActions.startGetMembers({ centerId: this.center.id }))
-                            this.nxStore.dispatch(CenterCommonActions.startGetInstructors({ centerId: this.center.id }))
-                            this.storageService.updateCenterUser(cu)
-                        },
-                    })
-                )
-            })
-        } else {
+
+        const registerUserProfile = () => {
             this.nxStore.dispatch(
-                DashboardActions.startRegisterDrawerCurUserProfile({
+                DashboardActions.startRegisterCurUserProfile({
                     userId: this.curCenterUser.id,
                     centerUser: this.curUserData.user,
                     reqBody: {
@@ -468,6 +445,14 @@ export class MemberComponent implements OnInit, OnDestroy {
                     },
                 })
             )
+        }
+
+        if (!_.isEmpty(this.curCenterUser.picture)) {
+            this.fileService.deleteFile(this.curCenterUser.picture).subscribe(() => {
+                registerUserProfile()
+            })
+        } else {
+            registerUserProfile()
         }
     }
     isFileExist(fileList: FileList) {
