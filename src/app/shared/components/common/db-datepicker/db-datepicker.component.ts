@@ -14,7 +14,7 @@ import {
     Renderer2,
 } from '@angular/core'
 import moment from 'moment-timezone'
-import _ from "lodash";
+import _ from 'lodash'
 
 // 멀티 라인일 떄 현재 날짜 이전은 선택 불가 기능 추가하기
 @Component({
@@ -213,7 +213,6 @@ export class DbDatepickerComponent implements OnInit, OnChanges, AfterViewChecke
 
                 if (date.format('YYYYMMDD') == this.today.format('YYYYMMDD')) {
                     weekCol['color'] = 'rgb(227, 74, 94)'
-
                 } else if (date.format('MM') != currentDate.format('MM')) {
                     weekCol['color'] = '#CFCFCF'
                     weekCol['fontWeight'] = 400
@@ -494,8 +493,10 @@ export class DbDatepickerComponent implements OnInit, OnChanges, AfterViewChecke
         return 0
     }
     pastDisable(weekCol) {
-        return !this.lineSelectedDateObj.startDate ||
-          moment(weekCol.date).isSameOrBefore(this.lineSelectedDateObj.startDate)
+        return (
+            !this.lineSelectedDateObj.startDate ||
+            moment(weekCol.date).isSameOrBefore(this.lineSelectedDateObj.startDate)
+        )
     }
     isAvailableDate(weekCol) {
         switch (this.option) {

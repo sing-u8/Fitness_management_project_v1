@@ -79,4 +79,5 @@ export type getStatsSaleOption = {
     product_type_code?: GetStatsProductTypeCode
     product_name?: string
     responsibility_center_user_name?: string
+    center_user_phone_number?: string
 }

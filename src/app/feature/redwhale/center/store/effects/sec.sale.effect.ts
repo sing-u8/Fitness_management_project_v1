@@ -22,7 +22,13 @@ export class SaleEffect {
         this.actions$.pipe(
             ofType(SaleActions.startGetSaleData),
             switchMap(({ centerId, start_date, end_date, option }) => {
-                return this.centerStatApi.getStatsSales(centerId, start_date, end_date, option).pipe(
+                const _option = _.cloneDeep(option)
+                const phoneNumberReg = /\d{11}/
+                if (_.has(_option, 'center_user_name') && phoneNumberReg.test(_option?.center_user_name)) {
+                    _option.center_user_phone_number = _option.center_user_name
+                    delete _option.center_user_name
+                }
+                return this.centerStatApi.getStatsSales(centerId, start_date, end_date, _option).pipe(
                     map((saleData) => SaleActions.finishGetSaleData({ saleData })),
                     catchError((err: string) => of(SaleActions.setError({ error: err })))
                 )

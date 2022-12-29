@@ -40,7 +40,7 @@
           0원
         </p>
       </div>
-      <div *ngIf="!(curTotal <= 0 || prevTotal <= 0)" class="summary-desc">
+      <div *ngIf="!(curTotal == 0 || prevTotal == 0)" class="summary-desc">
         <!-- <p *ngIf="curTotal == 0" class="rw-typo-bodytext2-regular">매출을 입력해주세요.</p> -->
         <p class="rw-typo-bodytext2">
           {{summaryDescText}}
