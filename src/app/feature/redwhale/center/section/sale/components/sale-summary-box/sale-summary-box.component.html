@@ -61,14 +61,14 @@
           {{detailTitle[v.key]}}
         </div>
         <div class="rw-typo-bodytext0 d-flex">
-          <div
-            *ngIf="!(v.value <= 0 || SaleSummary.prev[v.key] <= 0)"
-            class="rw-typo-subtext3 change-ratio"
-            [class.plus] = "v.value > SaleSummary.prev[v.key]"
-            [class.minus] = "v.value < SaleSummary.prev[v.key]"
-          >
-            {{v.value | rateOfChange:SaleSummary.prev[v.key]:true }}
-          </div>
+<!--          <div-->
+<!--            *ngIf="!(v.value <= 0 || SaleSummary.prev[v.key] <= 0)"-->
+<!--            class="rw-typo-subtext3 change-ratio"-->
+<!--            [class.plus] = "v.value > SaleSummary.prev[v.key]"-->
+<!--            [class.minus] = "v.value < SaleSummary.prev[v.key]"-->
+<!--          >-->
+<!--            {{v.value | rateOfChange:SaleSummary.prev[v.key]:true }}-->
+<!--          </div>-->
 
           <div class="price">
             <div class="the-price">{{v.value | numberWithCommas}}원</div>
