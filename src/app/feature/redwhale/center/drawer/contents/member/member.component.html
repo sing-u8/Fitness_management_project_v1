@@ -84,7 +84,7 @@
                             <div *ngIf="curUserData.user.total_unpaid != 0" class="user-status-tag">
                                 <div class="unpaid-icon"></div>
                                 <span class="tooltip-pay"
-                                >{{ curUserData.user.total_unpaid | numberWithCommas }}원 미수</span
+                                    >{{ curUserData.user.total_unpaid | numberWithCommas }}원 미수</span
                                 >
                             </div>
                             <div *ngIf="imminentDateObj.isImminent == true" class="user-status-tag">
@@ -92,20 +92,6 @@
                                 <span>{{ imminentDateObj.imminentDate }}일 후 만료</span>
                             </div>
                         </div>
-
-                        <rw-member-role-select
-                            *ngIf="curCenterUser"
-                            [staffId]="centerStaff.id"
-                            [member]="curCenterUser"
-                            [visible]="doShowRoleSelect"
-                            [userRole]="userRole"
-                            [employeeRole]="staffRole"
-                            [mode]="'drawer'"
-                            (onClose)="closeRoleSelect()"
-                            (onSetUserRole)="setUserRole($event)"
-                            (onToggleSelect)="toggleRoleSelect()"
-                            (onSaveRole)="openChangeRoleModal()"
-                        ></rw-member-role-select>
                     </div>
                 </div>
                 <div class="chat-attend">
@@ -198,9 +184,27 @@
                             <img *ngIf="curUserData.user" src="assets/icons/etc/edit.svg" />
                         </span>
                     </div>
+                    <div class="user-data">
+                        <span class="rw-typo-bodytext1_grey prop">권한</span>
+                        <span class="rw-typo-bodytext1 value">
+                            <span *ngIf="!curUserData.user">-</span>
+                            <rw-member-role-select
+                                *ngIf="curCenterUser"
+                                [staffId]="centerStaff.id"
+                                [member]="curCenterUser"
+                                [visible]="doShowRoleSelect"
+                                [userRole]="userRole"
+                                [employeeRole]="staffRole"
+                                (onClose)="closeRoleSelect()"
+                                (onSetUserRole)="setUserRole($event)"
+                                (onToggleSelect)="toggleRoleSelect()"
+                                (onSaveRole)="openChangeRoleModal()"
+                            ></rw-member-role-select>
+                        </span>
+                    </div>
 
                     <textarea
-                        placeholder="메모를 입력해주세요."
+                        placeholder="회원에 대한 기록을 남겨주세요"
                         class="rw-typo-bodytext1 thin-scroll-y"
                         (blur)="updateUserMemo(memoForm.value)"
                         [formControl]="memoForm"
