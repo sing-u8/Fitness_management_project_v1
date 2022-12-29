@@ -8,6 +8,7 @@ import {
     ViewChildren,
     QueryList,
     AfterViewInit,
+    AfterViewChecked,
     Output,
     EventEmitter,
     OnChanges,
@@ -31,7 +32,7 @@ import _ from 'lodash'
         },
     ],
 })
-export class MultiInstructorSelectComponent implements AfterViewInit, ControlValueAccessor, OnChanges {
+export class MultiInstructorSelectComponent implements AfterViewInit, ControlValueAccessor,AfterViewChecked, OnChanges {
     @Input() items: MultiSelect
     @Input() disabled: boolean
     @Input() height: string
@@ -55,6 +56,8 @@ export class MultiInstructorSelectComponent implements AfterViewInit, ControlVal
     value: MultiSelect
     isOpen: boolean
 
+    public initItemsWidth = 100
+
     constructor(private el: ElementRef, private renderer: Renderer2) {
         this.disabled = false
     }
@@ -70,12 +73,17 @@ export class MultiInstructorSelectComponent implements AfterViewInit, ControlVal
         // this.onChanged(this.items[0])
 
         // setting elements style
-        this.renderer.setStyle(this.selectedElement.nativeElement, 'width', `104px`)
-        this.renderer.setStyle(this.itemsElement.nativeElement, 'width', `104px`)
+        this.renderer.setStyle(this.selectedElement.nativeElement, 'width', `${this.initItemsWidth}px`)
+        this.renderer.setStyle(this.itemsElement.nativeElement, 'width', `${this.initItemsWidth}px`)
 
         if (this.closeBgColor) {
             this.renderer.setStyle(this.selectedElement.nativeElement, 'backgroundColor', `${this.closeBgColor}`)
         }
+
+        // this.adjustCmpWidth()
+    }
+    ngAfterViewChecked() {
+        this.adjustCmpWidth()
     }
 
     toggle() {
@@ -99,6 +107,19 @@ export class MultiInstructorSelectComponent implements AfterViewInit, ControlVal
         }
     }
 
+    adjustCmpWidth() {
+        const checkedItems = this.items.filter((v) => v.checked)
+        if (checkedItems.length > 1 && this.initItemsWidth != 140) {
+            this.renderer.setStyle(this.selectedElement.nativeElement, 'width', `140px`)
+            this.renderer.setStyle(this.itemsElement.nativeElement, 'width', `140px`)
+            this.initItemsWidth = 140
+        } else if(checkedItems.length == 1 && this.initItemsWidth != 100) {
+            this.renderer.setStyle(this.selectedElement.nativeElement, 'width', `100px`)
+            this.renderer.setStyle(this.itemsElement.nativeElement, 'width', `100px`)
+            this.initItemsWidth = 100
+        }
+    }
+
     // !!
     onSelect(item: MultiSelectValue, idx: number) {
         if (item.disabled) return
@@ -108,15 +129,7 @@ export class MultiInstructorSelectComponent implements AfterViewInit, ControlVal
 
         this.onChanged(item)
         this.onSelectChange.emit({ selectedValue: this.items[idx], items: this.items })
-
-        const checkedItems = this.items.filter((v) => v.checked)
-        if (checkedItems.length > 1) {
-            this.renderer.setStyle(this.selectedElement.nativeElement, 'width', `145px`)
-            this.renderer.setStyle(this.itemsElement.nativeElement, 'width', `145px`)
-        } else {
-            this.renderer.setStyle(this.selectedElement.nativeElement, 'width', `104px`)
-            this.renderer.setStyle(this.itemsElement.nativeElement, 'width', `104px`)
-        }
+        this.adjustCmpWidth()
     }
 
     onChange = (_value: MultiSelectValue) => {

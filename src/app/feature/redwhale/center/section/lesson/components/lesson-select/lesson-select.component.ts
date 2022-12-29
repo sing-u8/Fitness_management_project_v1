@@ -69,13 +69,6 @@ export class LessonSelectComponent implements AfterViewInit, ControlValueAccesso
         this.renderer.setStyle(this.selectedElement.nativeElement, 'width', this.width)
         this.renderer.setStyle(this.itemsElement.nativeElement, 'width', this.width)
 
-        console.log(
-            'ngAfterViewInit in lesson select : ',
-            this.selectedElement.nativeElement,
-            this.selectedElement,
-            !_.isEmpty(this.width)
-        )
-
         if (!_.isEmpty(this.width)) {
             this.renderer.setStyle(this.selectedElement.nativeElement, 'width', `${this.width}px`)
             this.renderer.setStyle(this.itemsElement.nativeElement, 'width', `${this.width}px`)
