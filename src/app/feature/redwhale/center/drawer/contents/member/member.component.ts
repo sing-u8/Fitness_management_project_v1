@@ -480,6 +480,7 @@ export class MemberComponent implements OnInit, OnDestroy {
         imminentDate: 0,
     }
     findEndDateToExpired(dateToExpired: number) {
+        if (_.isEmpty(this.curUserData.user)) return
         const remainDate = this.timeService.getRestPeriod(
             dayjs().format(),
             this.curUserData.user.user_membership_end_date
