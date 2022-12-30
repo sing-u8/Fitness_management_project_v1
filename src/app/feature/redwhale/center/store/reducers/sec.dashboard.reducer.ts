@@ -249,7 +249,7 @@ export const dashboardReducer = createImmerReducer(
     on(DashboardActions.finishRefreshCenterUser, (state, { categ_type, refreshCenterUser, isUserInCurCateg }) => {
         if (isUserInCurCateg) {
             const refreshUserIdx = _.findIndex(state.usersLists[categ_type], (v) => v.user.id == refreshCenterUser.id)
-            state.usersLists[categ_type][refreshUserIdx].user = refreshCenterUser
+            if (refreshUserIdx != -1) state.usersLists[categ_type][refreshUserIdx].user = refreshCenterUser
         } else {
             _.remove(state.usersLists[categ_type], (v) => v.user.id == refreshCenterUser.id)
         }
@@ -259,7 +259,7 @@ export const dashboardReducer = createImmerReducer(
     on(DashboardActions.finishRefreshMyCenterUser, (state, { categ_type, refreshCenterUser, isUserInCurCateg }) => {
         if (isUserInCurCateg) {
             const refreshUserIdx = _.findIndex(state.usersLists[categ_type], (v) => v.user.id == refreshCenterUser.id)
-            state.usersLists[categ_type][refreshUserIdx].user = refreshCenterUser
+            if (refreshUserIdx != -1) state.usersLists[categ_type][refreshUserIdx].user = refreshCenterUser
         } else {
             _.remove(state.usersLists[categ_type], (v) => v.user.id == refreshCenterUser.id)
         }
