@@ -334,6 +334,8 @@
                     color: var(--grey);
                     display: flex;
                     align-items: center;
+                    justify-content: flex-start;
+                    padding-left: 9px !important;
                     //justify-content: center;
                     .back-icon {
                         background-image: url("/assets/icons/etc/short_left_arrow_grey.svg");
