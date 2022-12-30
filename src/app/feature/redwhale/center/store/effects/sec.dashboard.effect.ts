@@ -228,6 +228,7 @@ export class DashboardEffect {
                     this.centerUsersApi.getUserList(centerId, '', centerUser.name),
                 ]).pipe(
                     switchMap(([lockers, memberships, payments, reservations, contracts, centerUsers]) => {
+
                         return [
                             DashboardActions.finishGetUserData({
                                 memberships,

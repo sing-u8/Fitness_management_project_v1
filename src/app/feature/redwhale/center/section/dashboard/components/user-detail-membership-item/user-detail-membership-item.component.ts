@@ -137,33 +137,33 @@ export class UserDetailMembershipItemComponent implements OnInit, AfterViewInit 
     getReservableClassText() {
         // !! 기능 숨김 및 스키마 변경으로 수정 필요
         this.isClassLoaded = false
-        const center = this.storageService.getCenter()
-        this.centerMembershipService
-            .getLinkedClass(center.id, this.membership.membership_category_id, this.membership.membership_item_id)
-            .subscribe((linkedClasses) => {
-                if (linkedClasses.length == 0) {
-                    this.reservableClassFullText = '-'
-                } else if (linkedClasses.length > 1) {
-                    this.showFullClassArrow = true
-                    this.reservableClassText = `${this.wordService.ellipsis(linkedClasses[0].name, 11)} 외 ${
-                        linkedClasses.length - 1
-                    }개`
-                    this.reservableClassFullText = _.reduce(
-                        linkedClasses,
-                        (acc, cur, idx, list) => {
-                            return acc + cur.name + (idx != list.length - 1 ? ', ' : '')
-                        },
-                        ''
-                    )
-                } else {
-                    this.reservableClassText = `${this.wordService.ellipsis(linkedClasses[0].name, 11)}`
-                    if (linkedClasses[0].name.length > 11) {
-                        this.showFullClassArrow = true
-                        this.reservableClassFullText = linkedClasses[0].name
-                    }
-                }
-                this.isClassLoaded = true
-            })
+        const reservableClassItems = _.isEmpty(this.membership.class_item_names)
+            ? []
+            : _.split(this.membership.class_item_names, ',')
+        if (reservableClassItems.length == 0) {
+            this.reservableClassFullText = '-'
+            this.reservableClassText = '-'
+        } else if (reservableClassItems.length == 1) {
+            this.reservableClassText = `${this.wordService.ellipsis(reservableClassItems[0], 11)}`
+            if (reservableClassItems[0].length > 11) {
+                this.showFullClassArrow = true
+                this.reservableClassFullText = reservableClassItems[0]
+            }
+        } else {
+            this.reservableClassText = `${this.wordService.ellipsis(reservableClassItems[0], 11)} 외 ${
+                reservableClassItems.length - 1
+            }개`
+            this.reservableClassFullText = _.reduce(
+                reservableClassItems,
+                (acc, cur, idx, list) => {
+                    return acc + cur + (idx != list.length - 1 ? ', ' : '')
+                },
+                ''
+            )
+
+            this.showFullClassArrow = true
+        }
+        this.isClassLoaded = true
     }
     openShowFullClass() {
         if (this.showFullClassArrow) {

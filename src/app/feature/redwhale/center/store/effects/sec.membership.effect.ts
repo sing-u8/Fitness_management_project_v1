@@ -16,7 +16,6 @@ import { CenterLessonService } from '@services/center-lesson.service'
 import _ from 'lodash'
 
 import { MembershipItem } from '@schemas/membership-item'
-import * as LessonSelector from '@centerStore/selectors/sec.lesson.selector'
 
 @Injectable()
 export class MembershipEffect {

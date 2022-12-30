@@ -34,4 +34,5 @@ export interface UserMembership {
     total_refund: number
     total_unpaid: number
     holding: Array<Holding>
+    class_item_names: string
 }
