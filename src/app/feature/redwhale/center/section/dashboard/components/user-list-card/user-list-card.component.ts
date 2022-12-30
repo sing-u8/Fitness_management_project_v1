@@ -34,7 +34,7 @@ export class UserListCardComponent implements OnInit, AfterViewInit, OnChanges, 
     @Output() onHoldClick = new EventEmitter<boolean>()
 
     public attendanceTime = undefined
-    public expiredBefore = 0
+    public expiredBefore = -1
 
     clickCard() {
         this.onCardClick.emit(this.cardItem.user)

@@ -26,7 +26,7 @@
 	position: fixed;
 
 	width: 405px;
-	height: 80px;
+	height: 82px;
 	border-radius: 7px;
 	background-color: var(--font-color);
 	padding: 0 17px;
@@ -50,14 +50,15 @@
 		flex-direction: column;
 		align-items: flex-start;
 		justify-content: center;
-		margin-left: 13px;
+		margin-left: 15px;
 		.top {
 			color: var(--white) !important;
-			margin-bottom: 3px;
+
 		}
 		.bottom {
 			display: flex;
 			align-items: center;
+			margin-top: 3px;
 			.alert-text {
 				display: flex;
 				align-items: center;
