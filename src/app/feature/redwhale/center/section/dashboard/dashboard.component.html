@@ -1,4 +1,4 @@
-<article #member_management class="member-management">
+<article #member_management class="member-management thin-scroll-y-overlay2 thin-scroll-x-overlay2">
     <header>
         <div class="header-text">
             <span class="header-text__title rw-typo-headline1">회원관리</span>
@@ -18,7 +18,7 @@
         </div>
     </header>
 
-    <main class="l-main thin-scroll-y2 thin-scroll-x2">
+    <main class="l-main">
         <section class="l-entire-member">
             <db-member-list
                 [usersLists]="usersLists$ | async"
