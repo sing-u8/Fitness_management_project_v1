@@ -41,6 +41,10 @@ export class DashboardHelperService {
             }
         })
     }
+    refreshDrawerUserList(centerId: string, centerUser: CenterUser, categ_type: MemberSelectCateg) {
+        this.nxStore.dispatch(DashboardActions.startGetDrawerUsersByCategory({ centerId }))
+        this.nxStore.dispatch(DashboardActions.startGetDrawerUserList({ centerId, categ_type }))
+    }
 
     // synchronize
     // // by locker

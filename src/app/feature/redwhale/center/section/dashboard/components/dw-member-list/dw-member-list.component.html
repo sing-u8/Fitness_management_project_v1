@@ -143,6 +143,22 @@
                             ></db-user-list-card>
                         </db-user-flip-list>
                         <db-user-flip-list
+                            *ngIf="(employeeRoleObj$ | async)['administrator']?.length > 0"
+                            [type]="'관리자' + ' ' + (employeeRoleObj$ | async)['administrator']?.length"
+                        >
+                            <db-user-list-card
+                                *ngFor="let item of (employeeRoleObj$ | async)['administrator']; index as i"
+                                [cardItem]="item"
+                                [type]="selectedUserList.key"
+                                [holdMode]="holdModeFlags"
+                                [search]="userSearchInput.value"
+                                [holdNumber]="selectedUserListsHolding"
+                                [curUserData]="curUserData"
+                                (onCardClick)="onCardClick($event)"
+                                (onHoldClick)="onPartialHoldClick($event, i)"
+                            ></db-user-list-card>
+                        </db-user-flip-list>
+                        <db-user-flip-list
                             *ngIf="(employeeRoleObj$ | async)['instructor']?.length > 0"
                             [type]="'강사' + ' ' + (employeeRoleObj$ | async)['instructor']?.length"
                         >

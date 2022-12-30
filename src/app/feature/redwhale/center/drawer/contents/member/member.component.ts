@@ -339,10 +339,13 @@ export class MemberComponent implements OnInit, OnDestroy {
                         )
                         this.nxStore.dispatch(CenterCommonActions.startGetInstructors({ centerId: this.center.id }))
                         this.nxStore.dispatch(CenterCommonActions.startGetMembers({ centerId: this.center.id }))
+                        this.nxStore.dispatch(
+                            CenterCommonActions.startGetCenterPermission({ centerId: this.center.id })
+                        )
                         this.centerService.getCenter(this.center.id).subscribe((center) => {
                             this.storageService.setCenter(center)
                         })
-                        // !!
+                        this.nxStore.dispatch(CenterCommonActions.startGetCurCenter({ centerId: this.center.id }))
                         this.dashboardHelperService.refreshUserList(
                             this.center.id,
                             this.curCenterUser,
@@ -371,9 +374,18 @@ export class MemberComponent implements OnInit, OnDestroy {
                         )
                         this.nxStore.dispatch(CenterCommonActions.startGetInstructors({ centerId: this.center.id }))
                         this.nxStore.dispatch(CenterCommonActions.startGetMembers({ centerId: this.center.id }))
+                        this.nxStore.dispatch(
+                            CenterCommonActions.startGetCenterPermission({ centerId: this.center.id })
+                        )
+                        this.nxStore.dispatch(CenterCommonActions.startGetCurCenter({ centerId: this.center.id }))
                         this.dashboardHelperService.refreshUserList(
                             this.center.id,
                             this.curCenterUser,
+                            this.curUserListSelect.key
+                        )
+                        this.dashboardHelperService.refreshDrawerUserList(
+                            this.center.id,
+                            this.curUserData.user,
                             this.curUserListSelect.key
                         )
 

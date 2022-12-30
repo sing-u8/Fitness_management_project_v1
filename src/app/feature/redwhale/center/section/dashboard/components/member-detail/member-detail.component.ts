@@ -693,6 +693,11 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
                             this.curUserData.user,
                             this.curUserListSelect.key
                         )
+                        this.dashboardHelperService.refreshDrawerUserList(
+                            this.center.id,
+                            this.curUserData.user,
+                            this.curUserListSelect.key
+                        )
 
                         const _centerUser = {
                             ..._.cloneDeep(this.curUserData.user),

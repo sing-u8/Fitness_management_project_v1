@@ -288,7 +288,6 @@ export const dashboardReducer = createImmerReducer(
         if (state.drawerCurCenterId == centerId) {
             if (!_.isEmpty(state.drawerCurUserData.user) && state.drawerCurUserData.user.id == userId) {
                 state.drawerCurUserData.user = _.assign(state.drawerCurUserData.user, reqBody)
-                console.log('startSetCurUserData in dw : ', state.drawerCurUserData.user.memo)
             }
 
             const userListsKeys = _.keys(state.drawerUsersLists) as MemberSelectCateg[]
