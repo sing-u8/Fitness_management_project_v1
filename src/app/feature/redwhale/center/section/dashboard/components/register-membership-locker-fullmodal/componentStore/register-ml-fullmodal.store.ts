@@ -446,6 +446,7 @@ export class RegisterMembershipLockerFullmodalStore extends ComponentStore<State
         const linkedClass = await firstValueFrom(
             this.centerMembershipApi.getLinkedClass(center.id, membership.category_id, membership.id)
         )
+
         return {
             type: 'membership',
             date: {
