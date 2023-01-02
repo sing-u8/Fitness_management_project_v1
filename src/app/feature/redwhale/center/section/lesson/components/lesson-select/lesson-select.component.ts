@@ -55,6 +55,7 @@ export class LessonSelectComponent implements AfterViewInit, ControlValueAccesso
     isOpen: boolean
 
     public initItemsWidth = 0
+    public paddingWidth: 5
 
     constructor(private el: ElementRef, private renderer: Renderer2) {
         this.disabled = false
@@ -73,20 +74,23 @@ export class LessonSelectComponent implements AfterViewInit, ControlValueAccesso
             this.renderer.setStyle(this.selectedElement.nativeElement, 'width', `${this.width}px`)
             this.renderer.setStyle(this.itemsElement.nativeElement, 'width', `${this.width}px`)
         }
-        this.initItemsWidth = this.itemsElement.nativeElement.clientWidth
+        this.initItemsWidth = this.itemsElement.nativeElement.clientWidth + this.paddingWidth
 
         if (this.closeBgColor) {
             this.renderer.setStyle(this.selectedElement.nativeElement, 'backgroundColor', `${this.closeBgColor}`)
         }
     }
     ngAfterViewChecked() {
-        if (_.isEmpty(this.width) && this.initItemsWidth != this.itemsElement.nativeElement.clientWidth) {
+        if (
+            _.isEmpty(this.width) &&
+            this.initItemsWidth != this.itemsElement.nativeElement.clientWidth + this.paddingWidth
+        ) {
             this.renderer.setStyle(
                 this.itemsElement.nativeElement,
                 'width',
-                `${this.selectedElement.nativeElement.clientWidth}px`
+                `${this.selectedElement.nativeElement.clientWidth + this.paddingWidth}px`
             )
-            this.initItemsWidth = this.itemsElement.nativeElement.clientWidth
+            this.initItemsWidth = this.itemsElement.nativeElement.clientWidth + this.paddingWidth
         }
     }
 
