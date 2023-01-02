@@ -48,9 +48,9 @@ import { UserMembership } from '@schemas/user-membership'
 
 // ngrx
 import { Store } from '@ngrx/store'
-import * as CenterCommonSelector from '@centerStore/selectors/center.common.selector'
-import * as DashboardSelector from '@centerStore/selectors/sec.dashboard.selector'
 import { Loading } from '@schemas/store/loading'
+import * as CenterCommonSelector from '@centerStore/selectors/center.common.selector'
+import { ClassItem } from '@schemas/class-item'
 
 type Progress = 'one' | 'two'
 
@@ -229,6 +229,9 @@ export class RegisterMembershipLockerFullmodalComponent implements OnInit, OnCha
     onMemberhispTicketItemModify(data: { index: number; item: MembershipTicket }) {
         this.cmpStore.modifyMlItem(data)
     }
+    onMembershipTicketFinishGetLinkedClass(data: { index: number; item: MembershipTicket }) {
+        this.cmpStore.modifyMlItem(data)
+    }
 
     onLockerItemClick(data: UpdateChoseLocker) {
         this.cmpStore.updateChoseLockers(data)
@@ -269,18 +272,10 @@ export class RegisterMembershipLockerFullmodalComponent implements OnInit, OnCha
     closeMembershipListModal() {
         this.doShowMembershipListModal = false
     }
-    public isMembershipTicketPending = false
     async onMembershipTicketSelected(item: MembershipItem) {
-        // this.gymRegisterMlState.create(this.gymRegisterMlState.initMembershipItem(item))
-        if (this.isMembershipTicketPending) return
-        this.isMembershipTicketPending = true
-
         const membershipTicket = await this.cmpStore.initMembershipItem(item)
         this.cmpStore.addMlItem(membershipTicket)
-        this.isMembershipTicketPending = false
         this.closeMembershipListModal()
-
-        // console.log('onMembershipTicketSelected: ', item, this.gymRegisterMlState.itemList, this.itemList)
     }
 
     // don't exist membership, locker modals

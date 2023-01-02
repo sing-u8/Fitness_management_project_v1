@@ -9,7 +9,16 @@
     </div>
     <div class="reservable-lessons">
         <span class="rw-typo-subtext0-regular small-title">예약 가능한 수업</span>
-        <db-lesson-selector [(ngModel)]="membershipState.lessonList"></db-lesson-selector>
+        <ngx-skeleton-loader
+            *ngIf="membershipState?.loadingType == 'new'"
+            count="1"
+            appearance="circle"
+            [theme]="{ width: '530px', height: '44px', 'border-radius': '5px', margin: '0' }"
+        ></ngx-skeleton-loader>
+        <db-lesson-selector
+            *ngIf="!membershipState?.loadingType || membershipState?.loadingType == 'new-done'"
+            [(ngModel)]="membershipState.lessonList"
+        ></db-lesson-selector>
     </div>
     <div class="datepick-container">
         <div class="date-picker">

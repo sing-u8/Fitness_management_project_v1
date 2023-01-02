@@ -17,6 +17,7 @@ export type TotalPrice = Record<PriceType, { price: number; name: string }>
 
 export type MembershipTicket = {
     type: 'membership'
+    loadingType?: 'new' | 'new-done'
     date?: { startDate: string; endDate: string }
     amount?: { normalAmount: string; paymentAmount: string }
     price?: Record<PriceType, string>

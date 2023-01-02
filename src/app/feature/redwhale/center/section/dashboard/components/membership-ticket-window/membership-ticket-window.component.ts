@@ -5,12 +5,14 @@ import _ from 'lodash'
 import dayjs from 'dayjs'
 
 import { StorageService } from '@services/storage.service'
+import { CenterMembershipService } from '@services/center-membership.service'
 
 import { MembershipTicket, PriceType } from '@schemas/center/dashboard/register-ml-fullmodal'
 import { User } from '@schemas/user'
 import { Center } from '@schemas/center'
 import { CenterUser } from '@schemas/center-user'
 import { MembershipItem } from '@schemas/membership-item'
+import { Store } from '@ngrx/store'
 
 @Component({
     selector: 'db-membership-ticket-window',
@@ -27,6 +29,8 @@ export class MembershipTicketWindowComponent implements OnInit, AfterViewInit, O
     @Output() onSaveMlItem = new EventEmitter<{ index: number; item: MembershipTicket }>()
     @Output() onModifyMlItem = new EventEmitter<{ index: number; item: MembershipTicket }>()
 
+    @Output() onGetLinkedClassFinish = new EventEmitter<{ index: number; item: MembershipTicket }>()
+
     public selectedLessons: Array<ClassItem> = []
     public selectedLessonText = ''
 
@@ -39,7 +43,11 @@ export class MembershipTicketWindowComponent implements OnInit, AfterViewInit, O
     public centerUser: CenterUser
     // public status: 'modify' | 'done' = 'modify'
 
-    constructor(private storageService: StorageService) {}
+    constructor(
+        private storageService: StorageService,
+        private centerMembershipApi: CenterMembershipService,
+        private nxStore: Store
+    ) {}
 
     ngOnInit(): void {
         this.center = this.storageService.getCenter()
@@ -51,6 +59,7 @@ export class MembershipTicketWindowComponent implements OnInit, AfterViewInit, O
         //     this.lessonItemList.push({ selected: false, item: value })
         // })
         this.dayDiff = String(this.getDayDiff(this.membershipState.date))
+        this.getLinkedClassForNewLoading()
         this.getSelectedLessonList()
     }
 
@@ -70,6 +79,26 @@ export class MembershipTicketWindowComponent implements OnInit, AfterViewInit, O
                     this.membershipState.assignee = { name: v.name, value: v }
                 }
             })
+        }
+    }
+
+    // get linked class for loading new type
+    getLinkedClassForNewLoading() {
+        if (this.membershipState?.loadingType == 'new') {
+            this.centerMembershipApi
+                .getLinkedClass(
+                    this.center.id,
+                    this.membershipState.membershipItem.category_id,
+                    this.membershipState.membershipItem.id
+                )
+                .subscribe((linkedClass) => {
+                    const item = _.cloneDeep(this.membershipState)
+                    item.loadingType = 'new-done'
+                    item.lessonList = _.map(linkedClass, (value) => {
+                        return { selected: true, item: value }
+                    })
+                    this.onGetLinkedClassFinish.emit({ index: this.index, item })
+                })
         }
     }
 
@@ -160,6 +189,7 @@ export class MembershipTicketWindowComponent implements OnInit, AfterViewInit, O
 
     // selected lesson item method
     getSelectedLessonList() {
+        if (this.membershipState?.loadingType == 'new') return
         this.selectedLessons = _.map(
             _.filter(this.membershipState.lessonList, ['selected', true]),
             (lessonObj) => lessonObj.item
