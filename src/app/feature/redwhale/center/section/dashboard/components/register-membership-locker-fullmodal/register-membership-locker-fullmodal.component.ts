@@ -277,9 +277,9 @@ export class RegisterMembershipLockerFullmodalComponent implements OnInit, OnCha
 
         const membershipTicket = await this.cmpStore.initMembershipItem(item)
         this.cmpStore.addMlItem(membershipTicket)
+        this.isMembershipTicketPending = false
         this.closeMembershipListModal()
 
-        this.isMembershipTicketPending = false
         // console.log('onMembershipTicketSelected: ', item, this.gymRegisterMlState.itemList, this.itemList)
     }
 

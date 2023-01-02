@@ -20,23 +20,24 @@ section.l-member-list {
         justify-content: space-between;
         margin-bottom: 14px;
         position: relative;
-        .holding-all-button {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 33px;
-            border: 1px solid var(--border-color);
-            font-weight: 700;
-            z-index: 5;
-
-            padding: 0 10.6px !important;
-            border: 1px solid #f1f1f1;
-            border-radius: 4px;
+        .l-holding-all-button {
             position: absolute;
             right: 0;
             top: -5px;
+            .holding-all-button {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: 33px;
+                border: 1px solid var(--border-color);
+                font-weight: 700;
+                z-index: 5;
 
+                padding: 0 10.6px !important;
+                border-radius: 4px;
+            }
             .hold-dropdown {
+                z-index: 1;
                 width: 105px;
                 height: 76px;
                 padding: 5px 0;
