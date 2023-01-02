@@ -56,62 +56,65 @@ section.user-detail-payment {
     }
 
     .col1 {
-        min-width: 89px;
-        padding-right: 20px;
-        width: 11.8351%;
+        min-width: 101px;
+        width: calc(101 / 806) * 100%;
     }
 
     .col2 {
-        min-width: 46px;
-        padding-right: 20px;
-        width: 6.1170%;
+        min-width: 58px;
+        width: calc(58 / 806) * 100%;
     }
 
     .col3 {
-        min-width: 156px;
-        padding-right: 30px;
-        width: 20.7446%;
+        min-width: 142px;
+        width: calc(142 / 806) * 100%;
+        padding-right: 30px !important;
     }
 
     .col4 {
-        min-width: 83px;
-        padding-right: 20px;
-        width: 11.0372%;
+        min-width: 71px;
+        width: calc(109 / 806) * 100%;
+        padding-right: 12px !important;
+
     }
 
     .col5 {
-        min-width: calc(100% - 89px - 46px - 156px - 83px);
-        width: calc(100% - 11.8351% - 6.1170% - 20.7446% - 11.0372%);
+        min-width: calc(100% - 101px - 58px - 142px - 71px);
+        width: 100%;
+        padding-right: 0 !important;
+    }
+
+    .col1, .col2, .col3, .col4, .col5 {
+        padding-right: 32px;
     }
 
     @media (min-width: 1440px) {
         .col1 {
-            min-width: 104px;
-            padding-right: 35px;
-            width: 12.0370%;
+            min-width: 113px;
+            width: calc(113 / 914) * 100%;
         }
 
         .col2 {
-            min-width: 57px;
-            padding-right: 31px;
-            width: 6.5972%;
+            min-width: 70px;
+            width: calc(70 / 914) * 100%;
         }
 
         .col3 {
-            min-width: 211px;
-            padding-right: 40px;
-            width: 24.4212%;
+            min-width: 204px;
+            width: calc(113 / 914) * 100%;
         }
 
         .col4 {
-            min-width: 93px;
-            padding-right: 35px;
-            width: 10.7638%;
+            min-width: 83px;
+            width: calc(113 / 914) * 100%;
         }
 
         .col5 {
-            min-width: calc(100% - 104px - 57px - 211px - 93px);
-            width: calc(100% - 12.0370% - 6.5972% - 24.4212% - 10.7638%);
+            min-width: calc(100% - 113px - 70px - 204px - 83px);
+        }
+
+        .col1, .col2, .col3, .col4, .col5 {
+            padding-right: 44px;
         }
 
     }
@@ -119,31 +122,32 @@ section.user-detail-payment {
     @media (min-width: 1920px) {
         .col1 {
             min-width: 139px;
-            padding-right: 70px;
-            width: 10.9535%;
+            width: calc(139 / 1319) * 100%;
         }
 
         .col2 {
             min-width: 96px;
-            padding-right: 70px;
-            width: 7.5650%;
+            width: calc(96 / 1319) * 100%;
         }
 
         .col3 {
-            min-width: 357px;
-            padding-right: 100px;
-            width: 28.1323%;
+            min-width: 320px;
+            width: calc(320 / 1319) * 100%;
+            padding-right: 30px !important;
         }
 
         .col4 {
-            min-width: 138px;
-            padding-right: 80px;
-            width: 10.8747%;
+            min-width: 109px;
+            width: calc(109 / 1319) * 100%;
         }
 
         .col5 {
-            min-width: calc(100% - 139px - 96px - 357px - 138px);
-            width: calc(100% - 10.9535% - 7.5650% - 28.1323% - 10.8747%);
+            min-width: calc(100% - 139px - 96px - 320px - 109px);
+            width: 100%;
+        }
+
+        .col1, .col2, .col3, .col4, .col5 {
+            padding-right: 70px;
         }
 
     }

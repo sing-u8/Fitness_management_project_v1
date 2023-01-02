@@ -22,26 +22,22 @@
 }
 
 .col1 {
-    min-width: 137px;
-    padding-right: 23px;
-    width: calc(137 / 806) * 100%;
+    min-width: 153px;
+    width: calc(153 / 806) * 100%;
 }
 
 .col2 {
     min-width: 77px;
-    padding-right: 15px;
     width: calc(77 / 806) * 100%;
 }
 
 .col3 {
     min-width: 210px;
-    padding-right: 20px;
     width: calc(210 / 806) * 100%;
 }
 
 .col4 {
     min-width: 137px;
-    padding-right: 15px;
     width: calc(137 / 806) * 100%;
 }
 
@@ -50,7 +46,8 @@
     justify-content: space-between;
     align-items: center;
     min-width: calc(100% - 210px - 137px);
-    width: calc(100% - (calc(137 / 806) * 100% + calc(77 / 806) * 100% + calc(210 / 806) * 100% + calc(137 / 806) * 100%));
+    width: calc(100% - (calc(153 / 806) * 100% + calc(77 / 806) * 100% + calc(210 / 806) * 100% + calc(137 / 806) * 100%));
+    padding-right: 0 !important;
     position: relative;
 
     div.col5__content {
@@ -183,6 +180,7 @@
 .col3,
 .col4,
 .col5 {
+    padding-right: 23px;
     &.notification {
         padding-bottom: calc(26px + 2px);
     }
@@ -277,25 +275,21 @@
     }
     .col1 {
         min-width: 192px;
-        padding-right: 35px;
         width: calc(192 / 914) * 100%;
     }
 
     .col2 {
         min-width: 89px;
-        padding-right: 28px;
         width: calc(89 / 914) * 100%;
     }
 
     .col3 {
         min-width: 222px;
-        padding-right: 30px;
         width: calc(222 / 914) * 100%;
     }
 
     .col4 {
         min-width: 146px;
-        padding-right: 25px;
         width: calc(146 / 914) * 100%;
     }
 
@@ -308,30 +302,33 @@
         min-width: calc(100% - 192px - 89px - 25px - 13px);
         //width: calc(100% - (calc(256 / 914) * 100%) - 25px - 13px);
     }
+    .col1,
+    .col2,
+    .col3,
+    .col4, {
+        padding-right: 35px;
+    }
 }
 
 @media (min-width: 1920px) {
     .holding-layout {
-        width: 100% - (calc(495 / 806) * 100%);
-        min-width: calc(100% - 495px);
+        width: 100% - (calc(444 / 1319) * 100%);
+        min-width: calc(100% - 444px);
     }
 
     .col1 {
-        min-width: 386px;
-        padding-right: 70px;
-        width: calc(386 / 1319) * 100%;
+        min-width: 320px;
+        width: calc(320 / 1319) * 100%;
     }
 
     .col2 {
-        min-width: 109px;
-        padding-right: 50px;
-        width: calc(109 / 1319) * 100%;
+        min-width: 124px;
+        width: calc(124 / 1319) * 100%;
     }
 
     .col3 {
         width: 257px !important;
         min-width: 257px;
-        padding-right: 30px;
         //width: calc(257 / 1319) * 100%;
     }
 
@@ -348,8 +345,16 @@
     }
 
     .col-notification {
-        min-width: calc(100% - 386px - 109px - 25px - 13px);
-        width: calc(100% - 386px - 109px - 25px - 13px);
+        min-width: calc(100% - 320px - 124px - 25px - 13px);
+        width: calc(100% - 320px - 124px - 25px - 13px);
         //width: calc(100% - (calc(386 / 1319) * 100% - calc(109 / 1319) * 100%) - 25px - 13px);
+    }
+
+    .col1,
+    .col2,
+    .col3,
+    .col4,
+    .col5 {
+        padding-right: 70px;
     }
 }
