@@ -171,7 +171,7 @@ export class TransferMembershipFullmodalStore extends ComponentStore<State> {
                     forkJoin([
                         this.centerUsersPaymentApi.createMembershipAndLockerPayment(
                             param.centerId,
-                            param.transferUser.id,
+                            param.user.id,
                             createMLPaymentReqBody
                         ),
                     ])
@@ -259,7 +259,10 @@ export class TransferMembershipFullmodalStore extends ComponentStore<State> {
                 trans: '',
                 unpaid: '',
             },
-            count: { count: String(userMembership.count - userMembership.used_count), infinite: userMembership.unlimited },
+            count: {
+                count: String(userMembership.count - userMembership.used_count),
+                infinite: userMembership.unlimited,
+            },
             assignee: undefined,
             membershipItem: {
                 id: userMembership.membership_item_id,
