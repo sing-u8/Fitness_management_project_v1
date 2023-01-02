@@ -133,10 +133,8 @@ export class UserDetailMembershipItemComponent implements OnInit, AfterViewInit 
     public reservableClassFullText = ''
     public showFullClassArrow = false
     public openFullClass = false
-    public isClassLoaded = false
     getReservableClassText() {
         // !! 기능 숨김 및 스키마 변경으로 수정 필요
-        this.isClassLoaded = false
         const reservableClassItems = _.isEmpty(this.membership.class_item_names)
             ? []
             : _.split(this.membership.class_item_names, ',')
@@ -163,7 +161,6 @@ export class UserDetailMembershipItemComponent implements OnInit, AfterViewInit 
 
             this.showFullClassArrow = true
         }
-        this.isClassLoaded = true
     }
     openShowFullClass() {
         if (this.showFullClassArrow) {

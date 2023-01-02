@@ -2,54 +2,52 @@
     <div rwEllipsisDropdown [lineClamp]="2" class="col1 two-line-ellipsis">
         {{ membership.name }}
     </div>
-    
+
     <div class="col2">
         {{
             membership.contract_type_code == 'contract_type_new'
-            ? '신규 등록' : membership.contract_type_code == 'contract_type_renewal'
-            ? '재등록' : '양도'
+                ? '신규 등록'
+                : membership.contract_type_code == 'contract_type_renewal'
+                ? '재등록'
+                : '양도'
         }}
     </div>
 
     <div class="holding-layout">
         <div class="col-wrapper">
-            <div class="col3" >
-                {{ membership.start_date | dateFormat: 'YYYY.MM.DD' }} - {{ membership.end_date | dateFormat: 'YYYY.MM.DD' }}
-                ({{membership.start_date | period: membership.end_date}}일)
+            <div class="col3">
+                {{ membership.start_date | dateFormat: 'YYYY.MM.DD' }} -
+                {{ membership.end_date | dateFormat: 'YYYY.MM.DD' }} ({{
+                    membership.start_date | period: membership.end_date
+                }}일)
             </div>
-            <div class="col4" >
-                {{restDate}}일 / {{membership.unlimited ? '무제한' : membership.count < 1 || isExpired ? 0 : (membership.count - membership.used_count - membership.booked_count) + '회' }} 남음
+            <div class="col4">
+                {{ restDate }}일 /
+                {{
+                    membership.unlimited
+                        ? '무제한'
+                        : membership.count < 1 || isExpired
+                        ? 0
+                        : membership.count - membership.used_count - membership.booked_count + '회'
+                }}
+                남음
             </div>
-            <div class="col5" >
+            <div class="col5">
                 <div
                     (mousemove)="!isExpired && openShowFullClass()"
                     (mouseleave)="!isExpired && closeShowFullClass()"
                     class="col5__content"
                     [class.pointer-cursor]="!isExpired && showFullClassArrow"
                 >
-                    <ng-container *ngIf="isClassLoaded">
-                        <span>{{reservableClassText}}</span>
-                        <div
-                            *ngIf="showFullClassArrow"
-                            class="fill-down-icon"
-                            [class.open]="openFullClass"
-                        ></div>
-                        <div *ngIf="openFullClass" class="ellipsis-dropdown">{{reservableClassFullText}}</div>
-                    </ng-container>
-                    <ng-container *ngIf="!isClassLoaded">
-                        <ngx-skeleton-loader
-                            count = 1
-                            appearance="line"
-                            [theme]="{width: '125px', height: '19px', 'border-radius': '5px', 'margin':'0px'}"
-                        ></ngx-skeleton-loader>
-                    </ng-container>
-
+                    <span>{{ reservableClassText }}</span>
+                    <div *ngIf="showFullClassArrow" [class.open]="openFullClass"></div>
+                    <div *ngIf="openFullClass" class="ellipsis-dropdown">{{ reservableClassFullText }}</div>
                 </div>
 
-<!--                <div class="col4__content">-->
-<!--                    {{ restDate }}일 /-->
-<!--                    {{ membership.unlimited ? '무제한' : membership.count < 1 || isExpired ? 0 : membership.count + '회' }} 남음-->
-<!--                </div>-->
+                <!--                <div class="col4__content">-->
+                <!--                    {{ restDate }}일 /-->
+                <!--                    {{ membership.unlimited ? '무제한' : membership.count < 1 || isExpired ? 0 : membership.count + '회' }} 남음-->
+                <!--                </div>-->
                 <div class="col5__menu" (click)="toggleMenuDropDown()" (rwClickOutside)="hideMenuDropDown()">
                     <div class="l-menu-items" [class.show-items]="showMenuDropDown">
                         <div
@@ -67,14 +65,15 @@
         </div>
         <ng-container *ngIf="!isExpired && isHolding">
             <div
-                *ngFor="let item of membership.holding; let i=index"
+                *ngFor="let item of membership.holding; let i = index"
                 class="rw-typo-subtext0-regular col-notification"
                 [class.show-notification]="isHolding"
             >
                 <div class="d-flex align-items-center">
                     <div class="alert-icon"></div>
-                    {{ item.start_date | dateFormat: 'YYYY.MM.DD' }} - {{ item.end_date | dateFormat: 'YYYY.MM.DD' }}
-                    ({{item.start_date | period: item.end_date}}일) {{ (item.start_date | isAfter) ? '홀딩 예약' : '홀딩중' }}
+                    {{ item.start_date | dateFormat: 'YYYY.MM.DD' }} -
+                    {{ item.end_date | dateFormat: 'YYYY.MM.DD' }} ({{ item.start_date | period: item.end_date }}일)
+                    {{ (item.start_date | isAfter) ? '홀딩 예약' : '홀딩중' }}
                 </div>
 
                 <div
