@@ -5,9 +5,9 @@
         </div>
 
         <div class="card-desc-container">
-            <p class="categ rw-typo-subtext2">{{ cardInfo.category_name }}</p>
+            <p class="categ rw-typo-subtext2">{{ cardInfo.category_name | wordEllipsis: 30 }}</p>
             <div class="card-title-container rw-typo-title2">
-                <p class="card-title">{{ cardInfo.name }}</p>
+                <p class="card-title">{{ cardInfo.name | wordEllipsis: 30 }}</p>
             </div>
         </div>
     </div>
