@@ -246,8 +246,11 @@ export class TransferMembershipFullmodalStore extends ComponentStore<State> {
             date: {
                 startDate: dayjs().format('YYYY-MM-DD'),
                 endDate: dayjs()
-                    .add(dayjs(contractMembership.end_date).diff(dayjs().format('YYYY-MM-DD'), 'day'), 'day')
+                    .add(dayjs(userMembership.end_date).diff(dayjs().format('YYYY-MM-DD'), 'day'), 'day')
                     .format('YYYY-MM-DD'),
+                // dayjs()
+                //   .add(dayjs(contractMembership.end_date).diff(dayjs().format('YYYY-MM-DD'), 'day'), 'day')
+                //   .format('YYYY-MM-DD'),
             },
             amount: {
                 normalAmount: String(cmTotalPrice).replace(/\B(?=(\d{3})+(?!\d))/g, ','),
