@@ -67,41 +67,21 @@ export class MemberListComponent implements OnInit, OnDestroy {
                 },
                 cb: () => {
                     this.closePartialHoldModal()
-                    this.toggleHoldingMode()
+                    this.toggleHodlingMode()
                     event.loadingFns.hideLoading()
                 },
             })
         )
     }
-    toggleHoldingMode() {
+    toggleHodlingMode() {
         this.holdModeFlags = !this.holdModeFlags
         this.resetSelectedCategListHold()
-        // this.holdAll = false
-    }
-    openHoldingMode() {
-        this.holdModeFlags = true
-        this.resetSelectedCategListHold()
-        // this.holdAll = false
-        this.closeHoldingDropDown()
+        this.holdAll = false
     }
     resetSelectedCategListHold() {
         this.nxStore.dispatch(
             DashboardActions.resetUsersListsHoldSelected({ memberSelectCateg: this.selectedUserList.key })
         )
-    }
-
-    doShowHoldingDropDown = false
-    toggleHoldingDropDown(event) {
-        this.doShowHoldingDropDown = !this.doShowHoldingDropDown
-        event ? event.stopPropagation() : null
-    }
-    closeHoldingDropDown() {
-        this.doShowHoldingDropDown = false
-    }
-
-    onClickHoldAllButton() {
-        this.onHoldAll()
-        this.openPartialHoldModal()
     }
 
     public today: string = dayjs().format('YYYY.MM.DD (ddd)')
@@ -165,7 +145,7 @@ export class MemberListComponent implements OnInit, OnDestroy {
 
     public holdAll = false
     onHoldAll() {
-        this.holdAll = true
+        this.holdAll = !this.holdAll
         this.nxStore.dispatch(
             DashboardActions.setAllUserListHold({
                 memberSelectCateg: this.selectedUserList.key,

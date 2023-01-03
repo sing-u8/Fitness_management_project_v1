@@ -7,26 +7,19 @@
             (onTypeChange)="onSelectedUserListChange($event)"
         ></rw-user-list-select>
 
-        <div class="l-holding-all-button">
-            <div
-                class="holding-all-button"
-                *ngIf="
-                    usersLists[selectedUserList.key].length > 0 &&
-                    selectedUserList.key != 'expired' &&
-                    selectedUserList.key != 'employee'
-                "
-                rw-button
-                [rwButtonFontColor]="'var(--darkgrey)'"
-                [rwButtonColor]="'var(--white)'"
-                (click)="holdModeFlags ? toggleHoldingMode() : toggleHoldingDropDown($event)"
-            >
-                {{ holdModeFlags ? '일괄 홀딩 취소' : '일괄 홀딩' }}
-
-            </div>
-            <div *ngIf="doShowHoldingDropDown" class="hold-dropdown" (rwClickOutside)="closeHoldingDropDown()">
-                <div class="holding-button" (click)="openHoldingMode()">일부 회원 홀딩</div>
-                <div class="holding-button" (click)="onClickHoldAllButton()">전체 회원 홀딩</div>
-            </div>
+        <div
+            class="holding-all-button"
+            *ngIf="
+                usersLists[selectedUserList.key].length > 0 &&
+                selectedUserList.key != 'expired' &&
+                selectedUserList.key != 'employee'
+            "
+            rw-button
+            [rwButtonFontColor]="'var(--darkgrey)'"
+            [rwButtonColor]="'var(--white)'"
+            (click)="toggleHodlingMode()"
+        >
+            {{ holdModeFlags ? '일괄 홀딩 취소' : '일괄 홀딩' }}
         </div>
     </div>
 
@@ -114,7 +107,7 @@
                         선택 완료
                     </span>
                 </div>
-                <!--                <rw-checkbox [checked]="holdAll" (click)="onHoldAll()"></rw-checkbox>-->
+                <rw-checkbox [checked]="holdAll" (click)="onHoldAll()"></rw-checkbox>
             </div>
 
             <div class="l-member-card thin-scroll-y-overlay2" [class.l-hold-mode-card]="holdModeFlags">
