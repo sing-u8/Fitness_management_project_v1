@@ -46,7 +46,9 @@
     justify-content: space-between;
     align-items: center;
     min-width: calc(100% - 210px - 137px);
-    width: calc(100% - (calc(153 / 806) * 100% + calc(77 / 806) * 100% + calc(210 / 806) * 100% + calc(137 / 806) * 100%));
+    width: calc(
+        100% - (calc(153 / 806) * 100% + calc(77 / 806) * 100% + calc(210 / 806) * 100% + calc(137 / 806) * 100%)
+    );
     padding-right: 0 !important;
     position: relative;
 
@@ -305,7 +307,7 @@
     .col1,
     .col2,
     .col3,
-    .col4, {
+    .col4 {
         padding-right: 35px;
     }
 }
@@ -356,5 +358,44 @@
     .col4,
     .col5 {
         padding-right: 70px;
+    }
+
+    .drawer-open {
+        .holding-layout {
+            width: 100% - (calc(314 / 1001) * 100%);
+            min-width: calc(100% - 314px);
+        }
+
+        .col1 {
+            min-width: 220px;
+            width: calc(220 / 1001) * 100%;
+        }
+
+        .col2 {
+            min-width: 94px;
+            width: calc(94 / 1001) * 100%;
+        }
+
+        .col3 {
+            min-width: 227px;
+            width: calc(227 / 1001) * 100%;
+        }
+
+        .col4 {
+            min-width: 154px;
+            width: calc(154 / 1001) * 100%;
+        }
+
+        .col5 {
+            min-width: calc(100% - 220px - 94px - 227px - 154px);
+            width: 100%;
+        }
+
+        .col1,
+        .col2,
+        .col3,
+        .col4 {
+            padding-right: 40px;
+        }
     }
 }

@@ -18,7 +18,6 @@ section.user-detail-membership {
         position: relative;
         padding: $layout_padding;
         border-bottom: 1px solid var(--border-color);
-
     }
     main {
         width: 100%;
@@ -46,11 +45,9 @@ section.user-detail-membership {
             }
 
             &:hover {
-                background-color: var(--background-color) ;
+                background-color: var(--background-color);
             }
-
         }
-
     }
 
     .col1 {
@@ -76,10 +73,16 @@ section.user-detail-membership {
     .col5 {
         padding-right: 0 !important;
         min-width: calc(100% - 153px - 77px - 210px - 137px);
-        width: calc(100% - (calc(137 / 806) * 100% + calc(77 / 806) * 100% + calc(210 / 806) * 100% + calc(137 / 806) * 100%));
+        width: calc(
+            100% - (calc(137 / 806) * 100% + calc(77 / 806) * 100% + calc(210 / 806) * 100% + calc(137 / 806) * 100%)
+        );
     }
 
-    .col1, .col2, .col3, .col4, .col5 {
+    .col1,
+    .col2,
+    .col3,
+    .col4,
+    .col5 {
         padding-right: 23px;
         &.notification {
             padding-bottom: calc(26px + 2px);
@@ -109,10 +112,16 @@ section.user-detail-membership {
 
         .col5 {
             min-width: calc(100% - 192px - 89px - 222px - 146px);
-            width: calc(100% - (calc(192 / 914) * 100% + calc(89 / 914) * 100% + calc(222 / 914) * 100% + calc(146 / 914) * 100%));
+            width: calc(
+                100% -
+                    (calc(192 / 914) * 100% + calc(89 / 914) * 100% + calc(222 / 914) * 100% + calc(146 / 914) * 100%)
+            );
         }
 
-        .col1, .col2, .col3, .col4 {
+        .col1,
+        .col2,
+        .col3,
+        .col4 {
             padding-right: 35px;
         }
     }
@@ -130,24 +139,64 @@ section.user-detail-membership {
 
         .col3 {
             min-width: 257px;
-            padding-right: 60px;
             width: calc(257 / 1319) * 100%;
         }
 
         .col4 {
             min-width: 184px;
-            padding-right: 50px;
             width: calc(184 / 1319) * 100%;
         }
 
         .col5 {
             min-width: calc(100% - 320px - 124px - 257px - 184px);
-            width: calc(100% - ( calc(320 / 1319) * 100% + calc(124 / 1319) * 100% + calc(257 / 1319) * 100% + calc(184 / 1319) * 100% ));
+            width: calc(
+                100% -
+                    (
+                        calc(320 / 1319) * 100% + calc(124 / 1319) * 100% + calc(257 / 1319) * 100% + calc(184 / 1319) *
+                            100%
+                    )
+            );
         }
 
-        .col1, .col2, .col3, .col4{
+        .col1,
+        .col2,
+        .col3,
+        .col4 {
             padding-right: 70px;
         }
-    }
 
+        .drawer-open {
+            .col1 {
+                min-width: 220px;
+                width: calc(220 / 1001) * 100%;
+            }
+
+            .col2 {
+                min-width: 94px;
+                width: calc(94 / 1001) * 100%;
+            }
+
+            .col3 {
+                min-width: 227px;
+                width: calc(227 / 1001) * 100%;
+            }
+
+            .col4 {
+                min-width: 154px;
+                width: calc(154 / 1001) * 100%;
+            }
+
+            .col5 {
+                min-width: calc(100% - 220px - 94px - 227px - 154px);
+                width: 100%;
+            }
+
+            .col1,
+            .col2,
+            .col3,
+            .col4 {
+                padding-right: 40px;
+            }
+        }
+    }
 }

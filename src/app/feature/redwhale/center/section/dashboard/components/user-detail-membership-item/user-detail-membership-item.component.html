@@ -1,4 +1,4 @@
-<div class="item" [class.isExpired]="isExpired">
+<div class="item" [class.isExpired]="isExpired" [class.drawer-open]="drawerType != 'none'">
     <div rwEllipsisDropdown [lineClamp]="2" class="col1 two-line-ellipsis">
         {{ membership.name }}
     </div>

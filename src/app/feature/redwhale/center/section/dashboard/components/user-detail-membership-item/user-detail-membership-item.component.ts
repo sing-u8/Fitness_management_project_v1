@@ -11,6 +11,7 @@ import { WordService } from '@services/helper/word.service'
 import { TimeService } from '@services/helper/time.service'
 import { CenterMembershipService } from '@services/center-membership.service'
 import { StorageService } from '@services/storage.service'
+import { drawerSelector } from "@appStore/selectors";
 
 @Component({
     selector: 'db-user-detail-membership-item',
@@ -19,6 +20,7 @@ import { StorageService } from '@services/storage.service'
 })
 export class UserDetailMembershipItemComponent implements OnInit, AfterViewInit {
     @Input() membership: UserMembership
+    @Input() drawerType: string
 
     @Output() onUpdateInfo = new EventEmitter<UserMembership>()
     @Output() onExtendPeriodCount = new EventEmitter<UserMembership>()

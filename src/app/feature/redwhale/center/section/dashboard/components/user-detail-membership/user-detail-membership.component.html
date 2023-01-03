@@ -1,5 +1,5 @@
 <section class="user-detail-membership">
-    <header class="rw-typo-subtext1">
+    <header [class.drawer-open]="(drawer$ | async)?.tabName != 'none'" class="rw-typo-subtext1">
         <div class="col1">회원권</div>
         <div class="col2">구분</div>
         <div class="col3">기간</div>
@@ -21,6 +21,7 @@
         <ng-template #membership_exist>
             <db-user-detail-membership-item
                 *ngFor="let item of curUserData.memberships"
+                [drawerType]="(drawer$ | async).tabName"
                 [membership]="item"
                 (onUpdateInfo)="setSelectedUserMembership(item); toggleModifyMembershipFullModal()"
                 (onExtendPeriodCount)="toggleExtensionModal(); setSelectedUserMembership(item)"

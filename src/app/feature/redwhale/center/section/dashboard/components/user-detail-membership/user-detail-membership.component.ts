@@ -27,10 +27,8 @@ import dayjs from 'dayjs'
 // ngrx
 import { Store } from '@ngrx/store'
 import * as DashboardReducer from '@centerStore/reducers/sec.dashboard.reducer'
-import * as DashboardActions from '@centerStore/actions/sec.dashboard.actions'
-import * as DashboardSelector from '@centerStore/selectors/sec.dashboard.selector'
+import { drawerSelector } from '@appStore/selectors'
 import { showToast } from '@appStore/actions/toast.action'
-import { catchError } from 'rxjs'
 
 @Component({
     selector: 'db-user-detail-membership',
@@ -57,6 +55,8 @@ export class UserDetailMembershipComponent implements OnInit {
     public center: Center = this.storageService.getCenter()
 
     public chargeMode: ChargeMode = undefined
+
+    public drawer$ = this.nxStore.select(drawerSelector)
 
     public selectedUserMembership: UserMembership = undefined
     public selectedUserMembershipHoldingIdx: number
