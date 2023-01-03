@@ -319,13 +319,13 @@
                     <ng-template #linked_membership_done>
                         <div *ngIf="selectedLesson.lessonData" class="l-membership-item thin-scroll-y">
                             <gm-membership-card
-                                *ngFor="let memItem of selectedLesson.linkedMembershipItems"
-                                [lesMembershipItem]="memItem"
+                                *ngFor="let memItem of selectedLesson.linkedMembershipItems | keyvalue: kvReverseOrder"
+                                [lesMembershipItem]="memItem.value"
                                 [categId]="selectedLesson.categId"
                                 [categName]="selectedLesson.categName"
                                 [centerId]="center.id"
                                 [isIn]="'reservableItemList'"
-                                (onReservableCardDelete)="removeReservationMembership(memItem)"
+                                (onReservableCardDelete)="removeReservationMembership(memItem.value)"
                             >
                             </gm-membership-card>
 

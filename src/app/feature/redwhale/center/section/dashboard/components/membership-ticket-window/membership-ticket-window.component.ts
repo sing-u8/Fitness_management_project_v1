@@ -96,7 +96,7 @@ export class MembershipTicketWindowComponent implements OnInit, AfterViewInit, O
                     item.loadingType = 'new-done'
                     item.lessonList = _.map(linkedClass, (value) => {
                         return { selected: true, item: value }
-                    })
+                    }).reverse()
                     this.onGetLinkedClassFinish.emit({ index: this.index, item })
                 })
         }

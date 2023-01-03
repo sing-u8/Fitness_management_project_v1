@@ -334,13 +334,13 @@
                     <ng-template #linked_classes_done>
                         <div class="l-lesson-item thin-scroll-y">
                             <gl-lesson-card
-                                *ngFor="let memClassItem of selectedMembership.linkedClassItems"
-                                [memLessonItem]="memClassItem"
+                                *ngFor="let memClassItem of selectedMembership.linkedClassItems | keyvalue: kvReverseOrder"
+                                [memLessonItem]="memClassItem.value"
                                 [categId]="selectedMembership.categId"
                                 [categName]="selectedMembership.categName"
                                 [centerId]="center.id"
                                 [isIn]="'reservableItemList'"
-                                (onReservableCardDelete)="removeReservationLesson(memClassItem)"
+                                (onReservableCardDelete)="removeReservationLesson(memClassItem.value)"
                             >
                             </gl-lesson-card>
 
