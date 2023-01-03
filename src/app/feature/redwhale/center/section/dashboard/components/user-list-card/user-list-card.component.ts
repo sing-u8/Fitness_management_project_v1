@@ -79,7 +79,10 @@ export class UserListCardComponent implements OnInit, AfterViewInit, OnChanges, 
         imminentDate: 0,
     }
     findEndDateToExpired(dateToExpired: number) {
-        const remainDate = this.timeService.getRestPeriod(dayjs().format(), this.cardItem.user.user_membership_end_date)
+        const remainDate = this.timeService.getRestPeriod(
+            dayjs().format(),
+            this.cardItem.user.user_membership_in_use_end_date
+        )
         if (remainDate <= dateToExpired) {
             this.imminentDateObj = {
                 isImminent: true,
@@ -100,9 +103,9 @@ export class UserListCardComponent implements OnInit, AfterViewInit, OnChanges, 
     }
 
     initExpiredBefore() {
-        if (this.cardItem.user.user_membership_end_date) {
+        if (this.cardItem.user.user_membership_expired_end_date) {
             this.expiredBefore = dayjs(dayjs().format('YYYY-MM-DD')).diff(
-                this.cardItem.user.user_membership_end_date,
+                this.cardItem.user.user_membership_expired_end_date,
                 'd'
             )
         }

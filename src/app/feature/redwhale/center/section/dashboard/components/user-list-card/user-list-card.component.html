@@ -14,7 +14,7 @@
                 fontSize="12"
             ></rw-avatar>
 
-            <div *ngIf="expiredBefore >= 0" class="expired-avatar">
+            <div *ngIf="expiredBefore >= 0 && cardItem?.user?.user_membership_count > 0 && cardItem?.user?.user_membership_in_use_count == 0" class="expired-avatar">
                 <span class="rw-typo-subtext0">만료</span>
             </div>
         </div>

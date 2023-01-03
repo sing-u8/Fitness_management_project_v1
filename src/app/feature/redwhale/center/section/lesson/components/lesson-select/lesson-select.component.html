@@ -2,6 +2,7 @@
     <div
         class="selected rw-typo-bodytext0 d-flex justify-content-between align-items-center"
         [class.open]="isOpen"
+        [class.with-width]="width"
         [class.disabled]="disabled !== false"
         [class.height-small]="height_type == 'small'"
         [class.border-none]="noBorder == true"
@@ -9,18 +10,19 @@
         (click)="toggle()"
         (rwClickOutside)="close()"
     >
-        <div *ngIf="value?.value?.id" class="avatar">
+        <div  class="avatar">
             <rw-avatar
+                *ngIf="value?.value?.id"
                 [image]="value?.value?.picture"
                 [backgroundColor]="value?.value?.color"
                 text="{{ value?.value?.name }}"
                 size="23"
                 fontSize="10"
             ></rw-avatar>
+            <span #value_name_el class="text" [class.text--open]="isOpen">
+                {{ value?.name }}
+            </span>
         </div>
-        <span #value_name_el class="text" [class.text--open]="isOpen">
-            {{ value?.name }}
-        </span>
         <span class="arrow-icon"></span>
     </div>
     <div

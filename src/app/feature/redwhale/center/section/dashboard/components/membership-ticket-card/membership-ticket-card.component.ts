@@ -21,6 +21,5 @@ export class MembershipTicketCardComponent implements OnInit, AfterViewInit {
     ngOnInit(): void {}
     ngAfterViewInit(): void {
         this.isInWindow = this.isInWindow ?? false
-        console.log('MembershipTicketCardComponent -- ', this.cardInfo)
     }
 }

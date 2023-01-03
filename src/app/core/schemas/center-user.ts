@@ -18,7 +18,7 @@ export interface CenterUser {
     service080: string
     user_membership_count: number
     user_membership_in_use_count: number
-    user_membership_end_date: string
+    user_membership_in_use_end_date: string
     user_membership_expired_end_date: string
     total_unpaid: number
 }

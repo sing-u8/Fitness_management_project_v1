@@ -7,9 +7,7 @@
             <span class="rw-typo-title2">{{membershipState.membershipItem.name | wordEllipsis: 30 }}</span>
         </div>
     </div>
-    <!-- <div class="rw-typo-bodytext0 middle">
-      {{selectedLessonText}} 수업 예약 가능
-    </div> -->
+    <div *ngIf="selectedLessonText" class="rw-typo-bodytext0 middle">{{ selectedLessonText }} 수업 예약 가능</div>
     <div class="bottom">
         <div class="date">
             <span class="rw-typo-subtext0-regular small-title2">기간</span>
@@ -35,9 +33,7 @@
             <span class="rw-typo-title2">{{contractUserMembership?.name | wordEllipsis: 30}}</span>
         </div>
     </div>
-    <!-- <div class="rw-typo-bodytext0 middle">
-      {{selectedLessonText}} 수업 예약 가능
-    </div> -->
+<!--    <div *ngIf="selectedLessonText" class="rw-typo-bodytext0 middle">{{ selectedLessonText }} 수업 예약 가능</div>-->
     <div class="bottom">
         <div class="date">
             <span class="rw-typo-subtext0-regular small-title2">기간</span>

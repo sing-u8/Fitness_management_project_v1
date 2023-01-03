@@ -301,7 +301,7 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
         if (_.isEmpty(this.curUserData.user)) return
         const remainDate = this.timeService.getRestPeriod(
             dayjs().format(),
-            this.curUserData.user.user_membership_end_date
+            this.curUserData.user.user_membership_in_use_end_date
         )
         if (remainDate <= dateToExpired) {
             this.imminentDateObj = {

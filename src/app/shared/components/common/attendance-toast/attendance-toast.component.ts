@@ -55,7 +55,7 @@ export class AttendanceToastComponent implements OnChanges, AfterViewChecked {
             if (changes['member'].previousValue != changes['member'].currentValue && this.visible) {
                 const remainDate = this.timeService.getRestPeriod(
                     dayjs().format(),
-                    this.member.user_membership_end_date
+                    this.member.user_membership_in_use_end_date
                 )
                 if (remainDate <= this.dateToExpired) {
                     this.imminentDateObj = {
