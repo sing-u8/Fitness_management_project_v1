@@ -612,6 +612,47 @@ export const dashboardReducer = createImmerReducer(
         }
         return state
     }),
+    on(DashboardActions.finishRefreshCenterUserCard, (state, { refreshCenterUser, centerId }) => {
+        console.log(
+            'finishRefreshCenterUserCard -- ',
+            state.curCenterId == centerId,
+            state.curUserListSelect.value.userSize > 0,
+            state.drawerCurCenterId == centerId,
+            state.drawerCurUserListSelect.value.userSize > 0
+        )
+        if (
+            state.curCenterId == centerId &&
+            state.curUserListSelect.value.userSize > 0 &&
+            !_.isEmpty(refreshCenterUser)
+        ) {
+            const idx = state.usersLists[state.curUserListSelect.key].findIndex(
+                (v) => v.user.id == refreshCenterUser.id
+            )
+            if (idx != -1) {
+                state.usersLists[state.curUserListSelect.key][idx] = {
+                    user: refreshCenterUser,
+                    holdSelected: state.usersLists[state.curUserListSelect.key][idx].holdSelected,
+                }
+            }
+        }
+        if (
+            state.drawerCurCenterId == centerId &&
+            state.drawerCurUserListSelect.value.userSize > 0 &&
+            !_.isEmpty(refreshCenterUser)
+        ) {
+            const idx = state.usersLists[state.drawerCurUserListSelect.key].findIndex(
+                (v) => v.user.id == refreshCenterUser.id
+            )
+            if (idx != -1) {
+                state.usersLists[state.drawerCurUserListSelect.key][idx] = {
+                    user: refreshCenterUser,
+                    holdSelected: state.usersLists[state.drawerCurUserListSelect.key][idx].holdSelected,
+                }
+            }
+        }
+
+        return state
+    }),
     // // drawer
     // async
     on(DashboardActions.finishGetDrawerUsersByCategory, (state, { userSelectCateg }) => {

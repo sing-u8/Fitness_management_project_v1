@@ -41,7 +41,9 @@ import { UserMembership } from '@schemas/user-membership'
 import { Store } from '@ngrx/store'
 import * as CenterCommonSelector from '@centerStore/selectors/center.common.selector'
 import * as DashboardSelector from '@centerStore/selectors/sec.dashboard.selector'
+import * as DashboardAction from '@centerStore/actions/sec.dashboard.actions'
 import { Loading } from '@schemas/store/loading'
+import { startRefreshCenterUserCard, startRefreshDrawerCenterUser } from "@centerStore/actions/sec.dashboard.actions";
 
 type Progress = 'one' | 'two'
 
@@ -211,6 +213,12 @@ export class TransferMembershipFullmodalComponent implements OnInit, OnChanges, 
                 btLoadingFns.hideLoading()
                 if (!_.isEmpty(this.dbCurCenterId) && this.dbCurCenterId == this.center.id) {
                     this.dashboardHelper.refreshCurUser(this.center.id, this.curUser)
+                    this.nxStore.dispatch(
+                        DashboardAction.startRefreshCenterUserCard({
+                            centerId: this.center.id,
+                            centerUser: this.transferCenterUser,
+                        })
+                    )
                 }
                 this.resetMemoTerms()
                 this.closeModal()

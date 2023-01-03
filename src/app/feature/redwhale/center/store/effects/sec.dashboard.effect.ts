@@ -22,6 +22,7 @@ import { CenterUsersBookingService } from '@services/center-users-booking.servic
 import { CenterService } from '@services/center.service'
 import { CenterHoldingService } from '@services/center-holding.service'
 import { CenterContractService } from '@services/center-users-contract.service'
+import { startRefreshCenterUserCard } from '../actions/sec.dashboard.actions'
 
 @Injectable()
 export class DashboardEffect {
@@ -228,7 +229,6 @@ export class DashboardEffect {
                     this.centerUsersApi.getUserList(centerId, '', centerUser.name),
                 ]).pipe(
                     switchMap(([lockers, memberships, payments, reservations, contracts, centerUsers]) => {
-
                         return [
                             DashboardActions.finishGetUserData({
                                 memberships,
@@ -468,6 +468,21 @@ export class DashboardEffect {
         )
     )
 
+    refreshCenterUserCard$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(DashboardActions.startRefreshCenterUserCard),
+            switchMap(({ centerId, centerUser }) =>
+                this.centerUsersApi.getUserList(centerId, '', centerUser.name).pipe(
+                    map((centerUsers) => {
+                        const refreshCenterUser = _.find(centerUsers, (v) => v.id == centerUser.id)
+                        return DashboardActions.finishRefreshCenterUserCard({ centerId, refreshCenterUser })
+                    }),
+                    catchError((err: string) => of(DashboardActions.error({ error: err })))
+                )
+            )
+        )
+    )
+
     // // // -- drawer
     getDrawerUsersByCategory$ = createEffect(() =>
         this.actions$.pipe(
@@ -484,7 +499,8 @@ export class DashboardEffect {
                             }
                         })
                         return DashboardActions.finishGetDrawerUsersByCategory({ userSelectCateg })
-                    })
+                    }),
+                    catchError((err: string) => of(DashboardActions.error({ error: err })))
                 )
             )
         )

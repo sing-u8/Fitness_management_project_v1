@@ -85,6 +85,15 @@ export const finishGetUserData = createAction(
     }>()
 )
 
+export const startRefreshCenterUserCard = createAction(
+    `[${FeatureKey}] Start Refresh Center User Card`,
+    props<{ centerId: string; centerUser: CenterUser }>()
+)
+export const finishRefreshCenterUserCard = createAction(
+    `[${FeatureKey}] Finish Refresh Center User Card`,
+    props<{ centerId: string; refreshCenterUser: CenterUser }>()
+)
+
 export const startRefreshCenterUser = createAction(
     `[${FeatureKey}] Start Refresh Center User`,
     props<{ centerId: string; centerUser: CenterUser }>()
