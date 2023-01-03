@@ -165,38 +165,38 @@ section.user-detail-membership {
             padding-right: 70px;
         }
 
-        .drawer-open {
-            .col1 {
-                min-width: 220px;
-                width: calc(220 / 1001) * 100%;
-            }
-
-            .col2 {
-                min-width: 94px;
-                width: calc(94 / 1001) * 100%;
-            }
-
-            .col3 {
-                min-width: 227px;
-                width: calc(227 / 1001) * 100%;
-            }
-
-            .col4 {
-                min-width: 154px;
-                width: calc(154 / 1001) * 100%;
-            }
-
-            .col5 {
-                min-width: calc(100% - 220px - 94px - 227px - 154px);
-                width: 100%;
-            }
-
-            .col1,
-            .col2,
-            .col3,
-            .col4 {
-                padding-right: 40px;
-            }
-        }
+        //.drawer-open {
+        //    .col1 {
+        //        min-width: 220px;
+        //        width: calc(220 / 1001) * 100%;
+        //    }
+        //
+        //    .col2 {
+        //        min-width: 94px;
+        //        width: calc(94 / 1001) * 100%;
+        //    }
+        //
+        //    .col3 {
+        //        min-width: 227px;
+        //        width: calc(227 / 1001) * 100%;
+        //    }
+        //
+        //    .col4 {
+        //        min-width: 154px;
+        //        width: calc(154 / 1001) * 100%;
+        //    }
+        //
+        //    .col5 {
+        //        min-width: calc(100% - 220px - 94px - 227px - 154px);
+        //        width: 100%;
+        //    }
+        //
+        //    .col1,
+        //    .col2,
+        //    .col3,
+        //    .col4 {
+        //        padding-right: 40px;
+        //    }
+        //}
     }
 }
