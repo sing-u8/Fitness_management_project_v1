@@ -54,6 +54,7 @@ table.sale-table {
                     &:nth-child(5) {
                         min-width: 300px !important;
                         width: calc(calc(300 / 1158) * calc(100%)) !important;
+                        padding-right: 70px;
                     }
                     &:nth-child(6) {
                         min-width: 176px !important;
@@ -97,6 +98,7 @@ table.sale-table {
         &:nth-child(5) {
             min-width: 235px;
             width: calc(calc(235 / 876) * calc(100%));
+            padding-right: 35px;
         }
         &:nth-child(6) {
             min-width: 119px;
@@ -131,6 +133,7 @@ table.sale-table {
             }
             &:nth-child(5) {
                 min-width: 260px;
+                padding-right: 50px;
                 width: calc(calc(260 / 996) * calc(100%));
             }
             &:nth-child(6) {
@@ -166,6 +169,7 @@ table.sale-table {
             }
             &:nth-child(5) {
                 min-width: 367px;
+                padding-right: 80px;
                 width: calc(calc(367 / 1476) * calc(100%));
             }
             &:nth-child(6) {
