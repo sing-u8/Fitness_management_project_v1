@@ -138,16 +138,9 @@ export class ModifyMembershipFullmodalComponent implements OnInit, OnChanges, Af
             ),
         ]).subscribe(([linkedClassList]) => {
             this.classItemList = _.map(linkedClassList, (v) => {
-                if (linkedClassIds.findIndex((id) => id == v.id) != -1) {
-                    return {
-                        selected: true,
-                        item: v,
-                    }
-                } else {
-                    return {
-                        selected: false,
-                        item: v,
-                    }
+                return {
+                    selected: linkedClassIds.findIndex((id) => id == v.id) != -1,
+                    item: v,
                 }
             })
             this.loadingClassItemList = false
@@ -203,11 +196,6 @@ export class ModifyMembershipFullmodalComponent implements OnInit, OnChanges, Af
         if (!this.date.startDate || !this.date.endDate || !this.isClassSelected() || !this.checkCount()) {
             return
         }
-        console.log(
-            'confirmModify --- ',
-            this.classItemList.filter((v) => v.selected).map((v) => v.item.id),
-            this.classItemList
-        )
 
         loadingBt.showLoading()
         const reqBody: UpdateMembershipTicketReqBody = {

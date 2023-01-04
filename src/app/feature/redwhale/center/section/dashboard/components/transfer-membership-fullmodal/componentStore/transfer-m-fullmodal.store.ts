@@ -241,6 +241,9 @@ export class TransferMembershipFullmodalStore extends ComponentStore<State> {
 
         const cmTotalPrice =
             contractMembership.cash + contractMembership.card + contractMembership.trans + contractMembership.unpaid
+
+        const linkedClassIds = _.split(userMembership.class_item_ids, ',')
+
         return {
             type: 'membership',
             date: {
@@ -281,7 +284,7 @@ export class TransferMembershipFullmodalStore extends ComponentStore<State> {
                 sequence_number: 0,
             },
             lessonList: _.map(linkedClass, (value) => {
-                return { selected: true, item: value }
+                return { selected: linkedClassIds.findIndex((id) => id == value.id) != -1, item: value }
             }),
         }
     }
