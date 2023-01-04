@@ -112,13 +112,20 @@ section.l-member-list {
 
                 &:nth-of-type(2) {
                     color: var(--lightgrey);
-                    margin: 0 1px;
+                    font-size: 1rem;
+                    margin-top: 2px;
                 }
 
                 &:nth-of-type(3) {
                     cursor: pointer;
                     color: var(--red);
                     text-decoration: underline;
+                    text-underline-offset: 3px;
+                }
+
+                &.disabled {
+                    color: var(--lightgrey);
+                    cursor: auto;
                 }
             }
         }
