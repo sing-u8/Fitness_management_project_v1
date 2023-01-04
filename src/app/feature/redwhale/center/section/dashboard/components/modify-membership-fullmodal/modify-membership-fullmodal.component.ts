@@ -125,22 +125,20 @@ export class ModifyMembershipFullmodalComponent implements OnInit, OnChanges, Af
         }
         this.getClassItemList()
     }
+
+    public loadingClassItemList = false
     getClassItemList() {
-        forkJoin({
-            linkedClassList: this.centerMembershipService.getLinkedClass(
+        this.loadingClassItemList = true
+        const linkedClassIds = _.split(this.userMembership.class_item_ids, ',')
+        forkJoin([
+            this.centerMembershipService.getLinkedClass(
                 this.center.id,
                 this.userMembership.membership_category_id,
                 this.userMembership.membership_item_id
             ),
-            membershipTicketClassList: this.centerUsersMembershipService.getMembershipTicketClasses(
-                this.center.id,
-                this.userMembership.membership_category_id,
-                this.userMembership.membership_item_id
-            ),
-        }).subscribe(({ linkedClassList, membershipTicketClassList }) => {
-            console.log('getClassItemList in mmf -- ', linkedClassList, membershipTicketClassList)
+        ]).subscribe(([linkedClassList]) => {
             this.classItemList = _.map(linkedClassList, (v) => {
-                if (membershipTicketClassList.findIndex((mc) => mc.id == v.id) != -1) {
+                if (linkedClassIds.findIndex((id) => id == v.id) != -1) {
                     return {
                         selected: true,
                         item: v,
@@ -152,6 +150,7 @@ export class ModifyMembershipFullmodalComponent implements OnInit, OnChanges, Af
                     }
                 }
             })
+            this.loadingClassItemList = false
         })
     }
 
@@ -204,6 +203,11 @@ export class ModifyMembershipFullmodalComponent implements OnInit, OnChanges, Af
         if (!this.date.startDate || !this.date.endDate || !this.isClassSelected() || !this.checkCount()) {
             return
         }
+        console.log(
+            'confirmModify --- ',
+            this.classItemList.filter((v) => v.selected).map((v) => v.item.id),
+            this.classItemList
+        )
 
         loadingBt.showLoading()
         const reqBody: UpdateMembershipTicketReqBody = {

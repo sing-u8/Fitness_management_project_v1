@@ -35,4 +35,5 @@ export interface UserMembership {
     total_unpaid: number
     holding: Array<Holding>
     class_item_names: string
+    class_item_ids: string
 }
