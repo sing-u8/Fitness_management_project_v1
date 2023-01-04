@@ -40,7 +40,7 @@
                     [class.pointer-cursor]="!isExpired && showFullClassArrow"
                 >
                     <span>{{ reservableClassText }}</span>
-                    <div *ngIf="showFullClassArrow" [class.open]="openFullClass"></div>
+                    <div *ngIf="showFullClassArrow" [class.open]="openFullClass" class="fill-down-icon"></div>
                     <div *ngIf="openFullClass" class="ellipsis-dropdown">{{ reservableClassFullText }}</div>
                 </div>
 
