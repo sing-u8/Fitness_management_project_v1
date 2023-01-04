@@ -22,6 +22,7 @@ import { takeUntil } from 'rxjs/operators'
 // ngrx and store
 import { Store, select } from '@ngrx/store'
 
+import { drawerSelector } from '@appStore/selectors'
 import * as FromSale from '@centerStore/reducers/sec.sale.reducer'
 import * as SaleSelector from '@centerStore/selectors/sec.sale.selector'
 import * as SaleActions from '@centerStore/actions/sec.sale.actions'
@@ -62,6 +63,8 @@ export class SaleTableComponent implements OnInit, OnDestroy, AfterViewInit, Aft
         membershipLocker: { cur: string; applied: string }
         personInCharge: { cur: string; applied: string }
     }
+
+    public drawer$ = this.nxStore.select(drawerSelector)
 
     constructor(
         private nxStore: Store,
@@ -329,7 +332,8 @@ export class SaleTableComponent implements OnInit, OnDestroy, AfterViewInit, Aft
     public isScrollableTableBody = false
     checkIsSaleTableBodyScrollable() {
         if (this.saleData.length > 0 && this.sale_table_body_el) {
-            this.isScrollableTableBody = this.sale_table_body_el.nativeElement.scrollHeight > this.sale_table_body_el.nativeElement.offsetHeight;
+            this.isScrollableTableBody =
+                this.sale_table_body_el.nativeElement.scrollHeight > this.sale_table_body_el.nativeElement.offsetHeight
         }
     }
 }
