@@ -224,7 +224,8 @@
                                         (keypress)="restrictToNumber($event)"
                                         (keyup)="onSelectedItemInputKeyup($event, btItem.value.property)"
                                         (keyup.enter)="updateMembershipItemInput(btItem.value.property)"
-                                        (rwClickOutside)="updateMembershipItemInput(btItem.value.property)"
+                                        (blur)="btItem.value.property != 'count' ? updateMembershipItemInput(btItem.value.property) : null"
+                                        (rwClickOutside)="btItem.value.property == 'count' ? updateMembershipItemInput(btItem.value.property) : null"
                                     />
                                     <span
                                         class="rw-typo-bodytext0"
@@ -236,7 +237,6 @@
                                     >
                                         {{ btItem.value.suffix }}
                                     </span>
-
                                     <rw-checkbox
                                         *ngIf="btItem.value.property == 'count'"
                                         (click)="toggleInfinitCount($event)"
