@@ -23,6 +23,10 @@ table.sale-table {
 
     thead,
     tbody {
+        transition-property: all;
+        transition-duration: 0.5s, 0.5s;
+        transition-timing-function: ease;
+
         min-width: 876px;
         @media (min-width: 1440px) {
             min-width: 996px;
@@ -34,6 +38,9 @@ table.sale-table {
                 min-width: 1158px;
                 th,
                 td {
+                    transition-property: all;
+                    transition-duration: 0.5s, 0.5s;
+                    transition-timing-function: ease;
                     &:nth-child(1) {
                         min-width: 146px !important;
                         width: calc(calc(146 / 1158) * calc(100%)) !important;
