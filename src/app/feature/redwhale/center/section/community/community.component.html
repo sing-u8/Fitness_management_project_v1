@@ -1,12 +1,12 @@
 <section
     id="community-section"
     class="community"
-    rw-dropzone2
-    [dropLeaveTargetId]="'main_drag_guide'"
-    (onDrop)="onFileDrop($event);onFileDragLeave()"
-    (onDragOver) = "onFileDragOver()"
-    (onDragLeave) = "onFileDragLeave()"
 >
+<!--    rw-dropzone2-->
+<!--    [dropLeaveTargetId]="'main_drag_guide'"-->
+<!--    (onDrop)="onFileDrop($event);onFileDragLeave()"-->
+<!--    (onDragOver) = "onFileDragOver()"-->
+<!--    (onDragLeave) = "onFileDragLeave()"-->
 
     <rw-drag-guide
         id="main_drag_guide"
@@ -63,7 +63,7 @@
                         appearance="circle"
                         [theme]="{width: '150px', height: '22px', 'border-radius': '5px', 'margin': '0'}"
                     ></ngx-skeleton-loader>
-                    <span *ngIf="!changeRoomMode && (isLoading$ | async) == 'done'" class="rw-typo-title2">{{(curChatRoom$ | async)?.name}}</span>
+                    <span *ngIf="!changeRoomMode && (isLoading$ | async) == 'done'" class="rw-typo-title2">{{curChatRoomName}}</span>
                     <img
                         rw-tooltip rwTooltipTitle="채팅방 이름 변경"
                         rwTooltipPlacement="bottom"
@@ -79,7 +79,7 @@
                     <input
                         *ngIf="changeRoomMode"
                         class="rw-input rw-typo-title2"
-                        placeholder="{{(curChatRoom$ | async).name}}"
+                        placeholder="{{curChatRoomName}}"
                         (keyup.enter)="changeRoomName(changeRoomInput.value, changeRoomInput.valid)"
                         (rwClickOutside)="changeRoomName(changeRoomInput.value, changeRoomInput.valid)"
                         type="text"
@@ -178,13 +178,13 @@
                 </div>
                 <div #chatting_input class="chatting-input-container" [class.isFocused] = "isTextAreaFoucsed">
 
-                    <div class="plus-box">
-                        <img
-                            src="{{addBtSrc}}"
-                            alt="plus.svg" rw-tooltip rwTooltipTitle="파일 첨부"
-                            rwTooltipPlacement="bottom" (click)="file_picker.click()"
-                            (mouseover)="addFileBtMouseHover()" (mouseleave)="addFileBtMouseLeave()">
-                    </div>
+<!--                    <div class="plus-box">-->
+<!--                        <img-->
+<!--                            src="{{addBtSrc}}"-->
+<!--                            alt="plus.svg" rw-tooltip rwTooltipTitle="파일 첨부"-->
+<!--                            rwTooltipPlacement="bottom" (click)="file_picker.click()"-->
+<!--                            (mouseover)="addFileBtMouseHover()" (mouseleave)="addFileBtMouseLeave()">-->
+<!--                    </div>-->
 
                     <form class="input-box">
 

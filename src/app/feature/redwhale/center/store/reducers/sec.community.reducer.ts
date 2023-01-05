@@ -521,15 +521,16 @@ export const communityReducer = createImmerReducer(
         state.chatRoomList.unshift(ws_data.dataset[0])
         return state
     }),
+    // this action only for chat room name update now
     on(CommunitydActions.updateChatRoomByWS, (state, { ws_data }) => {
         const chatRoomIdx = state.chatRoomList.findIndex((v) => v.id == ws_data.dataset[0].id)
-        state.chatRoomList[chatRoomIdx] = ws_data.dataset[0]
+        state.chatRoomList[chatRoomIdx].name = ws_data.dataset[0].name
 
         if (!_.isEmpty(state.mainCurChatRoom) && state.mainCurChatRoom.id == ws_data.info.chat_room_id) {
-            state.mainCurChatRoom = ws_data.dataset[0]
+            state.mainCurChatRoom.name = ws_data.dataset[0].name
         }
         if (!_.isEmpty(state.drawerCurChatRoom) && state.drawerCurChatRoom.id == ws_data.info.chat_room_id) {
-            state.drawerCurChatRoom = ws_data.dataset[0]
+            state.drawerCurChatRoom.name = ws_data.dataset[0].name
         }
 
         return state
@@ -573,20 +574,18 @@ export const communityReducer = createImmerReducer(
 
         const chatRoom = state.chatRoomList[chatRoomIdx]
 
-        chatRoom.chat_room_users.filter((v) => v.id != ws_data.info.chat_room_user_id)
+        chatRoom.chat_room_users.filter((v) => v.id != ws_data.info.center_user_id)
         chatRoom.chat_room_user_count -= 1
         state.chatRoomList[chatRoomIdx] = chatRoom
 
         if (!_.isEmpty(state.mainCurChatRoom) && state.mainCurChatRoom.id == ws_data.info.chat_room_id) {
             state.mainCurChatRoom = chatRoom
-            state.mainChatRoomUserList = state.mainChatRoomUserList.filter(
-                (v) => v.id != ws_data.info.chat_room_user_id
-            )
+            state.mainChatRoomUserList = state.mainChatRoomUserList.filter((v) => v.id != ws_data.info.center_user_id)
         }
         if (!_.isEmpty(state.drawerCurChatRoom) && state.drawerCurChatRoom.id == ws_data.info.chat_room_id) {
             state.drawerCurChatRoom = chatRoom
             state.drawerChatRoomUserList = state.drawerChatRoomUserList.filter(
-                (v) => v.id != ws_data.info.chat_room_user_id
+                (v) => v.id != ws_data.info.center_user_id
             )
         }
         return state
@@ -647,7 +646,7 @@ export const communityReducer = createImmerReducer(
             _.find(state.mainChatRoomMsgs, (msg, idx) => {
                 if (msg.type_code == 'fe_chat_room_message_type_date') return false
                 const unread_users_ids = msg.unread_center_user_ids
-                const readUserId = _.remove(unread_users_ids, (id) => id == ws_data.info.user_id)
+                const readUserId = _.remove(unread_users_ids, (id) => id == ws_data.info.center_user_id)
                 if (!_.isEmpty(readUserId)) {
                     state.mainChatRoomMsgs[idx].unread_center_user_ids = unread_users_ids
                     return false
@@ -659,7 +658,7 @@ export const communityReducer = createImmerReducer(
             _.find(state.drawerChatRoomMsgs, (msg, idx) => {
                 if (msg.type_code == 'fe_chat_room_message_type_date') return false
                 const unread_users_ids = msg.unread_center_user_ids
-                const readUserId = _.remove(unread_users_ids, (id) => id == ws_data.info.user_id)
+                const readUserId = _.remove(unread_users_ids, (id) => id == ws_data.info.center_user_id)
                 if (!_.isEmpty(readUserId)) {
                     state.drawerChatRoomMsgs[idx].unread_center_user_ids = unread_users_ids
                     return false
@@ -782,6 +781,7 @@ export const selectMainChatRoomMsgEnd = (state: State) => state.mainChatRoomMsgE
 export const selectMainChatRoomMsgLoading = (state: State) => state.mainChatRoomMsgLoading
 export const selectMainChatRoomLoadingMsgs = (state: State) => state.mainChatRoomLoadingMsgs
 export const selectMainChatRoomUserList = (state: State) => state.mainChatRoomUserList
+
 // main - drawer
 export const selectDrawerIsJoinRoomLoading = (state: State) => state.drawerIsJoinRoomLoading
 export const selectDrawerPreChatRoom = (state: State) => state.drawerPreChatRoom
@@ -809,6 +809,25 @@ export const selectCurDrawerChatRoomIsTemp = (state: State) =>
 //
 
 // helper
+export function getChatRoomName(curCenterUser: CenterUser, chatRoom: ChatRoom): string {
+    if (chatRoom.type_code == 'chat_room_type_chat_with_me') {
+        return chatRoom.name
+    } else {
+        if (
+            (chatRoom.chat_room_users.length == 1 &&
+                (chatRoom.chat_room_users[0].name == chatRoom.name || curCenterUser.name == chatRoom.name) &&
+                chatRoom.permission_code == 'chat_room_user_permission_owner') ||
+            (chatRoom.chat_room_users.length == 1 &&
+                (chatRoom.chat_room_users[0].name == chatRoom.name || curCenterUser.name == chatRoom.name) &&
+                chatRoom.permission_code == 'chat_room_user_permission_member')
+        ) {
+            return chatRoom.chat_room_users[0].name
+        } else {
+            return chatRoom.name
+        }
+    }
+}
+
 function centerUserToChatRoomMemberUser(members: Array<CenterUser>): Array<ChatRoomUser> {
     return _.map(members, (v) => ({
         id: v.id,
@@ -911,6 +930,7 @@ function makeDateMessage(created_at: string): ChatRoomMessage {
         contentType: undefined,
         size: undefined,
         unread_center_user_ids: [],
+        unread_center_user_emails: [],
         created_at: dayjs(created_at).format('YYYY-MM-DD HH:mm:ss'),
         deleted_at: null,
     }

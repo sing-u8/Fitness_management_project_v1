@@ -274,6 +274,7 @@ export class CommunityEffect {
                                     contentType: fileList[0].contentType,
                                     size: fileList[0].file.size,
                                     unread_center_user_ids: [], // !! 추후에 필요에 따라 수정 필요
+                                    unread_center_user_emails: [],
                                     created_at: dayjs().format('YYYY-MM-DD HH:mm:ss'),
                                     deleted_at: null,
                                     gauge: {
@@ -440,6 +441,7 @@ export class CommunityEffect {
                                                 contentType: fileList[0].contentType,
                                                 size: fileList[0].file.size,
                                                 unread_center_user_ids: [], // !! 추후에 필요에 따라 수정 필요
+                                                unread_center_user_emails: [],
                                                 created_at: dayjs().format('YYYY-MM-DD HH:mm:ss'),
                                                 deleted_at: null,
                                                 gauge: {

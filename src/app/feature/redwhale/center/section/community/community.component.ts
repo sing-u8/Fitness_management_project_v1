@@ -37,6 +37,7 @@ import { select, Store } from '@ngrx/store'
 import { showToast } from '@appStore/actions/toast.action'
 import * as CommunitySelector from '@centerStore/selectors/sec.community.selector'
 import * as CommunityActions from '@centerStore/actions/sec.community.actions'
+import { getChatRoomName } from '@centerStore/reducers/sec.community.reducer'
 
 @Component({
     selector: 'community',
@@ -59,6 +60,7 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
 
     public curChatRoom$ = this.nxStore.select(CommunitySelector.mainCurChatRoom)
     public curChatRoom_: ChatRoom = undefined
+    public curChatRoomName = ''
     public isCurChatRoomTemp$ = this.nxStore.select(CommunitySelector.curMainChatRoomIsTemp)
 
     public chatRoomUserList$ = this.nxStore.select(CommunitySelector.mainChatRoomUserList)
@@ -103,6 +105,7 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
         })
         this.curChatRoom$.pipe(takeUntil(this.unsubscribe$)).subscribe((curChatRoom) => {
             this.curChatRoom_ = curChatRoom
+            this.curChatRoomName = getChatRoomName(this.centerUser, this.curChatRoom_)
         })
 
         this.nxStore.pipe(select(CommunitySelector.curChatLoaded), take(1)).subscribe((curChatLoaded) => {
@@ -553,6 +556,7 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
     }
     resizeChatScreen() {
         if (this.fileList.length > 0) {
+            // 나중에 수정 필요 -- 2023 01 05
             const screenPadMar = 120 + this.resizeHeight // 120px --> padding: 10px * 2 + margin: 30px 15px + fileHeight: 85px
             const inputHeight = 106 + this.resizeHeight // 20px --> padding: 10px * 2 + fileHeight: 85px
             this.renderer.setStyle(this.chatting_screen.nativeElement, 'height', `calc(100% - ${screenPadMar}px)`)

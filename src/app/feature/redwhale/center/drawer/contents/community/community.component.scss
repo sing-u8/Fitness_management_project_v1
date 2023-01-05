@@ -69,7 +69,7 @@ section.community {
 				display: flex;
 				flex-direction: column;
 				justify-content: space-between;
-				padding: 10px 15px;
+				padding: 16px 15px 13px;
 				textarea {
 					//width: 100%;
 					width: 293px;
@@ -201,10 +201,10 @@ section.community {
 			.input-bottom {
 				display: flex;
 				align-items: center;
-				justify-content: space-between;
+				justify-content: flex-end;
 				height: 50px;
 				width: 100%;
-				padding: 0px 15px 0px 8px;
+				padding: 0 15px 0 8px;
 				margin-bottom: 10px;
 
 				.plus-box {

@@ -67,13 +67,15 @@ export class WsChatService implements OnDestroy {
     }
 
     subscribeChatWs(accessToken: string) {
-        console.log('subscribeChatWs - ', accessToken)
+        console.log('subscribe chat ws : ')
         this.chatWs.subscribe({
             next: (ws) => {
                 if (this.isCenterExist() && this.isCenterMessage(ws)) {
+                    console.log('this is center chat ws : ', ws)
                     this.switchByWsChatBase(ws as wsChat.Base)
                 }
                 if (this.isCenterExist() && this.isCenterTouchPad(ws)) {
+                    console.log('this is center touch pad ws : ', ws)
                     this.switchBtWsTouchPad(ws as wsChat.Base)
                 }
             },

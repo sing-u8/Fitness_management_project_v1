@@ -26,12 +26,12 @@
     <div
         class="flex-fill chatting-screen"
         id="chatting-screen"
-        rw-dropzone2
-        [dropLeaveTargetId]="'drawer_drag_guide'"
-        (onDrop)="onFileDrop($event); onFileDragLeave()"
-        (onDragOver)="onFileDragOver()"
-        (onDragLeave)="onFileDragLeave()"
     >
+<!--        rw-dropzone2-->
+<!--        [dropLeaveTargetId]="'drawer_drag_guide'"-->
+<!--        (onDrop)="onFileDrop($event); onFileDragLeave()"-->
+<!--        (onDragOver)="onFileDragOver()"-->
+<!--        (onDragLeave)="onFileDragLeave()"-->
         <rw-drag-guide id="drawer_drag_guide" [showGuide]="showFileDragGuide" [isSideBar]="true"></rw-drag-guide>
 
         <div #chatting_screen class="chatting-screen-content thin-scroll-y-overlay2" (scroll)="scrolled($event)">
@@ -115,18 +115,18 @@
             </form>
 
             <div class="input-bottom">
-                <div class="plus-box">
-                    <img
-                        src="{{ addBtSrc }}"
-                        alt="plus.svg"
-                        rw-tooltip
-                        rwTooltipTitle="파일 첨부"
-                        rwTooltipPlacement="top"
-                        (click)="file_picker.click()"
-                        (mouseover)="addFileBtMouseHover()"
-                        (mouseleave)="addFileBtMouseLeave()"
-                    />
-                </div>
+<!--                <div class="plus-box">-->
+<!--                    <img-->
+<!--                        src="{{ addBtSrc }}"-->
+<!--                        alt="plus.svg"-->
+<!--                        rw-tooltip-->
+<!--                        rwTooltipTitle="파일 첨부"-->
+<!--                        rwTooltipPlacement="top"-->
+<!--                        (click)="file_picker.click()"-->
+<!--                        (mouseover)="addFileBtMouseHover()"-->
+<!--                        (mouseleave)="addFileBtMouseLeave()"-->
+<!--                    />-->
+<!--                </div>-->
 
                 <div
                     class="send-button"

@@ -10,6 +10,8 @@ import { StorageService } from '@services/storage.service'
 import _ from 'lodash'
 import { CenterUser } from '@schemas/center-user'
 
+import { getChatRoomName } from '@centerStore/reducers/sec.community.reducer'
+
 @Component({
     selector: 'rw-chatting-room-card',
     templateUrl: './chatting-room-card.component.html',
@@ -34,8 +36,8 @@ export class ChattingRoomCardComponent implements OnInit, AfterViewInit, OnChang
 
     ngOnInit(): void {
         this.curUser = this.storageService.getCenterUser()
-        console.log('ChattingRoomCardComponent -- ', this.curUser, this.room)
         this.initUserListInScreen()
+        this.initChatRoomName()
     }
     ngAfterViewInit(): void {}
     ngOnChanges(): void {}
@@ -56,6 +58,11 @@ export class ChattingRoomCardComponent implements OnInit, AfterViewInit, OnChang
                       },
                   ]
                 : this.room.chat_room_users.filter((v) => v.id != this.curUser.id).map((v) => v)
+    }
+
+    public chatRoomName = ''
+    initChatRoomName() {
+        this.chatRoomName = getChatRoomName(this.curUser, this.room)
     }
 
     limitChatRoomName() {

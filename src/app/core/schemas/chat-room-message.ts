@@ -15,6 +15,7 @@ export interface ChatRoomMessage {
     contentType: string
     size: number
     unread_center_user_ids: string[]
+    unread_center_user_emails: string[]
     created_at: string
     deleted_at: string
 }

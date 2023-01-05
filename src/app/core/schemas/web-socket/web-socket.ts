@@ -19,6 +19,7 @@ export interface Base {
     dataset: any
 }
 
+// 0
 export interface CreateChatRoom extends Base {
     topic: 'chat_room'
     operation: 'create'
@@ -27,29 +28,33 @@ export interface CreateChatRoom extends Base {
     }
     dataset: Array<ChatRoom>
 }
+// 0
 export interface ReadChatRoom extends Base {
     topic: 'chat_room'
     operation: 'read'
     info: {
         center_id: string
         chat_room_id: string
-        user_id: string
+        center_user_id: string
+        center_user_email: string
     }
     dataset: Array<never>
 }
+// 0
 export interface UpdateChatRoom extends Base {
     topic: 'chat_room'
     operation: 'update'
     info: { chat_room_id: string; center_id: string }
     dataset: Array<ChatRoom>
 }
-
+// 0
 export interface DeleteChatRoomUser extends Base {
     topic: 'chat_room_user'
     operation: 'delete'
-    info: { chat_room_id: string; chat_room_user_id: string; center_id: string }
+    info: { center_id: string; chat_room_id: string; center_user_id: string }
     dataset: Array<never>
 }
+// 0
 export interface CreateChatRoomUser extends Base {
     topic: 'chat_room_user'
     operation: 'create'
@@ -57,17 +62,19 @@ export interface CreateChatRoomUser extends Base {
     dataset: Array<ChatRoomUser>
 }
 
+// 0
 export interface CreateChatRoomMessage extends Base {
     topic: 'chat_room_message'
     operation: 'create'
     info: { chat_room_id: string; center_id: string }
     dataset: Array<ChatRoomMessage>
 }
+// 0
 export interface DeleteChatRoomMessage extends Base {
     topic: 'chat_room_message'
     operation: 'delete'
     info: { chat_room_id: string; message_id: string; center_id: string }
-    dataset: Array<never>
+    dataset: Array<ChatRoomMessage> // index: 0 - 삭제된 메시지; index: 1 - 최신 메시지
 }
 
 // -- touch pad
