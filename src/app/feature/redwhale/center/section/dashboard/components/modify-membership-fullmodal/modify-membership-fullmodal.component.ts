@@ -142,7 +142,7 @@ export class ModifyMembershipFullmodalComponent implements OnInit, OnChanges, Af
                     selected: linkedClassIds.findIndex((id) => id == v.id) != -1,
                     item: v,
                 }
-            })
+            }).reverse()
             this.loadingClassItemList = false
         })
     }

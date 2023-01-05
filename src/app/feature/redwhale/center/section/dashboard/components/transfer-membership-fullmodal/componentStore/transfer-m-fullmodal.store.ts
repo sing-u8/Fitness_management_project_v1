@@ -224,11 +224,9 @@ export class TransferMembershipFullmodalStore extends ComponentStore<State> {
     async initMembershipItemByUM(userMembership: UserMembership, curUser: CenterUser): Promise<MembershipTicket> {
         const center = this.storageService.getCenter()
         const linkedClass: ClassItem[] = await firstValueFrom(
-            this.centerMembershipApi.getLinkedClass(
-                center.id,
-                userMembership.membership_category_id,
-                userMembership.membership_item_id
-            )
+            this.centerMembershipApi
+                .getLinkedClass(center.id, userMembership.membership_category_id, userMembership.membership_item_id)
+                .pipe(map((v) => _.reverse(v)))
         )
         const contractMembership: ContractUserMembership = await firstValueFrom(
             this.centerContractService.getContractMembershipDetail(
