@@ -44,10 +44,6 @@
                     <div *ngIf="openFullClass" class="ellipsis-dropdown">{{ reservableClassFullText }}</div>
                 </div>
 
-                <!--                <div class="col4__content">-->
-                <!--                    {{ restDate }}일 /-->
-                <!--                    {{ membership.unlimited ? '무제한' : membership.count < 1 || isExpired ? 0 : membership.count + '회' }} 남음-->
-                <!--                </div>-->
                 <div class="col5__menu" (click)="toggleMenuDropDown()" (rwClickOutside)="hideMenuDropDown()">
                     <div class="l-menu-items" [class.show-items]="showMenuDropDown">
                         <div
