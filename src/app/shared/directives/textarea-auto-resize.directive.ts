@@ -7,6 +7,7 @@ export class TextareaAutoResize implements AfterViewInit {
     constructor(private el: ElementRef) {}
 
     @Input() maxLine = 10
+    @Input() heightUnit = 22
     @Output('onResize') onResize = new EventEmitter<string>()
 
     @HostListener(':keydown.backspace')
@@ -29,17 +30,17 @@ export class TextareaAutoResize implements AfterViewInit {
 
     setResizeHeight(height: number) {
         let _height = 0
-        if (height < 3 * 20) {
+        if (height < 3 * this.heightUnit) {
             _height = 40
         }
         for (let i = 4; i <= this.maxLine; i++) {
-            if (height < 20 * i) {
-                _height = 20 * (i - 1)
+            if (height < this.heightUnit * i) {
+                _height = this.heightUnit * (i - 1)
                 break
             }
         }
-        if (height >= 20 * this.maxLine) {
-            _height = 20 * this.maxLine
+        if (height >= this.heightUnit * this.maxLine) {
+            _height = this.heightUnit * this.maxLine
         }
         return _height
     }

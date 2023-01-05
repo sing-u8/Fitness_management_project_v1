@@ -38,9 +38,11 @@ table.sale-table {
                 min-width: 1158px;
                 th,
                 td {
-                    transition-property: all;
-                    transition-duration: 0.5s, 0.5s;
-                    transition-timing-function: ease;
+                    transition: all 0.5s ease;
+                    -moz-transition: all 0.5s ease;
+                    -webkit-transition: all 0.5s ease;
+                    -o-transition: all 0.5s ease;
+
                     &:nth-child(1) {
                         min-width: 146px !important;
                         width: calc(calc(146 / 1158) * calc(100%)) !important;

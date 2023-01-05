@@ -1373,7 +1373,10 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
 
         // !! user_membership_ids를 추가하는 방법 다시 생각해야 함.
         this.CenterCalendarService.reserveTask(this.center.id, this.curCenterCalendar$_.id, this.reserveLessonData.id, {
-            user_membership_ids: cmpReturn.usersAbleToBook.map((v) => v.user_memberships[0].id),
+            user_membership_ids: cmpReturn.usersAbleToBook.map((v) => {
+                console.log('onReserveModalConfirm -- ', v, v.user_memberships)
+                return v.user_memberships[0].id
+            }),
         }).subscribe(() => {
             this.hideReserveModal()
             this.showModifyLessonEventModal()
