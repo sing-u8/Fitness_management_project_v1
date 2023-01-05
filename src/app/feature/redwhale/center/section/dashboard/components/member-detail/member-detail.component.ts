@@ -103,7 +103,10 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
             })
 
         this.curUserData$.pipe(takeUntil(this.unSubscriber$)).subscribe((curUserData) => {
-            this.curUserData = curUserData
+            this.curUserData = {
+                ...curUserData,
+                payments: DashboardReducer.getPaymentsWithoutTotalZero(curUserData.payments)
+            }
             this.findEndDateToExpired(7)
 
             this.memoForm.setValue(this.curUserData?.user?.memo ?? '')

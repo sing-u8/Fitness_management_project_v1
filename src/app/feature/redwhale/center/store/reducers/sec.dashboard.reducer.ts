@@ -759,9 +759,7 @@ export const selectUsersLists = (state: State) => state.usersLists
 export const selectCurMemberManageCateg = (state: State) => state.curMemberManageCateg
 export const selectCurUserListSelect = (state: State) => state.curUserListSelect
 export const selectCurUserData = (state: State) => {
-    const curUserDataCopy = _.cloneDeep(state.curUserData)
-    curUserDataCopy.payments = getPaymentsWithoutTotalZero(state.curUserData.payments)
-    return curUserDataCopy
+    return state.curUserData
 }
 
 export const selectCurUserMemberhsipData = (state: State) => state.curUserData.memberships
@@ -775,9 +773,8 @@ export const selectedUserListsHolding = (state: State) =>
 export const selectSearchedUsersLists = (state: State) => {
     const searchUserList: UsersLists = _.cloneDeep(UsersListInit)
     const searchInput = state.curSearchInput
-    const usersLists = state.usersLists
-    _.forEach(_.keys(usersLists), (typeKey) => {
-        searchUserList[typeKey] = _.filter(usersLists[typeKey], (item) => {
+    _.forEach(_.keys(state.usersLists), (typeKey) => {
+        searchUserList[typeKey] = _.filter(state.usersLists[typeKey], (item) => {
             return _.includes(item.user.name, searchInput) || _.includes(item.user.phone_number, searchInput)
         })
     })
