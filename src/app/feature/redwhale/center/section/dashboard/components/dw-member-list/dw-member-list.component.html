@@ -97,12 +97,12 @@
 
             <div *ngIf="holdModeFlags" class="hold-mode-menu">
                 <div class="d-flex justify-content-start align-content-center">
-                    <span class="rw-typo-bodytext2-regular"> {{ selectedUserListsHolding }}명 선택됨 </span>
-                    <span *ngIf="selectedUserListsHolding > 0">・</span>
+                    <span class="rw-typo-bodytext2-regular"> {{ selectedUserListsHolding }}명</span>
+                    <span>・</span>
                     <span
-                        *ngIf="selectedUserListsHolding > 0"
-                        (click)="openPartialHoldModal()"
+                        (click)="selectedUserListsHolding > 0 && openPartialHoldModal()"
                         class="rw-typo-bodytext2-bold"
+                        [class.disabled] = "selectedUserListsHolding <= 0"
                     >
                         선택 완료
                     </span>
