@@ -22,7 +22,6 @@ import { CenterUsersBookingService } from '@services/center-users-booking.servic
 import { CenterService } from '@services/center.service'
 import { CenterHoldingService } from '@services/center-holding.service'
 import { CenterContractService } from '@services/center-users-contract.service'
-import { startRefreshCenterUserCard } from '../actions/sec.dashboard.actions'
 
 @Injectable()
 export class DashboardEffect {
