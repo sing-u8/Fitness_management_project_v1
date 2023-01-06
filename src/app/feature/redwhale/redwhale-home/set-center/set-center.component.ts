@@ -50,6 +50,8 @@ export class SetCenterComponent implements OnInit {
 
     public center: Center = undefined
 
+    public isLoaded = false
+
     constructor(
         private location: Location,
         private fb: FormBuilder,
@@ -77,6 +79,7 @@ export class SetCenterComponent implements OnInit {
         const urlList = _.split(this.router.url, '/')
         const centerId = urlList[urlList.length - 1]
 
+        this.isLoaded = false
         this.centerService
             .getCenter(centerId)
             .pipe(
@@ -87,7 +90,6 @@ export class SetCenterComponent implements OnInit {
             )
             .subscribe(([center, cp, cbg]) => {
                 this.center = center
-                console.log('get center data : ', center, ' - ', cp, ' - ', cbg)
                 if (center.background) {
                     this.photoSrc.file_type_center_background = cbg[0]?.url ?? undefined
                     this.photoName.file_type_center_background = cbg[0]?.originalname ?? undefined
@@ -101,7 +103,7 @@ export class SetCenterComponent implements OnInit {
 
                 this.centerNameForm.setValue(center.name)
                 this.centerAddrForm.setValue(center.address)
-                console.log('center cp cbg : ', center, cp, cbg)
+                this.isLoaded = true
             })
     }
 

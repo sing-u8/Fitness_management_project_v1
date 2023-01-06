@@ -172,12 +172,15 @@ export const dashboardReducer = createImmerReducer(
     // async
     on(DashboardActions.startLoadMemberList, (state) => {
         state = { ...state, ...MainDashboardInitialState } as State
-        state.isLoading = 'pending'
+
         return state
     }),
     on(DashboardActions.finishLoadMemberList, (state, { categ_type, userListValue }) => {
         state.usersLists[categ_type] = userListValue
-        state.isLoading = 'done'
+        return state
+    }),
+    on(DashboardActions.startGetUsersByCategory, (state) => {
+        state.isLoading = 'pending'
         return state
     }),
     on(DashboardActions.finishGetUsersByCategory, (state, { userSelectCateg }) => {
@@ -189,6 +192,7 @@ export const dashboardReducer = createImmerReducer(
                 userSize: state.usersSelectCategs[state.curUserListSelect.key].userSize,
             },
         }
+        state.isLoading = 'done'
         return state
     }),
     on(DashboardActions.startGetUserList, (state, { categ_type }) => {
@@ -655,6 +659,10 @@ export const dashboardReducer = createImmerReducer(
     }),
     // // drawer
     // async
+    on(DashboardActions.startGetDrawerUsersByCategory, (state) => {
+        state.drawerIsLoading = 'pending'
+        return state
+    }),
     on(DashboardActions.finishGetDrawerUsersByCategory, (state, { userSelectCateg }) => {
         state.drawerUsersSelectCategs = _.assign(state.drawerUsersSelectCategs, userSelectCateg)
         state.drawerCurUserListSelect = {
@@ -664,16 +672,17 @@ export const dashboardReducer = createImmerReducer(
                 userSize: state.drawerUsersSelectCategs[state.drawerCurUserListSelect.key].userSize,
             },
         }
+        state.drawerIsLoading = 'done'
         return state
     }),
     on(DashboardActions.startGetDrawerUserList, (state, { categ_type }) => {
         state.drawerCurUserListSelect = { key: categ_type, value: state.drawerUsersSelectCategs[categ_type] }
-        state.drawerIsLoading = 'pending'
+
         return state
     }),
     on(DashboardActions.finishGetDrawerUserList, (state, { categ_type, userListValue }) => {
         state.drawerUsersLists[categ_type] = userListValue
-        state.drawerIsLoading = 'done'
+
         return state
     }),
     on(DashboardActions.startSetDrawerCurUserData, (state, { userId, reqBody }) => {
