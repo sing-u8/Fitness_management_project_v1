@@ -4,6 +4,7 @@ export interface MembershipItem {
     id: string
     category_id: string
     category_name: string
+    category_sequence_number: number
     name: string
     days: number
     count: number

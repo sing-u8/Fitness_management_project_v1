@@ -10,7 +10,6 @@ import { ClassItem } from '@schemas/class-item'
 import { Loading } from '@schemas/store/loading'
 import { CenterUser } from '@schemas/center-user'
 import { MembershipItem } from '@schemas/membership-item'
-import { finishRefreshLinkedMemberships, startRefreshLinkedMemberships } from '../actions/sec.lesson.actions'
 
 export interface SelectedLesson {
     lessonData: ClassItem
@@ -321,14 +320,35 @@ export const lessonReducer = createImmerReducer(
             state.selectedLesson.linkedMembershipItems.push(mv)
             _.remove(state.selectedLesson.linkableMembershipItems, (v) => v.id == mv.id)
         })
+
+        const itemsByCategSM = _.groupBy(state.selectedLesson.linkedMembershipItems, (v) => v.category_sequence_number)
+        let itemsArr: MembershipItem[] = []
+        _.forEach(_.keys(itemsByCategSM), (k) => {
+            itemsArr = _.concat(
+                itemsArr,
+                _.sortBy(itemsByCategSM[k], (v) => v.sequence_number)
+            )
+        })
+        state.selectedLesson.linkedMembershipItems = itemsArr.reverse()
+
         return state
     }),
     on(LessonActions.startUnlinkMembership, (state, { unlinkMembership }) => {
         state.selectedLesson.linkableMembershipItems.push(unlinkMembership)
-        state.selectedLesson.linkableMembershipItems = _.sortBy(
+
+        const itemsByCategSM = _.groupBy(
             state.selectedLesson.linkableMembershipItems,
-            (v) => v.category_id
+            (v) => v.category_sequence_number
         )
+        let itemsArr: MembershipItem[] = []
+        _.forEach(_.keys(itemsByCategSM), (k) => {
+            itemsArr = _.concat(
+                itemsArr,
+                _.sortBy(itemsByCategSM[k], (v) => v.sequence_number)
+            )
+        })
+        state.selectedLesson.linkableMembershipItems = itemsArr.reverse()
+
         _.remove(state.selectedLesson.linkedMembershipItems, (v) => v.id == unlinkMembership.id)
         return state
     }),

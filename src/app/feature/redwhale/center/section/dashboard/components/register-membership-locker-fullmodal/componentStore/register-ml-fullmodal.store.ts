@@ -519,6 +519,7 @@ export class RegisterMembershipLockerFullmodalStore extends ComponentStore<State
                 color: contractMembership.color,
                 memo: '',
                 sequence_number: 0,
+                category_sequence_number: 0,
             },
             lessonList: _.map(linkedClass, (value) => {
                 return { selected: true, item: value }

@@ -9,8 +9,6 @@ import { MembershipCategory, FE_MembershipCategory } from '@schemas/membership-c
 import { MembershipItem } from '@schemas/membership-item'
 import { Loading } from '@schemas/store/loading'
 import { ClassItem } from '@schemas/class-item'
-import * as LessonActions from '@centerStore/actions/sec.lesson.actions'
-import { finishRefreshLinkedLessons, startRefreshLinkedLessons } from '../actions/sec.membership.actions'
 
 export interface SelectedMembership {
     membershipData: MembershipItem
@@ -273,14 +271,32 @@ export const membershipReducer = createImmerReducer(
             state.selectedMembership.linkedClassItems.push(mv)
             _.remove(state.selectedMembership.linkableClassItems, (v) => v.id == mv.id)
         })
+
+        const itemsByCategSM = _.groupBy(state.selectedMembership.linkedClassItems, (v) => v.category_sequence_number)
+        let itemsArr: ClassItem[] = []
+        _.forEach(_.keys(itemsByCategSM), (k) => {
+            itemsArr = _.concat(
+                itemsArr,
+                _.sortBy(itemsByCategSM[k], (v) => v.sequence_number)
+            )
+        })
+        state.selectedMembership.linkedClassItems = itemsArr.reverse()
+
         return state
     }),
     on(MembershipActions.startUnlinkClass, (state, { unlinkClass }) => {
         state.selectedMembership.linkableClassItems.push(unlinkClass)
-        state.selectedMembership.linkableClassItems = _.sortBy(
-            state.selectedMembership.linkableClassItems,
-            (v) => v.category_id
-        )
+
+        const itemsByCategSM = _.groupBy(state.selectedMembership.linkableClassItems, (v) => v.category_sequence_number)
+        let itemsArr: ClassItem[] = []
+        _.forEach(_.keys(itemsByCategSM), (k) => {
+            itemsArr = _.concat(
+                itemsArr,
+                _.sortBy(itemsByCategSM[k], (v) => v.sequence_number)
+            )
+        })
+        state.selectedMembership.linkableClassItems = itemsArr.reverse()
+
         _.remove(state.selectedMembership.linkedClassItems, (v) => v.id == unlinkClass.id)
         return state
     }),

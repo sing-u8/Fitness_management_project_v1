@@ -280,6 +280,7 @@ export class TransferMembershipFullmodalStore extends ComponentStore<State> {
                 color: contractMembership.color,
                 memo: '',
                 sequence_number: 0,
+                category_sequence_number: 0,
             },
             lessonList: _.map(linkedClass, (value) => {
                 return { selected: linkedClassIds.findIndex((id) => id == value.id) != -1, item: value }

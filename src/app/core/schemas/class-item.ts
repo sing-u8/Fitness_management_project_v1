@@ -5,6 +5,7 @@ export interface ClassItem {
     id: string
     category_id: string
     category_name: string
+    category_sequence_number: number
     type_code: 'class_item_type_onetoone' | 'class_item_type_group'
     type_code_name: string
     name: string
