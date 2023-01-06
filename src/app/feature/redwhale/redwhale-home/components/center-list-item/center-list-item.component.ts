@@ -260,8 +260,8 @@ export class CenterListItemComponent implements OnInit, AfterViewInit, OnDestroy
     public doShowOwnerModal = false
     public onwerModaldata = {
         text: '운영자는 센터를 나가실 수 없어요.',
-        subText: `센터 운영자는 운영자 권한 양도 후에
-                센터 나가기가 가능합니다.`,
+        subText: `운영자 권한을 양도하거나 등록된 회원을
+            모두 삭제한 후에 센터 나가기가 가능합니다.`,
     }
     showOwerModal() {
         this.doShowOwnerModal = true
