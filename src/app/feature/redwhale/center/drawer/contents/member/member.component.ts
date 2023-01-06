@@ -35,6 +35,7 @@ import { TimeService } from '@services/helper/time.service'
 import _ from 'lodash'
 import { UpdateUserRequestBody } from '@services/center-users.service'
 import dayjs from 'dayjs'
+import * as FromDashboard from '@centerStore/reducers/sec.dashboard.reducer'
 
 @Component({
     selector: 'dr-member',
@@ -47,9 +48,10 @@ export class MemberComponent implements OnInit, OnDestroy {
     public usersSelectCateg$ = this.nxStore.select(DashboardSelector.drawerUsersSelectCategs)
     public curUserData$ = this.nxStore.select(DashboardSelector.drawerCurUserData)
     public usersLists$ = this.nxStore.select(DashboardSelector.drawerUsersLists)
+    public searchInput$ = this.nxStore.select(DashboardSelector.drawerSearchInput)
     public selectedUserList$ = this.nxStore.select(DashboardSelector.drawerCurUserListSelect)
+    public searchedUsersLists = FromDashboard.UsersListInit
     public isLoading$ = this.nxStore.select(DashboardSelector.drawerIsLoading)
-    public searchedUsersLists$ = this.nxStore.select(DashboardSelector.drawerSearchedUsersLists)
     public selectedUserListsHolding$ = this.nxStore.select(DashboardSelector.drawerSelectedUserListsHolding)
     public curUserListSelect$ = this.nxStore.select(DashboardSelector.drawerCurUserListSelect)
 
@@ -120,6 +122,19 @@ export class MemberComponent implements OnInit, OnDestroy {
 
             _.forIn(this.userRole, (value, key) => {
                 this.userRole[key] = key == this.curCenterUser?.role_code
+            })
+        })
+
+        this.searchInput$.pipe(takeUntil(this.unSubscriber$)).subscribe((input) => {
+            this.searchedUsersLists = _.cloneDeep(FromDashboard.UsersListInit)
+            let _userList = FromDashboard.UsersListInit
+            this.usersLists$.pipe(take(1)).subscribe((v) => {
+                _userList = v
+            })
+            _.forEach(_.keys(_userList), (typeKey) => {
+                this.searchedUsersLists[typeKey] = _.filter(_userList[typeKey], (item) => {
+                    return _.includes(item.user.name, input) || _.includes(item.user.phone_number, input)
+                })
             })
         })
     }

@@ -153,12 +153,14 @@ export const smsReducer = createImmerReducer(
     // async
     on(SMSActions.startLoadMemberList, (state) => {
         state = { ...state, ...initialState }
-        state.isLoading = 'pending'
         return state
     }),
     on(SMSActions.finishLoadMemberList, (state, { categ_type, userListValue }) => {
         state.usersLists[categ_type] = userListValue
-        state.isLoading = 'done'
+        return state
+    }),
+    on(SMSActions.startGetUsersByCategory, (state) => {
+        state.isLoading = 'pending'
         return state
     }),
     on(SMSActions.finishGetUsersByCategory, (state, { userSelectCateg }) => {
@@ -170,6 +172,7 @@ export const smsReducer = createImmerReducer(
                 userSize: state.usersSelectCategs[state.curUserListSelect.key].userSize,
             },
         }
+        state.isLoading = 'done'
         return state
     }),
     on(SMSActions.startGetUserList, (state, { categ_type }) => {

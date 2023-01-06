@@ -167,7 +167,8 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     public usersSelectCateg$ = this.nxStore.select(DashboardSelector.usersSelectCategs)
     public curUserData$ = this.nxStore.select(DashboardSelector.curUserData)
     public usersLists$ = this.nxStore.select(DashboardSelector.usersLists)
-    public searchedUsersLists$ = this.nxStore.select(DashboardSelector.searchedUsersLists)
+    public searchInput$ = this.nxStore.select(DashboardSelector.searchInput)
+    public searchedUsersLists = FromDashboard.UsersListInit
     public selectedUserList$ = this.nxStore.select(DashboardSelector.curUserListSelect)
     public isLoading$ = this.nxStore.select(DashboardSelector.isLoading)
     public selectedUserListsHolding$ = this.nxStore.select(DashboardSelector.selectedUserListsHolding)
@@ -208,6 +209,18 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.willBeDeletedCenterUser = curUserData.user
                 this.checkIsDeletableMember()
             })
+        this.searchInput$.pipe(takeUntil(this.unsubscribe$)).subscribe((input) => {
+            this.searchedUsersLists = _.cloneDeep(FromDashboard.UsersListInit)
+            let _userList = FromDashboard.UsersListInit
+            this.usersLists$.pipe(take(1)).subscribe((v) => {
+                _userList = v
+            })
+            _.forEach(_.keys(_userList), (typeKey) => {
+                this.searchedUsersLists[typeKey] = _.filter(_userList[typeKey], (item) => {
+                    return _.includes(item.user.name, input) || _.includes(item.user.phone_number, input)
+                })
+            })
+        })
         this.nxStore.dispatch(DashboardActions.startGetUsersByCategory({ centerId: this.center.id }))
         this.nxStore.dispatch(DashboardActions.setCurCenterId({ centerId: this.center.id }))
     }

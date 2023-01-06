@@ -275,14 +275,14 @@ export const dashboardReducer = createImmerReducer(
     on(DashboardActions.startSetCurUserData, (state, { userId, reqBody, centerId }) => {
         if (state.curCenterId == centerId) {
             if (!_.isEmpty(state.curUserData.user) && state.curUserData.user.id == userId) {
-                state.curUserData.user = _.assign(state.curUserData.user, reqBody)
+                _.assign(state.curUserData.user, reqBody)
             }
 
             const userListsKeys = _.keys(state.usersLists) as MemberSelectCateg[]
             userListsKeys.forEach((key) => {
                 state.usersLists[key].find((v, i) => {
                     if (v.user.id == userId) {
-                        state.usersLists[key][i].user = _.assign(state.usersLists[key][i].user, reqBody)
+                        _.assign(state.usersLists[key][i].user, reqBody)
                         return true
                     }
                     return false
@@ -291,14 +291,14 @@ export const dashboardReducer = createImmerReducer(
         }
         if (state.drawerCurCenterId == centerId) {
             if (!_.isEmpty(state.drawerCurUserData.user) && state.drawerCurUserData.user.id == userId) {
-                state.drawerCurUserData.user = _.assign(state.drawerCurUserData.user, reqBody)
+                _.assign(state.drawerCurUserData.user, reqBody)
             }
 
             const userListsKeys = _.keys(state.drawerUsersLists) as MemberSelectCateg[]
             userListsKeys.forEach((key) => {
                 state.drawerUsersLists[key].find((v, i) => {
                     if (v.user.id == userId) {
-                        state.drawerUsersLists[key][i].user = _.assign(state.drawerUsersLists[key][i].user, reqBody)
+                        _.assign(state.drawerUsersLists[key][i].user, reqBody)
                         return true
                     }
                     return false
@@ -779,16 +779,6 @@ export const selectCurUserReservationData = (state: State) => state.curUserData.
 export const selectedUserListsHolding = (state: State) =>
     state.usersLists[state.curUserListSelect.key].filter((v) => v.holdSelected).length
 // additional
-export const selectSearchedUsersLists = (state: State) => {
-    const searchUserList: UsersLists = _.cloneDeep(UsersListInit)
-    const searchInput = state.curSearchInput
-    _.forEach(_.keys(state.usersLists), (typeKey) => {
-        searchUserList[typeKey] = _.filter(state.usersLists[typeKey], (item) => {
-            return _.includes(item.user.name, searchInput) || _.includes(item.user.phone_number, searchInput)
-        })
-    })
-    return searchUserList
-}
 export const selectEmployeeRoleObj = (state: State) => {
     return state.usersLists[state.curUserListSelect.key].length > 0
         ? _.reduce(
@@ -817,17 +807,7 @@ export const selectDrawerCurUserListSelect = (state: State) => state.drawerCurUs
 export const selectDrawerCurUserData = (state: State) => state.drawerCurUserData
 export const selectedDrawerUserListsHolding = (state: State) =>
     state.drawerUsersLists[state.drawerCurUserListSelect.key].filter((v) => v.holdSelected).length
-export const selectDrawerSearchedUsersLists = (state: State) => {
-    const searchUserList: UsersLists = _.cloneDeep(UsersListInit)
-    const searchInput = state.drawerCurSearchInput
-    const usersLists = state.drawerUsersLists
-    _.forEach(_.keys(usersLists), (typeKey) => {
-        searchUserList[typeKey] = _.filter(usersLists[typeKey], (item) => {
-            return _.includes(item.user.name, searchInput) || _.includes(item.user.phone_number, searchInput)
-        })
-    })
-    return searchUserList
-}
+
 export const selectDrawerEmployeeRoleObj = (state: State) => {
     return state.drawerUsersLists[state.drawerCurUserListSelect.key].length > 0
         ? _.reduce(

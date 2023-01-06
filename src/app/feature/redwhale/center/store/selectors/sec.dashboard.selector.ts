@@ -19,7 +19,6 @@ export const isUserDetailLoading = createSelector(DashboardFeature, FromDashboar
 // main
 export const usersSelectCategs = createSelector(DashboardFeature, FromDashboard.selectUsersSelectCategs)
 export const usersLists = createSelector(DashboardFeature, FromDashboard.selectUsersLists)
-export const searchedUsersLists = createSelector(DashboardFeature, FromDashboard.selectSearchedUsersLists)
 export const curMemberManageCateg = createSelector(DashboardFeature, FromDashboard.selectCurMemberManageCateg)
 export const curUserListSelect = createSelector(DashboardFeature, FromDashboard.selectCurUserListSelect)
 export const curUserData = createSelector(DashboardFeature, FromDashboard.selectCurUserData)
@@ -45,7 +44,6 @@ export const drawerCurMemberManageCateg = createSelector(
 )
 export const drawerCurUserListSelect = createSelector(DashboardFeature, FromDashboard.selectDrawerCurUserListSelect)
 export const drawerCurUserData = createSelector(DashboardFeature, FromDashboard.selectDrawerCurUserData)
-export const drawerSearchedUsersLists = createSelector(DashboardFeature, FromDashboard.selectDrawerSearchedUsersLists)
 export const drawerSelectedUserListsHolding = createSelector(
     DashboardFeature,
     FromDashboard.selectedDrawerUserListsHolding
