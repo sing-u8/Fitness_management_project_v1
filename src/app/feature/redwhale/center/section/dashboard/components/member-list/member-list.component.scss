@@ -32,6 +32,9 @@ section.l-member-list {
             z-index: 5;
             padding: 0 10.6px !important;
             border-radius: 4px;
+            position: absolute;
+            right: 0;
+            top: -5px;
         }
         .hold-dropdown {
             z-index: 1;
