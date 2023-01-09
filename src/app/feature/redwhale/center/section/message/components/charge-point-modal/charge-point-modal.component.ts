@@ -89,7 +89,7 @@ export class ChargePointModalComponent implements OnChanges, AfterViewChecked {
 
     onConfirm(loadingFns: ClickEmitterType): void {
         if (!(this.agreeCharge && this.isChargeablePoint())) return
-        const chargePoint = Number(this.pointInput) // this.chargePointList.find((v, i) => this.chargePointList[i].selected)
+        const chargePoint = Number(this.pointInput.replace(/[^0-9]/gi, '')) // this.chargePointList.find((v, i) => this.chargePointList[i].selected)
         loadingFns.showLoading()
         this.confirm.emit({ loadingFns, amount: chargePoint, point: chargePoint })
     }
@@ -129,6 +129,12 @@ export class ChargePointModalComponent implements OnChanges, AfterViewChecked {
     }
 
     isChargeablePoint() {
-        return Number(this.pointInput) >= 1000
+        return Number(this.pointInput.replace(/[^0-9]/gi, '')) >= 1000
+    }
+
+    onPointInputKeyUp(event) {
+        if (event.code == 'Enter' || _.includes(event.code, 'Arrow')) return
+        const preValue = String(this.pointInput)
+        this.pointInput = preValue.replace(/[^0-9]/gi, '').replace(/\B(?=(\d{3})+(?!\d))/g, ',')
     }
 }

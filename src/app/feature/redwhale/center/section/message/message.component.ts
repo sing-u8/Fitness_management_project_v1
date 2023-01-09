@@ -463,19 +463,19 @@ export class MessageComponent implements OnInit, OnDestroy {
         }
     }
     onMLTextChange(text: string, type: AutoTransmitType) {
-        if (_.isEmpty(_.trim(text))) return
+        // if (_.isEmpty(_.trim(text))) return
         if (type == 'membership') {
             this.nxStore.dispatch(
                 SMSActions.startUpdateMembershipAutoSend({
                     centerId: this.center.id,
-                    reqBody: { text },
+                    reqBody: { text: text },
                 })
             )
         } else {
             this.nxStore.dispatch(
                 SMSActions.startUpdateLockerAutoSend({
                     centerId: this.center.id,
-                    reqBody: { text },
+                    reqBody: { text: text },
                 })
             )
         }
