@@ -25,9 +25,9 @@ export class ChattingRoomCardComponent implements OnInit, AfterViewInit, OnChang
 
     @Output() onCardClick = new EventEmitter<ChatRoom>()
     onClick() {
-        if (this.isLoading == 'done') {
-            this.onCardClick.emit(this.room)
-        }
+        // if (this.isLoading == 'done') {
+        this.onCardClick.emit(this.room)
+        // }
     }
 
     public userList: ChatRoomUser[] = []

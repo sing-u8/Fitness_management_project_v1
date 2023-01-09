@@ -582,7 +582,7 @@ export const communityReducer = createImmerReducer(
         chatRoom.chat_room_users = chatRoom.chat_room_users.filter((v) => v.id != ws_data.info.center_user_id)
         chatRoom.chat_room_user_count -= 1
         state.chatRoomList[chatRoomIdx] = chatRoom
-        
+
         if (!_.isEmpty(state.mainCurChatRoom) && state.mainCurChatRoom.id == ws_data.info.chat_room_id) {
             state.mainCurChatRoom = chatRoom
             state.mainChatRoomUserList = state.mainChatRoomUserList.filter((v) => v.id != ws_data.info.center_user_id)

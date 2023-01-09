@@ -91,7 +91,7 @@ export class CommunityEffect {
                         : this.store.select(CommunitySelector.drawerPreChatRoom),
                 ]
             }),
-            mergeMap(([{ centerId, chatRoom, spot }, curChatRoom]) => {
+            switchMap(([{ centerId, chatRoom, spot }, curChatRoom]) => {
                 if (!_.isEmpty(curChatRoom) && curChatRoom.id == chatRoom.id) {
                     return [CommunityActions.skipFinishJoinChatRoom({ spot })]
                 } else {
