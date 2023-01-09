@@ -298,7 +298,7 @@ export class MembershipComponent implements OnInit {
             if (String(this.selMembershipInputObj[inputType].value.value) != '') {
                 reqBody[inputType] = this.selMembershipInputObj[inputType].value.value
             }
-            reqBody['unlimited'] = this.selMembershipInputObj[inputType].isInfinit == true ? true : false
+            reqBody['unlimited'] = this.selMembershipInputObj[inputType].isInfinit == true
             this.selMembershipInputObj[inputType].value.setValue(String(reqBody[inputType]))
             this.updateSelMembership(this.selectedMembership, reqBody)
         } else if (
