@@ -4,7 +4,7 @@
   </div>
 
   <div class="userList-container thin-scroll-y-overlay2">
-    <div *ngIf="isRoomHost && !isTempRoom" class="rw-typo-bodytext2-bold invite-user-button" (click)="onInviteUserClick()">
+    <div *ngIf="!isTempRoom" class="rw-typo-bodytext2-bold invite-user-button" (click)="onInviteUserClick()">
       <img src="assets/icons/etc/plus-red.svg" alt="plus-red.svg">
       채팅 참여자 초대
     </div>

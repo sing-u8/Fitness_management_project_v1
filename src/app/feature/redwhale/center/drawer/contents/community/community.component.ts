@@ -38,6 +38,7 @@ import { showToast } from '@appStore/actions/toast.action'
 import { closeDrawer } from '@appStore/actions/drawer.action'
 import * as CommunitySelector from '@centerStore/selectors/sec.community.selector'
 import * as CommunityActions from '@centerStore/actions/sec.community.actions'
+import { getChatRoomName } from "@centerStore/reducers/sec.community.reducer";
 
 @Component({
     selector: 'dr-community',

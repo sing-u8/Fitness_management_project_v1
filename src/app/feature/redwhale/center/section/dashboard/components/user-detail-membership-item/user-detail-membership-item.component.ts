@@ -138,7 +138,7 @@ export class UserDetailMembershipItemComponent implements OnInit, AfterViewInit 
         // !! 기능 숨김 및 스키마 변경으로 수정 필요
         const reservableClassItems = _.isEmpty(this.membership.class_item_names)
             ? []
-            : _.split(this.membership.class_item_names, ',')
+            : _.split(this.membership.class_item_names, ',').reverse()
         if (reservableClassItems.length == 0) {
             this.reservableClassFullText = '-'
             this.reservableClassText = '-'

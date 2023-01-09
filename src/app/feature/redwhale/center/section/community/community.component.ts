@@ -105,7 +105,8 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
         })
         this.curChatRoom$.pipe(takeUntil(this.unsubscribe$)).subscribe((curChatRoom) => {
             this.curChatRoom_ = curChatRoom
-            this.curChatRoomName = getChatRoomName(this.centerUser, this.curChatRoom_)
+            if (!_.isEmpty(this.curChatRoom_))
+                this.curChatRoomName = getChatRoomName(this.centerUser, this.curChatRoom_)
         })
 
         this.nxStore.pipe(select(CommunitySelector.curChatLoaded), take(1)).subscribe((curChatLoaded) => {

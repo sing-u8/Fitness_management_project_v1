@@ -19,7 +19,7 @@
   <div *ngIf="users.length == 3" class="threeAvatar">
     <rw-avatar
       *ngFor="let user of users; let idx = index"
-      size="19" fontSize="8"
+      size="19" fontSize="7"
       [image]=" user?.picture"
       [text] = "user?.name"
       [backgroundColor]="user?.color"
@@ -28,7 +28,7 @@
   <div *ngIf="users.length == 4" class="fourAvatar">
     <rw-avatar
       *ngFor="let user of users; let idx = index"
-      size="19" fontSize="8"
+      size="19" fontSize="7"
       [image]=" user?.picture"
       [text] = "user?.name"
       [backgroundColor]="user?.color"

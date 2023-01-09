@@ -178,8 +178,10 @@ export const communityReducer = createImmerReducer(
             state.mainChatRoomUserList = chatRoomUsers
 
             const lastMsgDate = _.last(state.mainChatRoomMsgs)?.created_at
+            console.log('finishJoinChatRoom : ', _.last(state.mainChatRoomMsgs))
             if (chatRoomMesgs.length < messagePageSize && lastMsgDate) {
                 state.mainChatRoomMsgs.push(makeDateMessage(lastMsgDate))
+                state.mainChatRoomMsgs = _.uniqBy(state.mainChatRoomMsgs, 'id')
             }
         }
         const joinRoomDrawer = () => {
@@ -192,6 +194,7 @@ export const communityReducer = createImmerReducer(
             const lastMsgDate = _.last(state.drawerChatRoomMsgs)?.created_at
             if (chatRoomMesgs.length < messagePageSize && lastMsgDate) {
                 state.drawerChatRoomMsgs.push(makeDateMessage(lastMsgDate))
+                state.drawerChatRoomMsgs = _.uniqBy(state.drawerChatRoomMsgs, 'id')
             }
         }
 
@@ -374,6 +377,7 @@ export const communityReducer = createImmerReducer(
             state.mainChatRoomMsgs = concatChatRoomMsg(state.mainChatRoomMsgs, newChatRoomMsgs)
             if (chatRoomMsgEnd) {
                 state.mainChatRoomMsgs.push(makeDateMessage(_.last(state.mainChatRoomMsgs).created_at))
+                state.mainChatRoomMsgs = _.uniqBy(state.mainChatRoomMsgs, 'id')
             }
             state.mainChatRoomMsgEnd = chatRoomMsgEnd
             state.mainChatRoomMsgLoading = false
@@ -382,6 +386,7 @@ export const communityReducer = createImmerReducer(
             state.drawerChatRoomMsgs = concatChatRoomMsg(state.drawerChatRoomMsgs, newChatRoomMsgs)
             if (chatRoomMsgEnd) {
                 state.drawerChatRoomMsgs.push(makeDateMessage(_.last(state.drawerChatRoomMsgs).created_at))
+                state.drawerChatRoomMsgs = _.uniqBy(state.drawerChatRoomMsgs, 'id')
             }
             state.drawerChatRoomMsgEnd = chatRoomMsgEnd
             state.drawerChatRoomMsgLoading = false
@@ -572,12 +577,12 @@ export const communityReducer = createImmerReducer(
     on(CommunitydActions.deleteChatRoomUserByWS, (state, { ws_data }) => {
         const chatRoomIdx = state.chatRoomList.findIndex((v) => v.id == ws_data.info.chat_room_id)
 
-        const chatRoom = state.chatRoomList[chatRoomIdx]
+        const chatRoom = _.cloneDeep(state.chatRoomList[chatRoomIdx])
 
-        chatRoom.chat_room_users.filter((v) => v.id != ws_data.info.center_user_id)
+        chatRoom.chat_room_users = chatRoom.chat_room_users.filter((v) => v.id != ws_data.info.center_user_id)
         chatRoom.chat_room_user_count -= 1
         state.chatRoomList[chatRoomIdx] = chatRoom
-
+        
         if (!_.isEmpty(state.mainCurChatRoom) && state.mainCurChatRoom.id == ws_data.info.chat_room_id) {
             state.mainCurChatRoom = chatRoom
             state.mainChatRoomUserList = state.mainChatRoomUserList.filter((v) => v.id != ws_data.info.center_user_id)
@@ -674,10 +679,10 @@ export const communityReducer = createImmerReducer(
         // const chatRoom = state.chatRoomList[chatRoomIdx]
 
         if (!_.isEmpty(state.mainCurChatRoom) && state.mainCurChatRoom.id == ws_data.info.chat_room_id) {
-            state.mainChatRoomMsgs.filter((v) => v.id != ws_data.info.message_id)
+            state.mainChatRoomMsgs = state.mainChatRoomMsgs.filter((v) => v.id != ws_data.info.message_id)
         }
         if (!_.isEmpty(state.drawerCurChatRoom) && state.drawerCurChatRoom.id == ws_data.info.chat_room_id) {
-            state.drawerChatRoomMsgs.filter((v) => v.id != ws_data.info.message_id)
+            state.drawerChatRoomMsgs = state.drawerChatRoomMsgs.filter((v) => v.id != ws_data.info.message_id)
         }
         return state
     }),
@@ -904,6 +909,7 @@ function getDateInsteredMessage(chatMessages: Array<ChatRoomMessage>): Array<Cha
     return newChatMsgs
 }
 function concatChatRoomMsg(curMsgs: Array<ChatRoomMessage>, prevMsgs: Array<ChatRoomMessage>) {
+    console.log('concatChatRoomMsg : ', curMsgs, prevMsgs)
     if (checkDayDiffBtMsgAndMsg(curMsgs[curMsgs.length - 1], prevMsgs[0])) {
         const dateMsg = makeDateMessage(curMsgs[curMsgs.length - 1].created_at)
         curMsgs.push(dateMsg)
@@ -911,6 +917,7 @@ function concatChatRoomMsg(curMsgs: Array<ChatRoomMessage>, prevMsgs: Array<Chat
     return _.uniqBy(_.concat(curMsgs, prevMsgs), 'id')
 }
 function checkDayDiffBtMsgAndMsg(currentMsg: ChatRoomMessage, prevMsg: ChatRoomMessage) {
+    console.log('checkDayDiffBtMsgAndMsg -- ', currentMsg, prevMsg)
     return dayjs(currentMsg.created_at).diff(dayjs(prevMsg.created_at), 'day') > 0
 }
 function makeDateMessage(created_at: string): ChatRoomMessage {

@@ -32,7 +32,7 @@
             [class.single-badge]="room.unread_message_count < 10 && room.unread_message_count > 0"
             [class.multi-badge]="room.unread_message_count > 9"
         >
-            {{ room.unread_message_count }}
+            {{ room.unread_message_count > 999 ? '999+' : room.unread_message_count }}
         </div>
     </div>
 </section>
