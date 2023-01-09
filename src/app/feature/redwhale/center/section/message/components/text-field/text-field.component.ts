@@ -34,7 +34,6 @@ export class TextFieldComponent implements OnInit, OnDestroy {
     constructor(private wordService: WordService, private fb: FormBuilder) {
         // this.textControl = this.fb.control(this.text)
         this.unsubscriber = this.textControl.valueChanges.subscribe((v) => {
-            console.log('textControl.valueChanges - v : ', v)
             this.matchTextTo(v)
             this.textChange.emit(this.textControl.value)
         })

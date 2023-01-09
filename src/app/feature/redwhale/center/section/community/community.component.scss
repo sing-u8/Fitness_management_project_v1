@@ -44,7 +44,6 @@
         position: relative;
         display: flex;
 
-
         div.chatting-sidebar {
             min-width: 266px;
             height: 100%;
@@ -247,14 +246,14 @@
                     width: calc(100% - 30px);
                     min-height: 70px;
                     margin: 0 15px 15px;
-                    padding: 15px 10px 15px 15px;
+                    padding: 15px 2.5px 15px 15px;
                     background-color: var(--white);
                     border-radius: 5px;
                     position: relative;
 
                     &.isFocused {
                         margin: 0 15px 15px;
-                        padding: 9px 0 9px 9px;
+                        padding: 14px 1.5px 14px 14px;
                         border: 1px solid var(--lightgrey);
                         .send-button {
                             bottom: 9px !important;
@@ -278,7 +277,7 @@
                     }
 
                     .input-box {
-                        width: calc(100% - 10px);
+                        width: calc(100%);
                         position: relative;
                         //margin: 4px 0 0 14px;
                         margin: 4px 0 0 0;
