@@ -38,7 +38,7 @@ export class LessonFlipListComponent implements OnInit, AfterViewInit {
             this.loading = 'pending'
             this.centerLessonApi.getItems(this.centerId, this.lessonCateg.id).subscribe((lessonItems) => {
                 this.loading = 'done'
-                this.lessonItems = lessonItems
+                this.lessonItems = lessonItems.reverse()
             })
         }
     }
