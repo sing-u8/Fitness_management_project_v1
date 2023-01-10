@@ -22,7 +22,7 @@ export class ScheduleHelperService {
             String(Number(startTimeList[0]) + quotient).length == 1
                 ? `0${Number(startTimeList[0]) + quotient}`
                 : Number(startTimeList[0]) + quotient
-        return `${hour}:${remainder}` // xx:xx
+        return `${hour}:${remainder == 0 ? '00' : remainder}` // xx:xx
     }
 
     // synchronize

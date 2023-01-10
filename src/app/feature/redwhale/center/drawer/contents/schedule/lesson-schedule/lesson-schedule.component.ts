@@ -254,6 +254,7 @@ export class LessonScheduleComponent implements OnInit, OnDestroy, AfterViewInit
                 },
             }
         }
+
         this.centerCalendarService.createCalendarTask(this.center.id, this.curCenterCalendar.id, reqBody).subscribe({
             next: (res) => {
                 fn ? fn() : null
