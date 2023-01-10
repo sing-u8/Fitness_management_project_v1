@@ -246,18 +246,21 @@
                     width: calc(100% - 30px);
                     min-height: 70px;
                     margin: 0 15px 15px;
-                    padding: 15px 2.5px 15px 15px;
                     background-color: var(--white);
                     border-radius: 5px;
                     position: relative;
+                    padding: 0 0 15px 0 ;
 
                     &.isFocused {
                         margin: 0 15px 15px;
-                        padding: 14px 1.5px 14px 14px;
                         border: 1px solid var(--lightgrey);
+                        padding: 0 0 14px 0;
                         .send-button {
                             bottom: 9px !important;
                             right: 9px !important;
+                        }
+                        textarea {
+                            padding: 14px 101.5px 0 14px !important;
                         }
                     }
 
@@ -280,7 +283,7 @@
                         width: calc(100%);
                         position: relative;
                         //margin: 4px 0 0 14px;
-                        margin: 4px 0 0 0;
+                        margin: 0 0 0 0;
                         display: flex;
                         flex-direction: column;
                         justify-content: space-between;
@@ -291,7 +294,7 @@
                             outline: none;
                             border: none;
                             min-height: 30px !important;
-                            padding-right: 100px;
+                            padding: 15px 102.5px 0 15px;
                             &::placeholder {
                                 font-weight: 400 !important;
                                 color: var(--grey) !important;

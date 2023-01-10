@@ -575,8 +575,9 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
             this.renderer.setStyle(this.chatting_screen.nativeElement, 'height', `calc(100% - ${screenPadMar}px)`)
             this.renderer.setStyle(this.chatting_input.nativeElement, 'height', `${inputHeight}px`)
         } else {
-            const screenPadMar = 73 + this.resizeHeight // 62px --> padding-t,b: 22px + input-bt: 50px + margin-top : 30px
-            const inputHeight = 72 + this.resizeHeight // 62px --> padding-t,b: 22px + input-bt: 50px
+            console.log('resize chat screen : ', this.resizeHeight, 60 + this.resizeHeight)
+            const screenPadMar = 60 + 20 + this.resizeHeight // 62px --> input-bt: 47px + margin-bt : 13px
+            const inputHeight = this.resizeHeight //
             this.renderer.setStyle(this.chatting_screen.nativeElement, 'height', `calc(100% - ${screenPadMar}px)`)
             this.renderer.setStyle(this.chatting_input.nativeElement, 'height', `${inputHeight}px`)
         }
