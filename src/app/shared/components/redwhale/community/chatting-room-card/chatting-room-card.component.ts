@@ -44,7 +44,7 @@ export class ChattingRoomCardComponent implements OnInit, AfterViewInit, OnChang
 
     initUserListInScreen() {
         this.userList =
-            this.room.type_code == 'chat_room_type_chat_with_me'
+            this.room.type_code == 'chat_room_type_chat_with_me' || this.room.chat_room_users.length == 0
                 ? [
                       {
                           id: this.curUser.id,
