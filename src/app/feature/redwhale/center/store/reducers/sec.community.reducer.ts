@@ -338,6 +338,14 @@ export const communityReducer = createImmerReducer(
                 state.mainChatRoomMsgs.unshift(makeDateMessage(chatRoomMessage.created_at))
             }
             state.mainChatRoomMsgs.unshift(chatRoomMessage)
+            state.mainCurChatRoom.last_message = chatRoomMessage.text
+            state.mainCurChatRoom.last_message_created_at = chatRoomMessage.created_at
+
+            const roomIdx = _.findIndex(state.chatRoomList, (v) => v.id == state.mainCurChatRoom.id)
+            if (roomIdx != -1) {
+                state.chatRoomList[roomIdx].last_message_created_at = chatRoomMessage.created_at
+                state.chatRoomList[roomIdx].last_message = chatRoomMessage.text
+            }
         }
         const addMsgToDrawer = () => {
             if (
@@ -347,6 +355,14 @@ export const communityReducer = createImmerReducer(
                 state.drawerChatRoomMsgs.unshift(makeDateMessage(chatRoomMessage.created_at))
             }
             state.drawerChatRoomMsgs.unshift(chatRoomMessage)
+            state.drawerCurChatRoom.last_message = chatRoomMessage.text
+            state.drawerCurChatRoom.last_message_created_at = chatRoomMessage.created_at
+
+            const roomIdx = _.findIndex(state.chatRoomList, (v) => v.id == state.drawerCurChatRoom.id)
+            if (roomIdx != -1) {
+                state.chatRoomList[roomIdx].last_message_created_at = chatRoomMessage.created_at
+                state.chatRoomList[roomIdx].last_message = chatRoomMessage.text
+            }
         }
 
         if (spot == 'main') {
@@ -917,8 +933,12 @@ function concatChatRoomMsg(curMsgs: Array<ChatRoomMessage>, prevMsgs: Array<Chat
     return _.uniqBy(_.concat(curMsgs, prevMsgs), 'id')
 }
 function checkDayDiffBtMsgAndMsg(currentMsg: ChatRoomMessage, prevMsg: ChatRoomMessage) {
-    console.log('checkDayDiffBtMsgAndMsg -- ', currentMsg, prevMsg)
-    return dayjs(currentMsg.created_at).diff(dayjs(prevMsg.created_at), 'day') > 0
+    return (
+        dayjs(dayjs(currentMsg.created_at).format('YYYY-MM-DD')).diff(
+            dayjs(dayjs(prevMsg.created_at).format('YYYY-MM-DD')),
+            'day'
+        ) > 0
+    )
 }
 function makeDateMessage(created_at: string): ChatRoomMessage {
     return {

@@ -98,7 +98,7 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
             this.chatRoomMsgLoading_ = chatRoomMsgLoading
         })
         this.chatRoomList$.pipe(takeUntil(this.unsubscribe$)).subscribe((chatRoomList) => {
-            this.chatRoomList_ = chatRoomList
+            this.chatRoomList_ = _.sortBy(chatRoomList, (v) => -dayjs(v.last_message_created_at).unix())
         })
         this.chatRoomMsgs$.pipe(takeUntil(this.unsubscribe$)).subscribe((crMsgs) => {
             this.chatRoomMsgs_ = crMsgs
@@ -154,6 +154,12 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
     ngOnInit(): void {}
     ngAfterViewInit(): void {}
     ngOnDestroy(): void {}
+
+    roomSortFn(a: ChatRoom, b: ChatRoom) {
+        if (dayjs(a.last_message_created_at).diff(dayjs(b.last_message_created_at), 's') > 0) return 1
+        if (dayjs(a.last_message_created_at).diff(dayjs(b.last_message_created_at), 's') < 0) return -1
+        return 0
+    }
 
     // input focused funcs and vars
     public isTextAreaFoucsed = false
@@ -567,7 +573,6 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
             const inputHeight = 30 + this.resizeHeight // 20px --> padding: 10px * 2
             this.renderer.setStyle(this.chatting_screen.nativeElement, 'height', `calc(100% - ${screenPadMar}px)`)
             this.renderer.setStyle(this.chatting_input.nativeElement, 'height', `${inputHeight}px`)
-            console.log('resizeChatScreen -- ', screenPadMar, ' - ', inputHeight, ' - ', this.resizeHeight)
         }
     }
     resetChatScreenSize() {
