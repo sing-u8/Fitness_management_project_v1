@@ -13,6 +13,7 @@ import * as SMSSelector from '../selectors/sec.sms.selector'
 import { CenterUsersService } from '@services/center-users.service'
 import { CenterSMSService, SendSMSMessageReqBody, UpdateMLAutoSendReqBody } from '@services/center-sms.service'
 import { SMSAutoSend } from '@schemas/sms-auto-send'
+import { finishGetUserList } from '../actions/sec.sms.actions'
 
 @Injectable()
 export class SMSEffect {
@@ -77,7 +78,8 @@ export class SMSEffect {
                             selected: false,
                         }))
                         // usersSelectCateg.member.userSize = usersList['member'].length
-                        return SMSActions.finishLoadMemberList({
+                        return SMSActions.finishGetUserList({
+                            centerId,
                             categ_type: categ_type,
                             userListValue,
                         })
