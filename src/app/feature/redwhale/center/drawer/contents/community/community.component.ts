@@ -102,6 +102,7 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
         this.drawerIsJoinRoomLoading$.pipe(takeUntil(this.unsubscribe$)).subscribe((isRoomLoading) => {
             if (isRoomLoading == 'done') {
                 this.spinner.hide('drawer_chatting_room_spinner')
+                this.chat_textarea_el.nativeElement.focus()
             } else {
                 this.spinner.show('drawer_chatting_room_spinner')
             }

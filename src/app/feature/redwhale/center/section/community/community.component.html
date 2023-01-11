@@ -140,8 +140,7 @@
 
             <div #chat_screen class="chatting-screen">
                 <div
-                    class="chatting-screen-content thin-scroll-y-overlay2 is-loading"
-                    [class.is-loading]="(mainIsJoinRoomLoading$ | async) != 'done'"
+                    class="chatting-screen-content thin-scroll-y-overlay2"
                     #chatting_screen
                     (scroll)="scrolled($event)"
                 >
@@ -149,7 +148,7 @@
                         <ngx-spinner
                             name="main_chatting_room_spinner"
                             [fullScreen]="false"
-                            bdColor="var(--white)"
+                            bdColor="var(--background-color)"
                             color="var(--grey)"
                             type="ball-spin-clockwise"
                             size="small"

@@ -8,6 +8,10 @@
     height: 100%;
 }
 
+ngx-spinner {
+    z-index: 1;
+}
+
 .community {
     height: 100%;
     $notiHeight: 45px;
@@ -239,11 +243,6 @@
                     justify-content: flex-start;
                     padding-bottom: 30px;
                     box-sizing: content-box;
-
-                    &.is-loading {
-                        justify-content: center !important;
-                        align-items: center !important;
-                    }
                 }
 
                 .chatting-input-container {
@@ -298,6 +297,7 @@
                             resize: none;
                             outline: none;
                             border: none;
+                            border-radius: 5px;
                             min-height: 30px !important;
                             padding: 15px 102.5px 0 15px;
                             &::placeholder {

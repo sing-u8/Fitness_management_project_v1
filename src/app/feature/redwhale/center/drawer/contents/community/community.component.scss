@@ -4,6 +4,10 @@
 	text-align: start;
 }
 
+ngx-spinner {
+	z-index: 1;
+}
+
 section.community {
 
 	height: 100%;
@@ -76,6 +80,7 @@ section.community {
 					resize: none;
 					outline: none;
 					border: none;
+					border-radius: 5px;
 					min-height: 30px !important;
 					padding: 16px 15px 13px;
 					&::placeholder {
