@@ -1,9 +1,12 @@
 import { Component, OnInit, Renderer2, OnDestroy } from '@angular/core'
 import { Router, NavigationStart, Event, NavigationEnd } from '@angular/router'
+import { Location } from '@angular/common'
 import { DeviceDetectorService } from 'ngx-device-detector'
 
 import { Subject } from 'rxjs'
 import { takeUntil } from 'rxjs/operators'
+
+import { DeeplinkService } from '@services/deeplink.service'
 
 @Component({
     selector: 'hp-header',
@@ -18,7 +21,13 @@ export class HomepageHeaderComponent implements OnInit, OnDestroy {
 
     public unSubscriber$ = new Subject<boolean>()
 
-    constructor(private router: Router, private renderer: Renderer2, private deviceDetector: DeviceDetectorService) {}
+    constructor(
+        private router: Router,
+        private renderer: Renderer2,
+        private deviceDetector: DeviceDetectorService,
+        private deeplink: DeeplinkService,
+        private location: Location
+    ) {}
 
     ngOnInit(): void {
         this.checkIsMobile(window.innerWidth)
@@ -74,11 +83,20 @@ export class HomepageHeaderComponent implements OnInit, OnDestroy {
 
     public removeHeaderFlag = false
     setRemoveHeaderFlag(url: string) {
-        if (url == '/terms-privacy' || url == '/terms-privacy') {
-            this.removeHeaderFlag = true
-        }
+        this.removeHeaderFlag = (url == '/terms-privacy' || url == '/terms-eula') && this.deeplink.isMobile()
     }
     closeWindow() {
-        window.close()
+        // console.log(
+        //     'close window : ',
+        //     this.router.url,
+        //     this.location.path(),
+        //     window.location.origin,
+        //     window.location.href
+        // )
+        setTimeout(() => {
+            // top.window.open(window.location.href, '_self').close()
+            top.window.opener = self
+            top.self.close()
+        }, 500)
     }
 }
