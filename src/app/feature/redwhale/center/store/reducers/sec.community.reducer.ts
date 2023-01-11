@@ -623,7 +623,7 @@ export const communityReducer = createImmerReducer(
         }
 
         let lastMsg = ''
-        let lastCreatedAt = dayjs().format('YYYY-MM-DD HH:mm:dd')
+        let lastCreatedAt = dayjs().format('YYYY-MM-DD HH:mm:ss')
         let unread_msg_count = 0
         ws_data.dataset.forEach((msg) => {
             if (msg.type_code != 'chat_room_message_type_system' && msg.type_code != 'fe_chat_room_message_type_date') {
@@ -833,19 +833,32 @@ export const selectCurDrawerChatRoomIsTemp = (state: State) =>
 export function getChatRoomName(curCenterUser: CenterUser, chatRoom: ChatRoom): string {
     if (chatRoom.type_code == 'chat_room_type_chat_with_me') {
         return chatRoom.name
+    } else if (
+        (chatRoom.chat_room_users.length == 1 &&
+            _.isEmpty(chatRoom.name) &&
+            chatRoom.permission_code == 'chat_room_user_permission_owner') ||
+        (chatRoom.chat_room_users.length == 1 &&
+            _.isEmpty(chatRoom.name) &&
+            chatRoom.permission_code == 'chat_room_user_permission_member')
+    ) {
+        return chatRoom.chat_room_users[0].name
+    } else if (chatRoom.chat_room_users.length > 1 && _.isEmpty(chatRoom.name)) {
+        let userNames = _.map(chatRoom.chat_room_users, (v) => v.name)
+        userNames.push(curCenterUser.name)
+        userNames = _.sortBy(userNames, (v) => v)
+        return _.reduce(
+            userNames,
+            (a, v, i) => {
+                if (userNames.length > i + 1) {
+                    return a + v + ', '
+                } else {
+                    return a + v
+                }
+            },
+            ''
+        )
     } else {
-        if (
-            (chatRoom.chat_room_users.length == 1 &&
-                (chatRoom.chat_room_users[0].name == chatRoom.name || curCenterUser.name == chatRoom.name) &&
-                chatRoom.permission_code == 'chat_room_user_permission_owner') ||
-            (chatRoom.chat_room_users.length == 1 &&
-                (chatRoom.chat_room_users[0].name == chatRoom.name || curCenterUser.name == chatRoom.name) &&
-                chatRoom.permission_code == 'chat_room_user_permission_member')
-        ) {
-            return chatRoom.chat_room_users[0].name
-        } else {
-            return chatRoom.name
-        }
+        return chatRoom.name
     }
 }
 
@@ -907,8 +920,8 @@ function makeTempChatRoom(center: Center, curUser: CenterUser, members: Array<Ce
                 background: v.background,
             })),
         ],
-        last_message: null,
-        last_message_created_at: null,
+        last_message: '',
+        last_message_created_at: dayjs().format('YYYY-MM-DD HH:mm:ss'),
         unread_message_count: 0,
     }
 }
