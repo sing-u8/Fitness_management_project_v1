@@ -35,33 +35,46 @@
         <rw-drag-guide id="drawer_drag_guide" [showGuide]="showFileDragGuide" [isSideBar]="true"></rw-drag-guide>
 
         <div #chatting_screen class="chatting-screen-content thin-scroll-y-overlay2" (scroll)="scrolled($event)">
-            <rw-chat-message
-                *ngFor="let msg of chatRoomLoadingMsgs$ | async; let i = index"
-                [message]="msg"
-                [showUserInfo]="true"
-                [isLoading]="true"
-                [isSidebar]="true"
-                [gauge]="msg.gauge.value"
-            ></rw-chat-message>
+            <ng-container *ngIf="(drawerIsJoinRoomLoading$ | async) != 'done'">
+                <ngx-spinner
+                  name="drawer_chatting_room_spinner"
+                  [fullScreen]="false"
+                  bdColor="var(--white)"
+                  color="var(--grey)"
+                  type="ball-spin-clockwise"
+                  size="small"
+                ></ngx-spinner>
+            </ng-container>
+            <ng-container *ngIf="(drawerIsJoinRoomLoading$ | async) == 'done'">
+                <rw-chat-message
+                  *ngFor="let msg of chatRoomLoadingMsgs$ | async; let i = index"
+                  [message]="msg"
+                  [showUserInfo]="true"
+                  [isLoading]="true"
+                  [isSidebar]="true"
+                  [gauge]="msg.gauge.value"
+                ></rw-chat-message>
 
-            <rw-chat-message
-                #message_el
-                *ngFor="let message of chatRoomMsgs$ | async; let i = index"
-                [message]="message"
-                [showUserInfo]="showUser(i)"
-                [lastSuccessiveMsg]="isLastSuccessiveMsg(i)"
-                [isSidebar]="true"
-            ></rw-chat-message>
+                <rw-chat-message
+                  #message_el
+                  *ngFor="let message of chatRoomMsgs$ | async; let i = index"
+                  [message]="message"
+                  [showUserInfo]="showUser(i)"
+                  [lastSuccessiveMsg]="isLastSuccessiveMsg(i)"
+                  [isSidebar]="true"
+                ></rw-chat-message>
 
-            <rw-chat-intro-message
-                [isSideBar]="true"
-                *ngIf="curChatRoom$ | async"
-                [selectedRoom]="curChatRoom$ | async"
-                [preSelectedRoom]="drawerPreChatRoom$ | async"
-                [joinRoomLoading]="drawerIsJoinRoomLoading$ | async"
-                [centerUser]="centerUser"
-                [msgList]="chatRoomMsgs$ | async"
-            ></rw-chat-intro-message>
+                <rw-chat-intro-message
+                  [isSideBar]="true"
+                  *ngIf="curChatRoom$ | async"
+                  [selectedRoom]="curChatRoom$ | async"
+                  [preSelectedRoom]="drawerPreChatRoom$ | async"
+                  [joinRoomLoading]="drawerIsJoinRoomLoading$ | async"
+                  [centerUser]="centerUser"
+                  [msgList]="chatRoomMsgs$ | async"
+                ></rw-chat-intro-message>
+            </ng-container>
+
         </div>
 
         <div #chatting_input class="chatting-input-container">

@@ -16,6 +16,7 @@ import { ModifyLessonScheduleComponent } from './contents/schedule/modify-lesson
 
 // ngxSkeletonLoader module
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader'
+import { NgxSpinnerModule } from 'ngx-spinner'
 
 @NgModule({
     declarations: [
@@ -28,7 +29,15 @@ import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader'
         ModifyGeneralScheduleComponent,
         ModifyLessonScheduleComponent,
     ],
-    imports: [CommonModule, SharedModule, FormsModule, ReactiveFormsModule, NgxSkeletonLoaderModule, DashboardModule],
+    imports: [
+        CommonModule,
+        SharedModule,
+        FormsModule,
+        ReactiveFormsModule,
+        NgxSkeletonLoaderModule,
+        NgxSpinnerModule,
+        DashboardModule,
+    ],
     exports: [DrawerComponent, FormsModule],
     providers: [],
 })

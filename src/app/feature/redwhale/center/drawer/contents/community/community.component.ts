@@ -39,7 +39,7 @@ import { showToast } from '@appStore/actions/toast.action'
 import { closeDrawer } from '@appStore/actions/drawer.action'
 import * as CommunitySelector from '@centerStore/selectors/sec.community.selector'
 import * as CommunityActions from '@centerStore/actions/sec.community.actions'
-import { getChatRoomName } from "@centerStore/reducers/sec.community.reducer";
+import { getChatRoomName } from '@centerStore/reducers/sec.community.reducer'
 
 @Component({
     selector: 'dr-community',
@@ -85,7 +85,8 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
         private storageService: StorageService,
         private nxStore: Store,
         private videoProcessingService: VideoProcessingService,
-        private commonCommunityService: CommonCommunityService
+        private commonCommunityService: CommonCommunityService,
+        private spinner: NgxSpinnerService
     ) {
         this.chatInput = this.fb.control('', { validators: [Validators.required, this.inputValidator()] })
         this.changeRoomInput = this.fb.control('', { validators: [Validators.required, this.inputValidator()] })
@@ -96,6 +97,14 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
 
         this.isLoading$.pipe(takeUntil(this.unsubscribe$)).subscribe((isLoading) => {
             this.isLoading_ = isLoading
+        })
+
+        this.drawerIsJoinRoomLoading$.pipe(takeUntil(this.unsubscribe$)).subscribe((isRoomLoading) => {
+            if (isRoomLoading == 'done') {
+                this.spinner.hide('drawer_chatting_room_spinner')
+            } else {
+                this.spinner.show('drawer_chatting_room_spinner')
+            }
         })
 
         this.chatRoomMsgLoading$.pipe(takeUntil(this.unsubscribe$)).subscribe((chatRoomMsgLoading) => {
