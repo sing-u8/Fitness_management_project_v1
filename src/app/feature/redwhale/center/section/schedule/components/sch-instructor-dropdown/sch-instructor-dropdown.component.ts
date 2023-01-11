@@ -108,7 +108,9 @@ export class SchInstructorDropdownComponent implements OnInit, OnChanges, OnDest
         this.isAllChecked = this.selectedNum == this.instructorList.length
     }
 
-    goToRegisterMember() {}
+    goToRegisterMember() {
+        this.router.navigate(['./dashboard'], { relativeTo: this.activatedRoute })
+    }
 
     //
 
