@@ -1,6 +1,9 @@
 import { Component, OnInit, Renderer2, OnDestroy } from '@angular/core'
-import { Router } from '@angular/router'
+import { Router, NavigationStart, Event, NavigationEnd } from '@angular/router'
 import { DeviceDetectorService } from 'ngx-device-detector'
+
+import { Subject } from 'rxjs'
+import { takeUntil } from 'rxjs/operators'
 
 @Component({
     selector: 'hp-header',
@@ -13,6 +16,8 @@ export class HomepageHeaderComponent implements OnInit, OnDestroy {
 
     public isMobileWidth = false
 
+    public unSubscriber$ = new Subject<boolean>()
+
     constructor(private router: Router, private renderer: Renderer2, private deviceDetector: DeviceDetectorService) {}
 
     ngOnInit(): void {
@@ -23,9 +28,19 @@ export class HomepageHeaderComponent implements OnInit, OnDestroy {
             }
             this.checkIsMobile(event.target.innerWidth)
         })
+
+        this.setRemoveHeaderFlag(this.router.url)
+
+        this.router.events.pipe(takeUntil(this.unSubscriber$)).subscribe((event: Event) => {
+            if (event instanceof NavigationEnd) {
+                this.setRemoveHeaderFlag(event.url)
+            }
+        })
     }
     ngOnDestroy(): void {
         this.resizeListener()
+        this.unSubscriber$.next(true)
+        this.unSubscriber$.complete()
     }
 
     navigateTo(url: string) {
@@ -55,5 +70,15 @@ export class HomepageHeaderComponent implements OnInit, OnDestroy {
     }
     onFreeStartCancel() {
         this.isFreeStartModalVisible = false
+    }
+
+    public removeHeaderFlag = false
+    setRemoveHeaderFlag(url: string) {
+        if (url == '/terms-privacy' || url == '/terms-privacy') {
+            this.removeHeaderFlag = true
+        }
+    }
+    closeWindow() {
+        window.close()
     }
 }

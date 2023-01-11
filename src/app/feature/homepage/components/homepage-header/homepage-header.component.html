@@ -57,10 +57,11 @@
 </section>
 
 
-<section class="l-header-mobile">
-    <div [routerLink]="['/']"  class="redwhale-logo"></div>
-    <div *ngIf="!isMenuOpen" (click)="toggleMenu()" class="hamburger-logo"></div>
-    <div *ngIf="isMenuOpen" (click)="toggleMenu()" class="close-button"></div>
+<section class="l-header-mobile" [class.remove-header] = "removeHeaderFlag">
+    <div *ngIf="!removeHeaderFlag" [routerLink]="['/']"  class="redwhale-logo"></div>
+    <div *ngIf="!isMenuOpen && !removeHeaderFlag" (click)="toggleMenu()" class="hamburger-logo"></div>
+    <div *ngIf="isMenuOpen && !removeHeaderFlag" (click)="toggleMenu()" class="close-button"></div>
+    <div *ngIf="removeHeaderFlag" (click)="closeWindow()" class="close-button"></div>
 
     <div class="menu-content" [style.display] = "isMenuOpen ? 'flex' : 'none'">
         <div class="l-menu-item">
