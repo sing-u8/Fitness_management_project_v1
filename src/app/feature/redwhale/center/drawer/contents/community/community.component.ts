@@ -31,6 +31,7 @@ import { StorageService } from '@services/storage.service'
 import { VideoProcessingService } from '@services/helper/video-processing-service.service'
 import * as CenterChatRoomApi from '@services/center-chat-room.service'
 import { CommonCommunityService } from '@services/helper/common-community.service'
+import { NgxSpinnerService } from 'ngx-spinner'
 
 // ngrx
 import { select, Store } from '@ngrx/store'
@@ -72,6 +73,8 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
     public chatRoomMsgLoading_ = false
 
     public chatRoomLoadingMsgs$ = this.nxStore.select(CommunitySelector.drawerChatRoomLoadingMsgs)
+
+    public drawerPreChatRoom$ = this.nxStore.select(CommunitySelector.drawerPreChatRoom)
 
     public unsubscribe$ = new Subject<void>()
 

@@ -69,6 +69,7 @@ import { CenterCommonEffect } from '@centerStore/effects/center.common.effect'
 
 // ngxSkeletonLoader module
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader'
+import { NgxSpinnerModule } from 'ngx-spinner'
 
 @NgModule({
     declarations: [
@@ -87,6 +88,7 @@ import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader'
         ReactiveFormsModule,
         DrawerModule,
         TouchPadModule,
+        NgxSpinnerModule,
         // sections modules
         LessonModule,
         MembershipModule,

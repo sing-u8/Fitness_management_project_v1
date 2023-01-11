@@ -1,6 +1,67 @@
 <!-- *ngIf="isTempRoom || isNewRoom" -->
-<div class="chat-intro-message" [class.is-sidebar]="isSideBar">
-    <div id="dm-with-me" *ngIf="selectedRoom?.type_code == 'chat_room_type_chat_with_me'; else dm">
+<div *ngIf="joinRoomLoading != 'done' && this.preSelectedRoom" class="chat-intro-message" [class.is-sidebar]="isSideBar">
+    <div class="dm-with-me" *ngIf="selectedRoom?.type_code == 'chat_room_type_chat_with_me'; else dm">
+        <p class="icon">💌</p>
+        <p class="rw-typo-bodytext0-bold title">
+            <span class="rw-typo-bodytext0-bold">{{ preSelectedRoom?.name }}</span
+            >님에게 메시지를 보내보세요.
+        </p>
+        <p class="rw-typo-bodytext1 dm-with-me__content">앗, 본인이신가요?</p>
+        <p class="rw-typo-bodytext1 content last-p">
+            그렇다면 이 공간을 나만의 <br *ngIf="isSideBar" />
+            메모장으로 활용해보세요!
+        </p>
+    </div>
+
+    <ng-template #dm>
+        <div
+            class="dm"
+            *ngIf="
+                preSelectedRoom?.type_code == 'chat_room_type_general' && preSelectedRoom?.chat_room_users.length == 1;
+                else group
+            "
+        >
+            <p class="rw-typo-bodytext0-bold title">
+                💌 <span class="rw-typo-bodytext0-bold">{{ dmChatRoomName }}</span
+                >님에게 메시지를 보내보세요.
+            </p>
+        </div>
+    </ng-template>
+
+    <ng-template #group>
+        <div
+            class="group"
+            *ngIf="preSelectedRoom?.type_code == 'chat_room_type_general' && preSelectedRoom?.chat_room_users.length > 1"
+        >
+            <p class="icon">💌</p>
+            <p class="rw-typo-bodytext0-bold title">새로운 그룹 채팅방이 개설되었어요!</p>
+            <p class="rw-typo-bodytext1 content">이 공간에 첫 메시지를 남겨보세요.</p>
+            <p class="rw-typo-bodytext1 content last-p">
+                {{ centerUser.name }}님이 첫 메시지를 보낸 직후부터 <br *ngIf="isSideBar" />
+                다른 멤버들도 채팅에 참여할 수 있어요.
+            </p>
+        </div>
+    </ng-template>
+
+    <!-- <ng-template #general>
+    <div class="general">
+      <p class="icon">💌</p>
+      <p class="rw-typo-bodytext0-bold title">
+        이 곳에서 <span class="rw-typo-bodytext0-bold">센터 공지사항</span>을 확인할 수 있어요.
+      </p>
+      <p class="rw-typo-bodytext1 content">
+        이제는 문자 대신 채팅으로
+        <br *ngIf="isSideBar" /> 센터의 공지사항을 받아볼 수 있어요.
+      </p>
+      <p class="rw-typo-bodytext1 content">
+        센터의 공지사항을 놓치지 말고 확인해보세요!
+      </p>
+    </div>
+  </ng-template> -->
+</div>
+
+<div *ngIf="joinRoomLoading == 'done'" class="chat-intro-message" [class.is-sidebar]="isSideBar">
+    <div class="dm-with-me" *ngIf="selectedRoom?.type_code == 'chat_room_type_chat_with_me'; else dm">
         <p class="icon">💌</p>
         <p class="rw-typo-bodytext0-bold title">
             <span class="rw-typo-bodytext0-bold">{{ selectedRoom?.name }}</span
@@ -15,23 +76,23 @@
 
     <ng-template #dm>
         <div
-            id="dm"
-            *ngIf="
+          class="dm"
+          *ngIf="
                 selectedRoom?.type_code == 'chat_room_type_general' && selectedRoom?.chat_room_users.length == 1;
                 else group
             "
         >
             <p class="rw-typo-bodytext0-bold title">
                 💌 <span class="rw-typo-bodytext0-bold">{{ dmChatRoomName }}</span
-                >님에게 메시지를 보내보세요.
+            >님에게 메시지를 보내보세요.
             </p>
         </div>
     </ng-template>
 
     <ng-template #group>
         <div
-            id="group"
-            *ngIf="selectedRoom?.type_code == 'chat_room_type_general' && selectedRoom?.chat_room_users.length > 1"
+          class="group"
+          *ngIf="selectedRoom?.type_code == 'chat_room_type_general' && selectedRoom?.chat_room_users.length > 1"
         >
             <p class="icon">💌</p>
             <p class="rw-typo-bodytext0-bold title">새로운 그룹 채팅방이 개설되었어요!</p>
@@ -44,7 +105,7 @@
     </ng-template>
 
     <!-- <ng-template #general>
-    <div id="general">
+    <div class="general">
       <p class="icon">💌</p>
       <p class="rw-typo-bodytext0-bold title">
         이 곳에서 <span class="rw-typo-bodytext0-bold">센터 공지사항</span>을 확인할 수 있어요.

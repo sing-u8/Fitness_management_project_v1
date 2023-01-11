@@ -57,6 +57,8 @@
                 [isSideBar]="true"
                 *ngIf="curChatRoom$ | async"
                 [selectedRoom]="curChatRoom$ | async"
+                [preSelectedRoom]="drawerPreChatRoom$ | async"
+                [joinRoomLoading]="drawerIsJoinRoomLoading$ | async"
                 [centerUser]="centerUser"
                 [msgList]="chatRoomMsgs$ | async"
             ></rw-chat-intro-message>

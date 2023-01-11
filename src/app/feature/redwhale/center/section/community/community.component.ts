@@ -31,6 +31,7 @@ import { StorageService } from '@services/storage.service'
 import { VideoProcessingService } from '@services/helper/video-processing-service.service'
 import * as CenterChatRoomApi from '@services/center-chat-room.service'
 import { CommonCommunityService } from '@services/helper/common-community.service'
+import { NgxSpinnerService } from 'ngx-spinner'
 
 // ngrx
 import { select, Store } from '@ngrx/store'
@@ -72,6 +73,8 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
 
     public chatRoomLoadingMsgs$ = this.nxStore.select(CommunitySelector.mainChatRoomLoadingMsgs)
 
+    public mainPreChatRoom$ = this.nxStore.select(CommunitySelector.mainPreChatRoom)
+
     public unsubscribe$ = new Subject<void>()
 
     constructor(
@@ -81,7 +84,8 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
         private storageService: StorageService,
         private nxStore: Store,
         private videoProcessingService: VideoProcessingService,
-        private commonCommunityService: CommonCommunityService
+        private commonCommunityService: CommonCommunityService,
+        private spinner: NgxSpinnerService
     ) {
         this.chatInput = this.fb.control('', { validators: [Validators.required, this.inputValidator()] })
         this.changeRoomInput = this.fb.control('', { validators: [Validators.required, this.inputValidator()] })
@@ -92,6 +96,14 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
 
         this.isLoading$.pipe(takeUntil(this.unsubscribe$)).subscribe((isLoading) => {
             this.isLoading_ = isLoading
+        })
+
+        this.mainIsJoinRoomLoading$.pipe(takeUntil(this.unsubscribe$)).subscribe((isRoomLoading) => {
+            if (isRoomLoading == 'done') {
+                this.spinner.hide('main_chatting_room_spinner')
+            } else {
+                this.spinner.show('main_chatting_room_spinner')
+            }
         })
 
         this.chatRoomMsgLoading$.pipe(takeUntil(this.unsubscribe$)).subscribe((chatRoomMsgLoading) => {

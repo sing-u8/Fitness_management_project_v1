@@ -140,34 +140,47 @@
 
             <div #chat_screen class="chatting-screen">
                 <div
-                    class="chatting-screen-content thin-scroll-y-overlay2"
+                    class="chatting-screen-content thin-scroll-y-overlay2 is-loading"
+                    [class.is-loading]="(mainIsJoinRoomLoading$ | async) != 'done'"
                     #chatting_screen
                     (scroll)="scrolled($event)"
                 >
-                    <rw-chat-message
-                        *ngFor="let msg of chatRoomLoadingMsgs$ | async; let i = index"
-                        [message]="msg"
-                        [showUserInfo]="true"
-                        [isLoading]="true"
-                        [gauge]="msg.gauge.value"
-                    ></rw-chat-message>
-
-                    <rw-chat-message
-                        #message_el
-                        *ngFor="let message of chatRoomMsgs$ | async; let i = index"
-                        [message]="message"
-                        [showUserInfo]="showUser(i)"
-                        [lastSuccessiveMsg]="isLastSuccessiveMsg(i)"
-                    ></rw-chat-message>
-
-                    <rw-chat-intro-message
-                        *ngIf="curChatRoom$ | async"
-                        [isSideBar]="false"
-                        [selectedRoom]="curChatRoom$ | async"
-                        [centerUser]="centerUser"
-                        [msgList]="chatRoomMsgs$ | async"
-                    >
-                    </rw-chat-intro-message>
+                    <ng-container *ngIf="(mainIsJoinRoomLoading$ | async) != 'done'">
+                        <ngx-spinner
+                            name="main_chatting_room_spinner"
+                            [fullScreen]="false"
+                            bdColor="var(--white)"
+                            color="var(--grey)"
+                            type="ball-spin-clockwise"
+                            size="small"
+                        ></ngx-spinner>
+                    </ng-container>
+                    <ng-container *ngIf="(mainIsJoinRoomLoading$ | async) == 'done'">
+                        <rw-chat-message
+                            *ngFor="let msg of chatRoomLoadingMsgs$ | async; let i = index"
+                            [message]="msg"
+                            [showUserInfo]="true"
+                            [isLoading]="true"
+                            [gauge]="msg.gauge.value"
+                        ></rw-chat-message>
+                        <rw-chat-message
+                            #message_el
+                            *ngFor="let message of chatRoomMsgs$ | async; let i = index"
+                            [message]="message"
+                            [showUserInfo]="showUser(i)"
+                            [lastSuccessiveMsg]="isLastSuccessiveMsg(i)"
+                        ></rw-chat-message>
+                        <rw-chat-intro-message
+                            *ngIf="curChatRoom$ | async"
+                            [isSideBar]="false"
+                            [selectedRoom]="curChatRoom$ | async"
+                            [preSelectedRoom]="mainPreChatRoom$ | async"
+                            [joinRoomLoading]="mainIsJoinRoomLoading$ | async"
+                            [centerUser]="centerUser"
+                            [msgList]="chatRoomMsgs$ | async"
+                        >
+                        </rw-chat-intro-message>
+                    </ng-container>
                 </div>
                 <div #chatting_input class="chatting-input-container" [class.isFocused]="isTextAreaFoucsed">
                     <!--                    <div class="plus-box">-->
