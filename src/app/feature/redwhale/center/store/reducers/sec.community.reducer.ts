@@ -12,6 +12,7 @@ import { ChatRoomUser } from '@schemas/chat-room-user'
 import { Loading } from '@schemas/store/loading'
 import { CenterUser } from '@schemas/center-user'
 import { Center } from '@schemas/center'
+import { deleteChatRoomUserByWSAfterEffect } from '../actions/sec.community.actions'
 
 export const messagePageSize = 20
 
@@ -340,6 +341,7 @@ export const communityReducer = createImmerReducer(
             state.mainChatRoomMsgs.unshift(chatRoomMessage)
             state.mainCurChatRoom.last_message = chatRoomMessage.text
             state.mainCurChatRoom.last_message_created_at = chatRoomMessage.created_at
+            state.mainChatRoomMsgs = _.uniqBy(state.mainChatRoomMsgs, 'id')
 
             const roomIdx = _.findIndex(state.chatRoomList, (v) => v.id == state.mainCurChatRoom.id)
             if (roomIdx != -1) {
@@ -357,6 +359,7 @@ export const communityReducer = createImmerReducer(
             state.drawerChatRoomMsgs.unshift(chatRoomMessage)
             state.drawerCurChatRoom.last_message = chatRoomMessage.text
             state.drawerCurChatRoom.last_message_created_at = chatRoomMessage.created_at
+            state.drawerChatRoomMsgs = _.uniqBy(state.drawerChatRoomMsgs, 'id')
 
             const roomIdx = _.findIndex(state.chatRoomList, (v) => v.id == state.drawerCurChatRoom.id)
             if (roomIdx != -1) {
@@ -563,6 +566,7 @@ export const communityReducer = createImmerReducer(
         })
 
         // 최근에 자신한테도 소켓이 오기 때문에... 추가한 방지책
+        console.log('create chat room user by ws : ', ws_data, chatRoomIdx)
         if (chatRoomIdx == -1) return state
 
         const chatRoom = _.cloneDeep(state.chatRoomList[chatRoomIdx])
@@ -590,27 +594,35 @@ export const communityReducer = createImmerReducer(
 
         return state
     }),
-    on(CommunitydActions.deleteChatRoomUserByWS, (state, { ws_data }) => {
-        const chatRoomIdx = state.chatRoomList.findIndex((v) => v.id == ws_data.info.chat_room_id)
+    on(
+        CommunitydActions.deleteChatRoomUserByWSAfterEffect,
+        (state, { ws_data, cur_center_user, deletedChatRoomIdx, newChatRoomList }) => {
+            // 다른 앱에서 본인이 나간 채팅방을 제거
+            if (ws_data.info.center_user_id == cur_center_user.id) {
+                state.chatRoomList = newChatRoomList
+            } else {
+                const chatRoom = _.cloneDeep(state.chatRoomList[deletedChatRoomIdx])
 
-        const chatRoom = _.cloneDeep(state.chatRoomList[chatRoomIdx])
+                chatRoom.chat_room_users = chatRoom.chat_room_users.filter((v) => v.id != ws_data.info.center_user_id)
+                chatRoom.chat_room_user_count -= 1
+                state.chatRoomList[deletedChatRoomIdx] = chatRoom
 
-        chatRoom.chat_room_users = chatRoom.chat_room_users.filter((v) => v.id != ws_data.info.center_user_id)
-        chatRoom.chat_room_user_count -= 1
-        state.chatRoomList[chatRoomIdx] = chatRoom
-
-        if (!_.isEmpty(state.mainCurChatRoom) && state.mainCurChatRoom.id == ws_data.info.chat_room_id) {
-            state.mainCurChatRoom = chatRoom
-            state.mainChatRoomUserList = state.mainChatRoomUserList.filter((v) => v.id != ws_data.info.center_user_id)
+                if (!_.isEmpty(state.mainCurChatRoom) && state.mainCurChatRoom.id == ws_data.info.chat_room_id) {
+                    state.mainCurChatRoom = chatRoom
+                    state.mainChatRoomUserList = state.mainChatRoomUserList.filter(
+                        (v) => v.id != ws_data.info.center_user_id
+                    )
+                }
+                if (!_.isEmpty(state.drawerCurChatRoom) && state.drawerCurChatRoom.id == ws_data.info.chat_room_id) {
+                    state.drawerCurChatRoom = chatRoom
+                    state.drawerChatRoomUserList = state.drawerChatRoomUserList.filter(
+                        (v) => v.id != ws_data.info.center_user_id
+                    )
+                }
+            }
+            return state
         }
-        if (!_.isEmpty(state.drawerCurChatRoom) && state.drawerCurChatRoom.id == ws_data.info.chat_room_id) {
-            state.drawerCurChatRoom = chatRoom
-            state.drawerChatRoomUserList = state.drawerChatRoomUserList.filter(
-                (v) => v.id != ws_data.info.center_user_id
-            )
-        }
-        return state
-    }),
+    ),
 
     on(CommunitydActions.finishCreateChatRoomMsgByWS, (state, { ws_data, chatRoomIdx, chatRoomList }) => {
         let chatRoom: ChatRoom = undefined

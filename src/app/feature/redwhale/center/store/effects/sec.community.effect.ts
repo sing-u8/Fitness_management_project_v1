@@ -20,6 +20,7 @@ import * as CommunityActions from '../actions/sec.community.actions'
 import * as CommunitySelector from '../selectors/sec.community.selector'
 import * as CommunityReducer from '../reducers/sec.community.reducer'
 import { IsTmepRoom } from '@schemas/chat-room'
+import { deleteChatRoomUserByWSAfterEffect } from '../actions/sec.community.actions'
 
 @Injectable()
 export class CommunityEffect {
@@ -611,6 +612,49 @@ export class CommunityEffect {
                 catchError((err: string) => of(CommunityActions.error({ error: err })))
             ),
         { dispatch: false }
+    )
+
+    public deleteChatRoomByWs$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(CommunityActions.deleteChatRoomUserByWS),
+            concatLatestFrom(() => [
+                this.store.select(CommunitySelector.chatRoomList),
+                this.store.select(CommunitySelector.mainCurChatRoom),
+                this.store.select(CommunitySelector.drawerCurChatRoom),
+            ]),
+            mergeMap(([{ ws_data, cur_center_user }, chatRoomList, mainCurChatRoom, drawerCurChatRoom]) => {
+                const chatRoomIdx = chatRoomList.findIndex((v) => v.id == ws_data.info.chat_room_id)
+                if (chatRoomIdx == -1) {
+                    return []
+                } else if (ws_data.info.center_user_id == cur_center_user.id) {
+                    const newChatRoomList = _.filter(chatRoomList, (v, i) => {
+                        return v.id != chatRoomList[chatRoomIdx].id
+                    })
+                    return [
+                        CommunityActions.deleteChatRoomUserByWSAfterEffect({
+                            ws_data,
+                            cur_center_user,
+                            deletedChatRoomIdx: chatRoomIdx,
+                            newChatRoomList,
+                        }),
+                        CommunityActions.startJoinChatRoom({
+                            centerId: ws_data.info.center_id,
+                            chatRoom: newChatRoomList.find((v) => v.type_code == 'chat_room_type_chat_with_me'),
+                            spot: mainCurChatRoom.id == drawerCurChatRoom?.id ? 'both' : 'main',
+                        }),
+                    ]
+                } else {
+                    return [
+                        CommunityActions.deleteChatRoomUserByWSAfterEffect({
+                            ws_data,
+                            cur_center_user,
+                            deletedChatRoomIdx: chatRoomIdx,
+                            newChatRoomList: undefined,
+                        }),
+                    ]
+                }
+            })
+        )
     )
 
     // by dashboard

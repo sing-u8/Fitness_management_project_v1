@@ -226,7 +226,16 @@ export const createChatRoomUserByWS = createAction(
 )
 export const deleteChatRoomUserByWS = createAction(
     `[${FeatureKey}] Delete Chat Room User By Web Socket`,
-    props<{ ws_data: WS.DeleteChatRoomUser }>()
+    props<{ ws_data: WS.DeleteChatRoomUser; cur_center_user: CenterUser }>()
+)
+export const deleteChatRoomUserByWSAfterEffect = createAction(
+    `[${FeatureKey}] Delete Chat Room User By Web Socket After Effect`,
+    props<{
+        ws_data: WS.DeleteChatRoomUser
+        cur_center_user: CenterUser
+        deletedChatRoomIdx: number
+        newChatRoomList: ChatRoom[]
+    }>()
 )
 
 export const startCreateChatRoomMsgByWS = createAction(
