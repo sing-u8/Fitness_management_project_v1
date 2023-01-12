@@ -35,7 +35,7 @@ export class WsChatService implements OnDestroy {
         private soundService: SoundService
     ) {
         console.log('WsChatService chat service !!!!!!!!!')
-        this.connect(this.wss)
+        this.connect()
     }
     ngOnInit(): void {
         console.log('-------------------------- WsChatService --------------------------------- ngOnInit')
@@ -45,7 +45,7 @@ export class WsChatService implements OnDestroy {
         this.closeChatWs()
     }
 
-    connect(url: string) {
+    connect() {
         console.log(
             `WsChatService connect chatWs : `,
             this.chatWs,
@@ -57,7 +57,6 @@ export class WsChatService implements OnDestroy {
         this.user = this.storageService.getUser()
         if (!this.chatWs) {
             this.chatWs = webSocket(this.wss)
-            console.log('rxjs webSocket connected: ' + url)
         }
         if (!_.isEmpty(this.user) && this.user.access_token) {
             console.log('WsChatService connect subscribe chat ws ')
@@ -84,8 +83,7 @@ export class WsChatService implements OnDestroy {
             },
             complete: () => {
                 console.log('web socket chat complete! -- err 발생 구간')
-                this.user = this.storageService.getUser()
-                this.connect(this.user.access_token)
+                this.connect()
             },
         })
         this.chatWs.next({
