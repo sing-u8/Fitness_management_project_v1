@@ -629,7 +629,7 @@ main {
                 -ms-flex: 0 0 66.6666667%;
                 flex: 0 0 66.6666667%;
                 max-width: 66.6666667%;
-                padding-left: 40px;
+                padding-left: 45px;
 
                 .selected-lesson-middle__item {
                     &:nth-child(n + 2) {
@@ -649,6 +649,7 @@ main {
                 -ms-flex: 0 0 67.2447552%;
                 flex: 0 0 67.2447552%;
                 max-width: 67.2447552%;
+                padding-left: 52px;
                 .selected-lesson-middle__item {
                     &:nth-child(n + 2) {
                         margin-left: 20px !important;
@@ -681,6 +682,7 @@ main {
             -ms-flex: 0 0 71.0144928%;
             flex: 0 0 71.0144928%;
             max-width: 71.0144928%;
+            padding-left: 35px;
 
             .selected-lesson-middle__item {
                 &:nth-child(n + 2) {
@@ -692,11 +694,13 @@ main {
                 -ms-flex: 0 0 72.6027397%;
                 flex: 0 0 72.6027397%;
                 max-width: 72.6027397%;
+                padding-left: 45px;
             }
             @media (min-width: 1920px) {
                 -ms-flex: 0 0 67.8668478%;
                 flex: 0 0 67.8668478%;
                 max-width: 67.8668478%;
+                padding-left: 52px;
             }
             @media (min-width: 2450px) {
                 -ms-flex: auto;
