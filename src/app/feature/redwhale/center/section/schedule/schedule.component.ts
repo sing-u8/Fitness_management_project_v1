@@ -238,7 +238,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
         })
     }
     ngOnDestroy(): void {
-        this.closeDrawer()
+        // this.closeDrawer()
         this.unsubscriber$.next()
         this.unsubscriber$.complete()
         this.nxStore.dispatch(ScheduleActions.setCalendarOptions({ calendarOptions: this.fullCalendar.options }))
