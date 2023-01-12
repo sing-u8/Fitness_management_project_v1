@@ -14,13 +14,10 @@ import dayjs from 'dayjs'
 import _ from 'lodash'
 
 import { CenterCalendarService } from '@services/center-calendar.service'
-import { CenterLessonService } from '@services/center-lesson.service'
 import { StorageService } from '@services/storage.service'
 import { CalendarTaskService } from '@services/helper/calendar-task.service'
 
 import { CalendarTask } from '@schemas/calendar-task'
-import { ClassCategory } from '@schemas/class-category'
-import { ClassItem } from '@schemas/class-item'
 import { UserBooked } from '@schemas/user-booked'
 import { Center } from '@schemas/center'
 

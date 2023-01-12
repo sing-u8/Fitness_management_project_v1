@@ -763,6 +763,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
         this.showScheduleDropdown()
     }
     onDateClick(arg) {
+        console.log('on Date Click -- ', this.schdule_dropdown_el)
         if (this.isLoading$_ != 'done') return
         if (arg.view.type == 'dayGridMonth') {
             if (this.dayCellLeave) {
