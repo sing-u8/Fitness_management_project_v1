@@ -111,18 +111,16 @@ export class ScheduleEffect {
     public createInstructor$ = createEffect(() => {
         return this.actions$.pipe(
             ofType(ScheduleActions.startCreateInstructorFilter),
-            switchMap(({ centerId, centerCalendarId, reqBody }) => {
+            switchMap(({ centerId, centerCalendarId, reqBody, cb }) => {
                 return this.centerCalendarApi.addFilterInstructor(centerId, centerCalendarId, reqBody).pipe(
                     switchMap((newInstructor) => {
+                        cb ? cb(newInstructor) : null
                         return [
                             ScheduleActions.finishCreateInstructorFilter({
                                 createdInstructor: {
                                     selected: true,
                                     instructor: newInstructor,
                                 },
-                            }),
-                            showToast({
-                                text: `'${this.wordService.ellipsis(newInstructor.name, 6)}' 강사가 추가되었습니다.`,
                             }),
                         ]
                     }),

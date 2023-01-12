@@ -14,6 +14,7 @@ import { FileService } from '@services/file.service'
 import { CenterUsersCheckInService } from '@services/center-users-check-in.service'
 import { ScheduleHelperService } from '@services/center/schedule-helper.service'
 import { CommunityHelperService } from '@services/center/community-helper.service'
+import { CenterCalendarService } from '@services/center-calendar.service'
 
 import { Center } from '@schemas/center'
 import { Loading } from '@schemas/componentStore/loading'
@@ -28,6 +29,8 @@ import { select, Store } from '@ngrx/store'
 import * as DashboardReducer from '@centerStore/reducers/sec.dashboard.reducer'
 import * as DashboardActions from '@centerStore/actions/sec.dashboard.actions'
 import * as DashboardSelector from '@centerStore/selectors/sec.dashboard.selector'
+import * as ScheduleActions from '@centerStore/actions/sec.schedule.actions'
+import * as ScheduleSelector from '@centerStore/selectors/sec.schedule.selector'
 import * as AppSelector from '@appStore/selectors'
 import * as CenterCommonActions from '@centerStore/actions/center.common.actions'
 import { showToast } from '@appStore/actions/toast.action'
@@ -36,6 +39,7 @@ import { CenterUser } from '@schemas/center-user'
 import { ContractTypeCode } from '@schemas/contract'
 import { UserMembership } from '@schemas/user-membership'
 import { UpdateUserRequestBody } from '@services/center-users.service'
+import { curUserData } from '@centerStore/selectors/sec.dashboard.selector'
 
 @Component({
     selector: 'db-member-detail',
@@ -81,7 +85,8 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
         private fileService: FileService,
         private centerUsersCheckInService: CenterUsersCheckInService,
         private scheduleHelperService: ScheduleHelperService,
-        private communityHelperService: CommunityHelperService
+        private communityHelperService: CommunityHelperService,
+        private centerCalendarService: CenterCalendarService
     ) {
         this.center = this.storageService.getCenter()
         this.user = this.storageService.getUser()
@@ -105,7 +110,7 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
         this.curUserData$.pipe(takeUntil(this.unSubscriber$)).subscribe((curUserData) => {
             this.curUserData = {
                 ...curUserData,
-                payments: DashboardReducer.getPaymentsWithoutTotalZero(curUserData.payments)
+                payments: DashboardReducer.getPaymentsWithoutTotalZero(curUserData.payments),
             }
             this.findEndDateToExpired(7)
 
@@ -664,6 +669,20 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
                             this.curUserData.user,
                             this.curUserListSelect.key
                         )
+
+                        this.centerCalendarService
+                            .getCalendars(this.center.id, { typeCode: 'calendar_type_center_calendar' })
+                            .subscribe((cals) => {
+                                this.nxStore.dispatch(
+                                    ScheduleActions.startCreateInstructorFilter({
+                                        centerId: this.center.id,
+                                        centerCalendarId: cals[0].id,
+                                        reqBody: {
+                                            instructor_center_user_id: this.curUserData.user.id,
+                                        },
+                                    })
+                                )
+                            })
                         // this.router.navigate(['./sale'], { relativeTo: this.activatedRoute })
                     },
                 })
@@ -707,6 +726,22 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
                             role_code: roleKey,
                         }
                         this.storageService.updateCenterUser(_centerUser)
+
+                        if (roleKey != 'member') {
+                            this.centerCalendarService
+                                .getCalendars(this.center.id, { typeCode: 'calendar_type_center_calendar' })
+                                .subscribe((cals) => {
+                                    this.nxStore.dispatch(
+                                        ScheduleActions.startCreateInstructorFilter({
+                                            centerId: this.center.id,
+                                            centerCalendarId: cals[0].id,
+                                            reqBody: {
+                                                instructor_center_user_id: this.curUserData.user.id,
+                                            },
+                                        })
+                                    )
+                                })
+                        }
                     },
                 })
             )

@@ -30,7 +30,7 @@ export const finishLoadScheduleState = createAction(
 
 export const startCreateInstructorFilter = createAction(
     `[${FeatureKey}] Start Create Instructor Filter`,
-    props<{ centerId: string; centerCalendarId: string; reqBody: AddFilterInstructorReqBody }>()
+    props<{ centerId: string; centerCalendarId: string; reqBody: AddFilterInstructorReqBody; cb?:(newInst: CenterUser) => void }>()
 )
 export const finishCreateInstructorFilter = createAction(
     `[${FeatureKey}] Finish Create Instructor Filter`,

@@ -19,6 +19,7 @@ import { Subject } from 'rxjs'
 import { takeUntil } from 'rxjs/operators'
 import { InstructorType } from '@centerStore/reducers/sec.schedule.reducer'
 import { Calendar } from '@schemas/calendar'
+import { showToast } from '@appStore/actions/toast.action'
 
 @Component({
     selector: 'rw-sch-instructor-dropdown',
@@ -159,6 +160,13 @@ export class SchInstructorDropdownComponent implements OnInit, OnChanges, OnDest
                 reqBody: {
                     instructor_center_user_id: this.willBeAddedInstructor.id,
                 },
+                cb: (newInst: CenterUser) => {
+                    this.nxStore.dispatch(
+                        showToast({
+                            text: `'${this.wordService.ellipsis(newInst.name, 6)}' 강사가 추가되었습니다.`,
+                        })
+                    )
+                },
             })
         )
         this.willBeAddedInstructor = undefined
@@ -179,10 +187,7 @@ export class SchInstructorDropdownComponent implements OnInit, OnChanges, OnDest
     onMemberListModalConfirm(centerUser: CenterUser) {
         this.addInstructorList = false
         this.willBeAddedInstructor = centerUser
-        this.addlInstructorData.text = `'${this.wordService.ellipsis(
-            centerUser.name,
-            6
-        )}' 강사를 추가하시겠어요?`
+        this.addlInstructorData.text = `'${this.wordService.ellipsis(centerUser.name, 6)}' 강사를 추가하시겠어요?`
         this.toggleAddInstructorModal()
     }
 
