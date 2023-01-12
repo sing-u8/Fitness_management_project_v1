@@ -117,7 +117,7 @@ export class DirectRegisterMemberFullmodalComponent implements OnInit, OnChanges
         })
         this.emailForm = this.fb.control('', {
             validators: [Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+[.][a-z]{2,}$')],
-            asyncValidators: [this.emailAsyncValidator()],
+            asyncValidators: [], //[this.emailAsyncValidator()],
         })
     }
 
