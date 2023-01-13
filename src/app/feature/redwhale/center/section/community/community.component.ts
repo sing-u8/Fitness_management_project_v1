@@ -589,10 +589,11 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
         }
     }
     resetChatScreenSize() {
-        this.resizeHeight = 20
-        this.renderer.removeStyle(this.chatting_screen.nativeElement, 'height')
+        const screenPadMar = 45 + 40 // 60px --> padding: 10px * 2 + margin: 30px 15px
+        const inputHeight = 40 // 20px --> padding: 10px * 2
+        this.renderer.setStyle(this.chatting_screen.nativeElement, 'height', `calc(100% - ${screenPadMar}px)`)
         this.renderer.removeStyle(this.chatting_input.nativeElement, 'height')
-        // this.renderer.removeStyle(this.chat_textarea_el.nativeElement, 'height')
+        this.renderer.setStyle(this.chat_textarea_el.nativeElement, 'height', `${inputHeight}px`)
     }
 
     onInputKeyPress(e: KeyboardEvent) {

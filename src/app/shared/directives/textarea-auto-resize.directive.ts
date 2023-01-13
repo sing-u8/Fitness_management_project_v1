@@ -30,11 +30,6 @@ export class TextareaAutoResize implements AfterViewInit {
     }
 
     setResizeHeight(height: number) {
-        console.log(
-            'setResizeHeight : ',
-            this.el.nativeElement.style.paddingTop,
-            this.el.nativeElement.style.paddingBottom
-        )
         let _height = 0
         if (height < 2 * this.heightUnit) {
             _height = 40
