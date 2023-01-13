@@ -549,7 +549,7 @@ export class CommunityEffect {
                 this.store.select(CommunitySelector.chatRoomList),
                 this.store.select(CommunitySelector.isLoading),
             ]),
-            mergeMap(([{ ws_data }, chatRoomList, isLoading]) => {
+            mergeMap(([{ ws_data, curCenterUser }, chatRoomList, isLoading]) => {
                 // if (_.isEmpty(chatRoomList) || isLoading != 'done') return []
                 const chatRoomIdx = chatRoomList.findIndex((v) => v.id == ws_data.info.chat_room_id)
                 if (chatRoomIdx != -1) {
@@ -558,6 +558,7 @@ export class CommunityEffect {
                             ws_data,
                             chatRoomIdx,
                             chatRoomList: undefined,
+                            curCenterUser,
                         }),
                     ]
                 } else {
@@ -578,6 +579,7 @@ export class CommunityEffect {
                                     ws_data,
                                     chatRoomIdx,
                                     chatRoomList: ctl,
+                                    curCenterUser,
                                 }),
                             ]
                         })

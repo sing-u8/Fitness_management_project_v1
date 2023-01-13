@@ -240,11 +240,11 @@ export const deleteChatRoomUserByWSAfterEffect = createAction(
 
 export const startCreateChatRoomMsgByWS = createAction(
     `[${FeatureKey}] Start Create Chat Room Message By Web Socket`,
-    props<{ ws_data: WS.CreateChatRoomMessage }>()
+    props<{ ws_data: WS.CreateChatRoomMessage;  curCenterUser: CenterUser }>()
 )
 export const finishCreateChatRoomMsgByWS = createAction(
     `[${FeatureKey}] Finish Create Chat Room Message By Web Socket`,
-    props<{ ws_data: WS.CreateChatRoomMessage; chatRoomIdx: number; chatRoomList: Array<ChatRoom> }>()
+    props<{ ws_data: WS.CreateChatRoomMessage; chatRoomIdx: number; chatRoomList: Array<ChatRoom>;  curCenterUser: CenterUser }>()
 )
 
 export const deleteChatRoomMsgByWS = createAction(

@@ -66,7 +66,7 @@ export interface CreateChatRoomUser extends Base {
 export interface CreateChatRoomMessage extends Base {
     topic: 'chat_room_message'
     operation: 'create'
-    info: { chat_room_id: string; center_id: string }
+    info: { chat_room_id: string; center_id: string; center_user_email: string; center_user_id: string }
     dataset: Array<ChatRoomMessage>
 }
 // 0

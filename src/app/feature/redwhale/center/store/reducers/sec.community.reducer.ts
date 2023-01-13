@@ -624,56 +624,62 @@ export const communityReducer = createImmerReducer(
         }
     ),
 
-    on(CommunitydActions.finishCreateChatRoomMsgByWS, (state, { ws_data, chatRoomIdx, chatRoomList }) => {
-        let chatRoom: ChatRoom = undefined
-        if (!_.isEmpty(chatRoomList)) {
-            state.chatRoomList = _.cloneDeep(chatRoomList)
-            chatRoom = _.cloneDeep(state.chatRoomList[chatRoomIdx])
-            chatRoom.unread_message_count = 0
-        } else {
-            chatRoom = _.cloneDeep(state.chatRoomList[chatRoomIdx])
-        }
-
-        let lastMsg = ''
-        let lastCreatedAt = dayjs().format('YYYY-MM-DD HH:mm:ss')
-        let unread_msg_count = 0
-        ws_data.dataset.forEach((msg) => {
-            if (msg.type_code != 'chat_room_message_type_system' && msg.type_code != 'fe_chat_room_message_type_date') {
-                lastMsg = msg.text
-                lastCreatedAt = msg.created_at
-                unread_msg_count += 1
+    on(
+        CommunitydActions.finishCreateChatRoomMsgByWS,
+        (state, { ws_data, chatRoomIdx, chatRoomList, curCenterUser }) => {
+            let chatRoom: ChatRoom = undefined
+            if (!_.isEmpty(chatRoomList)) {
+                state.chatRoomList = _.cloneDeep(chatRoomList)
+                chatRoom = _.cloneDeep(state.chatRoomList[chatRoomIdx])
+                chatRoom.unread_message_count = 0
+            } else {
+                chatRoom = _.cloneDeep(state.chatRoomList[chatRoomIdx])
             }
-        })
 
-        chatRoom.last_message = lastMsg
-        chatRoom.last_message_created_at = lastCreatedAt
-        chatRoom.unread_message_count += unread_msg_count
-
-        const isInMainChatRoom =
-            !_.isEmpty(state.mainCurChatRoom) && state.mainCurChatRoom.id == ws_data.info.chat_room_id
-        const isInDrawerChatRoom =
-            !_.isEmpty(state.drawerCurChatRoom) && state.drawerCurChatRoom.id == ws_data.info.chat_room_id
-        if (isInMainChatRoom) {
-            _.forEach(ws_data.dataset, (msg) => {
-                state.mainChatRoomMsgs.unshift(msg)
+            let lastMsg = ''
+            let lastCreatedAt = dayjs().format('YYYY-MM-DD HH:mm:ss')
+            let unread_msg_count = 0
+            ws_data.dataset.forEach((msg) => {
+                if (
+                    msg.type_code != 'chat_room_message_type_system' &&
+                    msg.type_code != 'fe_chat_room_message_type_date'
+                ) {
+                    lastMsg = msg.text
+                    lastCreatedAt = msg.created_at
+                    unread_msg_count += ws_data.info.center_user_id == curCenterUser.id ? 0 : 1
+                }
             })
-            state.mainChatRoomMsgs = _.uniqBy(state.mainChatRoomMsgs, 'id')
-        }
-        if (isInDrawerChatRoom) {
-            _.forEach(ws_data.dataset, (msg) => {
-                state.drawerChatRoomMsgs.unshift(msg)
-            })
-            state.drawerChatRoomMsgs = _.uniqBy(state.drawerChatRoomMsgs, 'id')
-        }
-        if (isInMainChatRoom || isInDrawerChatRoom) {
-            chatRoom.unread_message_count -= unread_msg_count
-        }
 
-        _.assign(state.chatRoomList[chatRoomIdx], chatRoom)
-        // state.chatRoomList[chatRoomIdx] = chatRoom
+            chatRoom.last_message = lastMsg
+            chatRoom.last_message_created_at = lastCreatedAt
+            chatRoom.unread_message_count += unread_msg_count
 
-        return state
-    }),
+            const isInMainChatRoom =
+                !_.isEmpty(state.mainCurChatRoom) && state.mainCurChatRoom.id == ws_data.info.chat_room_id
+            const isInDrawerChatRoom =
+                !_.isEmpty(state.drawerCurChatRoom) && state.drawerCurChatRoom.id == ws_data.info.chat_room_id
+            if (isInMainChatRoom) {
+                _.forEach(ws_data.dataset, (msg) => {
+                    state.mainChatRoomMsgs.unshift(msg)
+                })
+                state.mainChatRoomMsgs = _.uniqBy(state.mainChatRoomMsgs, 'id')
+            }
+            if (isInDrawerChatRoom) {
+                _.forEach(ws_data.dataset, (msg) => {
+                    state.drawerChatRoomMsgs.unshift(msg)
+                })
+                state.drawerChatRoomMsgs = _.uniqBy(state.drawerChatRoomMsgs, 'id')
+            }
+            if (isInMainChatRoom || isInDrawerChatRoom) {
+                chatRoom.unread_message_count -= unread_msg_count
+            }
+
+            _.assign(state.chatRoomList[chatRoomIdx], chatRoom)
+            // state.chatRoomList[chatRoomIdx] = chatRoom
+
+            return state
+        }
+    ),
     on(CommunitydActions.readChatRoomByWS, (state, { ws_data }) => {
         if (state.mainCurChatRoom?.id == ws_data.info.chat_room_id) {
             _.find(state.mainChatRoomMsgs, (msg, idx) => {
