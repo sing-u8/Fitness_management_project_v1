@@ -255,6 +255,7 @@ export const membershipReducer = createImmerReducer(
     on(MembershipActions.resetAll, (state) => {
         return adapter.removeAll({
             ...state,
+            selectedMembership: initialSelectedMembership,
             currentCenter: '',
             isLoading: 'idle',
             error: '',
