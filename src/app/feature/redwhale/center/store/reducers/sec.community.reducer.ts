@@ -418,6 +418,8 @@ export const communityReducer = createImmerReducer(
         let preTempChatRoom: ChatRoom = undefined
         // !! 채팅 유저리스트는 임시 채팅방을 만들 때 해놨음, 필요 시 이것도 API에서 받아와야함.
         const addMsgToMain = () => {
+            const idx = _.findIndex(state.chatRoomList, (v) => v.id == state.mainCurChatRoom.id)
+            state.chatRoomList[idx] = chatRoom
             state.mainCurChatRoom = chatRoom
             // startCreateChatRoomMsgByWS와 겹치기 떄문에 이 코드는 제거
             state.mainChatRoomMsgs = [
@@ -427,6 +429,8 @@ export const communityReducer = createImmerReducer(
             // state.chatRoomList[state.chatRoomList.findIndex((v) => v.id == preTempChatRoom.id)] = chatRoom
         }
         const addMsgToDrawer = () => {
+            const idx = _.findIndex(state.chatRoomList, (v) => v.id == state.drawerCurChatRoom.id)
+            state.chatRoomList[idx] = chatRoom
             state.drawerCurChatRoom = chatRoom
             // startCreateChatRoomMsgByWS와 겹치기 떄문에 이 코드는 제거
             state.drawerChatRoomMsgs = [
