@@ -13,6 +13,7 @@ import { Loading } from '@schemas/store/loading'
 import { CenterUser } from '@schemas/center-user'
 import { Center } from '@schemas/center'
 import { deleteChatRoomUserByWSAfterEffect } from '../actions/sec.community.actions'
+import { chatRoomList } from '@centerStore/selectors/sec.community.selector'
 
 export const messagePageSize = 20
 
@@ -179,7 +180,9 @@ export const communityReducer = createImmerReducer(
             state.mainChatRoomUserList = chatRoomUsers
 
             const lastMsgDate = _.last(state.mainChatRoomMsgs)?.created_at
-            console.log('finishJoinChatRoom : ', _.last(state.mainChatRoomMsgs))
+            // _.isEmpty(state.mainChatRoomMsgs)
+            //   ? dayjs().format('YYYY-MM-DD HH:mm:ss')
+            //   : _.last(state.mainChatRoomMsgs).created_at
             if (chatRoomMesgs.length < messagePageSize && lastMsgDate) {
                 state.mainChatRoomMsgs.push(makeDateMessage(lastMsgDate))
                 state.mainChatRoomMsgs = _.uniqBy(state.mainChatRoomMsgs, 'id')
@@ -193,6 +196,9 @@ export const communityReducer = createImmerReducer(
             state.drawerChatRoomUserList = chatRoomUsers
 
             const lastMsgDate = _.last(state.drawerChatRoomMsgs)?.created_at
+            // _.isEmpty(state.drawerChatRoomMsgs)
+            //   ? dayjs().format('YYYY-MM-DD HH:mm:ss')
+            //   : _.last(state.drawerChatRoomMsgs).created_at
             if (chatRoomMesgs.length < messagePageSize && lastMsgDate) {
                 state.drawerChatRoomMsgs.push(makeDateMessage(lastMsgDate))
                 state.drawerChatRoomMsgs = _.uniqBy(state.drawerChatRoomMsgs, 'id')
@@ -330,6 +336,81 @@ export const communityReducer = createImmerReducer(
         return state
     }),
 
+    on(CommunitydActions.startSendMessageSent, (state, { spot, chatRoomMessage }) => {
+        const addMsgToMain = () => {
+            if (
+                !_.isEmpty(state.mainChatRoomMsgs[0]) &&
+                checkDayDiffBtMsgAndMsg(chatRoomMessage, state.mainChatRoomMsgs[0])
+            ) {
+                state.mainChatRoomMsgs.unshift(makeDateMessage(chatRoomMessage.created_at))
+            }
+            state.mainChatRoomMsgs.unshift(chatRoomMessage)
+            state.mainCurChatRoom.last_message = chatRoomMessage.text
+            state.mainCurChatRoom.last_message_created_at = chatRoomMessage.created_at
+            state.mainChatRoomMsgs = _.uniqBy(state.mainChatRoomMsgs, 'id')
+
+            const roomIdx = _.findIndex(state.chatRoomList, (v) => v.id == state.mainCurChatRoom.id)
+            if (roomIdx != -1) {
+                state.chatRoomList[roomIdx].last_message_created_at = chatRoomMessage.created_at
+                state.chatRoomList[roomIdx].last_message = chatRoomMessage.text
+            }
+        }
+        const addMsgToDrawer = () => {
+            if (
+                !_.isEmpty(state.drawerChatRoomMsgs[0]) &&
+                checkDayDiffBtMsgAndMsg(chatRoomMessage, state.drawerChatRoomMsgs[0])
+            ) {
+                state.drawerChatRoomMsgs.unshift(makeDateMessage(chatRoomMessage.created_at))
+            }
+            state.drawerChatRoomMsgs.unshift(chatRoomMessage)
+            state.drawerCurChatRoom.last_message = chatRoomMessage.text
+            state.drawerCurChatRoom.last_message_created_at = chatRoomMessage.created_at
+            state.drawerChatRoomMsgs = _.uniqBy(state.drawerChatRoomMsgs, 'id')
+
+            const roomIdx = _.findIndex(state.chatRoomList, (v) => v.id == state.drawerCurChatRoom.id)
+            if (roomIdx != -1) {
+                state.chatRoomList[roomIdx].last_message_created_at = chatRoomMessage.created_at
+                state.chatRoomList[roomIdx].last_message = chatRoomMessage.text
+            }
+        }
+
+        if (spot == 'main') {
+            addMsgToMain()
+            if (state.mainCurChatRoom.id == state.drawerCurChatRoom?.id) {
+                addMsgToDrawer()
+            }
+        } else {
+            addMsgToDrawer()
+            if (state.mainCurChatRoom?.id == state.drawerCurChatRoom.id) {
+                addMsgToMain()
+            }
+        }
+        return state
+    }),
+    on(CommunitydActions.startSendMessageResponse, (state, { loadingMsgId, spot, chatRoomMessage }) => {
+        const updateMainMsg = () => {
+            const idx = _.findIndex(state.mainChatRoomMsgs, (v) => v.id == loadingMsgId)
+            state.mainChatRoomMsgs[idx] = chatRoomMessage
+            state.mainChatRoomMsgs = _.uniqBy(state.mainChatRoomMsgs, 'id')
+        }
+        const updateDrawerMsg = () => {
+            const idx = _.findIndex(state.drawerChatRoomMsgs, (v) => v.id == loadingMsgId)
+            state.mainChatRoomMsgs[idx] = chatRoomMessage
+            state.drawerChatRoomMsgs = _.uniqBy(state.drawerChatRoomMsgs, 'id')
+        }
+        if (spot == 'main') {
+            updateMainMsg()
+            if (state.mainCurChatRoom.id == state.drawerCurChatRoom?.id) {
+                updateDrawerMsg()
+            }
+        } else {
+            updateDrawerMsg()
+            if (state.mainCurChatRoom?.id == state.drawerCurChatRoom.id) {
+                updateMainMsg()
+            }
+        }
+        return state
+    }),
     on(CommunitydActions.finishSendMessage, (state, { spot, chatRoomMessage }) => {
         const addMsgToMain = () => {
             if (
@@ -631,6 +712,8 @@ export const communityReducer = createImmerReducer(
     on(
         CommunitydActions.finishCreateChatRoomMsgByWS,
         (state, { ws_data, chatRoomIdx, chatRoomList, curCenterUser }) => {
+            const isMyMsg = ws_data.info.center_user_id == curCenterUser.id
+
             let chatRoom: ChatRoom = undefined
             if (!_.isEmpty(chatRoomList)) {
                 state.chatRoomList = _.cloneDeep(chatRoomList)
@@ -662,13 +745,13 @@ export const communityReducer = createImmerReducer(
                 !_.isEmpty(state.mainCurChatRoom) && state.mainCurChatRoom.id == ws_data.info.chat_room_id
             const isInDrawerChatRoom =
                 !_.isEmpty(state.drawerCurChatRoom) && state.drawerCurChatRoom.id == ws_data.info.chat_room_id
-            if (isInMainChatRoom) {
+            if (isInMainChatRoom && !isMyMsg) {
                 _.forEach(ws_data.dataset, (msg) => {
                     state.mainChatRoomMsgs.unshift(msg)
                 })
                 state.mainChatRoomMsgs = _.uniqBy(state.mainChatRoomMsgs, 'id')
             }
-            if (isInDrawerChatRoom) {
+            if (isInDrawerChatRoom && !isMyMsg) {
                 _.forEach(ws_data.dataset, (msg) => {
                     state.drawerChatRoomMsgs.unshift(msg)
                 })
@@ -911,7 +994,7 @@ function centerUserToChatRoomOwnerUser(curUser: CenterUser): ChatRoomUser {
 
 function makeTempChatRoom(center: Center, curUser: CenterUser, members: Array<CenterUser>): ChatRoom {
     return {
-        id: 'temp_room-' + dayjs().format('YYMMDD/HH:mm:SSS'), // if temp chatroom, id = temp-room
+        id: 'temp_room-' + dayjs().format('YYMMDD/HH:mm:ss'), // if temp chatroom, id = temp-room
         type_code: 'chat_room_type_general',
         type_code_name: '일반',
         permission_code: 'chat_room_user_permission_owner',
@@ -961,7 +1044,7 @@ function getDateInsteredMessage(chatMessages: Array<ChatRoomMessage>): Array<Cha
 }
 function concatChatRoomMsg(curMsgs: Array<ChatRoomMessage>, prevMsgs: Array<ChatRoomMessage>) {
     console.log('concatChatRoomMsg : ', curMsgs, prevMsgs)
-    if (checkDayDiffBtMsgAndMsg(curMsgs[curMsgs.length - 1], prevMsgs[0])) {
+    if (!_.isEmpty(prevMsgs) && checkDayDiffBtMsgAndMsg(curMsgs[curMsgs.length - 1], prevMsgs[0])) {
         const dateMsg = makeDateMessage(curMsgs[curMsgs.length - 1].created_at)
         curMsgs.push(dateMsg)
     }

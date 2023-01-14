@@ -532,9 +532,16 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
     scrolled(event: any): void {
         this.isNearBottom = this.isScrollNearBottom()
 
-        if (this.isScrollNearTop() && !this.chatRoomMsgLoading_) {
+        if (this.isScrollNearTop() ) {
+            console.log(
+                'call start get more chat room msgs',
+                this.isScrollNearTop() && !this.chatRoomMsgLoading_,
+                this.isScrollNearTop(),
+                !this.chatRoomMsgLoading_
+            )
             this.nxStore.dispatch(CommunityActions.startGetMoreChatRoomMsgs({ centerId: this.center.id, spot: 'main' }))
         }
+        console.log('scrolled --- ', this.isNearBottom, this.isScrollNearTop(), !this.chatRoomMsgLoading_)
     }
     onItemElementsChanged(): void {
         if (this.isNearBottom) {
@@ -656,6 +663,7 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
             this.nxStore.dispatch(
                 CommunityActions.startSendMessageToTempRoom({
                     centerId: this.center.id,
+                    centerUser: this.centerUser,
                     reqBody: {
                         createRoom,
                         sendMsg,
@@ -673,7 +681,12 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
                 size: 0,
             }
             this.nxStore.dispatch(
-                CommunityActions.startSendMessage({ centerId: this.center.id, reqBody, spot: 'main' })
+                CommunityActions.startSendMessage({
+                    centerId: this.center.id,
+                    reqBody,
+                    spot: 'main',
+                    centerUser: this.centerUser,
+                })
             )
         }
     }

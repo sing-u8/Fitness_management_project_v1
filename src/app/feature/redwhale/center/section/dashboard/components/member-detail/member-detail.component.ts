@@ -134,17 +134,18 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
     // oneToOne Chat
     onOneToOneChat() {
         this.nxStore.pipe(select(AppSelector.drawerSelector), take(1)).subscribe((drawer) => {
-            if (drawer.tabName == 'community') {
-                this.nxStore.dispatch(closeDrawer())
-            } else {
-                this.communityHelperService.createOneToOneChatRoomByDashboard(
-                    'drawer',
-                    this.center,
-                    this.curUserData.user,
-                    this.userInCenter
-                )
-                this.nxStore.dispatch(openDrawer({ tabName: 'community' }))
-            }
+            this.communityHelperService.createOneToOneChatRoomByDashboard(
+                'drawer',
+                this.center,
+                this.curUserData.user,
+                this.userInCenter
+            )
+            this.nxStore.dispatch(openDrawer({ tabName: 'community' }))
+            // if (drawer.tabName == 'community') {
+            //     this.nxStore.dispatch(closeDrawer())
+            // } else {
+            //
+            // }
         })
     }
 

@@ -115,6 +115,7 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
             this.chatRoomMsgs_ = crMsgs
         })
         this.curChatRoom$.pipe(takeUntil(this.unsubscribe$)).subscribe((curChatRoom) => {
+            console.log('curChatRoom$ - in drawer : ', curChatRoom)
             this.curChatRoom_ = curChatRoom
         })
         this.joinedChatRoom$.pipe(takeUntil(this.unsubscribe$)).subscribe((joinedChatRoom) => {
@@ -122,6 +123,7 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
         })
         this.chatRoomList$.pipe(takeUntil(this.unsubscribe$)).subscribe((chatRoomList) => {
             this.chatRoomList_ = _.sortBy(chatRoomList, (v) => -dayjs(v.last_message_created_at).unix())
+            console.log('chatRoomList$ - in drawre : ', this.chatRoomList_)
         })
 
         this.nxStore.pipe(select(CommunitySelector.curChatLoaded), take(1)).subscribe((curChatLoaded) => {
@@ -662,6 +664,7 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
             this.nxStore.dispatch(
                 CommunityActions.startSendMessageToTempRoom({
                     centerId: this.center.id,
+                    centerUser: this.centerUser,
                     reqBody: {
                         createRoom,
                         sendMsg,
@@ -679,7 +682,12 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
                 size: 0,
             }
             this.nxStore.dispatch(
-                CommunityActions.startSendMessage({ centerId: this.center.id, reqBody, spot: 'drawer' })
+                CommunityActions.startSendMessage({
+                    centerId: this.center.id,
+                    reqBody,
+                    spot: 'drawer',
+                    centerUser: this.centerUser,
+                })
             )
         }
     }

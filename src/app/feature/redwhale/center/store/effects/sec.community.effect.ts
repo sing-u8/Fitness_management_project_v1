@@ -9,7 +9,7 @@ import { CenterChatRoomService, SendMessageReqBody } from '@services/center-chat
 import { CommonCommunityService } from '@services/helper/common-community.service'
 
 import { File as ServiceFile } from '@schemas/file'
-import { ChatRoomLoadingMessage } from '@schemas/chat-room-message'
+import { ChatRoomLoadingMessage, ChatRoomMessage } from '@schemas/chat-room-message'
 
 import _ from 'lodash'
 import dayjs from 'dayjs'
@@ -20,7 +20,12 @@ import * as CommunityActions from '../actions/sec.community.actions'
 import * as CommunitySelector from '../selectors/sec.community.selector'
 import * as CommunityReducer from '../reducers/sec.community.reducer'
 import { IsTmepRoom } from '@schemas/chat-room'
-import { deleteChatRoomUserByWSAfterEffect } from '../actions/sec.community.actions'
+import {
+    deleteChatRoomUserByWSAfterEffect,
+    startSendMessage,
+    startSendMessageResponse,
+    startSendMessageSent,
+} from '../actions/sec.community.actions'
 
 @Injectable()
 export class CommunityEffect {
@@ -222,7 +227,26 @@ export class CommunityEffect {
         )
     )
 
-    public sendMessageToChatRoom$ = createEffect(() =>
+    // public sendMessageToChatRoom$ = createEffect(() =>
+    //     this.actions$.pipe(
+    //         ofType(CommunityActions.startSendMessage),
+    //         concatLatestFrom(({ spot }) =>
+    //             spot == 'main'
+    //                 ? this.store.select(CommunitySelector.mainCurChatRoom)
+    //                 : this.store.select(CommunitySelector.drawerCurChatRoom)
+    //         ),
+    //         mergeMap(([{ centerId, reqBody, spot }, curChatRoom]) =>
+    //             this.centerChatRoomApi.sendMeesageToChatRoom(centerId, curChatRoom.id, reqBody).pipe(
+    //                 switchMap((chatRoomMessage) => {
+    //                     return [CommunityActions.finishSendMessage({ spot, chatRoomMessage })]
+    //                 })
+    //             )
+    //         ),
+    //         catchError((err: string) => of(CommunityActions.error({ error: err })))
+    //     )
+    // )
+
+    public startSendMessageToRoom$ = createEffect(() =>
         this.actions$.pipe(
             ofType(CommunityActions.startSendMessage),
             concatLatestFrom(({ spot }) =>
@@ -230,10 +254,55 @@ export class CommunityEffect {
                     ? this.store.select(CommunitySelector.mainCurChatRoom)
                     : this.store.select(CommunitySelector.drawerCurChatRoom)
             ),
-            mergeMap(([{ centerId, reqBody, spot }, curChatRoom]) =>
-                this.centerChatRoomApi.sendMeesageToChatRoom(centerId, curChatRoom.id, reqBody).pipe(
-                    switchMap((chatRoomMessage) => {
-                        return [CommunityActions.finishSendMessage({ spot, chatRoomMessage })]
+            mergeMap(([{ centerId, reqBody, spot, centerUser }, curChatRoom]) =>
+                this.centerChatRoomApi.sendMeesageToChatRoomWithReport(centerId, curChatRoom.id, reqBody).pipe(
+                    map((event: HttpEvent<any>) => {
+                        return {
+                            event,
+                            msgId: curChatRoom.id + ' - ' + dayjs().format('YYYY-MM-DD HH:mm:ss:SSS'),
+                        }
+                    }),
+                    mergeMap((res) => {
+                        switch (res.event.type) {
+                            case HttpEventType.Sent:
+                                const message: ChatRoomMessage = {
+                                    id: res.msgId,
+                                    center_user_id: centerUser.id,
+                                    center_user_email: centerUser.email,
+                                    center_user_name: centerUser.name,
+                                    center_user_picture: centerUser.picture,
+                                    center_user_background: centerUser.background,
+                                    center_user_color: centerUser.color,
+                                    type_code: 'chat_room_message_type_text',
+                                    type_code_name: '임시 메시지 - 텍스트',
+                                    text: reqBody.text,
+                                    url: undefined,
+                                    originalname: undefined,
+                                    contentType: undefined,
+                                    size: undefined,
+                                    unread_center_user_ids: [], // !! 추후에 필요에 따라 수정 필요
+                                    unread_center_user_emails: [],
+                                    created_at: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+                                    deleted_at: null,
+                                }
+                                this.store.dispatch(
+                                    CommunityActions.startSendMessageSent({ chatRoomMessage: message, spot })
+                                )
+                                return []
+                            case HttpEventType.UploadProgress:
+                                return []
+                            case HttpEventType.Response:
+                                const chatRoomMessage = res.event.body.dataset[0] as ChatRoomMessage
+                                return [
+                                    CommunityActions.startSendMessageResponse({
+                                        spot,
+                                        loadingMsgId: res.msgId,
+                                        chatRoomMessage,
+                                    }),
+                                ]
+                            default:
+                                return []
+                        }
                     })
                 )
             ),
@@ -408,6 +477,100 @@ export class CommunityEffect {
             catchError((err: string) => of(CommunityActions.error({ error: err })))
         )
     )
+
+    // public startSendMessageToTempRoom$ = createEffect(() =>
+    //     this.actions$.pipe(
+    //         ofType(CommunityActions.startSendMessageToTempRoom),
+    //         mergeMap(({ centerId, reqBody, spot, centerUser }) =>
+    //             this.centerChatRoomApi.createChatRoom(centerId, reqBody.createRoom).pipe(
+    //                 switchMap((chatRoom) =>
+    //                     this.centerChatRoomApi.getChatRoomMessage(centerId, chatRoom.id).pipe(
+    //                         map((existingMsgs) => ({ chatRoom, existingMsgs })),
+    //                         switchMap(({ chatRoom, existingMsgs }) => {
+    //                             return this.centerChatRoomApi
+    //                                 .sendMeesageToChatRoomWithReport(centerId, chatRoom.id, reqBody.sendMsg)
+    //                                 .pipe(
+    //                                     map((event: HttpEvent<any>) => {
+    //                                         return {
+    //                                             event,
+    //                                             msgId: chatRoom.id + chatRoom.last_message_created_at,
+    //                                         }
+    //                                     }),
+    //                                     switchMap((res) => {
+    //                                         switch (res.event.type) {
+    //                                             case HttpEventType.Sent:
+    //                                                 const message: ChatRoomLoadingMessage = {
+    //                                                     id: res.msgId,
+    //                                                     center_user_id: centerUser.id,
+    //                                                     center_user_email: centerUser.email,
+    //                                                     center_user_name: centerUser.name,
+    //                                                     center_user_picture: centerUser.picture,
+    //                                                     center_user_background: centerUser.background,
+    //                                                     center_user_color: centerUser.color,
+    //                                                     type_code: 'chat_room_message_type_text',
+    //                                                     type_code_name: '임시 메시지 - 텍스트',
+    //                                                     text: reqBody.sendMsg.text,
+    //                                                     url: undefined,
+    //                                                     originalname: undefined,
+    //                                                     contentType: undefined,
+    //                                                     size: undefined,
+    //                                                     unread_center_user_ids: [], // !! 추후에 필요에 따라 수정 필요
+    //                                                     unread_center_user_emails: [],
+    //                                                     created_at: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+    //                                                     deleted_at: null,
+    //                                                     gauge: {
+    //                                                         id: res.msgId,
+    //                                                         value: 0,
+    //                                                     },
+    //                                                 }
+    //                                                 this.store.dispatch(
+    //                                                     CommunityActions.addChatRoomLoadingMsgs({ msg: message, spot })
+    //                                                 )
+    //                                                 return []
+    //                                             case HttpEventType.UploadProgress:
+    //                                                 const gauge = Math.floor((res.event.loaded / res.event.total) * 100)
+    //                                                 this.store.dispatch(
+    //                                                     CommunityActions.updateChatRoomLoadingMsg({
+    //                                                         msgId: res.msgId,
+    //                                                         spot,
+    //                                                         gauge,
+    //                                                     })
+    //                                                 )
+    //                                                 return []
+    //                                             case HttpEventType.Response:
+    //                                                 const chatRoomMessage = res.event.body.dataset[0] as ChatRoomMessage
+    //                                                 const chatRoomMessages = _.sortBy(
+    //                                                     _.uniqBy([...existingMsgs, chatRoomMessage], 'id'),
+    //                                                     [
+    //                                                         (o) => {
+    //                                                             return -dayjs(o.created_at).unix()
+    //                                                         },
+    //                                                     ]
+    //                                                 )
+    //                                                 return [
+    //                                                     CommunityActions.finishSendMessageToTempRoom({
+    //                                                         spot,
+    //                                                         chatRoomMessages,
+    //                                                         chatRoom,
+    //                                                     }),
+    //                                                     CommunityActions.removeChatRoomLoadingMsgs({
+    //                                                         loadingMsgId: res.msgId,
+    //                                                         spot,
+    //                                                     }),
+    //                                                 ]
+    //                                             default:
+    //                                                 return []
+    //                                         }
+    //                                     })
+    //                                 )
+    //                         })
+    //                     )
+    //                 )
+    //             )
+    //         ),
+    //         catchError((err: string) => of(CommunityActions.error({ error: err })))
+    //     )
+    // )
 
     public startSendMessageWithFileToTempRoom$ = createEffect(() =>
         this.actions$.pipe(

@@ -171,6 +171,19 @@ export class CenterChatRoomService {
         )
     }
 
+    sendMeesageToChatRoomWithReport(centerId: string, chatRoomId: string, reqBody: SendMessageReqBody) {
+        const url = this.SERVER + `/${centerId}/chat_room/${chatRoomId}/message`
+        return this.http
+            .post<Response>(url, reqBody, {
+                headers: new HttpHeaders({
+                    'Content-Type': 'application/json',
+                }),
+                reportProgress: true,
+                observe: 'events',
+            })
+            .pipe(catchError(handleError))
+    }
+
     // 채팅방 메시지 조회
     getChatRoomMessage(
         centerId: string,

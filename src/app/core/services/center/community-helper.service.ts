@@ -79,7 +79,7 @@ export class CommunityHelperService {
         const existSameRoom: ChatRoom = _.find(chatRooms, (v) => {
             return v.chat_room_users.length == 1 && _.differenceBy(v.chat_room_users, [chatUser], 'id').length == 0
         })
-
+        console.log('determineJoinOrCreate - ', existSameRoom)
         if (existSameRoom == undefined) {
             this.nxStore.dispatch(
                 CommunityActions.createTempChatRoom({

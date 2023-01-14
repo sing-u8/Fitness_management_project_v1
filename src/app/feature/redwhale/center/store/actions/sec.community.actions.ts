@@ -119,8 +119,25 @@ export const startSendMessage = createAction(
         centerId: string
         reqBody: ChatRoomApi.SendMessageReqBody
         spot: FromCommunity.spot
+        centerUser?: CenterUser
     }>()
 )
+export const startSendMessageSent = createAction(
+    `[${FeatureKey}] Start Send Message to ChatRoom Sent`,
+    props<{
+        chatRoomMessage: ChatRoomMessage
+        spot: FromCommunity.spot
+    }>()
+)
+export const startSendMessageResponse = createAction(
+    `[${FeatureKey}] Start Send Message to ChatRoom Sent Response`,
+    props<{
+        loadingMsgId: string
+        spot: FromCommunity.spot
+        chatRoomMessage: ChatRoomMessage
+    }>()
+)
+
 export const finishSendMessage = createAction(
     `[${FeatureKey}] Finish Send Message to ChatRoom`,
     props<{
@@ -145,6 +162,7 @@ export const startSendMessageToTempRoom = createAction(
     `[${FeatureKey}] Start Send Message to TempChatRoom`,
     props<{
         centerId: string
+        centerUser?: CenterUser
         reqBody: {
             createRoom: ChatRoomApi.CreateChatRoomReqBody
             sendMsg: ChatRoomApi.SendMessageReqBody
@@ -240,11 +258,16 @@ export const deleteChatRoomUserByWSAfterEffect = createAction(
 
 export const startCreateChatRoomMsgByWS = createAction(
     `[${FeatureKey}] Start Create Chat Room Message By Web Socket`,
-    props<{ ws_data: WS.CreateChatRoomMessage;  curCenterUser: CenterUser }>()
+    props<{ ws_data: WS.CreateChatRoomMessage; curCenterUser: CenterUser }>()
 )
 export const finishCreateChatRoomMsgByWS = createAction(
     `[${FeatureKey}] Finish Create Chat Room Message By Web Socket`,
-    props<{ ws_data: WS.CreateChatRoomMessage; chatRoomIdx: number; chatRoomList: Array<ChatRoom>;  curCenterUser: CenterUser }>()
+    props<{
+        ws_data: WS.CreateChatRoomMessage
+        chatRoomIdx: number
+        chatRoomList: Array<ChatRoom>
+        curCenterUser: CenterUser
+    }>()
 )
 
 export const deleteChatRoomMsgByWS = createAction(

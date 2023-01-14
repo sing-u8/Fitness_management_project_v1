@@ -7,7 +7,7 @@
         (rwClickOutside)="close()"
     >
         <span class="text rw-typo-title2 flex-fill active">
-            {{ selectedRoom?.name }}
+            {{ { chatRoom: selectedRoom, curCenterUser: centerUser } | chatRoomName }}
         </span>
         <span class="grey rw-typo-title2 room-size">
             {{
