@@ -279,17 +279,17 @@
 
     .col2 {
         min-width: 270px;
-        width: calc(180 / 1319) * 100%;
+        width: calc(270 / 1319) * 100%;
     }
 
     .col3 {
         min-width: 257px;
-        width: calc(180 / 1319) * 100%;
+        //width: calc(257 / 1319) * 100%;
     }
 
     .col4 {
-        min-width: calc(100% - 180px - 270px - 257px);
-        //width: calc(100% - (calc(180 / 1319) * 100% + calc(180 / 1319) * 100%) + calc(180 / 1319) * 100%);
+        min-width: calc(100% - 257px);
+        //width: calc(100% - (calc(180 / 1319) * 100% + calc(270 / 1319) * 100%) + calc(257 / 1319) * 100%);
     }
 
     .col-notification {
