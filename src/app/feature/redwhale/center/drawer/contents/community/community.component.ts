@@ -115,7 +115,6 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
             this.chatRoomMsgs_ = crMsgs
         })
         this.curChatRoom$.pipe(takeUntil(this.unsubscribe$)).subscribe((curChatRoom) => {
-            console.log('curChatRoom$ - in drawer : ', curChatRoom)
             this.curChatRoom_ = curChatRoom
         })
         this.joinedChatRoom$.pipe(takeUntil(this.unsubscribe$)).subscribe((joinedChatRoom) => {
@@ -123,7 +122,6 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
         })
         this.chatRoomList$.pipe(takeUntil(this.unsubscribe$)).subscribe((chatRoomList) => {
             this.chatRoomList_ = _.sortBy(chatRoomList, (v) => -dayjs(v.last_message_created_at).unix())
-            console.log('chatRoomList$ - in drawre : ', this.chatRoomList_)
         })
 
         this.nxStore.pipe(select(CommunitySelector.curChatLoaded), take(1)).subscribe((curChatLoaded) => {
