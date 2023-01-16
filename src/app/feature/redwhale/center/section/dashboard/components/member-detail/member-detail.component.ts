@@ -30,7 +30,9 @@ import * as DashboardReducer from '@centerStore/reducers/sec.dashboard.reducer'
 import * as DashboardActions from '@centerStore/actions/sec.dashboard.actions'
 import * as DashboardSelector from '@centerStore/selectors/sec.dashboard.selector'
 import * as ScheduleActions from '@centerStore/actions/sec.schedule.actions'
+import * as CommunitySelector from '@centerStore/selectors/sec.community.selector'
 import * as ScheduleSelector from '@centerStore/selectors/sec.schedule.selector'
+import { curUserData } from '@centerStore/selectors/sec.dashboard.selector'
 import * as AppSelector from '@appStore/selectors'
 import * as CenterCommonActions from '@centerStore/actions/center.common.actions'
 import { showToast } from '@appStore/actions/toast.action'
@@ -39,7 +41,6 @@ import { CenterUser } from '@schemas/center-user'
 import { ContractTypeCode } from '@schemas/contract'
 import { UserMembership } from '@schemas/user-membership'
 import { UpdateUserRequestBody } from '@services/center-users.service'
-import { curUserData } from '@centerStore/selectors/sec.dashboard.selector'
 
 @Component({
     selector: 'db-member-detail',
@@ -134,18 +135,24 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
     // oneToOne Chat
     onOneToOneChat() {
         this.nxStore.pipe(select(AppSelector.drawerSelector), take(1)).subscribe((drawer) => {
-            this.communityHelperService.createOneToOneChatRoomByDashboard(
-                'drawer',
-                this.center,
-                this.curUserData.user,
-                this.userInCenter
-            )
-            this.nxStore.dispatch(openDrawer({ tabName: 'community' }))
-            // if (drawer.tabName == 'community') {
-            //     this.nxStore.dispatch(closeDrawer())
-            // } else {
-            //
-            // }
+            this.nxStore.pipe(select(CommunitySelector.drawerCurChatRoom), take(1)).subscribe((chatRoom) => {
+                if (
+                    !_.isEmpty(chatRoom) &&
+                    chatRoom.chat_room_users.length == 1 &&
+                    chatRoom.chat_room_users[0].id == this.curUserData.user.id &&
+                    drawer.tabName == 'community'
+                ) {
+                    this.nxStore.dispatch(closeDrawer())
+                } else {
+                    this.communityHelperService.createOneToOneChatRoomByDashboard(
+                        'drawer',
+                        this.center,
+                        this.curUserData.user,
+                        this.userInCenter
+                    )
+                    this.nxStore.dispatch(openDrawer({ tabName: 'community' }))
+                }
+            })
         })
     }
 
