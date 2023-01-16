@@ -16,6 +16,8 @@ import {
 import dayjs from 'dayjs'
 import _ from 'lodash'
 
+import { UserLockerMembershipErrors } from '@schemas/errors/user-locker-membership-errors'
+
 import { StorageService } from '@services/storage.service'
 import { CenterUsersLockerService, UpdateLockerTicketReqBody } from '@services/center-users-locker.service.service'
 import { DashboardHelperService } from '@services/center/dashboard-helper.service'
@@ -146,17 +148,23 @@ export class ModifyLockerFullmodalComponent implements OnInit, OnChanges, AfterV
         }
         this.centerUsersLockerService
             .updateLockerTicket(this.center.id, this.centerUser.id, this.userLocker.id, reqBody)
-            .subscribe((userMembership) => {
-                this.confirm.emit()
-                this.nxStore.dispatch(
-                    showToast({
-                        text: `'[${this.userLocker.category_name}] ${this.userLocker.name}' 정보가 수정되었습니다.`,
-                    })
-                )
-                this.dashboardHelperService.refreshCurUser(this.center.id, this.centerUser)
-                this.lockerHelperService.synchronizeCurUserLocker(this.center.id, this.centerUser.id)
-                this.lockerHelperService.synchronizeLockerItemList(this.center.id)
-                loadingBt.hideLoading()
+            .subscribe({
+                next: (userMembership) => {
+                    this.confirm.emit()
+                    this.nxStore.dispatch(
+                        showToast({
+                            text: `'[${this.userLocker.category_name}] ${this.userLocker.name}' 정보가 수정되었습니다.`,
+                        })
+                    )
+                    this.dashboardHelperService.refreshCurUser(this.center.id, this.centerUser)
+                    this.lockerHelperService.synchronizeCurUserLocker(this.center.id, this.centerUser.id)
+                    this.lockerHelperService.synchronizeLockerItemList(this.center.id)
+                    loadingBt.hideLoading()
+                },
+                error: (err) => {
+                    this.nxStore.dispatch(showToast({ text: UserLockerMembershipErrors[err.code].message }))
+                    loadingBt.hideLoading()
+                },
             })
     }
 

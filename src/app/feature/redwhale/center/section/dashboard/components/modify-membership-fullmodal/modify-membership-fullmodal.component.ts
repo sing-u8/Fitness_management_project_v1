@@ -17,6 +17,8 @@ import _ from 'lodash'
 import dayjs from 'dayjs'
 import { forkJoin } from 'rxjs'
 
+import { UserLockerMembershipErrors } from '@schemas/errors/user-locker-membership-errors'
+
 import { StorageService } from '@services/storage.service'
 import { CenterMembershipService } from '@services/center-membership.service'
 import { CenterUsersMembershipService, UpdateMembershipTicketReqBody } from '@services/center-users-membership.service'
@@ -75,10 +77,22 @@ export class ModifyMembershipFullmodalComponent implements OnInit, OnChanges, Af
         event.stopPropagation()
     }
 
-    public date = { startDate: '', endDate: '' }
+    public date = {
+        startDate: '',
+        endDate: '',
+    }
     public dayDiff = ''
     onDatePickRangeChange(event: { startDate: string; endDate: string }, type: 'start' | 'end') {
         this.date = event
+
+        if (type == 'start') {
+            if (!_.isEmpty(this.date.endDate) && dayjs(this.date.endDate).isBefore(dayjs(this.date.startDate))) {
+                this.date.endDate = ''
+                this.dayDiff = ''
+            } else if (!_.isEmpty(this.date.endDate)) {
+                this.dayDiff = String(this.getDayDiff(this.date))
+            }
+        }
         if (type == 'end') {
             this.dayDiff = String(this.getDayDiff(this.date))
         }
@@ -115,15 +129,22 @@ export class ModifyMembershipFullmodalComponent implements OnInit, OnChanges, Af
 
     setUserMembershipData() {
         this.datepickFlag = { start: false, end: false }
-        this.date = {
-            startDate: this.userMembership.start_date,
-            endDate: this.userMembership.end_date,
-        }
+
+        this.date.startDate = this.userMembership.start_date
+        this.date.endDate = this.userMembership.end_date
+
         this.count = {
             count: String(this.userMembership.count) ?? '0',
             infinite: this.userMembership.unlimited,
         }
         this.getClassItemList()
+    }
+    resetUserMembershipData() {
+        this.datepickFlag = { start: false, end: false }
+        this.date.startDate = ''
+        this.date.endDate = ''
+        this.count = { count: '0', infinite: false }
+        this.resetClssItemList()
     }
 
     public loadingClassItemList = false
@@ -174,7 +195,7 @@ export class ModifyMembershipFullmodalComponent implements OnInit, OnChanges, Af
                 setTimeout(() => {
                     this.renderer.removeClass(this.modalWrapperElement.nativeElement, 'display-flex')
                 }, 200)
-                this.resetClssItemList()
+                this.resetUserMembershipData()
             }
         }
     }
@@ -207,11 +228,17 @@ export class ModifyMembershipFullmodalComponent implements OnInit, OnChanges, Af
         }
         this.centerUsersMembershipService
             .updateMembershipTicket(this.center.id, this.centerUser.id, this.userMembership.id, reqBody)
-            .subscribe((userMembership) => {
-                this.nxStore.dispatch(showToast({ text: `'${this.userMembership.name}' 정보가 수정되었습니다.` }))
-                this.dashboardHelperService.refreshCurUser(this.center.id, this.centerUser)
-                loadingBt.hideLoading()
-                this.confirm.emit()
+            .subscribe({
+                next: (userMembership) => {
+                    this.nxStore.dispatch(showToast({ text: `'${this.userMembership.name}' 정보가 수정되었습니다.` }))
+                    this.dashboardHelperService.refreshCurUser(this.center.id, this.centerUser)
+                    loadingBt.hideLoading()
+                    this.confirm.emit()
+                },
+                error: (err) => {
+                    this.nxStore.dispatch(showToast({ text: UserLockerMembershipErrors[err.code].message }))
+                    loadingBt.hideLoading()
+                },
             })
     }
 }

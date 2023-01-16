@@ -20,6 +20,7 @@ import { HoldingOutput, HoldingConfirmOutput } from '../hold-modal/hold-modal.co
 import { DatePickConfirmOutput } from '@shared/components/common/datepick-modal/datepick-modal.component'
 import { CenterUser } from '@schemas/center-user'
 import { ClickEmitterType } from '@schemas/components/button'
+import { UserLockerMembershipErrors } from '@schemas/errors/user-locker-membership-errors'
 
 import _ from 'lodash'
 import dayjs from 'dayjs'
@@ -128,10 +129,16 @@ export class UserDetailMembershipComponent implements OnInit {
     onHoldConfirm(output: HoldingConfirmOutput) {
         this.holdData = output.datepick
         output.loadingFns.showLoading()
-        this.callHodingApi(() => {
-            output.loadingFns.hideLoading()
-            this.toggleHoldModal()
-        })
+        this.callHodingApi(
+            () => {
+                output.loadingFns.hideLoading()
+                this.toggleHoldModal()
+            },
+            () => {
+                output.loadingFns.hideLoading()
+                output.resetFn()
+            }
+        )
     }
 
     // transter function
@@ -295,7 +302,7 @@ export class UserDetailMembershipComponent implements OnInit {
                 },
             })
     }
-    callHodingApi(cb?: () => void) {
+    callHodingApi(cb?: () => void, errCb?: () => void) {
         const reqBody: HoldingMembershipTicketReqBody = {
             start_date: this.holdData.startDate,
             end_date: this.holdData.endDate,
@@ -318,8 +325,9 @@ export class UserDetailMembershipComponent implements OnInit {
                     this.dashboardHelper.refreshCurUser(this.center.id, this.curUserData.user)
                     cb ? cb() : null
                 },
-                error: () => {
-                    cb ? cb() : null
+                error: (err) => {
+                    this.nxStore.dispatch(showToast({ text: UserLockerMembershipErrors[err.code].message }))
+                    errCb ? errCb() : null
                 },
             })
     }

@@ -16,8 +16,12 @@
                     ‘{{ userMembership?.name | wordEllipsis: 16 }}’ 회원권을 홀딩하시겠어요?
                 </span>
             </div>
-            <div *ngIf="userLocker" class="sub-title rw-typo-subtext1">홀딩 기간을 선택하신 후, [홀딩하기] 버튼을 클릭해주세요.</div>
-            <div *ngIf="userMembership" class="sub-title rw-typo-subtext1">선택한 홀딩 기간 내에 예약된 수업은 모두 자동 취소됩니다.</div>
+            <div *ngIf="userLocker" class="sub-title rw-typo-subtext1">
+                홀딩 기간을 선택하신 후, [홀딩하기] 버튼을 클릭해주세요.
+            </div>
+            <div *ngIf="userMembership" class="sub-title rw-typo-subtext1">
+                선택한 홀딩 기간 내에 예약된 수업은 모두 자동 취소됩니다.
+            </div>
         </div>
 
         <div class="l-datepicker">
@@ -41,9 +45,10 @@
 
                     <db-datepicker
                         *ngIf="doShowDatePick.start"
-                        mode="reg-ml"
-                        [option]="'onlyStart'"
+                        mode="holding"
+                        [option]="'holdStart'"
                         [data]="startDatepick"
+                        [mlDate]="mlDate"
                         (dataChange)="onDatePickerChange('start', $event)"
                     ></db-datepicker>
                 </div>
@@ -65,9 +70,10 @@
 
                     <db-datepicker
                         *ngIf="doShowDatePick.end"
-                        mode="reg-ml"
-                        [option]="'onlyEnd'"
+                        mode="holding"
+                        [option]="'holdEnd'"
                         [data]="endDatePick"
+                        [mlDate]="mlDate"
                         (dataChange)="onDatePickerChange('end', $event)"
                     ></db-datepicker>
                 </div>

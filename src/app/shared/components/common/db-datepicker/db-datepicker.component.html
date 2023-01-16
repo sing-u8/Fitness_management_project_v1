@@ -46,12 +46,12 @@
     [class.isShadow]="isShadow"
 >
     <div class="month col d-flex justify-content-center">
-        <div class="start  d-flex justify-content-start align-items-start">
+        <div class="start d-flex justify-content-start align-items-start">
             <span class="chevron-double-left" (click)="previousYear()"></span>
             <span class="chevron-left" (click)="previousMonth()"></span>
         </div>
         <div class="center col-6 d-flex justify-content-center align-items-start">{{ month }}</div>
-        <div class="end  d-flex justify-content-end align-items-start">
+        <div class="end d-flex justify-content-end align-items-start">
             <span class="chevron-right" (click)="nextMonth()"></span>
             <span class="chevron-double-right" (click)="nextYear()"></span>
         </div>
@@ -88,12 +88,12 @@
     [class.isShadow]="isShadow"
 >
     <div class="month col d-flex">
-        <div class="start  d-flex justify-content-start align-items-start">
+        <div class="start d-flex justify-content-start align-items-start">
             <span class="chevron-double-left" (click)="previousYear()"></span>
             <span class="chevron-left" (click)="previousMonth()"></span>
         </div>
         <div class="center col-6 d-flex justify-content-center align-items-start">{{ month }}</div>
-        <div class="end  d-flex justify-content-end align-items-start">
+        <div class="end d-flex justify-content-end align-items-start">
             <span class="chevron-right" (click)="nextMonth()"></span>
             <span class="chevron-double-right" (click)="nextYear()"></span>
         </div>
@@ -131,12 +131,12 @@
     [class.isShadow]="isShadow"
 >
     <div class="month col d-flex">
-        <div class="start  d-flex justify-content-start align-items-start">
+        <div class="start d-flex justify-content-start align-items-start">
             <span class="chevron-double-left" (click)="previousYear()"></span>
             <span class="chevron-left" (click)="previousMonth()"></span>
         </div>
         <div class="center col-6 d-flex justify-content-center align-items-start">{{ month }}</div>
-        <div class="end  d-flex justify-content-end align-items-start">
+        <div class="end d-flex justify-content-end align-items-start">
             <span class="chevron-right" (click)="nextMonth()"></span>
             <span class="chevron-double-right" (click)="nextYear()"></span>
         </div>
@@ -183,12 +183,12 @@
     [class.isShadow]="isShadow"
 >
     <div class="month col d-flex">
-        <div class="start  d-flex justify-content-start align-items-start">
+        <div class="start d-flex justify-content-start align-items-start">
             <span class="chevron-double-left" (click)="previousYear()"></span>
             <span class="chevron-left" (click)="previousMonth()"></span>
         </div>
         <div class="center col-6 d-flex justify-content-center align-items-start">{{ month }}</div>
-        <div class="end  d-flex justify-content-end align-items-start">
+        <div class="end d-flex justify-content-end align-items-start">
             <span class="chevron-right" (click)="nextMonth()"></span>
             <span class="chevron-double-right" (click)="nextYear()"></span>
         </div>
@@ -220,6 +220,58 @@
             (click)="regMLSelectDate(weekCol); $event.stopPropagation()"
             rw-tooltip
             [rwTooltipDisabled]="pastDisable(weekCol) || option == 'onlyStart' || option == 'looseOnlyStart'"
+            [rwTooltipTitle]="getDayFromStartDate(weekCol) + '일 사용'"
+            rwTooltipPlacement="bottom"
+        >
+            {{ weekCol.day }}
+        </div>
+    </div>
+</div>
+
+<div
+    #holding_membership_locker
+    class="rw-datepicker mutiline-unit rw-datepicker-multiline d-flex flex-column user-select-none"
+    *ngIf="mode == 'holding'"
+    [class.isShadow]="isShadow"
+>
+    <div class="month col d-flex">
+        <div class="start d-flex justify-content-start align-items-start">
+            <span class="chevron-double-left" (click)="previousYear()"></span>
+            <span class="chevron-left" (click)="previousMonth()"></span>
+        </div>
+        <div class="center col-6 d-flex justify-content-center align-items-start">{{ month }}</div>
+        <div class="end d-flex justify-content-end align-items-start">
+            <span class="chevron-right" (click)="nextMonth()"></span>
+            <span class="chevron-double-right" (click)="nextYear()"></span>
+        </div>
+    </div>
+    <!-- <div class="week-header col d-flex justify-content-between align-items-center">
+        <div class="d-flex justify-content-center align-items-center">일</div>
+        <div class="d-flex justify-content-center align-items-center">월</div>
+        <div class="d-flex justify-content-center align-items-center">화</div>
+        <div class="d-flex justify-content-center align-items-center">수</div>
+        <div class="d-flex justify-content-center align-items-center">목</div>
+        <div class="d-flex justify-content-center align-items-center">금</div>
+        <div class="d-flex justify-content-center align-items-center">토</div>
+    </div> -->
+    <div
+        class="week-row col d-flex justify-content-between align-items-center"
+        *ngFor="let weekRow of weekRows; let i = index"
+    >
+        <div
+            class="week-col d-flex justify-content-center align-items-center align-self-start"
+            *ngFor="let weekCol of weekRow; let j = index"
+            [style.color]="weekCol.color"
+            [style.font-weight]="weekCol.fontWeight"
+            [class.start-date]="isStartDate(weekCol)"
+            [class.end-date]="isEndDate(weekCol)"
+            [class.selected]="isEdgeDate(weekCol)"
+            [class.same-date]="isSameDate(weekCol)"
+            [class.between]="isBetween(weekCol)"
+            [class.avaliable-date]="holdingML_IsAvailableDate(weekCol)"
+            (click)="setInitHoldingML(weekCol); $event.stopPropagation()"
+            rw-tooltip
+            [rwTooltipDisabled]="pastDisable(weekCol) || option == 'holdStart'"
             [rwTooltipTitle]="getDayFromStartDate(weekCol) + '일 사용'"
             rwTooltipPlacement="bottom"
         >

@@ -33,6 +33,8 @@ export class DbDatepickerComponent implements OnInit, OnChanges, AfterViewChecke
         | 'onlyEnd'
         | 'looseOnlyStart'
         | 'looseOnlyEnd' /* only reg-ml until this line*/
+        | 'holdStart' /* only hold */
+        | 'holdEnd'
     @Input() width: string
     @Input() height: string
 
@@ -57,7 +59,7 @@ export class DbDatepickerComponent implements OnInit, OnChanges, AfterViewChecke
 
     // multi
     selectedDateObj: any
-    // multiline and   reg-ml : register-membership-locker datepicker
+    // multiline and reg-ml[register-membership-locker datepicker] and holding
     lineSelectedDateObj: { startDate: string; endDate: string }
 
     changed
@@ -94,6 +96,14 @@ export class DbDatepickerComponent implements OnInit, OnChanges, AfterViewChecke
                 this.regMLSelectDate({ date: this.data.endDate })
             }
             this.currentDate = moment()
+        } else if (this.mode == 'holding') {
+            if (this.option == 'holdStart') {
+                this.holdingMLSelectDate({ date: this.data.startDate })
+            } else if (this.option == 'holdEnd') {
+                this.holdingMLSelectDate({ date: this.data.startDate })
+                this.holdingMLSelectDate({ date: this.data.endDate })
+            }
+            this.currentDate = moment()
         } else {
             this.currentDate = moment()
         }
@@ -126,6 +136,7 @@ export class DbDatepickerComponent implements OnInit, OnChanges, AfterViewChecke
         if (changes.hasOwnProperty('data') && !changes['data']['firstChange']) {
             this.changed = true
             this.getDays(this.currentDate)
+            // this.setDatePick()
         }
 
         // if (changes.hasOwnProperty('data')) {
@@ -591,6 +602,78 @@ export class DbDatepickerComponent implements OnInit, OnChanges, AfterViewChecke
             case 'looseOnlyStart':
                 return true
             case 'looseOnlyEnd':
+                return !moment(weekCol.date).isBefore(moment().format(this.lineSelectedDateObj.startDate), 'day')
+            default:
+                return false
+        }
+    }
+
+    // --------- holding method --------------------------------------------------------------------------------------------------
+    // optional input
+    @Input() mlDate: { startDate: string; endDate: string }
+    holdingMLSelectDate(weekCol) {
+        if (this.toggleEdge(weekCol) == false) {
+            this.setInitHoldingML(weekCol)
+        } else {
+            this.dataChange.emit(this.lineSelectedDateObj)
+        }
+    }
+
+    setInitHoldingML(weekCol) {
+        switch (this.option) {
+            case 'holdStart':
+                this.initHoldingStartDateWeekCol(weekCol)
+                break
+            case 'holdEnd':
+                this.initHoldingEndDateWeekCol(weekCol)
+                break
+        }
+    }
+
+    initHoldingStartDateWeekCol(weekCol) {
+        if (
+            moment(weekCol.date).isBefore(moment(this.mlDate.startDate).format('YYYY-MM-DD'), 'day') ||
+            moment(weekCol.date).isBefore(moment().format('YYYY-MM-DD'), 'day') ||
+            moment(weekCol.date).isAfter(moment(this.mlDate.endDate).format('YYYY-MM-DD'), 'day')
+        ) {
+            return
+        }
+        this.lineSelectedDateObj.startDate = weekCol.date
+
+        this.dataChange.emit({
+            startDate: weekCol.date,
+            endDate: this.data?.endDate ?? '',
+        })
+        // this.dataChange.emit(this.lineSelectedDateObj)
+    }
+
+    initHoldingEndDateWeekCol(weekCol) {
+        if (
+            moment(weekCol.date).isBefore(moment(this.mlDate.startDate).format('YYYY-MM-DD'), 'day') ||
+            moment(weekCol.date).isBefore(moment().format('YYYY-MM-DD'), 'day')
+        )
+            return
+
+        if (!this.lineSelectedDateObj.startDate) {
+            this.lineSelectedDateObj.startDate = weekCol.date
+            this.dataChange.emit(this.lineSelectedDateObj)
+        } else if (
+            !moment(weekCol.date).isBefore(moment(this.lineSelectedDateObj.startDate).format('YYYY-MM-DD'), 'day')
+        ) {
+            this.lineSelectedDateObj.endDate = weekCol.date
+            this.dataChange.emit(this.lineSelectedDateObj)
+        }
+    }
+
+    holdingML_IsAvailableDate(weekCol) {
+        switch (this.option) {
+            case 'holdStart':
+                return !(
+                    moment(weekCol.date).isBefore(moment(this.mlDate.startDate).format('YYYY-MM-DD'), 'day') ||
+                    moment(weekCol.date).isBefore(moment().format('YYYY-MM-DD'), 'day') ||
+                    moment(weekCol.date).isAfter(moment(this.mlDate.endDate).format('YYYY-MM-DD'), 'day')
+                )
+            case 'holdEnd':
                 return !moment(weekCol.date).isBefore(moment().format(this.lineSelectedDateObj.startDate), 'day')
             default:
                 return false

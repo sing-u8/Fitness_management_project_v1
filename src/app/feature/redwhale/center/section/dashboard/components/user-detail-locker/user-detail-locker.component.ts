@@ -15,6 +15,7 @@ import { LockerHelperService } from '@services/center/locker-helper.service'
 
 import { Center } from '@schemas/center'
 import { UserLocker } from '@schemas/user-locker'
+import { UserLockerMembershipErrors } from '@schemas/errors/user-locker-membership-errors'
 import { ChargeType, ChargeMode, ConfirmOuput } from '@shared/components/common/charge-modal/charge-modal.component'
 import { HoldingOutput, HoldingConfirmOutput } from '../hold-modal/hold-modal.component'
 import { DatePickConfirmOutput } from '@shared/components/common/datepick-modal/datepick-modal.component'
@@ -109,10 +110,16 @@ export class UserDetailLockerComponent implements OnInit {
     onHoldConfirm(output: HoldingConfirmOutput) {
         this.holdData = output.datepick
         output.loadingFns.showLoading()
-        this.callHodingApi(() => {
-            output.loadingFns.hideLoading()
-            this.toggleHoldModal()
-        })
+        this.callHodingApi(
+            () => {
+                output.loadingFns.hideLoading()
+                this.toggleHoldModal()
+            },
+            () => {
+                output.loadingFns.hideLoading()
+                output.resetFn()
+            }
+        )
     }
 
     // Empty function
@@ -250,12 +257,11 @@ export class UserDetailLockerComponent implements OnInit {
 
     // api funcs
 
-    callHodingApi(cb?: () => void) {
+    callHodingApi(cb?: () => void, errCb?: () => void) {
         const reqBody: HoldingLockerTicketReqBody = {
             start_date: this.holdData.startDate,
             end_date: this.holdData.endDate,
         }
-        console.log('callHolding api : ', this.holdData)
         this.centerUsersLockerService
             .holdingLockerTicket(this.center.id, this.curUserData.user.id, this.selectedUserLocker.id, reqBody)
             .subscribe({
@@ -276,8 +282,9 @@ export class UserDetailLockerComponent implements OnInit {
                     this.dashboardHelper.refreshCurUser(this.center.id, this.curUserData.user)
                     cb ? cb() : null
                 },
-                error: () => {
-                    cb ? cb() : null
+                error: (err) => {
+                    this.nxStore.dispatch(showToast({ text: UserLockerMembershipErrors[err.code].message }))
+                    errCb ? errCb() : null
                 },
             })
     }

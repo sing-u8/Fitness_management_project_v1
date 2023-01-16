@@ -63,7 +63,7 @@
                                 {{ date.startDate | dateFormat: 'YYYY.MM.DD' }}
                             </div>
                             <db-datepicker
-                                [class.display-none]="!datepickFlag.start"
+                                *ngIf="datepickFlag.start"
                                 (rwClickOutside)="startDatepickClickOutside($event)"
                                 mode="reg-ml"
                                 [option]="'looseOnlyStart'"
@@ -82,7 +82,7 @@
                                 rwButtonFontColor="var(--font-color)"
                                 (click)="onEndDateBtClick($event)"
                             >
-                                <span class="item-font" *ngIf="!date.endDate || datepickFlag.start; else showEndDate"
+                                <span class="item-font" *ngIf="!date.endDate; else showEndDate"
                                     >만료일을 선택해주세요.</span
                                 >
                                 <ng-template #showEndDate>

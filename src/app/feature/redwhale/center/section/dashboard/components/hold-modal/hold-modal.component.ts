@@ -29,6 +29,7 @@ export interface HoldingConfirmOutput {
         endDate: string
     }
     loadingFns: ClickEmitterType
+    resetFn: () => void
 }
 
 @Component({
@@ -113,6 +114,7 @@ export class HoldModalComponent implements AfterViewChecked, OnChanges, AfterVie
         if (changes['visible'] && !changes['visible']?.firstChange) {
             if (changes['visible'].previousValue != changes['visible'].currentValue) {
                 this.changed = true
+                this.initMLDate()
             }
         }
     }
@@ -147,6 +149,9 @@ export class HoldModalComponent implements AfterViewChecked, OnChanges, AfterVie
         this.confirm.emit({
             datepick: _.cloneDeep(this.endDatePick),
             loadingFns: loadingFns,
+            resetFn: () => {
+                this.setCompVars()
+            }
         })
     }
 
@@ -156,5 +161,20 @@ export class HoldModalComponent implements AfterViewChecked, OnChanges, AfterVie
     }
     resetMouseModalDown() {
         this.isMouseModalDown = false
+    }
+    //
+    public mlDate: { startDate: string; endDate: string } = undefined
+    initMLDate() {
+        if (!_.isEmpty(this.userMembership)) {
+            this.mlDate = {
+                startDate: this.userMembership.start_date,
+                endDate: this.userMembership.end_date,
+            }
+        } else {
+            this.mlDate = {
+                startDate: this.userLocker.start_date,
+                endDate: this.userLocker.end_date,
+            }
+        }
     }
 }
