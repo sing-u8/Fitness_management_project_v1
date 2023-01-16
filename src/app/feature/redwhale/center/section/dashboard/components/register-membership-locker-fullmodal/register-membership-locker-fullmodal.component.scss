@@ -492,6 +492,34 @@ section.register-ml-fullmodal-wrapper {
 
                         .memo-terms {
                             min-height: 150px;
+                            &::placeholder {
+                                font-weight: 400 !important;
+                                color: var(--grey) !important;
+                            }
+
+                            &::-webkit-input-placeholder {
+                                font-weight: 400 !important;
+                                color: var(--grey) !important;
+                            }
+
+                            &:-ms-input-placeholder {
+                                font-weight: 400 !important;
+                                color: var(--grey) !important;
+                            }
+                            &:focus::placeholder {
+                                font-weight: 400 !important;
+                                color: var(--grey) !important;
+                            }
+
+                            &:focus::-webkit-input-placeholder {
+                                font-weight: 400 !important;
+                                color: var(--grey) !important;
+                            }
+
+                            &:focus:-ms-input-placeholder {
+                                font-weight: 400 !important;
+                                color: var(--grey) !important;
+                            }
                         }
                     }
                 }
