@@ -894,10 +894,8 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
 
             const eventTitleContainerEl: HTMLElement = arg.el.getElementsByClassName('fc-daygrid-event-dot')[0]
             const eventTitleEl: HTMLElement = arg.el.getElementsByClassName('fc-event-title')[0]
-            // const eventTimeEl: HTMLElement = this.renderer.createElement('div')
 
             eventTitleContainerEl.style.display = 'none'
-            // eventTimeEl.style.display = 'none'
 
             eventTitleEl.classList.add('rw-typo-subtext3')
             eventTitleEl.style.color = '#212121'

@@ -62,7 +62,10 @@ export class SchInstructorDropdownComponent implements OnInit, OnChanges, OnDest
     }
     ngOnChanges(changes: SimpleChanges): void {
         if (this.instructorList && !this.isInit) {
-            this.selectedNum = this.instructorList.length
+            this.isAllChecked = this.instructorList.every((v) => v.selected)
+            this.instructorList.forEach((v) => {
+                this.selectedNum += v.selected ? 1 : 0
+            })
         }
         if (changes['instructorList']) {
             this.instructorFilter = (cu: CenterUser) => {
@@ -71,6 +74,7 @@ export class SchInstructorDropdownComponent implements OnInit, OnChanges, OnDest
             this.addableInstLength = _.filter(this.memberList, this.instructorFilter).length
         }
     }
+
     ngOnDestroy() {
         this.unsubscribe$.next(true)
         this.unsubscribe$.complete()
