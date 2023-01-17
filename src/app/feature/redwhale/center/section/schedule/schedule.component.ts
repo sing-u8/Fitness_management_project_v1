@@ -817,9 +817,8 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
         if (arg.view.type == 'dayGridMonth') {
             const date = this.operatingTime.start.split(':').map((time) => Number(time))
             this.tempTaskTitleTime = new Date(new Date().setHours(date[0], date[1], date[2]))
-            console.log('setTempTaskTitleTime : ', date, ' - ', this.tempTaskTitleTime)
         } else {
-            this.tempTaskTitleTime = arg.date
+            this.tempTaskTitleTime = arg.date ?? arg.start
         }
     }
     public setTaskTitleTime() {

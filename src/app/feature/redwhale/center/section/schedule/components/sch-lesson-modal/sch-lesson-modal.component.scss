@@ -154,7 +154,7 @@
                     flex-wrap: wrap;
                     .tag-item {
                         display: flex;
-                        height: 27px;
+                        min-height: 27px;
                         align-items: center;
                         justify-content: center;
                         padding: 5px 10px;
