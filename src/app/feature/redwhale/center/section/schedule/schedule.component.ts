@@ -683,6 +683,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
             locale: 'ko',
             height: '100%',
             headerToolbar: false,
+            displayEventTime: false,
             // contentHeight: 'auto',
 
             views: {
@@ -835,12 +836,11 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
 
             const eventTitleContainerEl: HTMLElement = arg.el.getElementsByClassName('fc-event-title-container')[0]
             const eventTitleEl: HTMLElement = arg.el.getElementsByClassName('fc-event-title')[0]
-            const eventTimeEl: HTMLElement = arg.el.getElementsByClassName('fc-event-time')[0]
+            const eventTimeEl: HTMLElement = this.renderer.createElement('div')
 
             const insts = _.orderBy(arg.event.extendedProps.originItem.responsibility, 'name')
 
             if (arg.event.extendedProps.originItem.type_code == 'calendar_task_type_normal') {
-                eventTitleContainerEl.appendChild(eventTimeEl)
                 eventTitleEl.classList.add('rw-typo-subtext3')
                 eventTitleEl.style.fontSize = '1.1rem'
                 eventTitleEl.style.fontWeight = '500'
@@ -854,13 +854,13 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
                 eventTimeEl.innerHTML = `${
                     insts.length > 1 ? insts[0].name + ` 외 ${insts.length - 1}명` : insts[0]?.name ?? '담당자 없음'
                 }`
+                eventTitleContainerEl.appendChild(eventTimeEl)
             } else {
                 eventTitleEl.classList.add('rw-typo-subtext0')
                 eventTitleEl.style.fontSize = '1.2rem'
                 eventTitleEl.style.fontWeight = '700'
                 eventTitleEl.style.whiteSpace = 'nowrap'
 
-                eventTitleContainerEl.appendChild(eventTimeEl)
                 eventTimeEl.classList.add('rw-typo-subtext4')
                 eventTimeEl.style.color = '#C9C9C9'
                 eventTimeEl.style.fontSize = '1.1rem'
@@ -869,6 +869,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
                 } ㆍ ${arg.event.extendedProps.originItem.class.booked_count}/${
                     arg.event.extendedProps.originItem.class.capacity
                 }명`
+                eventTitleContainerEl.appendChild(eventTimeEl)
                 // event color tag
                 eventMainFrame_el.insertAdjacentHTML(
                     'afterbegin',
@@ -893,10 +894,10 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
 
             const eventTitleContainerEl: HTMLElement = arg.el.getElementsByClassName('fc-daygrid-event-dot')[0]
             const eventTitleEl: HTMLElement = arg.el.getElementsByClassName('fc-event-title')[0]
-            const eventTimeEl: HTMLElement = arg.el.getElementsByClassName('fc-event-time')[0]
+            // const eventTimeEl: HTMLElement = this.renderer.createElement('div')
 
             eventTitleContainerEl.style.display = 'none'
-            eventTimeEl.style.display = 'none'
+            // eventTimeEl.style.display = 'none'
 
             eventTitleEl.classList.add('rw-typo-subtext3')
             eventTitleEl.style.color = '#212121'
