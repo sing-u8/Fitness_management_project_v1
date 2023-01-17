@@ -185,7 +185,8 @@ export class SchLessonModalComponent implements AfterViewChecked, OnChanges {
     public repeatTimeDiff = ''
     getRepeatTimeDiff() {
         if (!this.lessonData.calendar_task_group_id) return
-        const timeDiff = dayjs(this.lessonData.repeat_end_date).diff(dayjs(this.lessonData.repeat_start_date), 'day')
+        const timeDiff =
+            dayjs(this.lessonData.repeat_end_date).diff(dayjs(this.lessonData.repeat_start_date), 'day') + 1
         this.repeatTimeDiff = `(${timeDiff}일)`
     }
 
@@ -265,9 +266,7 @@ export class SchLessonModalComponent implements AfterViewChecked, OnChanges {
             duration: this.lessonData.class.duration,
             lessonType: this.lessonData.class.type_code == 'class_item_type_onetoone' ? '1:1 수업' : '그룹 수업',
             instructor:
-                this.lessonData.responsibility.length > 1
-                    ? insts[0].name + ` 외 ${insts.length - 1}명`
-                    : insts[0].name,
+                this.lessonData.responsibility.length > 1 ? insts[0].name + ` 외 ${insts.length - 1}명` : insts[0].name,
         }
     }
 
