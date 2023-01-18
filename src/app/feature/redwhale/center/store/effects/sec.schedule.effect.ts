@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core'
 import { Actions, concatLatestFrom, createEffect, ofType } from '@ngrx/effects'
 import { forkJoin, of } from 'rxjs'
-import { catchError, map, switchMap, tap } from 'rxjs/operators'
+import { catchError, map, switchMap, tap, mergeMap } from 'rxjs/operators'
 
 import { StorageService } from '@services/storage.service'
 import { CenterCalendarService } from '@services/center-calendar.service'
@@ -63,7 +63,6 @@ export class ScheduleEffect {
                                             instructor: centerUser,
                                         })
                                     )
-                                    console.log('start load schedule  state ------- ', value, value.curCenterUser)
                                     if (!value.doLessonsExist) {
                                         return [
                                             ScheduleActions.setCurCenterId({ centerId: center.id }),
@@ -156,9 +155,9 @@ export class ScheduleEffect {
         () =>
             this.actions$.pipe(
                 ofType(ScheduleActions.startUpdateCalendarTask),
-                switchMap(({ centerId, calendarId, taskId, reqBody, mode, cb }) =>
+                mergeMap(({ centerId, calendarId, taskId, reqBody, mode, cb }) =>
                     this.centerCalendarApi.updateCalendarTask(centerId, calendarId, taskId, reqBody, mode).pipe(
-                        tap(() => {
+                        tap((res) => {
                             cb ? cb() : null
                         })
                     )
@@ -189,9 +188,7 @@ export class ScheduleEffect {
                                 }),
                             ]
                         }),
-                        catchError((err: string) =>
-                            of(ScheduleActions.setError({ error: 'createInstructor err :' + err }))
-                        )
+                        catchError((err: string) => of(ScheduleActions.setError({ error: err })))
                     )
             })
         )

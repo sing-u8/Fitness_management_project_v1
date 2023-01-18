@@ -160,7 +160,10 @@ export const scheduleReducer = createImmerReducer(
         state.taskList = taskList // _.unionBy(state.taskList, taskList, 'id')
         return state
     }),
-
+    // on(ScheduleActions.startUpdateCalendarTask, (state, action) => {
+    //
+    //     return state
+    // }),
     // - // sync
     on(ScheduleActions.setCalendarOptions, (state, { calendarOptions }) => {
         state.calendarOptions = calendarOptions

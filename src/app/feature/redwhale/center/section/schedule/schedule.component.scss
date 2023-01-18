@@ -1035,6 +1035,10 @@ article.schedule {
         }
     }
 
+    .fc-popover {
+        z-index: 999 !important;
+    }
+
     .fc-scroller {
         overflow: hidden !important;
 

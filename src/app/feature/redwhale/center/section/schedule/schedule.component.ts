@@ -6,9 +6,10 @@ import _ from 'lodash'
 import dayjs from 'dayjs'
 
 // fullcalendar
-import { CalendarOptions, FullCalendarComponent } from '@fullcalendar/angular'
+import { CalendarOptions, createElement, FullCalendarComponent } from '@fullcalendar/angular'
 import { EventClickArg, EventDropArg, EventHoveringArg } from '@fullcalendar/common'
 import koLocale from '@fullcalendar/core/locales/ko'
+import enLocale from '@fullcalendar/core/locales/en-au'
 
 // services
 import { StorageService } from '@services/storage.service'
@@ -216,7 +217,6 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
         this.nxStore
             .pipe(select(ScheduleSelector.isScheduleEventChanged), takeUntil(this.unsubscriber$))
             .subscribe((status) => {
-                console.log('isScheduleEventChanged - in schedule -- status ', status)
                 if (status == true) {
                     this.getTaskList(this.selectedDateViewType)
                     this.nxStore.dispatch(ScheduleActions.setIsScheduleEventChanged({ isScheduleEventChanged: false }))
@@ -224,7 +224,6 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
             })
 
         this.nxStore.pipe(select(calendarOptions), takeUntil(this.unsubscriber$)).subscribe((calendarOptions) => {
-            console.log('calendarOptions selector :  ', calendarOptions, !_.isEmpty(calendarOptions))
             if (!_.isEmpty(calendarOptions)) {
                 this.initCalendarOptionFuncs()
                 this.recallCalendarState(this.selectedDateViewType)
@@ -362,13 +361,13 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
         calendarApi.view.calendar.gotoDate(rDate.startDate)
         this.setCalendarTitle(this.selectedDateViewType)
 
-        const calView = calendarApi.view
-        this.nxStore.dispatch(ScheduleActions.setWeekPick({ startDate: rDate.startDate, endDate: rDate.endDate }))
+        const endDate = dayjs(rDate.endDate).add(1, 'day').format('YYYY-MM-DD')
+        this.nxStore.dispatch(ScheduleActions.setWeekPick({ startDate: rDate.startDate, endDate: endDate }))
         this.nxStore.dispatch(
             ScheduleActions.setCalendarConfig({
                 calendarConfig: {
                     startDate: dayjs(rDate.startDate).format('YYYY-MM-DD'),
-                    endDate: dayjs(rDate.endDate).format('YYYY-MM-DD'),
+                    endDate: endDate,
                 },
             })
         )
@@ -684,8 +683,13 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
             height: '100%',
             headerToolbar: false,
             displayEventTime: false,
+            dayPopoverFormat: {
+                dayPeriod: undefined,
+                year: undefined,
+                month: undefined,
+                day: 'numeric',
+            },
             // contentHeight: 'auto',
-
             views: {
                 resourceTimeGridDay: {
                     allDaySlot: false,
@@ -729,7 +733,6 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
     // full calendar event functions
     onEventClick(arg: EventClickArg) {
         console.log('onEventClick arg: ', arg)
-        console.log('onEventClick event: ', arg.event.extendedProps['originItem'])
 
         if (arg.event.extendedProps['originItem'].type_code == 'calendar_task_type_normal') {
             this.generalEventData = arg.event.extendedProps['originItem']
@@ -743,7 +746,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
 
     onDateSelect(arg) {
         console.log('onDateSelect: ', arg)
-        if (this.isLoading$_ != 'done') return
+        // if (this.isLoading$_ != 'done') return
         if (arg.view.type == 'dayGridMonth') {
             if (this.dayCellLeave) {
                 this.hideScheduleDropdown()
@@ -787,7 +790,6 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     public setSchedulingInstructor(arg) {
-        console.log('setSchedulingInstructor func arg  : ', arg)
         if (arg.view.type == 'resourceTimeGridDay') {
             console.log(
                 "arg.view.type == 'resourceTimeGridDay' -- ",
@@ -844,11 +846,13 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
                 eventTitleEl.style.fontSize = '1.1rem'
                 eventTitleEl.style.fontWeight = '500'
                 eventTitleEl.style.whiteSpace = 'nowrap'
+                eventTitleEl.style.overflow = 'hidden'
                 eventTitleEl.style.color = '#606060'
 
                 eventTimeEl.style.fontSize = '1.1rem'
                 eventTimeEl.style.fontWeight = '400'
                 eventTimeEl.style.whiteSpace = 'nowrap'
+                eventTimeEl.style.overflow = 'hidden'
                 eventTimeEl.style.color = '#c9c9c9'
                 eventTimeEl.innerHTML = `${
                     insts.length > 1 ? insts[0].name + ` 외 ${insts.length - 1}명` : insts[0]?.name ?? '담당자 없음'
@@ -859,10 +863,14 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
                 eventTitleEl.style.fontSize = '1.2rem'
                 eventTitleEl.style.fontWeight = '700'
                 eventTitleEl.style.whiteSpace = 'nowrap'
+                eventTitleEl.style.overflow = 'hidden'
 
                 eventTimeEl.classList.add('rw-typo-subtext4')
                 eventTimeEl.style.color = '#C9C9C9'
                 eventTimeEl.style.fontSize = '1.1rem'
+                eventTimeEl.style.whiteSpace = 'nowrap'
+                eventTimeEl.style.overflow = 'hidden'
+
                 eventTimeEl.innerHTML = `${
                     insts.length > 1 ? insts[0].name + ` 외 ${insts.length - 1}명` : insts[0]?.name ?? '담당자 없음'
                 } ㆍ ${arg.event.extendedProps.originItem.class.booked_count}/${
@@ -899,6 +907,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
             eventTitleEl.classList.add('rw-typo-subtext3')
             eventTitleEl.style.color = '#212121'
             eventTitleEl.style.whiteSpace = 'nowrap'
+            eventTitleEl.style.overflow = 'hidden'
             if (arg.event.extendedProps.originItem.type_code == 'calendar_task_type_normal') {
                 eventTitleEl.style.fontWeight = '500'
                 arg.el.style.backgroundColor = 'var(--background-color)'
@@ -941,6 +950,36 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
         this.fullCalendar.getApi().render()
         let calTask: CalendarTask = _.cloneDeep(arg.event.extendedProps['originItem'] as CalendarTask)
 
+        // '일'에서 다른 담당자로 옮겨질 때 제자리로 이동
+        if (
+            !_.isEmpty(arg.newResource) ||
+            dayjs(dayjs(arg.event.startStr).format('YYYY-MM-DD') + ' ' + this.operatingTime.start).isAfter(
+                dayjs(arg.event.start),
+                'minute'
+            ) ||
+            dayjs(dayjs(arg.event.startStr).format('YYYY-MM-DD') + ' ' + this.operatingTime.end).isBefore(
+                dayjs(arg.event.end),
+                'minute'
+            )
+        ) {
+            if (calTask.type_code == 'calendar_task_type_class' && !_.isEmpty(calTask.class)) {
+                calTask = _.assign(calTask, {
+                    start: dayjs(calTask.start).format('YYYY-MM-DD HH:mm:ss'),
+                    end: dayjs(calTask.end).format('YYYY-MM-DD HH:mm:ss'),
+                    class: {
+                        ...calTask.class,
+                    },
+                })
+            } else {
+                calTask = _.assign(calTask, {
+                    start: dayjs(calTask.start).format('YYYY-MM-DD HH:mm:ss'),
+                    end: dayjs(calTask.end).format('YYYY-MM-DD HH:mm:ss'),
+                })
+            }
+            this.nxStore.dispatch(ScheduleActions.updatetask({ task: calTask }))
+            return
+        }
+
         if (arg.event.extendedProps['originItem'].type_code == 'calendar_task_type_normal') {
             const reqBody: UpdateCalendarTaskReqBody = {
                 start_date: dayjs(arg.event.startStr).format('YYYY-MM-DD'),
@@ -957,7 +996,6 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
                     reqBody: reqBody,
                     mode: 'one',
                     cb: () => {
-                        // this.getTaskList(this.selectedDateViewType)
                         this.nxStore.dispatch(
                             showToast({
                                 text: `'${this.wordService.ellipsis(calTask.name, 8)}' 기타 일정이 수정 되었습니다.`,
@@ -1019,7 +1057,6 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
                     reqBody: reqBody,
                     mode: 'one',
                     cb: () => {
-                        // this.getTaskList(this.selectedDateViewType)
                         this.nxStore.dispatch(
                             showToast({
                                 text: `'${this.wordService.ellipsis(calTask.name, 8)}' 수업 일정이 수정 되었습니다.`,
@@ -1030,10 +1067,35 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
             )
         }
 
-        calTask = _.assign(calTask, {
-            start: dayjs(arg.event.startStr).format('YYYY-MM-DD HH:mm:ss'),
-            end: dayjs(arg.event.endStr).format('YYYY-MM-DD HH:mm:ss'),
-        })
+        if (calTask.type_code == 'calendar_task_type_class' && !_.isEmpty(calTask.class)) {
+            calTask = _.assign(calTask, {
+                start: dayjs(arg.event.startStr).format('YYYY-MM-DD HH:mm:ss'),
+                end: dayjs(arg.event.endStr).format('YYYY-MM-DD HH:mm:ss'),
+                class: {
+                    ...calTask.class,
+                    start_booking: dayjs(dayjs(arg.event.startStr).format('YYYY-MM-DD HH:mm:ss'))
+                        .subtract(calTask.class.start_booking_until, 'day')
+                        .format('YYYY-MM-DD HH:mm:ss'),
+                    end_booking: dayjs(dayjs(arg.event.startStr).format('YYYY-MM-DD HH:mm:ss'))
+                        .subtract(calTask.class.end_booking_before, 'hour')
+                        .format('YYYY-MM-DD HH:mm:ss'),
+                    cancel_booking: dayjs(dayjs(arg.event.startStr).format('YYYY-MM-DD HH:mm:ss'))
+                        .subtract(calTask.class.cancel_booking_before, 'hour')
+                        .format('YYYY-MM-DD HH:mm:ss'),
+                },
+            })
+        } else {
+            calTask = _.assign(calTask, {
+                start: dayjs(arg.event.startStr).format('YYYY-MM-DD HH:mm:ss'),
+                end: dayjs(arg.event.endStr).format('YYYY-MM-DD HH:mm:ss'),
+            })
+        }
+
+        // calTask = _.assign(calTask, {
+        //     start: dayjs(arg.event.startStr).format('YYYY-MM-DD HH:mm:ss'),
+        //     end: dayjs(arg.event.endStr).format('YYYY-MM-DD HH:mm:ss'),
+        // })
+
         this.nxStore.dispatch(ScheduleActions.updatetask({ task: calTask }))
     }
 
@@ -1072,6 +1134,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
                                 style="display: flex; align-items: center; justify-content: center;
                                     border-radius: 8px; width:21px; height:21px; cursor:pointer;
                                     background-color:var(--font-color); margin-right: 7.5px; z-index:10;"
+                                (rwClickOutside)="hideScheduleDropdown()"
                             >
                                 <img
                                     src="assets/icons/etc/plus-white.svg"
@@ -1086,24 +1149,20 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
                     )[0]
                     addSchButton_el.onclick = (e) => {
                         console.log('add schButton event : ', e, '-- arg :', arg)
-                        if (this.doShowScheduleDropdown == false) {
-                            const bt_pos = addSchButton_el.getBoundingClientRect()
-                            this.drawerDate = {
-                                startDate: dayjs(
-                                    dayjs(`${dayjs(arg.date).format('YYYY-MM-DD')} ${this.operatingTime.start}`).format(
-                                        'YYYY-MM-DD HH:mm:ss'
-                                    )
-                                ).toDate(),
-                                endDate: null,
-                            }
-                            const posX = window.innerWidth < 105 + bt_pos.right ? bt_pos.left - 84 : bt_pos.left
-                            const posY = window.innerHeight < 85 + bt_pos.bottom ? bt_pos.top - 81 : bt_pos.bottom + 5
-                            this.renderer.setStyle(this.schdule_dropdown_el.nativeElement, 'left', `${posX}px`)
-                            this.renderer.setStyle(this.schdule_dropdown_el.nativeElement, 'top', `${posY}px`)
-                            this.showScheduleDropdown()
-                        } else {
-                            this.hideScheduleDropdown()
+                        const bt_pos = addSchButton_el.getBoundingClientRect()
+                        this.drawerDate = {
+                            startDate: dayjs(
+                                dayjs(`${dayjs(arg.date).format('YYYY-MM-DD')} ${this.operatingTime.start}`).format(
+                                    'YYYY-MM-DD HH:mm:ss'
+                                )
+                            ).toDate(),
+                            endDate: null,
                         }
+                        const posX = window.innerWidth < 105 + bt_pos.right ? bt_pos.left - 84 : bt_pos.left
+                        const posY = window.innerHeight < 85 + bt_pos.bottom ? bt_pos.top - 81 : bt_pos.bottom + 5
+                        this.renderer.setStyle(this.schdule_dropdown_el.nativeElement, 'left', `${posX}px`)
+                        this.renderer.setStyle(this.schdule_dropdown_el.nativeElement, 'top', `${posY}px`)
+                        this.showScheduleDropdown()
                     }
                     addSchButton_el.onmouseenter = (e) => {
                         this.dayCellLeave = false
@@ -1117,7 +1176,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
                 const popover_el: HTMLElement = arg.el
                 const popoverTitle_el: HTMLElement = arg.el.getElementsByClassName('fc-popover-title')[0]
                 const popoverBody_el: HTMLElement = arg.el.getElementsByClassName('fc-popover-body')[0]
-                const popoverClose_el: HTMLElement = arg.el.getElementsByClassName('fc-popover-close')[0]
+                const popoverHeader_el: HTMLElement = arg.el.getElementsByClassName('fc-popover-header')[0]
 
                 arg.el.style.borderColor = 'transparent'
                 arg.el.style.borderRadius = '0px'
@@ -1127,11 +1186,12 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
                 popoverBody_el.classList.add('thin-scroll-y-overlay2')
                 popoverBody_el.style.maxHeight = '180px'
 
-                popoverTitle_el.innerHTML = `${dayjs(arg.date).format('DD')}`
-                popoverTitle_el.classList.add('rw-typo-subtext0')
-                popoverTitle_el.style.fontWeight = '500'
-                popoverTitle_el.style.fontSize = '1.2rem'
-                popoverTitle_el.style.padding = '4px 0px 0px 4px'
+                popoverTitle_el.style.visibility = 'hidden'
+                popoverTitle_el.outerHTML = `${dayjs(arg.date).format('D')}`
+                popoverHeader_el.classList.add('rw-typo-subtext0')
+                popoverHeader_el.style.fontWeight = '500'
+                popoverHeader_el.style.fontSize = '1.2rem'
+                popoverHeader_el.style.padding = '3px 4px 3px 9px'
             }
         }
     }
