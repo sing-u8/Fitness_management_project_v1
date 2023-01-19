@@ -87,7 +87,7 @@ export class DbDatepickerComponent implements OnInit, OnChanges, AfterViewChecke
         } else if (this.mode == 'multiline' || this.mode == 'multiline-component') {
             this.multiLineSelectDate({ date: this.data?.startDate })
             this.multiLineSelectDate({ date: this.data?.endDate })
-            this.currentDate = moment()
+            this.currentDate = this.data?.startDate ? moment(this.data?.startDate) : moment()
         } else if (this.mode == 'reg-ml') {
             if (this.option == 'onlyStart' || this.option == 'looseOnlyStart') {
                 this.regMLSelectDate({ date: this.data.startDate })
@@ -95,7 +95,7 @@ export class DbDatepickerComponent implements OnInit, OnChanges, AfterViewChecke
                 this.regMLSelectDate({ date: this.data.startDate })
                 this.regMLSelectDate({ date: this.data.endDate })
             }
-            this.currentDate = moment()
+            this.currentDate = this.data?.startDate ? moment(this.data?.startDate) : moment()
         } else if (this.mode == 'holding') {
             if (this.option == 'holdStart') {
                 this.holdingMLSelectDate({ date: this.data.startDate })
@@ -103,7 +103,7 @@ export class DbDatepickerComponent implements OnInit, OnChanges, AfterViewChecke
                 this.holdingMLSelectDate({ date: this.data.startDate })
                 this.holdingMLSelectDate({ date: this.data.endDate })
             }
-            this.currentDate = moment()
+            this.currentDate = this.data?.startDate ? moment(this.data?.startDate) : moment()
         } else {
             this.currentDate = moment()
         }

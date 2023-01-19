@@ -83,11 +83,10 @@ export class DatepickerComponent implements OnInit, OnChanges, AfterViewChecked,
             this.currentDate = moment(this.data.date)
         } else if (this.mode == 'week' && this.data.startDate) {
             this.currentDate = moment(this.data.startDate)
-        } else if (false) {
         } else if ((this.mode == 'multiline' || this.mode == 'multiline-component') && this.data.startDate) {
             this.multiLineSelectDate({ date: this.data?.startDate })
             this.multiLineSelectDate({ date: this.data?.endDate })
-            this.currentDate = moment()
+            this.currentDate = this.data?.startDate ? moment(this.data?.startDate) : moment()
         } else if (this.mode == 'reg-ml') {
             if (this.option == 'onlyStart' || this.option == 'looseOnlyStart') {
                 this.regMLSelectDate({ date: this.data.startDate })
@@ -95,7 +94,7 @@ export class DatepickerComponent implements OnInit, OnChanges, AfterViewChecked,
                 this.regMLSelectDate({ date: this.data.startDate })
                 this.regMLSelectDate({ date: this.data.endDate })
             }
-            this.currentDate = moment()
+            this.currentDate = this.data?.startDate ? moment(this.data?.startDate) : moment()
         } else {
             this.currentDate = moment()
         }
