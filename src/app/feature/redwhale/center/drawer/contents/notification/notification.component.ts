@@ -23,6 +23,6 @@ export class NotificationComponent implements OnInit {
     }
 
     closeDrawer() {
-        this.nxStore.dispatch(closeDrawer())
+        this.nxStore.dispatch(closeDrawer({ tabName: 'none' }))
     }
 }

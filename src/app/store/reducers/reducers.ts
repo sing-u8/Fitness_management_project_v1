@@ -74,8 +74,8 @@ export const appReducer = createImmerReducer(
         state.drawer.tabName = action.tabName
         return state
     }),
-    on(closeDrawer, (state): AppStateInterface => {
-        state.drawer.tabName = 'none'
+    on(closeDrawer, (state, { tabName }): AppStateInterface => {
+        state.drawer.tabName = tabName
         return state
     }),
     // ------------------------------------------------------------------------------------//

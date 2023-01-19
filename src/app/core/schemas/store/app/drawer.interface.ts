@@ -10,4 +10,7 @@ export type DrawerTypes =
     | 'lesson-schedule'
     | 'modify-general-schedule'
     | 'modify-lesson-schedule'
+    | 'schedule-none'
     | 'none'
+
+export type NoneType = 'none' | 'schedule-none'

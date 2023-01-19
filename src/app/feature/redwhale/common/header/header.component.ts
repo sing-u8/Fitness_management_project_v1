@@ -168,7 +168,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
             drawer = _drawer
         })
         if (drawer.tabName == tabName) {
-            this.nxStore.dispatch(closeDrawer())
+            this.nxStore.dispatch(closeDrawer({ tabName: 'none' }))
         } else {
             this.nxStore.dispatch(openDrawer({ tabName: tabName }))
         }

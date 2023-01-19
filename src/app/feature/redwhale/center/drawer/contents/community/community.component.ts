@@ -719,6 +719,6 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
 
     // drawer
     closeDrawer() {
-        this.nxStore.dispatch(closeDrawer())
+        this.nxStore.dispatch(closeDrawer({ tabName: 'none' }))
     }
 }

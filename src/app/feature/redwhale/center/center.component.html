@@ -1,9 +1,14 @@
 <div
     class="redwhale-center full-absolute user-select-none"
-    [ngClass]="((drawer$ | async).tabName == 'general-schedule'
-            || (drawer$ | async).tabName == 'lesson-schedule'
-            || (drawer$ | async).tabName == 'modify-general-schedule'
-            || (drawer$ | async).tabName == 'modify-lesson-schedule') ? 'thin-scroll-x-overlay2' : ''"
+    [ngClass]="
+        (drawer$ | async).tabName == 'general-schedule' ||
+        (drawer$ | async).tabName == 'lesson-schedule' ||
+        (drawer$ | async).tabName == 'modify-general-schedule' ||
+        (drawer$ | async).tabName == 'modify-lesson-schedule' ||
+        (drawer$ | async).tabName == 'schedule-none'
+            ? 'thin-scroll-x-overlay2'
+            : ''
+    "
 >
     <div class="d-flex flex-column h-100">
         <rw-header></rw-header>
@@ -18,10 +23,13 @@
             <div
                 class="right-side"
                 [class.open-drawer]="(drawer$ | async).tabName != 'none'"
-                [class.schedule-drawer]="(drawer$ | async).tabName == 'general-schedule'
-                                    || (drawer$ | async).tabName == 'lesson-schedule'
-                                    || (drawer$ | async).tabName == 'modify-general-schedule'
-                                    || (drawer$ | async).tabName == 'modify-lesson-schedule'"
+                [class.schedule-drawer]="
+                    (drawer$ | async).tabName == 'general-schedule' ||
+                    (drawer$ | async).tabName == 'lesson-schedule' ||
+                    (drawer$ | async).tabName == 'modify-general-schedule' ||
+                    (drawer$ | async).tabName == 'modify-lesson-schedule'
+                "
+                [class.schedule-close-drawer]="(drawer$ | async).tabName == 'schedule-none'"
             >
                 <drawer></drawer>
             </div>

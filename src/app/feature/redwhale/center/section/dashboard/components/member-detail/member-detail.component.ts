@@ -142,7 +142,7 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
                     chatRoom.chat_room_users[0].id == this.curUserData.user.id &&
                     drawer.tabName == 'community'
                 ) {
-                    this.nxStore.dispatch(closeDrawer())
+                    this.nxStore.dispatch(closeDrawer({ tabName: 'none' }))
                 } else {
                     this.communityHelperService.createOneToOneChatRoomByDashboard(
                         'drawer',

@@ -168,7 +168,7 @@ export class ModifyLessonScheduleComponent implements OnInit, OnDestroy, AfterVi
     ngAfterViewInit(): void {}
 
     closeDrawer() {
-        this.nxStore.dispatch(closeDrawer())
+        this.nxStore.dispatch(closeDrawer({ tabName: 'schedule-none' }))
     }
 
     onTimeClick(time: { key: string; name: string }) {

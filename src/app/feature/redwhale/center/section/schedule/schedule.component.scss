@@ -11,7 +11,7 @@
 article.schedule {
     height: 100%;
     // padding: 25px 32px 35px 32px;
-    padding: 35px ;
+    padding: 35px;
     min-width: 1220px;
 
     @media (min-width: 1440px) {
@@ -58,20 +58,19 @@ article.schedule {
         }
     }
 
-
     .l-schedule-body {
         display: flex;
         height: calc(100vh - 200px);
         width: 100%;
         position: relative;
 
-        .schedule-body--title-margin{
+        .schedule-body--title-margin {
             margin-bottom: 15px;
         }
         .schedule-body--title-margin2 {
             margin-bottom: 9px;
         }
-        .schedule-body--option-margin{
+        .schedule-body--option-margin {
             margin-top: 6px;
         }
 
@@ -151,7 +150,7 @@ article.schedule {
                             height: 29px;
                             border-radius: 5px;
 
-                            &>img {
+                            & > img {
                                 width: 20px;
                                 height: 20px;
                             }
@@ -198,7 +197,6 @@ article.schedule {
                         }
                     }
                 }
-
             }
 
             section.schedule-body__right-body {
@@ -222,15 +220,9 @@ article.schedule {
                     overflow: hidden;
                 }
             }
-
-
         }
-
     }
-
-
 }
-
 
 // ----------------------------------------- ohters  --------------------------------------
 .full-width {
@@ -337,13 +329,8 @@ article.schedule {
     }
 }
 
-
-
-
-
 //---------------------------------------------- calendar styles -----------------------------------------------------------------------------------------
 :host ::ng-deep .fc {
-
     .fc-event-title {
         position: initial !important;
     }
@@ -374,7 +361,7 @@ article.schedule {
     .fc-timegrid-slots {
         tbody {
             tr {
-                &:first-child{
+                &:first-child {
                     td:first-child {
                         div {
                             display: none;
@@ -408,10 +395,9 @@ article.schedule {
         border: 1px solid var(--lightergrey) !important;
     }
 
-
-    table[role=presentation] {
+    table[role='presentation'] {
         colgroup {
-            border-right: 1px solid var(--lightergrey)!important;
+            border-right: 1px solid var(--lightergrey) !important;
         }
     }
 
@@ -454,7 +440,6 @@ article.schedule {
             border-right: 1px solid var(--lightergrey);
         }
     }
-
 
     .fc-timegrid-slot-label {
         height: 3rem;
@@ -547,9 +532,8 @@ article.schedule {
     }
 
     .fc-timegrid-body {
-
-        .fc-timegrid-slots>table,
-        .fc-timegrid-cols>table {
+        .fc-timegrid-slots > table,
+        .fc-timegrid-cols > table {
             width: 100% !important;
         }
     }
@@ -574,7 +558,7 @@ article.schedule {
             }
             border: 1px dashed var(--lightergrey) !important;
             td {
-                border: 1px dashed var(--lightergrey)!important;
+                border: 1px dashed var(--lightergrey) !important;
                 border-left: 1px dashed var(--lightergrey) !important;
             }
             &:nth-child(even) {
@@ -630,7 +614,7 @@ article.schedule {
     .fc-timegrid-slots {
         tbody {
             tr {
-                &:first-child{
+                &:first-child {
                     td:first-child {
                         div {
                             display: none;
@@ -646,7 +630,7 @@ article.schedule {
                         div.fc-timegrid-slot-label-cushion {
                             position: absolute;
                             top: -10.5px;
-	                        left: 0;
+                            left: 0;
                         }
                     }
                 }
@@ -660,12 +644,11 @@ article.schedule {
         border-right: 1px dashed var(--lightergrey) !important;
     }
 
-    table[role=presentation] {
+    table[role='presentation'] {
         colgroup {
-            border-right: 1px solid var(--lightergrey)!important;
+            border-right: 1px solid var(--lightergrey) !important;
         }
     }
-
 
     thead {
         table.fc-col-header {
@@ -762,9 +745,8 @@ article.schedule {
     }
 
     .fc-timegrid-body {
-
-        .fc-timegrid-slots>table,
-        .fc-timegrid-cols>table {
+        .fc-timegrid-slots > table,
+        .fc-timegrid-cols > table {
             width: 100% !important;
         }
     }
@@ -809,7 +791,7 @@ article.schedule {
             }
             border: 1px dashed var(--lightergrey) !important;
             td {
-                border: 1px dashed var(--lightergrey)!important;
+                border: 1px dashed var(--lightergrey) !important;
                 border-left: 1px dashed var(--lightergrey) !important;
             }
             &:nth-child(even) {
@@ -871,7 +853,7 @@ article.schedule {
         }
 
         tbody {
-            tr.fc-scrollgrid-section>td {
+            tr.fc-scrollgrid-section > td {
                 border-right: 1px dashed transparent !important;
                 border-bottom: 1px solid transparent !important;
             }
@@ -1010,24 +992,24 @@ article.schedule {
         width: 100% !important;
     }
 
-    td[role=gridcell] {
+    td[role='gridcell'] {
         border: 1px dashed var(--lightergrey) !important;
     }
 
     tr.fc-scrollgrid-section {
-        th[role=presentation] {
+        th[role='presentation'] {
             border-right: 1px solid transparent !important;
         }
     }
 
     table.fc-col-header {
-        thead[role=presentation] {
-            tr[role=row] {
-                th[role=columnheader] {
+        thead[role='presentation'] {
+            tr[role='row'] {
+                th[role='columnheader'] {
                     border: none !important;
                     border-right: 1px dashed var(--lightergrey) !important;
                     border-bottom: 1px solid var(--lightergrey, #ddd) !important;
-                    &:last-of-type{
+                    &:last-of-type {
                         border-right: 1px solid transparent !important;
                     }
                 }

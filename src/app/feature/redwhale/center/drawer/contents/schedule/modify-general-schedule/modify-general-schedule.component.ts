@@ -246,7 +246,7 @@ export class ModifyGeneralScheduleComponent implements OnInit, AfterViewInit, On
     }
 
     closeDrawer() {
-        this.nxStore.dispatch(closeDrawer())
+        this.nxStore.dispatch(closeDrawer({ tabName: 'schedule-none' }))
     }
 
     initStaffList(instructorList: ScheduleReducer.InstructorType[], event: CalendarTask) {

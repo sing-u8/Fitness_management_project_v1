@@ -9,7 +9,6 @@ import dayjs from 'dayjs'
 import { CalendarOptions, createElement, FullCalendarComponent } from '@fullcalendar/angular'
 import { EventClickArg, EventDropArg, EventHoveringArg } from '@fullcalendar/common'
 import koLocale from '@fullcalendar/core/locales/ko'
-import enLocale from '@fullcalendar/core/locales/en-au'
 
 // services
 import { StorageService } from '@services/storage.service'
@@ -42,6 +41,7 @@ import * as FromSchedule from '@centerStore/reducers/sec.schedule.reducer'
 import * as ScheduleSelector from '@centerStore/selectors/sec.schedule.selector'
 import { calendarOptions } from '@centerStore/selectors/sec.schedule.selector'
 import * as ScheduleActions from '@centerStore/actions/sec.schedule.actions'
+import { drawerSelector } from '@appStore/selectors'
 
 // temp
 export type GymOperatingTime = { start: string; end: string }
@@ -238,6 +238,16 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
     }
     ngOnDestroy(): void {
         // this.closeDrawer()
+        this.nxStore.pipe(select(drawerSelector), take(1)).subscribe((drawer) => {
+            if (
+                drawer.tabName == 'general-schedule' ||
+                drawer.tabName == 'lesson-schedule' ||
+                drawer.tabName == 'modify-general-schedule' ||
+                drawer.tabName == 'modify-lesson-schedule'
+            ) {
+                this.nxStore.dispatch(closeDrawer({ tabName: 'schedule-none' }))
+            }
+        })
         this.unsubscriber$.next()
         this.unsubscriber$.complete()
         this.nxStore.dispatch(ScheduleActions.setCalendarOptions({ calendarOptions: this.fullCalendar.options }))
@@ -639,7 +649,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
         // this.fullCalendar.getApi().updateSize()
     }
     closeDrawer() {
-        this.nxStore.dispatch(closeDrawer())
+        this.nxStore.dispatch(closeDrawer({ tabName: 'schedule-none' }))
         const calApi = this.fullCalendar.getApi()
         if (calApi?.updateSize) {
             calApi.updateSize()

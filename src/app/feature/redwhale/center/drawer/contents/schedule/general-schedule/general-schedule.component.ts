@@ -244,7 +244,7 @@ export class GeneralScheduleComponent implements OnInit, AfterViewInit, OnDestro
     }
 
     closeDrawer() {
-        this.nxStore.dispatch(closeDrawer())
+        this.nxStore.dispatch(closeDrawer({ tabName: 'schedule-none' }))
     }
 
     initStaffList(instructorList: ScheduleReducer.InstructorType[], schedulingInstructors: CenterUser[]) {

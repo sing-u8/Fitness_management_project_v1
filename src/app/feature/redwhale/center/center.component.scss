@@ -11,7 +11,7 @@
     }
 
     .right-side {
-        width: 0px;
+        width: 0;
         background-color: var(--white);
         transition: width 0.4s;
         -moz-transition: width 0.4s;
@@ -29,9 +29,16 @@
 
         &.schedule-drawer {
             position: absolute;
-            right: 0px;
+            right: 0;
             height: calc(100% - 55px);
             z-index: 100;
+        }
+        &.schedule-close-drawer {
+            position: absolute;
+            right: 0;
+            height: calc(100% - 55px);
+            z-index: 100;
+            width: 0;
         }
     }
 }

@@ -1,5 +1,4 @@
 <div class="drawer">
-
     <dr-member *ngIf="(drawer$ | async)?.tabName == 'member'"></dr-member>
     <dr-community *ngIf="(drawer$ | async)?.tabName == 'community'"></dr-community>
     <dr-notification *ngIf="(drawer$ | async)?.tabName == 'notification'"></dr-notification>
@@ -7,5 +6,4 @@
     <lesson-schedule *ngIf="(drawer$ | async)?.tabName == 'lesson-schedule'"></lesson-schedule>
     <modify-general-schedule *ngIf="(drawer$ | async)?.tabName == 'modify-general-schedule'"></modify-general-schedule>
     <modify-lesson-schedule *ngIf="(drawer$ | async)?.tabName == 'modify-lesson-schedule'"></modify-lesson-schedule>
-
 </div>

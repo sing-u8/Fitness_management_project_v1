@@ -144,7 +144,7 @@ export class MemberComponent implements OnInit, OnDestroy {
     }
 
     closeDrawer() {
-        this.nxStore.dispatch(closeDrawer())
+        this.nxStore.dispatch(closeDrawer({ tabName: 'none' }))
     }
 
     routeToDashboard() {
