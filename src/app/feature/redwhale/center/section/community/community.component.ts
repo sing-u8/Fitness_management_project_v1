@@ -99,6 +99,7 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
         })
 
         this.mainIsJoinRoomLoading$.pipe(takeUntil(this.unsubscribe$)).subscribe((isRoomLoading) => {
+            console.log('isRoomLoading -- ', isRoomLoading)
             if (isRoomLoading == 'done') {
                 this.spinner.hide('main_chatting_room_spinner')
                 this.chat_textarea_el.nativeElement.focus()
@@ -136,6 +137,7 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
                     )
                     this.nxStore.dispatch(CommunityActions.setLoading({ spot: 'main', loading: 'done' }))
                 } else if (curChatLoaded.main.isLoading == 'idle') {
+                    console.log("curChatLoaded.main.isLoading == 'idle' ")
                     this.nxStore.dispatch(
                         CommunityActions.startGetChatRooms({
                             centerId: this.center.id,
@@ -532,7 +534,7 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
     scrolled(event: any): void {
         this.isNearBottom = this.isScrollNearBottom()
 
-        if (this.isScrollNearTop() ) {
+        if (this.isScrollNearTop()) {
             console.log(
                 'call start get more chat room msgs',
                 this.isScrollNearTop() && !this.chatRoomMsgLoading_,
