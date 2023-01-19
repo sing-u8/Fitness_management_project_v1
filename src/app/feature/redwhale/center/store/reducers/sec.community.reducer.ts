@@ -1054,7 +1054,7 @@ function concatChatRoomMsg(curMsgs: Array<ChatRoomMessage>, prevMsgs: Array<Chat
         curMsgs.push(dateMsg)
     }
     return _.uniqBy(_.concat(curMsgs, prevMsgs), 'id')
-} ㅎ
+}
 function checkDayDiffBtMsgAndMsg(currentMsg: ChatRoomMessage, prevMsg: ChatRoomMessage) {
     return (
         _.isEmpty(prevMsg) ||
