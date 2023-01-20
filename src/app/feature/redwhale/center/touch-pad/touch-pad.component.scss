@@ -798,10 +798,10 @@ section.touch-pad {
                     p.title {
                         font-weight: 400;
                         font-size: 3.2rem;
-                        line-height: 43px;
-                        letter-spacing: -0.596792px;
+                        line-height: 50px;
+                        letter-spacing: -.692326px;
                         color: var(--white);
-                        margin-bottom: 3px;
+                        margin-bottom: 0;
 
                         u {
                             font-weight: 700;
@@ -922,7 +922,7 @@ section.touch-pad {
         .center-notice-divider {
             width: 100%;
             height: 1px;
-            margin: 31px 0 34px;
+            margin: 34px 0 34px;
         }
         .center-notice-textarea {
             width: 100%;

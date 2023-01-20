@@ -14,7 +14,7 @@ export class SeeDetailDirective implements AfterViewInit, OnDestroy {
     @Output() onSeeMoreClick = new EventEmitter<any>()
 
     public unitHeight = 0
-    
+
     public seeMoreLimitNumber = 20
 
     public resizeUnListener: () => void
@@ -47,33 +47,37 @@ export class SeeDetailDirective implements AfterViewInit, OnDestroy {
         this.setUnitHeight()
         this._seeMoreCount = 0
         const idx = _.findIndex(this.el.nativeElement.children, (v: any, i) => {
-            console.log(
-                'set see more click button findIndex -- ',
-                i,
-                '--',
-                v.offsetHeight > this.unitHeight,
-                v.offsetHeight,
-                ' - ',
-                this.unitHeight,
-                ' - ',
-                this._seeMoreCount >= this.seeMoreCount,
-                this._seeMoreCount,
-                this.seeMoreCount
-            )
             this._seeMoreCount += _.round(v.offsetHeight / this.unitHeight)
+            console.log('this._seeMoreCount -- ', this._seeMoreCount)
             return this._seeMoreCount >= this.seeMoreCount
         })
-        console.log('setSeeMoreClickButton -- idx : ', idx)
+        let h = 0
+        let heightIdx = _.findIndex(this.el.nativeElement.children, (v: any, i) => {
+            h += v.offsetHeight
+            return h >= this.el.nativeElement.offsetHeight
+        })
+
+        let _idx
         if (idx != -1) {
-            this.el.nativeElement.children[idx].innerHTML =
-                this.el.nativeElement.children[idx].innerHTML.length < this.seeMoreLimitNumber
-                    ? this.el.nativeElement.children[idx].innerHTML + '...'
-                    : _.truncate(this.el.nativeElement.children[idx].innerHTML, {
+            heightIdx = heightIdx == -1 ? 0 : heightIdx
+            _idx = idx > heightIdx ? heightIdx : idx
+        } else {
+            _idx = heightIdx
+        }
+        if (_idx != -1) {
+            this.el.nativeElement.children[_idx].innerHTML =
+                this.el.nativeElement.children[_idx].innerHTML.length < this.seeMoreLimitNumber
+                    ? this.el.nativeElement.children[_idx].innerHTML + '...'
+                    : _.truncate(this.el.nativeElement.children[_idx].innerHTML, {
                           length: this.seeMoreLimitNumber,
                           omission: '...',
                       })
-            
-            this.renderer.setStyle(this.el.nativeElement, 'height', `${(this._seeMoreCount >= 3 && idx > 0 ? 3 : idx + 1) * 32 + (idx != 0 ? 6 : 0)}px`)
+
+            this.renderer.setStyle(
+                this.el.nativeElement,
+                'height',
+                `${(this._seeMoreCount >= 3 && _idx > 0 ? 3 : _idx + 1) * 32 + (_idx != 0 ? 6 : 0)}px`
+            )
 
             const bt = document.createElement('span')
             bt.innerHTML = '더보기'
@@ -81,13 +85,13 @@ export class SeeDetailDirective implements AfterViewInit, OnDestroy {
             bt.style.textUnderlineOffset = '6px'
             bt.style.textDecoration = 'underline'
             bt.style.textDecorationThickness = '3px'
-            bt.style.marginLeft = '5px'
+            bt.style.marginLeft = '10px'
             bt.style.cursor = 'pointer'
 
             bt.addEventListener('click', (e) => {
                 this.onSeeMoreClick.emit()
             })
-            this.el.nativeElement.children[idx].appendChild(bt)
+            this.el.nativeElement.children[_idx].appendChild(bt)
         }
     }
     setUnitHeight() {
