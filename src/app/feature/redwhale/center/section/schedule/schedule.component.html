@@ -34,6 +34,7 @@
                         && selectedDateViewType !='dayGridMonth'"
                     mode="date"
                     [isDivider]="true"
+                    [availableDays]="operatingDayOfWeek.value"
                     [data]="datePickerData"
                     [height]="'268px'"
                     (dataChange)="onDatePickerClick($event)"

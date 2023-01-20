@@ -34,7 +34,8 @@
             *ngFor="let weekCol of weekRow; let j = index"
             [style.color]="weekCol.color"
             [class.selected]="weekCol.selected"
-            (click)="selectDate(i, j)"
+            [class.not-allowed]="!availableDays.includes(j)"
+            (click)="availableDays.includes(j) && selectDate(i, j)"
         >
             {{ weekCol.day }}
         </div>

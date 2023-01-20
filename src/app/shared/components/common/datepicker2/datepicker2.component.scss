@@ -89,7 +89,6 @@
     .week-row {
         .week-col {
             cursor: pointer;
-
             &:hover {
                 background-color: var(--background-color);
             }
@@ -98,9 +97,15 @@
         .selected {
             color: var(--white) !important;
             background-color: var(--red);
-
             &:hover {
                 background-color: var(--red);
+            }
+        }
+
+        .not-allowed {
+            cursor: not-allowed;
+            &:hover {
+                background-color: transparent;
             }
         }
     }
@@ -147,7 +152,6 @@
         // }
     }
 }
-
 
 .isShadow {
     box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16) !important;

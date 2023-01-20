@@ -29,6 +29,7 @@ export class Datepicker2Component implements OnInit, OnChanges, AfterViewChecked
     @Input() isDivider = false
     @Input() isShadow = true
     @Input() mode: 'date' | 'week' | 'multi' | 'modify-range'
+    @Input() availableDays: number[] = [0, 1, 2, 3, 4, 5, 6]
 
     @Input() data: any
     @Input() shadowOn: boolean
@@ -244,6 +245,7 @@ export class Datepicker2Component implements OnInit, OnChanges, AfterViewChecked
     }
 
     selectDate(i, j) {
+        console.log('datepicker2 select date : ', i, j)
         if (this.selectedDate) {
             this.weekRows[this.selectedDateIndex['i']][this.selectedDateIndex['j']]['selected'] = false
         }
