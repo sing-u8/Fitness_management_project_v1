@@ -12,6 +12,7 @@ export interface ChatRoom {
     center_name: string
     chat_room_user_count: number
     chat_room_users: Array<ChatRoomUser>
+    chat_room_user_names: string
     last_message: string
     last_message_created_at: string
     unread_message_count: number

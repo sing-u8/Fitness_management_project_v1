@@ -247,4 +247,5 @@ export interface SendMessageReqBody {
     mimetype?: string
     contentType?: string
     size?: number
+    uuid?: string
 }

@@ -101,7 +101,7 @@ export class CommunityComponent implements OnInit, OnDestroy, AfterViewInit {
         this.mainIsJoinRoomLoading$.pipe(takeUntil(this.unsubscribe$)).subscribe((isRoomLoading) => {
             if (isRoomLoading == 'done') {
                 this.spinner.hide('main_chatting_room_spinner')
-                this.chat_textarea_el.nativeElement.focus()
+                if (!_.isEmpty(this.chat_textarea_el)) this.chat_textarea_el.nativeElement.focus()
             } else {
                 this.spinner.show('main_chatting_room_spinner')
             }

@@ -342,9 +342,7 @@ export const communityReducer = createImmerReducer(
 
     on(CommunitydActions.startSendMessageSent, (state, { spot, chatRoomMessage }) => {
         const addMsgToMain = () => {
-            if (
-                checkDayDiffBtMsgAndMsg(chatRoomMessage, state.mainChatRoomMsgs[0])
-            ) {
+            if (checkDayDiffBtMsgAndMsg(chatRoomMessage, state.mainChatRoomMsgs[0])) {
                 state.mainChatRoomMsgs.unshift(makeDateMessage(chatRoomMessage.created_at))
             }
             state.mainChatRoomMsgs.unshift(chatRoomMessage)
@@ -359,9 +357,7 @@ export const communityReducer = createImmerReducer(
             }
         }
         const addMsgToDrawer = () => {
-            if (
-                checkDayDiffBtMsgAndMsg(chatRoomMessage, state.drawerChatRoomMsgs[0])
-            ) {
+            if (checkDayDiffBtMsgAndMsg(chatRoomMessage, state.drawerChatRoomMsgs[0])) {
                 state.drawerChatRoomMsgs.unshift(makeDateMessage(chatRoomMessage.created_at))
             }
             state.drawerChatRoomMsgs.unshift(chatRoomMessage)
@@ -415,9 +411,7 @@ export const communityReducer = createImmerReducer(
     }),
     on(CommunitydActions.finishSendMessage, (state, { spot, chatRoomMessage }) => {
         const addMsgToMain = () => {
-            if (
-                checkDayDiffBtMsgAndMsg(chatRoomMessage, state.mainChatRoomMsgs[0])
-            ) {
+            if (checkDayDiffBtMsgAndMsg(chatRoomMessage, state.mainChatRoomMsgs[0])) {
                 state.mainChatRoomMsgs.unshift(makeDateMessage(chatRoomMessage.created_at))
             }
             state.mainChatRoomMsgs.unshift(chatRoomMessage)
@@ -432,9 +426,7 @@ export const communityReducer = createImmerReducer(
             }
         }
         const addMsgToDrawer = () => {
-            if (
-                checkDayDiffBtMsgAndMsg(chatRoomMessage, state.drawerChatRoomMsgs[0])
-            ) {
+            if (checkDayDiffBtMsgAndMsg(chatRoomMessage, state.drawerChatRoomMsgs[0])) {
                 state.drawerChatRoomMsgs.unshift(makeDateMessage(chatRoomMessage.created_at))
             }
             state.drawerChatRoomMsgs.unshift(chatRoomMessage)
@@ -1008,6 +1000,7 @@ function makeTempChatRoom(center: Center, curUser: CenterUser, members: Array<Ce
         center_id: center.id,
         center_name: center.name,
         chat_room_user_count: 1 + members.length,
+        chat_room_user_names: '',
         chat_room_users: [
             {
                 id: curUser.id,
