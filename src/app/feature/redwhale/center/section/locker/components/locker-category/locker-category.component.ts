@@ -13,6 +13,7 @@ import {
 import { FormBuilder, FormControl } from '@angular/forms'
 import { takeUntil } from 'rxjs/operators'
 import { Subject } from 'rxjs'
+import _ from 'lodash'
 
 import { StorageService } from '@services/storage.service'
 
@@ -79,7 +80,7 @@ export class LockerCategoryComponent implements OnInit, OnDestroy, AfterViewInit
         this.nxStore.pipe(select(LockerSelector.curLockerCateg), takeUntil(this.unsubscriber$)).subscribe((lc) => {
             this.curLockerCateg = lc
             if (lc != FromLocker.initialLockerState.curLockerCateg) {
-                this.isActivated = this.category.id == lc.id ? true : false
+                this.isActivated = this.category.id == lc.id
             }
         })
         this.nxStore.pipe(select(LockerSelector.LockerGlobalMode), takeUntil(this.unsubscriber$)).subscribe((lgm) => {
@@ -93,7 +94,10 @@ export class LockerCategoryComponent implements OnInit, OnDestroy, AfterViewInit
     }
 
     setCategActivate() {
-        if (this.category.id == this.curLockerCateg?.id) {
+
+        console.log('set categ activate : ',this.category.id == this.curLockerCateg?.id , this.menuClicked )
+        if (this.category.id == this.curLockerCateg?.id || this.menuClicked) {
+            this.menuClicked = false
             return
         }
 
@@ -106,6 +110,7 @@ export class LockerCategoryComponent implements OnInit, OnDestroy, AfterViewInit
         }
     }
 
+    public menuClicked = false
     toggleDropdown(e) {
         // pointerevent.clientX - pointerevent.layerX - dropdown.style.width + categorycontainer.offsetWidth
         // pointerevent.clientY - pointerevent.layerY + (categorycontainer.height + margin)
@@ -116,16 +121,16 @@ export class LockerCategoryComponent implements OnInit, OnDestroy, AfterViewInit
         this.renderer.setStyle(this.categoryDropDown.nativeElement, 'top', `${drY}px`)
 
         this.isDropdownOpen = !this.isDropdownOpen
-        this.setCategActivate()
+        // this.setCategActivate()
 
-        // e.stopPropagation()
+        this.menuClicked = true
     }
     closeDropdown(e) {
         // 선택된 카테고리와 이 카테고리와 같고 locker-category-image-container 클래스를 가지는 엘리먼트를 눌렀을 때는 드롭다운 보여주고 아니면 감추기
         this.isDropdownOpen = !!(
             this.curLockerCateg != FromLocker.initialLockerState.curLockerCateg &&
             this.curLockerCateg.id == this.category.id &&
-            e.path.includes(this.lockerCategoryImage.nativeElement)
+            _.includes(e.path, this.lockerCategoryImage.nativeElement)
         )
     }
 
