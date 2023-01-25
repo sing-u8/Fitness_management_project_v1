@@ -85,18 +85,27 @@ export class HomepageHeaderComponent implements OnInit, OnDestroy {
     setRemoveHeaderFlag(url: string) {
         this.removeHeaderFlag = (url == '/terms-privacy' || url == '/terms-eula') && this.deeplink.isMobile()
     }
+
+    public win
+    public storageId = 'openwindowId'
     closeWindow() {
-        // console.log(
-        //     'close window : ',
-        //     this.router.url,
-        //     this.location.path(),
-        //     window.location.origin,
-        //     window.location.href
-        // )
-        setTimeout(() => {
-            // top.window.open(window.location.href, '_self').close()
-            top.window.opener = self
-            top.self.close()
-        }, 500)
+        console.log(
+            'close window : ',
+            this.router.url,
+            this.location.path(),
+            window.location.origin,
+            window.location.href
+        )
+        // setTimeout(() => {
+        //     // top.window.open(window.location.href, '_self').close()
+        //     top.window.opener = self
+        //     top.self.close()
+        // }, 500)
+        // const wdId = `new_window_${this.location}`
+        // localStorage.setItem(this.storageId, wdId)
+        const wd = window.open(window.location.href, '_self')
+        wd.close()
+        window.close()
+        // window.open('', '_self').close()
     }
 }
