@@ -63,6 +63,7 @@ export class MobileResetPasswordComponent implements OnInit, OnDestroy, AfterVie
     ngAfterViewInit(): void {
         const vh = window.innerHeight * 0.01
         this.renderer.setStyle(this.l_section_el.nativeElement, 'height', `calc(${vh}px * 100)`)
+        this.renderer.setProperty(this.l_section_el.nativeElement, '--vh', `${vh}px`)
         this.renderer.setStyle(this.middle_el.nativeElement, 'height', `calc(${vh}px * 100 - 105px)`)
 
         this.resizeUnListener = this.renderer.listen('window', 'resize', (e) => {
@@ -73,7 +74,6 @@ export class MobileResetPasswordComponent implements OnInit, OnDestroy, AfterVie
             this.renderer.setStyle(this.l_section_el.nativeElement, 'height', `calc(${vh}px * 100)`)
             this.renderer.setStyle(this.middle_el.nativeElement, 'height', `calc(${vh}px * 100 - 105px)`)
         })
-
         // this.new_password.input_el.nativeElement.focus()
         // this.new_password.input_el.nativeElement.click()
     }
@@ -83,7 +83,8 @@ export class MobileResetPasswordComponent implements OnInit, OnDestroy, AfterVie
 
     navigateOnClose() {
         // this.router.navigate(['auth/login'])
-        window.close()
+        // let new_window = open(location, '_self')
+        window.open('', '_self').close()
     }
 
     public errorTextObj = {
@@ -113,7 +114,7 @@ export class MobileResetPasswordComponent implements OnInit, OnDestroy, AfterVie
             if (pattern4.test(control.value)) {
                 this.setGuideText(inputType, this.errorTextObj['whiteSpace'])
                 return { whiteSpace: true, status: 'warning' }
-            } else if (control.value < 8) {
+            } else if (control.value.length < 8) {
                 this.setGuideText(inputType, this.errorTextObj['tooShort'])
                 return { tooShort: true, status: 'warning' }
             } else if (
@@ -163,7 +164,7 @@ export class MobileResetPasswordComponent implements OnInit, OnDestroy, AfterVie
                 this.isTokenValid = true
             },
             error: (e) => {
-                console.log('checkResetPasswordLinkMail -- err : ',e)
+                console.log('checkResetPasswordLinkMail -- err : ', e)
                 this.isTokenValid = false
                 if (e.code == 'FUNCTION_AUTH_008') {
                     this.showMrpToast('만료된 비밀번호 재설정 링크입니다.')

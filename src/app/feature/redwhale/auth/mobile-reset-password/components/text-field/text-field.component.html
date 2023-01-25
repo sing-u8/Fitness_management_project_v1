@@ -1,91 +1,67 @@
-<div
-  class="l-text-field" #l_text_field_el
-  (rwClickOutside)="onInputBlured()"
-  (click)="onInputFocused()"
->
-
-  <div class="text-field">
-    <div
-      class="text-field-title"
-      [ngClass] = "{
-        'h-warning-color' : form.dirty && form.errors?.['status'] == 'warning',
-        'h-error-color' : form.dirty && form.errors?.['status'] == 'error'
-      }"
-    >
-      {{title}}
-    </div>
-    <input
-      #input_el
-      [ngClass] = "{
-        'h-warning-border' : form.dirty && form.errors?.['status'] == 'warning',
-        'h-error-border' : form.dirty && form.errors?.['status'] == 'error'
-      }"
-      [type]="textVisible ? 'text' : 'password'"
-      [placeholder]="placeHolder"
-      [formControl] = "form"
-      (keyup.enter) = "Enter($event)"
-      (keyup) = "keyUp($event)"
-    >
-
-    <div
-      *ngIf="form.dirty" id="status"
-      [class.not-focused] = "!isFocused"
-    >
-      <img
-        *ngIf="form.errors?.['status'] == 'error'  else warning"
-        id="error" src="assets/icons/mobile/error.svg" alt="error.svg"
-      >
-      <ng-template #warning>
-        <img
-          *ngIf="form.errors?.['status'] == 'warning' else valid"
-          id="error" src="assets/icons/mobile/warning.svg" alt="warning.svg"
+<div class="l-text-field" #l_text_field_el (rwClickOutside)="onInputBlured()" (click)="onInputFocused()">
+    <div class="text-field">
+        <input
+            #input_el
+            [ngClass]="{
+                'h-warning-border' : form.dirty && form.errors?.['status'] == 'warning',
+                'h-error-border' : form.dirty && form.errors?.['status'] == 'error'
+            }"
+            [class.filled]="form.value.length > 0"
+            [type]="textVisible ? 'text' : 'password'"
+            [placeholder]="placeHolder"
+            [formControl]="form"
+            (keyup.enter)="Enter($event)"
+            (keyup)="keyUp($event)"
+        />
+        <div
+            class="text-field-title"
+            [ngClass]="{
+                'h-warning-color' : form.dirty && form.errors?.['status'] == 'warning',
+                'h-error-color' : form.dirty && form.errors?.['status'] == 'error'
+            }"
+            [class.filled]="form.value.length > 0"
         >
-      </ng-template>
-      <ng-template #valid>
-        <img
-          *ngIf="form.valid && isFocused"
-          id="check" src="assets/icons/mobile/check.svg" alt="check.svg"
-        >
-      </ng-template>
+            {{ title }}
+        </div>
+
+        <div *ngIf="form.dirty" id="status" [class.not-focused]="!isFocused" [class.filled]="form.value.length > 0">
+            <img
+                *ngIf="form.errors?.['status'] == 'error'  else warning"
+                id="error"
+                src="assets/icons/mobile/error.svg"
+                alt="error.svg"
+            />
+            <ng-template #warning>
+                <img
+                    *ngIf="form.errors?.['status'] == 'warning' else valid"
+                    id="error"
+                    src="assets/icons/mobile/warning.svg"
+                    alt="warning.svg"
+                />
+            </ng-template>
+            <ng-template #valid>
+                <img *ngIf="form.valid && isFocused" id="check" src="assets/icons/mobile/check.svg" alt="check.svg" />
+            </ng-template>
+        </div>
+
+        <div id="visible" *ngIf="form.value.length >= 0 && isFocused" [class.filled]="form.value.length > 0">
+            <div *ngIf="!textVisible" class="invisible" (click)="toggleVisible(); $event.stopPropagation()"></div>
+            <div *ngIf="textVisible" class="visible" (click)="toggleVisible(); $event.stopPropagation()"></div>
+        </div>
     </div>
 
     <div
-      id="visible" *ngIf="form.value.length > 0 && isFocused "
-    >
-      <div
-        *ngIf="!textVisible"
-        class="invisible"
-        (click)="toggleVisible(); $event.stopPropagation()"
-      ></div>
-      <div
-        *ngIf="textVisible"
-        class="visible"
-        (click)="toggleVisible(); $event.stopPropagation()"
-      ></div>
-    </div>
-
-
-
-  </div>
-
-  <div
-    *ngIf="form.dirty && !form.valid"
-    class="guide-text"
-    [ngClass] = "{
+        *ngIf="form.dirty && !form.valid"
+        class="guide-text"
+        [ngClass]="{
       'h-warning-color' : form.dirty && form.errors?.['status'] == 'warning',
       'h-error-color' : form.dirty && form.errors?.['status'] == 'error'
     }"
-  >
-    {{guideText}}
-  </div>
+    >
+        {{ guideText }}
+    </div>
 
-  <div
-    *ngIf="isFocused && form.pristine"
-    class="guide-text"
-  >
-    {{guidePlaceHoldText}}
-  </div>
-
+    <div *ngIf="isFocused && form.pristine" class="guide-text">
+        {{ guidePlaceHoldText }}
+    </div>
 </div>
-
-

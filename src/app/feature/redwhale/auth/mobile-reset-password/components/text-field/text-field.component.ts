@@ -74,28 +74,32 @@ export class TextFieldComponent implements OnInit, AfterViewInit, OnChanges {
             this.input_el.nativeElement.click()
             this.input_el.nativeElement.focus()
         })
-        this.renderer.listen(this.input_el.nativeElement, 'onclick', (event) => {
-            console.log('click input : ', event)
-            this.input_el.nativeElement.click()
-            this.input_el.nativeElement.focus()
-        })
+        // this.renderer.listen(this.input_el.nativeElement, 'onclick', (event) => {
+        //     console.log('click input : ', event)
+        //     this.input_el.nativeElement.focus()
+        //     // this.input_el.nativeElement.click()
+        // })
         this.onInputLoad()
     }
 
     onInputLoad() {
         if (this.autoFocus) {
             // this.input_el.nativeElement.click()
-            // this.input_el.nativeElement.focus()
 
             this.input_el.nativeElement.dispatchEvent(new Event('onclick'))
             if (window.hasOwnProperty('ontouchstart')) {
-                // this.input_el.nativeElement.dispatchEvent(new TouchEvent('touchstart'))
+                this.input_el.nativeElement.dispatchEvent(new TouchEvent('touchstart'))
             }
+            // setTimeout(() => {
+            //     this.input_el.nativeElement.focus()
+            // }, 200)
         }
     }
 
     toggleVisible() {
         this.textVisible = !this.textVisible
+        this.input_el.nativeElement.click()
+        this.input_el.nativeElement.focus()
     }
 
     // input foucs func

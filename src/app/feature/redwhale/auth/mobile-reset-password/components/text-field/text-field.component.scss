@@ -12,6 +12,9 @@
         overflow: hidden;
         border-radius: 20px;
         position: relative;
+        .text-field-title {
+            display: none;
+        }
         input {
             font-weight: 500;
             font-size: 1.7rem;
@@ -20,19 +23,33 @@
             width: 100%;
             height: 100%;
             border-radius: 20px;
-            border: 1px solid #ECECEC;
-            padding: 35px 100px 16px 19px;
+            border: 1px solid #ececec;
+            padding: 25px 100px 26px 19px;
 
             &:focus {
                 border-color: #6a6a6a;
                 outline: none;
+                padding: 35px 100px 16px 19px;
             }
 
             &::placeholder {
                 font-weight: 500;
                 font-size: 1.7rem;
-                color: #B9B9B9;
+                color: #b9b9b9;
             }
+
+            &.filled {
+                padding: 35px 100px 16px 19px;
+            }
+        }
+        input:focus ~ div.text-field-title {
+            display: block !important;
+        }
+        input:focus ~ div#status {
+            bottom: 16px !important;
+        }
+        input:focus ~ div#visible {
+            bottom: 19px !important;
         }
 
         &-title {
@@ -46,12 +63,16 @@
             position: absolute;
             left: 19px;
             top: 16px;
+
+            &.filled {
+                display: block !important;
+            }
         }
 
         div#status {
             position: absolute;
             right: 50px;
-            bottom: 16px;
+            bottom: 25px;
             img#check {
                 width: 19px;
                 height: 19px;
@@ -64,11 +85,15 @@
             &.not-focused {
                 right: 19px;
             }
+
+            &.filled {
+                bottom: 16px !important;
+            }
         }
         div#visible {
             position: absolute;
             right: 19px;
-            bottom: 19px;
+            bottom: 28px;
             .invisible,
             .visible {
                 width: 21px;
@@ -80,7 +105,11 @@
             }
             .visible {
                 background-image: url('/assets/icons/mobile/visible.svg');
-                        background-size: cover;
+                background-size: cover;
+            }
+
+            &.filled {
+                bottom: 19px !important;
             }
         }
     }
