@@ -1,0 +1,23 @@
+<div class="sec2__footer">
+  <div class="footer-bg-1"></div>
+  <div class="footer-bg-2"></div>
+  <div class="footer--title">
+    번거로운 문의 과정 없이<br />
+    즉시 무료로 써보고 결정하세요.
+  </div>
+  <div class="footer--list">
+    <div class="list-item" *ngFor="let item of sec2FooterItemList">
+      <div class="check-icon"></div>
+      {{ item }}
+    </div>
+  </div>
+  <div
+    rw-button
+    [rwButtonFontColor]="'var(--white)'"
+    [rwButtonColor]="'var(--red)'"
+    class="sec2__button"
+    (click)="routerTo('/auth/login')"
+  >
+    2주 무료 체험하기
+  </div>
+</div>
