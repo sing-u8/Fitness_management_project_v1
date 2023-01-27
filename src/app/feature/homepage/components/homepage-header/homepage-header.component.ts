@@ -68,6 +68,11 @@ export class HomepageHeaderComponent implements OnInit, OnDestroy {
         }
     }
 
+    public faqFlag = false
+    toggleFaqFlag() {
+        this.faqFlag = !this.faqFlag
+    }
+
     // ----------  free start modal ---------------//
     public isFreeStartModalVisible = false
     toggleFreeStartModalVisible() {
