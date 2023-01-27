@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core'
+import { Router } from '@angular/router'
 
 @Component({
     selector: 'rw-free-try-footer',
@@ -12,7 +13,11 @@ export class FreeTryFooterComponent implements OnInit {
         '이용 가이드 제공',
     ]
 
-    constructor() {}
+    constructor(private router: Router) {}
 
     ngOnInit(): void {}
+
+    routerTo(url: string) {
+        this.router.navigateByUrl(`/${url}`)
+    }
 }

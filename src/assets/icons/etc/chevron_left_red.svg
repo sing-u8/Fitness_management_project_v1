@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+    <g id="오른짧은화살표" transform="translate(20.239 20.553) rotate(180)">
+        <rect id="Rectangle_3126" data-name="Rectangle 3126" width="20" height="20" transform="translate(0.239 0.553)"
+            fill="none" />
+        <path id="오른짧은화살표-2" data-name="오른짧은화살표"
+            d="M-.981-213.955a.644.644,0,0,1-.2.461l-4.165,4.005a.644.644,0,0,1-.906.1.644.644,0,0,1-.1-.906.606.606,0,0,1,.115-.112l3.685-3.544L-6.232-217.5a.645.645,0,0,1,.1-.906.644.644,0,0,1,.79-.015l4.165,4.005A.646.646,0,0,1-.981-213.955Z"
+            transform="translate(13.73 224.1)" fill="#E34A5E" />
+    </g>
+</svg>
