@@ -323,13 +323,17 @@
         }
 
         .box-index {
-            width: 32px;
-            height: 32px;
+            width: 43px;
+            height: 43px;
             background-color: var(--white);
             border: 1px solid #606060;
             border-radius: 12px;
             margin-top: 38px;
             position: relative;
+
+            font-size: 18px;
+            line-height: 26px;
+            letter-spacing: -0.324px;
 
             .box-index__line {
                 width: 1px;
