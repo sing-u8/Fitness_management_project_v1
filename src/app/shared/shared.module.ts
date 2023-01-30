@@ -35,6 +35,7 @@ import { MultiUserSelectComponent } from './components/common/multi-user-select/
 import { ComponentToastComponent } from './components/common/component-toast/component-toast.component'
 import { SettingNoticeModalComponent } from './components/common/setting-notice-modal/setting-notice-modal.component'
 import { NoticeModalComponent } from './components/common/notice-modal/notice-modal.component'
+import { IntroGuideToastComponent } from './components/common/intro-guide-toast/intro-guide-toast.component'
 
 // -drawer- //
 import { LessonFlipListComponent } from './components/redwhale/drawer/lesson-flip-list/lesson-flip-list.component'
@@ -116,8 +117,7 @@ import { DragulaModule } from 'ng2-dragula'
 // // ngx libraries
 import { NgxGaugeModule } from 'ngx-gauge'
 import { NgxSpinnerModule } from 'ngx-spinner'
-import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
-
+import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader'
 
 // import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader'
 
@@ -163,6 +163,7 @@ FullCalendarModule.registerPlugins([
         ComponentToastComponent,
         SettingNoticeModalComponent,
         NoticeModalComponent,
+        IntroGuideToastComponent,
         // -- //drawer
         DrawerLessonCardComponent,
         SchDayRepeatSelectComponent,
@@ -264,6 +265,7 @@ FullCalendarModule.registerPlugins([
         MultiUserSelectComponent,
         ComponentToastComponent,
         SettingNoticeModalComponent,
+        IntroGuideToastComponent,
         // -- //drawer
         DrawerLessonCardComponent,
         SchDayRepeatSelectComponent,

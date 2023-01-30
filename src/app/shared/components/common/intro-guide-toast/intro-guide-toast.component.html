@@ -1,0 +1,82 @@
+<div class="intro-guide-toast">
+    <div class="header" (click)="isOpen = !isOpen">
+        👋 도입 과정이 궁금하신가요?
+        <div class="mdi mdi-chevron-down" [class.open]="isOpen"></div>
+    </div>
+    <div class="body" [class.open]="isOpen">
+        <div class="guide-item">
+            <div class="guide-index">
+                1
+                <div id="line1" class="dash-line"></div>
+            </div>
+            <div class="guide-content">
+                <div class="guide-h">회원가입 / 로그인</div>
+            </div>
+        </div>
+        <div class="guide-item">
+            <div class="guide-index">
+                2
+                <div id="line2" class="dash-line"></div>
+            </div>
+            <div class="guide-content">
+                <div class="guide-h">센터 생성하기</div>
+                <div class="guide-t">
+                    [센터 생성] 버튼을 눌러 <br />
+                    본인의 센터를 생성해 주세요.
+                </div>
+            </div>
+        </div>
+        <div class="guide-item">
+            <div class="guide-index">
+                3
+                <div id="line3" class="dash-line"></div>
+            </div>
+            <div class="guide-content">
+                <div class="guide-h">무료 체험하기</div>
+                <div class="guide-t">
+                    생성한 센터는 2주간 무료로 이용할<br />
+                    수 있어요. 먼저 이용 가이드를 따라<br />
+                    초기 설정을 진행해 주세요.
+                </div>
+                <div class="guide-a">
+                    이용 가이드 보기
+                    <div class="arrow-icon"></div>
+                </div>
+            </div>
+        </div>
+        <div class="guide-item">
+            <div class="guide-index">
+                4
+                <div id="line4" class="dash-line"></div>
+            </div>
+            <div class="guide-content">
+                <div class="guide-h">서비스 결제하기</div>
+                <div class="guide-t">
+                    [결제하기] 버튼을 눌러<br />
+                    월 / 1년 / 2년 / 평생 이용권 중<br />
+                    하나를 선택하여 결제해 주세요.<br />
+                    생성한 센터는 2주간 무료로 이용할
+                </div>
+                <div class="guide-t">
+                    결제 후 최대 90일까지<br />
+                    100% 환불을 보장해 드려요.
+                </div>
+            </div>
+        </div>
+        <div class="guide-item">
+            <div class="guide-index">5</div>
+            <div class="guide-content">
+                <div class="guide-h">[선택] 회원 정보 이동하기</div>
+                <div class="guide-t">
+                    정확한 상담을 위해<br />
+                    ‘회원 정보 이동 신청서’를<br />
+                    작성해 주세요.
+                </div>
+                <div class="guide-a">
+                    신청서 작성하기
+                    <div class="arrow-icon"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

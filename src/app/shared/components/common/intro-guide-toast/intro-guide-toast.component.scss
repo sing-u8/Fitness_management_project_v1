@@ -1,0 +1,167 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+.intro-guide-toast {
+    display: flex;
+    flex-direction: column;
+
+    box-shadow: 0 4px 10px rgba(181, 181, 181, 0.25);
+
+    .header {
+        width: 290px;
+        height: 49.65px;
+        background-color: var(--font-color);
+        border-radius: 12px 12px 0 0;
+        padding: 14px 13.65px 13.65px 15px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        font-weight: 500;
+        font-size: 1.5rem;
+        line-height: 22px;
+        letter-spacing: -0.225px;
+        color: var(--white);
+        cursor: pointer;
+
+        .mdi {
+            display: flex;
+            align-items: center;
+            transform: rotateX(0deg);
+            transition: transform 0.2s linear;
+            -moz-transition: transform 0.2s linear;
+            -webkit-transition: transform 0.2s linear;
+            -o-transition: transform 0.2s linear;
+            font-size: 2.2rem;
+            color: var(--white);
+            width: 30px;
+            height: 30px;
+            margin-top: 2px;
+        }
+        .open {
+            &.mdi {
+                transform: rotateX(180deg);
+                transition: transform 0.2s linear;
+                -moz-transition: transform 0.2s linear;
+                -webkit-transition: transform 0.2s linear;
+                -o-transition: transform 0.2s linear;
+            }
+        }
+    }
+    .body {
+        background-color: var(--white) !important;
+        transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 0.8);
+        -moz-transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 0.8);
+        -webkit-transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 0.8);
+        -o-transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 0.8);
+
+        width: 290px;
+        height: 0;
+        padding: 0;
+
+        overflow: hidden;
+
+        &.open {
+            height: 669.35px;
+            padding: 25px 20px 37.35px;
+        }
+
+        .guide-item {
+            display: flex;
+
+            &:not(:last-of-type) {
+                margin-bottom: 30px;
+            }
+
+            .guide-index {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                position: relative;
+                width: 25px;
+                height: 25px;
+                margin-right: 10px;
+
+                background-color: var(--white);
+                border: 1px solid var(--darkgrey);
+                border-radius: 10px;
+
+                font-weight: 700;
+                font-size: 1.4rem;
+                line-height: 20px;
+                letter-spacing: -0.22px;
+
+                color: var(--font-color);
+
+                .dash-line {
+                    position: absolute;
+                    width: 1px;
+                    border-right: 1px dashed #a0a0a0;
+                    top: 30px;
+
+                    &#line1 {
+                        height: 18px;
+                    }
+                    &#line2 {
+                        height: 62px;
+                    }
+                    &#line3 {
+                        height: 113px;
+                    }
+                    &#line4 {
+                        height: 148px;
+                    }
+                }
+            }
+            .guide-content {
+                display: flex;
+                flex-direction: column;
+                .guide-h {
+                    display: flex;
+                    align-items: center;
+                    height: 25px;
+                    font-weight: 700;
+                    font-size: 1.5rem;
+                    line-height: 22px;
+                    letter-spacing: -0.22px;
+                    color: var(--font-color);
+                }
+                .guide-t {
+                    margin-top: 7px;
+                    font-weight: 400;
+                    font-size: 1.4rem;
+                    line-height: 20px;
+                    letter-spacing: -0.2px;
+                    color: var(--font-color);
+
+                    :last-of-type {
+                        margin-top: 7px;
+                    }
+                }
+                .guide-a {
+                    margin-top: 7px;
+                    display: flex;
+                    align-items: center;
+                    font-size: 1.5rem;
+                    font-weight: 700;
+                    line-height: 20px;
+                    letter-spacing: -0.2px;
+                    color: var(--red);
+                    cursor: pointer;
+
+                    .arrow-icon {
+                        transform: rotate(180deg);
+                        width: 24px;
+                        height: 24px;
+                        background-image: url('/assets/icons/etc/chevron_left_red.svg');
+                        background-repeat: no-repeat;
+                        background-size: contain;
+                    }
+                }
+            }
+        }
+    }
+}
