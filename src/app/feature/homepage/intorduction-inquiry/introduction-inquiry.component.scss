@@ -60,6 +60,10 @@ article.l-intro-inquiry {
                 color: var(--font-color);
             }
         }
+
+        rw-introduction-guide {
+            margin-bottom: 100px;
+        }
     }
     .intro-inquiry-bottom {
         display: flex;
@@ -96,6 +100,10 @@ article.l-intro-inquiry {
                     color: var(--font-color);
                 }
             }
+
+            rw-introduction-guide {
+                margin-bottom: 120px;
+            }
         }
     }
     @media (min-width: 1280px) {
@@ -123,6 +131,10 @@ article.l-intro-inquiry {
                     letter-spacing: -1.024px;
                     color: var(--font-color);
                 }
+            }
+
+            rw-introduction-guide {
+                margin-bottom: 180px;
             }
         }
     }
