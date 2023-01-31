@@ -15,7 +15,6 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit {
     ngOnInit(): void {}
     ngOnDestroy(): void {}
     ngAfterViewInit(): void {
-        this.initScrollAniEls()
         this.onScroll()
         this.scrollListener = this.renderer.listen(document.getElementById('l-homepage'), 'scroll', () => {
             this.onScroll()
@@ -64,29 +63,22 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit {
     public elementVisibleHeight = 150
     public hpSAobjList: Array<{ parent: Element; children: Array<Element> }> = undefined
 
-    initScrollAniEls() {
-        const hpScrollAnis = document.querySelectorAll('.hp-scroll-ani')
-        this.hpSAobjList = _.flatMapDeep(hpScrollAnis, (ani) => {
-            let SAlist: Array<Element> = []
-            _.forEach(ani.getElementsByClassName('hp-SA1'), (v) => SAlist.push(v))
-            _.forEach(ani.getElementsByClassName('hp-SA2'), (v) => SAlist.push(v))
-            _.forEach(ani.getElementsByClassName('hp-SA3'), (v) => SAlist.push(v))
-            _.forEach(ani.getElementsByClassName('hp-SA4'), (v) => SAlist.push(v))
-            _.forEach(ani.getElementsByClassName('hp-SA5'), (v) => SAlist.push(v))
-            SAlist = _.flattenDeep(SAlist)
-            return { parent: ani, children: SAlist }
-        })
-    }
-
     onScroll() {
         _.forEach(this.hpSAobjList, (obj) => {
             const windowHeight = window.innerHeight
-            const elementTop = obj.parent.getBoundingClientRect().top
-            if (elementTop < windowHeight - this.elementVisibleHeight) {
-                _.forEach(obj.children, (child) => child.classList.add('active'))
-            } else {
-                _.forEach(obj.children, (child) => child.classList.remove('active'))
-            }
         })
     }
+
+    // ---------------------------------------------------------------------
+    public nav_items: Array<{ value: string }> = [
+        { value: '회원 관리' },
+        { value: '스케줄 관리' },
+        { value: '수업 예약' },
+        { value: '매출 관리' },
+        { value: '락커 관리' },
+        { value: '채팅' },
+        { value: '전자 계약' },
+        { value: '문자' },
+        { value: '출석 관리' },
+    ]
 }
