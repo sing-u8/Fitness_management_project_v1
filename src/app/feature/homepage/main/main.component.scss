@@ -170,7 +170,9 @@ section.l-main {
             width: 308px;
             background: var(--hp-lighergrey);
             border-radius: 20px;
-            padding: 35px 35px 25px 35px;
+            padding: 35px 30px 25px 35px;
+            position: relative;
+            overflow: hidden;
         }
         .content-item-title {
             font-weight: 700;
@@ -189,81 +191,283 @@ section.l-main {
             margin-bottom: 10px;
         }
 
+        .content-item-image-common {
+            background-size: contain;
+            background-repeat: no-repeat;
+            position: absolute;
+            image-rendering: -webkit-optimize-contrast;
+        }
+
         .member-management {
             .mm-1 {
                 margin-bottom: 30px;
+                .mm-1-image {
+                    width: 290px;
+                    height: 230px;
+                    background-image: url('/assets/homepage/images/main/mobile/int_m_1_1.png');
+                    bottom: 54px;
+                    right: -9px;
+                }
             }
             .mm-2 {
                 margin-bottom: 30px;
                 justify-content: flex-end;
+                .mm-2-image {
+                    width: 273px;
+                    height: 293px;
+                    background-image: url('/assets/homepage/images/main/mobile/int_m_1_2.png');
+                    bottom: 237px;
+                    right: 3px;
+                }
             }
             .mm-3 {
+                .mm-3-image {
+                    width: 273px;
+                    height: 218px;
+                    background-image: url('/assets/homepage/images/main/mobile/int_m_1_3.png');
+                    bottom: 0px;
+                    right: 0px;
+                }
             }
         }
         .schedule-management {
             .cm-1 {
                 margin-bottom: 30px;
+                .cm-1-image {
+                    width: 277px;
+                    height: 297px;
+                    background-image: url('/assets/homepage/images/main/mobile/int_m_2_1.png');
+                    bottom: -3px;
+                    right: -1px;
+                }
             }
             .cm-2 {
                 margin-bottom: 30px;
                 justify-content: flex-end;
+                .cm-2-image {
+                    width: 218px;
+                    height: 289px;
+                    background-image: url('/assets/homepage/images/main/mobile/int_m_2_2.png');
+                    top: 0;
+                    right: 45px;
+                }
+            }
+            .cm-3-4 {
+                width: 100%;
+                display: flex;
+                flex-direction: column;
             }
             .cm-3 {
                 margin-bottom: 30px;
+                height: 460px;
+                .cm-3-image {
+                    width: 221px;
+                    height: 80px;
+                    background-image: url('/assets/homepage/images/main/mobile/int_m_2_3.png');
+                    bottom: 65px;
+                    right: 43px;
+                }
             }
             .cm-4 {
+                height: 460px;
+                .cm-4-image {
+                    width: 262px;
+                    height: 172px;
+                    background-image: url('/assets/homepage/images/main/mobile/int_m_2_4.png');
+                    bottom: 29px;
+                    right: 23px;
+                    background-size: cover;
+                }
             }
         }
         .lesson-reservation {
             .lr-1 {
                 margin-bottom: 30px;
+                .lr-1-image {
+                    background-image: url('/assets/homepage/images/main/mobile/int_m_3_1.png');
+                    width: 240px;
+                    height: 280px;
+                    bottom: -1px;
+                    right: 34px;
+                }
+            }
+
+            .lr-2-3 {
+                width: 100%;
+                display: flex;
+                flex-direction: column;
             }
             .lr-2 {
+                height: 460px;
                 margin-bottom: 30px;
+                .lr-2-image {
+                    background-image: url('/assets/homepage/images/main/mobile/int_m_3_2.png');
+                    width: 262.4px;
+                    height: 170.8px;
+                    right: 23px;
+                    bottom: 40px;
+                    background-size: cover;
+                }
             }
             .lr-3 {
+                height: 460px;
+                .lr-3-image {
+                    background-image: url('/assets/homepage/images/main/mobile/int_m_3_3.png');
+                    background-size: cover;
+                    width: 254px;
+                    height: 182px;
+                    right: 0;
+                    bottom: 36px;
+                }
             }
         }
         .sale-management {
             .sm-1 {
                 margin-bottom: 30px;
+                .sm-1-image {
+                    background-size: cover;
+                    background-image: url('/assets/homepage/images/main/mobile/int_m_4_1.png');
+                    width: 273px;
+                    height: 313px;
+                    bottom: 0px;
+                    right: 0px;
+                }
             }
             .sm-2 {
+                .sm-2-image {
+                    background-size: cover;
+                    background-image: url('/assets/homepage/images/main/mobile/int_m_4_2.png');
+                    width: 273px;
+                    height: 282px;
+                    bottom: 0px;
+                    right: 0px;
+                }
             }
         }
         .locker-management {
             .lm-1 {
                 margin-bottom: 30px;
+                .lm-1-image {
+                    background-image: url('/assets/homepage/images/main/mobile/int_m_5_1.png');
+                    width: 280px;
+                    height: 318px;
+                    bottom: -3px;
+                    right: 0px;
+                }
             }
             .lm-2 {
+                .lm-2-image {
+                    background-image: url('/assets/homepage/images/main/mobile/int_m_5_2.png');
+                    width: 280px;
+                    height: 293px;
+                    right: -3px;
+                    bottom: 0px;
+                }
             }
         }
         .chatting {
             .ch-1 {
                 margin-bottom: 30px;
+                .ch-1-image {
+                    background-size: cover;
+                    background-image: url('/assets/homepage/images/main/mobile/int_m_6_1.png');
+                    width: 280px;
+                    height: 333px;
+                    right: 0px;
+                    bottom: 0px;
+                }
+            }
+            .ch-2-3 {
+                width: 100%;
+                display: flex;
+                flex-direction: column;
             }
             .ch-2 {
+                height: 460px;
                 margin-bottom: 30px;
+                .ch-2-image {
+                    background-size: cover;
+                    background-image: url('/assets/homepage/images/main/mobile/int_m_6_2.png');
+                    width: 272px;
+                    height: 173px;
+                    bottom: 72px;
+                    right: 0px;
+                }
             }
             .ch-3 {
+                height: 460px;
+                .ch-3-image {
+                    background-image: url('/assets/homepage/images/main/mobile/int_m_6_3.png');
+                    width: 207px;
+                    height: 81px;
+                    bottom: 65px;
+                    right: 50px;
+                }
             }
         }
         .contract {
             .ct-1 {
+                .ct-1-image {
+                    background-size: cover;
+                    background-image: url('/assets/homepage/images/main/mobile/int_m_7_1.png');
+                    width: 273px;
+                    height: 235px;
+                    bottom: 0px;
+                    right: 0px;
+                }
             }
         }
         .message {
             .mg-1 {
                 margin-bottom: 30px;
+                .mg-1-image {
+                    background-size: cover;
+                    background-image: url('/assets/homepage/images/main/mobile/int_m_8_1.png');
+                    width: 270px;
+                    height: 276px;
+                    bottom: 0px;
+                    right: 23px;
+                }
             }
             .mg-2 {
+                .mg-2-image {
+                    background-size: cover;
+                    background-image: url('/assets/homepage/images/main/mobile/int_m_8_2.png');
+                    width: 289px;
+                    height: 257px;
+                    right: 0;
+                    bottom: 55px;
+                }
             }
         }
         .attendance {
             .at-1 {
                 justify-content: flex-end;
+                .at-1-image {
+                    background-size: cover;
+                    background-image: url('/assets/homepage/images/main/mobile/int_m_9_1.png');
+                    width: 288px;
+                    height: 275px;
+                    right: 0;
+                    top: 0;
+                }
             }
         }
+    }
+
+    .additional-desc {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 13px 0 150px;
+
+        font-weight: 400;
+        font-size: 1.5rem;
+        line-height: 22px;
+        text-align: center;
+        letter-spacing: -0.225px;
+        color: var(--hp-grey);
     }
 
     @media (min-width: 768px) {
@@ -355,35 +559,245 @@ section.l-main {
             }
 
             .member-management {
-                .mm-title {
-                }
-                .mm-title-content {
-                }
                 .mm-1 {
                     margin-bottom: 40px;
+                    .mm-1-image {
+                        width: 448px;
+                        height: 302px;
+                        background-image: url('/assets/homepage/images/main/tablet/int_t_1_1.png');
+                        bottom: 66px;
+                        right: 88px;
+                    }
                 }
                 .mm-2 {
                     margin-bottom: 40px;
+                    .mm-2-image {
+                        width: 489px;
+                        height: 386px;
+                        background-image: url('/assets/homepage/images/main/tablet/int_t_1_2.png');
+                        bottom: 254px;
+                        right: -4px;
+                    }
                 }
                 .mm-3 {
+                    .mm-3-image {
+                        width: 415px;
+                        height: 458px;
+                        background-image: url('/assets/homepage/images/main/tablet/int_t_1_3.png');
+                        bottom: -4px;
+                        right: 0;
+                    }
                 }
             }
             .schedule-management {
+                .cm-1 {
+                    margin-bottom: 40px;
+                    .cm-1-image {
+                        width: 479px;
+                        height: 371px;
+                        background-image: url('/assets/homepage/images/main/tablet/int_t_2_1.png');
+                        bottom: -3px;
+                        right: -1px;
+                    }
+                }
+                .cm-2 {
+                    margin-bottom: 40px;
+                    justify-content: flex-start;
+                    .cm-2-image {
+                        width: 224px;
+                        height: 630px;
+                        background-image: url('/assets/homepage/images/main/tablet/int_t_2_2.png');
+                        top: 0;
+                        bottom: initial;
+                        right: 50px;
+                    }
+                }
+                .cm-3-4 {
+                }
+                .cm-3 {
+                    height: 400px;
+                    margin-bottom: 40px;
+                    .cm-3-image {
+                        background-image: url('/assets/homepage/images/main/tablet/int_t_2_3.png');
+                        width: 296px;
+                        height: 109px;
+                        right: 49px;
+                        bottom: 52px;
+                    }
+                }
+                .cm-4 {
+                    height: 400px;
+                    .cm-4-image {
+                        background-image: url('/assets/homepage/images/main/tablet/int_t_2_4.png');
+                        width: 288px;
+                        height: 252px;
+                        bottom: 45px;
+                        right: 0;
+                    }
+                }
             }
             .lesson-reservation {
+                .lr-1 {
+                    margin-bottom: 40px;
+                    .lr-1-image {
+                        background-image: url('/assets/homepage/images/main/tablet/int_t_3_1.png');
+                        background-size: cover;
+                        width: 326px;
+                        height: 412px;
+                        right: 67px;
+                        bottom: 0;
+                    }
+                }
+                .lr-2 {
+                    margin-bottom: 40px;
+                    height: 400px;
+                    .lr-2-image {
+                        background-image: url('/assets/homepage/images/main/tablet/int_t_3_2.png');
+                        width: 280px;
+                        height: 216px;
+                        bottom: 30px;
+                        right: 0;
+                    }
+                }
+                .lr-3 {
+                    height: 400px;
+                    .lr-3-image {
+                        background-image: url('/assets/homepage/images/main/tablet/int_t_3_3.png');
+                        width: 265px;
+                        height: 227px;
+                        bottom: 30px;
+                        right: 0;
+                    }
+                }
             }
             .sale-management {
+                .sm-1 {
+                    margin-bottom: 40px;
+                    .sm-1-image {
+                        background-size: cover;
+                        background-image: url('/assets/homepage/images/main/tablet/int_t_4_1.png');
+                        width: 413px;
+                        height: 530px;
+                        bottom: 0px;
+                        right: 0px;
+                    }
+                }
+                .sm-2 {
+                    .sm-2-image {
+                        background-size: cover;
+                        background-image: url('/assets/homepage/images/main/tablet/int_t_4_2.png');
+                        width: 445px;
+                        height: 485px;
+                        bottom: 0px;
+                        right: 0px;
+                    }
+                }
             }
             .locker-management {
+                .lm-1 {
+                    margin-bottom: 40px;
+                    .lm-1-image {
+                        width: 273px;
+                        height: 218px;
+                        background-image: url('/assets/homepage/images/main/tablet/int_t_5_1.png');
+                        bottom: 0px;
+                        right: 0px;
+                    }
+                }
+                .lm-2 {
+                    .lm-2-image {
+                        background-image: url('/assets/homepage/images/main/tablet/int_t_5_2.png');
+                        height: 391px;
+                        width: 466px;
+                        bottom: -2px;
+                        right: 0px;
+                    }
+                }
             }
             .chatting {
+                .ch-1 {
+                    margin-bottom: 40px;
+                    .ch-1-image {
+                        background-image: url('/assets/homepage/images/main/tablet/int_t_6_1.png');
+                        width: 555px;
+                        height: 430px;
+                        bottom: 0px;
+                        right: 0px;
+                    }
+                }
+                .ch-2 {
+                    height: 400px;
+                    margin-bottom: 40px;
+                    .ch-2-image {
+                        background-image: url('/assets/homepage/images/main/tablet/int_t_6_2.png');
+                        width: 312px;
+                        height: 216px;
+                        bottom: 40px;
+                        right: -10px;
+                    }
+                }
+                .ch-3 {
+                    height: 400px;
+                    .ch-3-image {
+                        background-image: url('/assets/homepage/images/main/tablet/int_t_6_3.png');
+                        width: 283px;
+                        height: 100px;
+                        bottom: 52px;
+                        right: 52px;
+                    }
+                }
             }
             .contract {
+                .ct-1 {
+                    .ct-1-image {
+                        background-image: url('/assets/homepage/images/main/tablet/int_t_7_1.png');
+                        width: 496px;
+                        height: 351px;
+                        bottom: 0px;
+                        right: 0px;
+                    }
+                }
             }
             .message {
+                .mg-1 {
+                    margin-bottom: 40px;
+                    .mg-1-image {
+                        background-size: cover;
+                        background-image: url('/assets/homepage/images/main/tablet/int_t_8_1.png');
+                        width: 372px;
+                        height: 383px;
+                        right: 55px;
+                        bottom: 0px;
+                    }
+                }
+                .mg-2 {
+                    .mg-2-image {
+                        background-size: cover;
+                        background-image: url('/assets/homepage/images/main/tablet/int_t_8_2.png');
+                        width: 566px;
+                        height: 345px;
+                        right: 0;
+                        bottom: 64px;
+                    }
+                }
             }
             .attendance {
+                .at-1 {
+                    justify-content: flex-end;
+                    .at-1-image {
+                        background-size: cover;
+                        background-image: url('/assets/homepage/images/main/tablet/int_t_9_1.png');
+                        width: 481px;
+                        height: 431px;
+                        right: 60px;
+                        top: 0;
+                    }
+                }
             }
+        }
+
+        .additional-desc {
+            margin: 10px 0 180px;
         }
     }
     @media (min-width: 820px) {
@@ -456,29 +870,266 @@ section.l-main {
                 }
                 .mm-1 {
                     margin-bottom: 50px;
+                    .mm-1-image {
+                        width: 498px;
+                        height: 336px;
+                        background-image: url('/assets/homepage/images/main/web/int_w_1_1.png');
+                        bottom: 75px;
+                        right: -35px;
+                    }
                 }
                 .mm-2 {
+                    justify-content: flex-start;
                     margin-bottom: 50px;
+                    .mm-2-image {
+                        width: 513px;
+                        height: 431px;
+                        background-image: url('/assets/homepage/images/main/web/int_w_1_2.png');
+                        bottom: 54px;
+                        right: -1px;
+                    }
                 }
                 .mm-3 {
+                    .mm-3-image {
+                        width: 474px;
+                        height: 440px;
+                        background-image: url('/assets/homepage/images/main/web/int_w_1_3.png');
+                        bottom: -8px;
+                        right: 32px;
+                    }
                 }
             }
             .schedule-management {
+                .cm-1 {
+                    margin-bottom: 50px;
+                    .cm-1-image {
+                        background-image: url('/assets/homepage/images/main/web/int_w_2_1.png');
+                        width: 583px;
+                        height: 430px;
+                        bottom: 0px;
+                        right: 0px;
+                    }
+                }
+                .cm-2 {
+                    margin-bottom: 50px;
+                    justify-content: flex-end;
+                    .cm-2-image {
+                        background-image: url('/assets/homepage/images/main/web/int_w_2_2.png');
+                        width: 533px;
+                        height: 485px;
+                        right: 39px;
+                        top: 0;
+                    }
+                }
+                .cm-3-4 {
+                    flex-direction: row;
+                    justify-content: space-between;
+                    align-items: center;
+                }
+                .cm-3 {
+                    width: 475px;
+                    height: 500px;
+                    margin: 0;
+                    .cm-3-image {
+                        background-image: url('/assets/homepage/images/main/web/int_w_2_3.png');
+                        width: 302px;
+                        height: 100px;
+                        right: 45px;
+                        bottom: 52px;
+                    }
+                }
+                .cm-4 {
+                    width: 475px;
+                    height: 500px;
+                    .cm-4-image {
+                        background-image: url('/assets/homepage/images/main/web/int_w_2_4.png');
+                        background-size: cover;
+                        width: 328px;
+                        height: 191px;
+                        bottom: 0px;
+                        right: 40px;
+                    }
+                }
             }
             .lesson-reservation {
+                .lr-1 {
+                    margin-bottom: 50px;
+                    .lr-1-image {
+                        background-image: url('/assets/homepage/images/main/web/int_w_3_1.png');
+                        width: 355px;
+                        height: 412px;
+                        right: 90px;
+                        bottom: 0;
+                    }
+                }
+                .lr-2-3 {
+                    flex-direction: row;
+                    justify-content: space-between;
+                    align-items: center;
+                }
+                .lr-2 {
+                    width: 475px;
+                    height: 500px;
+                    margin: 0;
+                    .lr-2-image {
+                        background-image: url('/assets/homepage/images/main/web/int_w_3_2.png');
+                        background-size: cover;
+                        width: 328px;
+                        height: 196px;
+                        bottom: 0px;
+                        right: 74px;
+                    }
+                }
+                .lr-3 {
+                    width: 475px;
+                    height: 500px;
+                    .lr-3-image {
+                        background-image: url('/assets/homepage/images/main/web/int_w_3_3.png');
+                        background-size: cover;
+                        width: 335px;
+                        height: 201px;
+                        bottom: 0px;
+                        right: 72px;
+                    }
+                }
             }
             .sale-management {
+                .sm-1 {
+                    margin-bottom: 50px;
+                    .sm-1-image {
+                        background-size: cover;
+                        background-image: url('/assets/homepage/images/main/web/int_w_4_1.png');
+                        width: 489px;
+                        height: 445px;
+                        right: 40px;
+                        bottom: 0px;
+                    }
+                }
+                .sm-2 {
+                    .sm-2-image {
+                        background-size: cover;
+                        background-image: url('/assets/homepage/images/main/web/int_w_4_2.png');
+                        width: 505px;
+                        height: 437px;
+                        right: 47px;
+                        bottom: 0px;
+                    }
+                }
             }
             .locker-management {
+                .lm-1 {
+                    margin-bottom: 50px;
+                    .lm-1-image {
+                        background-image: url('/assets/homepage/images/main/web/int_w_5_1.png');
+                        height: 427px;
+                        width: 518px;
+                        bottom: -2px;
+                        right: 0px;
+                    }
+                }
+                .lm-2 {
+                    .lm-2-image {
+                        background-image: url('/assets/homepage/images/main/web/int_w_5_2.png');
+                        width: 501px;
+                        height: 492px;
+                        right: -3px;
+                        bottom: -7px;
+                    }
+                }
             }
             .chatting {
+                .ch-1 {
+                    margin-bottom: 50px;
+                    .ch-1-image {
+                        background-image: url('/assets/homepage/images/main/web/int_w_6_1.png');
+                        width: 534px;
+                        height: 485px;
+                        bottom: 0px;
+                        right: 0px;
+                    }
+                }
+                .ch-2-3 {
+                    flex-direction: row;
+                    justify-content: space-between;
+                    align-items: center;
+                }
+                .ch-2 {
+                    width: 475px;
+                    height: 500px;
+                    margin: 0;
+                    .ch-2-image {
+                        background-image: url('/assets/homepage/images/main/web/int_w_6_2.png');
+                        width: 312px;
+                        height: 192px;
+                        bottom: 0px;
+                        right: 40px;
+                    }
+                }
+                .ch-3 {
+                    width: 475px;
+                    height: 500px;
+                    .ch-3-image {
+                        background-image: url('/assets/homepage/images/main/web/int_w_6_3.png');
+                        width: 283px;
+                        height: 100px;
+                        bottom: 55px;
+                        right: 45px;
+                    }
+                }
             }
             .contract {
+                .ct-1 {
+                    .ct-1-image {
+                        background-image: url('/assets/homepage/images/main/web/int_w_7_1.png');
+                        width: 494px;
+                        height: 402px;
+                        bottom: 0px;
+                        right: 0px;
+                    }
+                }
             }
             .message {
+                .mg-1 {
+                    margin-bottom: 50px;
+                    .mg-1-image {
+                        background-size: cover;
+                        background-image: url('/assets/homepage/images/main/web/int_w_8_1.png');
+                        width: 414px;
+                        height: 431px;
+                        right: 88px;
+                        bottom: 0px;
+                    }
+                }
+                .mg-2 {
+                    .mg-2-image {
+                        background-size: cover;
+                        background-image: url('/assets/homepage/images/main/web/int_w_8_2.png');
+                        width: 713px;
+                        height: 384px;
+                        right: 0;
+                        bottom: 47px;
+                    }
+                }
             }
             .attendance {
+                .at-1 {
+                    justify-content: flex-start;
+                    .at-1-image {
+                        background-size: cover;
+                        background-image: url('/assets/homepage/images/main/web/int_w_9_1.png');
+                        width: 651px;
+                        height: 425px;
+                        right: 56px;
+                        top: 0;
+                    }
+                }
             }
+        }
+
+        .additional-desc {
+            width: 1000px;
+            justify-content: flex-end;
+            margin: 14px 0 250px;
         }
     }
     @media (min-width: 1440px) {
