@@ -17,9 +17,11 @@ import { FreeStartModalComponent } from './free-start-modal/free-start-modal.com
 import { FareGuideBoxComponent } from './fare-guide-box/fare-guide-box.component'
 import { FareGuideOptionTableComponent } from './fare-guide-option-table/fare-guide-option-table.component'
 import { InquirySelectComponent } from './inquiry-select/inquiry-select.component'
-import { FaqListSectionComponent } from './faq-list-section/faq-list-section.component';
-import { FareGuideBox2Component } from './fare-guide-box2/fare-guide-box2.component';
+import { FaqListSectionComponent } from './faq-list-section/faq-list-section.component'
+import { FareGuideBox2Component } from './fare-guide-box2/fare-guide-box2.component'
 import { FareGuideOptionTable2Component } from './fare-guide-option-table2/fare-guide-option-table2.component'
+import { FreeTryFooterComponent } from './free-try-footer/free-try-footer.component';
+import { IntroductionGuideComponent } from './introduction-guide/introduction-guide.component'
 
 @NgModule({
     declarations: [
@@ -39,25 +41,29 @@ import { FareGuideOptionTable2Component } from './fare-guide-option-table2/fare-
         FaqListSectionComponent,
         FareGuideBox2Component,
         FareGuideOptionTable2Component,
+        FreeTryFooterComponent,
+        IntroductionGuideComponent,
     ],
     imports: [CommonModule, RouterModule, FormsModule, ReactiveFormsModule, SharedModule],
-    exports: [
-        HomepageHeaderComponent,
-        ButtonComponent,
-        FindMoreButtonComponent,
-        FunctionBoxComponent,
-        FreeStartFooterComponent,
-        HomepageFooterComponent,
-        FAQListComponent,
-        MainCarouselComponent,
-        ReceiveIntroductionModalComponent,
-        FreeStartModalComponent,
-        FareGuideBoxComponent,
-        FareGuideOptionTableComponent,
-        InquirySelectComponent,
-        FaqListSectionComponent,
-        FareGuideBox2Component,
-        FareGuideOptionTable2Component,
-    ],
+  exports: [
+    HomepageHeaderComponent,
+    ButtonComponent,
+    FindMoreButtonComponent,
+    FunctionBoxComponent,
+    FreeStartFooterComponent,
+    HomepageFooterComponent,
+    FAQListComponent,
+    MainCarouselComponent,
+    ReceiveIntroductionModalComponent,
+    FreeStartModalComponent,
+    FareGuideBoxComponent,
+    FareGuideOptionTableComponent,
+    InquirySelectComponent,
+    FaqListSectionComponent,
+    FareGuideBox2Component,
+    FareGuideOptionTable2Component,
+    FreeTryFooterComponent,
+    IntroductionGuideComponent
+  ]
 })
 export class ComponentsModule {}

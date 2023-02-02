@@ -154,31 +154,83 @@ section.l-header-mobile {
 
         .l-menu-item {
             display: flex;
-            align-items: center;
             flex-direction: column;
-            margin-top: 20.5vh; // 필요에 따라 수정 필요
-            margin-bottom: 70px;
+            width: 100%;
+            padding: 20px 18px 0 30px;
         }
 
-        .menu-item {
+        .menu-item,
+        .menu-drop-item,
+        .menu-item span {
             cursor: pointer;
             text-decoration: none;
-
             color: var(--font-color);
             font-weight: 700;
-            font-size: 1.8rem;
+            font-size: 18px;
+            line-height: 41px;
             letter-spacing: -0.324px;
 
-            height: 54px;
+            min-height: 41px;
             display: flex;
             align-items: center;
-            &:not(:last-of-type) {
-                margin-bottom: 15px;
+
+            margin-bottom: 29px;
+        }
+
+        .menu-drop-item {
+            padding-bottom: 0;
+            flex-direction: column;
+            .menu-drop-header {
+                width: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+            }
+            .menu-drop-content {
+                margin-top: 26px;
+                padding-left: 15px;
+                display: flex;
+                flex-direction: column;
+                width: 100%;
+                .menu-drop-content-item {
+                    text-decoration: none;
+                    width: 100%;
+                    height: 23px;
+                    align-items: center;
+                    font-weight: 500;
+                    font-size: 16px;
+                    line-height: 23px;
+                    letter-spacing: -0.256px;
+                    color: var(--font-color);
+                    &:not(:last-of-type) {
+                        margin-bottom: 30px;
+                    }
+                }
+            }
+            .mdi {
+                transform: rotateX(0deg);
+                transition: transform 0.2s linear;
+                -moz-transition: transform 0.2s linear;
+                -webkit-transition: transform 0.2s linear;
+                -o-transition: transform 0.2s linear;
+                font-size: 2.8rem;
+                color: var(--font-color);
+                display: flex;
+                align-items: center;
+            }
+            .open {
+                &.mdi {
+                    transform: rotateX(180deg);
+                    transition: transform 0.2s linear;
+                    -moz-transition: transform 0.2s linear;
+                    -webkit-transition: transform 0.2s linear;
+                    -o-transition: transform 0.2s linear;
+                }
             }
         }
 
         hp-button {
-            margin-bottom: 60px;
+            margin-bottom: 35px;
         }
     }
 }
@@ -187,15 +239,16 @@ section.l-header-mobile {
 // }
 @media (min-width: 768px) {
     .menu-content {
-        .menu-item {
-            height: 54px;
+        .menu-item,
+        .menu-drop-item,
+        .menu-item span {
             &:not(:last-of-type) {
-                margin-bottom: 20px;
+                margin-bottom: 49px;
             }
         }
 
         hp-button {
-            margin-bottom: 90px;
+            margin-bottom: 80px;
         }
     }
 }

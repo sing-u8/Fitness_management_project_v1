@@ -1,80 +1,86 @@
 .login {
-  .box {
-    width: 415px;
-    padding-top: 70px;
+    .box {
+        width: 415px;
+        padding-top: 70px;
 
-    rw-button {
-      &#kakao {
-        margin-top: 44px;
-      }
-      &#google {
-        margin-top: 15px;
-      }
-      &#apple {
-        margin-top: 15px;
-      }
-    }
-
-    .button {
-      position: relative;
-      height: 55px;
-      border-radius: 6px;
-      cursor: pointer;
-
-      img {
-        position: absolute;
-        left: 11px;
-        &#kakao {
-          width: 34px;
-          height: 34px;
+        rw-button {
+            &#kakao {
+                margin-top: 44px;
+            }
+            &#google {
+                margin-top: 15px;
+            }
+            &#apple {
+                margin-top: 15px;
+            }
         }
-        &#google {
-          width: 32px;
-          height: 32px;
-          left: 12px;
+
+        .button {
+            position: relative;
+            height: 55px;
+            border-radius: 6px;
+            cursor: pointer;
+
+            img {
+                position: absolute;
+                left: 11px;
+                &#kakao {
+                    width: 34px;
+                    height: 34px;
+                }
+                &#google {
+                    width: 32px;
+                    height: 32px;
+                    left: 12px;
+                }
+                &#apple {
+                    width: 34px;
+                    height: 34px;
+                }
+            }
         }
-        &#apple {
-          width: 34px;
-          height: 34px;
+
+        .kakao {
+            width: 100%;
         }
-      }
-    }
 
-    .kakao {
-      width: 100%;
-    }
-
-    .google {
-      width: 100%;
-      span {
-        color: var(--white);
-      }
-    }
-
-    .apple {
-      width: 100%;
-      span {
-        color: var(--white);
-      }
-    }
-
-    .email {
-      height: 55px;
-      margin-top: 15px;
-
-      .rw-typo-title2 {
-        padding: 17px 30px;
-        font-weight: 500;
-        cursor: pointer;
-        &:hover {
-          opacity: 0.8;
+        .google {
+            width: 100%;
+            span {
+                color: var(--white);
+            }
         }
-      }
 
-      .v-line {
-        height: 20px;
-        border-right: 1px solid var(--border-color);
-      }
+        .apple {
+            width: 100%;
+            span {
+                color: var(--white);
+            }
+        }
+
+        .email {
+            height: 55px;
+            margin-top: 15px;
+
+            .rw-typo-title2 {
+                padding: 17px 30px;
+                font-weight: 500;
+                cursor: pointer;
+                &:hover {
+                    opacity: 0.8;
+                }
+            }
+
+            .v-line {
+                height: 20px;
+                border-right: 1px solid var(--border-color);
+            }
+        }
     }
-  }
+}
+
+rw-intro-guide-toast {
+    position: absolute;
+    right: 45px;
+    bottom: 0;
 }

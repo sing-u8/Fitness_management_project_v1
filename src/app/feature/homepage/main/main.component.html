@@ -1,255 +1,386 @@
-<section class="l-main">
-
+<section #l_main_el class="l-main">
     <div (click)="scrollTop()" class="scroll-up-button"></div>
 
-    <div id="sec1" class="sec--common sec__bg-lightergrey hp-scroll-ani">
-
-        <div class="sec1__l-text">
-            <div class="sec1__text hp-SA1">쉽고 간편한 센터 관리, 레드웨일로 시작하세요.</div>
-            <div class="hp-SA2">
-                <div
-                    class="sec1__button"
-                    (click)="toggleFreeStartModalVisible()"
-                >
-                    무료로 시작하기
-                </div>
-            </div>
+    <div #l_title_el class="l-title">
+        <div class="title-one">기능 소개</div>
+        <div class="title-two">
+            복잡한 센터 관리,<br />
+            이제는 더욱 쉽고 간편하게!
         </div>
-        <div class="sec1__l-image hp-SA3">
-            <div class="sec1__image1"></div>
-            <div class="sec1__image2"></div>
-        </div>
-
+        <div class="title-bg"></div>
     </div>
 
-    <div id="sec2" class="sec--common sec__bg-white hp-scroll-ani">
+    <div #l_main_nav_el class="l-main-nav">
+        <div class="nav-item" *ngFor="let item of nav_items" (click)="item.onClick()">{{ item.value }}</div>
+    </div>
+    <div #l_main_nav_dummy_el class="l-main-nav-dummy"></div>
 
-        <div class="sec2__l-text hp-SA1">
-            <div class="sec2__text">
-                기간 제한 없이,<br> 무료로 사용해보고<br> 결정하세요.
+    <div class="l-content">
+        <div #member_management_el class="content-common member-management">
+            <div class="content-title">회원 관리</div>
+            <div class="content-title-detail">어려운 회원 관리가 쉬워졌어요.</div>
+            <div class="content-item-common mm-1">
+                <div class="content-item-title">
+                    한 화면에서<br />
+                    통합 관리가 가능해요.
+                </div>
+                <div class="content-item-detail">
+                    출결, 회원권/락커 정보, 예약,<br class="mobile" />
+                    결제 내역, 계약서 등의<br class="pad" /><br class="web" />
+                    정보 확인부터<br class="mobile" />
+                    회원권 등록, 연장, 정지, 환불까지<br />
+                    편리하게 관리할 수 있어요.
+                </div>
+                <div class="content-item-image-common mm-1-image"></div>
             </div>
-            <hp-find-more-button
-                (onClick)="onReceiveIntroOpen()"
-            ></hp-find-more-button>
+            <div class="content-item-common mm-2">
+                <div class="content-item-title">
+                    회원 상담까지 한 화면에서<br />
+                    해결할 수 있어요.
+                </div>
+                <div class="content-item-detail">
+                    회원의 정보를 보면서<br class="mobile" />
+                    1:1 채팅 상담을<br class="pad" /><br class="web" />
+                    진행할 수 있어<br class="mobile" />
+                    세심한 상담이 가능해져요.
+                </div>
+                <div class="content-item-image-common mm-2-image"></div>
+            </div>
+            <div class="content-item-common mm-3">
+                <div class="content-item-title">
+                    회원을 자동으로<br />
+                    분류해요.
+                </div>
+                <div class="content-item-detail">
+                    미수금이 있는 회원을<br class="mobile" />
+                    한 눈에 확인할 수 있고,<br />
+                    만료 회원이나 만료 예정 회원에게<br />
+                    채팅으로 재등록 메시지를<br class="mobile" />
+                    전달할 수 있어요.
+                </div>
+                <div class="content-item-detail">
+                    다양한 회원 분류에 따라<br />
+                    필요한 내용만 골라 전달해 보세요.
+                </div>
+                <div class="content-item-image-common mm-3-image"></div>
+            </div>
         </div>
 
-        <div class="sec2__talks">
-            <div class="talk1 hp-SA2">
-                센터 관리 프로그램 금액이 너무 비싸요.
+        <div #schedule_management_el class="content-common schedule-management">
+            <div class="content-title">스케줄 관리</div>
+            <div class="content-title-detail">
+                똑똑한 캘린더로<br class="mobile" />
+                일정 관리를 한 눈에
             </div>
-            <div class="talk2 hp-SA3">
-                가입비부터 초기 설치비까지 0원!<br>
-                지금 바로 무료로 시작하실 수 있어요.
+            <div class="content-item-common cm-1">
+                <div class="content-item-title">
+                    강사별 일정을<br />
+                    한 눈에 볼 수 있어요.
+                </div>
+                <div class="content-item-detail">
+                    수업 스케줄이 꼬이는 상황은 이제 그만!<br />
+                    한 눈에 일정을 파악하고,<br />
+                    편하게 업무를 분담해 보세요.
+                </div>
+                <div class="content-item-image-common cm-1-image"></div>
             </div>
-            <div class="talk3 hp-SA4">
-                정보 이동 시, 정보가 손실되진 않나요?
+            <div class="content-item-common cm-2">
+                <div class="content-item-title">
+                    반복되는 일정도<br />
+                    한 번에 등록할 수 있어요.
+                </div>
+                <div class="content-item-detail">
+                    매일 반복되는 수업 일정을<br />
+                    하나씩 등록하는 번거로움 없이<br />
+                    몇 주, 몇 달간의 일정도<br />
+                    단 한 번만에 등록할 수 있어요.
+                </div>
+                <div class="content-item-image-common cm-2-image"></div>
             </div>
-            <div class="talk4 hp-SA5">
-                편리하고 안전한 데이터 이동을 위해<br>
-                회원 정보를 무료로, 원격 이동시켜드려요.
+            <div class="cm-3-4">
+                <div class="content-item-common cm-3">
+                    <div class="content-item-title">
+                        스케줄 화면에서 채팅으로<br />
+                        즉시 일정을 조율할 수 있어요.
+                    </div>
+                    <div class="content-item-detail">
+                        더 이상 카톡과 스케줄 화면을<br class="mobile" />
+                        번갈아 가면서<br />
+                        일정을 조율할 필요가 없어요.
+                    </div>
+                    <div class="content-item-detail">
+                        스케줄 화면에서 채팅 기능을 이용해<br />
+                        회원과의 일정 조율을 그대로<br class="mobile" /><br class="pad" />
+                        이어갈 수 있어요.
+                    </div>
+                    <div class="content-item-image-common cm-3-image"></div>
+                </div>
+                <div class="content-item-common cm-4">
+                    <div class="content-item-title">
+                        수업 일정을 모바일로<br />
+                        확인할 수 있어요.
+                    </div>
+                    <div class="content-item-detail">
+                        회원은 언제 어디서든 모바일을 통해<br />
+                        수업 일정을 확인할 수 있어요.
+                    </div>
+                    <div class="content-item-detail">
+                        변경된 일정이나 다가오는 일정은<br />
+                        즉시 모바일 알림 기능으로 알려드려요.
+                    </div>
+                    <div class="content-item-image-common cm-4-image"></div>
+                </div>
             </div>
         </div>
 
+        <div #lesson_reservation_el class="content-common lesson-reservation">
+            <div class="content-title">수업 예약</div>
+            <div class="content-title-detail">
+                효율적인 센터 운영은<br class="mobile" />
+                예약에서부터
+            </div>
+            <div class="content-item-common lr-1">
+                <div class="content-item-title">
+                    회원이 직접<br />
+                    예약할 수 있어요.
+                </div>
+                <div class="content-item-detail">
+                    수업 일정을 등록하면,<br class="mobile" />
+                    복잡한 일정 조율 없이<br class="pad" /><br class="web" />
+                    즉시 회원이<br class="mobile" />
+                    모바일로 수업을 예약할 수 있어요.
+                </div>
+                <div class="content-item-image-common lr-1-image"></div>
+            </div>
+            <div class="lr-2-3">
+                <div class="content-item-common lr-2">
+                    <div class="content-item-title">
+                        노쇼 및 당일 취소에 대한<br />
+                        대응이 가능해요.
+                    </div>
+                    <div class="content-item-detail">
+                        수업 시간이 되면<br class="mobile" />
+                        회원권 횟수가 차감되어<br />
+                        회원과의 불필요한 분쟁이 사라지고,<br />
+                        재등록도 유도할 수 있어요.
+                    </div>
+                    <div class="content-item-image-common lr-2-image"></div>
+                </div>
+                <div class="content-item-common lr-3">
+                    <div class="content-item-title">
+                        예약 가능한 시간을<br />
+                        수업마다 설정할 수 있어요.
+                    </div>
+                    <div class="content-item-detail">
+                        수업 인원, 수업 시간부터<br class="mobile" />
+                        예약 가능한 날짜,<br class="pad" /><br class="web" />
+                        예약 마감 시간,<br class="mobile" />
+                        취소 마감 시간까지<br class="pad" /><br class="web" />
+                        각 수업별로<br class="mobile" />
+                        예약 정책을 설정할 수 있어요.
+                    </div>
+                    <div class="content-item-image-common lr-3-image"></div>
+                </div>
+            </div>
+        </div>
+
+        <div #sale_management_el class="content-common sale-management">
+            <div class="content-title">매출 관리</div>
+            <div class="content-title-detail">
+                한 번에 조회하는<br class="mobile" />
+                우리 센터 매출
+            </div>
+            <div class="content-item-common sm-1">
+                <div class="content-item-title">
+                    필요한 매출 정보를<br />
+                    쉽게 조회할 수 있어요.
+                </div>
+                <div class="content-item-detail">
+                    기간, 회원명, 결제 담당자 등<br />
+                    상황에 따라 필요한 매출 정보만을<br />
+                    필터링해서 확인할 수 있어요.
+                </div>
+                <div class="content-item-image-common sm-1-image"></div>
+            </div>
+            <div class="content-item-common sm-2">
+                <div class="content-item-title">
+                    당일, 당월 매출을<br />
+                    한 눈에 파악할 수 있어요.
+                </div>
+                <div class="content-item-detail">
+                    총 매출과 결제수단별 매출 증감을<br class="mobile" />
+                    파악하고,<br class="pad" /><br class="web" />
+                    당일과 전일의 매출,<br class="mobile" />
+                    당월과 전월의 매출을<br />
+                    자세하게 비교할 수 있어요.
+                </div>
+                <div class="content-item-image-common sm-2-image"></div>
+            </div>
+        </div>
+
+        <div #locker_management_el class="content-common locker-management">
+            <div class="content-title">락커 관리</div>
+            <div class="content-title-detail">락커, 자유롭게 배치해보세요.</div>
+            <div class="content-item-common lm-1">
+                <div class="content-item-title">
+                    센터 구조에 따라<br />
+                    자유롭게 배치할 수 있어요.
+                </div>
+                <div class="content-item-detail">
+                    남성 탈의실, 여성 탈의실, 신발장 등<br />
+                    센터 구조에 맞게 락커를<br />
+                    자유롭게 배치할 수 있어요.
+                </div>
+                <div class="content-item-image-common lm-1-image"></div>
+            </div>
+            <div class="content-item-common lm-2">
+                <div class="content-item-title">
+                    한 화면에서<br />
+                    손쉽게 관리할 수 있어요.
+                </div>
+                <div class="content-item-detail">
+                    락커 회원 등록부터 기간 설정,<br class="mobile" />
+                    자리이동, 비우기,<br class="pad" /><br class="web" />
+                    락커 사용 내역 확인,<br class="mobile" />
+                    파손된 락커 관리까지<br />
+                    한 화면에서 편리하게 관리할 수 있어요.
+                </div>
+                <div class="content-item-image-common lm-2-image"></div>
+            </div>
+        </div>
+
+        <div #chatting_el class="content-common chatting">
+            <div class="content-title">채팅</div>
+            <div class="content-title-detail">
+                채팅으로 회원 관리와<br class="mobile" />
+                마케팅을 동시에
+            </div>
+            <div class="content-item-common ch-1">
+                <div class="content-item-title">
+                    유료 문자 대신<br />
+                    무료 채팅을 이용하세요.
+                </div>
+                <div class="content-item-detail">
+                    문자 비용이 부담스러우신가요?<br />
+                    무료 채팅으로 공지를 전달해 보세요.
+                </div>
+                <div class="content-item-image-common ch-1-image"></div>
+            </div>
+            <div class="ch-2-3">
+                <div class="content-item-common ch-2">
+                    <div class="content-item-title">
+                        카톡 대신 업무 전용<br />
+                        메신저를 이용하세요.
+                    </div>
+                    <div class="content-item-detail">
+                        사적인 대화를 구분하여<br />
+                        업무 효율을 더욱 높일 수 있어요.
+                    </div>
+                    <div class="content-item-image-common ch-2-image"></div>
+                </div>
+                <div class="content-item-common ch-3">
+                    <div class="content-item-title">
+                        회원 응대가<br />
+                        편하고 쉬워져요.
+                    </div>
+                    <div class="content-item-detail">
+                        채팅에 회원 정보가 연동되어 응대가 편해지며,<br />
+                        채팅 상담 기록이 남아있어<br />
+                        관리자의 모니터링도 가능해요.
+                    </div>
+                    <div class="content-item-image-common ch-3-image"></div>
+                </div>
+            </div>
+        </div>
+
+        <div #contract_el class="content-common contract">
+            <div class="content-title">전자 계약</div>
+            <div class="content-title-detail">
+                불편한 종이 계약은 NO!<br class="mobile" />
+                관리하기 쉬운 전자 계약
+            </div>
+            <div class="content-item-common ct-1">
+                <div class="content-item-title">
+                    종이 계약 대신<br />
+                    전자 계약으로 관리하세요.
+                </div>
+                <div class="content-item-detail">
+                    계약서 작성 후 일일이<br class="mobile" />
+                    전산에 옮기지 마세요.<br />
+                    이제 센터만의 전자 계약서를<br class="mobile" />
+                    작성할 수 있어요.
+                </div>
+                <div class="content-item-detail">
+                    전자 회원 서명으로 법적 효력도 챙기고,<br />
+                    이용 약관도 자유롭게 작성해 보세요.
+                </div>
+                <div class="content-item-image-common ct-1-image"></div>
+            </div>
+        </div>
+
+        <div #message_el class="content-common message">
+            <div class="content-title">문자</div>
+            <div class="content-title-detail">
+                부담되는 문자 비용,<br class="mobile" />
+                이제 더욱 저렴하게
+            </div>
+            <div class="content-item-common mg-1">
+                <div class="content-item-title">
+                    저렴한 비용으로<br />
+                    문자 전송이 가능해요.
+                </div>
+                <div class="content-item-detail">
+                    단문 12원, 장문 32원의 저렴한 비용으로<br />
+                    즉시 또는 예약된 시간에 맞추어<br />
+                    회원에게 문자를 전송해 보세요.
+                </div>
+                <div class="content-item-image-common mg-1-image"></div>
+            </div>
+            <div class="content-item-common mg-2">
+                <div class="content-item-title">
+                    자동으로 만료 안내 문자를<br />
+                    전송할 수 있어요.
+                </div>
+                <div class="content-item-detail">
+                    회원권과 락커가 만료되기 전에<br />
+                    자동으로 안내 문자를 전송할 수 있어요.
+                </div>
+                <div class="content-item-image-common mg-2-image"></div>
+            </div>
+        </div>
+
+        <div #attendance_el class="content-common attendance">
+            <div class="content-title">출석 관리</div>
+            <div class="content-title-detail">터치 한 번으로 출석 완료</div>
+            <div class="content-item-common at-1">
+                <div class="content-item-title">
+                    터치 방식으로<br />
+                    출석을 관리할 수 있어요.
+                </div>
+                <div class="content-item-detail">
+                    보유하고 있는<br class="mobile" />
+                    태블릿이나 터치 모니터에서<br />
+                    출석용 터치 스크린 모드를<br class="mobile" />
+                    바로 이용할 수 있어요.
+                </div>
+                <div class="content-item-image-common at-1-image"></div>
+            </div>
+        </div>
     </div>
 
-    <div id="sec3" class="sec--common sec__bg-lightergrey hp-scroll-ani">
-
-        <div class="sec3__l-text hp-SA1">
-            <div class="sec3__text">
-                복잡한 센터 관리,<br>
-                이제는 쉽고 간편하게!
-            </div>
-            <hp-find-more-button
-                (onClick)="onReceiveIntroOpen()"
-            ></hp-find-more-button>
-        </div>
-        <div class="sec3__l-box">
-            <div class="sec3__box1 hp-SA2">
-                <hp-function-box [type]="'m-member'"></hp-function-box>
-                <hp-function-box [type]="'m-schedule'"></hp-function-box>
-                <hp-function-box [type]="'r-class'"></hp-function-box>
-            </div>
-            <div class="sec3__box2 hp-SA3">
-                <hp-function-box [type]="'m-sale'"></hp-function-box>
-                <hp-function-box [type]="'m-locker'"></hp-function-box>
-                <hp-function-box [type]="'chat'"></hp-function-box>
-            </div>
-        </div>
-
+    <div class="additional-desc">
+        * 기기는 별도로 판매하지 않으며, 시중에<br class="mobile" />
+        판매되는 기기를 구매하여 이용해 주세요.
     </div>
 
-    <div id="sec4" class="sec--common sec__bg-white">
-
-        <div class="sec4__element sec4-1 hp-scroll-ani">
-            <div class="text-with-title hp-SA1">
-                <div class="title">회원 관리</div>
-                <div class="text">
-                    한 화면에서 관리하는<br>
-                    센터 회원의 모든 것
-                </div>
-                <hp-find-more-button
-                    (onClick)="onReceiveIntroOpen()"
-                ></hp-find-more-button>
-            </div>
-            <div class="sec4-1__images">
-                <div class="sec4-1__image1 hp-SA2">
-                    <div class="sec4-1__image1_1"></div>
-                    <div class="sec4-1__image1_2"></div>
-                </div>
-                <div class="sec4-1__image2 hp-SA3"></div>
-                <div class="sec4-1__image3 hp-SA4"></div>
-            </div>
-        </div>
-        <div class="sec4__element sec4-2 hp-scroll-ani">
-            <div class="text-with-title hp-SA1">
-                <div class="title">스케줄 관리</div>
-                <div class="text">
-                    한 눈에 확인하는 일정,<br>
-                    띠링! 자동 알림까지
-                </div>
-                <hp-find-more-button
-                    (onClick)="onReceiveIntroOpen()"
-                ></hp-find-more-button>
-            </div>
-            <div class="sec4-2__images">
-                <div class="sec4-2__image1 hp-SA2"></div>
-                <div class="sec4-2__image2 hp-SA2"></div>
-                <div class="sec4-2__image3 hp-SA3"></div>
-            </div>
-        </div>
-        <div class="sec4__element sec4-3 hp-scroll-ani">
-            <div class="text-with-title hp-SA1">
-                <div class="title">수업 예약</div>
-                <div class="text">
-                    언제 어디서든<br>
-                    실시간으로 예약하고<br>
-                    확인하는 수업
-                </div>
-                <hp-find-more-button
-                    (onClick)="onReceiveIntroOpen()"
-                ></hp-find-more-button>
-            </div>
-            <div class="sec4-3__images hp-SA">
-                <div class="sec4-3__image1"></div>
-                <div class="sec4-3__image2"></div>
-                <div class="sec4-3__image3"></div>
-            </div>
-        </div>
-        <div class="sec4__element sec4-4 hp-scroll-ani">
-            <div class="text-with-title hp-SA1" >
-                <div class="title">매출 관리</div>
-                <div class="text">
-                    필요한 정보만 골라<br>
-                    한 번에 조회하는<br>
-                    우리 센터 매출
-                </div>
-                <hp-find-more-button
-                    (onClick)="onReceiveIntroOpen()"
-                ></hp-find-more-button>
-            </div>
-            <div class="sec4-4__images">
-                <div class="sec4-4__image1 hp-SA2"></div>
-                <div class="sec4-4__image2 hp-SA3"></div>
-            </div>
-        </div>
-        <div class="sec4__element sec4-5 hp-scroll-ani">
-            <div class="text-with-title hp-SA1">
-                <div class="title">락커 관리</div>
-                <div class="text">
-                    더는 헷갈리지 않게,<br>
-                    센터 락커 구조 그대로
-                </div>
-                <hp-find-more-button
-                    (onClick)="onReceiveIntroOpen()"
-                ></hp-find-more-button>
-            </div>
-            <div class="sec4-5__images">
-                <div class="sec4-5__image1 hp-SA2"></div>
-                <div class="sec4-5__image2 hp-SA3"></div>
-            </div>
-        </div>
-        <div class="sec4__element sec4-6 hp-scroll-ani">
-            <div class="text-with-title hp-SA1">
-                <div class="title">채팅</div>
-                <div class="text">
-                    무료 채팅으로<br>
-                    회원 관리부터<br>
-                    마케팅까지 완벽하게
-                </div>
-                <hp-find-more-button
-                    (onClick)="onReceiveIntroOpen()"
-                ></hp-find-more-button>
-            </div>
-            <div class="sec4-6__images">
-                <div class="sec4-6__image1 hp-SA2"></div>
-                <div class="sec4-6__image2 hp-SA3"></div>
-                <div class="sec4-6__image3 hp-SA4"></div>
-                <div class="sec4-6__image4 hp-SA4">
-                    네, 저 3kg 더 빠졌어요.<br>
-                    그럼 2개월 재등록 신청할게요!
-                </div>
-                <div class="sec4-6__image5 hp-SA5"></div>
-            </div>
-        </div>
-
-
-
-    </div>
-
-    <div id="sec5" class="sec--common sec__bg-lightergrey hp-scroll-ani">
-
-        <div class="sec5__l-text">
-            <div class="sec5__text hp-SA1">
-                <div class="sec5__title">물론, 기본에도 충실해요.</div>
-                <div class="sec5__desc">
-                    출석용 터치 스크린 모드를 이용한 출석부터<br>
-                    모바일 알림, 수업과 회원권의 체계적인 관리까지!
-                </div>
-            </div>
-            <div class="sec5__images sec5__images-main">
-                <div class="sec5__image1 hp-SA1"></div>
-                <div class="sec5__image2 hp-SA2"></div>
-            </div>
-            <div class="sec5__image3 hp-SA3">
-                <div class="sec5__images sec5__images-sub">
-                    <div class="sec5__image1 hp-SA1"></div>
-                    <div class="sec5__image2 hp-SA2"></div>
-                </div>
-            </div>
-        </div>
-
-    </div>
-
-    <div id="sec6" class="sec--common sec__bg-white hp-scroll-ani">
-        <div class="body">
-            <hp-main-carousel></hp-main-carousel>
-        </div>
-        <hp-free-start-footer
-            class="hp-SA1"
-            [animation]="true"
-            (onFreeStartClick)="toggleFreeStartModalVisible()"
-        ></hp-free-start-footer>
-
-    </div>
-
-    <div id="sec7" class="sec--common sec__bg-white hp-scroll-ani">
-        <div class="body">
-            <hp-faq-list
-                [animation]="true"
-            ></hp-faq-list>
-        </div>
-        <hp-homepage-footer></hp-homepage-footer>
-    </div>
-
+    <hp-homepage-footer></hp-homepage-footer>
 </section>
-
 
 <hp-receive-introduction-modal
     [(visible)]="receiveIntroVisible"
     (cancel)="onReceiveIntroClose()"
     (confirm)="onReceiveIntroFinish()"
 ></hp-receive-introduction-modal>
-
 
 <hp-free-start-modal
     [(visible)]="isFreeStartModalVisible"

@@ -1,38 +1,19 @@
 <section class="l-header">
-
     <div class="header__left">
-        <div [routerLink]="['/']"  class="redwhale-logo"></div>
+        <div [routerLink]="['/']" class="redwhale-logo"></div>
     </div>
     <div class="header__middle">
         <a
             [routerLink]="['/']"
-            [routerLinkActiveOptions]="{exact: true}"
+            [routerLinkActiveOptions]="{ exact: true }"
             routerLinkActive="active"
             class="header__nav"
         >
-            서비스 소개
+            기능 소개
         </a>
-        <a
-            [routerLink]="['/fare-guide']"
-            routerLinkActive="active"
-            class="header__nav"
-        >
-            요금 안내
-        </a>
-        <a
-            [routerLink]="['/introduction-inquiry']"
-            routerLinkActive="active"
-            class="header__nav"
-        >
-            도입 문의
-        </a>
-        <a
-            [routerLink]="['/FAQ']"
-            routerLinkActive="active"
-            class="header__nav"
-        >
-            자주 묻는 질문
-        </a>
+        <a [routerLink]="['/fare-guide']" routerLinkActive="active" class="header__nav"> 요금 안내 </a>
+        <a [routerLink]="['/introduction-inquiry']" routerLinkActive="active" class="header__nav"> 도입 안내 </a>
+        <a [routerLink]="['/FAQ']" routerLinkActive="active" class="header__nav"> 고객 센터 </a>
     </div>
     <div class="header__right">
         <hp-button
@@ -56,26 +37,44 @@
     </div>
 </section>
 
-
-<section class="l-header-mobile" [class.remove-header] = "removeHeaderFlag">
-    <div *ngIf="!removeHeaderFlag" [routerLink]="['/']"  class="redwhale-logo"></div>
+<section class="l-header-mobile" [class.remove-header]="removeHeaderFlag">
+    <div *ngIf="!removeHeaderFlag" [routerLink]="['/']" class="redwhale-logo"></div>
     <div *ngIf="!isMenuOpen && !removeHeaderFlag" (click)="toggleMenu()" class="hamburger-logo"></div>
     <div *ngIf="isMenuOpen && !removeHeaderFlag" (click)="toggleMenu()" class="close-button"></div>
     <div *ngIf="removeHeaderFlag" (click)="closeWindow()" class="close-button"></div>
 
-    <div class="menu-content" [style.display] = "isMenuOpen ? 'flex' : 'none'">
+    <div class="menu-content" [style.display]="isMenuOpen ? 'flex' : 'none'">
         <div class="l-menu-item">
             <a [routerLink]="['/']" (click)="toggleMenu()" class="menu-item">서비스 소개</a>
             <a [routerLink]="['/fare-guide']" (click)="toggleMenu()" class="menu-item">요금 안내</a>
-            <a [routerLink]="['/introduction-inquiry']" (click)="toggleMenu()" class="menu-item">도입 문의</a>
-            <a [routerLink]="['/FAQ']" (click)="toggleMenu()" class="menu-item">자주 묻는 질문</a>
+            <a [routerLink]="['/introduction-inquiry']" (click)="toggleMenu()" class="menu-item">도입 안내</a>
+            <div class="menu-drop-item">
+                <div class="menu-drop-header" (click)="toggleFaqFlag()">
+                    <span>자주 묻는 질문</span>
+                    <div class="mdi mdi-chevron-down" [class.open]="faqFlag"></div>
+                </div>
+                <div *ngIf="faqFlag" class="menu-drop-content">
+                    <a [routerLink]="['/introduction-inquiry']" (click)="toggleMenu()" class="menu-drop-content-item"
+                        >공지사항</a
+                    >
+                    <a [routerLink]="['/introduction-inquiry']" (click)="toggleMenu()" class="menu-drop-content-item"
+                        >이벤트</a
+                    >
+                    <a [routerLink]="['/introduction-inquiry']" (click)="toggleMenu()" class="menu-drop-content-item"
+                        >이용 가이드</a
+                    >
+                    <a [routerLink]="['/introduction-inquiry']" (click)="toggleMenu()" class="menu-drop-content-item"
+                        >자주 묻는 질문</a
+                    >
+                </div>
+            </div>
         </div>
 
         <hp-button
             *ngIf="isMobileWidth"
             [width]="'294'"
             [height]="'50'"
-            [text] = "'무료로 시작하기'"
+            [text]="'무료로 시작하기'"
             [bgColor]="'var(--red)'"
             [fontColor]="'var(--white)'"
             (onClick)="toggleFreeStartModalVisible()"
@@ -85,12 +84,11 @@
             *ngIf="!isMobileWidth"
             [width]="'460'"
             [height]="'50'"
-            [text] = "'무료로 시작하기'"
+            [text]="'무료로 시작하기'"
             [bgColor]="'var(--red)'"
             [fontColor]="'var(--white)'"
             (onClick)="toggleFreeStartModalVisible()"
         ></hp-button>
-
     </div>
 </section>
 

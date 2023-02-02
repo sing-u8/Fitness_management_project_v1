@@ -9,9 +9,17 @@
     align-items: center;
     justify-content: flex-start;
     width: 100vw;
-    height: calc(100vh - 65px);
+    //height: calc(100vh - 65px);
+    height: 100%;
     position: relative;
     padding-top: 65px;
+
+    rw-intro-guide-toast {
+        position: absolute;
+        right: 45px;
+        bottom: 0;
+        z-index: 1;
+    }
 
     section {
         &.header {
