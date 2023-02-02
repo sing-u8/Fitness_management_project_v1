@@ -11,7 +11,7 @@
     </div>
 
     <div #l_main_nav_el class="l-main-nav">
-        <div class="nav-item" *ngFor="let item of nav_items" (click)="item.onClick()">{{ item.value }}</div>
+        <div #nav_item class="nav-item" *ngFor="let item of nav_items" (click)="item.onClick()">{{ item.value }}</div>
     </div>
     <div #l_main_nav_dummy_el class="l-main-nav-dummy"></div>
 
