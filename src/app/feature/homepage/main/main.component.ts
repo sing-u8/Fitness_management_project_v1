@@ -133,32 +133,99 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit {
                 onClick: () => {
                     const h = document.getElementById('l-homepage')
                     h.scrollTo({
-                        top:
-                            h.scrollTop -
-                            (this.headerHeight + this.l_title_el.nativeElement.clientHeight) -
-                            this.member_management_el.nativeElement.getBoundingClientRect().y,
+                        top: h.scrollTop - (150 - this.member_management_el.nativeElement.getBoundingClientRect().y),
                         behavior: 'smooth',
                     })
-                    console.log(
-                        'scroll to member management el : ',
-                        h.scrollTop,
-                        this.headerHeight,
-                        this.l_title_el.nativeElement.clientHeight,
-                        this.member_management_el.nativeElement.getBoundingClientRect().y,
-                        h.scrollTop -
-                            (this.headerHeight + this.l_title_el.nativeElement.clientHeight) -
-                            this.member_management_el.nativeElement.getBoundingClientRect().y
-                    )
                 },
             },
-            { value: '스케줄 관리', el: this.schedule_management_el },
-            { value: '수업 예약', el: this.lesson_reservation_el },
-            { value: '매출 관리', el: this.sale_management_el },
-            { value: '락커 관리', el: this.locker_management_el },
-            { value: '채팅', el: this.chatting_el },
-            { value: '전자 계약', el: this.contract_el },
-            { value: '문자', el: this.message_el },
-            { value: '출석 관리', el: this.attendance_el },
+            {
+                value: '스케줄 관리',
+                el: this.schedule_management_el,
+                onClick: () => {
+                    const h = document.getElementById('l-homepage')
+                    h.scrollTo({
+                        top: h.scrollTop - (150 - this.schedule_management_el.nativeElement.getBoundingClientRect().y),
+                        behavior: 'smooth',
+                    })
+                },
+            },
+            {
+                value: '수업 예약',
+                el: this.lesson_reservation_el,
+                onClick: () => {
+                    const h = document.getElementById('l-homepage')
+                    h.scrollTo({
+                        top: h.scrollTop - (150 - this.lesson_reservation_el.nativeElement.getBoundingClientRect().y),
+                        behavior: 'smooth',
+                    })
+                },
+            },
+            {
+                value: '매출 관리',
+                el: this.sale_management_el,
+                onClick: () => {
+                    const h = document.getElementById('l-homepage')
+                    h.scrollTo({
+                        top: h.scrollTop - (150 - this.sale_management_el.nativeElement.getBoundingClientRect().y),
+                        behavior: 'smooth',
+                    })
+                },
+            },
+            {
+                value: '락커 관리',
+                el: this.locker_management_el,
+                onClick: () => {
+                    const h = document.getElementById('l-homepage')
+                    h.scrollTo({
+                        top: h.scrollTop - (150 - this.locker_management_el.nativeElement.getBoundingClientRect().y),
+                        behavior: 'smooth',
+                    })
+                },
+            },
+            {
+                value: '채팅',
+                el: this.chatting_el,
+                onClick: () => {
+                    const h = document.getElementById('l-homepage')
+                    h.scrollTo({
+                        top: h.scrollTop - (150 - this.chatting_el.nativeElement.getBoundingClientRect().y),
+                        behavior: 'smooth',
+                    })
+                },
+            },
+            {
+                value: '전자 계약',
+                el: this.contract_el,
+                onClick: () => {
+                    const h = document.getElementById('l-homepage')
+                    h.scrollTo({
+                        top: h.scrollTop - (150 - this.contract_el.nativeElement.getBoundingClientRect().y),
+                        behavior: 'smooth',
+                    })
+                },
+            },
+            {
+                value: '문자',
+                el: this.message_el,
+                onClick: () => {
+                    const h = document.getElementById('l-homepage')
+                    h.scrollTo({
+                        top: h.scrollTop - (150 - this.message_el.nativeElement.getBoundingClientRect().y),
+                        behavior: 'smooth',
+                    })
+                },
+            },
+            {
+                value: '출석 관리',
+                el: this.attendance_el,
+                onClick: () => {
+                    const h = document.getElementById('l-homepage')
+                    h.scrollTo({
+                        top: h.scrollTop - (150 - this.attendance_el.nativeElement.getBoundingClientRect().y),
+                        behavior: 'smooth',
+                    })
+                },
+            },
         ]
     }
     // ---------------------------------------------------------------------
