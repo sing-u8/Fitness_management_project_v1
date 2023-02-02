@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, Input } from '@angular/core'
 
 @Component({
     selector: 'rw-intro-guide-toast',
@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core'
     styleUrls: ['./intro-guide-toast.component.scss'],
 })
 export class IntroGuideToastComponent implements OnInit {
-    public isOpen = false
+    @Input() isOpen = false
     constructor() {}
 
     ngOnInit(): void {}
