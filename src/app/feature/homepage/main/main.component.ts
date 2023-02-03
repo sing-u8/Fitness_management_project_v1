@@ -1,14 +1,4 @@
-import {
-    Component,
-    OnInit,
-    Renderer2,
-    OnDestroy,
-    AfterViewInit,
-    ViewChild,
-    ElementRef,
-    ViewChildren,
-    QueryList,
-} from '@angular/core'
+import { Component, OnInit, Renderer2, OnDestroy, AfterViewInit, ViewChild, ElementRef } from '@angular/core'
 import { Router } from '@angular/router'
 import { DeviceDetectorService } from 'ngx-device-detector'
 import _ from 'lodash'
@@ -27,34 +17,49 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit {
         this.resizeListener()
     }
     ngAfterViewInit(): void {
-        this.initNavItems()
-
-        this.onScroll()
         this.setResizeVars()
+        this.initNavItems()
         this.resizeListener = this.renderer.listen(window, 'resize', (e) => {
             this.setResizeVars()
-            console.log('window resize listen : ', e, window.innerWidth, this.headerHeight)
+            this.setNavOnScroll()
         })
         this.scrollListener = this.renderer.listen(document.getElementById('l-homepage'), 'scroll', () => {
-            const h = document.getElementById('l-homepage')
-            console.log(
-                'l-homepage scroll listen : ',
-                this.headerHeight,
-                this.l_title_el.nativeElement.clientHeight,
-                h.scrollTop,
-                h.scrollHeight,
-                h.offsetHeight,
-                this.message_el.nativeElement.getBoundingClientRect(),
-                this.attendance_el.nativeElement.getBoundingClientRect(),
-                document.getElementById('l-homepage').getBoundingClientRect()
-            )
             this.setNavOnScroll()
-            this.onScroll()
+        })
+        this.navScrollListener = this.renderer.listen(this.l_main_nav_el.nativeElement, 'scroll', () => {
+            const navItems = this.l_main_nav_el.nativeElement.getElementsByClassName('nav-item')
+            console.log(
+                'set nav on scroll - ',
+                this.l_main_nav_el.nativeElement.scrollLeft,
+                this.l_main_nav_el.nativeElement.scrollWidth,
+                this.l_main_nav_el.nativeElement.getBoundingClientRect(),
+                'set nav scroll 0 -- ',
+                navItems[0].getBoundingClientRect(),
+                'set nav scroll 1 -- ',
+                navItems[1].getBoundingClientRect(),
+                'set nav scroll 2 -- ',
+                navItems[2].getBoundingClientRect(),
+                'set nav scroll 3 -- ',
+                navItems[3].getBoundingClientRect(),
+                'set nav scroll 4 -- ',
+                navItems[4].getBoundingClientRect(),
+                'set nav scroll 5 -- ',
+                navItems[5].getBoundingClientRect(),
+                'set nav scroll 6 -- ',
+                navItems[6].getBoundingClientRect(),
+                'set nav scroll 7 -- ',
+                navItems[7].getBoundingClientRect(),
+                'set nav scroll 8 -- ',
+                navItems[8].getBoundingClientRect()
+            )
         })
 
         const h = document.getElementById('l-homepage')
-        h.scrollTo({ top: 0 })
-        h.scrollTo({ top: 1 })
+        setTimeout(() => {
+            h.scrollTo({ top: 0 })
+            h.scrollTo({ top: 1 })
+            h.scrollTo({ top: 0 })
+        }, 100)
     }
 
     // ----------  free start modal ---------------//
@@ -93,16 +98,9 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit {
 
     // -------------------- animation funcs and vals  ------------------//
     public scrollListener = undefined
-    public elementVisibleHeight = 150
-    public hpSAobjList: Array<{ parent: Element; children: Array<Element> }> = undefined
-
-    onScroll() {
-        _.forEach(this.hpSAobjList, (obj) => {
-            const windowHeight = window.innerHeight
-        })
-    }
-
     public resizeListener = undefined
+    public navScrollListener = undefined
+
     public headerHeight = 50
     setResizeVars() {
         if (window.innerWidth >= 960) {
@@ -126,17 +124,13 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit {
         }
 
         this.setNavScrollActive()
-
-        console.log(
-            'set nav on scroll - ',
-            this.l_title_el.nativeElement.className,
-            this.l_title_el.nativeElement.classNames
-        )
     }
 
     // ---------------------------------------------------------------------
     public nav_items: Array<{ value: string; el: ElementRef; onClick?: () => void }> = []
     initNavItems() {
+        const navItems = this.l_main_nav_el.nativeElement.getElementsByClassName('nav-item')
+
         this.nav_items = [
             {
                 value: '회원 관리',
@@ -145,6 +139,11 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit {
                     const h = document.getElementById('l-homepage')
                     h.scrollTo({
                         top: h.scrollTop - (150 - this.member_management_el.nativeElement.getBoundingClientRect().y),
+                        behavior: 'smooth',
+                    })
+                    this.l_main_nav_el.nativeElement.scrollTo({
+                        left:
+                            this.l_main_nav_el.nativeElement.scrollLeft - (10 - navItems[0].getBoundingClientRect().x),
                         behavior: 'smooth',
                     })
                 },
@@ -158,6 +157,11 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit {
                         top: h.scrollTop - (150 - this.schedule_management_el.nativeElement.getBoundingClientRect().y),
                         behavior: 'smooth',
                     })
+                    this.l_main_nav_el.nativeElement.scrollTo({
+                        left:
+                            this.l_main_nav_el.nativeElement.scrollLeft - (10 - navItems[1].getBoundingClientRect().x),
+                        behavior: 'smooth',
+                    })
                 },
             },
             {
@@ -167,6 +171,11 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit {
                     const h = document.getElementById('l-homepage')
                     h.scrollTo({
                         top: h.scrollTop - (150 - this.lesson_reservation_el.nativeElement.getBoundingClientRect().y),
+                        behavior: 'smooth',
+                    })
+                    this.l_main_nav_el.nativeElement.scrollTo({
+                        left:
+                            this.l_main_nav_el.nativeElement.scrollLeft - (10 - navItems[2].getBoundingClientRect().x),
                         behavior: 'smooth',
                     })
                 },
@@ -180,6 +189,11 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit {
                         top: h.scrollTop - (150 - this.sale_management_el.nativeElement.getBoundingClientRect().y),
                         behavior: 'smooth',
                     })
+                    this.l_main_nav_el.nativeElement.scrollTo({
+                        left:
+                            this.l_main_nav_el.nativeElement.scrollLeft - (10 - navItems[3].getBoundingClientRect().x),
+                        behavior: 'smooth',
+                    })
                 },
             },
             {
@@ -189,6 +203,11 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit {
                     const h = document.getElementById('l-homepage')
                     h.scrollTo({
                         top: h.scrollTop - (150 - this.locker_management_el.nativeElement.getBoundingClientRect().y),
+                        behavior: 'smooth',
+                    })
+                    this.l_main_nav_el.nativeElement.scrollTo({
+                        left:
+                            this.l_main_nav_el.nativeElement.scrollLeft - (10 - navItems[4].getBoundingClientRect().x),
                         behavior: 'smooth',
                     })
                 },
@@ -202,6 +221,11 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit {
                         top: h.scrollTop - (150 - this.chatting_el.nativeElement.getBoundingClientRect().y),
                         behavior: 'smooth',
                     })
+                    this.l_main_nav_el.nativeElement.scrollTo({
+                        left:
+                            this.l_main_nav_el.nativeElement.scrollLeft - (10 - navItems[5].getBoundingClientRect().x),
+                        behavior: 'smooth',
+                    })
                 },
             },
             {
@@ -211,6 +235,11 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit {
                     const h = document.getElementById('l-homepage')
                     h.scrollTo({
                         top: h.scrollTop - (150 - this.contract_el.nativeElement.getBoundingClientRect().y),
+                        behavior: 'smooth',
+                    })
+                    this.l_main_nav_el.nativeElement.scrollTo({
+                        left:
+                            this.l_main_nav_el.nativeElement.scrollLeft - (10 - navItems[6].getBoundingClientRect().x),
                         behavior: 'smooth',
                     })
                 },
@@ -224,6 +253,11 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit {
                         top: h.scrollTop - (150 - this.message_el.nativeElement.getBoundingClientRect().y),
                         behavior: 'smooth',
                     })
+                    this.l_main_nav_el.nativeElement.scrollTo({
+                        left:
+                            this.l_main_nav_el.nativeElement.scrollLeft - (10 - navItems[7].getBoundingClientRect().x),
+                        behavior: 'smooth',
+                    })
                 },
             },
             {
@@ -235,6 +269,11 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit {
                         top: h.scrollTop - (150 - this.attendance_el.nativeElement.getBoundingClientRect().y),
                         behavior: 'smooth',
                     })
+                    this.l_main_nav_el.nativeElement.scrollTo({
+                        left:
+                            this.l_main_nav_el.nativeElement.scrollLeft - (10 - navItems[8].getBoundingClientRect().x),
+                        behavior: 'smooth',
+                    })
                 },
             },
         ]
@@ -243,14 +282,12 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit {
     // @ViewChildren('nav_item') navItems: QueryList<any>
     resetNavActive() {
         const navItems = this.l_main_nav_el.nativeElement.getElementsByClassName('nav-item')
-        console.log('reset navv active : ', navItems)
         _.forEach(navItems, (v) => {
             this.renderer.removeClass(v, 'cur-item')
         })
     }
     setNavActive(eRef: ElementRef) {
-        console.log('setNavActive - eRef : ', eRef)
-        this.renderer.addClass(eRef, 'cur-item')
+        if (!_.isEmpty(eRef)) this.renderer.addClass(eRef, 'cur-item')
     }
     setNavScrollActive() {
         const h = document.getElementById('l-homepage')
@@ -270,30 +307,66 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit {
         if (mme.height + mme.y > 40) {
             this.resetNavActive()
             this.setNavActive(navItems[0])
+            this.l_main_nav_el.nativeElement.scrollTo({
+                left: this.l_main_nav_el.nativeElement.scrollLeft - (10 - navItems[0].getBoundingClientRect().x),
+                behavior: 'smooth',
+            })
         } else if (sche.top <= 150 && sche.height + sche.y > 40) {
             this.resetNavActive()
             this.setNavActive(navItems[1])
+            this.l_main_nav_el.nativeElement.scrollTo({
+                left: this.l_main_nav_el.nativeElement.scrollLeft - (10 - navItems[1].getBoundingClientRect().x),
+                behavior: 'smooth',
+            })
         } else if (lre.top <= 150 && lre.height + lre.y > 40) {
             this.resetNavActive()
             this.setNavActive(navItems[2])
+            this.l_main_nav_el.nativeElement.scrollTo({
+                left: this.l_main_nav_el.nativeElement.scrollLeft - (10 - navItems[2].getBoundingClientRect().x),
+                behavior: 'smooth',
+            })
         } else if (sme.top <= 150 && sme.height + sme.y > 40) {
             this.resetNavActive()
             this.setNavActive(navItems[3])
+            this.l_main_nav_el.nativeElement.scrollTo({
+                left: this.l_main_nav_el.nativeElement.scrollLeft - (10 - navItems[3].getBoundingClientRect().x),
+                behavior: 'smooth',
+            })
         } else if (lme.top <= 150 && lme.height + lme.y > 40) {
             this.resetNavActive()
             this.setNavActive(navItems[4])
+            this.l_main_nav_el.nativeElement.scrollTo({
+                left: this.l_main_nav_el.nativeElement.scrollLeft - (10 - navItems[4].getBoundingClientRect().x),
+                behavior: 'smooth',
+            })
         } else if (che.top <= 150 && che.height + che.y > 40) {
             this.resetNavActive()
             this.setNavActive(navItems[5])
+            this.l_main_nav_el.nativeElement.scrollTo({
+                left: this.l_main_nav_el.nativeElement.scrollLeft - (10 - navItems[5].getBoundingClientRect().x),
+                behavior: 'smooth',
+            })
         } else if (cne.top <= 150 && cne.height + cne.y > 40) {
             this.resetNavActive()
             this.setNavActive(navItems[6])
+            this.l_main_nav_el.nativeElement.scrollTo({
+                left: this.l_main_nav_el.nativeElement.scrollLeft - (10 - navItems[6].getBoundingClientRect().x),
+                behavior: 'smooth',
+            })
         } else if (msge.top <= 150 && msge.height + msge.y > 40 && h.scrollTop + h.offsetHeight != h.scrollHeight) {
             this.resetNavActive()
             this.setNavActive(navItems[7])
+            this.l_main_nav_el.nativeElement.scrollTo({
+                left: this.l_main_nav_el.nativeElement.scrollLeft - (10 - navItems[7].getBoundingClientRect().x),
+                behavior: 'smooth',
+            })
         } else if (atte.top <= 150 || h.scrollTop + h.offsetHeight == h.scrollHeight) {
             this.resetNavActive()
             this.setNavActive(navItems[8])
+            this.l_main_nav_el.nativeElement.scrollTo({
+                left: this.l_main_nav_el.nativeElement.scrollLeft - (10 - navItems[8].getBoundingClientRect().x),
+                behavior: 'smooth',
+            })
         }
     }
     // ---------------------------------------------------------------------
