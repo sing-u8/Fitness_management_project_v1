@@ -394,7 +394,7 @@ export type DeleteMode = 'one' | 'after' | 'all'
 export type UpdateMode = DeleteMode
 
 export interface ReserveTaskReqBody {
-    user_membership_ids: string[]
+    center_user_ids: string[]
 }
 
 export interface AddFilterInstructorReqBody {
