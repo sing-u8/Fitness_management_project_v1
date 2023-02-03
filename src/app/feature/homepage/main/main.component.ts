@@ -44,9 +44,8 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit {
                 h.scrollTop,
                 h.scrollHeight,
                 h.offsetHeight,
-                this.member_management_el.nativeElement.getBoundingClientRect(),
-                this.schedule_management_el.nativeElement.getBoundingClientRect(),
-                this.lesson_reservation_el.nativeElement.getBoundingClientRect(),
+                this.message_el.nativeElement.getBoundingClientRect(),
+                this.attendance_el.nativeElement.getBoundingClientRect(),
                 document.getElementById('l-homepage').getBoundingClientRect()
             )
             this.setNavOnScroll()
@@ -254,6 +253,8 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit {
         this.renderer.addClass(eRef, 'cur-item')
     }
     setNavScrollActive() {
+        const h = document.getElementById('l-homepage')
+
         const mme = this.member_management_el.nativeElement.getBoundingClientRect()
         const sche = this.schedule_management_el.nativeElement.getBoundingClientRect()
         const lre = this.lesson_reservation_el.nativeElement.getBoundingClientRect()
@@ -287,10 +288,10 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit {
         } else if (cne.top <= 150 && cne.height + cne.y > 40) {
             this.resetNavActive()
             this.setNavActive(navItems[6])
-        } else if (msge.top <= 150 && msge.height + msge.y > 40) {
+        } else if (msge.top <= 150 && msge.height + msge.y > 40 && h.scrollTop + h.offsetHeight != h.scrollHeight) {
             this.resetNavActive()
             this.setNavActive(navItems[7])
-        } else if (atte.top <= 150) {
+        } else if (atte.top <= 150 || h.scrollTop + h.offsetHeight == h.scrollHeight) {
             this.resetNavActive()
             this.setNavActive(navItems[8])
         }
