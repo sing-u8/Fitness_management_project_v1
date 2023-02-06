@@ -95,7 +95,7 @@
                                 *ngIf="datepickFlag.end"
                                 (rwClickOutside)="endDatepickClickOutside($event)"
                                 mode="reg-ml"
-                                [option]="'looseOnlyEnd'"
+                                [option]="'limitLooseOnlyEnd'"
                                 [(data)]="date"
                                 (dataChange)="onDatePickRangeChange($event, 'end')"
                             ></db-datepicker>

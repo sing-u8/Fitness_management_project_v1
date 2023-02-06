@@ -32,6 +32,7 @@ export class DbDatepickerComponent implements OnInit, OnChanges, AfterViewChecke
         | 'onlyStart'
         | 'onlyEnd'
         | 'looseOnlyStart'
+        | 'limitLooseOnlyEnd'
         | 'looseOnlyEnd' /* only reg-ml until this line*/
         | 'holdStart' /* only hold */
         | 'holdEnd'
@@ -92,6 +93,9 @@ export class DbDatepickerComponent implements OnInit, OnChanges, AfterViewChecke
             if (this.option == 'onlyStart' || this.option == 'looseOnlyStart') {
                 this.regMLSelectDate({ date: this.data.startDate })
             } else if (this.option == 'onlyEnd' || this.option == 'looseOnlyEnd') {
+                this.regMLSelectDate({ date: this.data.startDate })
+                this.regMLSelectDate({ date: this.data.endDate })
+            } else if (this.option == 'limitLooseOnlyEnd') {
                 this.regMLSelectDate({ date: this.data.startDate })
                 this.regMLSelectDate({ date: this.data.endDate })
             }
@@ -547,6 +551,9 @@ export class DbDatepickerComponent implements OnInit, OnChanges, AfterViewChecke
             case 'looseOnlyEnd':
                 this.initLooseOnlyEndDateWeekCol(weekCol)
                 break
+            case 'limitLooseOnlyEnd':
+                this.initLimitLooseOnlyEndDateWeekCol(weekCol)
+                break
         }
     }
 
@@ -592,6 +599,19 @@ export class DbDatepickerComponent implements OnInit, OnChanges, AfterViewChecke
             this.dataChange.emit(this.lineSelectedDateObj)
         }
     }
+    initLimitLooseOnlyEndDateWeekCol(weekCol) {
+        if (!this.lineSelectedDateObj.startDate) {
+            this.lineSelectedDateObj.startDate = weekCol.date
+            this.dataChange.emit(this.lineSelectedDateObj)
+        } else if (moment(weekCol.date).isBefore(moment().format('YYYY-MM-DD'), 'day')) {
+            return
+        } else if (
+            !moment(weekCol.date).isBefore(moment(this.lineSelectedDateObj.startDate).format('YYYY-MM-DD'), 'day')
+        ) {
+            this.lineSelectedDateObj.endDate = weekCol.date
+            this.dataChange.emit(this.lineSelectedDateObj)
+        }
+    }
 
     regML_IsAvailableDate(weekCol) {
         switch (this.option) {
@@ -603,6 +623,11 @@ export class DbDatepickerComponent implements OnInit, OnChanges, AfterViewChecke
                 return true
             case 'looseOnlyEnd':
                 return !moment(weekCol.date).isBefore(moment().format(this.lineSelectedDateObj.startDate), 'day')
+            case 'limitLooseOnlyEnd':
+                return (
+                    !moment(weekCol.date).isBefore(moment().format(this.lineSelectedDateObj.startDate), 'day') &&
+                    !moment(weekCol.date).isBefore(moment().format('YYYY-MM-DD'), 'day')
+                )
             default:
                 return false
         }
