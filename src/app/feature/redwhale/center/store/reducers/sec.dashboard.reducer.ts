@@ -234,7 +234,7 @@ export const dashboardReducer = createImmerReducer(
         (state, { memberships, lockers, payments, reservations, contracts, centerUser }) => {
             state.curUserData = {
                 ...state.curUserData,
-                reservations: _.reverse(_.cloneDeep(reservations)),
+                reservations,
                 payments,
                 lockers,
                 memberships,

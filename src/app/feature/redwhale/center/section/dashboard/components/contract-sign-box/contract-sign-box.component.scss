@@ -115,9 +115,9 @@ section.l-contract-sign-box {
       -o-transition: visibility 0s, opacity 0.4s;
 
       &:hover {
-        opacity: 1;
-        visibility: visible;
-        z-index: 5;
+        opacity: 0;
+        visibility: hidden;
+        z-index: -5;
       }
       .red {
         color: var(--red);
