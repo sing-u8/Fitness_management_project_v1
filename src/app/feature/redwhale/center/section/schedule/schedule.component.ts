@@ -27,6 +27,7 @@ import { Loading } from '@schemas/store/loading'
 import { User } from '@schemas/user'
 import { UserBooked } from '@schemas/user-booked'
 import { UserAbleToBook } from '@schemas/user-able-to-book'
+import { CenterCalendarError } from '@schemas/errors/center-calendar-errors'
 
 // rxjs
 import { Observable, Subject } from 'rxjs'
@@ -1445,17 +1446,26 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
             center_user_ids: cmpReturn.usersAbleToBook.map((v) => {
                 return v.id
             }),
-        }).subscribe(() => {
-            this.hideReserveModal()
-            this.showModifyLessonEventModal()
-            this.nxStore.dispatch(showToast({ text: `${this.reserveLessonData.name} 일정에 회원이 예약되었습니다.` }))
+        }).subscribe({
+            next: () => {
+                this.hideReserveModal()
+                this.showModifyLessonEventModal()
+                this.nxStore.dispatch(
+                    showToast({ text: `${this.reserveLessonData.name} 일정에 회원이 예약되었습니다.` })
+                )
 
-            this.dashboardHelperService.synchronizeSchedule(this.center.id)
+                this.dashboardHelperService.synchronizeSchedule(this.center.id)
 
-            this.getTaskList(this.selectedDateViewType, (eventList) => {
-                this.updateLessonEventData(this.lessonEventData.id, eventList)
-                this.reserveLessonData = undefined
-            })
+                this.getTaskList(this.selectedDateViewType, (eventList) => {
+                    this.updateLessonEventData(this.lessonEventData.id, eventList)
+                    this.reserveLessonData = undefined
+                })
+            },
+            error: (err) => {
+                this.hideReserveModal()
+                this.showModifyLessonEventModal()
+                this.nxStore.dispatch(showToast({ text: CenterCalendarError[err.code] }))
+            },
         })
     }
 
