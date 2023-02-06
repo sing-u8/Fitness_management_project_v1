@@ -7,6 +7,7 @@ dayjs.extend(isSameOrBefor)
 dayjs.extend(isSameOrAfter)
 
 import { CalendarTask } from '@schemas/calendar-task'
+import { CalendarTaskOverview } from '@schemas/calendar-task-overview'
 
 export type ClassCalendarTaskStatus = {
     status: 'bookable' | 'bookedFull' | 'taskEnd' | 'bookableDurationEnd'
@@ -19,29 +20,26 @@ export type ClassCalendarTaskStatus = {
 export class CalendarTaskService {
     constructor() {}
 
-    isBookingEnd(ct: CalendarTask) {
-        return dayjs(ct.class.end_booking).isBefore(dayjs(), 'm')
+    isBookingEnd(ct: CalendarTaskOverview) {
+        return dayjs(ct.end_booking).isBefore(dayjs(), 'm')
     }
-    isCancelBookingEnd(ct: CalendarTask) {
-        return dayjs(ct.class.cancel_booking).isBefore(dayjs(), 'm')
+    isCancelBookingEnd(ct: CalendarTaskOverview) {
+        return dayjs(ct.cancel_booking).isBefore(dayjs(), 'm')
     }
-    isBookedFull(ct: CalendarTask) {
-        return ct.class.booked_count == ct.class.capacity
+    isBookedFull(ct: CalendarTaskOverview) {
+        return ct.booked_count == ct.capacity
     }
-    isTaskEnd(ct: CalendarTask) {
+    isTaskEnd(ct: CalendarTaskOverview) {
         return dayjs(ct.end).isBefore(dayjs(), 'm')
     }
-    isBookable(ct: CalendarTask) {
-        return (
-            dayjs(ct.class.start_booking).isSameOrBefore(dayjs(), 'm') &&
-            dayjs(ct.class.end_booking).isSameOrAfter(dayjs(), 'm')
-        )
+    isBookable(ct: CalendarTaskOverview) {
+        return dayjs(ct.start_booking).isSameOrBefore(dayjs(), 'm') && dayjs(ct.end_booking).isSameOrAfter(dayjs(), 'm')
     }
-    isBookableDurationEnd(ct: CalendarTask) {
-        return dayjs(ct.class.end_booking).isBefore(dayjs(), 'm')
+    isBookableDurationEnd(ct: CalendarTaskOverview) {
+        return dayjs(ct.end_booking).isBefore(dayjs(), 'm')
     }
 
-    getClassCalendarTaskStatus(ct: CalendarTask): ClassCalendarTaskStatus {
+    getClassCalendarTaskStatus(ct: CalendarTaskOverview): ClassCalendarTaskStatus {
         if (this.isBookedFull(ct)) {
             return {
                 status: 'bookedFull',

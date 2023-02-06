@@ -1,10 +1,7 @@
-import { CalendarTaskClass } from '@schemas/calendar-task-class'
-import { CenterUser } from '@schemas/center-user'
-
-export interface CalendarTask {
+export interface CalendarTaskOverview {
     id: string
     calendar_task_group_id: string
-    type_code: 'calendar_task_type_normal' | 'calendar_task_type_class'
+    type_code: string
     type_code_name: string
     name: string
     all_day: boolean
@@ -19,6 +16,12 @@ export interface CalendarTask {
     repeat_count: number
     repeat_start_date: string
     repeat_end_date: string
-    class: CalendarTaskClass
-    responsibility: Array<CenterUser>
+    responsibility_center_user_ids: string // ex) test-id1, test-id2
+    responsibility_center_user_names: string
+    calendar_task_class_type_code: string
+    capacity: number
+    booked_count: number
+    start_booking: string
+    end_booking: string
+    cancel_booking: string
 }

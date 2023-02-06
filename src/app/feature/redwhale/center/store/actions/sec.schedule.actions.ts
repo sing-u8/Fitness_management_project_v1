@@ -14,6 +14,7 @@ import {
 } from '@services/center-calendar.service'
 
 import * as FromSchReducer from '@centerStore/reducers/sec.schedule.reducer'
+import { CalendarTaskOverview } from '@schemas/calendar-task-overview'
 
 const FeatureKey = 'Center/Schedule'
 
@@ -30,7 +31,12 @@ export const finishLoadScheduleState = createAction(
 
 export const startCreateInstructorFilter = createAction(
     `[${FeatureKey}] Start Create Instructor Filter`,
-    props<{ centerId: string; centerCalendarId: string; reqBody: AddFilterInstructorReqBody; cb?:(newInst: CenterUser) => void }>()
+    props<{
+        centerId: string
+        centerCalendarId: string
+        reqBody: AddFilterInstructorReqBody
+        cb?: (newInst: CenterUser) => void
+    }>()
 )
 export const finishCreateInstructorFilter = createAction(
     `[${FeatureKey}] Finish Create Instructor Filter`,
@@ -58,13 +64,13 @@ export const startGetAllCalendarTask = createAction(
     `[${FeatureKey}] Start Get All Calendar Task`,
     props<{
         centerId: string
-        cb?: (taskList: CalendarTask[]) => void
+        cb?: (taskList: CalendarTaskOverview[]) => void
     }>()
 )
 export const finishGetAllCalendarTask = createAction(
     `[${FeatureKey}] Finish Get All Calendar Task`,
     props<{
-        taskList: CalendarTask[]
+        taskList: CalendarTaskOverview[]
     }>()
 )
 
@@ -73,8 +79,8 @@ export const setCalendarOptions = createAction(
     `[${FeatureKey}] Set Calendar Options`,
     props<{ calendarOptions: CalendarOptions }>()
 )
-export const setTaskList = createAction(`[${FeatureKey}] Set Task List`, props<{ taskList: CalendarTask[] }>())
-export const updatetask = createAction(`[${FeatureKey}] Update Task`, props<{ task: CalendarTask }>())
+export const setTaskList = createAction(`[${FeatureKey}] Set Task List`, props<{ taskList: CalendarTaskOverview[] }>())
+export const updatetask = createAction(`[${FeatureKey}] Update Task`, props<{ task: CalendarTaskOverview }>())
 export const setInstructorList = createAction(
     `[${FeatureKey}] Set Instructor List`,
     props<{ instructorList: FromSchReducer.InstructorType[] }>()

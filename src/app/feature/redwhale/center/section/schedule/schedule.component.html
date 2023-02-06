@@ -179,7 +179,7 @@
 <rw-sch-lesson-modal
     [(visible)]="doShowModifyLessonEventModal"
     [lessonData] = "lessonEventData"
-    [responsiblityCalId] = "curCenterCalendar$_?.id"
+    [responsibilityCalId] = "curCenterCalendar$_?.id"
     (cancel)="hideModifyLessonEventModal()"
     (modify)="onModifyLessonEvent($event)"
     (delete)="onDeleteLessonEvent($event)"

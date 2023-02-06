@@ -27,6 +27,7 @@ import { Loading } from '@schemas/store/loading'
 import { User } from '@schemas/user'
 import { UserBooked } from '@schemas/user-booked'
 import { UserAbleToBook } from '@schemas/user-able-to-book'
+import { CalendarTaskOverview } from '@schemas/calendar-task-overview'
 import { CenterCalendarError } from '@schemas/errors/center-calendar-errors'
 
 // rxjs
@@ -52,7 +53,7 @@ export type ScheduleEvent = {
     start: string
     end: string
     resourceIds?: Array<string>
-    originItem: CalendarTask
+    originItem: CalendarTaskOverview
     textColor: string
     color: string
 }
@@ -525,7 +526,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
         this.nxStore.dispatch(
             ScheduleActions.startGetAllCalendarTask({
                 centerId: this.center.id,
-                cb: (taskList: CalendarTask[]) => {
+                cb: (taskList: CalendarTaskOverview[]) => {
                     if (_.isFunction(callback)) {
                         const eventList = taskList.map((task) => this.makeScheduleEvent(task, viewType))
                         callback(eventList)
@@ -536,13 +537,13 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     // !!!!!!!!!!!!!!!!!!!!
-    makeScheduleEvent(task: CalendarTask, viewType: ViewType): ScheduleEvent {
+    makeScheduleEvent(task: CalendarTaskOverview, viewType: ViewType): ScheduleEvent {
         if (viewType == 'resourceTimeGridDay') {
             return {
                 title: task.name,
                 start: task.start,
                 end: task.end,
-                resourceIds: task.responsibility.map((v) => v.id),
+                resourceIds: _.split(task.responsibility_center_user_ids, ','),
                 originItem: task,
                 textColor: '#212121',
                 color: task.type_code == 'calendar_task_type_normal' ? '#F6F6F6' : '#FFFFFF',
@@ -568,13 +569,13 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
         // filter instructor
         if (instructors.length > 0 && this.eventList.length > 0) {
             _.forEach(this.eventList, (event) => {
+                const responsibilityIds = _.split(event.originItem.responsibility_center_user_ids, ',')
                 if (
                     _.findIndex(instructors, (instructor) => {
                         return (
                             (instructor.selected &&
-                                event.originItem.responsibility.findIndex((v) => v.id == instructor.instructor.id) !=
-                                    -1) ||
-                            event.originItem.responsibility.length == 0
+                                responsibilityIds.findIndex((v) => v == instructor.instructor.id) != -1) ||
+                            responsibilityIds.length == 0
                         )
                     }) != -1
                 ) {
@@ -592,11 +593,11 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
                 const isOneToOneType =
                     scheduleType['calendar_task_type_onetoone'].selected == true &&
                     event.originItem.type_code == 'calendar_task_type_class' &&
-                    event.originItem.class?.type_code == 'class_item_type_onetoone'
+                    event.originItem.calendar_task_class_type_code == 'class_item_type_onetoone'
                 const isGroupType =
                     scheduleType['calendar_task_type_group'].selected == true &&
                     event.originItem.type_code == 'calendar_task_type_class' &&
-                    event.originItem.class?.type_code == 'class_item_type_group'
+                    event.originItem.calendar_task_class_type_code == 'class_item_type_group'
 
                 if (isNormalType || isOneToOneType || isGroupType) {
                     lessonTypeEventList.push(event)
@@ -615,7 +616,9 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
         } else {
             this.fullCalendar.options = {
                 ...this.fullCalendar.options,
-                ...{ events: _.filter(this.eventList, (v) => v.originItem.responsibility.length == 0) },
+                ...{
+                    events: _.filter(this.eventList, (v) => _.isEmpty(v.originItem.responsibility_center_user_ids)),
+                },
             }
         }
     }
@@ -850,7 +853,12 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
             const eventTitleEl: HTMLElement = arg.el.getElementsByClassName('fc-event-title')[0]
             const eventTimeEl: HTMLElement = this.renderer.createElement('div')
 
-            const insts = _.orderBy(arg.event.extendedProps.originItem.responsibility, 'name')
+            const insts = _.orderBy(_.split(arg.event.extendedProps.originItem.responsibility_center_user_names, ','))
+            console.log(
+                'event id mount insts : ',
+                arg.event.extendedProps.originItem.responsibility_center_user_names,
+                _.split(arg.event.extendedProps.originItem.responsibility_center_user_names)
+            )
 
             if (arg.event.extendedProps.originItem.type_code == 'calendar_task_type_normal') {
                 eventTitleEl.classList.add('rw-typo-subtext3')
@@ -866,7 +874,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
                 eventTimeEl.style.overflow = 'hidden'
                 eventTimeEl.style.color = '#c9c9c9'
                 eventTimeEl.innerHTML = `${
-                    insts.length > 1 ? insts[0].name + ` 외 ${insts.length - 1}명` : insts[0]?.name ?? '담당자 없음'
+                    insts.length > 1 ? insts[0] + ` 외 ${insts.length - 1}명` : insts[0] ?? '담당자 없음'
                 }`
                 eventTitleContainerEl.appendChild(eventTimeEl)
             } else {
@@ -883,9 +891,9 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
                 eventTimeEl.style.overflow = 'hidden'
 
                 eventTimeEl.innerHTML = `${
-                    insts.length > 1 ? insts[0].name + ` 외 ${insts.length - 1}명` : insts[0]?.name ?? '담당자 없음'
-                } ㆍ ${arg.event.extendedProps.originItem.class.booked_count}/${
-                    arg.event.extendedProps.originItem.class.capacity
+                    insts.length > 1 ? insts[0] + ` 외 ${insts.length - 1}명` : insts[0] ?? '담당자 없음'
+                } ㆍ ${arg.event.extendedProps.originItem.booked_count}/${
+                    arg.event.extendedProps.originItem.capacity
                 }명`
                 eventTitleContainerEl.appendChild(eventTimeEl)
                 // event color tag
@@ -959,7 +967,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
         console.log('eventDrop: ', arg, arg.event.startStr, arg.event.endStr)
         console.log('extendedProps: ', arg.event.extendedProps)
         this.fullCalendar.getApi().render()
-        let calTask: CalendarTask = _.cloneDeep(arg.event.extendedProps['originItem'] as CalendarTask)
+        let calTask: CalendarTaskOverview = _.cloneDeep(arg.event.extendedProps['originItem'] as CalendarTaskOverview)
 
         // '일'에서 다른 담당자로 옮겨질 때 제자리로 이동
         if (
@@ -973,13 +981,10 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
                 'minute'
             )
         ) {
-            if (calTask.type_code == 'calendar_task_type_class' && !_.isEmpty(calTask.class)) {
+            if (calTask.type_code == 'calendar_task_type_class') {
                 calTask = _.assign(calTask, {
                     start: dayjs(calTask.start).format('YYYY-MM-DD HH:mm:ss'),
                     end: dayjs(calTask.end).format('YYYY-MM-DD HH:mm:ss'),
-                    class: {
-                        ...calTask.class,
-                    },
                 })
             } else {
                 calTask = _.assign(calTask, {
@@ -1078,22 +1083,10 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
             )
         }
 
-        if (calTask.type_code == 'calendar_task_type_class' && !_.isEmpty(calTask.class)) {
+        if (calTask.type_code == 'calendar_task_type_class') {
             calTask = _.assign(calTask, {
                 start: dayjs(arg.event.startStr).format('YYYY-MM-DD HH:mm:ss'),
                 end: dayjs(arg.event.endStr).format('YYYY-MM-DD HH:mm:ss'),
-                class: {
-                    ...calTask.class,
-                    start_booking: dayjs(dayjs(arg.event.startStr).format('YYYY-MM-DD HH:mm:ss'))
-                        .subtract(calTask.class.start_booking_until, 'day')
-                        .format('YYYY-MM-DD HH:mm:ss'),
-                    end_booking: dayjs(dayjs(arg.event.startStr).format('YYYY-MM-DD HH:mm:ss'))
-                        .subtract(calTask.class.end_booking_before, 'hour')
-                        .format('YYYY-MM-DD HH:mm:ss'),
-                    cancel_booking: dayjs(dayjs(arg.event.startStr).format('YYYY-MM-DD HH:mm:ss'))
-                        .subtract(calTask.class.cancel_booking_before, 'hour')
-                        .format('YYYY-MM-DD HH:mm:ss'),
-                },
             })
         } else {
             calTask = _.assign(calTask, {
@@ -1294,7 +1287,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
     }
     // - //
 
-    public lessonEventData: CalendarTask = undefined
+    public lessonEventData: CalendarTaskOverview = undefined
     updateLessonEventData(calTaskId: string, eventList: ScheduleEvent[]) {
         this.lessonEventData = eventList.find((v) => v.originItem.id == calTaskId).originItem
     }
@@ -1462,7 +1455,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
                 })
             },
             error: (err) => {
-                console.log('onReserveModalConfirm err : ',err)
+                console.log('onReserveModalConfirm err : ', err)
                 this.hideReserveModal()
                 this.showModifyLessonEventModal()
                 this.nxStore.dispatch(showToast({ text: CenterCalendarError[err.code].message }))

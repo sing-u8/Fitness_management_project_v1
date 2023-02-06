@@ -12,9 +12,9 @@ import { Calendar } from '@schemas/calendar'
 import { CalendarTask } from '@schemas/calendar-task'
 import { CalendarOptions } from '@fullcalendar/angular'
 import { CenterUser } from '@schemas/center-user'
+import { CalendarTaskOverview } from '@schemas/calendar-task-overview'
 
 import * as ScheduleActions from '../actions/sec.schedule.actions'
-import { setModifyGeneralOption } from '../actions/sec.schedule.actions'
 
 export type FilterType = 'onetoone' | 'group' | 'general'
 export type FilterTypeName = '1:1 수업' | '그룹 수업' | '기타 일정'
@@ -80,7 +80,7 @@ export interface State {
 
     // main
     calendarOptions: CalendarOptions
-    taskList: CalendarTask[]
+    taskList: CalendarTaskOverview[]
     instructorList: InstructorType[]
     calendarConfig: CalendarConfigInfo
     operatingHour: CenterOperatingHour

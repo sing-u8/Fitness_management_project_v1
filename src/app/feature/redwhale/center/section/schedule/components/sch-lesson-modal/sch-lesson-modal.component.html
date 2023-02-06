@@ -49,16 +49,37 @@
                         <img src="assets/icons/etc/workout_white.svg" />
                     </div>
                     <div class="card-desc">
-                        <p class="rw-typo-subtext0-regular card-category">{{ lessonCardData.categName }}</p>
-                        <p class="rw-typo-bodytext0-bold">{{ lessonCardData.lessonName }}</p>
+                        <ng-container *ngIf="isLessonTaskLoading == 'done'">
+                            <p class="rw-typo-subtext0-regular card-category">{{ lessonCardData.categName }}</p>
+                            <p class="rw-typo-bodytext0-bold">{{ lessonCardData.lessonName }}</p>
+                        </ng-container>
+                        <ng-container *ngIf="isLessonTaskLoading != 'done'">
+                            <ngx-skeleton-loader
+                                count="1"
+                                appearance="circle"
+                                [theme]="{ width: '50px', height: '13px', 'border-radius': '5px', margin: '0' }"
+                            ></ngx-skeleton-loader>
+                            <ngx-skeleton-loader
+                                count="1"
+                                appearance="circle"
+                                [theme]="{ width: '50px', height: '16px', 'border-radius': '5px', margin: '0' }"
+                            ></ngx-skeleton-loader>
+                        </ng-container>
                     </div>
                 </div>
                 <div class="card-bottom">
-                    <p class="card-desc2 rw-typo-subtext1">
+                    <p *ngIf="isLessonTaskLoading == 'done'" class="card-desc2 rw-typo-subtext1">
                         {{ lessonCardData.duration }}분
                         <span class="bar">|</span>
                         {{ lessonCardData.lessonType }}
                     </p>
+                    <div *ngIf="isLessonTaskLoading != 'done'" class="card-desc2">
+                        <ngx-skeleton-loader
+                            count="1"
+                            appearance="circle"
+                            [theme]="{ width: '68px', height: '18px', 'border-radius': '5px', margin: '0' }"
+                        ></ngx-skeleton-loader>
+                    </div>
                 </div>
             </div>
 
@@ -72,7 +93,15 @@
             </div>
             <div class="modal-content">
                 <div class="small-title">강사</div>
-                <div class="rw-typo-bodytext1">{{ lessonCardData.instructor }}</div>
+                <div *ngIf="isLessonTaskLoading == 'done'" class="rw-typo-bodytext1">
+                    {{ lessonCardData.instructor }}
+                </div>
+                <ngx-skeleton-loader
+                    *ngIf="isLessonTaskLoading != 'done'"
+                    count="1"
+                    appearance="circle"
+                    [theme]="{ width: '50px', height: '18px', 'border-radius': '5px', margin: '0' }"
+                ></ngx-skeleton-loader>
             </div>
             <div *ngIf="lessonData?.calendar_task_group_id" class="modal-content">
                 <div class="small-title">일정 반복 기간</div>
@@ -83,9 +112,15 @@
             </div>
             <div class="modal-content">
                 <div class="small-title">예약 인원</div>
-                <div class="rw-typo-bodytext1">
-                    {{ lessonData?.class.booked_count }} / {{ lessonData?.class.capacity }}명
+                <div *ngIf="isLessonTaskLoading == 'done'" class="rw-typo-bodytext1">
+                    {{ lessonTask?.class.booked_count }} / {{ lessonTask?.class.capacity }}명
                 </div>
+                <ngx-skeleton-loader
+                    *ngIf="isLessonTaskLoading != 'done'"
+                    count="1"
+                    appearance="circle"
+                    [theme]="{ width: '50px', height: '18px', 'border-radius': '5px', margin: '0' }"
+                ></ngx-skeleton-loader>
             </div>
             <div *ngIf="lessonData?.memo" class="modal-content">
                 <div class="small-title">상세 정보</div>
@@ -93,19 +128,39 @@
             </div>
             <div class="modal-content">
                 <div class="small-title">예약 가능 시간</div>
-                <div class="rw-typo-bodytext1">{{ reservationEnableTime }}</div>
+                <div *ngIf="isLessonTaskLoading == 'done'" class="rw-typo-bodytext1">{{ reservationEnableTime }}</div>
+                <ngx-skeleton-loader
+                    *ngIf="isLessonTaskLoading != 'done'"
+                    count="1"
+                    appearance="circle"
+                    [theme]="{ width: '320px', height: '20px', 'border-radius': '5px', margin: '0' }"
+                ></ngx-skeleton-loader>
             </div>
             <div class="modal-content">
                 <div class="small-title">예약 취소 마감 시간</div>
-                <div class="rw-typo-bodytext1">{{ reservationCancelEndTime }}</div>
+                <div *ngIf="isLessonTaskLoading == 'done'" class="rw-typo-bodytext1">
+                    {{ reservationCancelEndTime }}
+                </div>
+                <ngx-skeleton-loader
+                    *ngIf="isLessonTaskLoading != 'done'"
+                    count="1"
+                    appearance="circle"
+                    [theme]="{ width: '320px', height: '20px', 'border-radius': '5px', margin: '0' }"
+                ></ngx-skeleton-loader>
             </div>
             <div class="modal-content">
                 <div class="small-title">예약 가능한 회원권</div>
-                <div class="rw-typo-bodytext1 lesson-tag">
-                    <div *ngFor="let membership of lessonData?.class?.membership_items" class="tag-item">
+                <div *ngIf="isLessonTaskLoading == 'done'" class="rw-typo-bodytext1 lesson-tag">
+                    <div *ngFor="let membership of lessonTask?.class?.membership_items" class="tag-item">
                         {{ membership.name }}
                     </div>
                 </div>
+                <ngx-skeleton-loader
+                    *ngIf="isLessonTaskLoading != 'done'"
+                    count="1"
+                    appearance="circle"
+                    [theme]="{ width: '320px', height: '32px', 'border-radius': '5px', margin: '0' }"
+                ></ngx-skeleton-loader>
             </div>
         </div>
 
@@ -148,7 +203,7 @@
                             <div class="reservation-header">
                                 <div class="rh-left">
                                     <p class="rw-typo-bodytext0-bold">
-                                        {{ lessonData.class.capacity }}명 정원인 수업에
+                                        {{ lessonTask.class.capacity }}명 정원인 수업에
                                     </p>
                                     <p class="rw-typo-bodytext0-bold">
                                         <span>{{ userBookeds.length }}명</span>의 회원이 예약했어요.
@@ -157,7 +212,7 @@
                                 <div class="rh-right">
                                     <!-- isBookable &&-->
                                     <div
-                                        *ngIf="lessonData.class.capacity > userBookeds.length"
+                                        *ngIf="lessonTask.class.capacity > userBookeds.length"
                                         class="rw-typo-subtext0 reserve-member-button"
                                         (click)="onReserveMember()"
                                     >
@@ -187,11 +242,8 @@
                                         </span>
                                     </div>
                                     <div class="item-right">
-<!--                                        *ngIf="!isCancelBookingEnd || !isTaskEnd"-->
-                                        <div
-                                            class="close-button"
-                                            (click)="onCancelReservedMember(reservation)"
-                                        >
+                                        <!--                                        *ngIf="!isCancelBookingEnd || !isTaskEnd"-->
+                                        <div class="close-button" (click)="onCancelReservedMember(reservation)">
                                             <img src="assets/icons/etc/close_grey.svg" />
                                         </div>
                                     </div>

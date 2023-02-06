@@ -1,6 +1,6 @@
 * {
-    padding: 0px;
-    margin: 0px;
+    padding: 0;
+    margin: 0;
 }
 
 .rw-modal-background {
@@ -46,7 +46,7 @@
         .modal-header {
             width: calc(100% - 28px);
             height: 35px;
-            margin: 15px 0px;
+            margin: 15px 0;
             padding: 0 5px;
             display: flex;
             // align-items: center;
@@ -91,19 +91,19 @@
             border-radius: 5px;
             overflow: hidden;
             position: relative;
-            margin: 0px 0px 15px 0px;
+            margin: 0 0 15px 0;
 
             display: flex;
 
             .lesson-button {
                 border-color: var(--border-color);
                 border-style: solid;
-                border-width: 1px 0px 1px 1px;
+                border-width: 1px 0 1px 1px;
             }
             .reservation-button {
                 border-color: var(--border-color);
                 border-style: solid;
-                border-width: 1px 1px 1px 0px;
+                border-width: 1px 1px 1px 0;
             }
 
             .lesson-button,
@@ -118,7 +118,7 @@
                 &.selected {
                     color: var(--white);
                     background-color: var(--font-color);
-                    border-width: 0px;
+                    border-width: 0;
                 }
             }
         }
@@ -160,7 +160,7 @@
                         padding: 5px 10px;
                         border-radius: 5px;
                         border: 1px solid var(--border-color);
-                        margin: 0px 10px 10px 0px;
+                        margin: 0 10px 10px 0;
                     }
                 }
             }
@@ -213,6 +213,8 @@
                 }
                 .card-bottom {
                     .card-desc2 {
+                        display: flex;
+                        justify-content: flex-end;
                         text-align: end;
                         width: 100%;
                         align-self: flex-end;
@@ -309,7 +311,7 @@
                     display: flex;
                     align-items: center;
                     justify-content: space-between;
-                    padding: 0px 10px;
+                    padding: 0 10px;
                     position: relative;
 
                     &:not(:last-of-type) {
@@ -377,7 +379,7 @@
                 width: 1px;
                 height: 30px;
                 border-right: 1px solid var(--border-color);
-                margin: 0px 10px;
+                margin: 0 10px;
             }
         }
     }
@@ -390,7 +392,7 @@
 }
 
 .bar {
-    margin: 0px 10px;
+    margin: 0 10px;
     color: var(--border-color);
 }
 

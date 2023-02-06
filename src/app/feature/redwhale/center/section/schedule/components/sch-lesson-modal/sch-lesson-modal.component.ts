@@ -20,6 +20,8 @@ import { CalendarTaskService } from '@services/helper/calendar-task.service'
 import { CalendarTask } from '@schemas/calendar-task'
 import { UserBooked } from '@schemas/user-booked'
 import { Center } from '@schemas/center'
+import { CalendarTaskOverview } from '@schemas/calendar-task-overview'
+import { Loading } from '@schemas/store/loading'
 
 const dayOfWeekInit = [
     { key: 0, name: '일', selected: false },
@@ -37,8 +39,8 @@ const dayOfWeekInit = [
 })
 export class SchLessonModalComponent implements AfterViewChecked, OnChanges {
     @Input() visible: boolean
-    @Input() lessonData: CalendarTask
-    @Input() responsiblityCalId: string
+    @Input() lessonData: CalendarTaskOverview
+    @Input() responsibilityCalId: string
 
     @ViewChild('modalBackgroundElement') modalBackgroundElement
     @ViewChild('modalWrapperElement') modalWrapperElement
@@ -56,6 +58,22 @@ export class SchLessonModalComponent implements AfterViewChecked, OnChanges {
     public time: string
     public reservationEnableTime: string
     public reservationCancelEndTime: string
+
+    public lessonTask: CalendarTask
+    public isLessonTaskLoading: Loading = 'idle'
+    public getLessonTask(cto: CalendarTaskOverview) {
+        this.isLessonTaskLoading = 'pending'
+        this.centerCalendarService
+            .getCalendarTasksDetail(this.center.id, this.responsibilityCalId, cto.id)
+            .subscribe((calTask) => {
+                this.lessonTask = calTask
+                this.initReservationEnableTime()
+                this.initReservationCancelEndTime()
+                this.initLessonCardData()
+                this.getLessonCalendarTaskStatus()
+                this.isLessonTaskLoading = 'done'
+            })
+    }
 
     public repeatText: string
 
@@ -96,21 +114,14 @@ export class SchLessonModalComponent implements AfterViewChecked, OnChanges {
                     changes['lessonData'].previousValue?.id != changes['lessonData'].currentValue?.id)
             ) {
                 isAnotherLesson = true
+                this.getLessonTask(this.lessonData)
             }
-            this.initTime()
-            this.getTimeDiff()
-            this.getRepeatTimeDiff()
-            this.initReservationEnableTime()
-            this.initReservationCancelEndTime()
             this.setRepeatDayOfWeek()
-
-            this.initLessonCardData()
-
-            //
+            this.getRepeatTimeDiff()
+            this.getTimeDiff()
+            this.initTime()
             this.initDate()
             this.getUsersBooked(isAnotherLesson)
-
-            this.getLessonCalendarTaskStatus()
         }
     }
 
@@ -149,7 +160,7 @@ export class SchLessonModalComponent implements AfterViewChecked, OnChanges {
         this.modify.emit(this.lessonData)
     }
     onReserveMember() {
-        this.reserveMember.emit({ lessonTask: this.lessonData, usersBooked: this.userBookeds })
+        this.reserveMember.emit({ lessonTask: this.lessonTask, usersBooked: this.userBookeds })
     }
 
     onCancelReservedMember(taskReservation: UserBooked) {
@@ -192,27 +203,39 @@ export class SchLessonModalComponent implements AfterViewChecked, OnChanges {
 
     initReservationEnableTime() {
         this.reservationEnableTime =
-            dayjs(this.lessonData.class.start_booking).format('MM.DD A hh:mm') +
+            dayjs(this.lessonTask.class.start_booking).format('MM.DD A hh:mm') +
             ' - ' +
-            dayjs(this.lessonData.class.end_booking).format('MM.DD A hh:mm') +
+            dayjs(this.lessonTask.class.end_booking).format('MM.DD A hh:mm') +
             ' 예약 가능'
     }
     initReservationCancelEndTime() {
         this.reservationCancelEndTime =
-            dayjs(this.lessonData.class.cancel_booking).format('YYYY.MM.DD A hh:mm') + ' 까지 예약 취소 가능'
+            dayjs(this.lessonTask.class.cancel_booking).format('YYYY.MM.DD A hh:mm') + ' 까지 예약 취소 가능'
     }
 
     // 일정 반복 기간 변수 및 함수
     public dayOfWeek = _.cloneDeep(dayOfWeekInit)
     initDayOfWeek() {
         const _dayOfWeek = _.cloneDeep(dayOfWeekInit)
-        _.forEach(this.lessonData.repeat_day_of_the_week, (day) => {
-            _.forEach(_dayOfWeek, (dayObj, idx) => {
-                if (dayObj.key == day) {
-                    _dayOfWeek[idx].selected = true
-                }
-            })
-        })
+
+        _.forEach(
+            _.map(_.split(this.lessonData.repeat_day_of_the_week, ','), (v) => _.toNumber(v)),
+            (day) => {
+                _.forEach(_dayOfWeek, (dayObj, idx) => {
+                    if (dayObj.key == day) {
+                        _dayOfWeek[idx].selected = true
+                    }
+                })
+            }
+        )
+
+        console.log(
+            'init day of week : ',
+            _dayOfWeek,
+            this.lessonData.repeat_day_of_the_week,
+            _.split(this.lessonData.repeat_day_of_the_week, ','),
+            _.map(_.split(this.lessonData.repeat_day_of_the_week, ','), (v) => _.toNumber(v))
+        )
         this.dayOfWeek = _dayOfWeek
     }
 
@@ -259,14 +282,14 @@ export class SchLessonModalComponent implements AfterViewChecked, OnChanges {
         instructor: undefined,
     }
     initLessonCardData() {
-        const insts = _.orderBy(this.lessonData.responsibility, 'name')
+        const insts = _.orderBy(this.lessonTask.responsibility, 'name')
         this.lessonCardData = {
-            categName: this.lessonData.class.category_name,
-            lessonName: this.lessonData.class.name,
-            duration: this.lessonData.class.duration,
-            lessonType: this.lessonData.class.type_code == 'class_item_type_onetoone' ? '1:1 수업' : '그룹 수업',
+            categName: this.lessonTask.class.category_name,
+            lessonName: this.lessonTask.class.name,
+            duration: this.lessonTask.class.duration,
+            lessonType: this.lessonTask.class.type_code == 'class_item_type_onetoone' ? '1:1 수업' : '그룹 수업',
             instructor:
-                this.lessonData.responsibility.length > 1 ? insts[0].name + ` 외 ${insts.length - 1}명` : insts[0].name,
+                this.lessonTask.responsibility.length > 1 ? insts[0].name + ` 외 ${insts.length - 1}명` : insts[0].name,
         }
     }
 
@@ -277,7 +300,7 @@ export class SchLessonModalComponent implements AfterViewChecked, OnChanges {
     getUsersBooked(isAnotherLesson: boolean) {
         if (isAnotherLesson) this.isUsersBookedInitialized = false
         this.centerCalendarService
-            .getReservedUsers(this.center.id, this.responsiblityCalId, this.lessonData.id)
+            .getReservedUsers(this.center.id, this.responsibilityCalId, this.lessonData.id)
             .subscribe((userBookeds: UserBooked[]) => {
                 this.userBookeds = userBookeds
                 this.isUsersBookedInitialized = true

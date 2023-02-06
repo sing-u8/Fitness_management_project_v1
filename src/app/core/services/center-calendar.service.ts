@@ -12,6 +12,7 @@ import { CalendarTask } from '@schemas/calendar-task'
 import { UserAbleToBook } from '@schemas/user-able-to-book'
 import { UserBooked } from '@schemas/user-booked'
 import { CenterUser } from '@schemas/center-user'
+import { CalendarTaskOverview } from '@schemas/calendar-task-overview'
 
 @Injectable({
     providedIn: 'root',
@@ -152,24 +153,31 @@ export class CenterCalendarService {
         )
     }
 
-    //!! 테스크 조회
+    // 테스크 조회
     getCalendarTasks(
         centerId: string,
         calendarId: string,
         start_date: string,
-        end_date: string,
-        page?: number,
-        pageSize?: number
-    ): Observable<Array<CalendarTask>> {
+        end_date: string
+    ): Observable<Array<CalendarTaskOverview>> {
         const url =
-            this.SERVER +
-            `/${centerId}/calendar/${calendarId}/task?start_date=${start_date}&end_date=${end_date}` +
-            (page ? `?page=${page}&` : '') +
-            (pageSize ? `pageSize=${pageSize}` : '')
+            this.SERVER + `/${centerId}/calendar/${calendarId}/task?start_date=${start_date}&end_date=${end_date}`
 
         return this.http.get<Response>(url, this.options).pipe(
             map((res) => {
                 return res.dataset
+            }),
+            catchError(handleError)
+        )
+    }
+
+    // 테스크 상세 조회
+    getCalendarTasksDetail(centerId: string, calendarId: string, taskId: string): Observable<CalendarTask> {
+        const url = this.SERVER + `/${centerId}/calendar/${calendarId}/task/${taskId}`
+
+        return this.http.get<Response>(url, this.options).pipe(
+            map((res) => {
+                return res.dataset[0]
             }),
             catchError(handleError)
         )
