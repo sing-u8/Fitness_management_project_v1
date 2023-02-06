@@ -1462,9 +1462,10 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
                 })
             },
             error: (err) => {
+                console.log('onReserveModalConfirm err : ',err)
                 this.hideReserveModal()
                 this.showModifyLessonEventModal()
-                this.nxStore.dispatch(showToast({ text: CenterCalendarError[err.code] }))
+                this.nxStore.dispatch(showToast({ text: CenterCalendarError[err.code].message }))
             },
         })
     }
