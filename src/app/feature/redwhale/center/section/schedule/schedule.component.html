@@ -222,6 +222,7 @@
 <rw-sch-general-modal
     [(visible)]="doShowModifyGeneralEventModal"
     [generalData]="generalEventData"
+    [calendarId]="curCenterCalendar$_?.id"
     (cancel)="hideModifyGeneralEventModal()"
     (modify)="onModifyGeneralEvent($event)"
     (delete)="onDeleteGeneralEvent($event)"

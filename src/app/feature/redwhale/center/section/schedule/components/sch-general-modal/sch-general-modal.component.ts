@@ -16,6 +16,11 @@ import _ from 'lodash'
 import { CalendarTask } from '@schemas/calendar-task'
 import { Calendar } from '@schemas/calendar'
 import { CenterUser } from '@schemas/center-user'
+import { CalendarTaskOverview } from '@schemas/calendar-task-overview'
+import { Loading } from '@schemas/store/loading'
+import { CenterCalendarService } from '@services/center-calendar.service'
+import { StorageService } from '@services/storage.service'
+import { Center } from '@schemas/center'
 
 @Component({
     selector: 'rw-sch-general-modal',
@@ -24,7 +29,8 @@ import { CenterUser } from '@schemas/center-user'
 })
 export class SchGeneralModalComponent implements AfterViewChecked, OnChanges {
     @Input() visible: boolean
-    @Input() generalData: CalendarTask
+    @Input() generalData: CalendarTaskOverview
+    @Input() calendarId: string
 
     @ViewChild('modalBackgroundElement') modalBackgroundElement: ElementRef
     @ViewChild('modalWrapperElement') modalWrapperElement: ElementRef
@@ -43,20 +49,49 @@ export class SchGeneralModalComponent implements AfterViewChecked, OnChanges {
 
     public curStaffs: CenterUser[] = []
 
-    constructor(private el: ElementRef, private renderer: Renderer2) {
+    public center: Center
+    public generalTask: CalendarTask
+    public isGeneralTaskLoading: Loading = 'idle'
+    getLessonTask(cto: CalendarTaskOverview) {
+        this.isGeneralTaskLoading = 'pending'
+        this.centerCalendarService
+            .getCalendarTasksDetail(this.center.id, this.calendarId, cto.id)
+            .subscribe((calTask) => {
+                this.generalTask = calTask
+                this.isGeneralTaskLoading = 'done'
+                this.curStaffs = _.orderBy(calTask.responsibility, 'name')
+            })
+    }
+
+    constructor(
+        private el: ElementRef,
+        private renderer: Renderer2,
+        private centerCalendarService: CenterCalendarService,
+        private storageService: StorageService
+    ) {
         this.isMouseModalDown = false
+        this.center = this.storageService.getCenter()
     }
 
     ngOnChanges(changes: SimpleChanges) {
-        if (!changes['visible'].firstChange) {
+        if (changes['visible'] && !changes['visible'].firstChange) {
             if (changes['visible'].previousValue != changes['visible'].currentValue) {
                 this.changed = true
             }
         }
+
         if (this.generalData) {
+            let isAnotherTask = false
+            if (
+                (!changes['generalData']?.previousValue && changes['generalData']?.currentValue) ||
+                (changes['generalData']?.previousValue &&
+                    changes['generalData'].previousValue?.id != changes['generalData'].currentValue?.id)
+            ) {
+                isAnotherTask = true
+                this.getLessonTask(this.generalData)
+            }
             this.initDate()
             this.initTime()
-            this.curStaffs = _.orderBy(this.generalData.responsibility, 'name')
         }
     }
 
@@ -86,10 +121,12 @@ export class SchGeneralModalComponent implements AfterViewChecked, OnChanges {
         this.cancel.emit()
     }
     onDelete() {
-        this.delete.emit(this.generalData)
+        if (this.isGeneralTaskLoading != 'done') return
+        this.delete.emit(this.generalTask)
     }
     onModify() {
-        this.modify.emit(this.generalData)
+        if (this.isGeneralTaskLoading != 'done') return
+        this.modify.emit(this.generalTask)
     }
 
     // on mouse rw-modal down

@@ -61,7 +61,7 @@ export class SchLessonModalComponent implements AfterViewChecked, OnChanges {
 
     public lessonTask: CalendarTask
     public isLessonTaskLoading: Loading = 'idle'
-    public getLessonTask(cto: CalendarTaskOverview) {
+    getLessonTask(cto: CalendarTaskOverview) {
         this.isLessonTaskLoading = 'pending'
         this.centerCalendarService
             .getCalendarTasksDetail(this.center.id, this.responsibilityCalId, cto.id)
@@ -153,11 +153,13 @@ export class SchLessonModalComponent implements AfterViewChecked, OnChanges {
     }
 
     onDelete() {
-        this.delete.emit(this.lessonData)
+        if (this.isLessonTaskLoading != 'done') return
+        this.delete.emit(this.lessonTask)
         this.screen_status = 'lesson'
     }
     onModify() {
-        this.modify.emit(this.lessonData)
+        if (this.isLessonTaskLoading != 'done') return
+        this.modify.emit(this.lessonTask)
     }
     onReserveMember() {
         this.reserveMember.emit({ lessonTask: this.lessonTask, usersBooked: this.userBookeds })

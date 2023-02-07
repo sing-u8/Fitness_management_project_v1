@@ -203,7 +203,7 @@
                             <div class="reservation-header">
                                 <div class="rh-left">
                                     <p class="rw-typo-bodytext0-bold">
-                                        {{ lessonTask.class.capacity }}명 정원인 수업에
+                                        {{ lessonData.capacity }}명 정원인 수업에
                                     </p>
                                     <p class="rw-typo-bodytext0-bold">
                                         <span>{{ userBookeds.length }}명</span>의 회원이 예약했어요.
@@ -212,7 +212,7 @@
                                 <div class="rh-right">
                                     <!-- isBookable &&-->
                                     <div
-                                        *ngIf="lessonTask.class.capacity > userBookeds.length"
+                                        *ngIf="lessonData.capacity > userBookeds.length"
                                         class="rw-typo-subtext0 reserve-member-button"
                                         (click)="onReserveMember()"
                                     >

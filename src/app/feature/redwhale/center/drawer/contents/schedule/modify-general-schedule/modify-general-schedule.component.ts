@@ -25,6 +25,8 @@ import { closeDrawer } from '@appStore/actions/drawer.action'
 import { showToast } from '@appStore/actions/toast.action'
 import { MultiSelect } from '@schemas/components/multi-select'
 import { Calendar } from '@schemas/calendar'
+import { Loading } from '@schemas/store/loading'
+import { CalendarTaskOverview } from '@schemas/calendar-task-overview'
 
 @Component({
     selector: 'modify-general-schedule',

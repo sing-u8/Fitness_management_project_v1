@@ -575,7 +575,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
                         return (
                             (instructor.selected &&
                                 responsibilityIds.findIndex((v) => v == instructor.instructor.id) != -1) ||
-                            responsibilityIds.length == 0
+                            _.isEmpty(responsibilityIds[0])
                         )
                     }) != -1
                 ) {
@@ -854,12 +854,6 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
             const eventTimeEl: HTMLElement = this.renderer.createElement('div')
 
             const insts = _.orderBy(_.split(arg.event.extendedProps.originItem.responsibility_center_user_names, ','))
-            console.log(
-                'event id mount insts : ',
-                arg.event.extendedProps.originItem.responsibility_center_user_names,
-                _.split(arg.event.extendedProps.originItem.responsibility_center_user_names)
-            )
-
             if (arg.event.extendedProps.originItem.type_code == 'calendar_task_type_normal') {
                 eventTitleEl.classList.add('rw-typo-subtext3')
                 eventTitleEl.style.fontSize = '1.1rem'
@@ -1029,19 +1023,19 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
                     start_time: dayjs(arg.event.startStr).format('HH:mm'),
                     end_date: dayjs(arg.event.endStr).format('YYYY-MM-DD'),
                     end_time: dayjs(arg.event.endStr).format('HH:mm'),
-                    class: {
-                        name: eventData.class.name,
-                        category_name: eventData.class.category_name,
-                        class_item_id: eventData.class.class_item_id,
-                        type_code: eventData.class.type_code,
-                        state_code: 'calendar_task_class_state_active',
-                        duration: String(eventData.class.duration),
-                        capacity: String(eventData.class.capacity),
-                        start_booking_until: String(eventData.class.start_booking_until),
-                        end_booking_before: String(eventData.class.end_booking_before),
-                        cancel_booking_before: String(eventData.class.cancel_booking_before),
-                        instructor_center_user_ids: eventData.class.instructors.map((v) => v.id),
-                    },
+                    // class: {
+                    //     name: eventData.class.name,
+                    //     category_name: eventData.class.category_name,
+                    //     class_item_id: eventData.class.class_item_id,
+                    //     type_code: eventData.class.type_code,
+                    //     state_code: 'calendar_task_class_state_active',
+                    //     duration: String(eventData.class.duration),
+                    //     capacity: String(eventData.class.capacity),
+                    //     start_booking_until: String(eventData.class.start_booking_until),
+                    //     end_booking_before: String(eventData.class.end_booking_before),
+                    //     cancel_booking_before: String(eventData.class.cancel_booking_before),
+                    //     instructor_center_user_ids: eventData.class.instructors.map((v) => v.id),
+                    // },
                 }
             } else {
                 reqBody = {
@@ -1049,19 +1043,19 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
                     start_time: dayjs(arg.event.startStr).format('HH:mm'),
                     end_date: dayjs(arg.event.endStr).format('YYYY-MM-DD'),
                     end_time: dayjs(arg.event.endStr).format('HH:mm'),
-                    class: {
-                        name: eventData.class.name,
-                        category_name: eventData.class.category_name,
-                        class_item_id: eventData.class.class_item_id,
-                        type_code: eventData.class.type_code,
-                        state_code: 'calendar_task_class_state_active',
-                        duration: String(eventData.class.duration),
-                        capacity: String(eventData.class.capacity),
-                        start_booking_until: String(eventData.class.start_booking_until),
-                        end_booking_before: String(eventData.class.end_booking_before),
-                        cancel_booking_before: String(eventData.class.cancel_booking_before),
-                        instructor_center_user_ids: eventData.class.instructors.map((v) => v.id),
-                    },
+                    // class: {
+                    //     name: eventData.class.name,
+                    //     category_name: eventData.class.category_name,
+                    //     class_item_id: eventData.class.class_item_id,
+                    //     type_code: eventData.class.type_code,
+                    //     state_code: 'calendar_task_class_state_active',
+                    //     duration: String(eventData.class.duration),
+                    //     capacity: String(eventData.class.capacity),
+                    //     start_booking_until: String(eventData.class.start_booking_until),
+                    //     end_booking_before: String(eventData.class.end_booking_before),
+                    //     cancel_booking_before: String(eventData.class.cancel_booking_before),
+                    //     instructor_center_user_ids: eventData.class.instructors.map((v) => v.id),
+                    // },
                 }
             }
             console.log('drop event: ', reqBody)
@@ -1327,7 +1321,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
         this.showReserveModal(cmpReturn.lessonTask, cmpReturn.usersBooked)
     }
 
-    public generalEventData: CalendarTask = undefined
+    public generalEventData: CalendarTaskOverview = undefined
     public doShowModifyGeneralEventModal = false
     showModifyGeneralEventModal() {
         this.doShowModifyGeneralEventModal = true
