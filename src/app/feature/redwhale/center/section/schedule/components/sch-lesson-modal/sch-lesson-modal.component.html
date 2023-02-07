@@ -113,7 +113,7 @@
             <div class="modal-content">
                 <div class="small-title">예약 인원</div>
                 <div *ngIf="isLessonTaskLoading == 'done'" class="rw-typo-bodytext1">
-                    {{ lessonTask?.class.booked_count }} / {{ lessonTask?.class.capacity }}명
+                    {{ lessonData?.booked_count }} / {{ lessonData?.capacity }}명
                 </div>
                 <ngx-skeleton-loader
                     *ngIf="isLessonTaskLoading != 'done'"
@@ -202,9 +202,7 @@
                         <div class="reservation-list thin-scroll-y-overlay2">
                             <div class="reservation-header">
                                 <div class="rh-left">
-                                    <p class="rw-typo-bodytext0-bold">
-                                        {{ lessonData.capacity }}명 정원인 수업에
-                                    </p>
+                                    <p class="rw-typo-bodytext0-bold">{{ lessonData.capacity }}명 정원인 수업에</p>
                                     <p class="rw-typo-bodytext0-bold">
                                         <span>{{ userBookeds.length }}명</span>의 회원이 예약했어요.
                                     </p>
