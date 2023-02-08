@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core'
 import { Router, ActivatedRouteSnapshot, RouterStateSnapshot, CanActivate } from '@angular/router'
 import { Observable, of, forkJoin } from 'rxjs'
 import { catchError, map, take } from 'rxjs/operators'
+import _ from 'lodash'
 
 import { Center } from '@schemas/center'
 
@@ -12,6 +13,7 @@ import { StorageService } from '@services/storage.service'
 import { Store, select } from '@ngrx/store'
 import * as CenterCommonActions from '@centerStore/actions/center.common.actions'
 import { curCenterRefreshed } from '@centerStore/selectors/center.common.selector'
+import { CenterUser } from '@schemas/center-user'
 
 @Injectable({
     providedIn: 'root',
@@ -32,7 +34,9 @@ export class CenterGuard implements CanActivate {
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
         const address = route.params['address']
         const center: Center = this.storageService.getCenter()
-        if (address == this.addrData.addr && this.addrData.isChecked) {
+        const centerUser: CenterUser = this.storageService.getCenterUser()
+
+        if (address == this.addrData.addr && this.addrData.isChecked && !_.isEmpty(centerUser)) {
             this.nxStore.dispatch(CenterCommonActions.startGetCenterPermission({ centerId: center.id }))
             return of(true)
         } else {

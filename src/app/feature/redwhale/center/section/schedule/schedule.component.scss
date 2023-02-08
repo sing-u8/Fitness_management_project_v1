@@ -268,7 +268,7 @@ article.schedule {
     display: none;
 }
 
-.schdule-dropdown {
+.schedule-dropdown {
     display: none;
     box-shadow: 0 0 10px #b5b5b545;
     width: 105px;
@@ -293,8 +293,8 @@ article.schedule {
     }
 
     &.show {
-        display: initial;
-        z-index: 500;
+        display: initial !important;
+        z-index: 5 !important;
     }
 }
 

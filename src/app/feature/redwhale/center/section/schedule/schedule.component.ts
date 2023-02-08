@@ -117,7 +117,19 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
         private dashboardHelperService: DashboardHelperService
     ) {
         this.center = this.storageService.getCenter()
+        this.user = this.storageService.getUser()
 
+        this.nxStore.dispatch(
+            ScheduleActions.setOperatingHour({
+                operatingHour: {
+                    start: this.center.open_time,
+                    end: this.center.close_time,
+                },
+            })
+        )
+    }
+
+    ngOnInit(): void {
         this.nxStore
             .pipe(select(ScheduleSelector.operatingHour), takeUntil(this.unsubscriber$))
             .subscribe((operatingHour) => {
@@ -129,12 +141,10 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.initFullCalendar()
             } else {
                 this.fullCalendarOptions = calendarOptions
+                this.initCalendarOptionFuncs()
+                this.getOperatingData(this.center.id)
             }
         })
-    }
-
-    ngOnInit(): void {
-        this.user = this.storageService.getUser()
 
         this.nxStore
             .pipe(select(ScheduleSelector.curCenterCalendar), takeUntil(this.unsubscriber$))
@@ -234,8 +244,8 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
 
         this.nxStore.pipe(select(ScheduleSelector.taskList), takeUntil(this.unsubscriber$)).subscribe((taskList) => {
             this.eventList = taskList.map((task) => this.makeScheduleEvent(task, this.selectedDateViewType))
-            console.log('getTaskList : ', this.eventList)
             this.setEventsFiltersChange(this.instructorList$_, this.lectureFilter$_)
+            console.log('getTaskList : ', this.eventList)
         })
     }
     ngOnDestroy(): void {
@@ -332,7 +342,6 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
             fn ? fn() : null
         })
     }
-
     getHiddenDays(days: number[]) {
         const newHiddenDays = [0, 1, 2, 3, 4, 5, 6]
         return _.difference(newHiddenDays, days)
@@ -387,8 +396,14 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     // --------------------- functions for top of full calendar ---------------------
-
     changeView(viewType: ViewType) {
+        this.eventList = []
+        this.fullCalendar.options = {
+            ...this.fullCalendar.options,
+            ...{
+                events: this.eventList,
+            },
+        }
         this.nxStore.dispatch(
             ScheduleActions.setCalendarConfig({
                 calendarConfig: {
@@ -624,7 +639,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     // ------------------------------------------- schedule dropdown  ------------------------------------------//
-    @ViewChild('schdule_dropdown') schdule_dropdown_el: ElementRef
+    @ViewChild('schedule_dropdown') schedule_dropdown_el: ElementRef
     public doShowScheduleDropdown = false
     showScheduleDropdown() {
         this.doShowScheduleDropdown = true
@@ -759,8 +774,8 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     onDateSelect(arg) {
-        console.log('onDateSelect: ', arg)
-        // if (this.isLoading$_ != 'done') return
+        console.log('onDateSelect: ', arg, ' daycellleave : ', arg.view.type, this.dayCellLeave)
+        if (this.isLoading$_ == 'pending') return
         if (arg.view.type == 'dayGridMonth') {
             if (this.dayCellLeave) {
                 this.hideScheduleDropdown()
@@ -774,15 +789,15 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
         this.drawerDate = { startDate: new Date(arg.startStr), endDate: new Date(arg.endStr) }
         const posX = highlight_pos.right - 120 // + 105(dropdown width) + 15(padding)
         const posY = window.innerHeight < 85 + highlight_pos.bottom ? highlight_pos.top - 81 : highlight_pos.bottom + 5
-        this.renderer.setStyle(this.schdule_dropdown_el.nativeElement, 'left', `${posX}px`)
-        this.renderer.setStyle(this.schdule_dropdown_el.nativeElement, 'top', `${posY}px`)
+        this.renderer.setStyle(this.schedule_dropdown_el.nativeElement, 'left', `${posX}px`)
+        this.renderer.setStyle(this.schedule_dropdown_el.nativeElement, 'top', `${posY}px`)
 
         this.setSchedulingInstructor(arg)
         this.showScheduleDropdown()
     }
     onDateClick(arg) {
-        console.log('on Date Click -- ', this.schdule_dropdown_el)
-        if (this.isLoading$_ != 'done') return
+        console.log('on Date Click -- ', this.schedule_dropdown_el, this.isLoading$_, this.dayCellLeave, arg.view.type)
+        if (this.isLoading$_ == 'pending') return
         if (arg.view.type == 'dayGridMonth') {
             if (this.dayCellLeave) {
                 this.hideScheduleDropdown()
@@ -796,8 +811,8 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
         this.drawerDate = { startDate: new Date(arg.dateStr), endDate: null }
         const posX = highlight_pos.right - 120 // + 105(dropdown width) + 15(padding)
         const posY = window.innerHeight < 85 + highlight_pos.bottom ? highlight_pos.top - 81 : highlight_pos.bottom + 5
-        this.renderer.setStyle(this.schdule_dropdown_el.nativeElement, 'left', `${posX}px`)
-        this.renderer.setStyle(this.schdule_dropdown_el.nativeElement, 'top', `${posY}px`)
+        this.renderer.setStyle(this.schedule_dropdown_el.nativeElement, 'left', `${posX}px`)
+        this.renderer.setStyle(this.schedule_dropdown_el.nativeElement, 'top', `${posY}px`)
 
         this.setSchedulingInstructor(arg)
         this.showScheduleDropdown()
@@ -1097,7 +1112,7 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
         this.nxStore.dispatch(ScheduleActions.updatetask({ task: calTask }))
     }
 
-    public dayCellLeave = true
+    public dayCellLeave = false
     dayCellDidMount(arg) {
         if (arg.view.type == 'dayGridMonth') {
             if (arg.el.classList.contains('fc-daygrid-day')) {
@@ -1158,8 +1173,8 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
                         }
                         const posX = window.innerWidth < 105 + bt_pos.right ? bt_pos.left - 84 : bt_pos.left
                         const posY = window.innerHeight < 85 + bt_pos.bottom ? bt_pos.top - 81 : bt_pos.bottom + 5
-                        this.renderer.setStyle(this.schdule_dropdown_el.nativeElement, 'left', `${posX}px`)
-                        this.renderer.setStyle(this.schdule_dropdown_el.nativeElement, 'top', `${posY}px`)
+                        this.renderer.setStyle(this.schedule_dropdown_el.nativeElement, 'left', `${posX}px`)
+                        this.renderer.setStyle(this.schedule_dropdown_el.nativeElement, 'top', `${posY}px`)
                         this.showScheduleDropdown()
                     }
                     addSchButton_el.onmouseenter = (e) => {
