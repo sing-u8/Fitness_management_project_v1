@@ -9,7 +9,9 @@
                 ? '신규 등록'
                 : membership.contract_type_code == 'contract_type_renewal'
                 ? '재등록'
-                : '양도'
+                : membership.contract_type_code == 'contract_type_transfer'
+                ? '양도'
+                : '신규 등록'
         }}
     </div>
 
