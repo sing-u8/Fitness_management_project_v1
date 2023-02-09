@@ -82,7 +82,8 @@
                         <div
                             class="content"
                             [class.changeable]="curUserData?.user"
-                            (click)="curUserData?.user && toggleShowChangeUserEmailModal()"
+                            [class.not-changeable]="isOwnerData"
+                            (click)="curUserData?.user && !isOwnerData && toggleShowChangeUserEmailModal()"
                         >
                             {{ !curUserData.user ? '-' : !curUserData.user.email ? '-' : curUserData.user.email }}
                             <img *ngIf="curUserData?.user" src="assets/icons/etc/edit.svg" />
@@ -336,7 +337,6 @@
     (cancel)="toggleShowChangeUserBirthDateModal()"
     (confirm)="onChangeUserBirthDateConfirm($event)"
 ></db-change-user-birth-date-modal>
-
 
 <rw-modal
     [(visible)]="doShowRemoveUserProfile"

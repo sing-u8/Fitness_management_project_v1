@@ -273,6 +273,20 @@ section.member-detail__body {
                                     display: none;
                                 }
                             }
+                            &.not-changeable {
+                                cursor: auto !important;
+                                position: relative;
+                                overflow: visible;
+                                width: auto;
+                                &:hover {
+                                    img {
+                                        display: none !important;
+                                    }
+                                }
+                                img {
+                                    display: none !important;
+                                }
+                            }
                         }
                         .content_select {
                             font-weight: 400;

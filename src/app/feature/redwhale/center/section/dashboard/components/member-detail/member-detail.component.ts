@@ -66,6 +66,7 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
 
     public curUserData: DashboardReducer.CurUserData = _.cloneDeep(DashboardReducer.CurUserDataInit)
     public curUserData$ = this.nxStore.select(DashboardSelector.curUserData)
+    public isOwnerData = false
 
     public dbCurCenterId$ = this.nxStore.select(DashboardSelector.curCenterId)
     public dwCurCenterId$ = this.nxStore.select(DashboardSelector.drawerCurCenterId)
@@ -122,6 +123,8 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
             _.forIn(this.userRole, (value, key) => {
                 this.userRole[key] = key == this.curUserData?.user?.role_code
             })
+
+            this.isOwnerData = this.userInCenter.id == curUserData.user.id || curUserData.user.role_code == 'owner'
         })
 
         this.dbCurCenterId$.pipe(takeUntil(this.unSubscriber$)).subscribe((dbCurCenterId) => {
