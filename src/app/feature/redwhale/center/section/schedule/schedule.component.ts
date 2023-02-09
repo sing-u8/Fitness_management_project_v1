@@ -807,7 +807,6 @@ export class ScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
         const highlight_El: HTMLElement = arg.dayEl.getElementsByClassName('fc-highlight')[0]
         const highlight_pos = highlight_El.getBoundingClientRect()
 
-        console.log('onDateClick: ', arg, highlight_pos)
         this.drawerDate = { startDate: new Date(arg.dateStr), endDate: null }
         const posX = highlight_pos.right - 120 // + 105(dropdown width) + 15(padding)
         const posY = window.innerHeight < 85 + highlight_pos.bottom ? highlight_pos.top - 81 : highlight_pos.bottom + 5
