@@ -16,7 +16,7 @@ type UserOrEmpty = User | { sign_in_method: string }
 
 @Injectable({ providedIn: 'root' })
 export class StorageService {
-    private storage = sessionStorage
+    private storage = localStorage // sessionStorage
     private userKey = 'redwhale:authUser'
 
     constructor(private fireAuth: Auth, private router: Router) {}
