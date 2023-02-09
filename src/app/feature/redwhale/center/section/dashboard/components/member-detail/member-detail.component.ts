@@ -77,6 +77,7 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
         this.user = this.storageService.getUser()
         this.userInCenter = this.storageService.getCenterUser()
         this.staffRole = this.userInCenter.role_code as Role
+        console.log('get Center User Data : ', this.userInCenter)
     }
 
     constructor(
@@ -676,17 +677,16 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
                             CenterCommonActions.startGetCenterPermission({ centerId: this.center.id })
                         )
 
-                        const _centerUser = {
-                            ..._.cloneDeep(this.curUserData.user),
-                            role_code: roleKey,
-                        }
-                        this.storageService.updateCenterUser(_centerUser)
-                        this.getCenterUserData()
-                        if (this.userInCenter.id == _centerUser.id) {
-                            this.centerService.getCenter(this.center.id).subscribe((center) => {
-                                this.storageService.setCenter(center)
-                            })
-                        }
+                        this.centerService.getCenter(this.center.id).subscribe((center) => {
+                            this.storageService.setCenter(center)
+                            const _userInCenter = {
+                                ..._.cloneDeep(this.userInCenter),
+                                role_code: center.role_code,
+                                role_name: center.role_name,
+                            }
+                            this.storageService.updateCenterUser(_userInCenter)
+                            this.getCenterUserData()
+                        })
 
                         this.nxStore.dispatch(CenterCommonActions.startGetCurCenter({ centerId: this.center.id }))
                         this.dashboardHelperService.refreshUserList(
