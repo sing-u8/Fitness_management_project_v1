@@ -73,6 +73,12 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
     public dbCurCenterId = undefined
     public dwCurCenterId = undefined
 
+    getCenterUserData() {
+        this.user = this.storageService.getUser()
+        this.userInCenter = this.storageService.getCenterUser()
+        this.staffRole = this.userInCenter.role_code as Role
+    }
+
     constructor(
         private fb: FormBuilder,
         private storageService: StorageService,
@@ -91,9 +97,7 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
         private centerCalendarService: CenterCalendarService
     ) {
         this.center = this.storageService.getCenter()
-        this.user = this.storageService.getUser()
-        this.userInCenter = this.storageService.getCenterUser()
-        this.staffRole = this.center.role_code as Role
+        this.getCenterUserData()
 
         this.spinner.show('ud_loading')
         this.nxStore
@@ -124,7 +128,7 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
                 this.userRole[key] = key == this.curUserData?.user?.role_code
             })
 
-            this.isOwnerData = curUserData.user.role_code == 'owner'
+            this.isOwnerData = curUserData.user?.role_code == 'owner'
         })
 
         this.dbCurCenterId$.pipe(takeUntil(this.unSubscriber$)).subscribe((dbCurCenterId) => {
@@ -737,6 +741,12 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
                             role_code: roleKey,
                         }
                         this.storageService.updateCenterUser(_centerUser)
+                        this.getCenterUserData()
+                        if (this.userInCenter.id == _centerUser.id) {
+                            this.centerService.getCenter(this.center.id).subscribe((center) => {
+                                this.storageService.setCenter(center)
+                            })
+                        }
 
                         if (roleKey != 'member') {
                             this.centerCalendarService

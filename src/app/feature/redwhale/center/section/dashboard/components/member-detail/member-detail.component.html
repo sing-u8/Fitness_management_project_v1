@@ -129,7 +129,7 @@
                             <span *ngIf="!curUserData.user">{{ '-' }}</span>
                             <rw-member-role-select
                                 *ngIf="curUserData.user"
-                                [staffId]="user.id"
+                                [staffId]="userInCenter.id"
                                 [member]="curUserData?.user"
                                 [visible]="doShowRoleSelect"
                                 [userRole]="userRole"

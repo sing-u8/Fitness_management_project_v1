@@ -38,7 +38,7 @@ export class MemberRoleSelectComponent implements OnInit, OnChanges {
 
     ngOnInit(): void {}
     ngOnChanges(changes: SimpleChanges) {
-        this.showArrow = this.blockEmitToggleSelect()
+        this.showArrow = !this.blockEmitToggleSelect()
     }
 
     emitClose() {
@@ -48,21 +48,21 @@ export class MemberRoleSelectComponent implements OnInit, OnChanges {
         this.onSetUserRole.emit(role)
     }
     emitToggleSelect() {
-        if (this.blockEmitToggleSelect()) this.onToggleSelect.emit({})
+        if (!this.blockEmitToggleSelect()) this.onToggleSelect.emit({})
     }
     emitSaveRole() {
         this.onSaveRole.emit({})
     }
 
     blockEmitToggleSelect(): boolean {
-        if (this.employeeRole == 'owner' && this.userRole.owner == true && this.staffId == this.member.id) {
-            return false
-        } else if (
-            this.employeeRole == 'instructor' &&
-            (this.userRole.owner == true || this.userRole.instructor == true)
+        if (
+            this.userRole.owner ||
+            (this.userRole.administrator && (this.employeeRole == 'instructor' || this.employeeRole == 'member')) ||
+            (this.userRole.instructor && this.employeeRole == 'member')
         ) {
+            return true
+        } else {
             return false
         }
-        return true
     }
 }
