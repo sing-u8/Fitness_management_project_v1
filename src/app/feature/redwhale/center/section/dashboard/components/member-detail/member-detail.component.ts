@@ -124,7 +124,7 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
                 this.userRole[key] = key == this.curUserData?.user?.role_code
             })
 
-            this.isOwnerData = this.userInCenter.id == curUserData.user.id || curUserData.user.role_code == 'owner'
+            this.isOwnerData = curUserData.user.role_code == 'owner'
         })
 
         this.dbCurCenterId$.pipe(takeUntil(this.unSubscriber$)).subscribe((dbCurCenterId) => {
