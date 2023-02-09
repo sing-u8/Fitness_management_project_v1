@@ -675,9 +675,19 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
                         this.nxStore.dispatch(
                             CenterCommonActions.startGetCenterPermission({ centerId: this.center.id })
                         )
-                        this.centerService.getCenter(this.center.id).subscribe((center) => {
-                            this.storageService.setCenter(center)
-                        })
+
+                        const _centerUser = {
+                            ..._.cloneDeep(this.curUserData.user),
+                            role_code: roleKey,
+                        }
+                        this.storageService.updateCenterUser(_centerUser)
+                        this.getCenterUserData()
+                        if (this.userInCenter.id == _centerUser.id) {
+                            this.centerService.getCenter(this.center.id).subscribe((center) => {
+                                this.storageService.setCenter(center)
+                            })
+                        }
+
                         this.nxStore.dispatch(CenterCommonActions.startGetCurCenter({ centerId: this.center.id }))
                         this.dashboardHelperService.refreshUserList(
                             this.center.id,
