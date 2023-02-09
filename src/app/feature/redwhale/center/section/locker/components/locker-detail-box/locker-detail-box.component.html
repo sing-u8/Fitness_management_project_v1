@@ -193,7 +193,7 @@
                 [class.move-locket-ticket-mode-button]="lockerGlobalMode == 'moveLockerTicket'"
                 rw-button
                 rwButtonColor="var(--white)"
-                (click)="toggleMoveLockerTicketMode()">
+                (click)="toggleMoveLockerTicketMode(); $event.stopPropagation()">
                 <img *ngIf="lockerGlobalMode != 'moveLockerTicket'" src="assets/icons/etc/change_place.svg">
                 <img *ngIf="lockerGlobalMode == 'moveLockerTicket'" src="assets/icons/etc/change_place_red.svg">
                 <span>

@@ -509,8 +509,8 @@ export class LockerComponent implements OnInit, AfterViewInit, OnDestroy {
     //  gridster methods --> //
     onClickOutsideOfLocker(e) {
         if (
-            this.LockerGlobalMode == 'moveLockerTicket' &&
-            _.findIndex(e.path, (el) => el['id'] == 'rw-locker-detail-box') == -1
+            this.LockerGlobalMode == 'moveLockerTicket'
+            // && _.findIndex(e.path, (el) => el['id'] == 'rw-locker-detail-box') == -1
         ) {
             this.nxStore.dispatch(LockerActions.setLockerGlobalMode({ lockerMode: 'normal' }))
         }

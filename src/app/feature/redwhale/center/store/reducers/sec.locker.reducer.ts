@@ -9,7 +9,6 @@ import { LockerCategory } from '@schemas/locker-category'
 import { LockerItem } from '@schemas/locker-item'
 import { Loading } from '@schemas/store/loading'
 import { UserLocker } from '@schemas/user-locker'
-import { finishSynchronizeCurLockerItem } from '../actions/sec.locker.actions'
 
 export const initialLockerState: {
     curLockerCateg: LockerCategory
