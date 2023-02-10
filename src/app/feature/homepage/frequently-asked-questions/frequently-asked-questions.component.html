@@ -1,20 +1,31 @@
 <article class="l-faq">
 
+    <div class="faq-title">고객 센터</div>
+
     <hp-faq-list-section></hp-faq-list-section>
 
-    <div class="inquiry-card">
-        <div class="card-title">
-            아직 문제가<br>
-            해결되지 않으셨나요?
+    <div class="faq-help">
+        <div class="title">
+            🔎 아직 궁금한 점이 해결되지 않으셨나요?
         </div>
-        <hp-find-more-button
-            [text]="'문의하기'"
-            [maxWidth]="'90px'"
-            [whiteMode]="true"
-            (onClick)="routerTo('introduction-inquiry')"
-        ></hp-find-more-button>
-        <div class="crying-icon"></div>
+        <div class="l-help-button">
+            <div class="help-button">이용 가이드 보기</div>
+            <div class="help-button black">카카오 상담하기</div>
+        </div>
     </div>
+<!--    <div class="inquiry-card">-->
+<!--        <div class="card-title">-->
+<!--            아직 문제가<br>-->
+<!--            해결되지 않으셨나요?-->
+<!--        </div>-->
+<!--        <hp-find-more-button-->
+<!--            [text]="'문의하기'"-->
+<!--            [maxWidth]="'90px'"-->
+<!--            [whiteMode]="true"-->
+<!--            (onClick)="routerTo('introduction-inquiry')"-->
+<!--        ></hp-find-more-button>-->
+<!--        <div class="crying-icon"></div>-->
+<!--    </div>-->
 
     <hp-homepage-footer></hp-homepage-footer>
 

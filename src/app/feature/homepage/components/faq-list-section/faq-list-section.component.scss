@@ -152,7 +152,7 @@ section.fap-list {
     }
 
     .l-page {
-        margin-top: 35px;
+        margin-top: 27px;
         display: flex;
         align-items: center;
         .page-common {
@@ -276,6 +276,10 @@ hp-find-more-button {
                 }
             }
         }
+
+        .l-page {
+            margin-top: 19px;
+        }
     }
 }
 
@@ -328,6 +332,10 @@ hp-find-more-button {
                     margin-top: 10px;
                 }
             }
+        }
+
+        .l-page {
+            margin-top: 28px;
         }
     }
 }

@@ -13,7 +13,7 @@
         </a>
         <a [routerLink]="['/fare-guide']" routerLinkActive="active" class="header__nav"> 요금 안내 </a>
         <a [routerLink]="['/introduction-inquiry']" routerLinkActive="active" class="header__nav"> 도입 안내 </a>
-        <a [routerLink]="['/FAQ']" routerLinkActive="active" class="header__nav"> 고객 센터 </a>
+        <a [routerLink]="['/customer-center']" [routerLinkActive]="['active', 'hover-cc--disable']" class="header__nav hover-cc"> 고객 센터 </a>
     </div>
     <div class="header__right">
         <hp-button
@@ -35,6 +35,8 @@
             (onClick)="toggleFreeStartModalVisible()"
         ></hp-button>
     </div>
+
+<!--    <rw-customer-center-header ></rw-customer-center-header>-->
 </section>
 
 <section class="l-header-mobile" [class.remove-header]="removeHeaderFlag">
@@ -54,16 +56,19 @@
                     <div class="mdi mdi-chevron-down" [class.open]="faqFlag"></div>
                 </div>
                 <div *ngIf="faqFlag" class="menu-drop-content">
-                    <a [routerLink]="['/introduction-inquiry']" (click)="toggleMenu()" class="menu-drop-content-item"
+                    <a [routerLink]="['/customer-center/notice']" (click)="toggleMenu()" class="menu-drop-content-item"
                         >공지사항</a
                     >
-                    <a [routerLink]="['/introduction-inquiry']" (click)="toggleMenu()" class="menu-drop-content-item"
+                    <a [routerLink]="['/customer-center/event']" (click)="toggleMenu()" class="menu-drop-content-item"
                         >이벤트</a
                     >
-                    <a [routerLink]="['/introduction-inquiry']" (click)="toggleMenu()" class="menu-drop-content-item"
+                    <a
+                        [routerLink]="['/customer-center/usage-guide']"
+                        (click)="toggleMenu()"
+                        class="menu-drop-content-item"
                         >이용 가이드</a
                     >
-                    <a [routerLink]="['/introduction-inquiry']" (click)="toggleMenu()" class="menu-drop-content-item"
+                    <a [routerLink]="['/customer-center/FAQ']" (click)="toggleMenu()" class="menu-drop-content-item"
                         >자주 묻는 질문</a
                     >
                 </div>

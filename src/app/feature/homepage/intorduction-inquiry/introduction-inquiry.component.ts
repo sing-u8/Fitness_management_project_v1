@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core'
 import { Router } from '@angular/router'
 import { DeviceDetectorService } from 'ngx-device-detector'
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser'
 import _ from 'lodash'
-import { FormBuilder, FormGroup, Validators, ValidationErrors, ValidatorFn, AbstractControl } from '@angular/forms'
+import { FormBuilder } from '@angular/forms'
+import { FaqListType } from '../components/faq-list/faq-list.component'
 
 @Component({
     selector: 'rw-introduction-inquiry',
@@ -10,159 +12,17 @@ import { FormBuilder, FormGroup, Validators, ValidationErrors, ValidatorFn, Abst
     styleUrls: ['./introduction-inquiry.component.scss'],
 })
 export class IntroductionInquiryComponent implements OnInit {
-    public inquiryForm: FormGroup
-    public errors: {
-        centerName: string
-        contactName: string
-        email: string
-        phone: string
-        enquiry: string
-    } = {
-        centerName: '',
-        contactName: '',
-        email: '',
-        phone: '',
-        enquiry: '',
-    }
-
-    public positionItems: Array<{ name: string; code: string }> = [
-        { name: '관리자', code: 'administer' },
-        { name: '트레이너 및 강사', code: 'instructor' },
-        { name: '회원', code: 'member' },
-    ]
-    public position: { name: string; code: string } = { name: '관리자', code: 'administer' }
-    onPositionChanged(value: { name: string; code: string }) {
-        this.position = value
-    }
-
-    public privacyAgree = false
-    togglePrivacyAgree() {
-        this.privacyAgree = !this.privacyAgree
-    }
-
-    public showPrivacy = false
-    toggleShowPrivacy() {
-        this.showPrivacy = !this.showPrivacy
-    }
-
-    constructor(private fb: FormBuilder, private deviceDetector: DeviceDetectorService, private router: Router) {
+    constructor(
+        private fb: FormBuilder,
+        private deviceDetector: DeviceDetectorService,
+        private router: Router,
+        private domSanitizer: DomSanitizer
+    ) {
         const h = document.getElementById('l-homepage')
         h.scrollTo({ top: 0 })
-
-        this.inquiryForm = this.fb.group({
-            centerName: ['', [this.centerNameValidator()]],
-            contactName: ['', [this.contactNameValidator()]],
-            email: ['', [this.emailValidator()]],
-            phone: ['', [this.phoneValidator()]],
-            enquiry: ['', [this.enquiryValidator()]],
-        })
-    }
-
-    get centerName() {
-        return this.inquiryForm.get('centerName')
-    }
-    get contactName() {
-        return this.inquiryForm.get('contactName')
-    }
-    get email() {
-        return this.inquiryForm.get('email')
-    }
-    get phone() {
-        return this.inquiryForm.get('phone')
-    }
-    get enquiry() {
-        return this.inquiryForm.get('enquiry')
     }
 
     ngOnInit(): void {}
-
-    centerNameValidator(): ValidatorFn {
-        return (control: AbstractControl): ValidationErrors | null => {
-            console.log('centerName validator : ', control, control.value, this.errors)
-            if (control.value == '') {
-                this.errors.centerName = '센터명을 입력해주세요.'
-
-                return { centerNameNone: true }
-            }
-            return null
-        }
-    }
-    contactNameValidator(): ValidatorFn {
-        return (control: AbstractControl): ValidationErrors | null => {
-            if (control.value == '') {
-                this.errors.contactName = '이름을 입력해주세요.'
-                return { contactNameNone: true }
-            }
-            return null
-        }
-    }
-    emailValidator(): ValidatorFn {
-        return (control: AbstractControl): ValidationErrors | null => {
-            const emailRegex = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/
-            if (control.value == '') {
-                this.errors.email = '이메일 주소를 입력해주세요.'
-                return { emailNone: true }
-            } else if (!emailRegex.test(control.value)) {
-                this.errors.email = '이메일 양식을 확인해주세요.'
-                return { eamilFormError: true }
-            }
-            return null
-        }
-    }
-    phoneValidator(): ValidatorFn {
-        return (control: AbstractControl): ValidationErrors | null => {
-            const phoneRegex = /^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/
-            // console.log('phone control: ', control, control.value)
-
-            if (control.value == '') {
-                this.errors.phone = '전화번호를 입력해주세요.'
-                return { phoneNone: true }
-            } else if (!phoneRegex.test(control.value)) {
-                this.errors.email = '전화번호를 확인해주세요.'
-                return { phoneFormError: true }
-            }
-            return null
-        }
-    }
-    phoneCheck(event: KeyboardEvent) {
-        const code = event.key
-        return !_.isNaN(Number(code))
-
-        // this.matchPhoneForm()
-    }
-    matchPhoneForm(keyup: KeyboardEvent) {
-        if (!this.inquiryForm) return
-        let phone = this.inquiryForm.get('phone').value
-        const phoneSize = phone.length
-        const lastStr = phone[phoneSize - 1]
-        const digitReg = /[\d]/g
-        const dashReg = /[-]/g
-
-        if (phoneSize == 3 || phoneSize == 4) {
-            if (keyup.key != 'Backspace' && digitReg.test(lastStr)) {
-                phone = phone.slice(0, 3) + '-' + phone.slice(3)
-            } else if (keyup.key == 'Backspace' && phoneSize == 4 && dashReg.test(lastStr)) {
-                phone = phone.slice(0, 3)
-            }
-        } else if (phoneSize == 8 || phoneSize == 9) {
-            if (keyup.key != 'Backspace' && digitReg.test(lastStr)) {
-                phone = phone.slice(0, 8) + '-' + phone.slice(8)
-            } else if (keyup.key == 'Backspace' && phoneSize == 9 && dashReg.test(lastStr)) {
-                phone = phone.slice(0, 8)
-            }
-        }
-        this.inquiryForm.patchValue({ phone: phone })
-    }
-
-    enquiryValidator(): ValidatorFn {
-        return (control: AbstractControl): ValidationErrors | null => {
-            if (control.value == '') {
-                this.errors.enquiry = '문의 사항을 입력해주세요.'
-                return { enquiryNone: true }
-            }
-            return null
-        }
-    }
 
     // ----------  free start modal ---------------//
     public isFreeStartModalVisible = false
@@ -176,6 +36,60 @@ export class IntroductionInquiryComponent implements OnInit {
     onFreeStartCancel() {
         this.isFreeStartModalVisible = false
     }
+
+    //
+
+    public faqList: FaqListType[] = [
+        {
+            title: '가입비나 초기 설치 비용은 얼마인가요?',
+            desc: this.domSanitizer.bypassSecurityTrustHtml(
+                '<div><b>가입비 및 초기 설치 비용은 없습니다.</b> 레드웨일은 서비스 이용료 외 추가 요금이 발생하지 않습니다.</div>'
+            ),
+            isOpen: false,
+        },
+        {
+            title: '문자 비용은 얼마인가요?',
+            desc: this.domSanitizer.bypassSecurityTrustHtml(
+                '<div>문자 비용은 <b>단문 12원, 장문 32원</b>으로 업계 최저가로 제공해 드리고 있습니다.</div>'
+            ),
+            isOpen: false,
+        },
+        {
+            title: '무료 체험은 어떻게 하나요?',
+            desc: this.domSanitizer.bypassSecurityTrustHtml(
+                '<div>로그인 후 [무료로 시작하기] 버튼을 눌러 무료 체험을 시작하실 수 있습니다. 레드웨일 서비스에서 <b>센터를 생성하시면 2주간의 무료 체험이 자동으로 시작</b>됩니다.</div>'
+            ),
+            isOpen: false,
+        },
+        {
+            title: '요금 결제는 어떻게 하나요?',
+            desc: this.domSanitizer.bypassSecurityTrustHtml(
+                `<div>요금은 센터 단위로 부과되므로 로그인 후 먼저 센터를 생성하셔야 합니다. 센터 생성을 마친 후, <b>[센터 설정] 메뉴에서 결제를 진행</b>하실 수 있습니다. 단, 문자 요금은 별도로 [문자] 메뉴에서 결제가 이루어 집니다.</div>`
+            ),
+            isOpen: false,
+        },
+        {
+            title: '기존 회원 정보 이동이 가능한가요?',
+            desc:
+                '네 가능합니다. 레드웨일의 엑셀 양식에 맞게 기존 회원 정보를 입력하여 보내주시면 기존 회원 정보를 일괄\n' +
+                '등록해 드리고 있습니다.',
+            isOpen: false,
+        },
+        {
+            title: '다지점 할인이 가능한가요?',
+            desc: this.domSanitizer.bypassSecurityTrustHtml(
+                '<div>3개 이상의 지점을 보유하고 계시다면, 다지점 할인 혜택을 받으실 수 있습니다. <b>카카오 상담</b>을 통해 문의를 남겨주시면 검토 후 견적서를 전송해드려요.</div>'
+            ),
+            isOpen: false,
+        },
+        {
+            title: '서비스 이용을 취소하고 싶은데, 환불 받을 수 있나요?',
+            desc: this.domSanitizer.bypassSecurityTrustHtml(
+                '<div>요금제별 환불 가능 <b>기간 내에 환불 요청 시 전액 환불이 가능</b>합니다. 단, 환불 기간이 지난 경우에는 환불이 불가한 점 양해부탁드립니다.</div>'
+            ),
+            isOpen: false,
+        },
+    ]
 }
 
 // &#13;&#10;

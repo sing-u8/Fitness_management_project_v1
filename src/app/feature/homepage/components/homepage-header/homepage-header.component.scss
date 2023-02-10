@@ -20,6 +20,12 @@ section.l-header {
     background-color: var(--white);
     padding: 0 18px;
 
+    rw-customer-center-header {
+        display: none;
+        position: absolute;
+        top: 0;
+    }
+
     div.header__left {
         position: absolute;
         left: 18px;
@@ -43,6 +49,22 @@ section.l-header {
         .header__nav {
             &:not(:first-of-type) {
                 margin-left: 26px;
+            }
+            &.hover-cc {
+                &:hover {
+                    rw-customer-center-header {
+                        display: initial;
+                        top: 65px;
+                    }
+                }
+                &--disable {
+                    &:hover {
+                        rw-customer-center-header {
+                            top: 0 !important;
+                            display: none !important;
+                        }
+                    }
+                }
             }
         }
     }
@@ -77,14 +99,14 @@ section.l-header {
 
         &.active {
             font-weight: 700;
-            color: var(--hp-black);
+            color: var(--font-color);
             text-decoration: underline;
-            text-underline-offset: 8px;
-            text-decoration-thickness: 3px;
+            text-underline-offset: 7px;
+            text-decoration-thickness: 2px;
+            text-decoration-color: var(--red);
         }
 
         &:hover {
-            // background-color: var(--hp-lighergrey);
             opacity: 0.8;
         }
     }

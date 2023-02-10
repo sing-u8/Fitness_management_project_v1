@@ -1,38 +1,28 @@
-<section
-    class="fap-list"
->
+<section class="fap-list">
     <div class="title">자주 묻는 질문</div>
 
     <div class="l-category">
-        <div
-            class="category"
-            [class.active] = "curCateg == '전체'"
-            (click)="selectCateg('전체')"
-        >
-            전체
-        </div>
+        <div class="category" [class.active]="curCateg == '전체'" (click)="selectCateg('전체')">전체</div>
         <div
             *ngFor="let categ of categs"
             class="category"
-            [class.active] = "curCateg == categ"
+            [class.active]="curCateg == categ"
             (click)="selectCateg(categ)"
         >
-            {{categ}}
+            {{ categ }}
         </div>
     </div>
 
     <div
         class="l-faq"
-        [class.display-none]="!(idx+1 > (pageNumber - 1)*10 && idx+1 <= (pageNumber)*10)"
+        [class.display-none]="!(idx + 1 > (pageNumber - 1) * 10 && idx + 1 <= pageNumber * 10)"
         *ngFor="let faq of faqDisplayList; index as idx"
     >
-            <div class="faq-header" (click)="toggleFAQ(idx)">
-                <span>{{faq.title}}</span>
-                <div class="arrow" [class.isOpen]="faq.isOpen"></div>
-            </div>
-            <div class="faq-body" [class.isOpen] ="faq.isOpen">
-                {{faq.desc}}
-            </div>
+        <div class="faq-header" (click)="toggleFAQ(idx)">
+            <span>{{ faq.title }}</span>
+            <div class="arrow" [class.isOpen]="faq.isOpen"></div>
+        </div>
+        <div [innerHTML]="faq.desc" class="faq-body" [class.isOpen]="faq.isOpen"></div>
     </div>
 
     <div class="l-page">
@@ -41,10 +31,11 @@
             (click)="setPageNumber(i)"
             *ngFor="let i of pageIndexList; first as first"
             class="page-index page-common"
-            [class.active] = "pageNumber == i"
-            [class.none-margin] = "first"
-        >{{i}}</div>
+            [class.active]="pageNumber == i"
+            [class.none-margin]="first"
+        >
+            {{ i }}
+        </div>
         <div (click)="increasePageNumber()" class="right-arrow page-common"></div>
     </div>
-
 </section>

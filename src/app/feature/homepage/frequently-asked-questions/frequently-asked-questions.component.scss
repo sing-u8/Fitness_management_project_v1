@@ -9,8 +9,16 @@ article.l-faq {
     flex-direction: column;
     align-items: center;
 
+    .faq-title {
+        font-weight: 700;
+        font-size: 15px;
+        line-height: 22px;
+        letter-spacing: -0.225px;
+        color: var(--font-color);
+        margin: 50px 0 8px;
+    }
+
     hp-faq-list-section {
-        margin-top: 46px;
     }
 
     .inquiry-card {
@@ -51,9 +59,63 @@ article.l-faq {
         }
     }
 
+    .faq-help {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: 80px 0 130px;
+        width: 302px;
+
+        .title {
+            font-weight: 700;
+            font-size: 1.5rem;
+            line-height: 22px;
+            letter-spacing: -0.22px;
+            color: var(--font-color);
+            margin-bottom: 25px;
+        }
+        .l-help-button {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+
+            .help-button {
+                font-weight: 500;
+                font-size: 15px;
+                line-height: 22px;
+                letter-spacing: -0.22px;
+                color: var(--font-color);
+                background-color: var(--white);
+                border: 1px solid var(--hp-grey);
+                border-radius: 10px;
+                width: 145px;
+                height: 45px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+
+                &.black {
+                    color: var(--white);
+                    background-color: var(--font-color);
+                    border: none;
+                }
+            }
+        }
+    }
+
     @media (min-width: 768px) {
+        .faq-title {
+            font-weight: 700;
+            font-size: 15px;
+            line-height: 22px;
+            letter-spacing: -0.225px;
+            color: var(--font-color);
+
+            margin: 68px 0 7px;
+        }
+
         hp-faq-list-section {
-            margin-top: 73px;
         }
 
         .inquiry-card {
@@ -81,10 +143,47 @@ article.l-faq {
                 right: -30px;
             }
         }
+
+        .faq-help {
+            flex-direction: row;
+            width: 608px;
+            justify-content: space-around;
+            margin: 80px 0 150px;
+
+            .title {
+                font-weight: 700;
+                font-size: 1.6rem;
+                line-height: 23px;
+                letter-spacing: -0.256px;
+                margin-bottom: 0;
+            }
+            .l-help-button {
+                display: flex;
+                justify-content: space-between;
+                width: 306px;
+
+                .help-button {
+                    font-weight: 500;
+                    font-size: 1.6rem;
+                    line-height: 23px;
+                    letter-spacing: -0.256px;
+                    width: 147px;
+                    height: 47px;
+                }
+            }
+        }
     }
     @media (min-width: 1280px) {
+        .faq-title {
+            font-weight: 700;
+            font-size: 15px;
+            line-height: 22px;
+            letter-spacing: -0.225px;
+            color: var(--font-color);
+            margin: 170px 0 10px;
+        }
+
         hp-faq-list-section {
-            margin-top: 113px;
         }
 
         .inquiry-card {
@@ -105,6 +204,35 @@ article.l-faq {
                 height: 190px;
                 bottom: -27px;
                 right: -37px;
+            }
+        }
+
+        .faq-help {
+            flex-direction: row;
+            width: 800px;
+            justify-content: space-around;
+            margin: 80px 0 250px;
+
+            .title {
+                font-weight: 700;
+                font-size: 1.6rem;
+                line-height: 23px;
+                letter-spacing: -0.256px;
+                margin-bottom: 0;
+            }
+            .l-help-button {
+                display: flex;
+                justify-content: space-between;
+                width: 362px;
+
+                .help-button {
+                    font-weight: 500;
+                    font-size: 1.6rem;
+                    line-height: 23px;
+                    letter-spacing: -0.256px;
+                    width: 175px;
+                    height: 49px;
+                }
             }
         }
     }

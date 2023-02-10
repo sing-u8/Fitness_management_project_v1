@@ -20,8 +20,9 @@ import { InquirySelectComponent } from './inquiry-select/inquiry-select.componen
 import { FaqListSectionComponent } from './faq-list-section/faq-list-section.component'
 import { FareGuideBox2Component } from './fare-guide-box2/fare-guide-box2.component'
 import { FareGuideOptionTable2Component } from './fare-guide-option-table2/fare-guide-option-table2.component'
-import { FreeTryFooterComponent } from './free-try-footer/free-try-footer.component';
+import { FreeTryFooterComponent } from './free-try-footer/free-try-footer.component'
 import { IntroductionGuideComponent } from './introduction-guide/introduction-guide.component'
+import { CustomerCenterHeaderComponent } from './customer-center-header/customer-center-header.component'
 
 @NgModule({
     declarations: [
@@ -43,27 +44,29 @@ import { IntroductionGuideComponent } from './introduction-guide/introduction-gu
         FareGuideOptionTable2Component,
         FreeTryFooterComponent,
         IntroductionGuideComponent,
+        CustomerCenterHeaderComponent,
     ],
     imports: [CommonModule, RouterModule, FormsModule, ReactiveFormsModule, SharedModule],
-  exports: [
-    HomepageHeaderComponent,
-    ButtonComponent,
-    FindMoreButtonComponent,
-    FunctionBoxComponent,
-    FreeStartFooterComponent,
-    HomepageFooterComponent,
-    FAQListComponent,
-    MainCarouselComponent,
-    ReceiveIntroductionModalComponent,
-    FreeStartModalComponent,
-    FareGuideBoxComponent,
-    FareGuideOptionTableComponent,
-    InquirySelectComponent,
-    FaqListSectionComponent,
-    FareGuideBox2Component,
-    FareGuideOptionTable2Component,
-    FreeTryFooterComponent,
-    IntroductionGuideComponent
-  ]
+    exports: [
+        HomepageHeaderComponent,
+        ButtonComponent,
+        FindMoreButtonComponent,
+        FunctionBoxComponent,
+        FreeStartFooterComponent,
+        HomepageFooterComponent,
+        FAQListComponent,
+        MainCarouselComponent,
+        ReceiveIntroductionModalComponent,
+        FreeStartModalComponent,
+        FareGuideBoxComponent,
+        FareGuideOptionTableComponent,
+        InquirySelectComponent,
+        FaqListSectionComponent,
+        FareGuideBox2Component,
+        FareGuideOptionTable2Component,
+        FreeTryFooterComponent,
+        IntroductionGuideComponent,
+        CustomerCenterHeaderComponent,
+    ],
 })
 export class ComponentsModule {}
