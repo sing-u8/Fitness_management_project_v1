@@ -35,6 +35,7 @@ export type CurChatLoaded = {
 
 export interface State {
     // common
+    unreadMessageNumber: number
     curCenterId: string // for main
     isLoading: Loading // for main
     drawerIsLoading: Loading
@@ -68,6 +69,7 @@ export interface State {
 
 export const initialState: State = {
     // common
+    unreadMessageNumber: 0,
     curCenterId: undefined,
     isLoading: 'idle',
     drawerIsLoading: 'idle',
@@ -893,6 +895,7 @@ export const communityReducer = createImmerReducer(
 
 // main
 export const selectChatRoomList = (state: State) => state.chatRoomList
+export const selectUnreadMessageNumber = (state: State) => state.unreadMessageNumber
 // main - screen = main
 export const selectMainIsJoinRoomLoading = (state: State) => state.mainIsJoinRoomLoading
 export const selectMainPreChatRoom = (state: State) => state.mainPreChatRoom

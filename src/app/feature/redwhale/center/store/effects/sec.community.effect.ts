@@ -20,12 +20,6 @@ import * as CommunityActions from '../actions/sec.community.actions'
 import * as CommunitySelector from '../selectors/sec.community.selector'
 import * as CommunityReducer from '../reducers/sec.community.reducer'
 import { IsTmepRoom } from '@schemas/chat-room'
-import {
-    deleteChatRoomUserByWSAfterEffect,
-    startSendMessage,
-    startSendMessageResponse,
-    startSendMessageSent,
-} from '../actions/sec.community.actions'
 
 @Injectable()
 export class CommunityEffect {
@@ -35,6 +29,24 @@ export class CommunityEffect {
         private actions$: Actions,
         private store: Store
     ) {}
+
+    public getUnreadMessageNumber = createEffect(() =>
+        this.actions$.pipe(
+            ofType(CommunityActions.startGetUnreadMessageNumber),
+            switchMap(({ centerId }) =>
+                this.centerChatRoomApi.getUnreadMessageNumber(centerId).pipe(
+                    switchMap((obj) => {
+                        return [
+                            CommunityActions.finishGetUnreadMessageNumber({
+                                unreadMessageNumber: obj.unread_message_count,
+                            }),
+                        ]
+                    })
+                )
+            ),
+            catchError((err: string) => of(CommunityActions.error({ error: err })))
+        )
+    )
 
     public createChatRoom$ = createEffect(() =>
         this.actions$.pipe(

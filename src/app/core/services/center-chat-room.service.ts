@@ -19,6 +19,24 @@ export class CenterChatRoomService {
 
     constructor(private http: HttpClient) {}
 
+    // 읽지 않은 총 메시지 수
+    getUnreadMessageNumber(centerId: string): Observable<{ unread_message_count: number }> {
+        const url = this.SERVER + `/${centerId}/chat_room/unread_message_count`
+
+        const options = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json',
+            }),
+        }
+
+        return this.http.get<Response>(url, options).pipe(
+            map((res) => {
+                return res.dataset[0]
+            }),
+            catchError(handleError)
+        )
+    }
+
     // 채팅방 생성
     createChatRoom(centerId: string, reqBody: CreateChatRoomReqBody): Observable<ChatRoom> {
         const url = this.SERVER + `/${centerId}/chat_room`

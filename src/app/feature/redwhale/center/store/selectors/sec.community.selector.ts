@@ -1,12 +1,14 @@
 import { createSelector } from '@ngrx/store'
 import { GymFeature, GymState } from './sec.selector'
 import * as FromCommunity from '@centerStore/reducers/sec.community.reducer'
+import { selectUnreadMessageNumber } from '@centerStore/reducers/sec.community.reducer'
 
 export const FeatureKey = 'Center/Community'
 export const CommunityFeature = createSelector(GymFeature, (state: GymState) => state[FeatureKey])
 
 // main
 export const chatRoomList = createSelector(CommunityFeature, FromCommunity.selectChatRoomList)
+export const unreadMessageNumber = createSelector(CommunityFeature, FromCommunity.selectUnreadMessageNumber)
 
 // main - screen = main
 export const mainIsJoinRoomLoading = createSelector(CommunityFeature, FromCommunity.selectMainIsJoinRoomLoading)

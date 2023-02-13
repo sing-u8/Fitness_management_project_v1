@@ -31,6 +31,16 @@ export const setLoading = createAction(
     props<{ spot: FromCommunity.spot; loading: Loading }>()
 )
 
+export const startGetUnreadMessageNumber = createAction(
+    `[${FeatureKey}] Start Get Unread Message Number`,
+    props<{ centerId: string }>()
+)
+export const finishGetUnreadMessageNumber = createAction(
+    `[${FeatureKey}] Finish Get Unread Message Number`,
+    props<{ unreadMessageNumber: number }>()
+)
+export const setUnreadMessageNumber = createAction(`[${FeatureKey}] Set Unread Message Number`)
+
 // main
 // - // async
 export const startCreateChatRoom = createAction(
