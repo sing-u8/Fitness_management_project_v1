@@ -12,8 +12,12 @@ import { Center } from '@schemas/center'
 import { User } from '@schemas/user'
 
 import * as CenterCommonSelector from '@centerStore/selectors/center.common.selector'
+import { unreadMessageNumber } from '@centerStore/selectors/sec.community.selector'
+import { startGetUnreadMessageNumber } from '@centerStore/actions/sec.community.actions'
 import { select, Store } from '@ngrx/store'
 import _ from 'lodash'
+import { selectCurCenter } from '@centerStore/reducers/center.common.reducer'
+import { curCenter } from '@centerStore/selectors/center.common.selector'
 
 @Component({
     selector: 'rw-centerNav',
@@ -35,6 +39,8 @@ export class NavComponent implements OnInit, OnDestroy {
         sale: true,
     }
 
+    public unreadMsgNumber = 0
+
     constructor(
         private nxStore: Store,
         private router: Router,
@@ -50,6 +56,15 @@ export class NavComponent implements OnInit, OnDestroy {
                     this.showNavs.sale = this.centerPermissionHelperService.getReceiveSalePermission()
                 }
             })
+        this.nxStore.pipe(select(CenterCommonSelector.curCenter), takeUntil(this.unSubscriber$)).subscribe((center) => {
+            if (!_.isEmpty(center)) {
+                this.nxStore.dispatch(startGetUnreadMessageNumber({ centerId: this.center.id }))
+            }
+        })
+
+        this.nxStore.pipe(select(unreadMessageNumber), takeUntil(this.unSubscriber$)).subscribe((umn) => {
+            this.unreadMsgNumber = umn
+        })
 
         this.user = this.storageService.getUser()
         this.getCenterAddress()
