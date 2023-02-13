@@ -115,9 +115,6 @@ article.l-faq {
             margin: 68px 0 7px;
         }
 
-        hp-faq-list-section {
-        }
-
         .inquiry-card {
             width: 460px;
             height: 130px;
@@ -171,6 +168,11 @@ article.l-faq {
                     height: 47px;
                 }
             }
+        }
+    }
+    @media (min-width: 960px) {
+        .faq-title {
+            margin: 125px 0 7px;
         }
     }
     @media (min-width: 1280px) {

@@ -36,6 +36,7 @@ import { ComponentToastComponent } from './components/common/component-toast/com
 import { SettingNoticeModalComponent } from './components/common/setting-notice-modal/setting-notice-modal.component'
 import { NoticeModalComponent } from './components/common/notice-modal/notice-modal.component'
 import { IntroGuideToastComponent } from './components/common/intro-guide-toast/intro-guide-toast.component'
+import { KakaoChannelButtonComponent } from './components/common/kakao-channel-button/kakao-channel-button.component'
 
 // -drawer- //
 import { LessonFlipListComponent } from './components/redwhale/drawer/lesson-flip-list/lesson-flip-list.component'
@@ -164,6 +165,7 @@ FullCalendarModule.registerPlugins([
         SettingNoticeModalComponent,
         NoticeModalComponent,
         IntroGuideToastComponent,
+        KakaoChannelButtonComponent,
         // -- //drawer
         DrawerLessonCardComponent,
         SchDayRepeatSelectComponent,
@@ -266,6 +268,7 @@ FullCalendarModule.registerPlugins([
         ComponentToastComponent,
         SettingNoticeModalComponent,
         IntroGuideToastComponent,
+        KakaoChannelButtonComponent,
         // -- //drawer
         DrawerLessonCardComponent,
         SchDayRepeatSelectComponent,

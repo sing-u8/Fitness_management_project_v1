@@ -1,0 +1,30 @@
+* {
+	padding: 0;
+	margin: 0;
+}
+
+.l-kakao-channel-button {
+	width: 50px;
+	height: 50px;
+	background-color: transparent;
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	cursor: pointer;
+
+	position: relative;
+
+	a {
+		width: 100%;
+		height: 100%;
+	}
+
+	.kakao-img {
+		width: 100%;
+		height: 100%;
+		background-image: url("/assets/images/kakao.png");
+		background-size: contain;
+		background-repeat: no-repeat;
+	}
+}
