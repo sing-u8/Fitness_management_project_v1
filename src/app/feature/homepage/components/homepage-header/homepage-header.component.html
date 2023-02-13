@@ -13,7 +13,10 @@
         </a>
         <a [routerLink]="['/fare-guide']" routerLinkActive="active" class="header__nav"> 요금 안내 </a>
         <a [routerLink]="['/introduction-inquiry']" routerLinkActive="active" class="header__nav"> 도입 안내 </a>
-        <a [routerLink]="['/customer-center']" [routerLinkActive]="['active', 'hover-cc--disable']" class="header__nav hover-cc"> 고객 센터 </a>
+        <a [routerLink]="['/customer-center']" [routerLinkActive]="['active', 'hover-cc--disable']" class="header__nav hover-cc">
+            고객 센터
+        </a>
+        <rw-customer-center-header ></rw-customer-center-header>
     </div>
     <div class="header__right">
         <hp-button
@@ -35,8 +38,6 @@
             (onClick)="toggleFreeStartModalVisible()"
         ></hp-button>
     </div>
-
-<!--    <rw-customer-center-header ></rw-customer-center-header>-->
 </section>
 
 <section class="l-header-mobile" [class.remove-header]="removeHeaderFlag">
@@ -52,7 +53,7 @@
             <a [routerLink]="['/introduction-inquiry']" (click)="toggleMenu()" class="menu-item">도입 안내</a>
             <div class="menu-drop-item">
                 <div class="menu-drop-header" (click)="toggleFaqFlag()">
-                    <span>자주 묻는 질문</span>
+                    <span>고객 센터</span>
                     <div class="mdi mdi-chevron-down" [class.open]="faqFlag"></div>
                 </div>
                 <div *ngIf="faqFlag" class="menu-drop-content">

@@ -24,6 +24,12 @@ section.l-header {
         display: none;
         position: absolute;
         top: 0;
+        left: 0;
+        width: 100vw;
+        &:hover {
+            display: initial;
+            top: 65px;
+        }
     }
 
     div.header__left {
@@ -45,24 +51,22 @@ section.l-header {
         z-index: 5;
         display: flex;
         align-items: center;
+        height: 100%;
 
         .header__nav {
             &:not(:first-of-type) {
                 margin-left: 26px;
             }
             &.hover-cc {
-                &:hover {
-                    rw-customer-center-header {
-                        display: initial;
-                        top: 65px;
-                    }
+                height: 100%;
+                &:hover ~ rw-customer-center-header {
+                    display: initial;
+                    top: 65px;
                 }
                 &--disable {
-                    &:hover {
-                        rw-customer-center-header {
-                            top: 0 !important;
-                            display: none !important;
-                        }
+                    &:hover ~ rw-customer-center-header {
+                        top: 0 !important;
+                        display: none !important;
                     }
                 }
             }
