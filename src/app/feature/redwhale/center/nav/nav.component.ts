@@ -58,12 +58,14 @@ export class NavComponent implements OnInit, OnDestroy {
             })
         this.nxStore.pipe(select(CenterCommonSelector.curCenter), takeUntil(this.unSubscriber$)).subscribe((center) => {
             if (!_.isEmpty(center)) {
+                console.log('CenterCommonSelector.curCenter --- ', center)
                 this.nxStore.dispatch(startGetUnreadMessageNumber({ centerId: this.center.id }))
             }
         })
 
         this.nxStore.pipe(select(unreadMessageNumber), takeUntil(this.unSubscriber$)).subscribe((umn) => {
             this.unreadMsgNumber = umn
+            console.log('unreadMsgNumber in center - nav : ', this.unreadMsgNumber)
         })
 
         this.user = this.storageService.getUser()
