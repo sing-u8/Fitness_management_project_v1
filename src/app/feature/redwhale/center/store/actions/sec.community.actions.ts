@@ -39,7 +39,10 @@ export const finishGetUnreadMessageNumber = createAction(
     `[${FeatureKey}] Finish Get Unread Message Number`,
     props<{ unreadMessageNumber: number }>()
 )
-export const setUnreadMessageNumber = createAction(`[${FeatureKey}] Set Unread Message Number`)
+export const setUnreadMessageNumber = createAction(
+    `[${FeatureKey}] Set Unread Message Number`,
+    props<{ unreadMessageNumber: number }>()
+)
 
 // main
 // - // async

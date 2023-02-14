@@ -103,6 +103,7 @@ export const initialState: State = {
 export const communityReducer = createImmerReducer(
     initialState,
     // async
+
     on(CommunitydActions.finishCreateChatRoom, (state, { chatRoom, spot }) => {
         if (spot == 'main') {
             state.mainCurChatRoom = chatRoom
@@ -759,6 +760,7 @@ export const communityReducer = createImmerReducer(
             }
 
             _.assign(state.chatRoomList[chatRoomIdx], chatRoom)
+            state.unreadMessageNumber = getUnreadMessageNumber(state.chatRoomList)
             // state.chatRoomList[chatRoomIdx] = chatRoom
 
             return state
@@ -789,6 +791,7 @@ export const communityReducer = createImmerReducer(
                 return true
             })
         }
+        state.unreadMessageNumber = getUnreadMessageNumber(state.chatRoomList)
         return state
     }),
     on(CommunitydActions.deleteChatRoomMsgByWS, (state, { ws_data }) => {
@@ -829,6 +832,14 @@ export const communityReducer = createImmerReducer(
     }),
 
     // common
+    on(CommunitydActions.finishGetUnreadMessageNumber, (state, { unreadMessageNumber }) => {
+        state.unreadMessageNumber = unreadMessageNumber
+        return state
+    }),
+    on(CommunitydActions.setUnreadMessageNumber, (state, { unreadMessageNumber }) => {
+        state.unreadMessageNumber = unreadMessageNumber
+        return state
+    }),
     on(CommunitydActions.setLoading, (state, { spot, loading }) => {
         if (spot == 'main') {
             state.isLoading = loading
@@ -933,6 +944,14 @@ export const selectCurDrawerChatRoomIsTemp = (state: State) =>
 //
 
 // helper
+export function getUnreadMessageNumber(chatRoomList: Array<ChatRoom>) {
+    let number = 0
+    chatRoomList.forEach((v) => {
+        number += v.unread_message_count
+    })
+    return number
+}
+
 export function getChatRoomName(curCenterUser: CenterUser, chatRoom: ChatRoom): string {
     if (chatRoom.type_code == 'chat_room_type_chat_with_me') {
         return chatRoom.name
