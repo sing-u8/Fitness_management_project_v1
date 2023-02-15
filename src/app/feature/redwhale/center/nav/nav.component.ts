@@ -39,7 +39,7 @@ export class NavComponent implements OnInit, OnDestroy {
         sale: true,
     }
 
-    public unreadMsgNumber = 0
+    public unreadMsgNumber = '0'
 
     constructor(
         private nxStore: Store,
@@ -64,7 +64,7 @@ export class NavComponent implements OnInit, OnDestroy {
         })
 
         this.nxStore.pipe(select(unreadMessageNumber), takeUntil(this.unSubscriber$)).subscribe((umn) => {
-            this.unreadMsgNumber = umn
+            this.unreadMsgNumber = umn > 999 ? '999+' : `${umn}`
             console.log('unreadMsgNumber in center - nav : ', this.unreadMsgNumber)
         })
 
