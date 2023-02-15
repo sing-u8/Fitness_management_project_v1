@@ -133,7 +133,7 @@ export class WsChatService implements OnDestroy {
             this.nxStore.dispatch(
                 CommunityActions.startCreateChatRoomMsgByWS({
                     ws_data: ws as wsChat.CreateChatRoomMessage,
-                    curCenterUser: this.storageService.getCenterUser()
+                    curCenterUser: this.storageService.getCenterUser(),
                 })
             )
         } else if (ws.topic == 'chat_room_message' && ws.operation == 'delete') {
