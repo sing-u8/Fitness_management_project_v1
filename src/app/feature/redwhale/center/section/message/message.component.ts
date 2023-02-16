@@ -624,6 +624,9 @@ export class MessageComponent implements OnInit, OnDestroy {
         this.showRegisterSenderPhone = false
     }
     onRegisterSenderPhoneConfirm() {
+        window.open(
+            'https://docs.google.com/forms/d/e/1FAIpQLSe7cUZwmeggLOIW9ysL3g5jwlD4m7aPy0TKF5CGYfLlWTzKtw/viewform?usp=sf_link'
+        )
         this.showRegisterSenderPhone = false
     }
     // onRegisterSenderPhoneConfirm(res: { loadingFns: ClickEmitterType; data: { name: string; phone: string } }) {
