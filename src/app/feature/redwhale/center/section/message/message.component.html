@@ -402,9 +402,15 @@
     (confirm)="onShowChargePointCompleteConfirm()"
 ></msg-charge-point-compelete-modal>
 
-<msg-register-sender-phone-modal
+<rw-modal
     [(visible)]="showRegisterSenderPhone"
-    [type]="registerSenderPhoneType"
+    [data]="registerSenderPhoneData"
+    (confirm)="onRegisterSenderPhoneConfirm()"
     (cancel)="onRegisterSenderPhoneCancel()"
-    (confirm)="onRegisterSenderPhoneConfirm($event)"
-></msg-register-sender-phone-modal>
+></rw-modal>
+<!--<msg-register-sender-phone-modal-->
+<!--    [(visible)]="showRegisterSenderPhone"-->
+<!--    [type]="registerSenderPhoneType"-->
+<!--    (cancel)="onRegisterSenderPhoneCancel()"-->
+<!--    (confirm)="onRegisterSenderPhoneConfirm($event)"-->
+<!--&gt;</msg-register-sender-phone-modal>-->

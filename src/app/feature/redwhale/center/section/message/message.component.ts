@@ -608,6 +608,11 @@ export class MessageComponent implements OnInit, OnDestroy {
 
     // register sender phone modal vars & funcs
     public showRegisterSenderPhone = false
+    public registerSenderPhoneData = {
+        text: '문자 전송을 위해\n' + '발신번호 등록을 신청해주세요.',
+        subText: '전기통신사업법 제84조 2에 따라\n' + '문자를 보내고자 할 경우 사전에 발신번호 등록이 필요해요.',
+        confirmButtonText: '등록 신청하기',
+    }
     public registerSenderPhoneType: 'cover' | 'contain' = 'cover'
     setRegisterSenderPhoneType(type: 'cover' | 'contain') {
         this.registerSenderPhoneType = type
@@ -618,20 +623,23 @@ export class MessageComponent implements OnInit, OnDestroy {
     onRegisterSenderPhoneCancel() {
         this.showRegisterSenderPhone = false
     }
-    onRegisterSenderPhoneConfirm(res: { loadingFns: ClickEmitterType; data: { name: string; phone: string } }) {
-        res.loadingFns.showLoading()
-        this.nxStore.dispatch(
-            SMSActions.startRegisterCallingNumber({
-                reqBody: {
-                    phone_number: res.data.phone,
-                },
-                cb: () => {
-                    this.nxStore.dispatch(showToast({ text: '발신번호 등록 요청이 완료되었습니다.' }))
-                    this.nxStore.dispatch(SMSActions.startGetCallerList({ centerId: this.center.id }))
-                    res.loadingFns.hideLoading()
-                    this.showRegisterSenderPhone = false
-                },
-            })
-        )
+    onRegisterSenderPhoneConfirm() {
+        this.showRegisterSenderPhone = false
     }
+    // onRegisterSenderPhoneConfirm(res: { loadingFns: ClickEmitterType; data: { name: string; phone: string } }) {
+    //     res.loadingFns.showLoading()
+    //     this.nxStore.dispatch(
+    //         SMSActions.startRegisterCallingNumber({
+    //             reqBody: {
+    //                 phone_number: res.data.phone,
+    //             },
+    //             cb: () => {
+    //                 this.nxStore.dispatch(showToast({ text: '발신번호 등록 요청이 완료되었습니다.' }))
+    //                 this.nxStore.dispatch(SMSActions.startGetCallerList({ centerId: this.center.id }))
+    //                 res.loadingFns.hideLoading()
+    //                 this.showRegisterSenderPhone = false
+    //             },
+    //         })
+    //     )
+    // }
 }
