@@ -31,7 +31,7 @@ const routes: Routes = [
                     { path: 'event', component: EventComponent },
                     { path: 'usage-guide', component: UsageGuideComponent },
                     { path: 'FAQ', component: FrequentlyAskedQuestionsComponent },
-                    { path: '', redirectTo: 'notice', component: NoticeComponent },
+                    { path: '', redirectTo: 'FAQ', component: FrequentlyAskedQuestionsComponent },
                 ],
             },
         ],

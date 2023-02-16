@@ -2,21 +2,21 @@
     <div (click)="scrollTop()" class="scroll-up-button"></div>
     <rw-kakao-channel-button></rw-kakao-channel-button>
 
-    <div #l_title_el class="l-title">
-        <div class="title-one">기능 소개</div>
-        <div class="title-two">
-            복잡한 센터 관리,<br />
-            이제는 더욱 쉽고 간편하게!
-        </div>
-        <div class="title-bg"></div>
-    </div>
+    <!--    <div #l_title_el class="l-title">-->
+    <!--        <div class="title-one">기능 소개</div>-->
+    <!--        <div class="title-two">-->
+    <!--            복잡한 센터 관리,<br />-->
+    <!--            이제는 더욱 쉽고 간편하게!-->
+    <!--        </div>-->
+    <!--        <div class="title-bg"></div>-->
+    <!--    </div>-->
 
     <div #l_main_nav_el class="l-main-nav">
         <div class="nav-item" *ngFor="let item of nav_items" (click)="item.onClick()">
             {{ item.value }}
         </div>
     </div>
-    <div #l_main_nav_dummy_el class="l-main-nav-dummy"></div>
+        <div #l_main_nav_dummy_el class="l-main-nav-dummy"></div>
 
     <div class="l-content">
         <div #member_management_el class="content-common member-management">

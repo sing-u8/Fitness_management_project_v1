@@ -87,17 +87,21 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     setNavOnScroll() {
-        const title_rect = this.l_title_el.nativeElement.getBoundingClientRect()
-        const main_rect = this.l_main_el.nativeElement.getBoundingClientRect()
-        if (Math.abs(main_rect.y - this.headerHeight) >= title_rect.height) {
-            this.renderer.addClass(this.l_main_nav_el.nativeElement, 'nav-fixed')
-            this.renderer.setStyle(this.l_main_nav_el.nativeElement, 'top', `${this.headerHeight}px`)
-            this.renderer.setStyle(this.l_main_nav_dummy_el.nativeElement, 'display', 'block')
-        } else {
-            this.renderer.removeClass(this.l_main_nav_el.nativeElement, 'nav-fixed')
-            this.renderer.removeStyle(this.l_main_nav_el.nativeElement, 'top')
-            this.renderer.removeStyle(this.l_main_nav_dummy_el.nativeElement, 'display')
-        }
+        // const title_rect = this.l_title_el.nativeElement.getBoundingClientRect()
+        // const main_rect = this.l_main_el.nativeElement.getBoundingClientRect()
+        // if (Math.abs(main_rect.y - this.headerHeight) >= title_rect.height) {
+        //     this.renderer.addClass(this.l_main_nav_el.nativeElement, 'nav-fixed')
+        //     this.renderer.setStyle(this.l_main_nav_el.nativeElement, 'top', `${this.headerHeight}px`)
+        //     this.renderer.setStyle(this.l_main_nav_dummy_el.nativeElement, 'display', 'block')
+        // } else {
+        //     this.renderer.removeClass(this.l_main_nav_el.nativeElement, 'nav-fixed')
+        //     this.renderer.removeStyle(this.l_main_nav_el.nativeElement, 'top')
+        //     this.renderer.removeStyle(this.l_main_nav_dummy_el.nativeElement, 'display')
+        // }
+
+        this.renderer.addClass(this.l_main_nav_el.nativeElement, 'nav-fixed')
+        this.renderer.setStyle(this.l_main_nav_el.nativeElement, 'top', `${this.headerHeight}px`)
+        this.renderer.setStyle(this.l_main_nav_dummy_el.nativeElement, 'display', 'block')
 
         this.setNavScrollActive()
     }
@@ -347,7 +351,7 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit {
     }
     // ---------------------------------------------------------------------
     @ViewChild('l_main_el') l_main_el: ElementRef
-    @ViewChild('l_title_el') l_title_el: ElementRef
+    // @ViewChild('l_title_el') l_title_el: ElementRef
     @ViewChild('l_main_nav_el') l_main_nav_el: ElementRef
     @ViewChild('l_main_nav_dummy_el') l_main_nav_dummy_el: ElementRef
 

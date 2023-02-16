@@ -63,12 +63,12 @@ section.l-main {
     background-color: var(--white);
 
     overflow-x: hidden;
+    overflow-y: hidden;
     display: flex;
     flex-direction: column;
     align-items: center;
     position: relative;
     width: 100%;
-    overflow-y: overlay;
 
     .l-title {
         display: flex;
