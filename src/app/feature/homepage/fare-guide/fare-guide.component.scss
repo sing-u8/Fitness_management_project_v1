@@ -3,6 +3,14 @@
     margin: 0;
     text-align: initial;
 }
+@keyframes moveLockerTicketGuide {
+    from {
+        bottom: 0;
+    }
+    to {
+        bottom: 10px;
+    }
+}
 
 // elements
 rw-kakao-channel-button {
@@ -57,23 +65,22 @@ article.l-fare-guide {
             justify-content: space-between;
             width: 300px;
             position: relative;
-            margin: 40px 0 40px;
+            margin: 50px 0 40px;
             .sec1__text-title {
-                font-size: 2.5rem;
                 font-weight: 700;
-                line-height: 37px;
-                text-align: center;
-                letter-spacing: -0.625px;
-                color: #212121;
+                font-size: 1.5rem;
+                line-height: 22px;
+                letter-spacing: -0.225px;
+                color: var(--font-color);
                 margin-bottom: 8px;
             }
             .sec1__text-desc {
-                font-size: 1.4rem;
-                font-weight: 500;
-                line-height: 23px;
+                font-weight: 700;
+                font-size: 2.5rem;
+                line-height: 37px;
+                letter-spacing: -0.625px;
+                color: var(--font-color);
                 text-align: center;
-                letter-spacing: -0.196px;
-                color: #606060;
             }
         }
 
@@ -84,7 +91,7 @@ article.l-fare-guide {
             justify-content: space-between;
             width: 100%;
             position: relative;
-            padding: 80px 0 0 0;
+            padding: 100px 0 0 0;
             margin: 0 0 50px;
             overflow: hidden;
             .sec1__desc-title {
@@ -133,7 +140,7 @@ article.l-fare-guide {
         .l-fare-guide-box {
             display: grid;
             grid-template-columns: repeat(1, auto);
-            gap: 20px;
+            gap: 30px;
 
             hp-fare-guide-box {
                 &:not(:first-of-type) {
@@ -333,7 +340,7 @@ article.l-fare-guide {
             height: 588px;
             background-repeat: no-repeat;
             background-size: contain;
-            margin: 20px 0 60px;
+            margin: 20px 0 70px;
         }
 
         .l-charge-calc {
@@ -392,6 +399,7 @@ article.l-fare-guide {
             }
         }
 
+        .charge-calc-text-solo,
         .charge-calc-text {
             display: grid;
             grid-template-rows: repeat(2, auto);
@@ -436,9 +444,35 @@ article.l-fare-guide {
                 background-color: var(--font-color);
             }
         }
+        .charge-calc-text-solo {
+            display: flex !important;
+            flex-direction: column !important;
+            width: 100%;
+            justify-content: center;
+            margin-top: 38px;
+            position: relative;
+
+            .text-item {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+            }
+            .charge-calc-text {
+                &__ani {
+                    animation: 1s ease-in-out 0s infinite alternate moveLockerTicketGuide;
+                    position: absolute;
+                    width: 100%;
+                }
+                &__dummy {
+                    width: 100%;
+                    height: 32px;
+                }
+            }
+        }
 
         hp-faq-list {
-            margin: 75px 0 105px 0;
+            margin: 100px 0 150px 0;
         }
     }
 
@@ -450,27 +484,25 @@ article.l-fare-guide {
         div#sec1 {
             .sec1__l-text {
                 width: 375px;
-                margin: 65px 0 35px;
+                margin: 68px 0 50px;
                 .sec1__text-title {
-                    font-size: 3rem;
                     font-weight: 700;
-                    line-height: 43px;
-                    letter-spacing: -0.9px;
-                    margin-bottom: 10px;
+                    font-size: 1.6rem;
+                    line-height: 26px;
+                    letter-spacing: -0.26px;
+                    margin-bottom: 7px;
                 }
                 .sec1__text-desc {
-                    font-size: 1.5rem;
-                    line-height: 26px;
-                    letter-spacing: -0.225px;
-                    br {
-                        display: none;
-                    }
+                    font-weight: 700;
+                    font-size: 3rem;
+                    line-height: 43px;
+                    letter-spacing: -0.9px;
                 }
             }
 
             .sec1__l-desc {
                 position: relative;
-                padding: 120px 0 0 0;
+                padding: 140px 0 0 0;
                 margin: 0 0 0;
                 .sec1__desc-title {
                     font-size: 2.6rem;
@@ -495,7 +527,7 @@ article.l-fare-guide {
                 line-height: 23px;
                 letter-spacing: -0.26px;
                 margin-top: 40px;
-                margin-bottom: 80px;
+                margin-bottom: 100px;
             }
 
             .sec1__background {
@@ -535,7 +567,7 @@ article.l-fare-guide {
                 font-weight: 400;
                 line-height: 22px;
                 letter-spacing: -0.225px;
-                margin: 20px 0 120px;
+                margin: 20px 0 140px;
             }
 
             .sec1__footer {
@@ -550,7 +582,7 @@ article.l-fare-guide {
         }
 
         div#sec2 {
-            padding: 120px 0 0;
+            padding: 140px 0 0;
 
             .sec2__title {
                 width: 440px;
@@ -562,9 +594,9 @@ article.l-fare-guide {
             }
 
             .sec2__table {
-                margin-bottom: 70px;
+                margin-bottom: 80px;
                 &.last-table {
-                    margin-bottom: 120px;
+                    margin-bottom: 140px;
                 }
                 .table__title {
                     font-weight: 700;
@@ -638,7 +670,7 @@ article.l-fare-guide {
 
         div#sec3 {
             .sec3__text1--margin {
-                margin-top: 120px;
+                margin-top: 140px;
                 margin-bottom: 40px;
             }
             .sec3__text1 {
@@ -660,7 +692,7 @@ article.l-fare-guide {
                 background-image: url('/assets/homepage/icons/fare-guide-graph2.svg');
                 width: 609px;
                 height: 485px;
-                margin: 25px 0 80px;
+                margin: 25px 0 110px;
             }
 
             .l-charge-calc {
@@ -693,6 +725,7 @@ article.l-fare-guide {
                 }
             }
 
+            .charge-calc-text-solo,
             .charge-calc-text {
                 row-gap: 15px;
                 margin-top: 40.5px;
@@ -713,9 +746,16 @@ article.l-fare-guide {
                     letter-spacing: -0.324px;
                 }
             }
+            .charge-calc-text-solo {
+                .charge-calc-text {
+                    &__dummy {
+                        height: 35px;
+                    }
+                }
+            }
 
             hp-faq-list {
-                margin: 92px 0 155px 0;
+                margin: 140px 0 180px 0;
             }
         }
     }
@@ -728,26 +768,27 @@ article.l-fare-guide {
         div#sec1 {
             .sec1__l-text {
                 width: 400px;
-                margin: 93px 0 60px;
+                margin: 113px 0 60px;
 
                 .sec1__text-title {
-                    font-size: 3.2rem;
                     font-weight: 700;
-                    line-height: 49px;
-                    letter-spacing: -1.024px;
+                    font-size: 1.8rem;
+                    line-height: 26px;
+                    letter-spacing: -0.324px;
                     margin-bottom: 11px;
                 }
 
                 .sec1__text-desc {
-                    font-size: 1.6rem;
-                    line-height: 1.63;
-                    letter-spacing: -0.26px;
+                    font-weight: 700;
+                    font-size: 3.2rem;
+                    line-height: 49px;
+                    letter-spacing: -1.024px;
                 }
             }
 
             .sec1__l-desc {
                 position: relative;
-                padding: 140px 0 0 0;
+                padding: 190px 0 0 0;
                 margin: 0 0 0;
                 .sec1__desc-title {
                     font-size: 2.9rem;
@@ -772,7 +813,7 @@ article.l-fare-guide {
                 line-height: 26px;
                 letter-spacing: -0.5px;
                 margin-top: 45px;
-                margin-bottom: 90px;
+                margin-bottom: 120px;
             }
 
             .sec1__background {
@@ -813,7 +854,7 @@ article.l-fare-guide {
 
             .fare-guide-desc {
                 width: 1248px;
-                margin: 20px 0 140px;
+                margin: 20px 0 190px;
             }
 
             .sec1__footer {
@@ -822,7 +863,7 @@ article.l-fare-guide {
             }
         }
         div#sec2 {
-            padding: 140px 0 0;
+            padding: 190px 0 0;
 
             .sec2__title {
                 width: 480px;
@@ -834,9 +875,9 @@ article.l-fare-guide {
             }
 
             .sec2__table {
-                margin-bottom: 60px;
+                margin-bottom: 80px;
                 &.last-table {
-                    margin-bottom: 140px;
+                    margin-bottom: 190px;
                 }
                 .table__title {
                     font-weight: 700;
@@ -899,7 +940,7 @@ article.l-fare-guide {
         }
         div#sec3 {
             .sec3__text1--margin {
-                margin-top: 140px;
+                margin-top: 190px;
                 margin-bottom: 45px;
             }
             .sec3__text1 {
@@ -921,7 +962,7 @@ article.l-fare-guide {
                 background-image: url('/assets/homepage/icons/fare-guide-graph3.svg');
                 width: 781px;
                 height: 485px;
-                margin: 30px 0 80px;
+                margin: 30px 0 110px;
             }
 
             .l-charge-calc {
@@ -936,12 +977,13 @@ article.l-fare-guide {
                 }
             }
 
+            .charge-calc-text-solo,
             .charge-calc-text {
                 margin-top: 30px;
             }
 
             hp-faq-list {
-                margin: 140px 0 185px 0;
+                margin: 180px 0 250px 0;
             }
         }
     }

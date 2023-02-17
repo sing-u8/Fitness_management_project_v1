@@ -11,12 +11,37 @@
         >
             기능 소개
         </a>
-        <a [routerLink]="['/fare-guide']" routerLinkActive="active" class="header__nav"> 요금 안내 </a>
-        <a [routerLink]="['/introduction-inquiry']" routerLinkActive="active" class="header__nav"> 도입 안내 </a>
-        <a [routerLink]="['/customer-center']" [routerLinkActive]="['active', 'hover-cc--disable']" class="header__nav hover-cc">
-            고객 센터
+        <a [routerLink]="['/fare-guide']" routerLinkActive="active" class="header__nav">
+            <div class="nav-content">요금 안내</div>
         </a>
-        <rw-customer-center-header ></rw-customer-center-header>
+        <a [routerLink]="['/introduction-inquiry']" routerLinkActive="active" class="header__nav">
+            <div class="nav-content">도입 안내</div>
+        </a>
+        <div
+            [routerLink]="['/customer-center']"
+            (click)="navigateTo('/customer-center')"
+            [routerLinkActive]="['active']"
+            class="header__nav hover-cc"
+        >
+            <div class="nav-content">고객 센터</div>
+            <div class="mdi mdi-chevron-down" [class.open]="faqFlag"></div>
+            <div class="cc-route-dropdown">
+                <div
+                    (click)="navigateTo('/customer-center/usage-guide'); $event.stopPropagation()"
+                    [routerLinkActive]="['route-active']"
+                    class="route-item"
+                >
+                    이용 가이드
+                </div>
+                <div
+                    (click)="navigateTo('/customer-center/FAQ'); $event.stopPropagation()"
+                    [routerLinkActive]="['route-active']"
+                    class="route-item"
+                >
+                    자주 묻는질문
+                </div>
+            </div>
+        </div>
     </div>
     <div class="header__right">
         <hp-button

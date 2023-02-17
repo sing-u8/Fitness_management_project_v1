@@ -145,6 +145,10 @@ section.l-main {
             &.cur-item {
                 font-weight: 700;
                 color: var(--font-color);
+                text-decoration: underline;
+                text-underline-offset: 7px;
+                text-decoration-thickness: 2px;
+                text-decoration-color: var(--red);
             }
 
             &:nth-child(1),
@@ -170,6 +174,7 @@ section.l-main {
     .l-main-nav-dummy {
         display: none;
         background-color: transparent;
+        z-index: 0;
     }
 
     .l-content {
@@ -536,7 +541,9 @@ section.l-main {
                 height: 360px;
             }
         }
-
+        .l-main-nav-dummy {
+            height: 57px;
+        }
         .l-main-nav {
             height: 57px;
             justify-content: flex-start;

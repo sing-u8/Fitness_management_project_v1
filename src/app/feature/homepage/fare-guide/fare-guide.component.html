@@ -1,12 +1,15 @@
 <article class="l-fare-guide">
-
     <rw-kakao-channel-button></rw-kakao-channel-button>
 
     <div id="sec1" class="sec--common sec__bg-white">
-        <div class="sec1__l-text">
-            <div class="sec1__text-title">요금 안내</div>
-            <div class="sec1__text-desc">2주간 기능 제한 없이 무료로 사용해 보고 결정하세요.</div>
-        </div>
+<!--        <div class="sec1__l-text">-->
+<!--            <div class="sec1__text-title">요금 안내</div>-->
+<!--            <div class="sec1__text-desc">-->
+<!--                2주간 기능 제한 없이<br />-->
+<!--                무료로 사용해 보고<br class="mobile" />-->
+<!--                결정하세요.-->
+<!--            </div>-->
+<!--        </div>-->
 
         <div class="w-100 d-flex flex-column align-items-center sec__bg-lightergrey">
             <div class="sec1__l-desc">
@@ -26,7 +29,7 @@
                 </div>
 
                 <div class="sec1__background"></div>
-<!--                <img src="/assets/homepage/images/fare-guide/confetti.png">-->
+                <!--                <img src="/assets/homepage/images/fare-guide/confetti.png">-->
             </div>
 
             <div class="l-fare-guide-box">
@@ -65,29 +68,29 @@
         </div>
 
         <rw-free-try-footer></rw-free-try-footer>
-<!--        <div class="sec2__footer">-->
-<!--            <div class="footer-bg-1"></div>-->
-<!--            <div class="footer-bg-2"></div>-->
-<!--            <div class="footer&#45;&#45;title">-->
-<!--                번거로운 문의 과정 없이<br />-->
-<!--                즉시 무료로 써보고 결정하세요.-->
-<!--            </div>-->
-<!--            <div class="footer&#45;&#45;list">-->
-<!--                <div class="list-item" *ngFor="let item of sec2FooterItemList">-->
-<!--                    <div class="check-icon"></div>-->
-<!--                    {{ item }}-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            <div-->
-<!--                rw-button-->
-<!--                [rwButtonFontColor]="'var(&#45;&#45;white)'"-->
-<!--                [rwButtonColor]="'var(&#45;&#45;red)'"-->
-<!--                class="sec2__button"-->
-<!--                (click)="routerTo('/auth/login')"-->
-<!--            >-->
-<!--                2주 무료 체험하기-->
-<!--            </div>-->
-<!--        </div>-->
+        <!--        <div class="sec2__footer">-->
+        <!--            <div class="footer-bg-1"></div>-->
+        <!--            <div class="footer-bg-2"></div>-->
+        <!--            <div class="footer&#45;&#45;title">-->
+        <!--                번거로운 문의 과정 없이<br />-->
+        <!--                즉시 무료로 써보고 결정하세요.-->
+        <!--            </div>-->
+        <!--            <div class="footer&#45;&#45;list">-->
+        <!--                <div class="list-item" *ngFor="let item of sec2FooterItemList">-->
+        <!--                    <div class="check-icon"></div>-->
+        <!--                    {{ item }}-->
+        <!--                </div>-->
+        <!--            </div>-->
+        <!--            <div-->
+        <!--                rw-button-->
+        <!--                [rwButtonFontColor]="'var(&#45;&#45;white)'"-->
+        <!--                [rwButtonColor]="'var(&#45;&#45;red)'"-->
+        <!--                class="sec2__button"-->
+        <!--                (click)="routerTo('/auth/login')"-->
+        <!--            >-->
+        <!--                2주 무료 체험하기-->
+        <!--            </div>-->
+        <!--        </div>-->
     </div>
 
     <div id="sec3" class="sec--common sec__bg-white">
@@ -119,9 +122,16 @@
                 <span class="currency">원</span>
             </div>
 
-            <div *ngIf="chargeCalcNum > 0" class="arrow-icon"></div>
+            <div class="arrow-icon"></div>
         </div>
 
+        <div *ngIf="chargeCalcNum == 0" class="charge-calc-text-solo">
+            <div class="charge-calc-text__dummy"></div>
+            <div class="charge-calc-text__ani d-flex align-items-center justify-content-center">
+                <div class="calc-block">월 이용료</div>
+                를 입력하시고 비교해 보세요!
+            </div>
+        </div>
         <div *ngIf="chargeCalcNum > 0" class="charge-calc-text">
             <div class="text-item">
                 <div class="d-flex align-items-center justify-content-center">
