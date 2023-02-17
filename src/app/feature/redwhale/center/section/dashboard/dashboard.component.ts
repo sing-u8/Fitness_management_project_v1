@@ -1,4 +1,5 @@
 import { Component, OnInit, AfterViewInit, OnDestroy, ViewChild, ElementRef } from '@angular/core'
+import { Router } from '@angular/router'
 
 import dayjs from 'dayjs'
 import 'dayjs/locale/ko'
@@ -180,7 +181,8 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
         private centerService: CenterService,
         private storageService: StorageService,
         private usersCenterService: UsersCenterService,
-        private nxStore: Store
+        private nxStore: Store,
+        private router: Router
     ) {}
 
     ngOnInit(): void {
@@ -273,6 +275,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     }
     confirmDeleteMember() {
         let curUser: CenterUser = undefined
+        const loginCenterUser: CenterUser = this.storageService.getCenterUser()
         this.curUserData$.pipe(take(1)).subscribe((cud) => {
             curUser = cud.user
         })
@@ -280,7 +283,11 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
             DashboardActions.startExportMember({
                 centerId: this.center.id,
                 userId: curUser.id,
-                callback: () => {},
+                callback: () => {
+                    if (curUser.id == loginCenterUser.id) {
+                        this.router.navigateByUrl('/redwhale-home')
+                    }
+                },
             })
         )
         this.nxStore.dispatch(showToast({ text: '회원 삭제가 완료되었습니다.' }))

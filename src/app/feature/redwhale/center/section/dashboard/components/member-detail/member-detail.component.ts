@@ -729,49 +729,53 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
                                 }(으)로 변경되었습니다.`,
                             })
                         )
-                        this.nxStore.dispatch(CenterCommonActions.startGetInstructors({ centerId: this.center.id }))
-                        this.nxStore.dispatch(CenterCommonActions.startGetMembers({ centerId: this.center.id }))
-                        this.nxStore.dispatch(
-                            CenterCommonActions.startGetCenterPermission({ centerId: this.center.id })
-                        )
-                        this.nxStore.dispatch(CenterCommonActions.startGetCurCenter({ centerId: this.center.id }))
-                        this.dashboardHelperService.refreshUserList(
-                            this.center.id,
-                            this.curUserData.user,
-                            this.curUserListSelect.key
-                        )
-                        this.dashboardHelperService.refreshDrawerUserList(
-                            this.center.id,
-                            this.curUserData.user,
-                            this.curUserListSelect.key
-                        )
+                        if (roleKey == 'member' && this.userInCenter.id == this.curUserData.user.id) {
+                            this.router.navigateByUrl('/redwhale-home')
+                        } else {
+                            this.nxStore.dispatch(CenterCommonActions.startGetInstructors({ centerId: this.center.id }))
+                            this.nxStore.dispatch(CenterCommonActions.startGetMembers({ centerId: this.center.id }))
+                            this.nxStore.dispatch(
+                                CenterCommonActions.startGetCenterPermission({ centerId: this.center.id })
+                            )
+                            this.nxStore.dispatch(CenterCommonActions.startGetCurCenter({ centerId: this.center.id }))
+                            this.dashboardHelperService.refreshUserList(
+                                this.center.id,
+                                this.curUserData.user,
+                                this.curUserListSelect.key
+                            )
+                            this.dashboardHelperService.refreshDrawerUserList(
+                                this.center.id,
+                                this.curUserData.user,
+                                this.curUserListSelect.key
+                            )
 
-                        const _centerUser = {
-                            ..._.cloneDeep(this.curUserData.user),
-                            role_code: roleKey,
-                        }
-                        this.storageService.updateCenterUser(_centerUser)
-                        this.getCenterUserData()
-                        if (this.userInCenter.id == _centerUser.id) {
-                            this.centerService.getCenter(this.center.id).subscribe((center) => {
-                                this.storageService.setCenter(center)
-                            })
-                        }
-
-                        if (roleKey != 'member') {
-                            this.centerCalendarService
-                                .getCalendars(this.center.id, { typeCode: 'calendar_type_center_calendar' })
-                                .subscribe((cals) => {
-                                    this.nxStore.dispatch(
-                                        ScheduleActions.startCreateInstructorFilter({
-                                            centerId: this.center.id,
-                                            centerCalendarId: cals[0].id,
-                                            reqBody: {
-                                                instructor_center_user_id: this.curUserData.user.id,
-                                            },
-                                        })
-                                    )
+                            const _centerUser = {
+                                ..._.cloneDeep(this.curUserData.user),
+                                role_code: roleKey,
+                            }
+                            this.storageService.updateCenterUser(_centerUser)
+                            this.getCenterUserData()
+                            if (this.userInCenter.id == _centerUser.id) {
+                                this.centerService.getCenter(this.center.id).subscribe((center) => {
+                                    this.storageService.setCenter(center)
                                 })
+                            }
+
+                            if (roleKey != 'member') {
+                                this.centerCalendarService
+                                    .getCalendars(this.center.id, { typeCode: 'calendar_type_center_calendar' })
+                                    .subscribe((cals) => {
+                                        this.nxStore.dispatch(
+                                            ScheduleActions.startCreateInstructorFilter({
+                                                centerId: this.center.id,
+                                                centerCalendarId: cals[0].id,
+                                                reqBody: {
+                                                    instructor_center_user_id: this.curUserData.user.id,
+                                                },
+                                            })
+                                        )
+                                    })
+                            }
                         }
                     },
                 })
