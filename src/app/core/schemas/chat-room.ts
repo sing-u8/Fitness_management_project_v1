@@ -1,5 +1,4 @@
 import { ChatRoomUser } from './chat-room-user'
-import { CenterUser } from './center-user'
 
 export interface ChatRoom {
     id: string | IsTempRoomType // if temp chatroom, id = temp_room
@@ -8,6 +7,7 @@ export interface ChatRoom {
     permission_code: ChatRoomPermissionCode
     permission_code_name: ChatRoomPermissionCodeName
     name: string
+    push_notification: boolean
     center_id: string
     center_name: string
     chat_room_user_count: number

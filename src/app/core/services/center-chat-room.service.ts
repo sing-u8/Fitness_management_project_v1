@@ -250,7 +250,8 @@ export interface CreateChatRoomReqBody {
 }
 
 export interface UpdateCenterRoomReqBody {
-    name: string
+    name?: string
+    push_notification?: boolean
 }
 
 export interface InviteMemberToChatRoomReqBody {

@@ -1019,6 +1019,7 @@ function makeTempChatRoom(center: Center, curUser: CenterUser, members: Array<Ce
         permission_code: 'chat_room_user_permission_owner',
         permission_code_name: '소유자',
         name: '', //members.reduce((acc, cur) => acc + (acc == '' ? `${cur.name}` : `, ${cur.name}`), ''),
+        push_notification: true,
         center_id: center.id,
         center_name: center.name,
         chat_room_user_count: 1 + members.length,
