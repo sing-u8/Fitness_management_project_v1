@@ -89,7 +89,7 @@ export class CenterListItemComponent implements OnInit, AfterViewInit, OnDestroy
     ngAfterViewInit(): void {
         this.initCenterRoleName()
         this.initCenterAvatar()
-        this.initCenterBackground()
+        // this.initCenterBackground()
         this.centerTerms = this.center.contract_terms
         this.centerNoticeText = this.center.notice
 
@@ -122,10 +122,13 @@ export class CenterListItemComponent implements OnInit, AfterViewInit, OnDestroy
         if (!this.center.picture) {
             this.centerAvatar = _.trim(this.center.name).slice(0, 1)
             this.renderer.setStyle(this.list_avatar.nativeElement, 'backgroundColor', this.center.color)
+            this.renderer.setStyle(this.list_header.nativeElement, 'backgroundColor', this.center.color)
         } else {
             this.centerAvatar = this.center.picture
             this.renderer.setStyle(this.list_avatar.nativeElement, 'backgroundImage', `url(${this.centerAvatar})`)
             this.renderer.setStyle(this.list_avatar.nativeElement, 'backgroundColor', 'var(--white)')
+            this.renderer.setStyle(this.list_header.nativeElement, 'backgroundImage', `url(${this.centerAvatar})`)
+            this.renderer.setStyle(this.list_header.nativeElement, 'opacity', '1')
         }
     }
     initCenterBackground() {
@@ -277,6 +280,15 @@ export class CenterListItemComponent implements OnInit, AfterViewInit, OnDestroy
             this.handleModalCancel()
             this.showOwerModal()
         }
+    }
+    // ------------------------------------------------------------------------------------------
+    public periodTextObj = {
+        in_free_trial: '⏳ 무료 체험 종료 ',
+        on_free_trial_end: '⏳ 오늘 무료 체험이 종료돼요!',
+        free_trial_end: '⛔ 무료 체험이 종료되었어요.',
+        in_use: '⏳ 이용권 만료 7일 전',
+        on_use_end: '⏳ 오늘 이용권이 만료돼요!',
+        use_end: '⛔ 이용권이 만료되었어요.',
     }
 }
 

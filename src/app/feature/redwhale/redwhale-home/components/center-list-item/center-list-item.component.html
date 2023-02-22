@@ -1,6 +1,6 @@
 <div id="_center-list-container" class="center-list-container" (click)="goGym($event)">
+<!--    <div class="period-tag"> ⏳ 무료 체험 종료 14일 전 </div>-->
     <div #list_header class="list-header"></div>
-
     <div #list_avatar class="list-avatar rw-typo-title2">
         <ng-template [ngIf]="centerAvatar && centerAvatar.length < 2">{{ centerAvatar }}</ng-template>
     </div>
@@ -24,25 +24,27 @@
             </div>
             <div *ngIf="showSettingDropdown" class="setting-dropdown" (rwClickOutside)="closeSettingDropdown()">
                 <div class="setting-dropdown-item rw-typo-bodytext2" (click)="goGymSetting($event)">기본 정보 수정</div>
-                <div class="setting-dropdown-item rw-typo-bodytext2" (click)="openSettingNoticeModal()">공지사항 설정</div>
+                <div class="setting-dropdown-item rw-typo-bodytext2" (click)="openSettingNoticeModal()">
+                    공지사항 설정
+                </div>
                 <div class="setting-dropdown-item rw-typo-bodytext2" (click)="openRoleModal($event)">권한 관리</div>
                 <div class="setting-dropdown-item rw-typo-bodytext2" (click)="openSettingTermsModal()">약관 설정</div>
             </div>
         </div>
-<!--        <div (rwClickOutside)="hideDropDown()" class="toolbar-right" id="_toolbar-right">-->
-<!--            <div class="icon-container" (click)="toggleDropDown($event)">-->
-<!--                <img src="assets/icons/etc/more-grey.svg" />-->
-<!--            </div>-->
-<!--            <div-->
-<!--                class="exit-dropdown"-->
-<!--                [class.dropdown-up]="dropDownUp == true"-->
-<!--                *ngIf="doShowDropDown"-->
-<!--                (click)="toggleDropDown($event); toggleConfirmModal(true)"-->
-<!--            >-->
-<!--                <img src="assets/icons/etc/leave.svg" />-->
-<!--                <span class="rw-typo-subtext3"> 이 센터에서 나가기 </span>-->
-<!--            </div>-->
-<!--        </div>-->
+        <!--        <div (rwClickOutside)="hideDropDown()" class="toolbar-right" id="_toolbar-right">-->
+        <!--            <div class="icon-container" (click)="toggleDropDown($event)">-->
+        <!--                <img src="assets/icons/etc/more-grey.svg" />-->
+        <!--            </div>-->
+        <!--            <div-->
+        <!--                class="exit-dropdown"-->
+        <!--                [class.dropdown-up]="dropDownUp == true"-->
+        <!--                *ngIf="doShowDropDown"-->
+        <!--                (click)="toggleDropDown($event); toggleConfirmModal(true)"-->
+        <!--            >-->
+        <!--                <img src="assets/icons/etc/leave.svg" />-->
+        <!--                <span class="rw-typo-subtext3"> 이 센터에서 나가기 </span>-->
+        <!--            </div>-->
+        <!--        </div>-->
     </div>
 </div>
 
@@ -64,17 +66,17 @@
 </rw-modal>
 
 <rw-setting-terms-modal
-    [(visible)] = "showSettingTermsModal"
+    [(visible)]="showSettingTermsModal"
     [(centerTerm)]="centerTerms"
-    [center] = "center"
+    [center]="center"
     (cancel)="cancelSettingTermsModal()"
     (confirm)="confirmSettingTermsModal($event)"
 ></rw-setting-terms-modal>
 
 <rw-setting-notice-modal
-    [(visible)] = "showSettingNoticeModal"
+    [(visible)]="showSettingNoticeModal"
     [(centerNoticeText)]="centerNoticeText"
-    [center] = "center"
+    [center]="center"
     (cancel)="cancelSettingNoticeModal()"
     (confirm)="confirmSettingNoticeModal($event)"
 ></rw-setting-notice-modal>

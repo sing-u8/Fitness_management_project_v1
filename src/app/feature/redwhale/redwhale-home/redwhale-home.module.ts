@@ -15,6 +15,7 @@ import { CenterListItemComponent } from './components/center-list-item/center-li
 import { CenterPreviewItemComponent } from './components/center-preview-item/center-preview-item.component'
 import { CreateCenterDirective } from './directives/create-center.directive'
 import { SetCenterComponent } from './set-center/set-center.component'
+import { FreeTrialModalComponent } from './components/free-trial-modal/free-trial-modal.component'
 
 // ngxSkeletonLoader module
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader'
@@ -27,6 +28,7 @@ import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader'
         CreateGymComponent,
         CenterPreviewItemComponent,
         SetCenterComponent,
+        FreeTrialModalComponent,
 
         // directive
         CreateCenterDirective,

@@ -3,6 +3,9 @@
     margin: 0px;
 }
 
+ngx-spinner {
+    z-index: 0 !important;
+}
 .cmp-button {
     display: flex;
     position: relative;

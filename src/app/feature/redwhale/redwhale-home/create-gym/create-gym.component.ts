@@ -209,4 +209,21 @@ export class CreateGymComponent implements OnInit {
             if (callback) callback()
         }
     }
+
+    // ------------------------------------------------------------------------//
+    public showFreeTrialModal = false
+    public btLoadingFnsForCC: ClickEmitterType
+    openFreeTrialModal(btLoadingFns: ClickEmitterType) {
+        this.showFreeTrialModal = true
+        this.btLoadingFnsForCC = btLoadingFns
+        btLoadingFns.showLoading()
+    }
+    onFreeTrialModalConfirm() {
+        this.showFreeTrialModal = false
+        this.createCenter(this.btLoadingFnsForCC)
+    }
+    onFreeTrialModalCancel() {
+        this.showFreeTrialModal = false
+        this.btLoadingFnsForCC.hideLoading()
+    }
 }

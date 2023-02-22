@@ -1,0 +1,44 @@
+<div class="rw-modal-background" #modalBackgroundElement></div>
+<div
+    class="rw-modal-wrapper justify-content-center align-items-center"
+    (mouseup)="!isMouseModalDown && !blockClickOutside && onCancel()"
+    (mousedown)="resetMouseModalDown()"
+    #modalWrapperElement
+>
+    <div class="rw-modal user-select-none" (mousedown)="onMouseModalDown(); $event.stopPropagation()">
+        <div class="text rw-typo-title1 d-flex justify-content-center">
+            아래 약관에 동의하시면 센터 만들기가 완료되며,<br />
+            14일 간의 무료 체험이 시작돼요.
+        </div>
+        <div class="sub-text rw-typo-subtext2 d-flex flex-column">
+            <span class="rw-typo-subtext0-regular"
+                >· 무료 체험 기간이 끝난 후 별도의 결제는 이루어지지 않으며, 유료 이용권 구매 시 결제가
+                진행됩니다.</span
+            >
+            <span class="rw-typo-subtext0-regular"
+                >· 무료 체험 기간이 끝난 후 3일 이내 유료 이용권 미구매 시 모든 기능이 제한됩니다.</span
+            >
+            <span class="rw-typo-subtext0-regular"
+                >· 무료 체험 기간이 끝난 후 14일 동안 접속 이력이 없는 센터의 경우, 센터와 관련된 모든 정보가<br />
+                &nbsp;&nbsp;&nbsp;&nbsp;자동으로 삭제됩니다.</span
+            >
+            <span class="rw-typo-subtext0-regular">· 유료 이용권 구매 전에는 기존 회원정보 이동이 불가합니다.</span>
+        </div>
+        <rw-checkbox
+            [checked]="startFreeTrialAgree"
+            [text]="'무료 체험 이용 약관에 동의합니다.'"
+            (click)="startFreeTrialAgree = !startFreeTrialAgree"
+        ></rw-checkbox>
+        <rw-button
+            [width]="'565'"
+            [height]="'50'"
+            [color]="'var(--red)'"
+            [borderRadius]="'0 0 6px 6px'"
+            [fontColor]="'var(--white)'"
+            [disabled]="!startFreeTrialAgree"
+            (onClick)="startFreeTrialAgree && onConfirm()"
+        >
+            <span class="rw-typo-title2-none-color">무료 체험 시작하기</span>
+        </rw-button>
+    </div>
+</div>

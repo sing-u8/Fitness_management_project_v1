@@ -1,18 +1,15 @@
 <div (click)="onButtonClick()" #rw_button class="cmp-button">
+    <ngx-spinner
+        bdColor="rgba(0, 0, 0, 0.8)"
+        type="ball-clip-rotate"
+        [size]="loadingSize"
+        [color]="loadingColor"
+        [bdColor]="color"
+        [fullScreen]="false"
+        [name]="loadingName"
+    ></ngx-spinner>
 
-  <ngx-spinner
-    bdColor="rgba(0, 0, 0, 0.8)"
-    type="ball-clip-rotate"
-    [size]="loadingSize"
-    [color]="loadingColor"
-    [bdColor]="color"
-    [fullScreen] = "false"
-    [name]="loadingName"
-  ></ngx-spinner>
-
-  <ng-container
-    *ngIf="!isLoading"
-  >
-    <ng-content #bt_content></ng-content>
-  </ng-container>
+    <ng-container *ngIf="!isLoading">
+        <ng-content #bt_content></ng-content>
+    </ng-container>
 </div>
