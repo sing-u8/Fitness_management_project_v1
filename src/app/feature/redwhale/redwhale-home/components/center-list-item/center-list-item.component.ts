@@ -17,6 +17,7 @@ import { StorageService } from '@services/storage.service'
 import { GymConfirmModalService } from '@services/home/gym-confirm-modal.service'
 import { CenterRolePermissionService } from '@services/center-role-permission.service'
 import { CenterService } from '@services/center.service'
+import { FreeTrialHelperService } from '@services/helper/free-trial-helper.service'
 
 import { Center } from '@schemas/center'
 import { SettingTermConfirmOutput } from '@shared/components/common/setting-terms-modal/setting-terms-modal.component'
@@ -66,6 +67,8 @@ export class CenterListItemComponent implements OnInit, AfterViewInit, OnDestroy
 
     public unSubscriber$ = new Subject<void>()
 
+    public centerTag = ''
+
     constructor(
         private centerModalService: GymConfirmModalService,
         private storageService: StorageService,
@@ -73,14 +76,36 @@ export class CenterListItemComponent implements OnInit, AfterViewInit, OnDestroy
         private router: Router,
         private nxStore: Store,
         private centerRolePermissionService: CenterRolePermissionService,
-        private centerService: CenterService
+        private centerService: CenterService,
+        private freeTrialHelperService: FreeTrialHelperService
     ) {
         this.doShowDropDown = false
         this.doShowModal = false
         this.centerModalData = this.centerModalService.initModal('leaveCenter')
     }
 
-    ngOnInit(): void {}
+    ngOnInit(): void {
+        this.centerTag = this.freeTrialHelperService.getPeriodAlertTag(this.center)
+        const c1 = _.cloneDeep(this.center)
+        c1.free_trial_end_date = '2023-02-28'
+        const c2 = _.cloneDeep(this.center)
+        c2.free_trial_end_date = '2023-02-26'
+        const c3 = _.cloneDeep(this.center)
+        c3.free_trial_end_date = '2023-02-23'
+        const c4 = _.cloneDeep(this.center)
+        c4.free_trial_end_date = '2023-02-22'
+        console.log(
+            'center list item : ',
+            this.centerTag,
+            this.freeTrialHelperService.getPeriodAlertTag(c1),
+            this.freeTrialHelperService.getPeriodAlertTag(c2),
+            this.freeTrialHelperService.getPeriodAlertTag(c3),
+            this.freeTrialHelperService.getHeaderPeriodAlertText(c1),
+            this.freeTrialHelperService.getHeaderPeriodAlertText(c2),
+            this.freeTrialHelperService.getHeaderPeriodAlertText(c3),
+            this.freeTrialHelperService.getHeaderPeriodAlertText(c4)
+        )
+    }
     ngOnDestroy(): void {
         this.unSubscriber$.next()
         this.unSubscriber$.complete()
@@ -266,30 +291,22 @@ export class CenterListItemComponent implements OnInit, AfterViewInit, OnDestroy
         subText: `운영자 권한을 양도하거나 등록된 회원을
             모두 삭제한 후에 센터 나가기가 가능합니다.`,
     }
-    showOwerModal() {
+    showOwnerModal() {
         this.doShowOwnerModal = true
     }
     hideOwnerModal() {
         this.doShowOwnerModal = false
     }
 
-    leaveGymIfNotOnwer() {
+    leaveGymIfNotOwner() {
         if (this.center.role_code != 'owner') {
             this.leaveGym()
         } else {
             this.handleModalCancel()
-            this.showOwerModal()
+            this.showOwnerModal()
         }
     }
     // ------------------------------------------------------------------------------------------
-    public periodTextObj = {
-        in_free_trial: '⏳ 무료 체험 종료 ',
-        on_free_trial_end: '⏳ 오늘 무료 체험이 종료돼요!',
-        free_trial_end: '⛔ 무료 체험이 종료되었어요.',
-        in_use: '⏳ 이용권 만료 7일 전',
-        on_use_end: '⏳ 오늘 이용권이 만료돼요!',
-        use_end: '⛔ 이용권이 만료되었어요.',
-    }
 }
 
 /*

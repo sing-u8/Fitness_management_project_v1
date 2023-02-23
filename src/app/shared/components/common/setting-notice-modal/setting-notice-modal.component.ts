@@ -109,7 +109,6 @@ export class SettingNoticeModalComponent implements OnChanges, AfterViewChecked,
     // notice text byte
     noticeTextMax = 250
     limitNoticeTextByte(event) {
-        console.log('limitNoticeTextByte -- ', this.centerNoticeText.length, ' - ', this.noticeTextMax)
         const code = event.which ? event.which : event.keyCode
 
         return (

@@ -25,7 +25,7 @@ export class FreeTrialModalComponent implements OnChanges, AfterViewChecked {
 
     @Output() visibleChange = new EventEmitter<boolean>()
     @Output() cancel = new EventEmitter<any>()
-    @Output() confirm = new EventEmitter<any>()
+    @Output() confirm = new EventEmitter<{ agree_free_trial: boolean }>()
 
     changed: boolean
 
@@ -73,7 +73,7 @@ export class FreeTrialModalComponent implements OnChanges, AfterViewChecked {
     }
 
     onConfirm(): void {
-        this.confirm.emit({})
+        this.confirm.emit({ agree_free_trial: this.startFreeTrialAgree })
     }
 
     // on mouse rw-modal down

@@ -236,7 +236,7 @@ p {
                         position: absolute;
                         right: -132px;
                         top: -5px;
-                        box-shadow : 0 0 10px #b5b5b545;
+                        box-shadow: 0 0 10px #b5b5b545;
                         .setting-dropdown-item {
                             width: 100%;
                             height: 35px;
@@ -312,6 +312,29 @@ p {
                         }
                     }
                 }
+            }
+        }
+    }
+
+    .middle-side-menu {
+        .charge-button {
+            font-weight: 700;
+            font-size: 13px;
+            line-height: 19px;
+            letter-spacing: -0.169px;
+            color: var(--red);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            margin-left: 15px;
+            .right-arrow {
+                background-image: url('/assets/icons/etc/chevron_left_red.svg');
+                background-repeat: no-repeat;
+                background-size: contain;
+                width: 20px;
+                height: 20px;
+                transform: rotateY(180deg);
+                margin-bottom: 0.5px;
             }
         }
     }

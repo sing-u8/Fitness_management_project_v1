@@ -1,5 +1,5 @@
-import { Component, OnInit, OnDestroy } from '@angular/core'
-import { Router, ActivatedRoute } from '@angular/router'
+import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core'
+import { Router, ActivatedRoute, NavigationStart, Event as NavigationEvent } from '@angular/router'
 
 import { StorageService } from '@services/storage.service'
 import { CenterService } from '@services/center.service'
@@ -7,6 +7,7 @@ import { UsersCenterService } from '@services/users-center.service'
 import { WsChatService } from '@services/web-socket/ws-chat.service'
 import { CenterRolePermissionService } from '@services/center-role-permission.service'
 import { CenterPermissionHelperService } from '@services/helper/center-permission-helper.service'
+import { FreeTrialHelperService } from '@services/helper/free-trial-helper.service'
 
 import { User } from '@schemas/user'
 import { Center } from '@schemas/center'
@@ -31,14 +32,14 @@ import { centerPermission, curCenter, curCenterAndPermission } from '@centerStor
 import { Subject } from 'rxjs'
 import { takeUntil } from 'rxjs/operators'
 import { showModal } from '@appStore/actions/modal.action'
-import {showToast} from "@appStore/actions/toast.action";
+import { showToast } from '@appStore/actions/toast.action'
 
 @Component({
     selector: 'rw-header',
     templateUrl: './header.component.html',
     styleUrls: ['./header.component.scss'],
 })
-export class HeaderComponent implements OnInit, OnDestroy {
+export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
     TAG = 'Header'
 
     url: string
@@ -58,6 +59,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     public unSubscriber$ = new Subject<void>()
 
+    public centerHeaderTag = ''
+    public isSubOver = {
+        freeTrial: false,
+        subscription: false,
+    }
+
     constructor(
         private router: Router,
         private storageService: StorageService,
@@ -67,7 +74,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
         private nxStore: Store,
         private wsChatService: WsChatService,
         private centerPermissionHelperService: CenterPermissionHelperService,
-        private centerRolePermissionService: CenterRolePermissionService
+        private centerRolePermissionService: CenterRolePermissionService,
+        private freeTrialHelperService: FreeTrialHelperService
     ) {}
 
     ngOnInit(): void {
@@ -88,7 +96,19 @@ export class HeaderComponent implements OnInit, OnDestroy {
         this.nxStore.pipe(select(centerPermission), takeUntil(this.unSubscriber$)).subscribe((po) => {
             this.centerPermissionObj = po
         })
+        this.centerHeaderTag = this.freeTrialHelperService.getHeaderPeriodAlertText(this.center)
     }
+    ngAfterViewInit() {
+        this.checkDoShowSubOverModal()
+        this.router.events.pipe(takeUntil(this.unSubscriber$)).subscribe((event: NavigationEvent) => {
+            if (event instanceof NavigationStart) {
+                this.center = this.storageService.getCenter()
+                this.checkDoShowSubOverModal()
+                console.log('in header event url : ', event.url, ' - ', event, ' - ', this.isSubOver)
+            }
+        })
+    }
+
     ngOnDestroy(): void {
         this.unSubscriber$.next()
         this.unSubscriber$.complete()
@@ -263,5 +283,50 @@ export class HeaderComponent implements OnInit, OnDestroy {
             this.nxStore.dispatch(showToast({ text: '센터 공지사항이 수정되었습니다.' }))
             e.loadingFns.hideLoading()
         })
+    }
+
+    // subscription over modal
+    public showSubOverModal = false
+    openSubOverModal() {
+        this.showSubOverModal = true
+    }
+    closeSubOverModal() {
+        this.showSubOverModal = false
+    }
+    public subOverData = {
+        text: '',
+        subText: ``,
+        cancelButtonText: '뒤로 가기',
+        confirmButtonText: '결제하기',
+    }
+    onCancelSubOver() {
+        this.showSubOverModal = false
+        this.router.navigate(['redwhale-home'])
+    }
+    onConfirmSubOver() {
+        this.showSubOverModal = false
+    }
+    setSubOverData() {
+        if (this.isSubOver.freeTrial) {
+            this.subOverData.text = '무료 체험 기간이 종료되었습니다.'
+            this.subOverData.subText = `무료 체험 기간 종료일로부터 14일 이내에
+                접속 이력이 없다면 센터의 모든 정보가 삭제됩니다.
+                계속 이용하고자 할 경우, 결제를 진행해주세요.`
+        } else if (this.isSubOver.subscription) {
+            this.subOverData.text = '이용권이 만료되었습니다.'
+            this.subOverData.subText = `이용권이 만료되어 기능을 사용하실 수 없어요.
+                계속 이용하고자 할 경우, 결제를 진행해주세요.`
+        }
+    }
+    checkDoShowSubOverModal() {
+        // console.log('checkDoShowSubOverModal -- ', _.isEmpty(this.center))
+        this.closeSubOverModal()
+        if (_.isEmpty(this.center)) return
+        this.isSubOver = this.freeTrialHelperService.isSubscriptionOver(this.center)
+        this.setSubOverData()
+        if (this.isSubOver.freeTrial || this.isSubOver.subscription) {
+            this.openSubOverModal()
+        }
+        console.log('checkDoShowSubOverModal -- ', this.showSubOverModal, this.subOverData)
     }
 }

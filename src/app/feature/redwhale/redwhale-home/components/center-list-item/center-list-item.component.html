@@ -1,5 +1,5 @@
 <div id="_center-list-container" class="center-list-container" (click)="goGym($event)">
-<!--    <div class="period-tag"> ⏳ 무료 체험 종료 14일 전 </div>-->
+    <div *ngIf="centerTag" class="period-tag">{{ centerTag }}</div>
     <div #list_header class="list-header"></div>
     <div #list_avatar class="list-avatar rw-typo-title2">
         <ng-template [ngIf]="centerAvatar && centerAvatar.length < 2">{{ centerAvatar }}</ng-template>
@@ -7,9 +7,9 @@
     <div class="list-contents">
         <p class="contents-top">
             <span class="rw-typo-title2">{{ center.name }}</span>
-            <span class="rw-typo-subtext3"> {{ centerRoleName }} </span>
+            <span class="rw-typo-subtext2-fontcolor"> {{ centerRoleName }} </span>
         </p>
-        <p class="rw-typo-subtext4">redwhale.xyz/{{ center.address }}</p>
+        <p class="rw-typo-subtext2-1">redwhale.xyz/{{ center.address }}</p>
     </div>
     <div class="list-bottom-toolbar">
         <div
@@ -20,7 +20,7 @@
         >
             <div class="setting-center">
                 <img src="assets/icons/header/settings.svg" />
-                <span class="rw-typo-subtext3">센터 설정</span>
+                <span class="rw-typo-subtext2-fontcolor">센터 설정</span>
             </div>
             <div *ngIf="showSettingDropdown" class="setting-dropdown" (rwClickOutside)="closeSettingDropdown()">
                 <div class="setting-dropdown-item rw-typo-bodytext2" (click)="goGymSetting($event)">기본 정보 수정</div>
@@ -52,7 +52,7 @@
     [(visible)]="doShowModal"
     [data]="centerModalData"
     (cancel)="handleModalCancel()"
-    (confirm)="leaveGymIfNotOnwer()"
+    (confirm)="leaveGymIfNotOwner()"
 >
 </rw-modal>
 

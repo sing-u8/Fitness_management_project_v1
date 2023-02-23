@@ -144,11 +144,15 @@ export class CreateGymComponent implements OnInit {
     // <---- photo file control helper function ------//
     // ------------------------------------------------------------------------//
 
-    createCenter(btLoadingFns: ClickEmitterType) {
+    createCenter(btLoadingFns: ClickEmitterType, agree_free_trial: boolean) {
         btLoadingFns.showLoading()
         this.centerNameForm.setValue(_.trim(this.centerNameForm.value))
         this.centerService
-            .createCenter({ name: this.centerNameForm.value, address: this.centerAddrForm.value })
+            .createCenter({
+                name: this.centerNameForm.value,
+                address: this.centerAddrForm.value,
+                free_trial_terms: agree_free_trial,
+            })
             .subscribe({
                 next: (v) => {
                     this.createApiPhotoFileAsPossible('file_type_center_background', v, () => {
@@ -218,9 +222,9 @@ export class CreateGymComponent implements OnInit {
         this.btLoadingFnsForCC = btLoadingFns
         btLoadingFns.showLoading()
     }
-    onFreeTrialModalConfirm() {
+    onFreeTrialModalConfirm(res: { agree_free_trial: boolean }) {
         this.showFreeTrialModal = false
-        this.createCenter(this.btLoadingFnsForCC)
+        this.createCenter(this.btLoadingFnsForCC, res.agree_free_trial)
     }
     onFreeTrialModalCancel() {
         this.showFreeTrialModal = false

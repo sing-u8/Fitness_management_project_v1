@@ -50,10 +50,10 @@
                 <div class="sub-menu">
                     <div
                         class="touchpad d-flex justify-content-center align-items-center"
-                        [class.not-approved] = "!isSettingApproved"
+                        [class.not-approved]="!isSettingApproved"
                         (click)="goTouchPad()"
                     >
-                        <img src="assets/icons/header/touchpad.svg"/>
+                        <img src="assets/icons/header/touchpad.svg" />
                         <span class="rw-typo-bodytext2">터치패드 모드</span>
                     </div>
                     <ng-container *ngIf="isSettingApproved">
@@ -70,12 +70,17 @@
                             <div class="setting-dropdown-item rw-typo-bodytext2" (click)="goSettingCenter()">
                                 기본 정보 수정
                             </div>
-                            <div class="setting-dropdown-item rw-typo-bodytext2" (click)="openSettingNoticeModal()">공지사항 설정</div>
-                            <div class="setting-dropdown-item rw-typo-bodytext2" (click)="openRoleModal()">권한 관리</div>
-                            <div class="setting-dropdown-item rw-typo-bodytext2" (click)="openSettingTermsModal()">약관 설정</div>
+                            <div class="setting-dropdown-item rw-typo-bodytext2" (click)="openSettingNoticeModal()">
+                                공지사항 설정
+                            </div>
+                            <div class="setting-dropdown-item rw-typo-bodytext2" (click)="openRoleModal()">
+                                권한 관리
+                            </div>
+                            <div class="setting-dropdown-item rw-typo-bodytext2" (click)="openSettingTermsModal()">
+                                약관 설정
+                            </div>
                         </div>
                     </ng-container>
-                    
                 </div>
 
                 <ng-container *ngIf="centerList.length > 1">
@@ -112,7 +117,14 @@
             </div>
         </div>
     </div>
-    <div class="right-side-menu col d-flex justify-content-end align-items-center">
+    <div *ngIf="centerHeaderTag" class="middle-side-menu d-flex align-items-center">
+        <span class="rw-typo-bodytext2">{{ centerHeaderTag }}</span>
+        <div class="charge-button">
+            {{ isSubOver.subscription ? '연장하기' : '계속 사용하기' }}
+            <div class="right-arrow"></div>
+        </div>
+    </div>
+    <div class="right-side-menu col d-flex justify-content-end align-items-center" >
         <div
             class="menu-item d-flex align-items-center"
             [class.menu-item-selected]="(drawer$ | async)?.tabName == 'member'"
@@ -132,17 +144,17 @@
             <span class="rw-typo-bodytext2">채팅</span>
             <div class="menu-item-selected-line" *ngIf="(drawer$ | async)?.tabName == 'community'"></div>
         </div>
-<!--        <div class="empty" *ngIf="url != '/redwhale-home'"></div>-->
-<!--        <div-->
-<!--            class="menu-item d-flex align-items-center"-->
-<!--            [class.menu-item-selected]="(drawer$ | async)?.tabName == 'notification'"-->
-<!--            (click)="openDrawer('notification')"-->
-<!--            *ngIf="url != '/redwhale-home'"-->
-<!--        >-->
-<!--            <span class="rw-typo-bodytext2">알림</span>-->
-<!--            <div class="dot-badge d-flex justify-content-center align-items-center"></div>-->
-<!--            <div class="menu-item-selected-line" *ngIf="(drawer$ | async)?.tabName == 'notification'"></div>-->
-<!--        </div>-->
+        <!--        <div class="empty" *ngIf="url != '/redwhale-home'"></div>-->
+        <!--        <div-->
+        <!--            class="menu-item d-flex align-items-center"-->
+        <!--            [class.menu-item-selected]="(drawer$ | async)?.tabName == 'notification'"-->
+        <!--            (click)="openDrawer('notification')"-->
+        <!--            *ngIf="url != '/redwhale-home'"-->
+        <!--        >-->
+        <!--            <span class="rw-typo-bodytext2">알림</span>-->
+        <!--            <div class="dot-badge d-flex justify-content-center align-items-center"></div>-->
+        <!--            <div class="menu-item-selected-line" *ngIf="(drawer$ | async)?.tabName == 'notification'"></div>-->
+        <!--        </div>-->
         <div class="v-line-center" *ngIf="url != '/redwhale-home'"></div>
         <div class="v-line-home" *ngIf="url == '/redwhale-home'"></div>
         <div
@@ -199,17 +211,25 @@
 </div>
 
 <rw-setting-terms-modal
-    [(visible)] = "showSettingTermsModal"
+    [(visible)]="showSettingTermsModal"
     [(centerTerm)]="centerTerms"
-    [center] = "center"
+    [center]="center"
     (cancel)="cancelSettingTermsModal()"
     (confirm)="confirmSettingTermsModal($event)"
 ></rw-setting-terms-modal>
 
 <rw-setting-notice-modal
-    [(visible)] = "showSettingNoticeModal"
+    [(visible)]="showSettingNoticeModal"
     [(centerNoticeText)]="centerNoticeText"
-    [center] = "center"
+    [center]="center"
     (cancel)="cancelSettingNoticeModal()"
     (confirm)="confirmSettingNoticeModal($event)"
 ></rw-setting-notice-modal>
+
+<rw-modal
+    [(visible)]="showSubOverModal"
+    [data]="subOverData"
+    [blockClickOutside]="true"
+    (cancel)="onCancelSubOver()"
+    (confirm)="onConfirmSubOver()"
+></rw-modal>

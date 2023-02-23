@@ -9,7 +9,7 @@ import { StorageService } from '@services/storage.service'
 
 import { Response } from '@schemas/response'
 import { Center } from '@schemas/center'
-import {CenterUser} from "@schemas/center-user";
+import { CenterUser } from '@schemas/center-user'
 
 @Injectable({
     providedIn: 'root',
@@ -127,6 +127,7 @@ export class CenterService {
 export interface CreateCenterRequestBody {
     name: string
     address: string
+    free_trial_terms: boolean
 }
 
 export interface UpdateCenterRequestBody {

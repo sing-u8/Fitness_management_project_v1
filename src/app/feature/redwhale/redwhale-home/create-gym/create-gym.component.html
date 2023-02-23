@@ -177,6 +177,6 @@
 
 <rw-free-trial-modal
     [(visible)]="showFreeTrialModal"
-    (confirm)="onFreeTrialModalConfirm()"
+    (confirm)="onFreeTrialModalConfirm($event)"
     (cancel)="onFreeTrialModalCancel()"
 ></rw-free-trial-modal>
