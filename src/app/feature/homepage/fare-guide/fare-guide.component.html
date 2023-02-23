@@ -2,14 +2,14 @@
     <rw-kakao-channel-button></rw-kakao-channel-button>
 
     <div id="sec1" class="sec--common sec__bg-white">
-<!--        <div class="sec1__l-text">-->
-<!--            <div class="sec1__text-title">요금 안내</div>-->
-<!--            <div class="sec1__text-desc">-->
-<!--                2주간 기능 제한 없이<br />-->
-<!--                무료로 사용해 보고<br class="mobile" />-->
-<!--                결정하세요.-->
-<!--            </div>-->
-<!--        </div>-->
+        <!--        <div class="sec1__l-text">-->
+        <!--            <div class="sec1__text-title">요금 안내</div>-->
+        <!--            <div class="sec1__text-desc">-->
+        <!--                2주간 기능 제한 없이<br />-->
+        <!--                무료로 사용해 보고<br class="mobile" />-->
+        <!--                결정하세요.-->
+        <!--            </div>-->
+        <!--        </div>-->
 
         <div class="w-100 d-flex flex-column align-items-center sec__bg-lightergrey">
             <div class="sec1__l-desc">
@@ -122,14 +122,14 @@
                 <span class="currency">원</span>
             </div>
 
-            <div class="arrow-icon"></div>
+            <div *ngIf="chargeCalcNum > 0" class="arrow-icon"></div>
+            <div *ngIf="chargeCalcNum == 0" class="arrow-icon1"></div>
         </div>
 
         <div *ngIf="chargeCalcNum == 0" class="charge-calc-text-solo">
             <div class="charge-calc-text__dummy"></div>
             <div class="charge-calc-text__ani d-flex align-items-center justify-content-center">
-                <div class="calc-block">월 이용료</div>
-                를 입력하시고 비교해 보세요!
+                <div class="calc-block">월 이용료를 입력하시고 비교해 보세요!</div>
             </div>
         </div>
         <div *ngIf="chargeCalcNum > 0" class="charge-calc-text">
