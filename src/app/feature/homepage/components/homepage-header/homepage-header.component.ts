@@ -113,4 +113,9 @@ export class HomepageHeaderComponent implements OnInit, OnDestroy {
         window.close()
         // window.open('', '_self').close()
     }
+
+    //
+    openUri(uri: string) {
+        window.open(uri)
+    }
 }

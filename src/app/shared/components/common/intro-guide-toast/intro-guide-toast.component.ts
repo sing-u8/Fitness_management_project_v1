@@ -10,4 +10,8 @@ export class IntroGuideToastComponent implements OnInit {
     constructor() {}
 
     ngOnInit(): void {}
+
+    openUri(uri: string) {
+        window.open(uri)
+    }
 }

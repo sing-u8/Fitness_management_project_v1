@@ -27,8 +27,10 @@
             <div class="mdi mdi-chevron-down" [class.open]="faqFlag"></div>
             <div class="cc-route-dropdown">
                 <div
-                    (click)="navigateTo('/customer-center/usage-guide'); $event.stopPropagation()"
-                    [routerLinkActive]="['route-active']"
+                    (click)="
+                        openUri('https://redwhalexyz.notion.site/eacd423859fe4abdb83433558c6a00bc');
+                        $event.stopPropagation()
+                    "
                     class="route-item"
                 >
                     이용 가이드
