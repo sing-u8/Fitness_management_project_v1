@@ -86,25 +86,6 @@ export class CenterListItemComponent implements OnInit, AfterViewInit, OnDestroy
 
     ngOnInit(): void {
         this.centerTag = this.freeTrialHelperService.getPeriodAlertTag(this.center)
-        const c1 = _.cloneDeep(this.center)
-        c1.free_trial_end_date = '2023-02-28'
-        const c2 = _.cloneDeep(this.center)
-        c2.free_trial_end_date = '2023-02-26'
-        const c3 = _.cloneDeep(this.center)
-        c3.free_trial_end_date = '2023-02-23'
-        const c4 = _.cloneDeep(this.center)
-        c4.free_trial_end_date = '2023-02-22'
-        console.log(
-            'center list item : ',
-            this.centerTag,
-            this.freeTrialHelperService.getPeriodAlertTag(c1),
-            this.freeTrialHelperService.getPeriodAlertTag(c2),
-            this.freeTrialHelperService.getPeriodAlertTag(c3),
-            this.freeTrialHelperService.getHeaderPeriodAlertText(c1),
-            this.freeTrialHelperService.getHeaderPeriodAlertText(c2),
-            this.freeTrialHelperService.getHeaderPeriodAlertText(c3),
-            this.freeTrialHelperService.getHeaderPeriodAlertText(c4)
-        )
     }
     ngOnDestroy(): void {
         this.unSubscriber$.next()
