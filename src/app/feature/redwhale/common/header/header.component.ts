@@ -324,9 +324,9 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
         if (_.isEmpty(this.center)) return
         this.isSubOver = this.freeTrialHelperService.isSubscriptionOver(this.center)
         this.setSubOverData()
-        if (this.isSubOver.freeTrial || this.isSubOver.subscription) {
-            this.openSubOverModal()
-        }
+        // if (this.isSubOver.freeTrial || this.isSubOver.subscription) {
+        //     this.openSubOverModal()
+        // }
         console.log('checkDoShowSubOverModal -- ', this.showSubOverModal, this.subOverData)
     }
 }
