@@ -157,7 +157,7 @@
                         <p class="rw-typo-title2 contract__title">서명</p>
                         <db-contract-sign-box
                             [signedUrl]="curContract?.user_sign"
-                            [contractDate]="today"
+                            [contractDate]="curContract?.date"
                             [type]="'r'"
                             [contractorName]="curContract?.user_name"
                         ></db-contract-sign-box>
