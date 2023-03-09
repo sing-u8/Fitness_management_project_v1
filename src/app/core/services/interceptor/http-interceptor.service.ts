@@ -8,6 +8,8 @@ import { StorageService } from '@services/storage.service'
 import { AuthService } from '@services/auth.service'
 import { ErrorObj } from '@schemas/error'
 
+import _ from 'lodash'
+
 @Injectable({
     providedIn: 'root',
 })
@@ -45,9 +47,9 @@ export class HttpInterceptorService implements HttpInterceptor {
             this.isRefreshing = true
             this.refreshTokenSubject.next(null)
 
-            const refreshToken = this.storageService.getUser().refresh_token
+            const refreshToken = this.storageService.getUser()?.refresh_token
             console.log('handle 401 error -- refreshToken : ', refreshToken)
-            if (refreshToken) {
+            if (!_.isEmpty(refreshToken)) {
                 return this.authService.refreshToken({ refresh_token: refreshToken }).pipe(
                     switchMap((accessToken) => {
                         console.log('after refresh access token : ', accessToken)
