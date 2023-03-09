@@ -12,9 +12,14 @@ export class FrequentlyAskedQuestionsComponent implements OnInit {
         h.scrollTo({ top: 0 })
     }
 
+    public kakaoUri = 'http://pf.kakao.com/_gCxiab'
+
     ngOnInit(): void {}
 
     routerTo(url: string) {
         this.router.navigateByUrl(`/${url}`)
+    }
+    openUri(uri: string) {
+        window.open(uri)
     }
 }
