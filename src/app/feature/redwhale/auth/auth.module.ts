@@ -8,20 +8,13 @@ import { CommonModule as AngularCommonModule } from '@angular/common'
 import { CommonModule } from './common/common.module'
 import { MobileResetPasswordModule } from './mobile-reset-password/mobile-reset-password.module'
 
-import { EmailLoginComponent } from './emailLogin/emailLogin.component'
 import { TermsComponent } from './terms/terms.component'
 import { LoginComponent } from './login/login.component'
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component'
 import { ResetPasswordComponent } from './reset-password/reset-password.component'
 
 @NgModule({
-    declarations: [
-        EmailLoginComponent,
-        TermsComponent,
-        LoginComponent,
-        ForgotPasswordComponent,
-        ResetPasswordComponent,
-    ],
+    declarations: [TermsComponent, LoginComponent, ForgotPasswordComponent, ResetPasswordComponent],
     imports: [
         AngularCommonModule,
         AuthRoutingModule,
