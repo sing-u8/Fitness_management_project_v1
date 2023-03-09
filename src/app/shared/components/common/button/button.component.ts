@@ -67,20 +67,20 @@ export class ButtonComponent implements OnInit, OnChanges, AfterViewChecked, Aft
         })
         detectChangesFor(changes, 'width', () => {
             this.changed = true
-            this.renderer.setStyle(this.button_el.nativeElement, 'width', `${this.width}`)
+            this.renderer.setStyle(this.button_el.nativeElement, 'width', `${this.width}px`)
         })
         detectChangesFor(changes, 'height', () => {
             this.changed = true
-            this.renderer.setStyle(this.button_el.nativeElement, 'height', `${this.height}`)
+            this.renderer.setStyle(this.button_el.nativeElement, 'height', `${this.height}px`)
         })
     }
     ngAfterViewInit(): void {
         if (this.width) {
-            this.renderer.setStyle(this.button_el.nativeElement, 'width', `${this.width}`)
+            this.renderer.setStyle(this.button_el.nativeElement, 'width', `${this.width}px`)
         }
 
         if (this.height) {
-            this.renderer.setStyle(this.button_el.nativeElement, 'height', `${this.height}`)
+            this.renderer.setStyle(this.button_el.nativeElement, 'height', `${this.height}px`)
         }
 
         if (this.padding) {
