@@ -5,7 +5,6 @@ import { AuthGuard } from '@guards/auth.guard'
 import { TermsGuard } from '@guards/terms.guard'
 
 import { LoginComponent } from './login/login.component'
-import { EmailLoginComponent } from './emailLogin/emailLogin.component'
 import { TermsComponent } from './terms/terms.component'
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component'
 import { ResetPasswordComponent } from './reset-password/reset-password.component'
@@ -13,7 +12,6 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
 const routes: Routes = [
     { path: '', redirectTo: 'login', pathMatch: 'full' },
     { path: 'login', canActivate: [AuthGuard], component: LoginComponent },
-    { path: 'email', canActivate: [AuthGuard], component: EmailLoginComponent },
     { path: 'terms', canActivate: [TermsGuard], component: TermsComponent },
     {
         path: 'registration',

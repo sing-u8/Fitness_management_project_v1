@@ -1,63 +1,126 @@
-<!-- <p>login works!</p> -->
-
-<div class="login full-absolute d-flex flex-column user-select-none">
+<section class="login">
     <rw-auth-header></rw-auth-header>
     <div class="flex-fill d-flex justify-content-center">
         <div class="box d-flex flex-column">
             <div class="headline d-flex flex-column align-items-center">
-                <div class="rw-typo-headline1">레드웨일을 이용하시려면</div>
-                <div class="rw-typo-headline1">로그인이 필요해요! 👇</div>
+                <div class="rw-typo-headline1">로그인</div>
+            </div>
+            <div class="input-box email-input-box">
+                <div class="label rw-typo-subtext2">이메일 주소</div>
+                <input
+                    class="rw-input"
+                    placeholder="이메일 주소를 입력해주세요."
+                    [(ngModel)]="email"
+                    maxlength="50"
+                    (keyup.enter)="formCheck() && signInWithEmail()"
+                />
+            </div>
+            <div class="input-box password-input-box">
+                <div class="label rw-typo-subtext2">비밀번호</div>
+                <input
+                    type="password"
+                    class="rw-input"
+                    placeholder="영어, 숫자, 특수문자 조합 8~15자 이내"
+                    [(ngModel)]="password"
+                    maxlength="15"
+                    (keyup.enter)="formCheck() && signInWithEmail()"
+                    *ngIf="!passwordVisible"
+                />
+                <input
+                    type="text"
+                    class="rw-input"
+                    placeholder="영어, 숫자, 특수문자 조합 8~15자 이내"
+                    [(ngModel)]="password"
+                    maxlength="15"
+                    (keyup.enter)="formCheck() && signInWithEmail()"
+                    *ngIf="passwordVisible"
+                />
+                <img
+                    *ngIf="password.length > 0"
+                    class="password-icon"
+                    src="assets/icons/etc/password-visible.svg"
+                    [class.display-block]="passwordVisible"
+                    (click)="changePasswordVisible(false)"
+                    alt="password-icon"
+                />
+                <img
+                    *ngIf="password.length > 0"
+                    class="password-icon"
+                    src="assets/icons/etc/password-invisible.svg"
+                    [class.display-block]="!passwordVisible"
+                    (click)="changePasswordVisible(true)"
+                    alt="password-icon"
+                />
+            </div>
+            <div class="checkbox-group d-flex justify-content-end align-items-center">
+                <rw-checkbox text="이메일 기억하기" [checked]="emailChecked" (click)="toggleRememberMe()"></rw-checkbox>
             </div>
 
             <rw-button
-                id="kakao"
-                #kakao_login_bt
+                #login_button_el
                 [height]="'55'"
-                [color]="'#fee500'"
-                [loadingName]="'kakao'"
-                (onClick)="signInWithKakao($event)"
+                [color]="'var(--red)'"
+                [disabled]="!formCheck()"
+                [loadingName]="'login'"
+                (onClick)="formCheck() && signInWithEmail()"
             >
-                <div class="button kakao d-flex justify-content-center align-items-center">
-                    <img id="kakao" src="assets/icons/social/kakao.svg" />
-                    <span class="rw-typo-title2">카카오로 로그인</span>
-                </div>
+                <span class="rw-typo-title2-none-color">로그인</span>
             </rw-button>
 
-            <rw-button
-                id="google"
-                #google_login_bt
-                [height]="'55'"
-                [color]="'#4285f4'"
-                [loadingName]="'google'"
-                (onClick)="signInWithGoogle($event)"
-            >
-                <div class="button google d-flex justify-content-center align-items-center">
-                    <img id="google" src="assets/icons/social/google.svg" />
-                    <span class="rw-typo-title2">Google로 로그인</span>
-                </div>
-            </rw-button>
-
-            <rw-button
-                id="apple"
-                #apple_login_bt
-                [height]="'55'"
-                [color]="'black'"
-                [loadingName]="'apple'"
-                (onClick)="signInWithApple($event)"
-            >
-                <div class="button apple d-flex justify-content-center align-items-center">
-                    <img id="apple" src="assets/icons/social/apple.svg" />
-                    <span class="rw-typo-title2">Apple로 로그인</span>
-                </div>
-            </rw-button>
-
-            <div class="email d-flex justify-content-evenly align-items-center">
-                <div class="rw-typo-title2" [routerLink]="['/auth/email']">이메일로 로그인</div>
-                <div class="v-line"></div>
-                <div class="rw-typo-title2" [routerLink]="['/auth/terms']">이메일로 회원가입</div>
+            <div class="l-text-button d-flex align-items-center justify-content-center">
+                <a class="rw-typo-bodytext1_darkgrey" [routerLink]="['/auth/forgot-password']">비밀번호 찾기</a>
+                <div class="divider"></div>
+                <a class="rw-typo-bodytext1_darkgrey" [routerLink]="['/auth/terms']">회원가입</a>
+            </div>
+            <div class="h-line"></div>
+            <div data-cy="l-social-login" class="d-flex justify-content-center align-items-center">
+                <rw-button
+                    [width]="'42px'"
+                    [height]="'42px'"
+                    [borderRadius]="'100px'"
+                    [padding]="'0'"
+                    [loadingName]="'kakao'"
+                    [color]="'#fee500'"
+                    id="kakao-button"
+                    (onClick)="signInWithKakao($event)"
+                >
+                    <div id="kakao" class="social-button rw-button">
+                        <img src="assets/icons/social/kakao.svg" alt="kakao.svg" />
+                    </div>
+                </rw-button>
+                <rw-button
+                    [width]="'42px'"
+                    [height]="'42px'"
+                    [padding]="'0'"
+                    [borderRadius]="'100px'"
+                    [borderColor]="'var(--border-color)'"
+                    [loadingName]="'google'"
+                    [loadingColor]="'var(--black)'"
+                    [color]="'var(--white)'"
+                    [loadingSize]="'small'"
+                    id="google-button"
+                    (onClick)="signInWithGoogle($event)"
+                >
+                    <div id="google" class="social-button rw-button">
+                        <img src="assets/icons/social/google.svg" alt="google.svg" />
+                    </div>
+                </rw-button>
+                <rw-button
+                    [width]="'42px'"
+                    [padding]="'0'"
+                    [height]="'42px'"
+                    [borderRadius]="'100px'"
+                    [loadingName]="'apple-button'"
+                    [color]="'var(--black)'"
+                    [loadingSize]="'small'"
+                    id="apple-button"
+                    (onClick)="signInWithApple($event)"
+                >
+                    <div id="apple" class="social-button rw-button">
+                        <img src="assets/icons/social/apple.svg" alt="apple.svg" />
+                    </div>
+                </rw-button>
             </div>
         </div>
-
-        <rw-intro-guide-toast [isOpen]="true"></rw-intro-guide-toast>
     </div>
-</div>
+</section>

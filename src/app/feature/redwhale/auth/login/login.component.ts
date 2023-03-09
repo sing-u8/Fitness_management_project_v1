@@ -1,16 +1,11 @@
-import { Component, OnInit, OnDestroy } from '@angular/core'
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core'
 import { Router } from '@angular/router'
 import { Observable, Subject } from 'rxjs'
-import { catchError, takeUntil } from 'rxjs/operators'
-
-declare let Kakao: any
-
 import {
     Auth,
     signInWithPopup,
     GoogleAuthProvider,
     OAuthProvider,
-    authState,
     signInWithCustomToken,
     UserCredential,
 } from '@angular/fire/auth'
@@ -18,17 +13,23 @@ import {
 import { environment } from '@environments/environment'
 
 import { StorageService } from '@services/storage.service'
+
 import { AuthService } from '@services/auth.service'
+
+import _ from 'lodash'
 
 // ngrx
 import { Store } from '@ngrx/store'
-
+import { showToast } from '@appStore/actions/toast.action'
 import { showModal } from '@appStore/actions/modal.action'
 import { removeRegistration } from '@appStore/actions/registration.action'
 
 // components
+import { ButtonComponent } from '@shared/components/common/button/button.component'
 import { ClickEmitterType } from '@schemas/components/button'
-import _ from 'lodash'
+import { isEmail, isPassword } from '@shared/helper/form-helper'
+
+declare let Kakao: any
 
 @Component({
     selector: 'rw-login',
@@ -37,30 +38,82 @@ import _ from 'lodash'
 })
 export class LoginComponent implements OnInit, OnDestroy {
     public TAG = '로그인'
-    public signInMethod: string
-    public unsubscriber$ = new Subject<boolean>()
-
     constructor(
-        private fireAuth: Auth,
         private router: Router,
-        private nxStore: Store,
+        private fireAuth: Auth,
         private storageService: StorageService,
-        private authService: AuthService
+        private authService: AuthService,
+        private nxStore: Store
     ) {}
 
     ngOnInit() {
-        this.nxStore.dispatch(removeRegistration())
+        const email = localStorage.getItem('email')
+        if (email) {
+            this.email = email
+            this.emailChecked = true
+        }
+        this.password = ''
 
+        this.nxStore.dispatch(removeRegistration())
         if (!Kakao.isInitialized()) {
             Kakao.init(`${environment.kakao['appKey']['javascript']}`)
         }
     }
-
     ngOnDestroy() {
-        this.unsubscriber$.next(true)
-        this.unsubscriber$.complete()
+        this.unsubscribe$.next(true)
+        this.unsubscribe$.complete()
     }
 
+    public signInMethod: string
+
+    //  email login vars and functions
+    public email: string
+    public emailChecked: boolean
+    public password: string
+    public passwordVisible: boolean
+    @ViewChild('login_button_el') login_button_el: ButtonComponent
+
+    signInWithEmail() {
+        this.login_button_el.showLoading()
+
+        this.signInMethod = 'email'
+        this.authService.signInWithEmail({ email: this.email, password: this.password }).subscribe({
+            next: (user) => {
+                if (this.emailChecked) {
+                    localStorage.setItem('email', this.email)
+                } else {
+                    localStorage.removeItem('email')
+                }
+                signInWithCustomToken(this.fireAuth, user.custom_token)
+                    .then((userCredential) => {
+                        this.storageService.setSignInMethod(this.signInMethod)
+                        this.router.navigateByUrl('/redwhale-home')
+                    })
+                    .finally(() => {
+                        this.login_button_el.hideLoading()
+                    })
+            },
+            error: (e) => {
+                this.nxStore.dispatch(showToast({ text: '입력하신 정보를 다시 확인해주세요.' }))
+                this.login_button_el.hideLoading()
+            },
+        })
+    }
+
+    changePasswordVisible(passwordVisible: boolean) {
+        this.passwordVisible = passwordVisible
+    }
+
+    toggleRememberMe() {
+        this.emailChecked = !this.emailChecked
+    }
+
+    formCheck(): boolean {
+        return isEmail(this.email) && isPassword(this.password)
+    }
+
+    // social login vars and functions
+    public unsubscribe$ = new Subject<boolean>()
     signInWithGoogle(btLoadingFns: ClickEmitterType) {
         btLoadingFns.showLoading()
         this.signInMethod = 'google'
@@ -87,9 +140,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     public kakaoBtLoadingFns: ClickEmitterType
     signInWithKakao(btLoadingFns: ClickEmitterType) {
-        // btLoadingFns.showLoading()
         this.kakaoBtLoadingFns = btLoadingFns
-        // this.kakaoBtLoadingFns.showLoading()
         this.signInMethod = 'kakao'
         const kakao$ = new Observable(function subscribe(observer) {
             Kakao.Auth.loginForm({
@@ -114,12 +165,10 @@ export class LoginComponent implements OnInit, OnDestroy {
                     signInWithCustomToken(this.fireAuth, String(user.custom_token)).then(() => {
                         this.storageService.setSignInMethod(this.signInMethod)
                         this.router.navigateByUrl('/redwhale-home')
-                        // btLoadingFns.hideLoading()
                     })
                 })
             },
             error: (e) => {
-                // btLoadingFns.hideLoading()
                 this.nxStore.dispatch(showModal({ data: { text: this.TAG, subText: e.message } }))
             },
         })
@@ -146,28 +195,3 @@ export class LoginComponent implements OnInit, OnDestroy {
         })
     }
 }
-
-/*
-        authState(this.fireAuth)
-            .pipe(takeUntil(this.unsubscriber$))
-            .subscribe((user) => {
-                if (user) {
-                    if (this.signInMethod == 'google' || this.signInMethod == 'apple') {
-                        user.getIdToken().then((accessToken) => {
-                            this.authService.signInWithFirebase({ accessToken }).subscribe({
-                                next: (user) => {
-                                    this.storageService.setSignInMethod(this.signInMethod)
-                                    this.router.navigateByUrl('/redwhale-home')
-                                },
-                                error: (e) => {
-                                    this.nxStore.dispatch(showModal({ data: { text: this.TAG, subText: e.message } }))
-                                },
-                            })
-                        })
-                    } else {
-                        this.storageService.setSignInMethod(this.signInMethod)
-                        this.router.navigateByUrl('/redwhale-home')
-                    }
-                }
-            })
-            */

@@ -17,6 +17,8 @@ import { NgxSpinnerService } from 'ngx-spinner'
 
 import { ClickEmitterType } from '@schemas/components/button'
 
+import { detectChangesFor } from '@shared/helper/component-helper'
+
 @Component({
     selector: 'rw-button',
     templateUrl: './button.component.html',
@@ -29,6 +31,7 @@ export class ButtonComponent implements OnInit, OnChanges, AfterViewChecked, Aft
     @Input() borderColor: string
     @Input() borderRadius: string
     @Input() fontColor: string
+    @Input() padding: string
     @Input() disabled: boolean
     @Input() loadingColor = '#fff'
     @Input() loadingSize: 'small' | 'default' | 'medium' | 'large' = 'default'
@@ -59,41 +62,41 @@ export class ButtonComponent implements OnInit, OnChanges, AfterViewChecked, Aft
     constructor(private renderer: Renderer2, private spinner: NgxSpinnerService) {}
 
     ngOnChanges(changes: SimpleChanges): void {
-        if (changes['disabled'] && !changes['disabled'].firstChange) {
-            if (changes['disabled'].previousValue != changes['disabled'].currentValue) {
-                this.changed = true
-            }
-        }
-
-        if (changes['width'] && !changes['width'].firstChange) {
-            if (changes['width'].previousValue != changes['width'].currentValue) {
-                this.changed = true
-                this.renderer.setStyle(this.button_el.nativeElement, 'width', `${this.width}px`)
-            }
-        }
+        detectChangesFor(changes, 'disabled', () => {
+            this.changed = true
+        })
+        detectChangesFor(changes, 'width', () => {
+            this.changed = true
+            this.renderer.setStyle(this.button_el.nativeElement, 'width', `${this.width}`)
+        })
+        detectChangesFor(changes, 'height', () => {
+            this.changed = true
+            this.renderer.setStyle(this.button_el.nativeElement, 'height', `${this.height}`)
+        })
     }
     ngAfterViewInit(): void {
         if (this.width) {
-            this.renderer.setStyle(this.button_el.nativeElement, 'width', `${this.width}px`)
+            this.renderer.setStyle(this.button_el.nativeElement, 'width', `${this.width}`)
         }
 
         if (this.height) {
-            this.renderer.setStyle(this.button_el.nativeElement, 'height', `${this.height}px`)
+            this.renderer.setStyle(this.button_el.nativeElement, 'height', `${this.height}`)
         }
 
-        if (!this.width && !this.height) {
-            this.renderer.setStyle(this.button_el.nativeElement, 'padding', `13px 15px`)
+        if (this.padding) {
+            this.renderer.setStyle(this.button_el.nativeElement, 'padding', `${this.padding}`)
         }
 
         if (this.color) {
             this.renderer.setStyle(this.button_el.nativeElement, 'backgroundColor', `${this.color}`)
             this.renderer.setStyle(this.button_el.nativeElement, 'color', 'var(--white)', RendererStyleFlags2.Important)
             this.renderer.addClass(this.button_el.nativeElement, 'cmp-button-type2')
-        } else if (this.borderColor) {
-            this.renderer.setStyle(this.button_el.nativeElement, 'border', `1px solid ${this.borderColor}`)
-            this.renderer.setStyle(this.button_el.nativeElement, 'color', 'var(--font-color)')
-            this.renderer.addClass(this.button_el.nativeElement, 'cmp-button-type1')
         } else {
+            this.renderer.addClass(this.button_el.nativeElement, 'cmp-button-type1')
+        }
+
+        if (this.borderColor) {
+            this.renderer.setStyle(this.button_el.nativeElement, 'border', `1px solid ${this.borderColor}`)
             this.renderer.addClass(this.button_el.nativeElement, 'cmp-button-type1')
         }
 
