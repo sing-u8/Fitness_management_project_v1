@@ -4,9 +4,11 @@ import { Routes, RouterModule } from '@angular/router'
 import { CenterComponent } from './center.component'
 import { CommunityComponent } from './section/community/community.component'
 import { TouchPadComponent } from './touch-pad/touch-pad.component'
+import { RegisterMembershipLockerPageComponent } from './section/dashboard/register-membership-locker-page/register-membership-locker-page.component'
 
 import { CenterMemberBlockGuard } from '@guards/center-member-block.guard'
 import { CenterSaleGuard } from '@guards/center-sale.guard'
+import { DashboardRegisterMlGuard } from '@guards/dashboard-register-ml.guard'
 
 const routes: Routes = [
     {
@@ -18,6 +20,11 @@ const routes: Routes = [
                 path: 'dashboard',
                 canActivate: [CenterMemberBlockGuard],
                 loadChildren: () => import('./section/dashboard/dashboard.module').then((m) => m.DashboardModule),
+            },
+            {
+                path: 'dashboard/:id/register-membership-locker',
+                canActivate: [DashboardRegisterMlGuard],
+                component: RegisterMembershipLockerPageComponent,
             },
             {
                 path: 'schedule',
