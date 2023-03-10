@@ -1,12 +1,10 @@
 import { Injectable } from '@angular/core'
 import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree } from '@angular/router'
-import { Observable, EMPTY, of } from 'rxjs'
+import { Observable, of } from 'rxjs'
 
-import { CenterService } from '@services/center.service'
 import { StorageService } from '@services/storage.service'
 
 import { Center } from '@schemas/center'
-import { map, catchError } from 'rxjs/operators'
 
 import _ from 'lodash'
 @Injectable({
@@ -15,7 +13,7 @@ import _ from 'lodash'
 export class CenterMemberBlockGuard implements CanActivate {
     public center: Center
 
-    constructor(private router: Router, private storageService: StorageService, private centerService: CenterService) {}
+    constructor(private router: Router, private storageService: StorageService) {}
 
     canActivate(
         route: ActivatedRouteSnapshot,
