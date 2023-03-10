@@ -71,11 +71,14 @@ export class LockerDatepickerComponent implements OnInit, OnChanges, AfterViewCh
             this.currentDate = moment(this.data.date)
         } else if (this.mode == 'week' && this.data.startDate) {
             this.currentDate = moment(this.data.startDate)
-        } else if (false) {
         } else if (this.mode == 'multiline' && this.data.startDate) {
             this.multiLineSelectDate({ date: this.data?.startDate })
             this.multiLineSelectDate({ date: this.data?.endDate })
-            this.currentDate = moment()
+            this.currentDate = this.data?.endDate
+                ? moment(this.data?.endDate)
+                : this.data?.startDate
+                ? moment(this.data?.startDate)
+                : moment()
         } else {
             this.currentDate = moment()
         }
