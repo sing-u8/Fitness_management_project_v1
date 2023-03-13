@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
+import { ActivatedRoute, Router } from '@angular/router'
 
 import { WordService } from '@services/helper/word.service'
 import {
@@ -30,6 +31,7 @@ import { Store } from '@ngrx/store'
 import * as DashboardReducer from '@centerStore/reducers/sec.dashboard.reducer'
 import { drawerSelector } from '@appStore/selectors'
 import { showToast } from '@appStore/actions/toast.action'
+import { ContractTypeCode } from '@schemas/contract'
 
 @Component({
     selector: 'db-user-detail-membership',
@@ -48,7 +50,8 @@ export class UserDetailMembershipComponent implements OnInit {
         private centerUsersMembershipService: CenterUsersMembershipService,
         private storageService: StorageService,
         private wordService: WordService,
-        private dashboardHelper: DashboardHelperService
+        private dashboardHelper: DashboardHelperService,
+        private router: Router
     ) {}
     // //
     ngOnInit(): void {}
@@ -190,13 +193,13 @@ export class UserDetailMembershipComponent implements OnInit {
         this.showRemoveModal = false
     }
 
-    // modify membership fullmodal
-    public showModifyMembershipFullModal = false
-    toggleModifyMembershipFullModal() {
-        this.showModifyMembershipFullModal = !this.showModifyMembershipFullModal
-    }
-    confirmModifyMembership() {
-        this.showModifyMembershipFullModal = false
+    routeToModifyMembership() {
+        this.router.navigateByUrl(`${this.center.address}/dashboard/${this.curUserData.user.id}/modify-membership`, {
+            state: {
+                centerUser: this.curUserData.user,
+                userMembership: this.selectedUserMembership,
+            },
+        })
     }
 
     // update, remove hoding funcs

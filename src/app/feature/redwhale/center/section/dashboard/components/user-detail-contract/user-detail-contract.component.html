@@ -22,7 +22,7 @@
                 *ngFor="let item of curUserData.contracts"
                 [contract]="item"
                 (onSign)="setSelectedPayment(item); openSignaturePad()"
-                (onContractDetail)="setSelectedPayment(item); openCCFullModal()"
+                (onContractDetail)="setSelectedPayment(item); routeToCheckContractPage()"
             ></db-user-detail-contract-item>
         </ng-template>
     </main>
@@ -35,10 +35,3 @@
     (cancel)="onCancelSignaturePad()"
     (confirm)="onConfirmSignaturePad($event)"
 ></rw-signature-pad-modal>
-
-<db-check-contract-fullmodal
-    [(visible)]="isCCFullModalVisible"
-    [curUser]="curUserData.user"
-    [curContract]="selectedContract"
-    (close)="closeCCFullModal()"
-></db-check-contract-fullmodal>

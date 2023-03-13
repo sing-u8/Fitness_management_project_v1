@@ -8,11 +8,11 @@
     opacity: 1 !important;
 }
 
-.register-ml-fullmodal-show {
+.transfer-m-fullmodal-show {
     opacity: 1 !important;
 }
 
-section.register-ml-fullmodal-wrapper {
+section.transfer-m-fullmodal-wrapper {
     display: flex;
     position: fixed;
     top: 0;
@@ -27,7 +27,7 @@ section.register-ml-fullmodal-wrapper {
     // -o-transition: opacity 0.3s cubic-bezier(0.25, 0.8, 0.25, 0.8);
     z-index: 1010;
 
-    section.register-membership-locker {
+    section.transfer-membership {
         top: 0;
         left: 0;
         width: 100vw;
@@ -51,7 +51,7 @@ section.register-ml-fullmodal-wrapper {
                 margin-bottom: 27px;
                 position: relative;
 
-                div.register-ml-progress {
+                div.transfer-m-progress {
                     counter-reset: progress;
                     list-style-type: circle;
                     position: absolute;
@@ -124,59 +124,6 @@ section.register-ml-fullmodal-wrapper {
                     margin-right: 20px;
                     width: 585px;
                     position: relative;
-                    .empty-memberhip-card,
-                    .empty-locker-card {
-                        padding: 17px 20px 20px;
-                        width: 585px;
-                        height: 136px;
-                        box-shadow: 0 0 10px #b5b5b51c;
-                        border-radius: 7px;
-                        background-color: var(--white);
-
-                        & > .title {
-                            display: flex;
-                            width: 545px;
-                            height: 38px;
-                            border-bottom: 1px solid var(--border-color);
-                            margin-bottom: 21px;
-                        }
-
-                        .membership-content,
-                        .locker-content {
-                            display: flex;
-                            cursor: pointer;
-
-                            .card-texts {
-                                display: flex;
-                                flex-direction: column;
-                                width: calc(100% - 48px);
-                                margin-left: 12px;
-
-                                .top {
-                                    display: flex;
-                                    align-items: center;
-                                    color: var(--grey);
-                                    margin-bottom: 2px;
-                                }
-
-                                .bottom {
-                                    display: flex;
-                                    justify-content: space-between;
-                                    align-items: center;
-
-                                    & > img {
-                                        width: 24px;
-                                        height: 24px;
-                                        margin-right: 5px;
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    .empty-memberhip-card {
-                        margin-bottom: 20px;
-                    }
 
                     .card-icon {
                         display: flex;
@@ -194,30 +141,6 @@ section.register-ml-fullmodal-wrapper {
                     }
 
                     .presence-membership-locker {
-                        .membership-locker-buttons {
-                            display: flex;
-                            justify-content: space-between;
-                            align-items: center;
-                            margin-bottom: 20px;
-
-                            .add-membership-ticket-button,
-                            .add-locker-button {
-                                display: flex;
-                                justify-content: space-between;
-                                width: 283px;
-                                height: 55px;
-                                box-shadow: 0 0 10px #b5b5b51c;
-                                border-radius: 7px;
-                                // background-color: var(--white);
-                                padding: 16px 22px !important;
-
-                                & img {
-                                    width: 20px;
-                                    height: 20px;
-                                }
-                            }
-                        }
-
                         .window-item {
                             &:not(:last-of-type) {
                                 margin-bottom: 20px;
@@ -488,34 +411,6 @@ section.register-ml-fullmodal-wrapper {
 
                         .memo-terms {
                             min-height: 150px;
-                            &::placeholder {
-                                font-weight: 400 !important;
-                                color: var(--grey) !important;
-                            }
-
-                            &::-webkit-input-placeholder {
-                                font-weight: 400 !important;
-                                color: var(--grey) !important;
-                            }
-
-                            &:-ms-input-placeholder {
-                                font-weight: 400 !important;
-                                color: var(--grey) !important;
-                            }
-                            &:focus::placeholder {
-                                font-weight: 400 !important;
-                                color: var(--grey) !important;
-                            }
-
-                            &:focus::-webkit-input-placeholder {
-                                font-weight: 400 !important;
-                                color: var(--grey) !important;
-                            }
-
-                            &:focus:-ms-input-placeholder {
-                                font-weight: 400 !important;
-                                color: var(--grey) !important;
-                            }
                         }
                     }
                 }
@@ -558,7 +453,7 @@ section.register-ml-fullmodal-wrapper {
     }
 }
 
-.register-ml-button {
+.transfer-m-button {
     display: flex;
     align-items: center;
     justify-content: center;

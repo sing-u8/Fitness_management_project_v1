@@ -1,0 +1,251 @@
+<section class="transfer-m-fullmodal-wrapper user-select-none" #modalWrapperElement>
+    <section class="transfer-membership user-select-none thin-scroll-x-overlay thin-scroll-y-overlay">
+        <header>
+            <div class="header-text-container">
+                <ng-container *ngIf="progress == 'one'">
+                    <p class="rw-typo-headline1">
+                        {{ curUser?.name + '님이 ' + transferCenterUser?.name + '님에게' }}
+                    </p>
+                    <p class="rw-typo-headline1">양도할 회원권 정보를 입력해주세요.</p>
+                </ng-container>
+                <ng-container *ngIf="progress == 'two'">
+                    <p class="rw-typo-headline1">[{{ center.name }}]</p>
+                    <p class="rw-typo-headline1">양도 계약서</p>
+                </ng-container>
+
+                <div class="transfer-m-progress">
+                    <div class="progress">
+                        <span class="circle_one_on" [class.hide]="progress == 'two'"></span>
+                        <span class="circle_one_off" [class.hide]="progress == 'one'"></span>
+                        <div class="rw-typo-subtext0" [class.not-in-progress]="progress == 'two'">회원권 양도</div>
+                    </div>
+                    <div class="progress__line"></div>
+                    <div class="progress">
+                        <span class="circle_two_on" [class.hide]="progress == 'one'"></span>
+                        <span class="circle_two_off" [class.hide]="progress == 'two'"></span>
+                        <div class="rw-typo-subtext0" [class.not-in-progress]="progress == 'one'">계약서 작성</div>
+                    </div>
+                </div>
+            </div>
+
+            <!--            <div-->
+            <!--                class="cg-typo-subtext close-button"-->
+            <!--                rw-button-->
+            <!--                rwButtonWidth="85"-->
+            <!--                rwButtonHeight="40"-->
+            <!--                rwButtonBorderColor="var(&#45;&#45;font-color)"-->
+            <!--                (click)="closeModal()"-->
+            <!--            >-->
+            <!--                <span class="mdi mdi-close"></span>-->
+            <!--                <span>닫기</span>-->
+            <!--            </div>-->
+        </header>
+
+        <main id="progress-one" [style.display]="progress == 'one' ? 'block' : 'none'">
+            <div class="main-wrapper">
+                <article class="membership-and-locker">
+                    <div class="presence-membership-locker">
+                        <ng-container *ngIf="(isMLoading$ | async) == 'pending'">
+                            <ngx-skeleton-loader
+                                appearance="line"
+                                count="1"
+                                [theme]="{ width: '585px', height: '978px', 'border-radius': '7px', margin: '0' }"
+                            ></ngx-skeleton-loader>
+                        </ng-container>
+                        <ng-container *ngIf="(isMLoading$ | async) == 'done'">
+                            <db-transfer-membership-ticket-window
+                                [membershipState]="mItem$ | async"
+                                [instructors]="instructors$ | async"
+                                (onModifyMlItem)="onMemberhispTicketItemModify($event)"
+                                (onModifyTotalPrice)="onTotalPriceModify($event)"
+                            ></db-transfer-membership-ticket-window>
+                        </ng-container>
+                    </div>
+                </article>
+
+                <aside class="l-payment-information">
+                    <div class="payment-information-wrapper">
+                        <div class="pay-information">
+                            <div class="total-price">
+                                <span class="rw-typo-subtext0-regular total-price-title">총 결제 금액</span>
+                                <span class="rw-typo-headline1">{{ totalSum | numberWithCommas }}원</span>
+                            </div>
+
+                            <div class="input-list">
+                                <div
+                                    *ngFor="let item of totalPrice$ | async | keyvalue: originalOrder"
+                                    class="rw-typo-subtext0-regular input-title"
+                                >
+                                    <span class="rw-typo-bodytext1_darkgrey">
+                                        {{ item.value.name }}
+                                    </span>
+                                    <span class="rw-typo-bodytext0-darkgrey-bold">
+                                        {{ item.value.price | numberWithCommas }}원
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="rw-typo-subtext0-regular date-text">결제일 : {{ today }}</div>
+                        </div>
+
+                        <rw-button
+                            #next_bt
+                            [width]="'238'"
+                            [height]="'50'"
+                            [color]="'var(--red)'"
+                            [loadingName]="'next_bt'"
+                            [borderRadius]="'5px'"
+                            [disabled]="!isAllMItemDone"
+                            (onClick)="isAllMItemDone && setProgress('two')"
+                        >
+                            <span class="transfer-m-button"> 다음 </span>
+                        </rw-button>
+                    </div>
+                </aside>
+            </div>
+        </main>
+
+        <main id="progress-two" [style.display]="progress == 'two' ? 'block' : 'none'">
+            <div class="main-wrapper">
+                <article class="contract-body">
+                    <div class="l-user-basic-info-box">
+                        <p class="rw-typo-title2 contract__title">회원 기본 정보</p>
+                        <div class="user-basic-info-box">
+                            <div class="l-avatar">
+                                <rw-avatar
+                                    size="83"
+                                    fontSize="16"
+                                    [image]="transferCenterUser?.picture"
+                                    [backgroundColor]="transferCenterUser?.color"
+                                    [text]="transferCenterUser?.name"
+                                ></rw-avatar>
+                                <p class="rw-typo-title1">{{ transferCenterUser?.name }}</p>
+                            </div>
+                            <div class="user-basic-info">
+                                <div class="l-info">
+                                    <div class="title">회원번호</div>
+                                    <div class="content">{{ transferCenterUser?.membership_number }}</div>
+                                </div>
+                                <div class="l-info">
+                                    <div class="title">이메일</div>
+                                    <div class="content">{{ transferCenterUser?.email }}</div>
+                                </div>
+                                <div class="l-info">
+                                    <div class="title">전화번호</div>
+                                    <div class="content">
+                                        {{ transferCenterUser?.phone_number | phoneNumber }}
+                                    </div>
+                                </div>
+                                <div class="l-info">
+                                    <div class="title">생년월일</div>
+                                    <div class="content">
+                                        <span>
+                                            {{ (transferCenterUser?.birth_date | dashToDot) ?? '-' }}
+                                            ({{ (transferCenterUser?.birth_date | birthDate: '세') ?? '-세' }},
+                                            {{
+                                                transferCenterUser?.sex == 'male'
+                                                    ? '남성'
+                                                    : transferCenterUser?.sex == 'female'
+                                                    ? '여성'
+                                                    : '-'
+                                            }})
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="l-ml-registered">
+                        <p class="rw-typo-title2 contract__title">회원권</p>
+                        <div class="ml-registered">
+                            <ng-container class="window-item" *ngIf="mItem$ | async">
+                                <db-membership-ticket-window-registered
+                                    [membershipState]="mItem$ | async"
+                                ></db-membership-ticket-window-registered>
+                            </ng-container>
+                        </div>
+                    </div>
+                    <div class="l-payment-info">
+                        <p class="rw-typo-title2 contract__title">결제 정보</p>
+                        <div class="payment-info">
+                            <p class="payment-info__total-price rw-typo-title2">
+                                총 {{ totalSum | numberWithCommas }}원 결제
+                            </p>
+                            <div class="bar"></div>
+                            <div class="payment-info__l-price-item">
+                                <div
+                                    class="payment-info__price-item"
+                                    *ngFor="let item of totalPrice$ | async | keyvalue: originalOrder"
+                                >
+                                    <p class="rw-typo-subtext0-regular">{{ item.value.name }}</p>
+                                    <p class="rw-typo-bodytext0-regular">{{ item.value.price | numberWithCommas }}원</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="l-terms">
+                        <p class="rw-typo-title2 contract__title">이용 약관</p>
+                        <textarea
+                            #terms
+                            [readonly]="true"
+                            [style.display]="center.contract_terms ? 'block' : 'none'"
+                            class="terms rw-typo-bodytext0-regular thin-scroll-y"
+                            [(ngModel)]="center.contract_terms"
+                        ></textarea>
+                        <div *ngIf="!center.contract_terms" class="no-terms rw-typo-bodytext0-regular">
+                            [센터 설정 > 약관 설정]에서 이용 약관을 작성해주세요.
+                        </div>
+                    </div>
+                    <div class="l-terms">
+                        <p class="rw-typo-title2 contract__title">특이 사항</p>
+                        <textarea
+                            class="terms memo-terms rw-typo-bodytext0-regular thin-scroll-y"
+                            rw-TextareaInfiniteResize
+                            [placeholder]="'계약 시 발생한 특이 사항에 대해 입력해주세요.'"
+                            [(ngModel)]="memoTerms"
+                        ></textarea>
+                    </div>
+                </article>
+
+                <aside class="l-contract-sign">
+                    <div class="contract-sign-wrapper">
+                        <p class="rw-typo-title2 contract__title">서명</p>
+                        <db-contract-sign-box
+                            [signData]="inputSignData"
+                            [contractDate]="today"
+                            [contractorName]="transferCenterUser?.name"
+                            (onSign)="onContractSign($event)"
+                        ></db-contract-sign-box>
+                        <div class="l-button">
+                            <rw-button
+                                #prev_bt
+                                [width]="'70'"
+                                [height]="'50'"
+                                [color]="'transparent'"
+                                [fontColor]="'var(--darkgrey)'"
+                                [borderRadius]="'5px'"
+                                [padding]="'0'"
+                                (onClick)="setProgress('one')"
+                            >
+                                <div class="transfer-m-button">
+                                    <span class="left-arrow"></span>
+                                    <span>뒤로</span>
+                                </div> </rw-button
+                            ><rw-button
+                                #register_ml_bt
+                                [width]="'158'"
+                                [height]="'50'"
+                                [color]="'var(--red)'"
+                                [loadingName]="'register_ml'"
+                                [borderRadius]="'5px'"
+                                (onClick)="transferMembership($event)"
+                            >
+                                <span class="transfer-m-button"> 저장하기 </span>
+                            </rw-button>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </main>
+    </section>
+</section>

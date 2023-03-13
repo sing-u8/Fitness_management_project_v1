@@ -23,14 +23,16 @@
                 *ngFor="let item of curUserData.memberships"
                 [drawerType]="(drawer$ | async).tabName"
                 [membership]="item"
-                (onUpdateInfo)="setSelectedUserMembership(item); toggleModifyMembershipFullModal()"
+                (onUpdateInfo)="setSelectedUserMembership(item); routeToModifyMembership()"
                 (onExtendPeriodCount)="toggleExtensionModal(); setSelectedUserMembership(item)"
                 (onHold)="toggleHoldModal(); setSelectedUserMembership(item)"
                 (onTransfer)="setTransFilterFn(); setSelectedUserMembership(item); toggleShowTransferModal()"
                 (onRefund)="setSelectedUserMembership(item); toggleShowRefundModal()"
                 (onReRegister)="setSelectedUserMembership(item); onReRegisterM.emit($event)"
                 (onRemoveRecord)="setSelectedUserMembership(item); toggleRemoveModal()"
-                (onUpdateHolding)="setSelectedUserMembership(item, $event.holdingIdx); toggleUpdateHoldModal($event.holdingIdx)"
+                (onUpdateHolding)="
+                    setSelectedUserMembership(item, $event.holdingIdx); toggleUpdateHoldModal($event.holdingIdx)
+                "
                 (onRemoveHolding)="setSelectedUserMembership(item, $event.holdingIdx); toggleRemoveHoldingModal()"
             ></db-user-detail-membership-item>
         </ng-template>
@@ -74,15 +76,6 @@
     (confirm)="onConfirmRefund()"
 ></rw-modal>
 
-
-<db-modify-membership-fullmodal
-    [(visible)]="showModifyMembershipFullModal"
-    [userMembership]="selectedUserMembership"
-    [centerUser]="curUserData?.user"
-    (close)="toggleModifyMembershipFullModal()"
-    (confirm)="confirmModifyMembership()"
-></db-modify-membership-fullmodal>
-
 <rw-modal
     [(visible)]="showRemoveHoldModal"
     [data]="removeHoldingModalData"
@@ -100,10 +93,10 @@
 ></rw-datepick-modal>
 
 <db-detail-item-remove-modal
-    [(visible)] = "showRemoveModal"
+    [(visible)]="showRemoveModal"
     [userName]="curUserData?.user?.name"
     [item]="selectedUserMembership"
     [type]="'membership'"
-    (cancel) = "toggleRemoveModal()"
-    (confirm) = "onConfirmRemove($event)"
+    (cancel)="toggleRemoveModal()"
+    (confirm)="onConfirmRemove($event)"
 ></db-detail-item-remove-modal>

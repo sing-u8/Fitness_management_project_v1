@@ -1,1 +1,380 @@
-<p>register-membership-locker-page works!</p>
+<section class="register-ml-fullmodal-wrapper user-select-none'" #modalWrapperElement>
+    <section class="register-membership-locker user-select-none thin-scroll-x-overlay thin-scroll-y-overlay">
+        <header>
+            <div class="header-text-container">
+                <ng-container *ngIf="progress == 'one'">
+                    <p class="rw-typo-headline1">
+                        {{ type == 'contract_type_new' ? curUser?.name + '님의' : curUser?.name + '님이 재등록할' }}
+                    </p>
+                    <p class="rw-typo-headline1">
+                        {{
+                            type == 'contract_type_new'
+                                ? '회원권과 락커를 등록해주세요.'
+                                : '회원권/락커 정보를 입력해주세요.'
+                        }}
+                    </p>
+                </ng-container>
+                <ng-container *ngIf="progress == 'two'">
+                    <p class="rw-typo-headline1">[{{ center.name }}]</p>
+                    <p class="rw-typo-headline1">
+                        {{ type == 'contract_type_new' ? '신규 등록 계약서' : '재등록 계약서' }}
+                    </p>
+                </ng-container>
+
+                <div class="register-ml-progress">
+                    <div class="progress">
+                        <span class="circle_one_on" [class.hide]="progress == 'two'"></span>
+                        <span class="circle_one_off" [class.hide]="progress == 'one'"></span>
+                        <div class="rw-typo-subtext0" [class.not-in-progress]="progress == 'two'">
+                            회원권 / 락커 등록
+                        </div>
+                    </div>
+                    <div class="progress__line"></div>
+                    <div class="progress">
+                        <span class="circle_two_on" [class.hide]="progress == 'one'"></span>
+                        <span class="circle_two_off" [class.hide]="progress == 'two'"></span>
+                        <div class="rw-typo-subtext0" [class.not-in-progress]="progress == 'one'">계약서 작성</div>
+                    </div>
+                </div>
+            </div>
+
+            <!--            <div-->
+            <!--                class="cg-typo-subtext close-button"-->
+            <!--                rw-button-->
+            <!--                rwButtonWidth="85"-->
+            <!--                rwButtonHeight="40"-->
+            <!--                rwButtonBorderColor="var(&#45;&#45;font-color)"-->
+            <!--                (click)="exitPage()"-->
+            <!--            >-->
+            <!--                <span class="mdi mdi-close"></span>-->
+            <!--                <span>닫기</span>-->
+            <!--            </div>-->
+        </header>
+
+        <main id="progress-one" [style.display]="progress == 'one' ? 'block' : 'none'">
+            <div class="main-wrapper">
+                <article class="membership-and-locker">
+                    <ng-template
+                        #none_membership_locker
+                        [ngIf]="(mlItems$ | async)['length'] == 0 && type == 'contract_type_new'"
+                        [ngIfElse]="presence_membership_locker"
+                    >
+                        <div class="empty-memberhip-card">
+                            <div class="rw-typo-title2 title">회원권</div>
+                            <div class="membership-content" (click)="checkMembershipItemEmpty()">
+                                <div class="card-icon">
+                                    <img src="assets/icons/etc/ticket-white.svg" />
+                                </div>
+                                <div class="card-texts">
+                                    <div class="rw-typo-subtext0-regular top">회원권</div>
+                                    <div class="rw-typo-bodytext0 bottom">
+                                        <span>등록하실 회원권을 선택해주세요.</span>
+                                        <img src="assets/icons/etc/short_right_arrow_darkgrey.svg" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="empty-locker-card">
+                            <div class="rw-typo-title2 title">락커</div>
+                            <div class="locker-content" (click)="checkLockerItemEmpty()">
+                                <div class="card-icon">
+                                    <img src="assets/icons/etc/locker-white.svg" />
+                                </div>
+                                <div class="card-texts">
+                                    <div class="rw-typo-subtext0-regular top">락커</div>
+                                    <div class="rw-typo-bodytext0 bottom">
+                                        <span>등록하실 락커를 선택해주세요.</span>
+                                        <img src="assets/icons/etc/short_right_arrow_darkgrey.svg" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-template>
+
+                    <ng-template #presence_membership_locker>
+                        <div class="presence-membership-locker">
+                            <div class="membership-locker-buttons">
+                                <div
+                                    class="add-membership-ticket-button"
+                                    rw-button
+                                    rwButtonColor="var(--white)"
+                                    (click)="checkMembershipItemEmpty()"
+                                >
+                                    <span class="rw-typo-title2">회원권 추가</span>
+                                    <img src="assets/icons/etc/plus.svg" />
+                                </div>
+                                <div
+                                    class="add-locker-button"
+                                    rw-button
+                                    rwButtonColor="var(--white)"
+                                    (click)="checkLockerItemEmpty()"
+                                >
+                                    <span class="rw-typo-title2">락커 추가</span>
+                                    <img src="assets/icons/etc/plus.svg" />
+                                </div>
+                            </div>
+
+                            <ng-container
+                                *ngIf="
+                                    type == 'contract_type_new' ||
+                                    (type == 'contract_type_renewal' && (isRenewalMLLoading$ | async) == 'done')
+                                "
+                            >
+                                <div class="window-item" *ngFor="let item of mlItems$ | async; let idx = index">
+                                    <ng-container class="window-item" *ngIf="item.type == 'membership'">
+                                        <db-membership-ticket-window
+                                            [membershipState]="item"
+                                            [index]="idx"
+                                            [instructors]="instructors$ | async"
+                                            (onRemoveMlItem)="onMLItemRemove($event)"
+                                            (onSaveMlItem)="onMemberhispTicketItemSave($event)"
+                                            (onModifyMlItem)="onMemberhispTicketItemModify($event)"
+                                            (onGetLinkedClassFinish)="onMembershipTicketFinishGetLinkedClass($event)"
+                                        ></db-membership-ticket-window>
+                                    </ng-container>
+                                    <ng-container class="window-item" *ngIf="item.type == 'locker'">
+                                        <db-locker-window
+                                            [lockerState]="item"
+                                            [index]="idx"
+                                            [Instructors]="instructors$ | async"
+                                            (onRemoveMlItem)="onMLItemRemove($event)"
+                                            (onSaveMlItem)="onLockerItemSave($event)"
+                                            (onModifyMlItem)="onLockerItemModify($event)"
+                                        ></db-locker-window>
+                                    </ng-container>
+                                </div>
+                            </ng-container>
+                            <ng-container
+                                *ngIf="type == 'contract_type_renewal' && (isRenewalMLLoading$ | async) == 'pending'"
+                            >
+                                <ngx-skeleton-loader
+                                    appearance="line"
+                                    count="1"
+                                    [theme]="{ width: '585px', height: '978px', 'border-radius': '7px', margin: '0' }"
+                                ></ngx-skeleton-loader>
+                            </ng-container>
+                        </div>
+                    </ng-template>
+                </article>
+
+                <aside class="l-payment-information">
+                    <div class="payment-information-wrapper">
+                        <div class="pay-information">
+                            <div class="total-price">
+                                <span class="rw-typo-subtext0-regular total-price-title">총 결제 금액</span>
+                                <span class="rw-typo-headline1">{{ totalSum | numberWithCommas }}원</span>
+                            </div>
+
+                            <div class="input-list">
+                                <div
+                                    *ngFor="let item of totalPrice$ | async | keyvalue: originalOrder"
+                                    class="rw-typo-subtext0-regular input-title"
+                                >
+                                    <span class="rw-typo-bodytext1_darkgrey">
+                                        {{ item.value.name }}
+                                    </span>
+                                    <span class="rw-typo-bodytext0-darkgrey-bold">
+                                        {{ item.value.price | numberWithCommas }}원
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="rw-typo-subtext0-regular date-text">결제일 : {{ today }}</div>
+                        </div>
+
+                        <rw-button
+                            #next_bt
+                            [width]="'238'"
+                            [height]="'50'"
+                            [color]="'var(--red)'"
+                            [loadingName]="'next_bt'"
+                            [borderRadius]="'5px'"
+                            [disabled]="!isAllMlItemDone"
+                            (onClick)="isAllMlItemDone && setProgress('two')"
+                        >
+                            <span class="register-ml-button"> 다음 </span>
+                        </rw-button>
+                    </div>
+                </aside>
+            </div>
+        </main>
+
+        <main id="progress-two" [style.display]="progress == 'two' ? 'block' : 'none'">
+            <div class="main-wrapper">
+                <article class="contract-body">
+                    <div class="l-user-basic-info-box">
+                        <p class="rw-typo-title2 contract__title">회원 기본 정보</p>
+                        <div class="user-basic-info-box">
+                            <div class="l-avatar">
+                                <rw-avatar
+                                    size="83"
+                                    fontSize="16"
+                                    [image]="curUser?.picture"
+                                    [backgroundColor]="curUser?.color"
+                                    [text]="curUser?.name"
+                                ></rw-avatar>
+                                <p class="rw-typo-title1">{{ curUser?.name }}</p>
+                            </div>
+                            <div class="user-basic-info">
+                                <div class="l-info">
+                                    <div class="title">회원번호</div>
+                                    <div class="content">{{ curUser?.membership_number }}</div>
+                                </div>
+                                <div class="l-info">
+                                    <div class="title">이메일</div>
+                                    <div class="content">{{ curUser?.email ?? '-' }}</div>
+                                </div>
+                                <div class="l-info">
+                                    <div class="title">전화번호</div>
+                                    <div class="content">
+                                        {{ curUser?.phone_number | phoneNumber }}
+                                    </div>
+                                </div>
+                                <div class="l-info">
+                                    <div class="title">생년월일</div>
+                                    <div class="content">
+                                        <span>
+                                            {{ (curUser?.birth_date | dashToDot) ?? '-' }}
+                                            ({{ (curUser?.birth_date | birthDate: '세') ?? '-세' }},
+                                            {{
+                                                curUser?.sex == 'male'
+                                                    ? '남성'
+                                                    : curUser?.sex == 'female'
+                                                    ? '여성'
+                                                    : '-'
+                                            }})
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="l-ml-registered">
+                        <p class="rw-typo-title2 contract__title">회원권 / 락커 정보</p>
+                        <div class="ml-registered" *ngFor="let item of mlItems$ | async; let idx = index">
+                            <ng-container class="window-item" *ngIf="item.type == 'membership'">
+                                <db-membership-ticket-window-registered
+                                    [membershipState]="item"
+                                ></db-membership-ticket-window-registered>
+                            </ng-container>
+                            <ng-container class="window-item" *ngIf="item.type == 'locker'">
+                                <db-locker-window-registered [lockerState]="item"></db-locker-window-registered>
+                            </ng-container>
+                        </div>
+                    </div>
+                    <div class="l-payment-info">
+                        <p class="rw-typo-title2 contract__title">결제 정보</p>
+                        <div class="payment-info">
+                            <p class="payment-info__total-price rw-typo-title2">
+                                총 {{ totalSum | numberWithCommas }}원 결제
+                            </p>
+                            <div class="bar"></div>
+                            <div class="payment-info__l-price-item">
+                                <div
+                                    class="payment-info__price-item"
+                                    *ngFor="let item of totalPrice$ | async | keyvalue: originalOrder"
+                                >
+                                    <p class="rw-typo-subtext0-regular">{{ item.value.name }}</p>
+                                    <p class="rw-typo-bodytext0-regular">{{ item.value.price | numberWithCommas }}원</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="l-terms">
+                        <p class="rw-typo-title2 contract__title">이용 약관</p>
+                        <textarea
+                            #terms
+                            [readonly]="true"
+                            [style.display]="center.contract_terms ? 'block' : 'none'"
+                            class="terms rw-typo-bodytext0-regular thin-scroll-y"
+                            [(ngModel)]="center.contract_terms"
+                        ></textarea>
+                        <div *ngIf="!center.contract_terms" class="no-terms rw-typo-bodytext0-regular">
+                            [센터 설정 > 약관 설정]에서 이용 약관을 작성해주세요.
+                        </div>
+                    </div>
+                    <div class="l-terms">
+                        <p class="rw-typo-title2 contract__title">특이 사항</p>
+                        <textarea
+                            class="terms memo-terms rw-typo-bodytext0-regular thin-scroll-y"
+                            rw-TextareaInfiniteResize
+                            [placeholder]="'계약 시 발생한 특이 사항에 대해 입력해주세요.'"
+                            [(ngModel)]="memoTerms"
+                        ></textarea>
+                    </div>
+                </article>
+
+                <aside class="l-contract-sign">
+                    <div class="contract-sign-wrapper">
+                        <p class="rw-typo-title2 contract__title">서명</p>
+                        <db-contract-sign-box
+                            [signData]="inputSignData"
+                            [contractDate]="today"
+                            [contractorName]="curUser?.name"
+                            (onSign)="onContractSign($event)"
+                        ></db-contract-sign-box>
+                        <div class="l-button">
+                            <rw-button
+                                #prev_bt
+                                [width]="'70'"
+                                [height]="'50'"
+                                [color]="'transparent'"
+                                [fontColor]="'var(--darkgrey)'"
+                                [borderRadius]="'5px'"
+                                [padding]="'0'"
+                                (onClick)="setProgress('one')"
+                            >
+                                <div class="register-ml-button">
+                                    <span class="left-arrow"></span>
+                                    <span>뒤로</span>
+                                </div> </rw-button
+                            ><rw-button
+                                #register_ml_bt
+                                [width]="'158'"
+                                [height]="'50'"
+                                [color]="'var(--red)'"
+                                [loadingName]="'register_ml'"
+                                [borderRadius]="'5px'"
+                                (onClick)="registerMLs($event)"
+                            >
+                                <span class="register-ml-button">
+                                    {{ type == 'contract_type_new' ? '모두 등록하기 ' : '저장하기' }}
+                                </span>
+                            </rw-button>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </main>
+    </section>
+</section>
+
+<db-lockerSelectModal
+    [(visible)]="doShowLockerSelectModal"
+    [lockerListInit]="true"
+    [choseLockers]="choseLocker$ | async"
+    (confirm)="onLockerSelected($event)"
+    (cancel)="closeLockerSelectModal()"
+    (onItemClick)="onLockerItemClick($event)"
+></db-lockerSelectModal>
+
+<db-membershipTicketListModal
+    [(visible)]="doShowMembershipListModal"
+    [membershipItems]="membershipItems$ | async"
+    (confirm)="onMembershipTicketSelected($event)"
+    (cancel)="closeMembershipListModal()"
+></db-membershipTicketListModal>
+
+<rw-modal
+    [(visible)]="doShowLockerEmpty"
+    [data]="showLockerEmptyData"
+    (cancel)="closeShowLockerEmpty()"
+    (confirm)="onLockerEmtpyConfirm()"
+></rw-modal>
+<rw-modal
+    [(visible)]="doShowMembershipEmpty"
+    [data]="showMembershipEmtpyData"
+    (cancel)="closeShowMembershipEmpty()"
+    (confirm)="onMembershipEmtpyConfirm()"
+></rw-modal>

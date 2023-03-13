@@ -36,7 +36,7 @@
                     rwButtonHeight="45"
                     rwButtonColor="var(--red)"
                     rwButtonFontColor="var(--white)"
-                    (click)="toggleDirectRegisterMemberFullModal()"
+                    (click)="routeToDirectRegisterMember()"
                 >
                     신규 회원 등록
                 </div>
@@ -217,7 +217,7 @@
                         <div
                             class="rw-typo-bodytext0-bold register-locker-membership-button"
                             rw-button
-                            (click)="toggleRegisterMLFullModal()"
+                            (click)="routeToDirectRegisterMembershipLockerPage()"
                         >
                             회원권 / 락커 등록하기
                         </div>
@@ -242,26 +242,6 @@
     (cancel)="closeChangeRoleModal()"
     (confirm)="confirmChangeRoleModal()"
 ></rw-modal>
-
-<db-register-membership-locker-fullmodal
-    [(visible)]="doShowRegisterMLFullModal"
-    [type]="'contract_type_new'"
-    (close)="toggleRegisterMLFullModal()"
-    (finishRegister)="onFinishRegisterML()"
-    [curUser]="curCenterUser"
-></db-register-membership-locker-fullmodal>
-
-<db-register-member-modal
-    [(visible)]="doShowRegisterMemberModal"
-    (cancel)="closeRegisterMemberModal()"
-    (onDirectRegister)="toggleDirectRegisterMemberFullModal()"
-></db-register-member-modal>
-
-<db-direct-register-member-fullmodal
-    [(visible)]="doShowDirectRegisterMemberFullModal"
-    (close)="closeDirectRegisterMemberFullModal()"
-    (finishRegister)="whenFinishRegisterMember($event)"
-></db-direct-register-member-fullmodal>
 
 <db-change-user-name-modal
     [(visible)]="doShowChangeNameModal"

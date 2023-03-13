@@ -15,6 +15,7 @@ import * as DashboardActions from '@centerStore/actions/sec.dashboard.actions'
 import { showToast } from '@appStore/actions/toast.action'
 import { Contract } from '@schemas/contract'
 import { SignatureConfirmOutput } from '@shared/components/common/signature-pad-modal/signature-pad-modal.component'
+import { Router } from '@angular/router'
 
 @Component({
     selector: 'db-user-detail-contract',
@@ -29,7 +30,8 @@ export class UserDetailContractComponent implements OnInit {
         private nxStore: Store,
         private wordService: WordService,
         private storageService: StorageService,
-        private fileService: FileService
+        private fileService: FileService,
+        private router: Router
     ) {}
 
     ngOnInit(): void {}
@@ -70,11 +72,12 @@ export class UserDetailContractComponent implements OnInit {
     }
 
     // check contract modal vars and methods
-    public isCCFullModalVisible = false
-    openCCFullModal() {
-        this.isCCFullModalVisible = true
-    }
-    closeCCFullModal() {
-        this.isCCFullModalVisible = false
+    routeToCheckContractPage() {
+        this.router.navigateByUrl(`${this.center.address}/dashboard/${this.curUserData.user.id}/check-contract`, {
+            state: {
+                curUser: this.curUserData.user,
+                curContract: this.selectedContract,
+            },
+        })
     }
 }

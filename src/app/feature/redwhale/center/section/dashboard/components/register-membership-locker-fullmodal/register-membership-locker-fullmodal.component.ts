@@ -28,7 +28,6 @@ import { ClickEmitterType } from '@schemas/components/button'
 // component Store
 import { RegisterMembershipLockerFullmodalStore, stateInit } from './componentStore/register-ml-fullmodal.store'
 import { Observable, Subject } from 'rxjs'
-import { takeUntil } from 'rxjs/operators'
 //
 import { CenterUser } from '@schemas/center-user'
 import { Center } from '@schemas/center'
@@ -50,7 +49,6 @@ import { UserMembership } from '@schemas/user-membership'
 import { Store } from '@ngrx/store'
 import { Loading } from '@schemas/store/loading'
 import * as CenterCommonSelector from '@centerStore/selectors/center.common.selector'
-import { ClassItem } from '@schemas/class-item'
 
 type Progress = 'one' | 'two'
 

@@ -90,37 +90,8 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     // register modal vars
-    public doShowRegisterMemberModal = false
-    toggleRegisterMemberModal() {
-        this.doShowRegisterMemberModal = !this.doShowRegisterMemberModal
-    }
-    closeRegisterMemberModal() {
-        this.doShowRegisterMemberModal = false
-    }
-
-    public doShowDirectRegisterMemberFullModal = false
-    toggleDirectRegisterMemberFullModal() {
-        this.doShowDirectRegisterMemberFullModal = !this.doShowDirectRegisterMemberFullModal
-    }
-    whenFinishRegisterMember(value: OutputType) {
-        this.nxStore.dispatch(
-            DashboardActions.startDirectRegisterMember({
-                centerId: this.center.id,
-                reqBody: value.reqBody,
-                imageFile: value.file,
-                callback: () => {
-                    this.nxStore.dispatch(CenterCommonActions.startGetMembers({ centerId: this.center.id }))
-                    this.nxStore.dispatch(DashboardActions.startGetUsersByCategory({ centerId: this.center.id }))
-                    value.cb ? value.cb() : null
-                    this.toggleDirectRegisterMemberFullModal()
-                    this.toggleRegisterMemberModal()
-                },
-            })
-        )
-    }
-    closeDirectRegisterMemberFullModal() {
-        this.toggleDirectRegisterMemberFullModal()
-        this.toggleRegisterMemberModal()
+    routeToDirectRegisterMember() {
+        this.router.navigateByUrl(`${this.center.address}/dashboard/register-member`, {})
     }
 
     //

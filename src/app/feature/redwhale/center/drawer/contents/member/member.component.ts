@@ -162,50 +162,20 @@ export class MemberComponent implements OnInit, OnDestroy {
         this.router.navigate(['./community'], { relativeTo: this.activatedRoute })
     }
 
-    // register modal vars and funcs
-    public doShowRegisterMemberModal = false
-    toggleRegisterMemberModal() {
-        this.doShowRegisterMemberModal = !this.doShowRegisterMemberModal
-    }
-    closeRegisterMemberModal() {
-        this.doShowRegisterMemberModal = false
-    }
-
     // register member vars and funcs
-    public doShowDirectRegisterMemberFullModal = false
-    toggleDirectRegisterMemberFullModal() {
-        this.doShowDirectRegisterMemberFullModal = !this.doShowDirectRegisterMemberFullModal
-    }
-    whenFinishRegisterMember(value: OutputType) {
-        this.nxStore.dispatch(
-            DashboardActions.startDirectRegisterMember({
-                centerId: this.center.id,
-                reqBody: value.reqBody,
-                imageFile: value.file,
-                callback: () => {
-                    this.nxStore.dispatch(CenterCommonActions.startGetMembers({ centerId: this.center.id }))
-                    this.nxStore.dispatch(DashboardActions.startGetUsersByCategory({ centerId: this.center.id }))
-                    value.cb ? value.cb() : null
-                    this.toggleDirectRegisterMemberFullModal()
-                    // this.toggleRegisterMemberModal()
-                },
-            })
-        )
-    }
-    closeDirectRegisterMemberFullModal() {
-        this.toggleDirectRegisterMemberFullModal()
-        // this.toggleRegisterMemberModal()
+    routeToDirectRegisterMember() {
+        this.router.navigateByUrl(`${this.center.address}/dashboard/register-member`, {})
     }
 
     // register membership locker full modal vars and funcs
-    public doShowRegisterMLFullModal = false
-    toggleRegisterMLFullModal() {
-        this.doShowRegisterMLFullModal = !this.doShowRegisterMLFullModal
+    routeToDirectRegisterMembershipLockerPage() {
+        this.router.navigateByUrl(`${this.center.address}/dashboard/register-member`, {
+            state: {
+                curUser: this.curUserData.user,
+                type: 'contract_type_new',
+            },
+        })
     }
-    onFinishRegisterML() {
-        this.toggleRegisterMLFullModal()
-    }
-
     // change name modal vars and funcs
     public doShowChangeNameModal = false
     public userNameForModal = ''

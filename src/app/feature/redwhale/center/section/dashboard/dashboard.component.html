@@ -12,7 +12,7 @@
             rwButtonHeight="43"
             rwButtonColor="var(--red)"
             rwButtonFontColor="var(--white)"
-            (click)="toggleDirectRegisterMemberFullModal()"
+            (click)="routeToDirectRegisterMember()"
         >
             신규 회원 등록
         </div>
@@ -28,14 +28,14 @@
                 [selectedUserListsHolding]="selectedUserListsHolding$ | async"
                 [curUserData]="curUserData$ | async"
                 [isLoading]="isLoading$ | async"
-                (onDirectRegisterMember)="toggleDirectRegisterMemberFullModal()"
+                (onDirectRegisterMember)="routeToDirectRegisterMember()"
             ></db-member-list>
         </section>
 
         <section class="l-member-detail">
             <div class="member-detail__header rw-typo-title1">
                 회원 상세 정보
-                
+
                 <div
                     *ngIf="(curUserData$ | async)?.user && isDeletableMemberUser"
                     class="delete-member-button rw-typo-bodytext2-bold_darkgrey"
@@ -49,24 +49,10 @@
                     회원 삭제
                 </div>
             </div>
-            <db-member-detail
-                [curUserListSelect]="(curUserListSelect$ | async)"
-            ></db-member-detail>
+            <db-member-detail [curUserListSelect]="curUserListSelect$ | async"></db-member-detail>
         </section>
     </main>
 </article>
-
-<!--<db-register-member-modal-->
-<!--    [(visible)]="doShowRegisterMemberModal"-->
-<!--    (cancel)="closeRegisterMemberModal()"-->
-<!--    (onDirectRegister)="toggleDirectRegisterMemberFullModal()"-->
-<!--&gt;</db-register-member-modal>-->
-
-<db-direct-register-member-fullmodal
-    [(visible)]="doShowDirectRegisterMemberFullModal"
-    (close)="closeDirectRegisterMemberFullModal()"
-    (finishRegister)="whenFinishRegisterMember($event)"
-></db-direct-register-member-fullmodal>
 
 <rw-modal
     [(visible)]="showDeleteMember"

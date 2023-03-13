@@ -26,6 +26,7 @@ import * as DashboardReducer from '@centerStore/reducers/sec.dashboard.reducer'
 import * as DashboardActions from '@centerStore/actions/sec.dashboard.actions'
 import * as DashboardSelector from '@centerStore/selectors/sec.dashboard.selector'
 import { showToast } from '@appStore/actions/toast.action'
+import { Router } from '@angular/router'
 @Component({
     selector: 'db-user-detail-payment',
     templateUrl: './user-detail-payment.component.html',
@@ -41,7 +42,8 @@ export class UserDetailPaymentComponent implements OnInit {
         private centerUsersLockerService: CenterUsersLockerService,
         private storageService: StorageService,
         private wordService: WordService,
-        private dashboardHelper: DashboardHelperService
+        private dashboardHelper: DashboardHelperService,
+        private router: Router
     ) {}
 
     ngOnInit(): void {}
@@ -74,12 +76,15 @@ export class UserDetailPaymentComponent implements OnInit {
     }
 
     // modify pyament fullmodal
-    public showModifyPaymentFullModal = false
-    toggleModifyPaymentFullModal() {
-        this.showModifyPaymentFullModal = !this.showModifyPaymentFullModal
-    }
-    confirmModifyPayment() {
-        this.showModifyPaymentFullModal = false
+    routeToModifyPaymentPage() {
+        this.router.navigateByUrl(`${this.center.address}/dashboard/${this.curUserData.user.id}/modify-payment`, {
+            state: {
+                curUser: this.curUserData.user,
+                userPayment: this.selectedPayment,
+                userMembership: this.selectedUserMembership,
+                userLocker: this.selectedUserLocker,
+            },
+        })
     }
 
     // charge modal

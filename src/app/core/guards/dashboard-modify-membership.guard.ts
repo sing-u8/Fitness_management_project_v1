@@ -4,16 +4,14 @@ import { Observable } from 'rxjs'
 import { Router } from '@angular/router'
 import { Location } from '@angular/common'
 
-import { CenterUser } from '@schemas/center-user'
-import { ContractTypeCode } from '@schemas/contract'
-import { UserMembership } from '@schemas/user-membership'
-
 import _ from 'lodash'
+import { CenterUser } from '@schemas/center-user'
+import { UserMembership } from '@schemas/user-membership'
 
 @Injectable({
     providedIn: 'root',
 })
-export class DashboardRegisterMlGuard implements CanActivate {
+export class DashboardModifyMembershipGuard implements CanActivate {
     public routerState: any
     constructor(private location: Location, private router: Router) {}
     canActivate(
@@ -31,13 +29,9 @@ export class DashboardRegisterMlGuard implements CanActivate {
 
     isActivate() {
         this.routerState = this.router.getCurrentNavigation().extras.state
-        const curUser: CenterUser = this.routerState?.curUser
-        const type: ContractTypeCode = this.routerState?.type
-        const rerUserMembership: UserMembership = this.routerState?.rerUserMembership
-        console.log('DB registerML guard -- in isActivate : ', this.router.getCurrentNavigation().extras.state)
+        const centerUser: CenterUser = this.routerState?.centerUser
+        const userMembership: UserMembership = this.routerState?.userMembership
 
-        if (!_.isEmpty(curUser) && type == 'contract_type_new') {
-            return true
-        } else return !_.isEmpty(curUser) && type == 'contract_type_renewal' && !_.isEmpty(rerUserMembership)
+        return !_.isEmpty(centerUser) && !_.isEmpty(userMembership)
     }
 }

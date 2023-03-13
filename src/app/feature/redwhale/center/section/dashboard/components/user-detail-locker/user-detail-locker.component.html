@@ -1,6 +1,5 @@
 <section class="user-detail-locker">
-
-    <header class='rw-typo-subtext1'>
+    <header class="rw-typo-subtext1">
         <div class="col1">카테고리</div>
         <div class="col2">락커</div>
         <div class="col3">기간</div>
@@ -9,12 +8,12 @@
     <main class="thin-scroll-y-overlay2">
         <ng-template #membership_emtpy [ngIf]="curUserData.lockers.length == 0" [ngIfElse]="membership_exist">
             <div class="center-empty-guide">
-                <img src="assets/icons/etc/empty_screen.svg">
+                <img src="assets/icons/etc/empty_screen.svg" />
                 <p>아직 등록된 락커가 없어요.</p>
                 <p>회원님에게 회원권 / 락커를 등록해주세요!</p>
                 <div class="center-empty-button" (click)="onRegisterML.emit()">
                     <p>회원권 / 락커 등록하기</p>
-                    <img src="assets/icons/etc/short_right_arrow_grey.svg">
+                    <img src="assets/icons/etc/short_right_arrow_grey.svg" />
                 </div>
             </div>
         </ng-template>
@@ -22,24 +21,25 @@
             <db-user-detail-locker-item
                 *ngFor="let item of curUserData.lockers"
                 [locker]="item"
-                (onUpdateInfo) = 'setSelectedUserLocker(item); toggleModifyLockerFullModal()'
-                (onHold) = 'toggleHoldModal();setSelectedUserLocker(item) '
-                (onEmpty) = 'setSelectedUserLocker(item);openEmptyModal()'
-                (onRefund) = 'setSelectedUserLocker(item); toggleShowRefundModal()'
-                (onRemoveRecord) = 'setSelectedUserLocker(item); toggleRemoveModal()'
-                (onUpdateHolding)="setSelectedUserLocker(item, $event.holdingIdx);toggleUpdateHoldModal($event.holdingIdx)"
+                (onUpdateInfo)="setSelectedUserLocker(item); routeToModifyLocker()"
+                (onHold)="toggleHoldModal(); setSelectedUserLocker(item)"
+                (onEmpty)="setSelectedUserLocker(item); openEmptyModal()"
+                (onRefund)="setSelectedUserLocker(item); toggleShowRefundModal()"
+                (onRemoveRecord)="setSelectedUserLocker(item); toggleRemoveModal()"
+                (onUpdateHolding)="
+                    setSelectedUserLocker(item, $event.holdingIdx); toggleUpdateHoldModal($event.holdingIdx)
+                "
                 (onRemoveHolding)="setSelectedUserLocker(item, $event.holdingIdx); toggleRemoveHoldingModal()"
             ></db-user-detail-locker-item>
         </ng-template>
-
     </main>
 </section>
 
 <rw-dashboard-charge-modal
-    [(visible)] = "showChargeModal"
-    [chargeMode] = "chargeMode"
-    (cancel) = "toggleChargeModal()"
-    (confirm) = "onChargeConfirm($event)"
+    [(visible)]="showChargeModal"
+    [chargeMode]="chargeMode"
+    (cancel)="toggleChargeModal()"
+    (confirm)="onChargeConfirm($event)"
 ></rw-dashboard-charge-modal>
 
 <db-hold-modal
@@ -62,15 +62,6 @@
     (cancel)="toggleRemoveModal()"
     (confirm)="onConfirmRemove()"
 ></rw-modal>
-
-
-<db-modify-locker-fullmodal
-    [(visible)]="showModifyLockerFullModal"
-    [userLocker]="selectedUserLocker"
-    [centerUser] = "curUserData?.user"
-    (close)="toggleModifyLockerFullModal()"
-    (confirm) = "confirmModifyLocker()"
-></db-modify-locker-fullmodal>
 
 <rw-modal
     [(visible)]="showRemoveHoldModal"

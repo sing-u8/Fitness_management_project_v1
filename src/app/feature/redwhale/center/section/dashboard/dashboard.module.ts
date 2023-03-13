@@ -76,6 +76,12 @@ import { ChangeUserEmailModalComponent } from './components/change-user-email-mo
 import { ChangeUserPhoneNumberModalComponent } from './components/change-user-phone-number-modal/change-user-phone-number-modal.component'
 import { ChangeUserBirthDateModalComponent } from './components/change-user-birth-date-modal/change-user-birth-date-modal.component'
 import { RegisterMembershipLockerPageComponent } from './register-membership-locker-page/register-membership-locker-page.component'
+import { TransferMembershipPageComponent } from './transfer-membership-page/transfer-membership-page.component'
+import { ModifyMembershipPageComponent } from './modify-membership-page/modify-membership-page.component'
+import { ModifyLockerPageComponent } from './modify-locker-page/modify-locker-page.component'
+import { DirectRegisterMemberPageComponent } from './direct-register-member-page/direct-register-member-page.component'
+import { CheckContractPageComponent } from './check-contract-page/check-contract-page.component'
+import { ModifyPaymentPageComponent } from './modify-payment-page/modify-payment-page.component'
 
 @NgModule({
     declarations: [
@@ -137,6 +143,12 @@ import { RegisterMembershipLockerPageComponent } from './register-membership-loc
         ChangeUserPhoneNumberModalComponent,
         ChangeUserBirthDateModalComponent,
         RegisterMembershipLockerPageComponent,
+        TransferMembershipPageComponent,
+        ModifyMembershipPageComponent,
+        ModifyLockerPageComponent,
+        DirectRegisterMemberPageComponent,
+        CheckContractPageComponent,
+        ModifyPaymentPageComponent,
     ],
     imports: [
         DashboardRoutingModule,

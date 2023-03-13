@@ -22,11 +22,6 @@ const routes: Routes = [
                 loadChildren: () => import('./section/dashboard/dashboard.module').then((m) => m.DashboardModule),
             },
             {
-                path: 'dashboard/:id/register-membership-locker',
-                canActivate: [DashboardRegisterMlGuard],
-                component: RegisterMembershipLockerPageComponent,
-            },
-            {
                 path: 'schedule',
                 canActivate: [CenterMemberBlockGuard],
                 loadChildren: () => import('./section/schedule/schedule.module').then((m) => m.ScheduleModule),
@@ -59,14 +54,6 @@ const routes: Routes = [
             },
         ],
     },
-    // {
-    //     path: 'dashboard/:membershipId',
-    //     canActivate: [CenterMemberBlockGuard],
-    //     loadChildren: () =>
-    //         import('./membership-locker-full-modal/membership-locker-full-modal.module').then(
-    //             (m) => m.MembershipLockerFullModalModule
-    //         ),
-    // },
     {
         path: 'touch-pad',
         component: TouchPadComponent,

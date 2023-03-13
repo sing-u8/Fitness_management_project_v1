@@ -1,5 +1,5 @@
 <section class="user-detail-payment">
-    <header class='rw-typo-subtext1'>
+    <header class="rw-typo-subtext1">
         <div class="col1">날짜</div>
         <div class="col2">구분</div>
         <div class="col3">회원권/락커명</div>
@@ -7,59 +7,43 @@
         <div class="col5">결제 금액</div>
     </header>
     <main class="thin-scroll-y-overlay2">
-
-        <ng-template
-            #payment_emtpy
-            [ngIf] = "curUserData.payments.length == 0"
-            [ngIfElse]="payment_exist"
-        >
+        <ng-template #payment_emtpy [ngIf]="curUserData.payments.length == 0" [ngIfElse]="payment_exist">
             <div class="center-empty-guide">
-                <img src="assets/icons/etc/empty_screen.svg">
+                <img src="assets/icons/etc/empty_screen.svg" />
                 <p>아직 결제하신 내역이 없어요.</p>
                 <p>회원님에게 회원권 / 락커를 등록해주세요!</p>
                 <div class="center-empty-button" (click)="onRegisterML.emit()">
                     <p>회원권 / 락커 등록하기</p>
-                    <img src="assets/icons/etc/short_right_arrow_grey.svg">
+                    <img src="assets/icons/etc/short_right_arrow_grey.svg" />
                 </div>
             </div>
         </ng-template>
         <ng-template #payment_exist>
             <db-user-detail-payment-item
-                *ngFor = "let item of curUserData.payments"
+                *ngFor="let item of curUserData.payments"
                 [payment]="item"
-                (onUpdatePayment)="setSelectedPayment(item); getPaymentLockerOrMembership(); toggleModifyPaymentFullModal()"
-                (onUpdateTransfer)="setSelectedPayment(item);openChargeModal('modify_transfer_payment')"
+                (onUpdatePayment)="setSelectedPayment(item); getPaymentLockerOrMembership(); routeToModifyPaymentPage()"
+                (onUpdateTransfer)="setSelectedPayment(item); openChargeModal('modify_transfer_payment')"
                 (onUpdateRefund)="setSelectedPayment(item); openChargeModal('modify_refund_payment')"
                 (onRemovePayment)="setSelectedPayment(item); openRemovePaymentModal()"
             ></db-user-detail-payment-item>
         </ng-template>
-
     </main>
 </section>
 
-<db-modify-payment-fullmodal
-    [(visible)]="showModifyPaymentFullModal"
-    [userPayment]="selectedPayment"
-    [userMembership]="selectedUserMembership"
-    [userLocker]="selectedUserLocker"
-    [curUser] = "curUserData?.user"
-    (close)="toggleModifyPaymentFullModal()"
-    (finishModify) = "confirmModifyPayment()"
-></db-modify-payment-fullmodal>
-
 <rw-dashboard-charge-modal
-    [(visible)] = "showChargeModal"
-    [chargeMode] = "chargeMode"
+    [(visible)]="showChargeModal"
+    [chargeMode]="chargeMode"
     [inputs]="chargeInput"
-    (cancel) = "hideChargeModal()"
-    (confirm) = "onChargeConfirm($event)"
+    (cancel)="hideChargeModal()"
+    (confirm)="onChargeConfirm($event)"
 ></rw-dashboard-charge-modal>
 
 <db-detail-item-remove-modal
-    [(visible)] = "showRemovePaymentModal"
+    [(visible)]="showRemovePaymentModal"
     [userName]="curUserData?.user?.name"
     [item]="selectedPayment"
     [type]="'payment'"
-    (cancel) = "onRemovePaymentCancel()"
-    (confirm) = "onRemovePaymentConfirm($event)"
+    (cancel)="onRemovePaymentCancel()"
+    (confirm)="onRemovePaymentConfirm($event)"
 ></db-detail-item-remove-modal>

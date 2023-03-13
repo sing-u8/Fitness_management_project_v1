@@ -1,0 +1,99 @@
+<section class="modify-ml-fullmodal-wrapper user-select-none" #modalWrapperElement>
+    <section class="modify-membership-locker user-select-none thin-scroll-x-overlay thin-scroll-y">
+        <header>
+            <div class="header-text-container">
+                <ng-template
+                    #payment_membership_title
+                    [ngIf]="userPayment?.user_membership_id"
+                    [ngIfElse]="payment_locker_title"
+                >
+                    <p class="rw-typo-headline1">{{ userPayment?.user_membership_name }}</p>
+                </ng-template>
+                <ng-template #payment_locker_title>
+                    <p class="rw-typo-headline1">{{ userPayment?.user_locker_name }}</p>
+                </ng-template>
+                <p class="rw-typo-headline1">결제 정보를 수정해보세요.</p>
+            </div>
+
+            <div
+                class="cg-typo-subtext close-button"
+                rw-button
+                rwButtonWidth="85"
+                rwButtonHeight="40"
+                rwButtonBorderColor="var(--font-color)"
+                (click)="closeModal()"
+            >
+                <span class="mdi mdi-close"></span>
+                <span>닫기</span>
+            </div>
+        </header>
+
+        <main id="l-main">
+            <div class="main-wrapper">
+                <article class="membership-and-locker">
+                    <ng-template
+                        #payment_membership
+                        [ngIf]="userPayment?.user_membership_id"
+                        [ngIfElse]="payment_locker"
+                    >
+                        <db-payment-membership-window
+                            [changeTicketMethod]="cmpStore.setMembershipTicket"
+                            [membershipTicket]="membershipTicket$ | async"
+                            [instructors]="instructors$ | async"
+                            (onPriceChange)="onMemershipTicketChange($event)"
+                        ></db-payment-membership-window>
+                    </ng-template>
+
+                    <ng-template #payment_locker>
+                        <db-payment-locker-window
+                            [changeTicketMethod]="cmpStore.setLockerTicket"
+                            [lockerTicket]="lockerTicket$ | async"
+                            [instructors]="instructors$ | async"
+                            (onPriceChange)="onLockerTicketChange($event)"
+                        ></db-payment-locker-window>
+                    </ng-template>
+                </article>
+
+                <aside class="l-payment-information">
+                    <div class="payment-information-wrapper">
+                        <div class="pay-information">
+                            <div class="total-price">
+                                <span class="rw-typo-subtext0-regular total-price-title">총 결제 금액</span>
+                                <span class="rw-typo-headline1">{{ totalPriceSum$ | async | numberWithCommas }}원</span>
+                            </div>
+
+                            <div class="input-list">
+                                <div
+                                    *ngFor="let item of totalPrice$ | async | keyvalue: originalOrder"
+                                    class="rw-typo-subtext0-regular input-title"
+                                >
+                                    <span class="rw-typo-bodytext1_darkgrey">
+                                        {{ item.value.name }}
+                                    </span>
+                                    <span class="rw-typo-bodytext0-darkgrey-bold">
+                                        {{ item.value.price | numberWithCommas }}원
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="rw-typo-subtext0-regular date-text">결제일 : {{ today }}</div>
+                        </div>
+
+                        <rw-button
+                            #modify_ml_bt
+                            [width]="'228'"
+                            [height]="'50'"
+                            [color]="'var(--red)'"
+                            [loadingName]="'modify_ml_payment'"
+                            [borderRadius]="'5px'"
+                            [disabled]="false"
+                            (onClick)="modifyPayment($event)"
+                        >
+                            <span class="modify-ml-button"> 수정하기 </span>
+                        </rw-button>
+                    </div>
+                </aside>
+            </div>
+        </main>
+    </section>
+</section>

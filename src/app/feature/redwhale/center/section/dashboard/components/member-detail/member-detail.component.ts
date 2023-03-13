@@ -165,15 +165,14 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     // transfer membership full modal vars and funcs
-    public doShowTransferMFullModal = false
-    openTransferMFullModal() {
-        this.doShowTransferMFullModal = true
-    }
-    closeTransferMFullModal() {
-        this.doShowTransferMFullModal = false
-    }
-    onFinishTransferM() {
-        this.closeTransferMFullModal()
+    routeToTransferMembership() {
+        this.router.navigateByUrl(`${this.center.address}/dashboard/${this.curUserData.user.id}/transfer-membership`, {
+            state: {
+                curUser: this.curUserData.user,
+                transferCenterUser: this.transferCenterUser,
+                transferUserMembership: this.transferUserMembership,
+            },
+        })
     }
 
     public transferCenterUser: CenterUser = undefined
@@ -186,17 +185,31 @@ export class MemberDetailComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     // register membership locker full modal vars and funcs
-    public doShowRegisterMLFullModal = false
     public registerMLFullModalType: ContractTypeCode = 'contract_type_new'
     openRegisterMLFullModal(type: ContractTypeCode) {
-        this.registerMLFullModalType = type
-        this.doShowRegisterMLFullModal = true
+        this.router.navigateByUrl(
+            `${this.center.address}/dashboard/${this.curUserData.user.id}/register-membership-locker`,
+            {
+                state: {
+                    curUser: this.curUserData.user,
+                    type: type,
+                    rerUserMembership: this.registerMLUserMembership,
+                },
+            }
+        )
     }
-    closeRegisterMLFullModal() {
-        this.doShowRegisterMLFullModal = false
-    }
-    onFinishRegisterML() {
-        this.closeRegisterMLFullModal()
+
+    routeToRegisterML(type: ContractTypeCode) {
+        this.router.navigateByUrl(
+            `${this.center.address}/dashboard/${this.curUserData.user.id}/register-membership-locker`,
+            {
+                state: {
+                    curUser: this.curUserData.user,
+                    type: type,
+                    rerUserMembership: this.registerMLUserMembership,
+                },
+            }
+        )
     }
 
     // reRegister funcs and vars

@@ -1,0 +1,201 @@
+<section class="direct-regitser-member-fullmodal-wrapper user-select-none" #modalWrapperElement>
+    <section class="direct-register-member-fullmodal user-select-none thin-scroll-y">
+        <div class="header">
+            <div class="header-text-container">
+                <p class="rw-typo-headline2 bold">새로운 회원님이 오셨군요! 👏</p>
+                <p class="rw-typo-headline2 bold">간편하게 회원을 등록해보세요.</p>
+                <!--                <div class="l-guide-text rw-typo-bodytext2-regular_darkgrey">-->
+                <!--                    ✋ 잠깐! 레드웨일 앱을 사용할 회원이신가요?-->
+                <!--                    <div class="l-guide-text-box">-->
+                <!--                        <div class="guide-text-box">-->
+                <!--                            <p class="guide-text-box__title">-->
+                <!--                                회원은 앱을 통해 수업을 예약하거나 센터와 채팅을 할 수 있어요.-->
+                <!--                            </p>-->
+                <!--                            <p class="guide-text-box__title">-->
+                <!--                                등록 중인 회원이 레드웨일 앱을 사용할 예정이라면,<br>-->
+                <!--                                아래 내용을 꼭! 확인해주세요.-->
+                <!--                            </p>-->
+                <!--                            <div class="guide-text-box__content">-->
+                <!--                                <img src="assets/icons/etc/check.svg" alt="check.svg">-->
+                <!--                                센터에서 직접 회원을 등록할 경우, 등록 과정에서 입력한<br>-->
+                <!--                                이메일 주소가 회원의 앱 아이디가 돼요.-->
+                <!--                            </div>-->
+                <!--                            <div class="guide-text-box__content">-->
+                <!--                                <img src="assets/icons/etc/check.svg" alt="check.svg">-->
+                <!--                                회원이 앱에 로그인할 경우, 이메일 로그인 방식을 통해서만<br>-->
+                <!--                                로그인할 수 있어요.-->
+                <!--                            </div>-->
+                <!--                            <div class="guide-text-box__content">-->
+                <!--                                <img src="assets/icons/etc/check.svg" alt="check.svg">-->
+                <!--                                추후 해당 회원이 소셜 로그인(카카오, 애플, 구글) 하고자<br>-->
+                <!--                                할 경우, 기존의 이메일 아이디와 소셜 로그인 아이디 간<br>-->
+                <!--                                연동이 불가능해요.-->
+                <!--                            </div>-->
+                <!--                            <div class="guide-text-box__content">-->
+                <!--                                <img src="assets/icons/etc/check.svg" alt="check.svg">-->
+                <!--                                그러므로, 이메일 로그인만 가능한 ‘센터 직접 등록’ 방식 보다<br>-->
+                <!--                                회원이 로그인 유형을 선택할 수 있는 <span class="red">‘QR코드 스캔’을 통한</span><br>-->
+                <!--                                <span class="red">회원 등록을 권장</span>해요.-->
+                <!--                            </div>-->
+                <!--                        </div>-->
+                <!--                    </div>-->
+                <!--                    -->
+                <!--                </div>-->
+            </div>
+
+            <!--            <div-->
+            <!--                class="cg-typo-subtext close-button"-->
+            <!--                rw-button-->
+            <!--                rwButtonWidth="85"-->
+            <!--                rwButtonHeight="40"-->
+            <!--                rwButtonBorderColor="var(&#45;&#45;font-color)"-->
+            <!--                (click)="exitPage()"-->
+            <!--            >-->
+            <!--                <span class="mdi mdi-close"></span>-->
+            <!--                <span>닫기</span>-->
+            <!--            </div>-->
+        </div>
+
+        <div class="main thin-scroll-x">
+            <div class="main-inner-container">
+                <div class="direct-registration-container">
+                    <div class="left">
+                        <p class="rw-typo-subtext2">회원 사진</p>
+                        <div *ngIf="!localFileData.src" class="add-avatar" (click)="add_member_avatar.click()">
+                            <div class="mdi mdi-plus"></div>
+                            <input
+                                type="file"
+                                accept="image/*"
+                                hidden
+                                #add_member_avatar
+                                (change)="onInputFileChange(add_member_avatar)"
+                            />
+                        </div>
+
+                        <div *ngIf="localFileData.src" class="added-avatar-conatainer">
+                            <div
+                                class="added-avatar"
+                                [style.backgroundImage]="'url(' + localFileData.src + ')'"
+                                #added_avatar
+                            ></div>
+                            <span (click)="deletePreviewAvatar()" class="remove-avatar rw-typo-subtext2">삭제</span>
+                        </div>
+
+                        <div class="gender">
+                            <p class="rw-typo-subtext2">성별</p>
+                            <div class="male" (click)="onSelectGender('male')">
+                                <rw-radio-button text="남성" [checked]="gender == 'male'"></rw-radio-button>
+                            </div>
+
+                            <div class="female" (click)="onSelectGender('female')">
+                                <rw-radio-button text="여성" [checked]="gender == 'female'"></rw-radio-button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <form [formGroup]="registerForm" class="right">
+                        <p class="rw-typo-subtext2 setting-info">
+                            <span class="asterisk">* &nbsp;</span>필수 입력 사항
+                        </p>
+
+                        <div class="setting-input-container">
+                            <p class="rw-typo-subtext2">이름<span class="asterisk"> *</span></p>
+                            <input
+                                rw-input
+                                placeholder="이름을 입력해주세요."
+                                class="center-name-input"
+                                maxlength="20"
+                                [class.input-warning]="!name.pristine && name.errors"
+                                formControlName="name"
+                            />
+                            <p *ngIf="!name.pristine && name.errors" class="warning">
+                                <img src="assets/icons/etc/warning-red.svg" />&nbsp;
+                                <span *ngIf="name.errors['pattern']">이름 양식을 확인해주세요.</span>
+                                <span *ngIf="name.errors['required']">이름을 입력해주세요.</span>
+                            </p>
+                        </div>
+
+                        <div class="setting-input-container">
+                            <p class="rw-typo-subtext2">전화번호<span class="asterisk"> *</span></p>
+                            <input
+                                rw-input
+                                placeholder="전화번호를 입력해주세요."
+                                class="center-name-input"
+                                maxlength="13"
+                                [class.input-warning]="!phone_number.pristine && phone_number.errors"
+                                formControlName="phone_number"
+                                (keydown)="phoneNumberCheck($event)"
+                            />
+                            <p *ngIf="!phone_number.pristine && phone_number.errors" class="warning">
+                                <img src="assets/icons/etc/warning-red.svg" />&nbsp;
+                                <span *ngIf="phone_number.errors['pattern']">전화번호 양식을 확인해주세요.</span>
+                                <span *ngIf="phone_number.errors['required']">전화번호를 입력해주세요.</span>
+                            </p>
+                        </div>
+
+                        <div class="setting-input-container">
+                            <p class="rw-typo-subtext2">생년월일</p>
+                            <input
+                                rw-input
+                                placeholder="생년월일을 입력해주세요. (YYYY.MM.DD)"
+                                class="center-name-input"
+                                [class.input-warning]="birth_date.invalid"
+                                formControlName="birth_date"
+                                maxlength="10"
+                                (keydown)="birthdateCheck($event)"
+                            />
+                            <p *ngIf="birth_date.invalid" class="warning">
+                                <img src="assets/icons/etc/warning-red.svg" />
+                                &nbsp;생년월일 양식을 확인해주세요.
+                            </p>
+                        </div>
+
+                        <div class="setting-input-container">
+                            <p class="rw-typo-subtext2">이메일 (레드웨일 앱 계정)</p>
+                            <input
+                                rw-input
+                                id="email"
+                                placeholder="이메일을 입력해주세요."
+                                class="center-name-input"
+                                [class.input-warning]="!emailForm.pristine && emailForm.errors"
+                                [formControl]="emailForm"
+                            />
+                            <p *ngIf="!emailForm.pristine && emailForm.errors" class="warning">
+                                <img src="assets/icons/etc/warning-red.svg" />&nbsp;
+                                <span *ngIf="emailForm.errors['pattern'] || emailForm.errors['isNonEmailForm']">
+                                    이메일 양식을 확인해주세요.
+                                </span>
+                                <span *ngIf="emailForm.errors['required']">이메일을 입력해주세요.</span>
+                                <span *ngIf="emailForm.errors['isExisted']">이미 사용중인 이메일입니다.</span>
+                            </p>
+                        </div>
+
+                        <div class="buttons">
+                            <div
+                                class="cancel rw-typo-title2"
+                                rw-button
+                                rwButtonColor="var(--white)"
+                                (click)="exitPage()"
+                            >
+                                취소
+                            </div>
+
+                            <rw-button
+                                id="direct-register-member"
+                                #direct_register_member_bt
+                                [height]="'55'"
+                                [width]="'364'"
+                                [color]="'var(--red)'"
+                                [loadingName]="'direcct-register-member'"
+                                [disabled]="emailForm.pending || registerForm.invalid"
+                                (onClick)="registerForm.valid && registerNewMember($event)"
+                            >
+                                <div class="registration rw-typo-title2">회원 등록하기</div>
+                            </rw-button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+</section>

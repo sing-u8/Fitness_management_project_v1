@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
+import { Router } from '@angular/router'
 
 import { WordService } from '@services/helper/word.service'
 import {
@@ -45,7 +46,8 @@ export class UserDetailLockerComponent implements OnInit {
         private storageService: StorageService,
         private timeService: TimeService,
         private dashboardHelper: DashboardHelperService,
-        private lockerHelperService: LockerHelperService
+        private lockerHelperService: LockerHelperService,
+        private router: Router
     ) {}
 
     ngOnInit(): void {}
@@ -183,13 +185,15 @@ export class UserDetailLockerComponent implements OnInit {
     }
 
     // modify Locker fullmodal
-    public showModifyLockerFullModal = false
-    toggleModifyLockerFullModal() {
-        this.showModifyLockerFullModal = !this.showModifyLockerFullModal
+    routeToModifyLocker() {
+        this.router.navigateByUrl(`${this.center.address}/dashboard/${this.curUserData.user.id}/modify-locker`, {
+            state: {
+                centerUser: this.curUserData.user,
+                userLocker: this.selectedUserLocker,
+            },
+        })
     }
-    confirmModifyLocker() {
-        this.showModifyLockerFullModal = false
-    }
+
 
     // update, remove hoding funcs
     public showUpdateHoldModal = false

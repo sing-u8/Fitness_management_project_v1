@@ -1,0 +1,278 @@
+* {
+    padding: 0;
+    margin: 0;
+    text-align: initial;
+}
+
+.rw-modal-wrapper-show {
+    opacity: 1 !important;
+}
+
+.register-ml-fullmodal-show {
+    opacity: 1 !important;
+}
+
+section.register-ml-fullmodal-wrapper {
+    display: flex;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: var(--white);
+    opacity: 1;
+    // transition: opacity 0.3s cubic-bezier(0.25, 0.8, 0.25, 0.8);
+    // -moz-transition: opacity 0.3s cubic-bezier(0.25, 0.8, 0.25, 0.8);
+    // -webkit-transition: opacity 0.3s cubic-bezier(0.25, 0.8, 0.25, 0.8);
+    // -o-transition: opacity 0.3s cubic-bezier(0.25, 0.8, 0.25, 0.8);
+    z-index: 1010;
+
+    section.register-membership-locker {
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: var(--background-color);
+        $containerWidth: 844px;
+        $header_height: 170px;
+
+        header {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            width: 100%;
+            height: $header_height;
+            background-color: var(--white);
+            position: relative;
+            padding: 0 20px;
+
+            .header-text-container {
+                width: $containerWidth;
+                margin-bottom: 27px;
+                position: relative;
+            }
+
+            .close-button {
+                position: absolute;
+                top: 36px;
+                right: 36px;
+            }
+        }
+
+        main {
+            width: 100%;
+            background-color: var(--background-color);
+        }
+        main {
+            div.main-wrapper {
+                width: 100%;
+                min-width: 884px;
+                display: flex;
+                justify-content: center;
+                padding-top: 30px;
+                padding-bottom: 35px;
+
+                .contract__title {
+                    width: 100%;
+                    margin-bottom: 12px !important;
+                }
+
+                & article.contract-body {
+                    width: 585px;
+                    position: relative;
+                    margin-right: 20px;
+                    div.l-user-basic-info-box {
+                        display: flex;
+                        flex-direction: column;
+                        margin-bottom: 40px;
+                        div.user-basic-info-box {
+                            width: 100%;
+                            height: 172px;
+                            position: relative;
+                            background: #ffffff;
+                            box-shadow: 0 0 10px rgba(181, 181, 181, 0.109804);
+                            border-radius: 5px;
+                            display: flex;
+
+                            .l-avatar {
+                                height: 100%;
+                                width: 83px;
+                                display: flex;
+                                flex-direction: column;
+                                justify-content: center;
+                                margin: 0 36px;
+                                p {
+                                    margin-top: 9px;
+                                    text-align: center;
+                                }
+                            }
+
+                            .user-basic-info {
+                                height: 100%;
+                                width: calc(100% - 72px - 83px);
+                                padding: 25px 36px 25px 0;
+                                .l-info {
+                                    display: flex;
+                                    justify-content: flex-start;
+                                    &:not(:first-of-type) {
+                                        margin-top: 14px;
+                                    }
+                                    .title {
+                                        width: 51px;
+                                        height: 20px;
+                                        text-align: left;
+                                        font-size: 1.4rem;
+                                        font-weight: 400;
+                                        line-height: 1.43;
+                                        letter-spacing: -0.2px;
+                                        color: var(--grey);
+                                        margin-right: 25px;
+                                    }
+                                    .content {
+                                        font-weight: 400;
+                                        font-size: 14px;
+                                        line-height: 20px;
+                                        letter-spacing: -0.196px;
+                                        width: calc(100% - 76px);
+                                        overflow: hidden;
+                                        text-overflow: ellipsis;
+                                        white-space: nowrap;
+
+                                        & span {
+                                            font-weight: 400;
+                                            font-size: 14px;
+                                            line-height: 20px;
+                                            letter-spacing: -0.196px;
+                                            width: calc(100% - 76px);
+                                            overflow: hidden;
+                                            text-overflow: ellipsis;
+                                            white-space: nowrap;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    div.l-ml-registered {
+                        display: flex;
+                        flex-direction: column;
+                        margin-bottom: 40px;
+                        .window-item {
+                            &:not(:last-of-type) {
+                                margin-bottom: 20px;
+                            }
+                        }
+                    }
+                    div.l-payment-info {
+                        display: flex;
+                        flex-direction: column;
+                        margin-bottom: 40px;
+                        .payment-info {
+                            display: flex;
+                            flex-direction: column;
+                            justify-content: center;
+                            align-items: center;
+                            width: 100%;
+                            height: 129px;
+                            background: #ffffff;
+                            box-shadow: 0 0 10px rgba(181, 181, 181, 0.109804);
+                            border-radius: 5px;
+                            padding: 17px 20px 16px;
+                            &__total-price {
+                                width: calc(100% - 10px);
+                            }
+                            .bar {
+                                height: 1px;
+                                width: 100%;
+                                border-top: 1px solid var(--border-color);
+                                margin: 16.5px 0;
+                            }
+                            .payment-info__l-price-item {
+                                width: 100%;
+                                padding: 0 12px;
+                                display: flex;
+                                .payment-info__price-item {
+                                    &:not(:first-of-type) {
+                                        margin-left: 16px;
+                                    }
+                                    &:last-of-type {
+                                        border-right: none !important;
+                                    }
+                                    display: flex;
+                                    flex-direction: column;
+                                    justify-content: space-between;
+                                    padding-right: 10px;
+                                    width: 130px;
+                                    height: 39px;
+                                    border-right: 1px solid var(--border-color);
+                                    p {
+                                        &:first-of-type {
+                                            color: var(--grey) !important;
+                                        }
+                                        width: 100%;
+                                        text-overflow: ellipsis;
+                                        overflow: hidden;
+                                        white-space: nowrap;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    div.l-terms {
+                        display: flex;
+                        flex-direction: column;
+
+                        &:not(:last-of-type) {
+                            margin-bottom: 40px;
+                        }
+
+                        .terms {
+                            resize: none;
+                            outline: none;
+                        }
+                        .terms,
+                        .no-terms {
+                            width: 100%;
+                            min-height: 54px;
+                            padding: 17px 20px;
+                            background: #ffffff;
+                            border: 1px solid #e9e9e9;
+                            border-radius: 7px;
+                        }
+                        .no-terms {
+                            color: var(--grey) !important;
+                        }
+                        .memo-terms {
+                            min-height: 150px;
+                        }
+                    }
+                }
+
+                & aside.l-contract-sign {
+                    width: 238px;
+                    position: relative;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+
+                    .contract-sign-wrapper {
+                        position: sticky;
+                        width: 100%;
+                        top: 30px;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.register-ml-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700 !important;
+    font-size: 1.5rem !important;
+    line-height: 22px !important;
+    letter-spacing: -0.225px !important;
+}
