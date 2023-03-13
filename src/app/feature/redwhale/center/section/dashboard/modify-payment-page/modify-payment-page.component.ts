@@ -73,6 +73,12 @@ export class ModifyPaymentPageComponent implements OnInit, OnDestroy {
     ) {
         this.center = this.storageService.getCenter()
 
+        const routerState = this.router.getCurrentNavigation().extras.state
+        this.curUser = routerState['curUser']
+        this.userPayment = routerState['userPayment']
+        this.userLocker = routerState['userLocker']
+        this.userMembership = routerState['userMembership']
+
         this.initCompVars(this.userPayment, this.userLocker, this.userMembership)
         this.getMembershipItem()
     }

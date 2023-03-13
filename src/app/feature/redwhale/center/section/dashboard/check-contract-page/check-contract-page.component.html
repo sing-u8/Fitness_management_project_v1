@@ -6,17 +6,17 @@
                 <p class="rw-typo-headline1">회원 계약서</p>
             </div>
 
-            <div
-                class="cg-typo-subtext close-button"
-                rw-button
-                rwButtonWidth="85"
-                rwButtonHeight="40"
-                rwButtonBorderColor="var(--font-color)"
-                (click)="closeModal()"
-            >
-                <span class="mdi mdi-close"></span>
-                <span>닫기</span>
-            </div>
+            <!--            <div-->
+            <!--                class="cg-typo-subtext close-button"-->
+            <!--                rw-button-->
+            <!--                rwButtonWidth="85"-->
+            <!--                rwButtonHeight="40"-->
+            <!--                rwButtonBorderColor="var(&#45;&#45;font-color)"-->
+            <!--                (click)="closeModal()"-->
+            <!--            >-->
+            <!--                <span class="mdi mdi-close"></span>-->
+            <!--                <span>닫기</span>-->
+            <!--            </div>-->
         </header>
 
         <main>
@@ -136,7 +136,8 @@
                             >{{ curContract?.terms }}</textarea
                         >
                         <div *ngIf="!curContract?.terms" class="no-terms rw-typo-bodytext0-regular">
-                            [센터 설정 > 약관 설정]에서 이용 약관을 작성해주세요.
+                            -
+                            <!--                            [센터 설정 > 약관 설정]에서 이용 약관을 작성해주세요.-->
                         </div>
                     </div>
                     <div class="l-terms">
