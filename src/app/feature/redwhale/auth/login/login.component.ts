@@ -160,15 +160,22 @@ export class LoginComponent implements OnInit, OnDestroy {
         kakao$.subscribe({
             next: (user) => {
                 const accessToken = user['access_token']
-
-                this.authService.signInWithKakao({ accessToken }).subscribe((user) => {
-                    signInWithCustomToken(this.fireAuth, String(user.custom_token)).then(() => {
-                        this.storageService.setSignInMethod(this.signInMethod)
-                        this.router.navigateByUrl('/redwhale-home')
-                    })
+                this.kakaoBtLoadingFns.showLoading()
+                this.authService.signInWithKakao({ accessToken }).subscribe({
+                    next: (user) => {
+                        signInWithCustomToken(this.fireAuth, String(user.custom_token)).then(() => {
+                            this.storageService.setSignInMethod(this.signInMethod)
+                            this.kakaoBtLoadingFns.hideLoading()
+                            this.router.navigateByUrl('/redwhale-home')
+                        })
+                    },
+                    error: () => {
+                        this.kakaoBtLoadingFns.hideLoading()
+                    },
                 })
             },
             error: (e) => {
+                this.kakaoBtLoadingFns.hideLoading()
                 this.nxStore.dispatch(showModal({ data: { text: this.TAG, subText: e.message } }))
             },
         })
