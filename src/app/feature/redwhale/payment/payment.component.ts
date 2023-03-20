@@ -32,6 +32,8 @@ export class PaymentComponent implements OnInit, OnDestroy {
 
     public unSubscribe$ = new Subject<boolean>()
 
+
+
     constructor(
         private renderer: Renderer2,
         private storageService: StorageService,

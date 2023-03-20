@@ -1,0 +1,35 @@
+<div class="l-payment-item" [class.selected]="selected">
+  <div class="payment-item">
+    <div class="top">
+      <div class="top__text1">
+        {{data.top.title}}
+      </div>
+      <div class="top__text2">
+        {{data.top.desc}}
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div class="middle">
+      <div class="middle__discount">
+        {{data.middle.discountText}}
+      </div>
+      <div class="l-middle-main">
+        <span class="middle__text1">{{data.middle.price}}</span>
+        <span class="middle__discounted">{{data.middle.originalPrice}}</span>
+      </div>
+      <div class="middle__text2">
+        {{data.middle.desc}}
+      </div>
+    </div>
+    <div class="divider2"></div>
+    <div class="bottom">
+      <div class="l-bottom-item">
+        <div class="bottom-item" *ngFor="let item of data.bottom">
+          <span class="bottom__left">{{item.left}}</span>
+          <span class="bottom__right">{{item.right}}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

@@ -10,6 +10,7 @@ export type PaymentItem = {
         desc: string
     }
     bottom: { left: string; right: string }[]
+    highlight?: string
     type?: 'month' | 'year' | 'whole_time'
     count?: number
 }

@@ -239,7 +239,7 @@ FullCalendarModule.registerPlugins([
         NgxSpinnerModule,
         NgxSkeletonLoaderModule,
         DragulaModule.forRoot(),
-        PaymentModule
+        PaymentModule,
     ],
     exports: [
         AvatarComponent,
