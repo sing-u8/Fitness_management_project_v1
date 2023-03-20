@@ -42,6 +42,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
     ) {}
 
     ngOnInit(): void {
+        //
         this.curCenter = this.storageService.getCenter()
     }
     ngOnDestroy() {}
