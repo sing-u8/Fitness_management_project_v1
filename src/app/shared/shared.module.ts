@@ -99,6 +99,9 @@ import { FilterZeroPaymentPipe } from './pipes/filter-zero-payment.pipe'
 import { NameEllipsisPipe } from './pipes/name-ellipsis.pipe'
 import { ChatRoomNamePipe } from './pipes/chat-room-name.pipe'
 
+// modules
+import { PaymentModule } from './components/payment/payment.module'
+
 // Dragula
 // import { DragulaModule } from 'ng2-dragula'
 // FullCalendar
@@ -236,6 +239,7 @@ FullCalendarModule.registerPlugins([
         NgxSpinnerModule,
         NgxSkeletonLoaderModule,
         DragulaModule.forRoot(),
+        PaymentModule
     ],
     exports: [
         AvatarComponent,

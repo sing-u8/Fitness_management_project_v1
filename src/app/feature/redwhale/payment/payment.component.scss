@@ -1,0 +1,190 @@
+* {
+    padding: 0;
+    margin: 0;
+    text-align: initial;
+}
+
+section#payment-wrapper {
+    display: flex;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: var(--white);
+    opacity: 1;
+    z-index: 1010;
+
+    section#payment {
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: var(--background-color);
+        $containerWidth: 844px;
+        $header_height: 170px;
+
+        header {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            width: 100%;
+            height: $header_height;
+            background-color: var(--white);
+            position: relative;
+            padding: 0 20px;
+
+            .header-text-container {
+                width: $containerWidth;
+                margin-bottom: 27px;
+                position: relative;
+
+                div.payment-progress {
+                    counter-reset: progress;
+                    list-style-type: circle;
+                    position: absolute;
+                    display: flex;
+                    align-items: center;
+                    right: 0;
+                    bottom: 0;
+                    .progress {
+                        display: flex;
+                        align-items: center;
+                        span {
+                            background-size: contain;
+                            background-repeat: no-repeat;
+                            width: 17px;
+                            height: 17px;
+                            margin-right: 5px;
+                            margin-top: 2px;
+                            &.hide {
+                                display: none;
+                            }
+                            &.circle_one_on {
+                                background-image: url('/assets/icons/number/circle-one.svg');
+                            }
+                            &.circle_one_off {
+                                background-image: url('/assets/icons/number/circle-one__darkgrey.svg');
+                            }
+                            &.circle_two_on {
+                                background-image: url('/assets/icons/number/circle-two.svg');
+                            }
+                            &.circle_two_off {
+                                background-image: url('/assets/icons/number/circle-two__darkgrey.svg');
+                            }
+                        }
+                        div {
+                            &.not-in-progress {
+                                color: var(--grey);
+                            }
+                        }
+                    }
+                    .progress__line {
+                        width: 25px;
+                        height: 1px;
+                        border: 1px dashed #c9c9c9;
+                        margin: 0 6px;
+                    }
+                }
+            }
+        }
+
+        main#progress-one {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            .l-payment-desc {
+                margin: 30px 0 20px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                .desc-title {
+                    font-weight: 700;
+                    font-size: 15px;
+                    line-height: 22px;
+                    letter-spacing: -0.225px;
+                    color: var(--font-color);
+                }
+                .desc-content {
+                    display: flex;
+                    align-items: center;
+                    font-weight: 400;
+                    font-size: 14px;
+                    line-height: 20px;
+                    text-align: center;
+                    letter-spacing: -0.196px;
+                    color: #606060;
+                    position: relative;
+
+                    .desc-content-guide-img {
+                        background-image: url('/assets/icons/etc/help-darkgrey.svg');
+                        background-size: contain;
+                        background-repeat: no-repeat;
+                        width: 19px;
+                        height: 19px;
+                        cursor: pointer;
+                        position: absolute;
+                        right: -18px;
+                        top: 2px;
+
+                        &:hover {
+                            .desc-content-guide-box {
+                                display: block;
+                            }
+                        }
+
+                        .desc-content-guide-box {
+                            display: none;
+                            $guide-box-height: 137px;
+                            width: 440px;
+                            height: $guide-box-height;
+                            position: relative;
+                            border: 1px solid #f1f1f1;
+                            box-shadow: 0 0 10px rgba(181, 181, 181, 0.4);
+
+                            bottom: -22px;
+                            left: -180px;
+                            cursor: auto;
+                            &:hover {
+                                display: none;
+                            }
+
+                            .box-header {
+                                height: 40px;
+                                width: 100%;
+                                background: var(--font-color);
+                                border-radius: 5px 5px 0 0;
+                                padding: 12px 14px 0;
+
+                                font-size: 12px;
+                                line-height: 17px;
+                                letter-spacing: -0.144px;
+                                color: var(--white);
+                            }
+                            .box-content {
+                                height: calc($guide-box-height - 40px);
+                                width: 100%;
+                                padding: 15px 20px 20px;
+                                display: flex;
+                                flex-direction: column;
+
+                                font-weight: 400;
+                                font-size: 13px;
+                                line-height: 19px;
+                                letter-spacing: -0.169px;
+
+                                .normal {
+                                    font-weight: 700;
+                                    color: var(--font-color);
+                                    margin-bottom: 5px;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        main#progress-two {
+        }
+    }
+}

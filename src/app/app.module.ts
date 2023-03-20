@@ -39,10 +39,11 @@ import { StorageModule as AngularFirestoreModule } from '@angular/fire/storage'
 import { provideAuth, connectAuthEmulator, getAuth } from '@angular/fire/auth'
 
 // Google reCAPTCHA
-import { RECAPTCHA_V3_SITE_KEY, RecaptchaV3Module } from 'ng-recaptcha'
+import { RECAPTCHA_V3_SITE_KEY, RecaptchaV3Module } from 'ng-recaptcha';
+import { PaymentComponent } from './feature/redwhale/payment/payment.component'
 
 @NgModule({
-    declarations: [AppComponent],
+    declarations: [AppComponent, PaymentComponent],
     imports: [
         BrowserModule,
         BrowserAnimationsModule,

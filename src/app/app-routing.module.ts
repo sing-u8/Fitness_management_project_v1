@@ -29,6 +29,10 @@ const routes: Routes = [
         loadChildren: () => import('./feature/redwhale/auth/auth.module').then((m) => m.AuthModule),
     },
     {
+        path: ':address/payment',
+        loadChildren: () => import('./feature/redwhale/payment/payment.module').then((m) => m.PaymentModule),
+    },
+    {
         path: 'redwhale-home',
         canActivate: [AuthGuard],
         loadChildren: () =>

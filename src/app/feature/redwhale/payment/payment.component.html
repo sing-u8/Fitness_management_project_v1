@@ -1,0 +1,46 @@
+<section id="payment-wrapper" class="user-select-none'" #modalWrapperElement>
+    <section id="payment" class="user-select-none thin-scroll-x-overlay thin-scroll-y-overlay">
+        <header>
+            <div class="header-text-container">
+                <p class="rw-typo-headline1">[{{ curCenter.name }}]</p>
+                <p class="rw-typo-headline1">상품 결제하기</p>
+
+                <div class="payment-progress">
+                    <div class="progress">
+                        <span class="circle_one_on" [class.hide]="progress == 'two'"></span>
+                        <span class="circle_one_off" [class.hide]="progress == 'one'"></span>
+                        <div class="rw-typo-subtext0" [class.not-in-progress]="progress == 'two'">상품 선택</div>
+                    </div>
+                    <div class="progress__line"></div>
+                    <div class="progress">
+                        <span class="circle_two_on" [class.hide]="progress == 'one'"></span>
+                        <span class="circle_two_off" [class.hide]="progress == 'two'"></span>
+                        <div class="rw-typo-subtext0" [class.not-in-progress]="progress == 'one'">결제 정보 입력</div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main id="progress-one" [style.display]="progress == 'one' ? 'block' : 'none'">
+            <div class="l-payment-desc">
+                <div class="desc-title">👇 결제하실 상품을 클릭해 주세요.</div>
+                <div class="desc-content">
+                    런칭 기념 할인은 각 상품별로 첫 결제 시에만 적용됩니다.
+                    <div class="desc-content-guide-img">
+                        <div class="desc-content-guide-box">
+                            <div class="box-header">런칭 기념 할인 안내</div>
+                            <div class="box-content">
+                                <span class="normal">런칭 기념 할인은 각 상품별로 첫 결제 시에만 적용됩니다.</span>
+                                <span
+                                    >동일한 상품을 재결제하는 경우에는 런칭 기념 할인이 적용되지 않으며,<br />
+                                    구매 이력이 없는 다른 상품을 첫 결제하는 경우에는 할인 혜택이 적용됩니다.
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <main id="progress-two" [style.display]="progress == 'two' ? 'block' : 'none'"></main>
+    </section>
+</section>

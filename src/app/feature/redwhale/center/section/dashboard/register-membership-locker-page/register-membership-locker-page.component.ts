@@ -1,9 +1,6 @@
 import {
-    AfterViewChecked,
     Component,
     ElementRef,
-    Input,
-    OnChanges,
     OnDestroy,
     OnInit,
     Renderer2,
