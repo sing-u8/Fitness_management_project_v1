@@ -15,6 +15,9 @@ import { Subject } from 'rxjs'
 type Progress = 'one' | 'two'
 
 import { Center } from '@schemas/center'
+import { PaymentItem } from '@schemas/components/payment-item'
+
+import { paymentItemList } from '@shared/helper/center-payment'
 
 @Component({
     selector: 'rw-payment',
@@ -30,9 +33,8 @@ export class PaymentComponent implements OnInit, OnDestroy {
         this.progress = progress
     }
 
+    public paymentItems = paymentItemList
     public unSubscribe$ = new Subject<boolean>()
-
-
 
     constructor(
         private renderer: Renderer2,

@@ -40,6 +40,10 @@
                     </div>
                 </div>
             </div>
+
+            <div class="l-payment-item">
+                <rw-payment-item *ngFor="let item of paymentItems" [data]="item"></rw-payment-item>
+            </div>
         </main>
         <main id="progress-two" [style.display]="progress == 'two' ? 'block' : 'none'"></main>
     </section>

@@ -57,6 +57,9 @@ import { ChatMessageComponent } from './components/redwhale/community/chat-messa
 import { ChatIntroMessageComponent } from './components/redwhale/community/chat-intro-message/chat-intro-message.component'
 import { ChattingRoomCardComponent } from './components/redwhale/community/chatting-room-card/chatting-room-card.component'
 
+// -payment- //
+import { PaymentItemComponent } from './components/payment/payment-item/payment-item.component'
+
 // Directives
 // import { AutoScrollDirective } from './directives/auto-scroll.directive'
 import { ButtonDirective } from './directives/button.directive'
@@ -98,9 +101,6 @@ import { IsTodayPipe } from './pipes/is-today.pipe'
 import { FilterZeroPaymentPipe } from './pipes/filter-zero-payment.pipe'
 import { NameEllipsisPipe } from './pipes/name-ellipsis.pipe'
 import { ChatRoomNamePipe } from './pipes/chat-room-name.pipe'
-
-// modules
-import { PaymentModule } from './components/payment/payment.module'
 
 // Dragula
 // import { DragulaModule } from 'ng2-dragula'
@@ -169,6 +169,7 @@ FullCalendarModule.registerPlugins([
         NoticeModalComponent,
         IntroGuideToastComponent,
         KakaoChannelButtonComponent,
+        PaymentItemComponent,
         // -- //drawer
         DrawerLessonCardComponent,
         SchDayRepeatSelectComponent,
@@ -239,7 +240,6 @@ FullCalendarModule.registerPlugins([
         NgxSpinnerModule,
         NgxSkeletonLoaderModule,
         DragulaModule.forRoot(),
-        PaymentModule,
     ],
     exports: [
         AvatarComponent,
@@ -273,6 +273,7 @@ FullCalendarModule.registerPlugins([
         SettingNoticeModalComponent,
         IntroGuideToastComponent,
         KakaoChannelButtonComponent,
+        PaymentItemComponent,
         // -- //drawer
         DrawerLessonCardComponent,
         SchDayRepeatSelectComponent,

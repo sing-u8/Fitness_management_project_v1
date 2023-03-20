@@ -183,6 +183,10 @@ section#payment-wrapper {
                     }
                 }
             }
+            .l-payment-item {
+                display: flex;
+                justify-content: center;
+            }
         }
         main#progress-two {
         }

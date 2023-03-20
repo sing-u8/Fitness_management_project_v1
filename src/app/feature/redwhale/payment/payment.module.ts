@@ -6,6 +6,6 @@ import { PaymentRoutingModule } from './payment-routing.module'
 
 @NgModule({
     declarations: [],
-    imports: [CommonModule, SharedModule],
+    imports: [CommonModule, SharedModule, PaymentRoutingModule],
 })
 export class PaymentModule {}
