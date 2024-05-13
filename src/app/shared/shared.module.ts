@@ -121,7 +121,8 @@ import { DragulaModule } from 'ng2-dragula'
 // // ngx libraries
 import { NgxGaugeModule } from 'ngx-gauge'
 import { NgxSpinnerModule } from 'ngx-spinner'
-import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader'
+import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
+import { JustTestComponent } from './components/common/just-test/just-test.component'
 
 // import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader'
 
@@ -230,6 +231,7 @@ FullCalendarModule.registerPlugins([
         FilterZeroPaymentPipe,
         NameEllipsisPipe,
         ChatRoomNamePipe,
+        JustTestComponent,
     ],
     imports: [
         CommonModule,
